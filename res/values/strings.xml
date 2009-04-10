@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<resources>
+
+	<string name="app_name">ODK Collect</string>
+
+	<string name="form">form</string>
+
+	<string name="main_menu">Main Menu</string>
+	<string name="main_menu_message">Please choose an option.</string>
+
+	<string name="enter_data">Enter Data</string>
+	<string name="enter_data_message">Slide your finger from right to left for the
+		next question. Reverse the slide for the previous question. Press Menu
+		for more options.</string>
+	<string name="enter_data_description">%s has been selected for data entry.</string>
+
+	<string name="send_data">Send Data</string>
+	<string name="manage_data">Manage Data</string>
+	<string name="manage_forms">Manage Forms</string>
+
+	<string name="choose_form">Choose Form</string>
+	<string name="loading_form">Loading form. Please wait...</string>
+
+	<string name="save_data">Save Data</string>
+	<string name="save_data_message">Please save to keep results.</string>
+	<string name="save_data_description">%s has been completed.</string>
+
+	<string name="enter_url">Enter URL</string>
+
+	<string name="preferences">Preferences</string>
+
+	<string name="add_repeat">Add a %s?</string>
+	 <string name="add_another_repeat">Add another %s?</string>
+
+	<string name="get_location">Get Location</string>
+	<string name="getting_location">Getting location. Please wait...</string>
+	<string name="get_image">Get Picture</string>
+
+  <string name="form_load_error">Sorry, error loading form %s</string>
+  <string name="gps_disabled_error">Sorry, GPS is disabled!</string>
+	<string name="required_answer_error">Sorry, this answer is required!</string>
+	<string name="invalid_answer_error">Sorry, this answer is invalid!</string>
+	<string name="no_forms_error">Sorry, you have no forms!</string>
+	<string name="questionview_error">Sorry, you are not in a form yet!</string>
+	<string name="delete_error">Sorry, you have not selected a form!</string>
+	<string name="languages_error">Sorry, you have no languages!</string>
+	<string name="sdcard_error">Sorry, you have no SD card!</string>
+	<string name="url_error">Sorry, URL is invalid!</string>
+	<string name="load_error">Sorry, unable to load form %s</string>
+  <string name="directory_error">Sorry, unable to create directory %s</string>  
+
+ <string name="form_deleted_ok">%s successfully deleted!</string>
+  <string name="form_added_ok">%s successfully added!</string>
+	<string name="data_saved_ok">Data successfully saved!</string>
+	<string name="data_saved_error">Sorry, data save failed!</string>
+	
+	
+	<string name="no_answer_error">Sorry, no answer to clear!</string>
+	 <string name="readonly_answer_error">Sorry, answer is read only!</string>
+	<string name="form_deleted_error">Sorry, unable to delete %s</string>
+	<string name="delete_confirm">Are you sure you want to delete %s</string>
+	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>
+
+	<string name="settings">Settings</string>
+
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+
+	<string name="add_form">Add Form</string>
+	<string name="delete_form">Delete Form</string>
+	<string name="clear_answer">Clear Answer</string>
+	<string name="change_language">Change Language</string>
+
+</resources>
