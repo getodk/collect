@@ -15,5 +15,5 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-	<translate android:fromXDelta="25%p" android:toXDelta="-30%p" android:duration="1500" android:repeatCount="infinite" />
+	<translate android:fromXDelta="25%p" android:toXDelta="-30%p" android:duration="1500" android:repeatCount="10" />
 </set>
