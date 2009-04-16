@@ -710,6 +710,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 mFormHandler.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
+                                if (isQuestionView()) {
+                                    PromptElement p = ((QuestionView) mCurrentView).getPrompt();
+                                    if (!p.isReadonly()) {
+                                        mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
+                                    }
+                                }
                                 refreshCurrentView();
                             }
                         }).setTitle(getString(R.string.change_language)).setNegativeButton(
