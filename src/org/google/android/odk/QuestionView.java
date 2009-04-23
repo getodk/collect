@@ -33,13 +33,12 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,8 +66,6 @@ import org.javarosa.core.util.OrderedHashtable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -109,7 +106,6 @@ public class QuestionView extends LinearLayout {
     private DatePicker mDateAnswer;
     private DatePicker.OnDateChangedListener mDateListener;
     private RadioGroup mRadioAnswer;
-    // private int mRadioChecked;
     private ImageView mImageAnswer;
 
     // view for decimal, integer, geopoint, string and untyped answer.
@@ -122,7 +118,12 @@ public class QuestionView extends LinearLayout {
     private Button mActionButton;
 
     // is answer readonly
-    private boolean mReadonly = false;
+    private boolean mReadOnly = false;
+
+    // first time displaying radio or checkbox
+    private int mRadioSelected = -1;
+    // private boolean mRadioInit = true;
+    private boolean mCheckboxInit = true;
 
 
     public QuestionView(Context context, PromptElement mPrompt) {
@@ -138,7 +139,7 @@ public class QuestionView extends LinearLayout {
 
     private void setPrompt(PromptElement mPrompt) {
         this.mPrompt = mPrompt;
-        mReadonly = mPrompt.isReadonly();
+        mReadOnly = mPrompt.isReadonly();
     }
 
 
@@ -272,7 +273,7 @@ public class QuestionView extends LinearLayout {
         mDateAnswer = new DatePicker(getContext());
         mDateListener = new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (mReadonly) {
+                if (mReadOnly) {
                     if (mPrompt.getAnswerValue() != null) {
                         Date d = (Date) mPrompt.getAnswerObject();
                         view.updateDate(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate());
@@ -322,7 +323,7 @@ public class QuestionView extends LinearLayout {
      * Build view for decimal answer. Includes retrieving existing answer.
      */
     private void DecimalView() {
-        GenericView(mReadonly);
+        GenericView(mReadOnly);
         mStringAnswer.setWidth(200);
         mStringAnswer.setKeyListener(new DigitsKeyListener(true, true));
         mView.addView(mStringAnswer);
@@ -367,7 +368,7 @@ public class QuestionView extends LinearLayout {
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
-        mActionButton.setEnabled(!mReadonly);
+        mActionButton.setEnabled(!mReadOnly);
 
         // gps has to readonly
         GenericView(true);
@@ -527,7 +528,7 @@ public class QuestionView extends LinearLayout {
         mActionButton.setText(getContext().getString(R.string.get_image));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
         mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!mReadonly);
+        mActionButton.setEnabled(!mReadOnly);
 
         // launch image capture intent on click
         mActionButton.setOnClickListener(new View.OnClickListener() {
@@ -572,7 +573,7 @@ public class QuestionView extends LinearLayout {
      * Build view for integer answer. Includes retrieving existing answer.
      */
     private void IntegerView() {
-        GenericView(mReadonly);
+        GenericView(mReadOnly);
 
         // only allows numbers and no periods
         mStringAnswer.setKeyListener(new DigitsKeyListener(true, false));
@@ -668,29 +669,44 @@ public class QuestionView extends LinearLayout {
             int i = 0;
 
             while (en.hasMoreElements()) {
+
                 k = (String) en.nextElement();
                 v = (String) h.get(k);
 
                 // no checkbox group so id by answer + offset
                 CheckBox c = new CheckBox(getContext());
+
+                // when clicked, check for readonly before toggling`
+                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (!mCheckboxInit && mReadOnly) {
+                            if (buttonView.isChecked()) {
+                                buttonView.setChecked(false);
+                            } else {
+                                buttonView.setChecked(true);
+                            }
+                        }
+                    }
+                });
+
                 c.setId(CHECKBOX_ID + i);
                 c.setText(k);
                 c.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
 
                 for (int vi = 0; vi < ve.size(); vi++) {
-
                     // match based on value, not key
                     if (v.equals(((Selection) ve.elementAt(vi)).getValue())) {
                         c.setChecked(true);
                         break;
                     }
                 }
-                ll.addView(c);
 
+                ll.addView(c);
                 i++;
             }
         }
 
+        mCheckboxInit = false;
         mView.addView(ll);
     }
 
@@ -700,13 +716,13 @@ public class QuestionView extends LinearLayout {
      * Store select one answer as {@link SelectOneData}.
      */
     private void SelectOneAnswer() {
-        int selected = mRadioAnswer.getCheckedRadioButtonId();
-        if (selected == -1) {
+        int i = mRadioAnswer.getCheckedRadioButtonId();
+        if (i == -1) {
             mAnswer = null;
         } else {
             // javarosa indexes start at 0, but android radio ids start at 1.
-            selected--;
-            mAnswer = new SelectOneData(new Selection(selected, mPrompt.getQuestionDef()));
+            i--;
+            mAnswer = new SelectOneData(new Selection(i, mPrompt.getQuestionDef()));
         }
     }
 
@@ -725,20 +741,19 @@ public class QuestionView extends LinearLayout {
     private void SelectOneView() {
 
         mRadioAnswer = new RadioGroup(getContext());
-      /*  mRadioAnswer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        mRadioAnswer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (mReadonly) {
-                    group.check(mRadioChecked);
+                if (mRadioSelected != -1 && mReadOnly) {
+                    mRadioAnswer.check(mRadioSelected);
                 } else {
-                    group.check(checkedId);
+                    mRadioAnswer.check(checkedId);
                 }
             }
         });
-        */
 
-        String selected = null;
+        String s = null;
         if (mPrompt.getAnswerValue() != null) {
-            selected = mPrompt.getAnswerText();
+            s = mPrompt.getAnswerText();
         }
 
         if (mPrompt.getSelectItems() != null) {
@@ -759,14 +774,13 @@ public class QuestionView extends LinearLayout {
                 r.setId(i);
                 mRadioAnswer.addView(r);
 
-                if (k.equals(selected)) {
+                if (k.equals(s)) {
                     r.setChecked(true);
-//                    mRadioChecked = i;
+                    mRadioSelected = i;
                 }
 
                 i++;
             }
-
             mView.addView(mRadioAnswer);
         }
     }
@@ -870,7 +884,7 @@ public class QuestionView extends LinearLayout {
      * Build view for string answer. Includes retrieving existing answer.
      */
     private void StringView() {
-        GenericView(mReadonly);
+        GenericView(mReadOnly);
         mView.addView(mStringAnswer);
     }
 
