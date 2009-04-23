@@ -37,6 +37,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -48,6 +49,7 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.data.DateData;
@@ -105,7 +107,9 @@ public class QuestionView extends LinearLayout {
 
     private ProgressDialog mLocationDialog;
     private DatePicker mDateAnswer;
+    private DatePicker.OnDateChangedListener mDateListener;
     private RadioGroup mRadioAnswer;
+    // private int mRadioChecked;
     private ImageView mImageAnswer;
 
     // view for decimal, integer, geopoint, string and untyped answer.
@@ -256,8 +260,7 @@ public class QuestionView extends LinearLayout {
     private void DateReset() {
         final Calendar c = Calendar.getInstance();
         mDateAnswer.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
-                null);
-
+                mDateListener);
     }
 
 
@@ -265,31 +268,38 @@ public class QuestionView extends LinearLayout {
      * Build view for date answer. Includes retrieving existing answer.
      */
     private void DateView() {
+        final Calendar c = Calendar.getInstance();
         mDateAnswer = new DatePicker(getContext());
+        mDateListener = new DatePicker.OnDateChangedListener() {
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                if (mReadonly) {
+                    if (mPrompt.getAnswerValue() != null) {
+                        Date d = (Date) mPrompt.getAnswerObject();
+                        view.updateDate(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate());
+                    } else {
+                        view.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+                                .get(Calendar.DAY_OF_MONTH));
+                    }
+                } else {
+                    c.set(Calendar.MONTH, monthOfYear);
+                    int maxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    if (dayOfMonth > maxDays) {
+                        view.updateDate(year, monthOfYear, maxDays);
+                    }
+                }
+            }
+        };
+
         if (mPrompt.getAnswerValue() != null) {
             Date d = (Date) mPrompt.getAnswerObject();
-            mDateAnswer.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), null);
+            mDateAnswer.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
         } else {
             // create date widget with now
             DateReset();
         }
 
-        // readonly date is a string
-        if (mReadonly) {
-            GenericView(mReadonly);
+        mView.addView(mDateAnswer);
 
-            // make the returning date more legible
-            try {
-                String s = mStringAnswer.getText().toString();
-                Date d = new SimpleDateFormat("dd/MM/yy").parse(s);
-                mStringAnswer.setText(new SimpleDateFormat("MMM dd, yyyy").format(d));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            mView.addView(mStringAnswer);
-        } else {
-            mView.addView(mDateAnswer);
-        }
     }
 
 
@@ -715,6 +725,16 @@ public class QuestionView extends LinearLayout {
     private void SelectOneView() {
 
         mRadioAnswer = new RadioGroup(getContext());
+      /*  mRadioAnswer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (mReadonly) {
+                    group.check(mRadioChecked);
+                } else {
+                    group.check(checkedId);
+                }
+            }
+        });
+        */
 
         String selected = null;
         if (mPrompt.getAnswerValue() != null) {
@@ -741,6 +761,7 @@ public class QuestionView extends LinearLayout {
 
                 if (k.equals(selected)) {
                     r.setChecked(true);
+//                    mRadioChecked = i;
                 }
 
                 i++;

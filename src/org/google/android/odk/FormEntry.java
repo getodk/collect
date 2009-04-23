@@ -713,7 +713,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                 if (isQuestionView()) {
                                     PromptElement p = ((QuestionView) mCurrentView).getPrompt();
                                     if (!p.isReadonly()) {
-                                        mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
+                                        mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView)
+                                                .getAnswer(), false);
                                     }
                                 }
                                 refreshCurrentView();
