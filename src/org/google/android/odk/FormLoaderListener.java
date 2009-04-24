@@ -15,12 +15,11 @@
  */
 package org.google.android.odk;
 
-import org.javarosa.core.model.FormDef;
 
 
 /**
  * @author Carl Hartung
  */
 public interface FormLoaderListener {
-    void loadingComplete(FormDef form);
+    void loadingComplete(FormHandler formHandler);
 }

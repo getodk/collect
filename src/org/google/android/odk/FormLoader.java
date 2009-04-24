@@ -16,15 +16,13 @@
 
 package org.google.android.odk;
 
-import android.util.Log;
-
-import org.javarosa.core.model.FormDef;
-import org.javarosa.xform.util.XFormUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+
+import org.javarosa.core.model.FormDef;
+import org.javarosa.xform.util.XFormUtils;
 
 /**
  * A Seriaizable object that handles the loading of forms in a separate thread.
@@ -72,9 +70,11 @@ public class FormLoader implements Serializable {
                     e.printStackTrace();
                 }
                 form = XFormUtils.getFormFromInputStream(fis);
+                FormHandler fh = null;
                 if (form == null) {
                     mLoadingState = LoadingState.ERROR;
                 } else {
+                    fh = new FormHandler(form);
                     mLoadingState = LoadingState.FINISHED;
                 }
                 
@@ -82,7 +82,7 @@ public class FormLoader implements Serializable {
                 // It is possible that the thread finishes after we've set the listener to null
                 // and before the activity is restarted.  In that case the thread is restarted.
                 if (mStateListener != null) {
-                    mStateListener.loadingComplete(form);
+                    mStateListener.loadingComplete(fh);
                 } else {
                     mLoadingState = LoadingState.NOT_RUNNING;
                 }

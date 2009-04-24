@@ -16,6 +16,8 @@
 
 package org.google.android.odk;
 
+import org.google.android.odk.FormLoader.LoadingState;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -40,9 +42,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.google.android.odk.FormLoader.LoadingState;
-import org.javarosa.core.model.FormDef;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -832,9 +831,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * loadingComplete() is called by FormLoader once it has finished loading a
      * form.
      */
-    public void loadingComplete(FormDef form) {
+    public void loadingComplete(FormHandler formHandler) {
         if (mFormLoader.getState() == LoadingState.FINISHED) {
-            mFormHandler = new FormHandler(form);
+            mFormHandler = formHandler;
             mFormHandler.setSourcePath(mFormPath);
         }
 
