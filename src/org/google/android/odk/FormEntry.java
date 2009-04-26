@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
@@ -100,7 +101,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         super.onCreate(savedInstanceState);
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
-
+        
         initializeVariables();
 
         // if starting for the first time, get stored data
@@ -563,7 +564,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         // bar.
         mProgressBar.setMax(mFormHandler.getQuestionCount());
         mProgressBar.setProgress(mFormHandler.getQuestionNumber());
-
+        
         RelativeLayout.LayoutParams p =
                 new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
         p.addRule(RelativeLayout.ABOVE, R.id.progressbar);

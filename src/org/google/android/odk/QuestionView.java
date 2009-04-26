@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -69,6 +70,7 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 
 
@@ -259,7 +261,7 @@ public class QuestionView extends LinearLayout {
      * Set date to now.
      */
     private void DateReset() {
-        final Calendar c = Calendar.getInstance();
+        final Calendar c = new GregorianCalendar();
         mDateAnswer.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
                 mDateListener);
     }
@@ -269,10 +271,10 @@ public class QuestionView extends LinearLayout {
      * Build view for date answer. Includes retrieving existing answer.
      */
     private void DateView() {
-        final Calendar c = Calendar.getInstance();
+        final Calendar c = new GregorianCalendar();
         mDateAnswer = new DatePicker(getContext());
         mDateListener = new DatePicker.OnDateChangedListener() {
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            public void onDateChanged(DatePicker view, int year, int month, int day) {
                 if (mReadOnly) {
                     if (mPrompt.getAnswerValue() != null) {
                         Date d = (Date) mPrompt.getAnswerObject();
@@ -282,10 +284,12 @@ public class QuestionView extends LinearLayout {
                                 .get(Calendar.DAY_OF_MONTH));
                     }
                 } else {
-                    c.set(Calendar.MONTH, monthOfYear);
+                    // handle leap years and number of days in month
+                    c.set(Calendar.YEAR,year);
+                    c.set(Calendar.MONTH,month);
                     int maxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (dayOfMonth > maxDays) {
-                        view.updateDate(year, monthOfYear, maxDays);
+                    if (day > maxDays) {
+                        view.updateDate(year, month, maxDays);
                     }
                 }
             }
