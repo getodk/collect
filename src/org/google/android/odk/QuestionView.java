@@ -285,11 +285,12 @@ public class QuestionView extends LinearLayout {
                     }
                 } else {
                     // handle leap years and number of days in month
-                    c.set(Calendar.YEAR,year);
-                    c.set(Calendar.MONTH,month);
-                    int maxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (day > maxDays) {
-                        view.updateDate(year, month, maxDays);
+                    c.set(year,month,1);
+                    int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    if (day > max) {
+                        view.updateDate(year,month,max);
+                    } else {
+                        view.updateDate(year,month,day);
                     }
                 }
             }
