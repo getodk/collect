@@ -285,12 +285,12 @@ public class QuestionView extends LinearLayout {
                     }
                 } else {
                     // handle leap years and number of days in month
-                    c.set(year,month,1);
+                    c.set(year, month, 1);
                     int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (day > max) {
-                        view.updateDate(year,month,max);
+                        view.updateDate(year, month, max);
                     } else {
-                        view.updateDate(year,month,day);
+                        view.updateDate(year, month, day);
                     }
                 }
             }
@@ -750,9 +750,10 @@ public class QuestionView extends LinearLayout {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (mRadioSelected != -1 && mReadOnly) {
                     mRadioAnswer.check(mRadioSelected);
-                } else {
+                } 
+                /*else {
                     mRadioAnswer.check(checkedId);
-                }
+                }*/
             }
         });
 
