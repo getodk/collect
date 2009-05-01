@@ -750,10 +750,7 @@ public class QuestionView extends LinearLayout {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (mRadioSelected != -1 && mReadOnly) {
                     mRadioAnswer.check(mRadioSelected);
-                } 
-                /*else {
-                    mRadioAnswer.check(checkedId);
-                }*/
+                }
             }
         });
 
