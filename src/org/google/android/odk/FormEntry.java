@@ -16,15 +16,15 @@
 
 package org.google.android.odk;
 
-import org.google.android.odk.FormLoader.LoadingState;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,7 +32,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
@@ -43,6 +42,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.google.android.odk.FormLoader.LoadingState;
+
+import java.io.File;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -101,7 +104,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         super.onCreate(savedInstanceState);
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
-        
+
         initializeVariables();
 
         // if starting for the first time, get stored data
@@ -232,18 +235,23 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             return;
         }
 
-        Bundle extras = intent.getExtras();
         switch (requestCode) {
             case (SharedConstants.IMAGE_CAPTURE):
                 if (resultCode != 0) {
                     // save bitmap in question view and data model
-                    Bitmap b = (Bitmap) extras.get("data");
+                    Debug.startMethodTracing("image");
+
+                    Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
                     PromptElement p = ((QuestionView) mCurrentView).getPrompt();
                     if (!p.isReadonly()) {
                         ((QuestionView) mCurrentView).setImageAnswer(b);
                         mFormHandler
                                 .saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
                     }
+                    new File(SharedConstants.TMPFILE_PATH).delete();
+                    
+                    Debug.startMethodTracing();
+
 
                 }
                 break;
@@ -564,7 +572,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         // bar.
         mProgressBar.setMax(mFormHandler.getQuestionCount());
         mProgressBar.setProgress(mFormHandler.getQuestionNumber());
-        
+
         RelativeLayout.LayoutParams p =
                 new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
         p.addRule(RelativeLayout.ABOVE, R.id.progressbar);

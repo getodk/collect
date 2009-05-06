@@ -52,12 +52,12 @@ public class SharedConstants {
     /**
      * Forms storage path
      */
-    public static final String FORMS_SDCARD_PATH = "/sdcard/odk/forms/";
+    public static final String FORMS_PATH = "/sdcard/odk/forms/";
 
     /**
      * Answers storage path
      */
-    public static final String ANSWERS_SDCARD_PATH = "/sdcard/odk/answers/";
+    public static final String ANSWERS_PATH = "/sdcard/odk/answers/";
 
 
     /**
@@ -69,5 +69,10 @@ public class SharedConstants {
      * How long to wait when opening network connection in milliseconds
      */
     public static final int CONNECTION_TIMEOUT = 5000;
+    
+    /**
+     * Temporary file
+     */
+    public static final String TMPFILE_PATH = "/sdcard/odk/tmp";
     
 }

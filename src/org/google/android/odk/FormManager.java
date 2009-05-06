@@ -77,7 +77,7 @@ public class FormManager extends ListActivity {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
 
         mFormNames = new ArrayList<String>();
-        mFormsPath = SharedConstants.FORMS_SDCARD_PATH;
+        mFormsPath = SharedConstants.FORMS_PATH;
 
         TextView tv = (TextView) findViewById(R.id.formmanager_message);
 

@@ -55,7 +55,7 @@ public class FormChooser extends ListActivity {
 
         mFormNames = new ArrayList<String>();
         mFormPath = SharedConstants.FORMPATH_KEY;
-        mFormsPath = SharedConstants.FORMS_SDCARD_PATH;
+        mFormsPath = SharedConstants.FORMS_PATH;
 
         TextView tv = (TextView) findViewById(R.id.formchooser_message);
 

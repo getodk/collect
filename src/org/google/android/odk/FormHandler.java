@@ -428,7 +428,7 @@ public class FormHandler {
                 getSourcePath().substring(getSourcePath().lastIndexOf("/") + 1,
                         getSourcePath().lastIndexOf("."));
 
-        String dname = SharedConstants.ANSWERS_SDCARD_PATH + "/" + fname + "_" + now + "/";
+        String dname = SharedConstants.ANSWERS_PATH + "/" + fname + "_" + now + "/";
 
         File dir = new File(dname);
         if (!dir.exists()) {
@@ -470,7 +470,7 @@ public class FormHandler {
                 getSourcePath().substring(getSourcePath().lastIndexOf("/") + 1,
                         getSourcePath().lastIndexOf("."));
 
-        String dname = SharedConstants.ANSWERS_SDCARD_PATH + "/" + fname + "_" + now + "/";
+        String dname = SharedConstants.ANSWERS_PATH + "/" + fname + "_" + now + "/";
 
         File d = new File(dname);
         if (!d.exists()) {

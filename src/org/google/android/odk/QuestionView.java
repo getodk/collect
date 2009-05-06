@@ -29,11 +29,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -66,6 +66,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.util.OrderedHashtable;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -108,7 +109,7 @@ public class QuestionView extends LinearLayout {
     private DatePicker mDateAnswer;
     private DatePicker.OnDateChangedListener mDateListener;
     private RadioGroup mRadioAnswer;
-    private ImageView mImageAnswer;
+    private ImageView mImageView;
 
     // view for decimal, integer, geopoint, string and untyped answer.
     private TextView mStringAnswer;
@@ -124,9 +125,7 @@ public class QuestionView extends LinearLayout {
 
     // first time displaying radio or checkbox
     private int mRadioSelected = -1;
-    // private boolean mRadioInit = true;
     private boolean mCheckboxInit = true;
-
 
     public QuestionView(Context context, PromptElement mPrompt) {
         super(context);
@@ -515,7 +514,7 @@ public class QuestionView extends LinearLayout {
      */
     private void ImageReset() {
         mImageData = null;
-        mImageAnswer.setVisibility(GONE);
+        mImageView.setVisibility(GONE);
     }
 
 
@@ -539,13 +538,15 @@ public class QuestionView extends LinearLayout {
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
+                Uri u = Uri.fromFile(new File(SharedConstants.TMPFILE_PATH));
+                i.putExtra("output", u);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.IMAGE_CAPTURE);
             }
         });
 
         // for showing the image
-        mImageAnswer = new ImageView(getContext());
-        mImageAnswer.setPadding(0, 10, 0, 0);
+        mImageView = new ImageView(getContext());
+        mImageView.setPadding(0, 10, 0, 0);
         if (mPrompt.getAnswerObject() != null) {
             // always use the image from the imageAnswer array
             InputStream is = ((BasicDataPointer) mPrompt.getAnswerObject()).getDataStream();
@@ -554,7 +555,7 @@ public class QuestionView extends LinearLayout {
 
         // finish complex layout
         ll.addView(mActionButton);
-        ll.addView(mImageAnswer);
+        ll.addView(mImageView);
         mView.addView(ll);
     }
 
@@ -795,12 +796,12 @@ public class QuestionView extends LinearLayout {
      * @param mBitmap bitmap from camera
      */
     public void setImageAnswer(Bitmap mBitmap) {
-        mImageAnswer.setImageBitmap(mBitmap);
+        mImageView.setImageBitmap(mBitmap);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        mBitmap.compress(CompressFormat.PNG, 100, bos); // lossless
+        mBitmap.compress(CompressFormat.PNG, 100, bos); // lossless and slow
         mImageData = bos.toByteArray();
-    }
 
+    }
 
     /**
      * Create location manager and listener.
