@@ -239,7 +239,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.IMAGE_CAPTURE):
                 if (resultCode != 0) {
                     // save bitmap in question view and data model
-                    Debug.startMethodTracing("image");
+                    //Debug.startMethodTracing("image");
 
                     Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
                     PromptElement p = ((QuestionView) mCurrentView).getPrompt();
@@ -250,7 +250,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     }
                     new File(SharedConstants.TMPFILE_PATH).delete();
                     
-                    Debug.startMethodTracing();
+                    //Debug.startMethodTracing();
 
 
                 }
