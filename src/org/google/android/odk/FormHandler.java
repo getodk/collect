@@ -454,7 +454,7 @@ public class FormHandler {
     }
 
 
-    private boolean exportPNGPayload(DataPointerPayload payload, String now) {
+    private boolean exportJPGPayload(DataPointerPayload payload, String now) {
         InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();
 
@@ -480,7 +480,7 @@ public class FormHandler {
         }
         try {
 
-            FileOutputStream o = new FileOutputStream(dname + payload.getPayloadId() + ".png");
+            FileOutputStream o = new FileOutputStream(dname + payload.getPayloadId() + ".jpg");
             o.write(data);
             o.flush();
             o.close();
@@ -527,8 +527,8 @@ public class FormHandler {
                                 return false;
                             }
                             break;
-                        case IDataPayload.PAYLOAD_TYPE_JPG: // actually a png
-                            if (!exportPNGPayload((DataPointerPayload) p, now)) {
+                        case IDataPayload.PAYLOAD_TYPE_JPG:
+                            if (!exportJPGPayload((DataPointerPayload) p, now)) {
                                 return false;
                             }
                             break;

@@ -63,14 +63,15 @@ the License.
 	<string name="load_error">Sorry, unable to load form %s</string>
   <string name="directory_error">Sorry, unable to create directory %s</string>  
 
- <string name="form_deleted_ok">%s successfully deleted!</string>
+  <string name="form_deleted_ok">%s successfully deleted!</string>
   <string name="form_added_ok">%s successfully added!</string>
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
 	
 	
 	<string name="no_answer_error">Sorry, no answer to clear!</string>
-	 <string name="readonly_answer_error">Sorry, answer is read only!</string>
+	<string name="readonly_question">This question is read only.</string>
+	<string name="readonly_answer_error">Sorry, answer is read only!</string>
 	<string name="form_deleted_error">Sorry, unable to delete %s</string>
 	<string name="delete_confirm">Are you sure you want to delete %s</string>
 	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>

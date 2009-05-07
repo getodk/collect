@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -239,20 +238,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.IMAGE_CAPTURE):
                 if (resultCode != 0) {
                     // save bitmap in question view and data model
-                    //Debug.startMethodTracing("image");
-
-                    Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
                     PromptElement p = ((QuestionView) mCurrentView).getPrompt();
                     if (!p.isReadonly()) {
-                        ((QuestionView) mCurrentView).setImageAnswer(b);
+                        Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
+                        ((QuestionView) mCurrentView).setImageData(b);
                         mFormHandler
                                 .saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
                     }
+                    // delete the tmp file
                     new File(SharedConstants.TMPFILE_PATH).delete();
-                    
-                    //Debug.startMethodTracing();
-
-
                 }
                 break;
         }

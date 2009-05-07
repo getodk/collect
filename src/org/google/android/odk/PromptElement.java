@@ -173,7 +173,14 @@ public class PromptElement {
         return (((QuestionDef) mBinding.element).getLongText());
     }
 
+    /**
+     * The help text of question in the prompt.
+     */
+    public String getHelpText() {
+        return (((QuestionDef) mBinding.element).getHelpText());
+    }
 
+    
     /**
      * The repeat count of closest group the prompt belongs to.
      */

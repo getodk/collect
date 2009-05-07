@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -42,6 +43,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -67,7 +69,7 @@ import org.javarosa.core.util.OrderedHashtable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -127,6 +129,9 @@ public class QuestionView extends LinearLayout {
     private int mRadioSelected = -1;
     private boolean mCheckboxInit = true;
 
+    private String mRadioKey;
+
+
     public QuestionView(Context context, PromptElement mPrompt) {
         super(context);
         setPrompt(mPrompt);
@@ -169,6 +174,7 @@ public class QuestionView extends LinearLayout {
         // display which group you are in as well as the question
         GroupTextView();
         QuestionTextView();
+        HelpTextView();
 
         // if question or answer type is not supported, use text widget
         switch (mPrompt.getQuestionType()) {
@@ -546,11 +552,16 @@ public class QuestionView extends LinearLayout {
 
         // for showing the image
         mImageView = new ImageView(getContext());
+        mImageView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+                LayoutParams.FILL_PARENT));
+
         mImageView.setPadding(0, 10, 0, 0);
+        mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         if (mPrompt.getAnswerObject() != null) {
             // always use the image from the imageAnswer array
-            InputStream is = ((BasicDataPointer) mPrompt.getAnswerObject()).getDataStream();
-            setImageAnswer(BitmapFactory.decodeStream(is));
+            mImageData = ((BasicDataPointer) mPrompt.getAnswerObject()).getData();
+            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(mImageData, 0,
+                    mImageData.length));
         }
 
         // finish complex layout
@@ -607,8 +618,35 @@ public class QuestionView extends LinearLayout {
 
         // wrap to the widget of view
         tv.setHorizontallyScrolling(false);
-        this.addView(tv);
+        addView(tv);
     }
+
+
+    /**
+     * Build view for help text.
+     */
+    private void HelpTextView() {
+        TextView tv = new TextView(getContext());
+        tv.setTextColor(Color.LTGRAY);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 6.0);
+        tv.setPadding(0, 0, 0, 7);
+        // wrap to the widget of view
+        tv.setHorizontallyScrolling(false);
+
+        String s = mPrompt.getHelpText();
+        if (mReadOnly) {
+            if (s == null) {
+                s = getContext().getString(R.string.readonly_question);
+            } else {
+                s = getContext().getString(R.string.readonly_question) + " " + s;
+            }
+        }
+        if (s != null) {
+            tv.setText(s);
+            addView(tv);
+        }
+    }
+
 
 
     /**
@@ -616,22 +654,30 @@ public class QuestionView extends LinearLayout {
      */
     private void SelectMultiAnswer() {
 
-        Vector v = new Vector();
+        Vector ve = new Vector();
+        OrderedHashtable h = mPrompt.getSelectItems();
+        Enumeration en = h.keys();
+        String k = null;
+        String v = null;
 
-        for (int i = 0; i < mPrompt.getSelectItems().size(); i++) {
-            // no checkbox group so find by id + offset
+        // counter for offset
+        int i = 0;
+        while (en.hasMoreElements()) {
+
+            k = (String) en.nextElement();
+            v = (String) h.get(k);
             CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
-            c.setPadding(0, 0, 0, 5);
             if (c.isChecked()) {
-                // use {@link Selection} for selections
-                v.add(new Selection(i, mPrompt.getQuestionDef()));
+                ve.add(new Selection(v));
             }
+            i++;
+
         }
 
-        if (v.size() == 0) {
+        if (ve.size() == 0) {
             mAnswer = null;
         } else {
-            mAnswer = new SelectMultiData(v);
+            mAnswer = new SelectMultiData(ve);
         }
     }
 
@@ -682,7 +728,7 @@ public class QuestionView extends LinearLayout {
                 // no checkbox group so id by answer + offset
                 CheckBox c = new CheckBox(getContext());
 
-                // when clicked, check for readonly before toggling`
+                // when clicked, check for readonly before toggling
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (!mCheckboxInit && mReadOnly) {
@@ -722,13 +768,10 @@ public class QuestionView extends LinearLayout {
      * Store select one answer as {@link SelectOneData}.
      */
     private void SelectOneAnswer() {
-        int i = mRadioAnswer.getCheckedRadioButtonId();
-        if (i == -1) {
+        if (mRadioAnswer.getCheckedRadioButtonId() == -1) {
             mAnswer = null;
         } else {
-            // javarosa indexes start at 0, but android radio ids start at 1.
-            i--;
-            mAnswer = new SelectOneData(new Selection(i, mPrompt.getQuestionDef()));
+            mAnswer = new SelectOneData(new Selection(mRadioKey));
         }
     }
 
@@ -781,6 +824,7 @@ public class QuestionView extends LinearLayout {
                 if (k.equals(s)) {
                     r.setChecked(true);
                     mRadioSelected = i;
+                    mRadioKey = k;
                 }
 
                 i++;
@@ -795,13 +839,19 @@ public class QuestionView extends LinearLayout {
      * 
      * @param mBitmap bitmap from camera
      */
-    public void setImageAnswer(Bitmap mBitmap) {
+    public void setImageData(Bitmap mBitmap) {
         mImageView.setImageBitmap(mBitmap);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        mBitmap.compress(CompressFormat.PNG, 100, bos); // lossless and slow
-        mImageData = bos.toByteArray();
-
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            mBitmap.compress(CompressFormat.JPEG, 100, bos);
+            mImageData = bos.toByteArray();
+            bos.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * Create location manager and listener.
