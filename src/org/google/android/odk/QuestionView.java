@@ -126,11 +126,10 @@ public class QuestionView extends LinearLayout {
     private boolean mReadOnly = false;
 
     // first time displaying radio or checkbox
-    private int mRadioSelected = -1;
+    private int mRadioSelectedId = -1;
+    private String mRadioSelectedKey;
+
     private boolean mCheckboxInit = true;
-
-    private String mRadioKey;
-
 
     public QuestionView(Context context, PromptElement mPrompt) {
         super(context);
@@ -771,7 +770,7 @@ public class QuestionView extends LinearLayout {
         if (mRadioAnswer.getCheckedRadioButtonId() == -1) {
             mAnswer = null;
         } else {
-            mAnswer = new SelectOneData(new Selection(mRadioKey));
+            mAnswer = new SelectOneData(new Selection(mRadioSelectedKey));
         }
     }
 
@@ -792,8 +791,8 @@ public class QuestionView extends LinearLayout {
         mRadioAnswer = new RadioGroup(getContext());
         mRadioAnswer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (mRadioSelected != -1 && mReadOnly) {
-                    mRadioAnswer.check(mRadioSelected);
+                if (mRadioSelectedId != -1 && mReadOnly) {
+                    mRadioAnswer.check(mRadioSelectedId);
                 }
             }
         });
@@ -823,8 +822,8 @@ public class QuestionView extends LinearLayout {
 
                 if (k.equals(s)) {
                     r.setChecked(true);
-                    mRadioSelected = i;
-                    mRadioKey = k;
+                    mRadioSelectedId = i;
+                    mRadioSelectedKey = k;
                 }
 
                 i++;
