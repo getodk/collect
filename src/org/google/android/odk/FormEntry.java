@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -58,6 +59,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private final String FORMPATH = "formpath";
     private final String FORMLOADER = "formloader";
 
+    private static final String DEVICE_ID_PROPERTY = "deviceid";
+    private static final String SUBSCRIBER_ID_PROPERTY = "subscriberid";
+    private static final String SIM_SERIAL_PROPERTY = "simserial";
+    private static final String PHONE_NUMBER_PROPERTY = "phonenumber";
+
     public static final int MENU_CLEAR = Menu.FIRST;
     public static final int MENU_LANGUAGES = Menu.FIRST + 1;
 
@@ -80,6 +86,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private FormLoader mFormLoader;
     private final Handler mHandler = new Handler();
+
 
     private final Runnable mUpdateDisplayByFormLoader = new Runnable() {
         public void run() {
@@ -119,7 +126,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         if (mFormLoader == null) {
             mFormLoader = new FormLoader();
         }
-
+        
         if (mFormLoader.getState() == LoadingState.RUNNING
                 || mFormLoader.getState() == LoadingState.NOT_RUNNING) {
             mProgressDialog.show();
@@ -136,8 +143,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             // The application is starting for the first time.
             Intent intent = getIntent();
             if (intent != null) {
+
                 mFormPath = intent.getStringExtra(SharedConstants.FORMPATH_KEY);
                 mFormLoader.loadForm(mFormPath);
+
             }
         } else {
             // The application had a screen flip or a similar restart happened
@@ -145,6 +154,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             mFormHandler = (FormHandler) data;
             refreshCurrentView();
         }
+        
+
     }
 
 
@@ -649,7 +660,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case AlertDialog.BUTTON1:
-                        if (shouldExit) finish();
+                        if (shouldExit) {
+                            finish();
+                        }
                         break;
                 }
             }
@@ -837,6 +850,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     public void loadingComplete(FormHandler formHandler) {
         if (mFormLoader.getState() == LoadingState.FINISHED) {
             mFormHandler = formHandler;
+            mFormHandler.initialize(getApplicationContext());
             mFormHandler.setSourcePath(mFormPath);
         }
 

@@ -17,13 +17,21 @@
 package org.google.android.odk;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.services.IService;
+import org.javarosa.core.services.UnavailableServiceException;
+
+import java.util.Vector;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Also
@@ -44,7 +52,7 @@ public class MainMenu extends Activity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.mainmenu);

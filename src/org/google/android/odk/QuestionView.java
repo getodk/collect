@@ -131,6 +131,7 @@ public class QuestionView extends LinearLayout {
 
     private boolean mCheckboxInit = true;
 
+
     public QuestionView(Context context, PromptElement mPrompt) {
         super(context);
         setPrompt(mPrompt);

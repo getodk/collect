@@ -15,8 +15,10 @@
  */
 package org.google.android.odk;
 
+import android.content.Context;
 import android.util.Log;
 
+import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -60,9 +62,20 @@ public class FormHandler {
     public FormHandler(FormDef formDef) {
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
-        mForm.initialize(true);
     }
-
+    
+    
+    public void initialize(Context context) {
+        
+        //load properties 
+        Vector v = new Vector();
+        v.add(new PropertyManager(context));
+        JavaRosaServiceProvider.instance().initialize(v);
+        
+        //initialize form
+        mForm.initialize(true); 
+    }
+    
 
     /**
      * Attempts to save the answer 'answer' into prompt.
@@ -412,7 +425,7 @@ public class FormHandler {
 
     // TODO report directory fail
     private boolean exportXMLPayload(ByteArrayPayload payload, String now) {
-        
+
         InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();
 
