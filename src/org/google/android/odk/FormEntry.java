@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -58,11 +57,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private final String FORMPATH = "formpath";
     private final String FORMLOADER = "formloader";
-
-    private static final String DEVICE_ID_PROPERTY = "deviceid";
-    private static final String SUBSCRIBER_ID_PROPERTY = "subscriberid";
-    private static final String SIM_SERIAL_PROPERTY = "simserial";
-    private static final String PHONE_NUMBER_PROPERTY = "phonenumber";
 
     public static final int MENU_CLEAR = Menu.FIRST;
     public static final int MENU_LANGUAGES = Menu.FIRST + 1;

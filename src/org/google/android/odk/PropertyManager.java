@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.IService;
+import org.javarosa.core.services.properties.IPropertyRules;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -40,6 +41,7 @@ public class PropertyManager implements IService, IPropertyManager {
         mProperties.put(PHONE_NUMBER_PROPERTY, mTelephonyManager.getLine1Number());
     }
 
+    @SuppressWarnings("unchecked")
     public Vector getProperty(String propertyName) {
         Log.i(t, "get property:" + propertyName);
         return null;
@@ -55,8 +57,20 @@ public class PropertyManager implements IService, IPropertyManager {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void setProperty(String propertyName, Vector propertyValue) {
         Log.i(t, "set property vector:" + propertyName + " value:" + propertyValue);
+    }
+
+    public void addRules(IPropertyRules rules) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @SuppressWarnings("unchecked")
+    public Vector getRules() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

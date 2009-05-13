@@ -34,7 +34,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -43,7 +42,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -89,7 +87,7 @@ import java.util.Vector;
 // TODO select multi, select one
 public class QuestionView extends LinearLayout {
 
-    private final static String t = "QuestionView";
+    //private final static String t = "QuestionView";
 
     // identify a group of checkboxes
     private final static int CHECKBOX_ID = 100;
@@ -377,7 +375,7 @@ public class QuestionView extends LinearLayout {
         mActionButton = new Button(getContext());
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
         mActionButton.setEnabled(!mReadOnly);
 
         // gps has to readonly
@@ -492,7 +490,7 @@ public class QuestionView extends LinearLayout {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
             tv.setTextColor(Color.LTGRAY);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 7.0);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
             tv.setPadding(0, 0, 0, 5);
             addView(tv);
         }
@@ -536,7 +534,7 @@ public class QuestionView extends LinearLayout {
 
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_image));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!mReadOnly);
 
@@ -613,7 +611,7 @@ public class QuestionView extends LinearLayout {
         TextView tv = new TextView(getContext());
         tv.setText(mPrompt.getQuestionText());
         tv.setTextColor(Color.WHITE);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
         tv.setPadding(0, 0, 0, 5);
 
         // wrap to the widget of view
@@ -628,7 +626,7 @@ public class QuestionView extends LinearLayout {
     private void HelpTextView() {
         TextView tv = new TextView(getContext());
         tv.setTextColor(Color.LTGRAY);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 6.0);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, 6);
         tv.setPadding(0, 0, 0, 7);
         // wrap to the widget of view
         tv.setHorizontallyScrolling(false);
@@ -652,9 +650,10 @@ public class QuestionView extends LinearLayout {
     /**
      * Store select multiple answer as {@link SelectMultiData}.
      */
+    @SuppressWarnings("unchecked")
     private void SelectMultiAnswer() {
 
-        Vector ve = new Vector();
+        Vector<Selection> ve = new Vector<Selection>();
         OrderedHashtable h = mPrompt.getSelectItems();
         Enumeration en = h.keys();
         String k = null;
@@ -700,6 +699,7 @@ public class QuestionView extends LinearLayout {
     /**
      * Build view for multi select answer. Includes retrieving existing answer.
      */
+    @SuppressWarnings("unchecked")
     private void SelectMultiView() {
 
         // view is too complex for scrollview
@@ -743,7 +743,7 @@ public class QuestionView extends LinearLayout {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(k);
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
@@ -787,6 +787,7 @@ public class QuestionView extends LinearLayout {
     /**
      * Build view for select one answer. Includes retrieving existing answer.
      */
+    @SuppressWarnings("unchecked")
     private void SelectOneView() {
 
         mRadioAnswer = new RadioGroup(getContext());
@@ -817,7 +818,7 @@ public class QuestionView extends LinearLayout {
 
                 RadioButton r = new RadioButton(getContext());
                 r.setText(k);
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
                 r.setId(i);
                 mRadioAnswer.addView(r);
 
@@ -956,7 +957,7 @@ public class QuestionView extends LinearLayout {
         if (s != null) {
             mStringAnswer.setText(s);
         }
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, (float) 10);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
     }
 
 

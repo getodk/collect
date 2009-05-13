@@ -42,7 +42,7 @@ public class FormChooser extends ListActivity {
     private File mFormsDirectory;
     private String mFormPath;
     private String mFormsPath;
-    private final String t = "FormChooser";
+    //private final String t = "FormChooser";
 
 
     /** Called when the activity is first created. */

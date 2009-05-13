@@ -30,4 +30,26 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>core</name>
+			<type>2</type>
+			<location>/Users/yanokwa/Documents/Code/android/JavaRosa/org.javarosa.core/src</location>
+		</link>
+		<link>
+			<name>forms</name>
+			<type>2</type>
+			<location>/Users/yanokwa/Documents/Code/android/JavaRosa/org.javarosa.forms/src</location>
+		</link>
+		<link>
+			<name>model</name>
+			<type>2</type>
+			<location>/Users/yanokwa/Documents/Code/android/JavaRosa/org.javarosa.core.model/src</location>
+		</link>
+		<link>
+			<name>xform</name>
+			<type>2</type>
+			<location>/Users/yanokwa/Documents/Code/android/JavaRosa/org.javarosa.xform/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

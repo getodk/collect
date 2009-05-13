@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.services.IService;
 import org.javarosa.core.services.transport.ByteArrayPayload;
 import org.javarosa.core.services.transport.DataPointerPayload;
 import org.javarosa.core.services.transport.IDataPayload;
@@ -44,7 +45,7 @@ import java.util.Calendar;
 import java.util.Vector;
 
 /**
- * Given a {@link formDef}, enables form iteration.
+ * Given a {@link FormDef}, enables form iteration.
  * 
  * @author Carl Hartung
  * @author Yaw Anokwa
@@ -63,26 +64,25 @@ public class FormHandler {
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
     }
-    
-    
+
+
     public void initialize(Context context) {
-        
-        //load properties 
-        Vector v = new Vector();
+
+        // load properties
+        Vector<IService> v = new Vector<IService>();
         v.add(new PropertyManager(context));
         JavaRosaServiceProvider.instance().initialize(v);
-        
-        //initialize form
-        mForm.initialize(true); 
+
+        // initialize form
+        mForm.initialize(true);
     }
-    
+
 
     /**
      * Attempts to save the answer 'answer' into prompt.
      * 
      * @param prompt
      * @param answer
-     * @return
      */
     public int saveAnswer(PromptElement prompt, IAnswerData answer, boolean validate) {
         if (!mForm.evaluateConstraint(prompt.getInstanceRef(), answer) && validate) {
@@ -105,7 +105,7 @@ public class FormHandler {
         Vector<IFormElement> elements = new Vector<IFormElement>();
         Vector<GroupElement> groups = new Vector<GroupElement>();
 
-        getForm().collapseIndex(mCurrentIndex, new Vector(), mult, elements);
+        getForm().collapseIndex(mCurrentIndex, new Vector<Object>(), mult, elements);
         for (int i = 0; i < elements.size(); i++) {
             IFormElement fi = elements.get(i);
             if (fi instanceof GroupDef) {
@@ -136,14 +136,13 @@ public class FormHandler {
      * Returns the prompt associated with the next relevant question or repeat.
      * For filling out forms, use this rather than nextQuestionPrompt()
      * 
-     * @return
      */
     public PromptElement nextPrompt() {
         nextRelevantIndex();
 
         String groupName = null;
         while (!isEnd()) {
-            Vector defs = getIndexVector(mCurrentIndex);
+            Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
             if (indexIsGroup(mCurrentIndex)) {
                 GroupDef last = (defs.size() == 0 ? null : (GroupDef) defs.lastElement());
 
@@ -170,13 +169,12 @@ public class FormHandler {
      * should only be used when iterating through the questions as it ignores
      * any repeats
      * 
-     * @return
      */
     public PromptElement nextQuestionPrompt() {
         nextRelevantIndex();
 
         while (!isEnd()) {
-            Vector defs = getIndexVector(mCurrentIndex);
+            Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
             if (indexIsGroup(mCurrentIndex)) {
                 nextRelevantIndex();
                 continue;
@@ -201,7 +199,6 @@ public class FormHandler {
     /**
      * returns the prompt for the previous relevant question
      * 
-     * @return
      */
     public PromptElement prevPrompt() {
         mQuestionCount--;
@@ -238,7 +235,7 @@ public class FormHandler {
 
 
     private boolean indexIsGroup(FormIndex index) {
-        Vector defs = getIndexVector(index);
+        Vector<IFormElement> defs = getIndexVector(index);
         IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
         if (last instanceof GroupDef) {
             return true;
@@ -269,13 +266,12 @@ public class FormHandler {
      * otherwise
      * 
      * @param questionIndex
-     * @return
      */
     private boolean isRelevant(FormIndex questionIndex) {
         TreeReference ref = mForm.getChildInstanceRef(questionIndex);
         boolean isAskNewRepeat = false;
 
-        Vector defs = mForm.explodeIndex(questionIndex);
+        Vector<IFormElement> defs = getIndexVector(questionIndex);
         IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
         if (last instanceof GroupDef
                 && ((GroupDef) last).getRepeat()
@@ -350,7 +346,8 @@ public class FormHandler {
     }
 
 
-    public Vector getIndexVector(FormIndex index) {
+    @SuppressWarnings("unchecked")
+    public Vector<IFormElement> getIndexVector(FormIndex index) {
         return mForm.explodeIndex(index);
     }
 
@@ -395,7 +392,7 @@ public class FormHandler {
 
         String groupName = null;
         while (!i.isEndOfFormIndex()) {
-            Vector defs = getIndexVector(i);
+            Vector<IFormElement> defs = getIndexVector(i);
             if (indexIsGroup(i)) {
             } else {
                 // we have a question
@@ -516,6 +513,7 @@ public class FormHandler {
 
 
     // should return something
+    @SuppressWarnings("unchecked")
     public boolean exportDataModel() {
         String now =
                 new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
@@ -532,7 +530,7 @@ public class FormHandler {
 
         switch (payload.getPayloadType()) {
             case IDataPayload.PAYLOAD_TYPE_MULTI:
-                Vector payloads = ((MultiMessagePayload) payload).getPayloads();
+                Vector<IDataPayload> payloads = ((MultiMessagePayload) payload).getPayloads();
                 for (Object p : payloads) {
                     switch (((IDataPayload) p).getPayloadType()) {
                         case IDataPayload.PAYLOAD_TYPE_XML:

@@ -36,8 +36,6 @@ public class ArrowAnimation extends View {
     private Bitmap mArrow;
 
     private int mImgXOffset;
-    private int mImgYOffset;
-
 
     public ArrowAnimation(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,7 +52,6 @@ public class ArrowAnimation extends View {
     private void init() {
         mArrow = BitmapFactory.decodeResource(getResources(), R.drawable.left_arrow);
         mImgXOffset = mArrow.getWidth() / 2;
-        mImgYOffset = mArrow.getHeight() / 2;
     }
 
 
