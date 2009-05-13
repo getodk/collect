@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -87,13 +88,16 @@ import java.util.Vector;
 // TODO select multi, select one
 public class QuestionView extends LinearLayout {
 
-    //private final static String t = "QuestionView";
+    // private final static String t = "QuestionView";
 
     // identify a group of checkboxes
     private final static int CHECKBOX_ID = 100;
 
     // convert from j2me date to android date
     private final static int YEARSHIFT = 1900;
+
+    // size of text
+    private final static int TEXTSIZE = 12;
 
     // layout question, group and answer widgets.
     private ScrollView mView;
@@ -124,10 +128,9 @@ public class QuestionView extends LinearLayout {
     private boolean mReadOnly = false;
 
     // first time displaying radio or checkbox
-    private int mRadioSelectedId = -1;
-    private String mRadioSelectedKey;
-
+    private int mRadioChecked = -1;
     private boolean mCheckboxInit = true;
+
 
 
     public QuestionView(Context context, PromptElement mPrompt) {
@@ -375,7 +378,7 @@ public class QuestionView extends LinearLayout {
         mActionButton = new Button(getContext());
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
         mActionButton.setEnabled(!mReadOnly);
 
         // gps has to readonly
@@ -479,7 +482,7 @@ public class QuestionView extends LinearLayout {
         for (GroupElement g : mPrompt.getGroups()) {
             int i = g.getRepeatCount() + 1;
             s += g.getGroupText();
-            if (i > 1) {
+            if (i > 0) {
                 s += " (" + i + ")";
             }
             s += " > ";
@@ -490,7 +493,7 @@ public class QuestionView extends LinearLayout {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
             tv.setTextColor(Color.LTGRAY);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
             tv.setPadding(0, 0, 0, 5);
             addView(tv);
         }
@@ -534,7 +537,7 @@ public class QuestionView extends LinearLayout {
 
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_image));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!mReadOnly);
 
@@ -611,7 +614,7 @@ public class QuestionView extends LinearLayout {
         TextView tv = new TextView(getContext());
         tv.setText(mPrompt.getQuestionText());
         tv.setTextColor(Color.WHITE);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
         tv.setPadding(0, 0, 0, 5);
 
         // wrap to the widget of view
@@ -626,7 +629,7 @@ public class QuestionView extends LinearLayout {
     private void HelpTextView() {
         TextView tv = new TextView(getContext());
         tv.setTextColor(Color.LTGRAY);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, 6);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
         tv.setPadding(0, 0, 0, 7);
         // wrap to the widget of view
         tv.setHorizontallyScrolling(false);
@@ -685,7 +688,8 @@ public class QuestionView extends LinearLayout {
      * Set all checkboxes to unchecked.
      */
     private void SelectMultiReset() {
-        for (int i = 0; i < mPrompt.getSelectItems().size(); i++) {
+        int j = mPrompt.getSelectItems().size();
+        for (int i = 0; i < j; i++) {
 
             // no checkbox group so find by id + offset
             CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
@@ -743,7 +747,7 @@ public class QuestionView extends LinearLayout {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(k);
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
@@ -768,10 +772,12 @@ public class QuestionView extends LinearLayout {
      * Store select one answer as {@link SelectOneData}.
      */
     private void SelectOneAnswer() {
-        if (mRadioAnswer.getCheckedRadioButtonId() == -1) {
+        int i = mRadioAnswer.getCheckedRadioButtonId();
+        if (i == -1) {
             mAnswer = null;
         } else {
-            mAnswer = new SelectOneData(new Selection(mRadioSelectedKey));
+            String s = (String) mPrompt.getSelectItems().elementAt(i - 1);
+            mAnswer = new SelectOneData(new Selection(s));
         }
     }
 
@@ -793,15 +799,15 @@ public class QuestionView extends LinearLayout {
         mRadioAnswer = new RadioGroup(getContext());
         mRadioAnswer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (mRadioSelectedId != -1 && mReadOnly) {
-                    mRadioAnswer.check(mRadioSelectedId);
+                if (mRadioChecked != -1 && mReadOnly) {
+                    mRadioAnswer.check(mRadioChecked);
                 }
             }
         });
 
         String s = null;
         if (mPrompt.getAnswerValue() != null) {
-            s = mPrompt.getAnswerText();
+            s = ((Selection) mPrompt.getAnswerObject()).getValue();
         }
 
         if (mPrompt.getSelectItems() != null) {
@@ -818,14 +824,13 @@ public class QuestionView extends LinearLayout {
 
                 RadioButton r = new RadioButton(getContext());
                 r.setText(k);
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
                 r.setId(i);
                 mRadioAnswer.addView(r);
 
-                if (k.equals(s)) {
+                if (v.equals(s)) {
                     r.setChecked(true);
-                    mRadioSelectedId = i;
-                    mRadioSelectedKey = k;
+                    mRadioChecked = i;
                 }
 
                 i++;
@@ -957,7 +962,7 @@ public class QuestionView extends LinearLayout {
         if (s != null) {
             mStringAnswer.setText(s);
         }
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
     }
 
 
