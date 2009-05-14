@@ -86,6 +86,7 @@ the License.
 
 	<string name="add_form">Add Form</string>
 	<string name="delete_form">Delete Form</string>
+	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>
 	<string name="change_language">Change Language</string>
 

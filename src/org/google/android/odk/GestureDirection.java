@@ -16,12 +16,17 @@
 
 package org.google.android.odk;
 
+import android.util.Log;
+
 /**
  * Calculates the direction of a gesture/fling. Used by {@link GestureDetector}
  * 
  * @author Carl Hartung
  */
 public class GestureDirection {
+    
+    private final static String t = "GestureDirection";
+
     enum UserGesture {
         SWIPE_RIGHT, SWIPE_LEFT, SWIPE_UP, SWIPE_DOWN, SWIPE_UNKNOWN
     }
@@ -36,6 +41,8 @@ public class GestureDirection {
 
 
     public GestureDirection(float x, float y) {
+        Log.i(t,"called constructor");
+
         mStartX = x;
         mStartY = y;
         mEndX = x;

@@ -16,6 +16,8 @@
 
 package org.google.android.odk;
 
+import android.util.Log;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.xform.util.XFormUtils;
 
@@ -31,6 +33,8 @@ import java.io.Serializable;
  */
 public class FormLoader implements Serializable {
 
+    private final static String t = "FormLoader";
+
     private static final long serialVersionUID = 1L;
 
     public enum LoadingState {
@@ -42,6 +46,8 @@ public class FormLoader implements Serializable {
 
 
     public FormLoader() {
+        Log.i(t,"called constructor");
+
         mLoadingState = LoadingState.NOT_RUNNING;
         mStateListener = null;
     }

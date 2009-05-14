@@ -61,8 +61,11 @@ public class FormHandler {
 
 
     public FormHandler(FormDef formDef) {
+        Log.i(t, "calling constructor");
+
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
+
     }
 
 

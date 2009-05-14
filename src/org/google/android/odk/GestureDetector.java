@@ -16,6 +16,7 @@
 
 package org.google.android.odk;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 import org.google.android.odk.GestureDirection.UserGesture;
@@ -26,11 +27,14 @@ import org.google.android.odk.GestureDirection.UserGesture;
  * @author Carl Hartung
  */
 public class GestureDetector {
-    
+
+    private final static String t = "GestureDetector";
+
     private GestureDirection mDirectionPoint;
 
-    
     public GestureDetector() {
+        Log.i(t,"called constructor");
+
         mDirectionPoint = null;
     }
 

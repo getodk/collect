@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -38,17 +39,18 @@ import java.util.List;
  */
 public class FormChooser extends ListActivity {
 
+    private final String t = "FormChooser";
+
     private List<String> mFormNames;
     private File mFormsDirectory;
     private String mFormPath;
     private String mFormsPath;
-    //private final String t = "FormChooser";
-
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(t,"called onCreate");
 
         setContentView(R.layout.formchooser);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.choose_form));

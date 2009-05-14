@@ -53,6 +53,7 @@ import java.io.File;
  * @author Carl Hartung
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
+    
     private final String t = "FormEntry";
 
     private final String FORMPATH = "formpath";
@@ -102,6 +103,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(t,"called onCreate");
+
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 

@@ -19,6 +19,7 @@ package org.google.android.odk;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,7 +33,7 @@ import android.widget.Toast;
  */
 public class MainMenu extends Activity {
 
-    //private static final String t = "MainMenu";
+    private static final String t = "MainMenu";
 
     // The request code for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
@@ -45,6 +46,7 @@ public class MainMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         
         super.onCreate(savedInstanceState);
+        Log.i(t,"called onCreate");
 
         setContentView(R.layout.mainmenu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));

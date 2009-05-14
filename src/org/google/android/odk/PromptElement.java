@@ -16,6 +16,8 @@
 
 package org.google.android.odk;
 
+import android.util.Log;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
@@ -39,6 +41,8 @@ import java.util.Vector;
 
 public class PromptElement {
 
+    private final static String t = "PromptElement";
+
     // object to access question and answer data
     private FormElementBinding mBinding;
 
@@ -50,12 +54,16 @@ public class PromptElement {
 
 
     public PromptElement(Vector<GroupElement> groups) {
+        Log.i(t,"calling constructor");
+
         setGroups(groups);
         setRepeat(true);
     }
 
 
     public PromptElement(FormIndex formIndex, FormDef formDef, Vector<GroupElement> groups) {
+        Log.i(t,"calling constructor");
+
         mBinding = new FormElementBinding(null, formIndex, formDef);
         setGroups(groups);
         setRepeat(false);

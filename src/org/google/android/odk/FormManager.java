@@ -22,6 +22,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,8 @@ import java.util.List;
  */
 public class FormManager extends ListActivity {
 
+    private final String t = "FormManager";
+
     private static final int DIALOG_ADD_FORM = 0;
     private static final int DIALOG_DELETE_FORM = 1;
 
@@ -65,12 +68,11 @@ public class FormManager extends ListActivity {
     private String mDeleteForm;
     private AlertDialog mAlertDialog;
 
-    //private final String t = "FormManager";
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(t,"called onCreate");
 
         setContentView(R.layout.formmanager);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));

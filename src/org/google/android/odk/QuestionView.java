@@ -88,7 +88,7 @@ import java.util.Vector;
 // TODO select multi, select one
 public class QuestionView extends LinearLayout {
 
-    // private final static String t = "QuestionView";
+    private final static String t = "QuestionView";
 
     // identify a group of checkboxes
     private final static int CHECKBOX_ID = 100;
@@ -131,10 +131,10 @@ public class QuestionView extends LinearLayout {
     private int mRadioChecked = -1;
     private boolean mCheckboxInit = true;
 
-
-
     public QuestionView(Context context, PromptElement mPrompt) {
         super(context);
+
+        Log.i(t,"calling constructor");
         setPrompt(mPrompt);
     }
 

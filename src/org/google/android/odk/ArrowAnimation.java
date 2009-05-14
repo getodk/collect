@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -32,6 +33,8 @@ import android.view.animation.AnimationUtils;
  */
 public class ArrowAnimation extends View {
 
+    private final static String t = "ArrowAnimation";
+
     private Animation mAnimation;
     private Bitmap mArrow;
 
@@ -39,6 +42,7 @@ public class ArrowAnimation extends View {
 
     public ArrowAnimation(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Log.i(t,"called constructor");
         init();
     }
 
