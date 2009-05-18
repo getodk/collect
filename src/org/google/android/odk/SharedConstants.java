@@ -75,4 +75,8 @@ public class SharedConstants {
      */
     public static final String TMPFILE_PATH = "/sdcard/odk/tmp";
     
+    public static final int APPLICATION_THEME =  android.R.style.Theme_Light;
+    public static final float APPLICATION_FONT = 10;
+
+    
 }

@@ -49,6 +49,9 @@ public class FormChooser extends ListActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        
+        setTheme(SharedConstants.APPLICATION_THEME);
+
         super.onCreate(savedInstanceState);
         Log.i(t,"called onCreate");
 

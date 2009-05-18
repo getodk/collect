@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -53,14 +54,16 @@ import java.io.File;
  * @author Carl Hartung
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
-    
+
     private final String t = "FormEntry";
 
     private final String FORMPATH = "formpath";
     private final String FORMLOADER = "formloader";
 
     public static final int MENU_CLEAR = Menu.FIRST;
-    public static final int MENU_LANGUAGES = Menu.FIRST + 1;
+    public static final int MENU_DELETE = Menu.FIRST + 1;
+    public static final int MENU_QUIT = Menu.FIRST + 2;
+    public static final int MENU_LANGUAGES = Menu.FIRST + 3;
 
     private ProgressBar mProgressBar;
     private String mFormPath;
@@ -102,8 +105,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        setTheme(SharedConstants.APPLICATION_THEME);
+
         super.onCreate(savedInstanceState);
-        Log.i(t,"called onCreate");
+        Log.i(t, "called onCreate");
 
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
@@ -123,7 +129,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         if (mFormLoader == null) {
             mFormLoader = new FormLoader();
         }
-        
+
         if (mFormLoader.getState() == LoadingState.RUNNING
                 || mFormLoader.getState() == LoadingState.NOT_RUNNING) {
             mProgressDialog.show();
@@ -151,7 +157,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             mFormHandler = (FormHandler) data;
             refreshCurrentView();
         }
-        
+
 
     }
 
@@ -300,8 +306,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
+        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
+                android.R.drawable.ic_menu_close_clear_cancel);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 android.R.drawable.ic_menu_more);
+        menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
+                android.R.drawable.ic_menu_save);
         return true;
     }
 

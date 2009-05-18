@@ -22,6 +22,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -71,6 +72,9 @@ public class FormManager extends ListActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        
+        setTheme(SharedConstants.APPLICATION_THEME);
+
         super.onCreate(savedInstanceState);
         Log.i(t,"called onCreate");
 
@@ -195,6 +199,7 @@ public class FormManager extends ListActivity {
                 switch (i) {
                     case AlertDialog.BUTTON1: // ok, download form
                         EditText et = (EditText) v.findViewById(R.id.add_url);
+                        et.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
                         try {
                             URL u = new URL(et.getText().toString());
                             getFormFromUrl(u);

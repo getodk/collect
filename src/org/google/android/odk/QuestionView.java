@@ -97,7 +97,7 @@ public class QuestionView extends LinearLayout {
     private final static int YEARSHIFT = 1900;
 
     // size of text
-    private final static int TEXTSIZE = 12;
+    private final static int TEXTSIZE = 10;
 
     // layout question, group and answer widgets.
     private ScrollView mView;
@@ -492,7 +492,7 @@ public class QuestionView extends LinearLayout {
         if (!s.equals("")) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextColor(Color.LTGRAY);
+            //tv.setTextColor(Color.LTGRAY);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
             tv.setPadding(0, 0, 0, 5);
             addView(tv);
@@ -613,7 +613,7 @@ public class QuestionView extends LinearLayout {
     private void QuestionTextView() {
         TextView tv = new TextView(getContext());
         tv.setText(mPrompt.getQuestionText());
-        tv.setTextColor(Color.WHITE);
+        //tv.setTextColor(Color.WHITE);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
         tv.setPadding(0, 0, 0, 5);
 
@@ -628,7 +628,7 @@ public class QuestionView extends LinearLayout {
      */
     private void HelpTextView() {
         TextView tv = new TextView(getContext());
-        tv.setTextColor(Color.LTGRAY);
+        //tv.setTextColor(Color.LTGRAY);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
         tv.setPadding(0, 0, 0, 7);
         // wrap to the widget of view

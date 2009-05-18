@@ -24,7 +24,6 @@ the License.
     android:layout_height="fill_parent" 
     android:textSize="7pt" 
     android:padding="20px" 
-    android:textColor="#ffffff"
     android:gravity="top" />
   
   <ListView 
@@ -38,7 +37,6 @@ the License.
     android:layout_height="fill_parent"
     android:text="@string/no_forms_error" 
     android:textSize="7pt" 
-    android:textColor="#cccccc"
     android:padding="20px" 
     android:gravity="center" />
    

@@ -20,6 +20,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,15 +40,19 @@ public class MainMenu extends Activity {
     // The request code for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
 
+    public static final int MENU_PREFERENCES = Menu.FIRST;
+
 
     /**
      * Create View with buttons to launch activities.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+
+        setTheme(SharedConstants.APPLICATION_THEME);
+
         super.onCreate(savedInstanceState);
-        Log.i(t,"called onCreate");
+        Log.i(t, "called onCreate");
 
         setContentView(R.layout.mainmenu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
@@ -74,6 +80,46 @@ public class MainMenu extends Activity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+
+        Button editdata = (Button) findViewById(R.id.editdata);
+        editdata.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Sorry, not implemented...",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
+
+        return true;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_PREFERENCES:
+                // createPreferencesMenu();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

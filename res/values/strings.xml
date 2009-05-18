@@ -20,16 +20,16 @@ the License.
 	<string name="form">form</string>
 
 	<string name="main_menu">Main Menu</string>
-	<string name="main_menu_message">Please choose an option.</string>
+	<string name="main_menu_message">Welcome to ODK Collect</string>
 
-	<string name="enter_data">Enter Data</string>
+	<string name="enter_data">Enter New Data</string>
 	<string name="enter_data_message">Slide your finger from right to left for the
 		next question. Reverse the slide for the previous question. Press Menu
 		for more options.</string>
 	<string name="enter_data_description">%s has been selected for data entry.</string>
 
-	<string name="send_data">Send Data</string>
-	<string name="manage_data">Manage Data</string>
+	<string name="edit_data">Edit Saved Data</string>
+	<string name="send_data">Send Finished Data</string>
 	<string name="manage_forms">Manage Forms</string>
 
 	<string name="choose_form">Choose Form</string>
@@ -68,7 +68,6 @@ the License.
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
 	
-	
 	<string name="no_answer_error">Sorry, no answer to clear!</string>
 	<string name="readonly_question">This question is read only.</string>
 	<string name="readonly_answer_error">Sorry, answer is read only!</string>
@@ -88,6 +87,7 @@ the License.
 	<string name="delete_form">Delete Form</string>
 	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>
+	<string name="quit_entry">Save and Exit</string>
 	<string name="change_language">Change Language</string>
 
 </resources>

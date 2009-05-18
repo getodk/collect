@@ -25,8 +25,8 @@ the License.
     android:layout_height="wrap_content" 
     android:id="@+id/description"
     android:gravity="center" 
+    android:text="description"
     android:textSize="10pt" 
-    android:textColor="#ffffff"
     android:paddingTop="2px"
     android:paddingBottom="60px" 
      />
@@ -37,7 +37,6 @@ the License.
 		android:text="@string/save_data_message"
 		android:gravity="center" 
     android:textSize="7pt"
-    android:textColor="#cccccc"
 		android:paddingBottom="6px" />
   
   <Button 
