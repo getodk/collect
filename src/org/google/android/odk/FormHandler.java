@@ -15,8 +15,15 @@
  */
 package org.google.android.odk;
 
-import android.content.Context;
-import android.util.Log;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
 
 import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;
@@ -34,15 +41,8 @@ import org.javarosa.core.services.transport.IDataPayload;
 import org.javarosa.core.services.transport.MultiMessagePayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Vector;
+import android.content.Context;
+import android.util.Log;
 
 /**
  * Given a {@link FormDef}, enables form iteration.
@@ -98,6 +98,13 @@ public class FormHandler {
         }
     }
 
+    /**
+     * Deletes the innermost group that repeats that this node belongs to.
+     */
+    public void deleteCurrentRepeat() {
+        mCurrentIndex = mForm.deleteRepeat(mCurrentIndex);
+    }
+
 
     /**
      * Returns a vector of the GroupElement hierarchy to which this question
@@ -112,7 +119,7 @@ public class FormHandler {
         for (int i = 0; i < elements.size(); i++) {
             IFormElement fi = elements.get(i);
             if (fi instanceof GroupDef) {
-                groups.add(new GroupElement(((GroupDef) fi).getLongText(), mult.get(i).intValue()));
+                groups.add(new GroupElement(((GroupDef) fi).getLongText(), mult.get(i).intValue(), ((GroupDef)fi).getRepeat()));
             }
         }
 
@@ -148,7 +155,7 @@ public class FormHandler {
             Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
             if (indexIsGroup(mCurrentIndex)) {
                 GroupDef last = (defs.size() == 0 ? null : (GroupDef) defs.lastElement());
-
+                
                 if (last.getRepeat() && resolveReferenceForCurrentIndex() == null) {
                     return new PromptElement(getGroups());
                 } else {
@@ -229,12 +236,11 @@ public class FormHandler {
             mCurrentIndex = mForm.decrementIndex(mCurrentIndex);
         } while (mCurrentIndex.isInForm() && !isRelevant(mCurrentIndex));
 
-        // skip backwards past any groups, and pop them from our stack
+        // recursively skip backwards past any groups, and pop them from our stack
         if (indexIsGroup(mCurrentIndex)) {
             prevQuestion();
         }
     }
-
 
 
     private boolean indexIsGroup(FormIndex index) {

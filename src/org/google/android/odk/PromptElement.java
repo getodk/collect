@@ -248,5 +248,15 @@ public class PromptElement {
     public boolean isRepeat() {
         return isRepeat;
     }
+    
+    public boolean isInRepeatableGroup() {
+        if (mGroups.isEmpty())
+            return false;
+        for (GroupElement group : mGroups) {
+            if (group.repeats())
+                return true;
+        }
+        return false;
+    }
 
 }

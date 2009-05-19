@@ -29,12 +29,21 @@ public class GroupElement {
 
     private String mGroupText;
     private int mRepeatCount;
+    private boolean mRepeats;
 
-    public GroupElement(String groupText, int repeatCount) {
+    public GroupElement(String groupText, int repeatCount, boolean repeats) {
         Log.i(t,"called constructor");
+        mGroupText = groupText;
+        mRepeatCount = repeatCount;
+        mRepeats = repeats;
+    }
 
-        setGroupText(groupText);
-        setRepeatCount(repeatCount);
+    public boolean repeats() {
+        return mRepeats;
+    }
+
+    public void setRepeat(boolean repeats) {
+        mRepeats = repeats;
     }
 
     public String getGroupText() {

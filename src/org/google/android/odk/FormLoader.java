@@ -16,15 +16,16 @@
 
 package org.google.android.odk;
 
-import android.util.Log;
-
-import org.javarosa.core.model.FormDef;
-import org.javarosa.xform.util.XFormUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+
+import org.javarosa.core.model.FormDef;
+import org.javarosa.xform.util.XFormUtils;
+
+import android.util.Log;
+
 
 /**
  * A Serializable object that handles the loading of forms in a separate thread.
@@ -95,7 +96,7 @@ public class FormLoader implements Serializable {
             }
         }.start();
     }
-
+    
 
     public LoadingState getState() {
         return mLoadingState;

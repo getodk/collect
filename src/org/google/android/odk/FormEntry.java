@@ -16,6 +16,10 @@
 
 package org.google.android.odk;
 
+import java.io.File;
+
+import org.google.android.odk.FormLoader.LoadingState;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -41,10 +45,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.google.android.odk.FormLoader.LoadingState;
-
-import java.io.File;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -186,6 +186,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                       // mFormLoader.setFormLoaderListener(null);
                         finish();
                     }
                 };
@@ -303,6 +304,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
+        // TODO (carlhartung): Make menu options only appear for screens that they are possible.
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
         menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
@@ -312,6 +314,17 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
                 android.R.drawable.ic_menu_save);
         return true;
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (isQuestionView() && ((QuestionView)mCurrentView).getPrompt().isInRepeatableGroup()) {
+            if (menu.findItem(MENU_DELETE) == null)
+                menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(android.R.drawable.ic_delete);
+        } else
+            menu.removeItem(MENU_DELETE);
+        
+        return true;        
     }
 
 
@@ -342,6 +355,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            case MENU_DELETE:
+                createRepeatDialog();      
         }
         return super.onOptionsItemSelected(item);
     }
@@ -466,7 +481,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             switch (mGestureDetector.getGesture(motionEvent)) {
                 case SWIPE_RIGHT:
                     mBeenSwiped = true;
-                    showPreviousView();
+                    showPreviousView(true);
                     handled = true;
                     break;
                 case SWIPE_LEFT:
@@ -525,11 +540,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * screen and displays the appropriate view. Also saves answers to the data
      * model without checking constraints.
      */
-    private void showPreviousView() {
+    private void showPreviousView(boolean save) {
         // The beginning and end Views aren't questions.
         // Also, we save the answer on a back swipe, but we ignore the question
         // constraints.
-        if (isQuestionView()) {
+        if (isQuestionView() && save) {
             PromptElement p = ((QuestionView) mCurrentView).getPrompt();
             if (!p.isReadonly()) {
                 mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
@@ -675,6 +690,31 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.show();
+    }
+    
+    /**
+     * Creates a confirm/cancel dialog for deleting repeats.
+     */
+    private void createRepeatDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setMessage("Do you want to delete repeat X and all of it's sub-answers?");
+        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case AlertDialog.BUTTON1: // yes
+                        mFormHandler.deleteCurrentRepeat();
+                        showPreviousView(false);
+                        break;
+                    case AlertDialog.BUTTON2: // no
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.yes), quitListener);
+        mAlertDialog.setButton2(getString(R.string.no), quitListener);
         mAlertDialog.show();
     }
 
