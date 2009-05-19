@@ -23,12 +23,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Bitmap.CompressFormat;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -131,10 +129,11 @@ public class QuestionView extends LinearLayout {
     private int mRadioChecked = -1;
     private boolean mCheckboxInit = true;
 
+
     public QuestionView(Context context, PromptElement mPrompt) {
         super(context);
 
-        Log.i(t,"calling constructor");
+        Log.i(t, "calling constructor");
         setPrompt(mPrompt);
     }
 
@@ -492,7 +491,7 @@ public class QuestionView extends LinearLayout {
         if (!s.equals("")) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            //tv.setTextColor(Color.LTGRAY);
+            // tv.setTextColor(Color.LTGRAY);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
             tv.setPadding(0, 0, 0, 5);
             addView(tv);
@@ -613,7 +612,7 @@ public class QuestionView extends LinearLayout {
     private void QuestionTextView() {
         TextView tv = new TextView(getContext());
         tv.setText(mPrompt.getQuestionText());
-        //tv.setTextColor(Color.WHITE);
+        // tv.setTextColor(Color.WHITE);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
         tv.setPadding(0, 0, 0, 5);
 
@@ -628,7 +627,7 @@ public class QuestionView extends LinearLayout {
      */
     private void HelpTextView() {
         TextView tv = new TextView(getContext());
-        //tv.setTextColor(Color.LTGRAY);
+        // tv.setTextColor(Color.LTGRAY);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
         tv.setPadding(0, 0, 0, 7);
         // wrap to the widget of view
@@ -870,19 +869,18 @@ public class QuestionView extends LinearLayout {
 
                 // if location has changed, update location
                 public void onLocationChanged(Location location) {
-                    mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    mLocation = location;
+                    stopGPS();
                 }
 
 
                 // close gps dialogs, alert user, stop gps
                 public void onProviderDisabled(String provider) {
-                    if (mLocationDialog != null && mLocationDialog.isShowing()) {
-                        mLocationDialog.dismiss();
-                        Toast.makeText(getContext(),
-                                getContext().getString(R.string.gps_disabled_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
                     stopGPS();
+                    Toast
+                            .makeText(getContext(),
+                                    getContext().getString(R.string.gps_disabled_error),
+                                    Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -890,25 +888,11 @@ public class QuestionView extends LinearLayout {
                 }
 
 
-                // check for only valid gps lock
-                public void onStatusChanged(String provider, int status, Bundle b) {
-                    switch (status) {
-                        case LocationProvider.AVAILABLE:
-                            // update location
-                            mLocation =
-                                    mLocationManager
-                                            .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                            // close gps dialogs, alert user, stop gps
-                            if (mLocationDialog != null && mLocationDialog.isShowing()) {
-                                mLocationDialog.dismiss();
-                                mStringAnswer.setText("lat: " + mLocation.getLatitude() + "\nlon: "
-                                        + mLocation.getLongitude());
-                                stopGPS();
-                            }
-                    }
-
+                public void onStatusChanged(String provider, int status, Bundle extras) {
                 }
+
+
+
             };
         }
 
@@ -922,10 +906,18 @@ public class QuestionView extends LinearLayout {
      * Stop listening to any updates from GPS
      */
     private void stopGPS() {
-        if (mLocationManager != null) {
-            mLocationManager.removeUpdates(mLocationListener);
 
+        if (mLocationDialog != null && mLocationDialog.isShowing()) {
+            mLocationDialog.dismiss();
+            if (mLocation != null) {
+                mStringAnswer.setText("lat: " + mLocation.getLatitude() + "\nlon: "
+                        + mLocation.getLongitude());
+            }
         }
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(mLocationListener); 
+        }
+
     }
 
 

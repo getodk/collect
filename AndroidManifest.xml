@@ -15,7 +15,7 @@ the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.google.android.odk" android:versionCode="1" android:versionName="1.0.0">
 <!-- Icon Credit: Tango Desktop Project -->
-  <application android:icon="@drawable/paper_icon" android:label="@string/app_name" >
+  <application android:icon="@drawable/paper_icon" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
   <activity android:name=".MainMenu" android:label="@string/app_name">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
