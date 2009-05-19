@@ -20,8 +20,10 @@ import java.io.File;
 
 import org.google.android.odk.FormLoader.LoadingState;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,7 +55,7 @@ import android.widget.Toast;
  * @author Carl Hartung
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
-
+        
     private final String t = "FormEntry";
 
     private final String FORMPATH = "formpath";
@@ -90,7 +92,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             updateDisplay();
         }
     };
-
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -294,11 +295,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         }
         showView(current, AnimationType.FADE);
     }
-
-
+    
+    
     /*
      * (non-Javadoc)
-     * 
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
@@ -316,6 +316,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         return true;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (isQuestionView() && ((QuestionView)mCurrentView).getPrompt().isInRepeatableGroup()) {
@@ -356,7 +360,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 }
                 return true;
             case MENU_DELETE:
-                createRepeatDialog();      
+                createDeleteRepeatConfirmDialog();      
         }
         return super.onOptionsItemSelected(item);
     }
@@ -609,6 +613,19 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    /*
+     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog() and onPrepareDialog(),
+     * but it's currently horribly broken so the methods below manage our dialogs for us.
+     * 
+     * The two issues we've noticed and are waiting to see fixed are:
+     * 1)  onPrepareDialog() is not called after a screen orientation change.
+     * http://code.google.com/p/android/issues/detail?id=1639
+     * 
+     * 2) The activity leaks the dialog window when the orientation changes
+     * 
+     */
+    
+    
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
@@ -696,9 +713,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /**
      * Creates a confirm/cancel dialog for deleting repeats.
      */
-    private void createRepeatDialog() {
+    private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setMessage("Do you want to delete repeat X and all of it's sub-answers?");
+        String name = ((QuestionView)mCurrentView).getPrompt().getLastRepeatedGroupName();
+        int repeatcount = ((QuestionView)mCurrentView).getPrompt().getLastRepeatedGroupRepeatCount();
+        if (repeatcount != -1) 
+            name += " (" + (repeatcount + 1) + ")";
+        mAlertDialog.setMessage(getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int i) {
@@ -902,4 +923,5 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         mHandler.post(mUpdateDisplayByFormLoader);
     }
+       
 }

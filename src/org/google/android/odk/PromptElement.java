@@ -209,6 +209,28 @@ public class PromptElement {
         }
         return null;
     }
+    
+    /**
+     * The name of the closest group that repeats or null.
+     */
+    public String getLastRepeatedGroupName() {
+        for (GroupElement g : mGroups) {
+            if (g.repeats())
+                return g.getGroupText();
+        }
+        return null;
+    }
+    
+    /**
+     * The cout of the closest group that repeats or -1.
+     */
+    public int getLastRepeatedGroupRepeatCount() {
+        for (GroupElement g : mGroups) {
+            if (g.repeats())
+                return g.getRepeatCount();            
+        }
+        return -1;
+    }
 
 
     /**

@@ -74,6 +74,8 @@ the License.
 	<string name="form_deleted_error">Sorry, unable to delete %s</string>
 	<string name="delete_confirm">Are you sure you want to delete %s</string>
 	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>
+	
+	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>
 
 	<string name="settings">Settings</string>
 
