@@ -15,21 +15,15 @@
  */
 package org.google.android.odk;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Vector;
+import android.content.Context;
+import android.util.Log;
 
 import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
+import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
@@ -41,8 +35,15 @@ import org.javarosa.core.services.transport.IDataPayload;
 import org.javarosa.core.services.transport.MultiMessagePayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 
-import android.content.Context;
-import android.util.Log;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
 
 /**
  * Given a {@link FormDef}, enables form iteration.
@@ -70,11 +71,19 @@ public class FormHandler {
 
 
     public void initialize(Context context) {
-
-        // load properties
+        
+        // load services
         Vector<IService> v = new Vector<IService>();
         v.add(new PropertyManager(context));
         JavaRosaServiceProvider.instance().initialize(v);
+        
+        // set evaluation context
+        EvaluationContext ec = new EvaluationContext();
+        ec.addFunctionHandler(new RegexFunction());
+        mForm.setEvaluationContext(ec);
+        
+        // initialize form
+        mForm.initialize(true);
 
         // initialize form
         mForm.initialize(true);
