@@ -25,9 +25,9 @@ import android.util.Log;
  * 
  * @author Carl Hartung
  */
-public class FormChooser extends FileChooser {
+public class InstanceChooser extends FileChooser {
 
-    private final String t = "FormChooser";
+    private final String t = "Instance Chooser";
 
 
     @Override
@@ -37,7 +37,7 @@ public class FormChooser extends FileChooser {
         Log.i(t,"called onCreate");
 
         // start file lister with app name, path to search, display style
-        super.initialize(getString(R.string.enter_data), SharedConstants.FORMS_PATH, false);
+        super.initialize(getString(R.string.edit_data), SharedConstants.ANSWERS_PATH, false);
         
     }
 

@@ -76,16 +76,17 @@ public class MainMenu extends Activity {
         Button senddata = (Button) findViewById(R.id.senddata);
         senddata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Sorry, not implemented...",
-                        Toast.LENGTH_SHORT).show();
+                
+
             }
+            
         });
 
         Button editdata = (Button) findViewById(R.id.editdata);
         editdata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Sorry, not implemented...",
-                        Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), InstanceChooser.class);
+                startActivity(i);
             }
         });
     }
@@ -135,14 +136,12 @@ public class MainMenu extends Activity {
             return;
         }
 
-        Bundle extras = intent.getExtras();
-
         switch (requestCode) {
             // if form chooser returns with a form name, start entry
             case FORM_CHOOSER:
-                String formPath = extras.getString(SharedConstants.FORMPATH_KEY);
+                String s = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 Intent i = new Intent(this, FormEntry.class);
-                i.putExtra(SharedConstants.FORMPATH_KEY, formPath);
+                i.putExtra(SharedConstants.FILEPATH_KEY, s);
                 startActivity(i);
                 break;
         }

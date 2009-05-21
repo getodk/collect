@@ -55,6 +55,8 @@ the License.
 	<string name="required_answer_error">Sorry, this answer is required!</string>
 	<string name="invalid_answer_error">Sorry, this answer is invalid!</string>
 	<string name="no_forms_error">Sorry, you have no forms!</string>
+	 <string name="no_files_error">Sorry, you have no files!</string>
+	
 	<string name="questionview_error">Sorry, you are not in a form yet!</string>
 	<string name="delete_error">Sorry, you have not selected a form!</string>
 	<string name="languages_error">Sorry, you have no languages!</string>

@@ -18,20 +18,16 @@ package org.google.android.odk;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -42,9 +38,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the
@@ -52,9 +45,9 @@ import java.util.List;
  * 
  * @author Carl Hartung
  */
-public class FormManager extends ListActivity {
+public class FormManager extends FileChooser {
 
-    private final String t = "FormManager";
+    private final String t = "Form Manager";
 
     private static final int DIALOG_ADD_FORM = 0;
     private static final int DIALOG_DELETE_FORM = 1;
@@ -63,59 +56,35 @@ public class FormManager extends ListActivity {
     private static final int MENU_ADD = Menu.FIRST;
     private static final int MENU_DELETE = Menu.FIRST + 1;
 
-    private List<String> mFormNames;
-    private File mFormsDirectory;
-    private String mFormsPath;
     private String mDeleteForm;
     private AlertDialog mAlertDialog;
 
-    /** Called when the activity is first created. */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        
-        setTheme(SharedConstants.APPLICATION_THEME);
 
         super.onCreate(savedInstanceState);
-        Log.i(t,"called onCreate");
+        Log.i(t, "called onCreate");
 
-        setContentView(R.layout.formmanager);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
+        // init file lister with app name, path to search, display style
+        super.initialize(getString(R.string.manage_forms), SharedConstants.FORMS_PATH, true);
 
-        mFormNames = new ArrayList<String>();
-        mFormsPath = SharedConstants.FORMS_PATH;
+    }
 
-        TextView tv = (TextView) findViewById(R.id.formmanager_message);
 
-        // First, check to see if there's an SD card.
-        String cardstatus = Environment.getExternalStorageState();
-        if (cardstatus.equals(Environment.MEDIA_REMOVED)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
-                || cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-            tv.setText(getString(R.string.sdcard_error));
-            return;
-        }
-
-        // Check to see if our storage directory exists and create it if not.
-        boolean made = true;
-        mFormsDirectory = new File(mFormsPath);
-        if (!mFormsDirectory.exists()) {
-            made = mFormsDirectory.mkdirs();
-        }
-        if (!made) {
-            tv.setText(getString(R.string.directory_error, mFormsPath));
-            return;
-        }
-
-        displayForms();
+    @Override
+    public void refreshRoot() {
+        super.refreshRoot();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_ADD, 0, getString(R.string.add_form)).setIcon(android.R.drawable.ic_menu_add);
-        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_form)).setIcon(android.R.drawable.ic_menu_delete);
+        menu.add(0, MENU_ADD, 0, getString(R.string.add_form)).setIcon(
+                android.R.drawable.ic_menu_add);
+        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_form)).setIcon(
+                android.R.drawable.ic_menu_delete);
         return true;
     }
 
@@ -138,34 +107,6 @@ public class FormManager extends ListActivity {
         return super.onMenuItemSelected(featureId, item);
     }
 
-
-    /**
-     * Opens forms directory, puts valid files in array adapter for display
-     */
-
-    private void displayForms() {
-        mFormNames.clear();
-        File[] files = mFormsDirectory.listFiles();
-
-        for (File f : files) {
-            String fileName =
-                    f.getAbsolutePath().substring(mFormsDirectory.getAbsolutePath().length() + 1);
-            if (fileName.matches(SharedConstants.VALID_FORMNAME)) {
-                mFormNames.add(fileName);
-            }
-        }
-
-        Collections.sort(mFormNames, String.CASE_INSENSITIVE_ORDER);
-
-        // This is needed for simple list single choice adapter.
-        getListView().setItemsCanFocus(false);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        ArrayAdapter<String> directoryList =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
-                        mFormNames);
-        setListAdapter(directoryList);
-    }
 
 
     /**
@@ -208,7 +149,9 @@ public class FormManager extends ListActivity {
                                     Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
-                        displayForms();
+
+                        refreshRoot();
+
                         break;
                     case AlertDialog.BUTTON2: // cancel, do nothing
                         break;
@@ -226,7 +169,7 @@ public class FormManager extends ListActivity {
      */
     private void createDeleteDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mDeleteForm = mFormNames.get(getListView().getCheckedItemPosition());
+        mDeleteForm = super.mFileList.get(getListView().getCheckedItemPosition());
         mAlertDialog.setMessage(getString(R.string.delete_confirm, mDeleteForm));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
@@ -234,7 +177,8 @@ public class FormManager extends ListActivity {
                         switch (i) {
                             case AlertDialog.BUTTON1: // yes, delete
                                 deleteSelectedForm();
-                                displayForms();
+                                refreshRoot();
+
                                 break;
                             case AlertDialog.BUTTON2: // no, do nothing
                                 break;
@@ -251,7 +195,7 @@ public class FormManager extends ListActivity {
      * Deletes the selected form
      */
     private void deleteSelectedForm() {
-        File f = new File(mFormsPath + "/" + mDeleteForm);
+        File f = new File(super.mRoot + "/" + mDeleteForm);
         if (f.delete()) {
             Toast.makeText(getApplicationContext(),
                     getString(R.string.form_deleted_ok, mDeleteForm), Toast.LENGTH_SHORT).show();
@@ -267,19 +211,19 @@ public class FormManager extends ListActivity {
      */
     private void getFormFromUrl(URL u) {
         try {
-            
+
             // prevent deadlock when connection is invalid
             URLConnection c = u.openConnection();
             c.setConnectTimeout(SharedConstants.CONNECTION_TIMEOUT);
             c.setReadTimeout(SharedConstants.CONNECTION_TIMEOUT);
-            
+
             InputStream is = c.getInputStream();
 
             String filename = u.getFile();
             filename = filename.substring(filename.lastIndexOf('/') + 1);
 
-            if (filename.matches(SharedConstants.VALID_FORMNAME)) {
-                File f = new File(mFormsPath + "/" + filename);
+            if (filename.matches(SharedConstants.VALID_FILENAME)) {
+                File f = new File(super.mRoot + "/" + filename);
                 OutputStream os = new FileOutputStream(f);
                 byte buf[] = new byte[1024];
                 int len;
@@ -297,9 +241,10 @@ public class FormManager extends ListActivity {
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.url_error), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-        } 
+        }
 
     }
+
 
     /**
      * Managed dialogs require setting your variables beforehand
@@ -309,9 +254,14 @@ public class FormManager extends ListActivity {
         super.onPrepareDialog(id, dialog);
         switch (id) {
             case DIALOG_DELETE_FORM:
-                mDeleteForm = mFormNames.get(getListView().getCheckedItemPosition());
+                mDeleteForm = super.mFileList.get(getListView().getCheckedItemPosition());
                 ((AlertDialog) dialog).setMessage(getString(R.string.delete_confirm, mDeleteForm));
                 break;
         }
+    }
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
     }
 }

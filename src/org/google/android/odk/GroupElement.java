@@ -50,15 +50,8 @@ public class GroupElement {
         return mGroupText;
     }
 
-    private void setGroupText(String groupName) {
-        this.mGroupText = groupName;
-    }
-
     public int getRepeatCount() {
         return mRepeatCount;
     }
 
-    private void setRepeatCount(int repeatCount) {
-        this.mRepeatCount = repeatCount;
-    }
 }

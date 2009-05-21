@@ -16,14 +16,8 @@
 
 package org.google.android.odk;
 
-import java.io.File;
-
-import org.google.android.odk.FormLoader.LoadingState;
-
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +41,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.google.android.odk.FormLoader.LoadingState;
+
+import java.io.File;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -147,7 +145,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             Intent intent = getIntent();
             if (intent != null) {
 
-                mFormPath = intent.getStringExtra(SharedConstants.FORMPATH_KEY);
+                mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 mFormLoader.loadForm(mFormPath);
 
             }
@@ -307,8 +305,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         // TODO (carlhartung): Make menu options only appear for screens that they are possible.
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
-        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
-                android.R.drawable.ic_menu_close_clear_cancel);
+        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(R.drawable.ic_menu_clear_playlist);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 android.R.drawable.ic_menu_more);
         menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
@@ -433,7 +430,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportDataModel()) {
+                                if (mFormHandler.exportData()) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();

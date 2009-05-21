@@ -34,6 +34,7 @@ import org.javarosa.core.services.transport.DataPointerPayload;
 import org.javarosa.core.services.transport.IDataPayload;
 import org.javarosa.core.services.transport.MultiMessagePayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
+import org.javarosa.xform.parse.XFormParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -85,8 +86,6 @@ public class FormHandler {
         // initialize form
         mForm.initialize(true);
 
-        // initialize form
-        mForm.initialize(true);
     }
 
 
@@ -528,11 +527,21 @@ public class FormHandler {
     public void finalizeDataModel() {
         mForm.postProcessModel();
     }
+    
+
+    public DataModelTree importData(byte[] savedXML) {
+        
+        DataModelTree broken = XFormParser.restoreDataModel(savedXML, null);
+        DataModelTree fixed = new DataModelTree(broken.processSavedDataModel(broken.getRoot(), mForm.getDataModel(), mForm));
+        mForm.setDataModel(fixed);
+        
+        return fixed;
+    }
 
 
     // should return something
     @SuppressWarnings("unchecked")
-    public boolean exportDataModel() {
+    public boolean exportData() {
         String now =
                 new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
                         .format(Calendar.getInstance().getTime());

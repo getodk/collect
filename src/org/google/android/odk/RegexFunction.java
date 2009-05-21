@@ -21,6 +21,7 @@ public class RegexFunction implements IFunctionHandler {
     }
 
 
+    @SuppressWarnings("unchecked")
     public Vector getPrototypes() {
 
         Class[] prototypes = {String.class, String.class};

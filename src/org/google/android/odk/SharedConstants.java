@@ -47,7 +47,7 @@ public class SharedConstants {
     /**
      * Used to validate and display valid form names.
      */
-    public static final String VALID_FORMNAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
+    public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
     /**
      * Forms storage path
@@ -63,7 +63,7 @@ public class SharedConstants {
     /**
      * Identifies the location of the form used to launch form entry
      */
-    public static final String FORMPATH_KEY = "formpath";
+    public static final String FILEPATH_KEY = "formpath";
     
     /**
      * How long to wait when opening network connection in milliseconds
