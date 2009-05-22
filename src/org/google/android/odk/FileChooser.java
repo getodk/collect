@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -41,8 +42,9 @@ abstract class FileChooser extends ListActivity {
     public void initialize(String title, String path, Boolean radio) {
         setTitle(getString(R.string.app_name) + " > " + title);
         mRadio = radio;
+        mFileList = new ArrayList<String>();
         if (getDirectory(path)) {
-            getFiles();
+            getFiles(mRoot);
             displayFiles();
         }
 
@@ -50,7 +52,7 @@ abstract class FileChooser extends ListActivity {
 
 
     public void refreshRoot() {
-        getFiles();
+        getFiles(mRoot);
         displayFiles();
     }
 
@@ -85,19 +87,21 @@ abstract class FileChooser extends ListActivity {
     }
 
 
-    private void getFiles() {
 
-        File[] files = mRoot.listFiles();
-        mFileList = new ArrayList<String>();
-
-
-        for (File f : files) {
-            String fileName = f.getAbsolutePath().substring(mRoot.getAbsolutePath().length() + 1);
-            if (fileName.matches(SharedConstants.VALID_FILENAME)) {
-                mFileList.add(fileName);
+    private void getFiles(File f) {
+        if (f.isDirectory()) {
+            File[] childs = f.listFiles();
+            for (File child : childs) {
+                getFiles(child);
             }
+            return;
+        }
+        String filename = f.getName();
+        if (filename.matches(SharedConstants.VALID_FILENAME)) {
+            mFileList.add(filename);
         }
     }
+
 
 
     /**
