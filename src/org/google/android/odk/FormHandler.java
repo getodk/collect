@@ -529,14 +529,14 @@ public class FormHandler {
     }
     
 
-    public DataModelTree importData(byte[] savedXML) {
+    public void importData(byte[] savedXML) {
         
-        DataModelTree broken = XFormParser.restoreDataModel(savedXML, null);
-        DataModelTree fixed = new DataModelTree(broken.processSavedDataModel(broken.getRoot(), mForm.getDataModel(), mForm));
-        mForm.setDataModel(fixed);
+        DataModelTree brokenTree = XFormParser.restoreDataModel(savedXML, null);
+        TreeElement fixedRoot = DataModelTree.processSavedDataModel(brokenTree.getRoot(), mForm.getDataModel(), mForm);
+        DataModelTree fixedTree = new DataModelTree(fixedRoot);
+        mForm.setDataModel(fixedTree);
         
-        return fixed;
-    }
+        }
 
 
     // should return something
