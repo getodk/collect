@@ -162,7 +162,7 @@ public class QuestionView extends ScrollView {
                 s = getContext().getString(R.string.readonly_question) + " " + s;
             }
         }
-        if (s != null) {
+        if (s != null && !s.equalsIgnoreCase("")) {
             tv.setText(s);
             mView.addView(tv);
         }
