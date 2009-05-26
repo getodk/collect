@@ -301,7 +301,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
         // TODO (carlhartung): Make menu options only appear for screens that they are possible.
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);

@@ -63,6 +63,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void buildView(final PromptElement prompt) {
         mItems = prompt.getSelectItems();
 

@@ -63,6 +63,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
+    @SuppressWarnings("unchecked")
     public IAnswerData getAnswer() {
         Vector<Selection> ve = new Vector<Selection>();
         Enumeration en = mItems.keys();
@@ -89,6 +90,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void buildView(final PromptElement prompt) {
         mItems = prompt.getSelectItems();
 

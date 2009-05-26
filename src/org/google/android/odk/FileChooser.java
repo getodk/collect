@@ -1,5 +1,9 @@
 package org.google.android.odk;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +13,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 abstract class FileChooser extends ListActivity {
 

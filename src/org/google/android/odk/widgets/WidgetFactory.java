@@ -16,7 +16,6 @@
 
 package org.google.android.odk.widgets;
 
-import org.google.android.odk.MainMenu;
 import org.google.android.odk.PromptElement;
 import org.javarosa.core.model.Constants;
 

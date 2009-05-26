@@ -158,7 +158,6 @@ public class FormHandler {
     public PromptElement nextPrompt() {
         nextRelevantIndex();
 
-        String groupName = null;
         while (!isEnd()) {
             Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
             if (indexIsGroup(mCurrentIndex)) {
@@ -192,7 +191,6 @@ public class FormHandler {
         nextRelevantIndex();
 
         while (!isEnd()) {
-            Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
             if (indexIsGroup(mCurrentIndex)) {
                 nextRelevantIndex();
                 continue;
@@ -407,9 +405,7 @@ public class FormHandler {
 
         i = nextIndexForCount(i);
 
-        String groupName = null;
         while (!i.isEndOfFormIndex()) {
-            Vector<IFormElement> defs = getIndexVector(i);
             if (indexIsGroup(i)) {
             } else {
                 // we have a question
