@@ -79,6 +79,8 @@ public class SharedConstants {
     
     
     public static final float APPLICATION_FONT = 10;
+    
+    public final static int TEXTSIZE = 10;
 
     
 }

@@ -16,6 +16,10 @@
 
 package org.google.android.odk;
 
+import java.io.File;
+
+import org.google.android.odk.FormLoader.LoadingState;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -41,10 +45,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.google.android.odk.FormLoader.LoadingState;
-
-import java.io.File;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -254,7 +254,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     PromptElement p = ((QuestionView) mCurrentView).getPrompt();
                     if (!p.isReadonly()) {
                         Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
-                        ((QuestionView) mCurrentView).setImageData(b);
+                        ((QuestionView) mCurrentView).setBinaryData(b);
                         mFormHandler
                                 .saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
                     }

@@ -107,7 +107,7 @@ public class PromptElement {
      * Is this question read only?
      */
     public boolean isReadonly() {
-        return !mBinding.instanceNode.enabled;
+        return !mBinding.instanceNode.isEnabled();
     }
 
     /**
@@ -162,7 +162,7 @@ public class PromptElement {
      * The text of message to display if a constraint is violated.
      */
     public String getConstraintText() {
-        return mBinding.instanceNode.constraint.constraintMsg;
+        return mBinding.instanceNode.getConstraint().constraintMsg;
     }
 
 
