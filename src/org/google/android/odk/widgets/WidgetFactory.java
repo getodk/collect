@@ -24,7 +24,7 @@ import android.content.Context;
 /**
  * Convenience class that handles creation of widgets.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class WidgetFactory {
 
@@ -33,7 +33,6 @@ public class WidgetFactory {
      * 
      * @param p
      * @param context
-     * @return
      */
     static public IQuestionWidget createWidgetFromPrompt(PromptElement p, Context context) {
         IQuestionWidget questionWidget = null;

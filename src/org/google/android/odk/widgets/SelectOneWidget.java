@@ -33,8 +33,8 @@ import android.widget.RadioGroup;
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
@@ -94,7 +94,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
                 RadioButton r = new RadioButton(getContext());
                 r.setText(k);
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
                 r.setId(i);
                 r.setEnabled(!prompt.isReadonly());
                 r.setFocusable(!prompt.isReadonly());

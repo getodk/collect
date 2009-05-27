@@ -29,7 +29,7 @@ import android.view.animation.AnimationUtils;
 /**
  * Builds view for arrow animation
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class ArrowAnimation extends View {
 

@@ -30,7 +30,8 @@ import android.widget.Button;
  * Responsible for displaying buttons to launch the major activities. Also
  * launches some activities based on returns of others.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenu extends Activity {
 
@@ -38,6 +39,7 @@ public class MainMenu extends Activity {
 
     // The request code for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
+    private static final int INSTANCE_CHOOSER = 1;
 
     public static final int MENU_PREFERENCES = Menu.FIRST;
 
@@ -85,7 +87,7 @@ public class MainMenu extends Activity {
         editdata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceChooser.class);
-                startActivity(i);
+                startActivityForResult(i, INSTANCE_CHOOSER);
             }
         });
     }

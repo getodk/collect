@@ -16,11 +16,6 @@
 
 package org.google.android.odk;
 
-import org.google.android.odk.widgets.IBinaryWidget;
-import org.google.android.odk.widgets.IQuestionWidget;
-import org.google.android.odk.widgets.WidgetFactory;
-import org.javarosa.core.model.data.IAnswerData;
-
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
@@ -29,14 +24,19 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.google.android.odk.widgets.IBinaryWidget;
+import org.google.android.odk.widgets.IQuestionWidget;
+import org.google.android.odk.widgets.WidgetFactory;
+import org.javarosa.core.model.data.IAnswerData;
+
 
 /**
  * Responsible for using a {@link PromptElement} and based on the question type
  * and answer type, displaying the appropriate widget. The class also sets (but
  * does not save) and gets the answers to questions.
  * 
- * @author Yaw Anokwa
- * @author Carl Hartung
+ * @author Yaw Anokwa (yanokwa@gmail.com)
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 
 public class QuestionView extends ScrollView {

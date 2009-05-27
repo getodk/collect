@@ -45,8 +45,8 @@ import android.widget.LinearLayout;
 /**
  * Widget that allows user to take pictures and add them to the form.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
@@ -82,7 +82,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_image));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadonly());
 

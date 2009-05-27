@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2009 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package org.google.android.odk;
 
 import android.content.Context;
@@ -10,6 +26,13 @@ import org.javarosa.core.services.properties.IPropertyRules;
 
 import java.util.HashMap;
 import java.util.Vector;
+
+/**
+ * Used to return device properties to JavaRosa
+ * 
+ * @author Yaw Anokwa (yanokwa@gmail.com)
+ * 
+ */
 
 public class PropertyManager implements IService, IPropertyManager {
 
@@ -32,7 +55,7 @@ public class PropertyManager implements IService, IPropertyManager {
 
 
     public PropertyManager(Context context) {
-        Log.i(t,"calling constructor");
+        Log.i(t, "calling constructor");
 
         mContext = context;
 
@@ -48,25 +71,27 @@ public class PropertyManager implements IService, IPropertyManager {
 
     @SuppressWarnings("unchecked")
     public Vector getProperty(String propertyName) {
-        //Log.i(t, "get property:" + propertyName);
+        // Log.i(t, "get property:" + propertyName);
         return null;
     }
 
 
     public String getSingularProperty(String propertyName) {
-        //Log.i(t, propertyName + ":" + mProperties.get(propertyName));
+        // Log.i(t, propertyName + ":" + mProperties.get(propertyName));
         return mProperties.get(propertyName.toLowerCase());
     }
 
 
     public void setProperty(String propertyName, String propertyValue) {
-        //Log.i(t, "set property string:" + propertyName + " value:" + propertyValue);
+        // Log.i(t, "set property string:" + propertyName + " value:" +
+        // propertyValue);
     }
 
 
     @SuppressWarnings("unchecked")
     public void setProperty(String propertyName, Vector propertyValue) {
-        //Log.i(t, "set property vector:" + propertyName + " value:" + propertyValue);
+        // Log.i(t, "set property vector:" + propertyName + " value:" +
+        // propertyValue);
     }
 
 

@@ -35,8 +35,8 @@ import android.widget.LinearLayout;
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
@@ -133,7 +133,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(k);
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key

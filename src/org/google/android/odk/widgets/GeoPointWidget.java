@@ -41,8 +41,8 @@ import android.widget.Toast;
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
 
@@ -94,7 +94,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         mActionButton = new Button(getContext());
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadonly());
 
         mStringAnswer = new TextView(getContext());
@@ -103,7 +103,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         if (s != null) {
             mStringAnswer.setText(s);
 
-            mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+            mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
 
             // string manipulation for readability
             String str = (String) mStringAnswer.getText();

@@ -19,7 +19,7 @@ package org.google.android.odk;
 /**
  * The constants used in multiple classes in this application.
  * 
- * @author Yaw Anokwa
+ * @author @author Yaw Anokwa (yanokwa@gmail.com)
  * 
  */
 public class SharedConstants {
@@ -64,23 +64,26 @@ public class SharedConstants {
      * Identifies the location of the form used to launch form entry
      */
     public static final String FILEPATH_KEY = "formpath";
-    
+
     /**
      * How long to wait when opening network connection in milliseconds
      */
     public static final int CONNECTION_TIMEOUT = 5000;
-    
+
     /**
      * Temporary file
      */
     public static final String TMPFILE_PATH = "/sdcard/odk/tmp";
-    
-    public static final int APPLICATION_THEME =  android.R.style.Theme_Light;
-    
-    
-    public static final float APPLICATION_FONT = 10;
-    
-    public final static int TEXTSIZE = 10;
 
-    
+    /**
+     * Theme used in entire application
+     */
+    public static final int APPLICATION_THEME = android.R.style.Theme_Light;
+
+    /**
+     * Default font size in entire application
+     */
+    public final static int APPLICATION_FONTSIZE = 10;
+
+
 }

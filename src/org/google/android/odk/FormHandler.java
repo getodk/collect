@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package org.google.android.odk;
 
 import android.content.Context;
@@ -49,8 +50,8 @@ import java.util.Vector;
 /**
  * Given a {@link FormDef}, enables form iteration.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormHandler {
 

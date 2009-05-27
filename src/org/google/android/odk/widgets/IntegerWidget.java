@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 /**
  * Widget that restricts values to integers.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class IntegerWidget extends StringWidget {
 

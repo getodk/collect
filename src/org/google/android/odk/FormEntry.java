@@ -50,7 +50,7 @@ import android.widget.Toast;
  * FormEntry is responsible for displaying questions, animating transitions
  * between questions, and allowing the user to enter data.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
         

@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package org.google.android.odk;
 
 
 
 /**
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener {
     void loadingComplete(FormHandler formHandler);

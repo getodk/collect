@@ -27,7 +27,7 @@ import android.util.TypedValue;
 /**
  * A widget that restricts values to floating point numbers.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class DecimalWidget extends StringWidget implements IQuestionWidget {
 
@@ -44,7 +44,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
     @Override
     public void buildView(PromptElement prompt) {
         super.buildView(prompt);
-        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         setWidth(200);
         setKeyListener(new DigitsKeyListener(true, true));
     }

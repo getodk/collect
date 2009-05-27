@@ -21,7 +21,7 @@ import android.util.Log;
 /**
  * Calculates the direction of a gesture/fling. Used by {@link GestureDetector}
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class GestureDirection {
     

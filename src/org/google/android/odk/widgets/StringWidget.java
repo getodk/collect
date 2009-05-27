@@ -30,8 +30,8 @@ import android.widget.EditText;
 /**
  * The most basic widget that allows for entry of any text.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class StringWidget extends EditText implements IQuestionWidget {
 
@@ -77,7 +77,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
             this.setClickable(false);
         }
 
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.TEXTSIZE);
+        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
     }
 
 }

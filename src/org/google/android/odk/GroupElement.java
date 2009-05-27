@@ -21,7 +21,7 @@ import android.util.Log;
 /**
  * Used by {@link FormHandler} to create a Vector of groups.
  * 
- * @author Yaw Anokwa
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class GroupElement {
     

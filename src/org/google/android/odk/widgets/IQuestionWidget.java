@@ -25,7 +25,7 @@ import org.javarosa.core.model.data.IAnswerData;
  * 
  * Each widget does need to handle the 'ReadOnly' case in BuildView().
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface IQuestionWidget {
     public IAnswerData getAnswer();

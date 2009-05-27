@@ -31,8 +31,8 @@ import android.widget.DatePicker;
  * Displays a DatePicker widget. DateWidget handles leap years and does not
  * allow dates that do not exist.
  * 
- * @author Carl Hartung
- * @author Yaw Anokwa
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DateWidget extends DatePicker implements IQuestionWidget {
 

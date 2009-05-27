@@ -30,7 +30,7 @@ import android.util.Log;
 /**
  * A Serializable object that handles the loading of forms in a separate thread.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormLoader implements Serializable {
 

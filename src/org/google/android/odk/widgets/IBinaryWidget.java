@@ -20,7 +20,7 @@ package org.google.android.odk.widgets;
 /**
  * Interface implemented by widgets that need binary data.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface IBinaryWidget {
     public void setBinaryData(Object answer);

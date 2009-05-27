@@ -24,7 +24,7 @@ import org.google.android.odk.GestureDirection.UserGesture;
 /**
  * Detects when a gesture/fling has occurred and in what direction.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class GestureDetector {
 

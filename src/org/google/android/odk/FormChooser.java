@@ -16,14 +16,20 @@
 
 package org.google.android.odk;
 
+import java.io.File;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenu}.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormChooser extends FileChooser {
 
@@ -42,5 +48,21 @@ public class FormChooser extends FileChooser {
     }
 
 
-   
+
+
+    /**
+     * Stores the path of clicked file in the intent and exits.
+     */
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+
+        File f = new File(mRoot + "/" + mFileList.get(position));
+
+        Intent i = new Intent();
+        i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());
+        setResult(RESULT_OK, i);
+
+        finish();
+    }
+
 }

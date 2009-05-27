@@ -43,7 +43,8 @@ import java.net.URLConnection;
  * Responsible for displaying, adding and deleting all the valid forms in the
  * forms directory.
  * 
- * @author Carl Hartung
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormManager extends FileChooser {
 
