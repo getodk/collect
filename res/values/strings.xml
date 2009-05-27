@@ -49,6 +49,8 @@ the License.
 	<string name="get_location">Get Location</string>
 	<string name="getting_location">Getting location. Please wait...</string>
 	<string name="get_image">Get Picture</string>
+	 <string name="get_barcode">Get Barcode</string>
+	
 
   <string name="form_load_error">Sorry, error loading form %s</string>
   <string name="gps_disabled_error">Sorry, GPS is disabled!</string>

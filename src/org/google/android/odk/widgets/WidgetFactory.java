@@ -51,6 +51,9 @@ public class WidgetFactory {
                     case Constants.DATATYPE_GEOPOINT:
                         questionWidget = new GeoPointWidget(context);
                         break;
+                    case Constants.DATATYPE_BARCODE:
+                        questionWidget = new BarcodeWidget(context);
+                        break;
                     default:
                         questionWidget = new StringWidget(context);
                         break;

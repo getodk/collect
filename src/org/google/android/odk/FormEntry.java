@@ -53,7 +53,7 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
-        
+
     private final String t = "FormEntry";
 
     private final String FORMPATH = "formpath";
@@ -185,7 +185,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                       // mFormLoader.setFormLoaderListener(null);
+                        // mFormLoader.setFormLoaderListener(null);
                         finish();
                     }
                 };
@@ -242,6 +242,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+
         if (resultCode == RESULT_CANCELED) {
             // request was canceled, so do nothing
             return;
@@ -249,17 +250,24 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         switch (requestCode) {
             case (SharedConstants.IMAGE_CAPTURE):
-                if (resultCode != 0) {
-                    // save bitmap in question view and data model
-                    PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-                    if (!p.isReadonly()) {
-                        Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
-                        ((QuestionView) mCurrentView).setBinaryData(b);
-                        mFormHandler
-                                .saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
-                    }
-                    // delete the tmp file
-                    new File(SharedConstants.TMPFILE_PATH).delete();
+                // save bitmap in question view and data model
+                PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
+                if (!pi.isReadonly()) {
+                    Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
+                    ((QuestionView) mCurrentView).setBinaryData(b);
+                    mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(), false);
+                }
+                // delete the tmp file
+                new File(SharedConstants.TMPFILE_PATH).delete();
+                break;
+            case (SharedConstants.BARCODE_CAPTURE):
+                PromptElement pe = ((QuestionView) mCurrentView).getPrompt();
+                if (!pe.isReadonly()) {
+                    String s = intent.getStringExtra("SCAN_RESULT"); 
+                    ((QuestionView) mCurrentView).setBinaryData(s);
+                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);
+                    
+                    
                 }
                 break;
         }
@@ -293,39 +301,45 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         }
         showView(current, AnimationType.FADE);
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
+     * 
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        // TODO (carlhartung): Make menu options only appear for screens that they are possible.
+        // TODO (carlhartung): Make menu options only appear for screens that
+        // they are possible.
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
-        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(R.drawable.ic_menu_clear_playlist);
+        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
+                R.drawable.ic_menu_clear_playlist);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 android.R.drawable.ic_menu_more);
         menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
                 android.R.drawable.ic_menu_save);
         return true;
     }
-    
+
+
     /*
      * (non-Javadoc)
+     * 
      * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (isQuestionView() && ((QuestionView)mCurrentView).getPrompt().isInRepeatableGroup()) {
+        if (isQuestionView() && ((QuestionView) mCurrentView).getPrompt().isInRepeatableGroup()) {
             if (menu.findItem(MENU_DELETE) == null)
-                menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(android.R.drawable.ic_delete);
+                menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
+                        android.R.drawable.ic_delete);
         } else
             menu.removeItem(MENU_DELETE);
-        
-        return true;        
+
+        return true;
     }
 
 
@@ -357,7 +371,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 }
                 return true;
             case MENU_DELETE:
-                createDeleteRepeatConfirmDialog();      
+                createDeleteRepeatConfirmDialog();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -611,18 +625,18 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
     /*
-     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog() and onPrepareDialog(),
-     * but it's currently horribly broken so the methods below manage our dialogs for us.
+     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
+     * and onPrepareDialog(), but it's currently horribly broken so the methods
+     * below manage our dialogs for us.
      * 
-     * The two issues we've noticed and are waiting to see fixed are:
-     * 1)  onPrepareDialog() is not called after a screen orientation change.
+     * The two issues we've noticed and are waiting to see fixed are: 1)
+     * onPrepareDialog() is not called after a screen orientation change.
      * http://code.google.com/p/android/issues/detail?id=1639
      * 
      * 2) The activity leaks the dialog window when the orientation changes
-     * 
      */
-    
-    
+
+
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
@@ -706,16 +720,17 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
-    
+
+
     /**
      * Creates a confirm/cancel dialog for deleting repeats.
      */
     private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        String name = ((QuestionView)mCurrentView).getPrompt().getLastRepeatedGroupName();
-        int repeatcount = ((QuestionView)mCurrentView).getPrompt().getLastRepeatedGroupRepeatCount();
-        if (repeatcount != -1) 
-            name += " (" + (repeatcount + 1) + ")";
+        String name = ((QuestionView) mCurrentView).getPrompt().getLastRepeatedGroupName();
+        int repeatcount =
+                ((QuestionView) mCurrentView).getPrompt().getLastRepeatedGroupRepeatCount();
+        if (repeatcount != -1) name += " (" + (repeatcount + 1) + ")";
         mAlertDialog.setMessage(getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
@@ -920,5 +935,5 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         mHandler.post(mUpdateDisplayByFormLoader);
     }
-       
+
 }
