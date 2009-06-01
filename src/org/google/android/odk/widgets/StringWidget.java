@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.StringData;
 
 import android.R;
 import android.content.Context;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.EditText;
@@ -78,6 +79,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
         }
 
         this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        this.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
     }
 
 }

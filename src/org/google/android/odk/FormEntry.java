@@ -23,6 +23,7 @@ import org.google.android.odk.FormLoader.LoadingState;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -155,8 +157,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             mFormHandler = (FormHandler) data;
             refreshCurrentView();
         }
-
-
     }
 
 
@@ -265,9 +265,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 if (!pe.isReadonly()) {
                     String s = intent.getStringExtra("SCAN_RESULT"); 
                     ((QuestionView) mCurrentView).setBinaryData(s);
-                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);
-                    
-                    
+                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);            
                 }
                 break;
         }
@@ -527,7 +525,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     return;
                 }
             }
-
         }
 
         if (!mFormHandler.isEnd()) {
@@ -587,6 +584,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
+        // hide the soft keyboard if it's showing.
+        if (mCurrentView != null) {
+            InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); 
+        }
+        
         switch (from) {
             case RIGHT:
                 mInAnimation = AnimationUtils.loadAnimation(this, R.anim.push_left_in);
