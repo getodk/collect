@@ -62,7 +62,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private final String FORMLOADER = "formloader";
 
     public static final int MENU_CLEAR = Menu.FIRST;
-    public static final int MENU_DELETE = Menu.FIRST + 1;
+    public static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
     public static final int MENU_QUIT = Menu.FIRST + 2;
     public static final int MENU_LANGUAGES = Menu.FIRST + 3;
 
@@ -309,11 +309,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        // TODO (carlhartung): Make menu options only appear for screens that
-        // they are possible.
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
-        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
+        menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
                 R.drawable.ic_menu_clear_playlist);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 android.R.drawable.ic_menu_more);
@@ -330,12 +328,28 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (isQuestionView() && ((QuestionView) mCurrentView).getPrompt().isInRepeatableGroup()) {
-            if (menu.findItem(MENU_DELETE) == null)
-                menu.add(0, MENU_DELETE, 0, getString(R.string.delete_repeat)).setIcon(
-                        android.R.drawable.ic_delete);
-        } else
-            menu.removeItem(MENU_DELETE);
+        /*
+         * Menu options are added only for views where they're appropriate, 
+         * and removed for those that they're not.
+         */
+        if (isQuestionView()) {
+            if (menu.findItem(MENU_CLEAR) == null) {
+                menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
+                        android.R.drawable.ic_menu_close_clear_cancel);
+            }
+
+            if (((QuestionView) mCurrentView).getPrompt().isInRepeatableGroup()) {
+                if (menu.findItem(MENU_DELETE_REPEAT) == null) {
+                    menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
+                            R.drawable.ic_menu_clear_playlist);
+                }
+            } else {
+                menu.removeItem(MENU_DELETE_REPEAT);
+            }
+        } else {
+            menu.removeItem(MENU_CLEAR);
+            menu.removeItem(MENU_DELETE_REPEAT);
+        }
 
         return true;
     }
@@ -368,7 +382,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
-            case MENU_DELETE:
+            case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
         }
         return super.onOptionsItemSelected(item);
