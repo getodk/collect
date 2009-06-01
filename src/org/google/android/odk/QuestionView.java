@@ -112,7 +112,7 @@ public class QuestionView extends ScrollView {
         for (GroupElement g : mPrompt.getGroups()) {
             int i = g.getRepeatCount() + 1;
             s += g.getGroupText();
-            if (i > 0) {
+            if (g.repeats() && i > 0) {
                 s += " (" + i + ")";
             }
             s += " > ";

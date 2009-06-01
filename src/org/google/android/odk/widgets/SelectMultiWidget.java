@@ -144,7 +144,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
                 }
 
                 c.setFocusable(!prompt.isReadonly());
-                c.setEnabled(false);
+                c.setEnabled(!prompt.isReadonly());
                 this.addView(c);
                 i++;
             }

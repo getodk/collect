@@ -598,12 +598,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
-        // hide the soft keyboard if it's showing.
-        if (mCurrentView != null) {
-            InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); 
-        }
-        
         switch (from) {
             case RIGHT:
                 mInAnimation = AnimationUtils.loadAnimation(this, R.anim.push_left_in);
@@ -637,6 +631,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, p);
+        // hide the soft keyboard if it's showing.
+        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); 
         mCurrentView.startAnimation(mInAnimation);
     }
 
