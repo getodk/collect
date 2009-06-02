@@ -17,6 +17,7 @@
 package org.google.android.odk;
 
 import java.io.File;
+import java.util.Set;
 
 import org.google.android.odk.FormLoader.LoadingState;
 
@@ -28,6 +29,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -266,6 +268,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     String s = intent.getStringExtra("SCAN_RESULT"); 
                     ((QuestionView) mCurrentView).setBinaryData(s);
                     mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);            
+                }
+                break;
+            case SharedConstants.AUDIO_CAPTURE:
+                Uri u = intent.getData();
+                PromptElement pa = ((QuestionView) mCurrentView).getPrompt();
+                if (!pa.isReadonly()) {
+                    String s = u.toString();
+                    ((QuestionView) mCurrentView).setBinaryData(s);
+                    mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);   
                 }
                 break;
         }

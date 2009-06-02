@@ -54,6 +54,9 @@ public class WidgetFactory {
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context);
                         break;
+                    case Constants.DATATYPE_AUDIO:
+                        questionWidget = new AudioWidget(context);
+                        break;
                     default:
                         questionWidget = new StringWidget(context);
                         break;

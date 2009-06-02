@@ -35,6 +35,11 @@ public class SharedConstants {
     public static final int BARCODE_CAPTURE = 2;
     
     /**
+     * Request code for returning image capture data from camera intent.
+     */
+    public static final int AUDIO_CAPTURE = 3;
+    
+    /**
      * Answer saved with no errors.
      */
     public static final int ANSWER_OK = 0;
