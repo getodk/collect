@@ -57,6 +57,9 @@ public class WidgetFactory {
                     case Constants.DATATYPE_AUDIO:
                         questionWidget = new AudioWidget(context);
                         break;
+                    case Constants.DATATYPE_VIDEO:
+                        questionWidget = new VideoWidget(context);
+                        break;
                     default:
                         questionWidget = new StringWidget(context);
                         break;

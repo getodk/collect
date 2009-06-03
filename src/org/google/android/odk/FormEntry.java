@@ -279,6 +279,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);   
                 }
                 break;
+            case SharedConstants.VIDEO_CAPTURE:
+                Uri uv = intent.getData();
+                PromptElement pv = ((QuestionView) mCurrentView).getPrompt();
+                if (!pv.isReadonly()) {
+                    String s = uv.toString();
+                    ((QuestionView) mCurrentView).setBinaryData(s);
+                    mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);   
+                }
+                break;
         }
     }
 
