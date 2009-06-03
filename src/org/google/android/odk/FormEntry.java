@@ -17,7 +17,6 @@
 package org.google.android.odk;
 
 import java.io.File;
-import java.util.Set;
 
 import org.google.android.odk.FormLoader.LoadingState;
 
