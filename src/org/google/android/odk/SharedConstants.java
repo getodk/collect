@@ -16,6 +16,12 @@
 
 package org.google.android.odk;
 
+import java.io.File;
+
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 /**
  * The constants used in multiple classes in this application.
  * 
@@ -99,6 +105,19 @@ public class SharedConstants {
      * Default font size in entire application
      */
     public final static int APPLICATION_FONTSIZE = 10;
+    
+    // TODO (carlhartung):  we may need this.  Keeping it until I'm done implementing audio/video.
+    /*public final static boolean createTempDirectory(Context context, String className) {
+        File tempdir = new File(SharedConstants.TMPFILE_PATH);
+        if (!tempdir.exists()) {
+            if (!tempdir.mkdirs()) {
+                Toast.makeText(context, "Cannot create temporary directory", Toast.LENGTH_LONG).show();
+                Log.e(className, "Cannot create directory: " + SharedConstants.TMPFILE_PATH);
+                return false;
+            }
+        }
+        return true;
+    }*/
 
 
 }

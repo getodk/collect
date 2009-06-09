@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.StringData;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
@@ -38,9 +39,13 @@ import android.widget.TextView;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
-
+    private static final String t = "VideoWidget";
+    
 /*
- * TODO:  This works, but needs to get cleaned up a bit, and we need to add it to Javarosa
+ * TODO:  This works, but needs to get cleaned up a bit
+ * TODO:  Also need to add features to move files to/from the answer folder, but that'll be
+ *        in the export in FormHandler.
+ *        Videos are currently in /sdcard/dcim/Camera/
  */
     private Button mRecordButton;
     private Button mPlayButton;
@@ -53,7 +58,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void clearAnswer() {
-        mStringAnswer = null;
+        deleteCurrentVideo();
         mPlayButton.setEnabled(false);
         mRecordButton.setText("Record");
         mDisplayText.setText("Nothing recorded yet...");
@@ -73,12 +78,18 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         mRecordButton = new Button(getContext());
         mRecordButton.setText("Record");
+        
         mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mRecordButton.setPadding(20, 20, 20, 20);
         mRecordButton.setEnabled(!prompt.isReadonly());
 
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                /*
+                 * We'd like to set our own path here, which android supports, but setting
+                 * MediaStore.EXTRA_OUTPUT is broken in the current build.
+                 * Filed under bug:  
+                 */
                 Intent i = new Intent("android.media.action.VIDEO_CAPTURE");
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.VIDEO_CAPTURE);
             }
@@ -93,7 +104,10 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                i.setData(Uri.parse(mStringAnswer));
+                Cursor c = getContext().getContentResolver().query(Uri.parse("content://media/external/video/media/"), null, "_display_name='" + mStringAnswer + "'", null, null);
+                c.moveToFirst();
+                int id = c.getInt(c.getColumnIndex("_id"));
+                i.setDataAndType(Uri.parse("content://media/external/video/media/" + id), "video/3gp");
                 ((Activity) getContext()).startActivity(i);
             }
         });
@@ -119,8 +133,22 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void setBinaryData(Object answer) {
-        mStringAnswer = (String)answer;
+        if (mStringAnswer != null) {
+            // User has selected new video, so delete the old one to clean things up.
+            deleteCurrentVideo();
+        }
+        String str = (String)answer;
+        Cursor c = getContext().getContentResolver().query(Uri.parse(str), null, null, null, null);
+        c.moveToFirst();
+        mStringAnswer = c.getString(c.getColumnIndex("_display_name"));
     }
+    
+    private void deleteCurrentVideo() {
+        getContext().getContentResolver().delete(Uri.parse("content://media/external/video/media/"), "_display_name='" + mStringAnswer + "'", null);
+        mStringAnswer = null;
+    }
+    
+    
 
 
 }      

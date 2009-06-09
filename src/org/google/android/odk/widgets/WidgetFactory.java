@@ -54,12 +54,6 @@ public class WidgetFactory {
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context);
                         break;
-                    case Constants.DATATYPE_AUDIO:
-                        questionWidget = new AudioWidget(context);
-                        break;
-                    case Constants.DATATYPE_VIDEO:
-                        questionWidget = new VideoWidget(context);
-                        break;
                     default:
                         questionWidget = new StringWidget(context);
                         break;
@@ -67,6 +61,12 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 questionWidget = new ImageWidget(context);
+                break;
+            case Constants.CONTROL_AUDIO_CAPTURE:
+                questionWidget = new AudioWidget(context);
+                break;
+            case Constants.CONTROL_VIDEO_CAPTURE:
+                questionWidget = new VideoWidget(context);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(context);

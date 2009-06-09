@@ -39,9 +39,15 @@ import android.widget.TextView;
  */
 public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
-/*
- * TODO:  This works, but needs to get cleaned up a bit, and we need to add it to Javarosa
- */
+    /*
+     * TODO:  This works, but needs to get cleaned up a bit
+     * TODO:  Also need to add features to move files to/from the answer folder, but that'll be
+     *        in the export in FormHandler.
+     *        Audio clips are currently in /sdcard/
+     *        The value in the answers.xml file is currently content://media/audio/4 or something
+     *        similar to that which only android understands.  It needs to be changed to
+     *        a path (VideoWidget has an example that does it right).
+     */
     private Button mRecordButton;
     private Button mPlayButton;
     private String mStringAnswer;
