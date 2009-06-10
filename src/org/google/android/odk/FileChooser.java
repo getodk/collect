@@ -62,14 +62,14 @@ public abstract class FileChooser extends ListActivity {
         mRadio = radio;
         mFileList = new ArrayList<String>();
         if (getDirectory(path)) {
-            getFiles(mRoot);
-            displayFiles();
+        	refreshRoot();
         }
 
     }
 
 
     public void refreshRoot() {
+    	mFileList.clear();
         getFiles(mRoot);
         displayFiles();
     }
