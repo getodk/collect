@@ -25,7 +25,9 @@ import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not
@@ -34,8 +36,9 @@ import android.widget.DatePicker;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DateWidget extends DatePicker implements IQuestionWidget {
+public class DateWidget extends LinearLayout implements IQuestionWidget {
 
+	private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
 
     // convert from j2me date to android date
@@ -49,13 +52,13 @@ public class DateWidget extends DatePicker implements IQuestionWidget {
 
     public void clearAnswer() {
         final Calendar c = new GregorianCalendar();
-        this.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
+        mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
                 mDateListener);
     }
 
 
     public IAnswerData getAnswer() {
-        Date d = new Date(this.getYear() - YEARSHIFT, this.getMonth(), this.getDayOfMonth());
+        Date d = new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(), mDatePicker.getDayOfMonth());
         return new DateData(d);
     }
 
@@ -65,6 +68,8 @@ public class DateWidget extends DatePicker implements IQuestionWidget {
      */
     public void buildView(final PromptElement prompt) {
         final Calendar c = new GregorianCalendar();
+        
+        mDatePicker = new DatePicker(getContext());
         mDateListener = new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
                 if (prompt.isReadonly()) {
@@ -90,14 +95,17 @@ public class DateWidget extends DatePicker implements IQuestionWidget {
 
         if (prompt.getAnswerValue() != null) {
             Date d = (Date) prompt.getAnswerObject();
-            this.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
+            mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
         } else {
             // create date widget with now
             clearAnswer();
         }
 
-        this.setFocusable(!prompt.isReadonly());
-        this.setEnabled(!prompt.isReadonly());
+        mDatePicker.setFocusable(!prompt.isReadonly());
+        mDatePicker.setEnabled(!prompt.isReadonly());
+        
+        this.setGravity(Gravity.LEFT);
+        this.addView(mDatePicker);
     }
 
 }

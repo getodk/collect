@@ -16,7 +16,7 @@
 
 package org.google.android.odk;
 
-import android.util.Log;
+import java.util.Vector;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -26,8 +26,6 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.util.OrderedHashtable;
 import org.javarosa.formmanager.view.FormElementBinding;
-
-import java.util.Vector;
 
 /**
  * Used by {@link QuestionView} to display Questions and by {@link FormEntry} to
@@ -41,7 +39,7 @@ import java.util.Vector;
 
 public class PromptElement {
 
-    private final static String t = "PromptElement";
+   // private final static String t = "PromptElement";
 
     // object to access question and answer data
     private FormElementBinding mBinding;
@@ -54,7 +52,7 @@ public class PromptElement {
 
 
     public PromptElement(Vector<GroupElement> groups) {
-        Log.i(t,"calling constructor");
+        //Log.i(t,"calling constructor");
 
         setGroups(groups);
         setRepeat(true);
@@ -62,7 +60,7 @@ public class PromptElement {
 
 
     public PromptElement(FormIndex formIndex, FormDef formDef, Vector<GroupElement> groups) {
-        Log.i(t,"calling constructor");
+        //Log.i(t,"calling constructor");
 
         mBinding = new FormElementBinding(null, formIndex, formDef);
         setGroups(groups);

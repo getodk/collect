@@ -16,11 +16,6 @@
 
 package org.google.android.odk;
 
-import java.io.File;
-
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * The constants used in multiple classes in this application.

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.Date;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.xform.util.XFormUtils;
@@ -76,7 +77,15 @@ public class FormLoader implements Serializable {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+                
+                //Debug.startMethodTracing("xforminput");
+             
+                Log.i("time:", new Date().toString());
                 form = XFormUtils.getFormFromInputStream(fis);
+                Log.i("time:", new Date().toString());
+
+                //Debug.stopMethodTracing();
+                
                 FormHandler fh = null;
                 if (form == null) {
                     mLoadingState = LoadingState.ERROR;

@@ -68,7 +68,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
 
     public void buildView(PromptElement prompt) {
-        String s = prompt.getAnswerText();
+        String s = (String) prompt.getAnswerObject();
         if (s != null) {
             this.setText(s);
         }
@@ -80,6 +80,11 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
         this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         this.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        
+        // needed to make long readonly text scroll
+        this.setHorizontallyScrolling(false);
+        this.setSingleLine(false);
+
     }
 
 }

@@ -16,10 +16,9 @@
 
 package org.google.android.odk;
 
-import android.util.Log;
-import android.view.MotionEvent;
-
 import org.google.android.odk.GestureDirection.UserGesture;
+
+import android.view.MotionEvent;
 
 /**
  * Detects when a gesture/fling has occurred and in what direction.
@@ -28,12 +27,12 @@ import org.google.android.odk.GestureDirection.UserGesture;
  */
 public class GestureDetector {
 
-    private final static String t = "GestureDetector";
+    //private final static String t = "GestureDetector";
 
     private GestureDirection mDirectionPoint;
 
     public GestureDetector() {
-        Log.i(t,"called constructor");
+        // Log.i(t,"called constructor");
 
         mDirectionPoint = null;
     }

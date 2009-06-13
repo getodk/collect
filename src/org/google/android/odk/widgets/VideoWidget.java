@@ -39,7 +39,7 @@ import android.widget.TextView;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
-    private static final String t = "VideoWidget";
+    //private static final String t = "VideoWidget";
     
 /*
  * TODO:  This works, but needs to get cleaned up a bit

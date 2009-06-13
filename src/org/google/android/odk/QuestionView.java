@@ -19,6 +19,7 @@ package org.google.android.odk;
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -52,7 +53,7 @@ public class QuestionView extends ScrollView {
     public QuestionView(Context context, PromptElement prompt) {
         super(context);
 
-        Log.i(t, "calling constructor");
+        //Log.i(t, "calling constructor");
         this.mPrompt = prompt;
     }
 
@@ -68,6 +69,7 @@ public class QuestionView extends ScrollView {
     public void buildView() {
         mView = new LinearLayout(getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
+        mView.setGravity(Gravity.LEFT);
         setPadding(10, 10, 10, 10);
 
         // display which group you are in as well as the question
@@ -77,7 +79,7 @@ public class QuestionView extends ScrollView {
 
         // if question or answer type is not supported, use text widget
         mQuestionWidget = WidgetFactory.createWidgetFromPrompt(mPrompt, getContext());
-
+        
         mView.addView((View) mQuestionWidget);
         addView(mView);
     }
@@ -155,14 +157,15 @@ public class QuestionView extends ScrollView {
         tv.setHorizontallyScrolling(false);
 
         String s = mPrompt.getHelpText();
+        /*
         if (mPrompt.isReadonly()) {
             if (s == null) {
                 s = getContext().getString(R.string.readonly_question);
             } else {
                 s = getContext().getString(R.string.readonly_question) + " " + s;
             }
-        }
-        if (s != null && !s.equalsIgnoreCase("")) {
+        }*/
+        if (s != null && !s.equals("")) {
             tv.setText(s);
             mView.addView(tv);
         }
