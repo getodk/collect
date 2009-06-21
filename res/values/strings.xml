@@ -43,8 +43,8 @@ the License.
 
 	<string name="preferences">Preferences</string>
 
-	<string name="add_repeat">Add a %s?</string>
-	 <string name="add_another_repeat">Add another %s?</string>
+	<string name="add_repeat">Add a \"%s\"?</string>
+	 <string name="add_another_repeat">Add another \"%s\"?</string>
 
 	<string name="get_location">Get Location</string>
 	<string name="getting_location">Getting location. Please wait...</string>
