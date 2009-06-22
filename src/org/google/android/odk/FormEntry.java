@@ -264,9 +264,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.BARCODE_CAPTURE):
                 PromptElement pe = ((QuestionView) mCurrentView).getPrompt();
                 if (!pe.isReadonly()) {
-                    String s = intent.getStringExtra("SCAN_RESULT"); 
+                    String s = intent.getStringExtra("SCAN_RESULT");
                     ((QuestionView) mCurrentView).setBinaryData(s);
-                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);            
+                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
                 break;
             case SharedConstants.AUDIO_CAPTURE:
@@ -275,7 +275,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 if (!pa.isReadonly()) {
                     String s = u.toString();
                     ((QuestionView) mCurrentView).setBinaryData(s);
-                    mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);   
+                    mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
                 break;
             case SharedConstants.VIDEO_CAPTURE:
@@ -284,7 +284,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 if (!pv.isReadonly()) {
                     String s = uv.toString();
                     ((QuestionView) mCurrentView).setBinaryData(s);
-                    mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);   
+                    mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
                 break;
         }
@@ -348,15 +348,18 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         /*
-         * Menu options are added only for views where they're appropriate, 
-         * and removed for those that they're not.
+         * Menu options are added only for views where they're appropriate, and
+         * removed for those that they're not.
          */
         if (isQuestionView()) {
-            if (menu.findItem(MENU_CLEAR) == null) {
-                menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
-                        android.R.drawable.ic_menu_close_clear_cancel);
+            if (!((QuestionView) mCurrentView).getPrompt().isReadonly()){
+                if (menu.findItem(MENU_CLEAR) == null) {
+                    menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
+                            android.R.drawable.ic_menu_close_clear_cancel);
+                }
+            }else {
+                menu.removeItem(MENU_CLEAR);
             }
-
             if (((QuestionView) mCurrentView).getPrompt().isInRepeatableGroup()) {
                 if (menu.findItem(MENU_DELETE_REPEAT) == null) {
                     menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
@@ -386,23 +389,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 createLanguageDialog();
                 return true;
             case MENU_CLEAR:
-                if (isQuestionView()) {
-                    PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-                    if (!p.isReadonly()) {
-                        ((QuestionView) mCurrentView).clearAnswer();
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                getString(R.string.readonly_answer_error), Toast.LENGTH_SHORT)
-                                .show();
-                    }
-
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_answer_error),
-                            Toast.LENGTH_SHORT).show();
-                }
+                createClearDialog();
                 return true;
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -651,8 +642,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, p);
         // hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); 
+        InputMethodManager inputManager =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
         mCurrentView.startAnimation(mInAnimation);
     }
 
@@ -797,6 +790,33 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 switch (i) {
                     case AlertDialog.BUTTON1: // yes
                         finish();
+                        break;
+                    case AlertDialog.BUTTON2: // no
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.yes), quitListener);
+        mAlertDialog.setButton2(getString(R.string.no), quitListener);
+        mAlertDialog.show();
+    }
+
+
+    /**
+     * Confirm clear dialog
+     */
+    private void createClearDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setMessage(getString(R.string.clearanswer_confirm));
+        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case AlertDialog.BUTTON1: // yes
+                        QuestionView qv = ((QuestionView) mCurrentView);
+                        qv.clearAnswer();
+                        mFormHandler.saveAnswer(qv.getPrompt(), qv.getAnswer(), false);
                         break;
                     case AlertDialog.BUTTON2: // no
                         break;

@@ -72,11 +72,11 @@ the License.
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
 	
-	<string name="no_answer_error">Sorry, no answer to clear!</string>
 	<string name="readonly_question">This question is read only.</string>
-	<string name="readonly_answer_error">Sorry, answer is read only!</string>
 	<string name="form_deleted_error">Sorry, unable to delete %s</string>
-	<string name="delete_confirm">Are you sure you want to delete %s</string>
+	 <string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
+	
+	<string name="delete_confirm">Are you sure you want to delete %s?</string>
 	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>
 	
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>
