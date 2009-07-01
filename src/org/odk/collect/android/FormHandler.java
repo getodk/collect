@@ -144,6 +144,38 @@ public class FormHandler {
     public void setFormIndex(FormIndex newIndex) {
         mCurrentIndex = newIndex;
     }
+    
+    private void createModelIfNecessary(FormIndex index) {
+        if (index.isInForm()) {
+            IFormElement e = getForm().getChild(index);
+            if (e instanceof GroupDef) {
+                GroupDef g = (GroupDef) e;
+                Log.e("carl", "group is " + g.getLongText());
+                if (g.getRepeat() && g.getCountReference() != null) {
+                    Log.e("carl", "reference is " + g.getCountReference().getReference().toString());
+                    IAnswerData count = getForm().getDataModel().getDataValue(
+                            g.getCountReference());
+                    if (count != null) {
+                        int fullcount = ((Integer) count.getValue()).intValue();
+                        Log.e("Carl", "fullt count " + fullcount);
+                        TreeReference ref = getForm()
+                                .getChildInstanceRef(index);
+                        TreeElement element = getForm().getDataModel()
+                                .resolveReference(ref);
+                        if (element == null) {
+                            if (index.getInstanceIndex() < fullcount) {
+                                getForm().createNewRepeat(index);
+                            }
+                        }
+                    } else {
+                        Log.e("carl", "was null...");
+                    }
+                    
+                }
+            }
+        }
+    }
+
 
 
     public FormIndex getIndex() {
@@ -158,6 +190,7 @@ public class FormHandler {
      */
     public PromptElement nextPrompt() {
         nextRelevantIndex();
+        createModelIfNecessary(mCurrentIndex);
 
         while (!isEnd()) {
             Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
