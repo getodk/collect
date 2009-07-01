@@ -223,7 +223,7 @@ public class FormManager extends FileChooser {
             String filename = u.getFile();
             filename = filename.substring(filename.lastIndexOf('/') + 1);
 
-            if (filename.matches(SharedConstants.VALID_FILENAME)) {
+            //if (filename.matches(SharedConstants.VALID_FILENAME)) {
                 File f = new File(super.mRoot + "/" + filename);
                 OutputStream os = new FileOutputStream(f);
                 byte buf[] = new byte[1024];
@@ -235,9 +235,9 @@ public class FormManager extends FileChooser {
                 is.close();
                 Toast.makeText(this, getString(R.string.form_added_ok, filename),
                         Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, getString(R.string.url_error), Toast.LENGTH_SHORT).show();
-            }
+            //} else {
+            //    Toast.makeText(this, getString(R.string.url_error), Toast.LENGTH_SHORT).show();
+            //}
             mAlertDialog.dismiss();
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.url_error), Toast.LENGTH_SHORT).show();

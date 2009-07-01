@@ -75,7 +75,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         if (s != null) {
             try {
                 // segment lat and lon
-                String[] sga = s.replace("lat: ", "").replace("\nlon: ", ",").split("[,]");
+                String[] sga = s.replace("lat: ", "").replace("\nlon: ", " ").split(" ");
                 double gp[] = new double[2];
                 gp[0] = Double.valueOf(sga[0]).doubleValue();
                 gp[1] = Double.valueOf(sga[1]).doubleValue();
@@ -108,7 +108,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
             // string manipulation for readability
             String str = (String) mStringAnswer.getText();
             if (!str.equals("")) {
-                mStringAnswer.setText("lat: " + str.replace(",", "\nlon: "));
+                mStringAnswer.setText("lat: " + str.replace(" ", "\nlon: "));
             }
             mStringAnswer.setGravity(Gravity.CENTER);
         }

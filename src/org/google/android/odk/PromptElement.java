@@ -213,7 +213,7 @@ public class PromptElement {
      */
     public String getLastRepeatedGroupName() {
         for (GroupElement g : mGroups) {
-            if (g.repeats())
+            if (g.isRepeat())
                 return g.getGroupText();
         }
         return null;
@@ -224,7 +224,7 @@ public class PromptElement {
      */
     public int getLastRepeatedGroupRepeatCount() {
         for (GroupElement g : mGroups) {
-            if (g.repeats())
+            if (g.isRepeat())
                 return g.getRepeatCount();            
         }
         return -1;
@@ -273,7 +273,7 @@ public class PromptElement {
         if (mGroups.isEmpty())
             return false;
         for (GroupElement group : mGroups) {
-            if (group.repeats())
+            if (group.isRepeat())
                 return true;
         }
         return false;

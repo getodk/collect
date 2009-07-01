@@ -53,7 +53,7 @@ public class QuestionView extends ScrollView {
     public QuestionView(Context context, PromptElement prompt) {
         super(context);
 
-        //Log.i(t, "calling constructor");
+        // Log.i(t, "calling constructor");
         this.mPrompt = prompt;
     }
 
@@ -79,7 +79,7 @@ public class QuestionView extends ScrollView {
 
         // if question or answer type is not supported, use text widget
         mQuestionWidget = WidgetFactory.createWidgetFromPrompt(mPrompt, getContext());
-        
+
         mView.addView((View) mQuestionWidget);
         addView(mView);
     }
@@ -109,15 +109,21 @@ public class QuestionView extends ScrollView {
      */
     private void AddGroupText() {
         String s = "";
+        String t = "";
+        int i;
 
         // list all groups in one string
         for (GroupElement g : mPrompt.getGroups()) {
-            int i = g.getRepeatCount() + 1;
-            s += g.getGroupText();
-            if (g.repeats() && i > 0) {
-                s += " (" + i + ")";
+            i = g.getRepeatCount() + 1;
+            t = g.getGroupText();
+            if (t != null) {
+                s += t;
+                if (g.isRepeat() && i > 0) {
+                    s += " (" + i + ")";
+                }
+                s += " > ";
             }
-            s += " > ";
+
         }
 
         // build view
@@ -158,13 +164,10 @@ public class QuestionView extends ScrollView {
 
         String s = mPrompt.getHelpText();
         /*
-        if (mPrompt.isReadonly()) {
-            if (s == null) {
-                s = getContext().getString(R.string.readonly_question);
-            } else {
-                s = getContext().getString(R.string.readonly_question) + " " + s;
-            }
-        }*/
+         * if (mPrompt.isReadonly()) { if (s == null) { s =
+         * getContext().getString(R.string.readonly_question); } else { s =
+         * getContext().getString(R.string.readonly_question) + " " + s; } }
+         */
         if (s != null && !s.equals("")) {
             tv.setText(s);
             mView.addView(tv);

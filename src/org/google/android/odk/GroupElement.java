@@ -38,7 +38,7 @@ public class GroupElement {
         mRepeats = repeats;
     }
 
-    public boolean repeats() {
+    public boolean isRepeat() {
         return mRepeats;
     }
 

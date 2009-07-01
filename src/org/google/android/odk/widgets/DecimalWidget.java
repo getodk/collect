@@ -80,7 +80,8 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
 		setFilters(fa);
 	}
 
-	public IAnswerData getAnswer() {
+	@Override
+    public IAnswerData getAnswer() {
 		String s = this.getText().toString();
 		if (s == null || s.equals("")) {
 			return null;
