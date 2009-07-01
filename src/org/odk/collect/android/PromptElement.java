@@ -54,8 +54,8 @@ public class PromptElement {
     public PromptElement(Vector<GroupElement> groups) {
         //Log.i(t,"calling constructor");
 
-        setGroups(groups);
-        setRepeat(true);
+        mGroups = groups;
+        isRepeat = true;
     }
 
 
@@ -63,8 +63,8 @@ public class PromptElement {
         //Log.i(t,"calling constructor");
 
         mBinding = new FormElementBinding(null, formIndex, formDef);
-        setGroups(groups);
-        setRepeat(false);
+        mGroups = groups;
+        isRepeat = false;
     }
 
 
@@ -250,18 +250,8 @@ public class PromptElement {
         }
         return null;
     }
-
-
-    private void setGroups(Vector<GroupElement> groups) {
-        this.mGroups = groups;
-    }
-
-
-    private void setRepeat(boolean isRepeat) {
-        this.isRepeat = isRepeat;
-    }
-
-
+    
+    
     /**
      * Is the prompt a repeat dialog?
      */
