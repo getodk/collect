@@ -14,20 +14,20 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import org.google.android.odk.PromptElement;
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
+package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.view.Gravity;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+
+import org.javarosa.core.model.data.DateData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.PromptElement;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not
