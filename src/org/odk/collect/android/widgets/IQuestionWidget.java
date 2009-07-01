@@ -14,10 +14,10 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
+package org.odk.collect.android.widgets;
 
-import org.google.android.odk.PromptElement;
 import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.PromptElement;
 
 /**
  * QuestionWidgets are the main elements in QuestionView. QuestionView is a

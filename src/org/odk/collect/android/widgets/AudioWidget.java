@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
+package org.odk.collect.android.widgets;
 
 import org.google.android.odk.PromptElement;
 import org.google.android.odk.SharedConstants;
