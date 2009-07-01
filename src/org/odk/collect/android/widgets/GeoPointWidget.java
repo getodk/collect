@@ -14,11 +14,11 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
+package org.odk.collect.android.widgets;
 
-import org.google.android.odk.PromptElement;
-import org.google.android.odk.R;
-import org.google.android.odk.SharedConstants;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 

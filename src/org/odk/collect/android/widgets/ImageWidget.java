@@ -14,16 +14,16 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
+package org.odk.collect.android.widgets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 
-import org.google.android.odk.PromptElement;
-import org.google.android.odk.R;
-import org.google.android.odk.SharedConstants;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.PointerAnswerData;
 import org.javarosa.core.model.data.helper.BasicDataPointer;

@@ -14,10 +14,10 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
+package org.odk.collect.android.widgets;
 
-import org.google.android.odk.PromptElement;
-import org.google.android.odk.SharedConstants;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 

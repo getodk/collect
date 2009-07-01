@@ -14,12 +14,12 @@
  * the License.
  */
 
-package org.google.android.odk.widgets;
+package org.odk.collect.android.widgets;
 
 import java.text.NumberFormat;
 
-import org.google.android.odk.PromptElement;
-import org.google.android.odk.SharedConstants;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 
