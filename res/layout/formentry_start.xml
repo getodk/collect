@@ -38,7 +38,7 @@ the License.
 		android:textSize="7pt" 
 		android:paddingTop="2px"/>
 <!-- 
-  <org.google.android.odk.ArrowAnimation
+  <org.odk.collect.android.ArrowAnimation
     android:layout_width="fill_parent" 
     android:layout_height="65px"
      /> -->
