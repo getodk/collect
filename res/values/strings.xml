@@ -53,6 +53,7 @@ the License.
 	
 
   <string name="form_load_error">Sorry, error loading form %s</string>
+  <string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
   <string name="gps_disabled_error">Sorry, GPS is disabled!</string>
 	<string name="required_answer_error">Sorry, this answer is required!</string>
 	<string name="invalid_answer_error">Sorry, this answer is invalid!</string>

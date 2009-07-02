@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.util.TypedValue;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -77,7 +79,14 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
-                ((Activity) getContext()).startActivityForResult(i, SharedConstants.BARCODE_CAPTURE);
+                try {
+                    ((Activity) getContext()).startActivityForResult(i, SharedConstants.BARCODE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    Toast
+                    .makeText(getContext(),
+                            getContext().getString(R.string.barcode_scanner_error),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
         
