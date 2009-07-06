@@ -29,6 +29,7 @@ import android.widget.TextView;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
 import org.odk.collect.android.SharedConstants;
 
 
@@ -40,18 +41,18 @@ import org.odk.collect.android.SharedConstants;
 public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
     /*
-     * TODO:  This works, but needs to get cleaned up a bit
-     * TODO:  Also need to add features to move files to/from the answer folder, but that'll be
-     *        in the export in FormHandler.
-     *        Audio clips are currently in /sdcard/
-     *        The value in the answers.xml file is currently content://media/audio/4 or something
-     *        similar to that which only android understands.  It needs to be changed to
-     *        a path (VideoWidget has an example that does it right).
+     * TODO: This works, but needs to get cleaned up a bit TODO: Also need to
+     * add features to move files to/from the answer folder, but that'll be in
+     * the export in FormHandler. Audio clips are currently in /sdcard/ The
+     * value in the answers.xml file is currently content://media/audio/4 or
+     * something similar to that which only android understands. It needs to be
+     * changed to a path (VideoWidget has an example that does it right).
      */
     private Button mRecordButton;
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
+
 
     public AudioWidget(Context context) {
         super(context);
@@ -61,8 +62,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void clearAnswer() {
         mStringAnswer = null;
         mPlayButton.setEnabled(false);
-        mRecordButton.setText("Record");
-        mDisplayText.setText("Nothing recorded yet...");
+        mRecordButton.setText(getContext().getString(R.string.record));
+        mDisplayText.setText(getContext().getString(R.string.no_recording));
     }
 
 
@@ -78,7 +79,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         this.setOrientation(LinearLayout.VERTICAL);
 
         mRecordButton = new Button(getContext());
-        mRecordButton.setText("Record");
+        mRecordButton.setText(getContext().getString(R.string.record));
         mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mRecordButton.setPadding(20, 20, 20, 20);
         mRecordButton.setEnabled(!prompt.isReadonly());
@@ -89,9 +90,9 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.AUDIO_CAPTURE);
             }
         });
-        
+
         mPlayButton = new Button(getContext());
-        mPlayButton.setText("Play");
+        mPlayButton.setText(getContext().getString(R.string.play));
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
@@ -103,20 +104,20 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
                 ((Activity) getContext()).startActivity(i);
             }
         });
-        
+
         mStringAnswer = prompt.getAnswerText();
         mPlayButton.setEnabled(mStringAnswer != null);
         if (mStringAnswer != null) {
-            mRecordButton.setText("Rerecord");
+            mRecordButton.setText(getContext().getString(R.string.rerecord));
         }
 
         mDisplayText = new TextView(getContext());
         if (mStringAnswer == null) {
-            mDisplayText.setText("Nothing recorded yet...");
+            mDisplayText.setText(getContext().getString(R.string.no_recording));
         } else {
-            mDisplayText.setText("One recording saved");
+            mDisplayText.setText(getContext().getString(R.string.recording_saved));
         }
-        
+
         // finish complex layout
         this.addView(mDisplayText);
         this.addView(mRecordButton);
@@ -125,8 +126,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void setBinaryData(Object answer) {
-        mStringAnswer = (String)answer;
+        mStringAnswer = (String) answer;
     }
 
 
-}      
+}

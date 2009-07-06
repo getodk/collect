@@ -16,30 +16,28 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.Calendar;
-
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.PointerAnswerData;
-import org.javarosa.core.model.data.helper.BasicDataPointer;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
-import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.PointerAnswerData;
+import org.javarosa.core.model.data.helper.BasicDataPointer;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 
 
 /**
@@ -90,8 +88,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
-                Uri u = Uri.fromFile(new File(SharedConstants.TMPFILE_PATH));
-                i.putExtra("output", u);
+                // Uri u = Uri.fromFile(new File(SharedConstants.TMPFILE_PATH));
+                // i.putExtra("output", u);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.IMAGE_CAPTURE);
             }
         });

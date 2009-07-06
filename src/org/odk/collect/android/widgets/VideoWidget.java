@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
 import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -39,18 +40,18 @@ import android.widget.TextView;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
-    //private static final String t = "VideoWidget";
-    
-/*
- * TODO:  This works, but needs to get cleaned up a bit
- * TODO:  Also need to add features to move files to/from the answer folder, but that'll be
- *        in the export in FormHandler.
- *        Videos are currently in /sdcard/dcim/Camera/
- */
+    // private static final String t = "VideoWidget";
+
+    /*
+     * TODO: This works, but needs to get cleaned up a bit TODO: Also need to
+     * add features to move files to/from the answer folder, but that'll be in
+     * the export in FormHandler. Videos are currently in /sdcard/dcim/Camera/
+     */
     private Button mRecordButton;
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
+
 
     public VideoWidget(Context context) {
         super(context);
@@ -60,8 +61,8 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void clearAnswer() {
         deleteCurrentVideo();
         mPlayButton.setEnabled(false);
-        mRecordButton.setText("Record");
-        mDisplayText.setText("Nothing recorded yet...");
+        mRecordButton.setText(getContext().getString(R.string.record));
+        mDisplayText.setText(getContext().getString(R.string.no_recording));
     }
 
 
@@ -77,8 +78,8 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         this.setOrientation(LinearLayout.VERTICAL);
 
         mRecordButton = new Button(getContext());
-        mRecordButton.setText("Record");
-        
+        mRecordButton.setText(getContext().getString(R.string.record));
+
         mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mRecordButton.setPadding(20, 20, 20, 20);
         mRecordButton.setEnabled(!prompt.isReadonly());
@@ -86,17 +87,17 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /*
-                 * We'd like to set our own path here, which android supports, but setting
-                 * MediaStore.EXTRA_OUTPUT is broken in the current build.
-                 * Filed under bug:  
+                 * We'd like to set our own path here, which android supports,
+                 * but setting MediaStore.EXTRA_OUTPUT is broken in the current
+                 * build. Filed under bug:
                  */
                 Intent i = new Intent("android.media.action.VIDEO_CAPTURE");
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.VIDEO_CAPTURE);
             }
         });
-        
+
         mPlayButton = new Button(getContext());
-        mPlayButton.setText("Play");
+        mPlayButton.setText(getContext().getString(R.string.play));
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
@@ -104,27 +105,31 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                Cursor c = getContext().getContentResolver().query(Uri.parse("content://media/external/video/media/"), null, "_display_name='" + mStringAnswer + "'", null, null);
+                Cursor c =
+                        getContext().getContentResolver().query(
+                                Uri.parse("content://media/external/video/media/"), null,
+                                "_display_name='" + mStringAnswer + "'", null, null);
                 c.moveToFirst();
                 int id = c.getInt(c.getColumnIndex("_id"));
-                i.setDataAndType(Uri.parse("content://media/external/video/media/" + id), "video/3gp");
+                i.setDataAndType(Uri.parse("content://media/external/video/media/" + id),
+                        "video/3gp");
                 ((Activity) getContext()).startActivity(i);
             }
         });
-        
+
         mStringAnswer = prompt.getAnswerText();
         mPlayButton.setEnabled(mStringAnswer != null);
         if (mStringAnswer != null) {
-            mRecordButton.setText("Rerecord");
+            mRecordButton.setText(getContext().getString(R.string.rerecord));
         }
 
         mDisplayText = new TextView(getContext());
         if (mStringAnswer == null) {
-            mDisplayText.setText("Nothing recorded yet...");
+            mDisplayText.setText(getContext().getString(R.string.no_recording));
         } else {
-            mDisplayText.setText("One recording saved");
+            mDisplayText.setText(getContext().getString(R.string.recording_saved));
         }
-        
+
         // finish complex layout
         this.addView(mDisplayText);
         this.addView(mRecordButton);
@@ -134,21 +139,24 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
     public void setBinaryData(Object answer) {
         if (mStringAnswer != null) {
-            // User has selected new video, so delete the old one to clean things up.
+            // User has selected new video, so delete the old one to clean
+            // things up.
             deleteCurrentVideo();
         }
-        String str = (String)answer;
+        String str = (String) answer;
         Cursor c = getContext().getContentResolver().query(Uri.parse(str), null, null, null, null);
         c.moveToFirst();
         mStringAnswer = c.getString(c.getColumnIndex("_display_name"));
     }
-    
+
+
     private void deleteCurrentVideo() {
-        getContext().getContentResolver().delete(Uri.parse("content://media/external/video/media/"), "_display_name='" + mStringAnswer + "'", null);
+        getContext().getContentResolver().delete(
+                Uri.parse("content://media/external/video/media/"),
+                "_display_name='" + mStringAnswer + "'", null);
         mStringAnswer = null;
     }
-    
-    
 
 
-}      
+
+}

@@ -89,6 +89,13 @@ the License.
 
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
+	
+	<string name="play">Play</string>
+	<string name="record">Record</string>
+  <string name="rerecord">Record Again</string>
+  <string name="no_recording">Nothing recorded yet.</string>
+  <string name="recording_saved">One recording saved.</string>
+  
 
 	<string name="add_form">Add Form</string>
 	<string name="delete_form">Delete Form</string>
