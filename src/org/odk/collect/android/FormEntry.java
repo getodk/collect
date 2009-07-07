@@ -16,16 +16,21 @@
 
 package org.odk.collect.android;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -44,11 +49,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.odk.collect.android.FormLoader.LoadingState;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -59,14 +59,14 @@ import java.util.Calendar;
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
 
     private final String t = "FormEntry";
-
     private final String FORMPATH = "formpath";
-    private final String FORMLOADER = "formloader";
 
-    public static final int MENU_CLEAR = Menu.FIRST;
-    public static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
-    public static final int MENU_QUIT = Menu.FIRST + 2;
-    public static final int MENU_LANGUAGES = Menu.FIRST + 3;
+    private static final int MENU_CLEAR = Menu.FIRST;
+    private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
+    private static final int MENU_QUIT = Menu.FIRST + 2;
+    private static final int MENU_LANGUAGES = Menu.FIRST + 3;
+    
+    private static final int PROGRESS_DIALOG = 1;
 
     private ProgressBar mProgressBar;
     private String mFormPath;
@@ -85,16 +85,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private ProgressDialog mProgressDialog;
 
     private boolean mBeenSwiped;
-
-    private FormLoader mFormLoader;
-    private final Handler mHandler = new Handler();
-
-
-    private final Runnable mUpdateDisplayByFormLoader = new Runnable() {
-        public void run() {
-            updateDisplay();
-        }
-    };
+    
+    private FormLoaderTask mFormLoaderTask;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -108,65 +100,41 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        setTheme(SharedConstants.APPLICATION_THEME);
-
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
-
+        setTheme(SharedConstants.APPLICATION_THEME);
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
         initializeVariables();
 
-        // if starting for the first time, get stored data
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(FORMLOADER)) {
-                mFormLoader = (FormLoader) savedInstanceState.getSerializable(FORMLOADER);
-            }
             if (savedInstanceState.containsKey(FORMPATH)) {
                 mFormPath = savedInstanceState.getString(FORMPATH);
             }
         }
-
-        if (mFormLoader == null) {
-            mFormLoader = new FormLoader();
-        }
-
-        if (mFormLoader.getState() == LoadingState.RUNNING
-                || mFormLoader.getState() == LoadingState.NOT_RUNNING) {
-            mProgressDialog.show();
-        }
-
-        if (mFormLoader.getState() == LoadingState.RUNNING) {
-            // If we're loading a form then the mProgressDialog is displayed and
-            // we need to wait for the loading thread to finish.
-            return;
-        }
-
-        final Object data = getLastNonConfigurationInstance();
-        if (data == null) {
-            // The application is starting for the first time.
-            Intent intent = getIntent();
-            if (intent != null) {
-
-                mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                mFormLoader.loadForm(mFormPath);
-                mAnswerPath = createAnswerPath();
-
-            }
-        } else {
-            // The application had a screen flip or a similar restart happened
-            // at a point other than the form loading.
+        
+        Object data = getLastNonConfigurationInstance();
+        if (data instanceof FormLoaderTask) {        
+            mFormLoaderTask = (FormLoaderTask) data;
+        } else if (data instanceof FormHandler) {
             mFormHandler = (FormHandler) data;
             refreshCurrentView();
+        } else if (data == null) {
+            // starting for the first time
+            Intent intent = getIntent();
+            if (intent != null) {
+                mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
+                mFormLoaderTask = new FormLoaderTask();
+                mFormLoaderTask.execute(mFormPath);
+                showDialog(PROGRESS_DIALOG);
+            }
         }
     }
 
 
     /** Initializes all member variables */
     public void initializeVariables() {
-
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
 
@@ -178,27 +146,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mBeenSwiped = false;
 
         mGestureDetector = new GestureDetector();
-        setupLoadingDialog();
     }
-
-
-    /** Builds the dialog which is shown to the user when an form is loading */
-    private void setupLoadingDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        DialogInterface.OnClickListener loadingButtonListener =
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        // mFormLoader.setFormLoaderListener(null);
-                        finish();
-                    }
-                };
-        mProgressDialog.setMessage(getString(R.string.loading_form));
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-    }
-
 
 
     /*
@@ -209,11 +157,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(FORMLOADER, mFormLoader);
         outState.putString(FORMPATH, mFormPath);
     }
 
-
+    
     private String createAnswerPath() {
         // check to see if sd card exists
         String cardstatus = Environment.getExternalStorageState();
@@ -247,9 +194,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
     private boolean deleteAnswerFolder() {
-
         if (mAnswerPath != null) {
-
             File dir = new File(mAnswerPath);
 
             // remove everything in the folder (not recursive)
@@ -269,29 +214,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         } else {
             return false;
-        }
-    }
-
-
-    /**
-     * updateDisplay updates the display based on the state of FormLoader. This
-     * should only be called in onResume() or by updateDisplayByFormLoader(). If
-     * you want to manually refresh the page call refreshCurrentView().
-     */
-    private void updateDisplay() {
-        switch (mFormLoader.getState()) {
-            case FINISHED:
-                if (mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-                refreshCurrentView();
-                break;
-            case ERROR:
-                if (mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-                createErrorDialog(getString(R.string.form_load_error, mFormPath), true);
-                break;
         }
     }
 
@@ -481,9 +403,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * (non-Javadoc)
      * 
      * @see android.app.Activity#onRetainNonConfigurationInstance()
+     * If we're loading, then we pass the loading thread to our next instance.  If we've
+     * finished loading, we pass the formhandler.
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
+        synchronized(this) {
+        if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
+            return mFormLoaderTask;
+        }
         if (mFormHandler != null && isQuestionView()) {
             PromptElement p = ((QuestionView) mCurrentView).getPrompt();
             if (!p.isReadonly()) {
@@ -576,7 +504,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-
         // constrain the user to only be able to swipe (that causes an action)
         // once per screen with the mBeenSwiped variable.
         boolean handled = false;
@@ -696,8 +623,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         mInAnimation.setAnimationListener(this);
 
-        // We must call setMax() first because it doesn't redraw the progress
-        // bar.
+        // We must call setMax() first because it doesn't redraw the progress bar.
         mProgressBar.setMax(mFormHandler.getQuestionCount());
         mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
@@ -718,14 +644,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     /*
      * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
-     * and onPrepareDialog(), but it's currently horribly broken so the methods
-     * below manage our dialogs for us.
+     * and onPrepareDialog(), but dialogs with dynamic content are broken 
+     * in 1.5 (cupcake).  We do use managed dialogs for our static loading ProgressDialog.
      * 
-     * The two issues we've noticed and are waiting to see fixed are: 1)
+     * The main issue we noticed and are waiting to see fixed is:
      * onPrepareDialog() is not called after a screen orientation change.
      * http://code.google.com/p/android/issues/detail?id=1639
      * 
-     * 2) The activity leaks the dialog window when the orientation changes
      */
 
 
@@ -904,7 +829,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * the form.
      */
     private void createLanguageDialog() {
-
         final String[] languages = mFormHandler.getLanguages();
         int selected = -1;
         if (languages != null) {
@@ -942,17 +866,42 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         }).create();
         mAlertDialog.show();
     }
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onCreateDialog(int)
+     */
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case PROGRESS_DIALOG:
+                mProgressDialog = new ProgressDialog(this);
+                DialogInterface.OnClickListener loadingButtonListener =
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mFormLoaderTask.setFormLoaderListener(null);
+                                finish();
+                            }
+                        };
+                mProgressDialog.setMessage(getString(R.string.loading_form));
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return mProgressDialog;
+        }
+        return null;
+    }
 
 
     private void dismissDialogs() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
         }
     }
 
+    
 
     /*
      * (non-Javadoc)
@@ -963,9 +912,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     protected void onPause() {
         Log.d(t, "onPause");
         dismissDialogs();
-        mFormLoader.setFormLoaderListener(null);
         super.onPause();
-
     }
 
 
@@ -977,26 +924,22 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     protected void onResume() {
         Log.d(t, "onResume");
-        mFormLoader.setFormLoaderListener(this);
-        updateDisplay();
+        if (mFormLoaderTask != null) {
+            mFormLoaderTask.setFormLoaderListener(this);
+            if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
+                dismissDialog(PROGRESS_DIALOG);
+                refreshCurrentView();
+            }
+        }
         super.onResume();
     }
 
 
+
     /*
      * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onDestroy()
+     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
      */
-    @Override
-    protected void onDestroy() {
-        Log.d(t, "onDestroy");
-        // dismissDialogs();
-        super.onStop();
-    }
-
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
@@ -1005,6 +948,18 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onDestroy()
+     */
+    @Override
+    protected void onDestroy() {
+        if (mFormLoaderTask != null)
+            mFormLoaderTask.setFormLoaderListener(null);
+        super.onDestroy();
     }
 
 
@@ -1045,17 +1000,21 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
     /**
-     * loadingComplete() is called by FormLoader once it has finished loading a
+     * loadingComplete() is called by FormLoaderTask once it has finished loading a
      * form.
      */
     public void loadingComplete(FormHandler formHandler) {
-        if (mFormLoader.getState() == LoadingState.FINISHED) {
+        dismissDialog(PROGRESS_DIALOG);
+        if (formHandler == null) {
+            createErrorDialog(getString(R.string.form_load_error, mFormPath), true); 
+        } else {
             mFormHandler = formHandler;
             mFormHandler.initialize(getApplicationContext());
             mFormHandler.setSourcePath(mFormPath);
+            mAnswerPath = createAnswerPath();
+            refreshCurrentView();
         }
-
-        mHandler.post(mUpdateDisplayByFormLoader);
     }
 
+    
 }
