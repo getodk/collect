@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,8 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.R;
 import org.odk.collect.android.SharedConstants;
+
+import java.io.File;
 
 
 /**
@@ -52,6 +55,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
+    private String mBinaryPath;
 
 
     public AudioWidget(Context context) {
@@ -62,7 +66,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void clearAnswer() {
         mStringAnswer = null;
         mPlayButton.setEnabled(false);
-        mRecordButton.setText(getContext().getString(R.string.record));
+        mRecordButton.setText(getContext().getString(R.string.record_audio));
         mDisplayText.setText(getContext().getString(R.string.no_recording));
     }
 
@@ -79,20 +83,20 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         this.setOrientation(LinearLayout.VERTICAL);
 
         mRecordButton = new Button(getContext());
-        mRecordButton.setText(getContext().getString(R.string.record));
+        mRecordButton.setText(getContext().getString(R.string.record_audio));
         mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mRecordButton.setPadding(20, 20, 20, 20);
         mRecordButton.setEnabled(!prompt.isReadonly());
 
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent("android.provider.MediaStore.RECORD_SOUND");
+                Intent i = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.AUDIO_CAPTURE);
             }
         });
 
         mPlayButton = new Button(getContext());
-        mPlayButton.setText(getContext().getString(R.string.play));
+        mPlayButton.setText(getContext().getString(R.string.play_audio));
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
@@ -108,7 +112,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mStringAnswer = prompt.getAnswerText();
         mPlayButton.setEnabled(mStringAnswer != null);
         if (mStringAnswer != null) {
-            mRecordButton.setText(getContext().getString(R.string.rerecord));
+            mRecordButton.setText(getContext().getString(R.string.rerecord_audio));
         }
 
         mDisplayText = new TextView(getContext());
@@ -129,5 +133,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mStringAnswer = (String) answer;
     }
 
+    public void setBinaryPath(String path) {
+        mBinaryPath = path;
+    }
 
 }

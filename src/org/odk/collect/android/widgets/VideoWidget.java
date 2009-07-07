@@ -22,11 +22,14 @@ import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +54,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
+    private String mBinaryPath;
 
 
     public VideoWidget(Context context) {
@@ -61,7 +65,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void clearAnswer() {
         deleteCurrentVideo();
         mPlayButton.setEnabled(false);
-        mRecordButton.setText(getContext().getString(R.string.record));
+        mRecordButton.setText(getContext().getString(R.string.record_video));
         mDisplayText.setText(getContext().getString(R.string.no_recording));
     }
 
@@ -78,7 +82,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         this.setOrientation(LinearLayout.VERTICAL);
 
         mRecordButton = new Button(getContext());
-        mRecordButton.setText(getContext().getString(R.string.record));
+        mRecordButton.setText(getContext().getString(R.string.record_video));
 
         mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mRecordButton.setPadding(20, 20, 20, 20);
@@ -91,13 +95,15 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
                  * but setting MediaStore.EXTRA_OUTPUT is broken in the current
                  * build. Filed under bug:
                  */
-                Intent i = new Intent("android.media.action.VIDEO_CAPTURE");
+                Intent i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+                Uri u = Uri.fromFile(new File(mBinaryPath + ".3gpp"));
+                i.putExtra(MediaStore.EXTRA_OUTPUT, u);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.VIDEO_CAPTURE);
             }
         });
 
         mPlayButton = new Button(getContext());
-        mPlayButton.setText(getContext().getString(R.string.play));
+        mPlayButton.setText(getContext().getString(R.string.play_video));
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
@@ -120,7 +126,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mStringAnswer = prompt.getAnswerText();
         mPlayButton.setEnabled(mStringAnswer != null);
         if (mStringAnswer != null) {
-            mRecordButton.setText(getContext().getString(R.string.rerecord));
+            mRecordButton.setText(getContext().getString(R.string.rerecord_video));
         }
 
         mDisplayText = new TextView(getContext());
@@ -157,6 +163,9 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mStringAnswer = null;
     }
 
+    public void setBinaryPath(String path) {
+        mBinaryPath = path;
+    }
 
 
 }

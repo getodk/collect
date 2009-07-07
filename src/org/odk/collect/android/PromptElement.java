@@ -16,6 +16,8 @@
 
 package org.odk.collect.android;
 
+import android.util.Log;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
@@ -65,6 +67,8 @@ public class PromptElement {
         mBinding = new FormElementBinding(null, formIndex, formDef);
         mGroups = groups;
         isRepeat = false;
+        
+        
     }
 
 
@@ -76,8 +80,16 @@ public class PromptElement {
     public QuestionDef getQuestionDef() {
         return (QuestionDef) mBinding.element;
     }
-
-
+    
+    
+    /**
+     * The instance name (essentially the question id)
+     */
+    public String getInstanceName() {
+       return mBinding.instanceNode.getName();
+    }
+    
+    
     /**
      * The data type of the answer (input, upload, etc)
      */

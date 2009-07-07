@@ -44,8 +44,8 @@ public class QuestionView extends ScrollView {
 
     private final static String t = "QuestionView";
 
-    IQuestionWidget mQuestionWidget;
-    PromptElement mPrompt;
+    private IQuestionWidget mQuestionWidget;
+    private PromptElement mPrompt;
     private LinearLayout mView;
     private final static int TEXTSIZE = 10;
 
@@ -88,8 +88,15 @@ public class QuestionView extends ScrollView {
     public IAnswerData getAnswer() {
         return mQuestionWidget.getAnswer();
     }
-
-
+/*
+    public void setBinaryPath(String path) {
+        if (mQuestionWidget instanceof IBinaryWidget)
+            ((IBinaryWidget) mQuestionWidget).setBinaryPath(path);
+        else
+            Log.e(t, "Attempted to setBinaryPath() on a non-binary widget ");
+    }
+    
+*/
     public void setBinaryData(Object answer) {
         if (mQuestionWidget instanceof IBinaryWidget)
             ((IBinaryWidget) mQuestionWidget).setBinaryData(answer);

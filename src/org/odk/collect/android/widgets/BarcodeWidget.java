@@ -110,6 +110,9 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         mStringAnswer.setText((String)answer);
         
     }
+    
+    public void setBinaryPath(String path) {
+    }
 
 
 }      

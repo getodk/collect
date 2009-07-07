@@ -90,9 +90,13 @@ the License.
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
 	
-	<string name="play">Play</string>
-	<string name="record">Record</string>
-  <string name="rerecord">Record Again</string>
+	<string name="play_audio">Play Audio</string>
+	<string name="play_video">Play Video</string>
+	<string name="record_audio">Record Audio</string>
+	<string name="record_video">Record Video</string>
+  <string name="rerecord_audio">Rerecord Audio</string>
+    <string name="rerecord_video">Rercord Video</string>
+  
   <string name="no_recording">Nothing recorded yet.</string>
   <string name="recording_saved">One recording saved.</string>
   

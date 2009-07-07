@@ -22,10 +22,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -48,6 +47,8 @@ import android.widget.Toast;
 import org.odk.collect.android.FormLoader.LoadingState;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * FormEntry is responsible for displaying questions, animating transitions
@@ -69,6 +70,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private ProgressBar mProgressBar;
     private String mFormPath;
+    private String mAnswerPath;
 
     private GestureDetector mGestureDetector;
     private FormHandler mFormHandler;
@@ -150,6 +152,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
                 mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 mFormLoader.loadForm(mFormPath);
+                mAnswerPath = createAnswerPath();
 
             }
         } else {
@@ -211,6 +214,65 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    private String createAnswerPath() {
+        // check to see if sd card exists
+        String cardstatus = Environment.getExternalStorageState();
+        if (cardstatus.equals(Environment.MEDIA_REMOVED)
+                || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
+                || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
+                || cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+            return null;
+        }
+
+        // create folders
+        boolean made = true;
+        String ts =
+                new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                        .format(Calendar.getInstance().getTime());
+
+        String fn = mFormPath.toString();
+        fn = fn.substring(fn.lastIndexOf('/') + 1, fn.lastIndexOf('.'));
+
+        File dir = new File(SharedConstants.ANSWERS_PATH + "/" + fn + "_" + ts);
+        if (!dir.exists()) {
+            made = dir.mkdirs();
+        }
+
+        if (!made) {
+            return null;
+        } else {
+            return dir.toString();
+        }
+    }
+
+
+    private boolean deleteAnswerFolder() {
+
+        if (mAnswerPath != null) {
+
+            File dir = new File(mAnswerPath);
+
+            // remove everything in the folder (not recursive)
+            if (dir.exists() && dir.isDirectory()) {
+                File[] files = dir.listFiles();
+                for (File file : files) {
+                    file.delete();
+                }
+            }
+
+            // clean answer folder
+            if (dir.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
+
     /**
      * updateDisplay updates the display based on the state of FormLoader. This
      * should only be called in onResume() or by updateDisplayByFormLoader(). If
@@ -251,29 +313,30 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         switch (requestCode) {
             case (SharedConstants.IMAGE_CAPTURE):
-                // save bitmap in question view and data model
                 PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
                 if (!pi.isReadonly()) {
-                    Bitmap b = BitmapFactory.decodeFile(SharedConstants.TMPFILE_PATH);
-                    ((QuestionView) mCurrentView).setBinaryData(b);
+                    String s = mAnswerPath + "/" + pi.getInstanceName() + ".jpg";
+                    File f = new File(SharedConstants.TMPFILE_PATH);
+                    f.renameTo(new File(s));
+                    ((QuestionView) mCurrentView).setBinaryData(s);
                     mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
-                // delete the tmp file
-                new File(SharedConstants.TMPFILE_PATH).delete();
                 break;
             case (SharedConstants.BARCODE_CAPTURE):
-                PromptElement pe = ((QuestionView) mCurrentView).getPrompt();
-                if (!pe.isReadonly()) {
+                PromptElement pb = ((QuestionView) mCurrentView).getPrompt();
+                if (!pb.isReadonly()) {
                     String s = intent.getStringExtra("SCAN_RESULT");
                     ((QuestionView) mCurrentView).setBinaryData(s);
-                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(), false);
+                    mFormHandler.saveAnswer(pb, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
                 break;
             case SharedConstants.AUDIO_CAPTURE:
-                Uri u = intent.getData();
+                Uri ua = intent.getData();
                 PromptElement pa = ((QuestionView) mCurrentView).getPrompt();
                 if (!pa.isReadonly()) {
-                    String s = u.toString();
+                    String s = ua.toString();
+                    Log.i("yaw","audio at "+ua.getPath());
+                    
                     ((QuestionView) mCurrentView).setBinaryData(s);
                     mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
@@ -283,6 +346,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 PromptElement pv = ((QuestionView) mCurrentView).getPrompt();
                 if (!pv.isReadonly()) {
                     String s = uv.toString();
+                    Log.i("yaw","video at "+s);
+
                     ((QuestionView) mCurrentView).setBinaryData(s);
                     mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
@@ -304,6 +369,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             current = createView(FormEntryViews.END_SCREEN, null);
         } else {
             PromptElement p = mFormHandler.currentPrompt();
+
             if (!p.isRepeat()) {
                 current = createView(FormEntryViews.QUESTION_VIEW, p);
             } else {
@@ -791,6 +857,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case AlertDialog.BUTTON1: // yes
+                        deleteAnswerFolder();
                         finish();
                         break;
                     case AlertDialog.BUTTON2: // no
