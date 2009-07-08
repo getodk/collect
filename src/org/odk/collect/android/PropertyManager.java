@@ -36,7 +36,7 @@ import java.util.Vector;
 
 public class PropertyManager implements IService, IPropertyManager {
 
-    private String t = "Property Manager";
+    private String t = "PropertyManager";
 
     private Context mContext;
 

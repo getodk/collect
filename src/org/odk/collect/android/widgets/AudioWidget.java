@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -51,7 +50,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
      * something similar to that which only android understands. It needs to be
      * changed to a path (VideoWidget has an example that does it right).
      */
-    private Button mRecordButton;
+    private Button mCaptureButton;
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
@@ -66,8 +65,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void clearAnswer() {
         mStringAnswer = null;
         mPlayButton.setEnabled(false);
-        mRecordButton.setText(getContext().getString(R.string.record_audio));
-        mDisplayText.setText(getContext().getString(R.string.no_recording));
+        mCaptureButton.setText(getContext().getString(R.string.capture_audio));
+        mDisplayText.setText(getContext().getString(R.string.no_capture));
     }
 
 
@@ -82,13 +81,13 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void buildView(PromptElement prompt) {
         this.setOrientation(LinearLayout.VERTICAL);
 
-        mRecordButton = new Button(getContext());
-        mRecordButton.setText(getContext().getString(R.string.record_audio));
-        mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        mRecordButton.setPadding(20, 20, 20, 20);
-        mRecordButton.setEnabled(!prompt.isReadonly());
+        mCaptureButton = new Button(getContext());
+        mCaptureButton.setText(getContext().getString(R.string.capture_audio));
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mCaptureButton.setPadding(20, 20, 20, 20);
+        mCaptureButton.setEnabled(!prompt.isReadonly());
 
-        mRecordButton.setOnClickListener(new View.OnClickListener() {
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.AUDIO_CAPTURE);
@@ -104,7 +103,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                i.setData(Uri.parse(mStringAnswer));
+                i.setDataAndType(Uri.fromFile(new File(mStringAnswer)), "audio/3gpp");
                 ((Activity) getContext()).startActivity(i);
             }
         });
@@ -112,19 +111,19 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mStringAnswer = prompt.getAnswerText();
         mPlayButton.setEnabled(mStringAnswer != null);
         if (mStringAnswer != null) {
-            mRecordButton.setText(getContext().getString(R.string.rerecord_audio));
+            mCaptureButton.setText(getContext().getString(R.string.replace_audio));
         }
 
         mDisplayText = new TextView(getContext());
         if (mStringAnswer == null) {
-            mDisplayText.setText(getContext().getString(R.string.no_recording));
+            mDisplayText.setText(getContext().getString(R.string.no_capture));
         } else {
-            mDisplayText.setText(getContext().getString(R.string.recording_saved));
+            mDisplayText.setText(getContext().getString(R.string.one_capture));
         }
 
         // finish complex layout
         this.addView(mDisplayText);
-        this.addView(mRecordButton);
+        this.addView(mCaptureButton);
         this.addView(mPlayButton);
     }
 

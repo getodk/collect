@@ -35,7 +35,7 @@ import java.util.Collections;
  */
 public abstract class FileChooser extends ListActivity {
 
-    private final String t = "File Chooser";
+    private final String t = "FileChooser";
 
     protected ArrayList<String> mFileList;
     protected File mRoot;

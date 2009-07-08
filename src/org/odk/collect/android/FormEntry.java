@@ -27,6 +27,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -253,23 +254,57 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 }
                 break;
             case SharedConstants.AUDIO_CAPTURE:
-                Uri ua = intent.getData();
                 PromptElement pa = ((QuestionView) mCurrentView).getPrompt();
                 if (!pa.isReadonly()) {
-                    String s = ua.toString();
-                    Log.i("yaw","audio at "+ua.getPath());
                     
+                    //find id of new item
+                    String ai = intent.getDataString();
+                    ai = ai.substring(ai.lastIndexOf("/") + 1);
+                    Cursor c =
+                            getContentResolver().query(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                                    null, "_id='" + ai + "'", null, null);
+                    
+                    // get path of item
+                    c.moveToFirst();
+                    String ap = c.getString(c.getColumnIndex("_data"));
+                 
+                    // delete db entry
+                    getContentResolver().delete(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "_id='" + ai + "'", null);
+                    
+                    // move file
+                    String s = mAnswerPath + "/" + pa.getInstanceName() + ".3gpp";
+                    File f = new File(ap);
+                    f.renameTo(new File(s));
+                    
+                    // save answer in data model
                     ((QuestionView) mCurrentView).setBinaryData(s);
                     mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);
                 }
                 break;
             case SharedConstants.VIDEO_CAPTURE:
-                Uri uv = intent.getData();
                 PromptElement pv = ((QuestionView) mCurrentView).getPrompt();
                 if (!pv.isReadonly()) {
-                    String s = uv.toString();
-                    Log.i("yaw","video at "+s);
-
+                    
+                    //find id of new item
+                    String av = intent.getDataString();
+                    av = av.substring(av.lastIndexOf("/") + 1);
+                    Cursor c =
+                            getContentResolver().query(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                                    null, "_id='" + av + "'", null, null);
+                    
+                    // get path of item
+                    c.moveToFirst();
+                    String ap = c.getString(c.getColumnIndex("_data"));
+                 
+                    // delete db entry
+                    getContentResolver().delete(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "_id='" + av + "'", null);
+                    
+                    // move file
+                    String s = mAnswerPath + "/" + pv.getInstanceName() + ".3gpp";
+                    File f = new File(ap);
+                    f.renameTo(new File(s));
+                    
+                    // save answer in data model
                     ((QuestionView) mCurrentView).setBinaryData(s);
                     mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);
                 }

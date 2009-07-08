@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.TypedValue;
@@ -45,9 +46,12 @@ import java.io.File;
  */
 public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
-    private Button mActionButton;
-    private ImageView mImageView;
-    private TextView mStringAnswer;
+    private Button mCaptureButton;
+    private String mStringAnswer;
+    private Button mPlayButton;
+    private TextView mDisplayText;
+
+
 
     public ImageWidget(Context context) {
         super(context);
@@ -55,40 +59,35 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void clearAnswer() {
-        //mImageView.setVisibility(GONE);
-        mStringAnswer.setText(null);
+        // deleteCurrentVideo();
+        mPlayButton.setEnabled(false);
+        mCaptureButton.setText(getContext().getString(R.string.capture_image));
+        mDisplayText.setText(getContext().getString(R.string.no_capture));
     }
 
 
     public IAnswerData getAnswer() {
-        String s = mStringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
+        if (mStringAnswer != null) {
+            return new StringData(mStringAnswer);
         } else {
-            return new StringData(s);
+            return null;
         }
     }
+
 
 
     public void buildView(PromptElement prompt) {
         this.setOrientation(LinearLayout.VERTICAL);
 
-        mActionButton = new Button(getContext());
-        mActionButton.setText(getContext().getString(R.string.get_image));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!prompt.isReadonly());
+        mCaptureButton = new Button(getContext());
+        mCaptureButton.setText(getContext().getString(R.string.capture_image));
+        mCaptureButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mCaptureButton.setPadding(20, 20, 20, 20);
+        mCaptureButton.setEnabled(!prompt.isReadonly());
 
-
-        mStringAnswer = new TextView(getContext());
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            mStringAnswer.setText(s);
-            mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        }
-        
         // launch image capture intent on click
-        mActionButton.setOnClickListener(new View.OnClickListener() {
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -98,29 +97,44 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
             }
         });
-        /*
-         * 
-         * // for showing the image mImageView = new
-         * android.widget.ImageView(getContext());
-         * mImageView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-         * LayoutParams.FILL_PARENT));
-         * 
-         * mImageView.setPadding(0, 10, 0, 0);
-         * mImageView.setScaleType(android.widget
-         * .ImageView.ScaleType.CENTER_CROP); if (prompt.getAnswerObject() !=
-         * null) { // always use the image from the imageAnswer array mImageData
-         * = ((BasicDataPointer) prompt.getAnswerObject()).getData();
-         * mImageView.setImageBitmap(BitmapFactory.decodeByteArray(mImageData,
-         * 0, mImageData.length)); }
-         */
+
+        mPlayButton = new Button(getContext());
+        mPlayButton.setText(getContext().getString(R.string.play_image));
+        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mPlayButton.setPadding(20, 20, 20, 20);
+
+
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent("android.intent.action.VIEW");
+                i.setDataAndType(Uri.fromFile(new File(mStringAnswer)), "image/jpeg");
+                ((Activity) getContext()).startActivity(i);
+            }
+        });
+
+        mStringAnswer = prompt.getAnswerText();
+        mPlayButton.setEnabled(mStringAnswer != null);
+        if (mStringAnswer != null) {
+            mCaptureButton.setText(getContext().getString(R.string.replace_image));
+        }
+
+        mDisplayText = new TextView(getContext());
+        if (mStringAnswer == null) {
+            mDisplayText.setText(getContext().getString(R.string.no_capture));
+        } else {
+            mDisplayText.setText(getContext().getString(R.string.one_capture));
+        }
+
         // finish complex layout
-        this.addView(mActionButton);
-        this.addView(mStringAnswer);
+        this.addView(mDisplayText);
+        this.addView(mCaptureButton);
+        this.addView(mPlayButton);
+
     }
 
 
     public void setBinaryData(Object answer) {
-        mStringAnswer.setText((String) answer);
+        mStringAnswer = (String) answer;
     }
 
 

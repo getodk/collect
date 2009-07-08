@@ -50,7 +50,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
      * add features to move files to/from the answer folder, but that'll be in
      * the export in FormHandler. Videos are currently in /sdcard/dcim/Camera/
      */
-    private Button mRecordButton;
+    private Button mCaptureButton;
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
@@ -65,8 +65,8 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void clearAnswer() {
         deleteCurrentVideo();
         mPlayButton.setEnabled(false);
-        mRecordButton.setText(getContext().getString(R.string.record_video));
-        mDisplayText.setText(getContext().getString(R.string.no_recording));
+        mCaptureButton.setText(getContext().getString(R.string.capture_video));
+        mDisplayText.setText(getContext().getString(R.string.no_capture));
     }
 
 
@@ -81,24 +81,18 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void buildView(PromptElement prompt) {
         this.setOrientation(LinearLayout.VERTICAL);
 
-        mRecordButton = new Button(getContext());
-        mRecordButton.setText(getContext().getString(R.string.record_video));
+        mCaptureButton = new Button(getContext());
+        mCaptureButton.setText(getContext().getString(R.string.capture_video));
 
-        mRecordButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        mRecordButton.setPadding(20, 20, 20, 20);
-        mRecordButton.setEnabled(!prompt.isReadonly());
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mCaptureButton.setPadding(20, 20, 20, 20);
+        mCaptureButton.setEnabled(!prompt.isReadonly());
 
-        mRecordButton.setOnClickListener(new View.OnClickListener() {
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*
-                 * We'd like to set our own path here, which android supports,
-                 * but setting MediaStore.EXTRA_OUTPUT is broken in the current
-                 * build. Filed under bug:
-                 */
                 Intent i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-                Uri u = Uri.fromFile(new File(mBinaryPath + ".3gpp"));
-                i.putExtra(MediaStore.EXTRA_OUTPUT, u);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.VIDEO_CAPTURE);
+              
             }
         });
 
@@ -107,18 +101,10 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
-
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                Cursor c =
-                        getContext().getContentResolver().query(
-                                Uri.parse("content://media/external/video/media/"), null,
-                                "_display_name='" + mStringAnswer + "'", null, null);
-                c.moveToFirst();
-                int id = c.getInt(c.getColumnIndex("_id"));
-                i.setDataAndType(Uri.parse("content://media/external/video/media/" + id),
-                        "video/3gp");
+                i.setDataAndType(Uri.fromFile(new File(mStringAnswer)), "video/3gpp");
                 ((Activity) getContext()).startActivity(i);
             }
         });
@@ -126,19 +112,19 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mStringAnswer = prompt.getAnswerText();
         mPlayButton.setEnabled(mStringAnswer != null);
         if (mStringAnswer != null) {
-            mRecordButton.setText(getContext().getString(R.string.rerecord_video));
+            mCaptureButton.setText(getContext().getString(R.string.replace_video));
         }
 
         mDisplayText = new TextView(getContext());
         if (mStringAnswer == null) {
-            mDisplayText.setText(getContext().getString(R.string.no_recording));
+            mDisplayText.setText(getContext().getString(R.string.no_capture));
         } else {
-            mDisplayText.setText(getContext().getString(R.string.recording_saved));
+            mDisplayText.setText(getContext().getString(R.string.one_capture));
         }
 
         // finish complex layout
         this.addView(mDisplayText);
-        this.addView(mRecordButton);
+        this.addView(mCaptureButton);
         this.addView(mPlayButton);
     }
 
