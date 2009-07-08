@@ -59,7 +59,9 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void clearAnswer() {
-        // deleteCurrentVideo();
+        File f = new File(mStringAnswer);
+        f.delete();
+        mStringAnswer = null;
         mPlayButton.setEnabled(false);
         mCaptureButton.setText(getContext().getString(R.string.capture_image));
         mDisplayText.setText(getContext().getString(R.string.no_capture));

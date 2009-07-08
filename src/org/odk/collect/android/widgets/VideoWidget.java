@@ -16,25 +16,24 @@
 
 package org.odk.collect.android.widgets;
 
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-
-import java.io.File;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
+
+import java.io.File;
 
 
 /**
@@ -54,8 +53,6 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
-    private String mBinaryPath;
-
 
     public VideoWidget(Context context) {
         super(context);
@@ -63,7 +60,9 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void clearAnswer() {
-        deleteCurrentVideo();
+        File f = new File(mStringAnswer);
+        f.delete();
+        mStringAnswer = null;
         mPlayButton.setEnabled(false);
         mCaptureButton.setText(getContext().getString(R.string.capture_video));
         mDisplayText.setText(getContext().getString(R.string.no_capture));
@@ -128,30 +127,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         this.addView(mPlayButton);
     }
 
-
     public void setBinaryData(Object answer) {
-        if (mStringAnswer != null) {
-            // User has selected new video, so delete the old one to clean
-            // things up.
-            deleteCurrentVideo();
-        }
-        String str = (String) answer;
-        Cursor c = getContext().getContentResolver().query(Uri.parse(str), null, null, null, null);
-        c.moveToFirst();
-        mStringAnswer = c.getString(c.getColumnIndex("_display_name"));
+        mStringAnswer = (String) answer;
     }
-
-
-    private void deleteCurrentVideo() {
-        getContext().getContentResolver().delete(
-                Uri.parse("content://media/external/video/media/"),
-                "_display_name='" + mStringAnswer + "'", null);
-        mStringAnswer = null;
-    }
-
-    public void setBinaryPath(String path) {
-        mBinaryPath = path;
-    }
-
-
 }

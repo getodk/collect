@@ -54,8 +54,6 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
-    private String mBinaryPath;
-
 
     public AudioWidget(Context context) {
         super(context);
@@ -63,6 +61,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void clearAnswer() {
+        File f = new File(mStringAnswer);
+        f.delete();
         mStringAnswer = null;
         mPlayButton.setEnabled(false);
         mCaptureButton.setText(getContext().getString(R.string.capture_audio));
@@ -130,10 +130,6 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
     public void setBinaryData(Object answer) {
         mStringAnswer = (String) answer;
-    }
-
-    public void setBinaryPath(String path) {
-        mBinaryPath = path;
     }
 
 }
