@@ -81,10 +81,15 @@ public class PromptElement {
     
     
     /**
-     * The instance name (essentially the question id)
+     * The instance name (question id) and the repeat count
      */
-    public String getInstanceName() {
-       return mBinding.instanceNode.getName();
+    public String getInstanceId() {
+       int count = getLastRepeatCount();
+       if (count == -1) {
+           return mBinding.instanceNode.getName();
+       } else {
+           return mBinding.instanceNode.getName()+count;
+       }
     }
     
     
@@ -230,7 +235,7 @@ public class PromptElement {
     }
     
     /**
-     * The cout of the closest group that repeats or -1.
+     * The count of the closest group that repeats or -1.
      */
     public int getLastRepeatedGroupRepeatCount() {
         for (GroupElement g : mGroups) {

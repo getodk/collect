@@ -16,10 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -28,7 +24,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -49,6 +44,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 /**
@@ -238,7 +237,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.IMAGE_CAPTURE):
                 PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
                 if (!pi.isReadonly()) {
-                    String s = mAnswerPath + "/" + pi.getInstanceName() + ".jpg";
+                    String s = mAnswerPath + "/" + pi.getInstanceId() + ".jpg";
                     File f = new File(SharedConstants.TMPFILE_PATH);
                     f.renameTo(new File(s));
                     ((QuestionView) mCurrentView).setBinaryData(s);
@@ -272,7 +271,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     getContentResolver().delete(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "_id='" + ai + "'", null);
                     
                     // move file
-                    String s = mAnswerPath + "/" + pa.getInstanceName() + ".3gpp";
+                    String s = mAnswerPath + "/" + pa.getInstanceId() + ".3gpp";
                     File f = new File(ap);
                     f.renameTo(new File(s));
                     
@@ -300,7 +299,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     getContentResolver().delete(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "_id='" + av + "'", null);
                     
                     // move file
-                    String s = mAnswerPath + "/" + pv.getInstanceName() + ".3gpp";
+                    String s = mAnswerPath + "/" + pv.getInstanceId() + ".3gpp";
                     File f = new File(ap);
                     f.renameTo(new File(s));
                     
