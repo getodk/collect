@@ -27,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -43,9 +42,12 @@ public class DataUploader extends ListActivity {
     private static final int MENU_UPLOAD = Menu.FIRST;
 
 
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onCreate(android.os.Bundle)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
 
@@ -56,10 +58,13 @@ public class DataUploader extends ListActivity {
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         setListAdapter(fileAdapter);
-
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -68,21 +73,23 @@ public class DataUploader extends ListActivity {
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
+     */
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_UPLOAD:
                 SparseBooleanArray s = this.getListView().getCheckedItemPositions();
 
-                Log.e("carl", "got items = " + s.size());
                 ArrayList<String> toUpload = new ArrayList<String>();
                 for (int i = 0; i < s.size(); i++) {
                     if (s.get(s.keyAt(i)) == true) {
-                        Log.e("testing", "adding " + getListView().getItemAtPosition(s.keyAt(i)));
+                        Log.e(t, "adding " + getListView().getItemAtPosition(s.keyAt(i)));
                         toUpload.add(getListView().getItemAtPosition(s.keyAt(i)).toString());
                     }
                 }
-                Toast.makeText(this, "uploading", Toast.LENGTH_LONG).show();
                 
                 Intent i = new Intent(this, UploaderActivity.class);
                 Bundle b = new Bundle();
