@@ -16,28 +16,24 @@
 
 package org.odk.collect.android;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the
@@ -46,12 +42,13 @@ import java.net.URLConnection;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManager extends FileChooser {
+public class FormManager extends ListActivity implements FormDownloaderListener {
 
     private final String t = "Form Manager";
 
-    private static final int DIALOG_ADD_FORM = 0;
-    private static final int DIALOG_DELETE_FORM = 1;
+    //private static final int DIALOG_ADD_FORM = 0;
+    //private static final int DIALOG_DELETE_FORM = 1;
+    private static final int PROGRESS_DIALOG = 2;
 
     // add or delete form
     private static final int MENU_ADD = Menu.FIRST;
@@ -59,6 +56,11 @@ public class FormManager extends FileChooser {
 
     private String mDeleteForm;
     private AlertDialog mAlertDialog;
+    private ProgressDialog mProgressDialog;
+
+    private ArrayList<String> mFileList;
+
+    private FormDownloadTask mFormDownloadTask;
 
 
     @Override
@@ -67,21 +69,31 @@ public class FormManager extends FileChooser {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
 
-        // init file lister with app name, path to search, display style
-        super.initialize(getString(R.string.manage_forms), SharedConstants.FORMS_PATH, true);
+        mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
+        if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED)
+            try {
+                dismissDialog(PROGRESS_DIALOG);
+            } catch (IllegalArgumentException e) {
+                Log.e(t, "dialog wasn't previously shown.  totally fine");
+            }
 
+        refresh();
     }
 
 
-    @Override
-    public void refreshRoot() {
-        super.refreshRoot();
+    private void refresh() {
+        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        ArrayAdapter<String> fileAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
+                        mFileList);
+        getListView().setItemsCanFocus(false);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        setListAdapter(fileAdapter);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_ADD, 0, getString(R.string.add_form)).setIcon(
                 android.R.drawable.ic_menu_add);
         menu.add(0, MENU_DELETE, 0, getString(R.string.delete_form)).setIcon(
@@ -94,11 +106,11 @@ public class FormManager extends FileChooser {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ADD:
-                showDialog(DIALOG_ADD_FORM);
+                createAddDialog();
                 return true;
             case MENU_DELETE:
                 if (getListView().getCheckedItemPosition() != -1) {
-                    showDialog(DIALOG_DELETE_FORM);
+                    createDeleteDialog();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.delete_error),
                             Toast.LENGTH_SHORT).show();
@@ -110,20 +122,30 @@ public class FormManager extends FileChooser {
 
 
 
-    /**
-     * Calls either the add form or delete form dialog
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onCreateDialog(int)
      */
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case DIALOG_ADD_FORM:
-                createAddDialog();
-                break;
-            case DIALOG_DELETE_FORM:
-                createDeleteDialog();
-                break;
+            case PROGRESS_DIALOG:
+                mProgressDialog = new ProgressDialog(this);
+                DialogInterface.OnClickListener loadingButtonListener =
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mFormDownloadTask.setDownloaderListener(null);
+                                finish();
+                            }
+                        };
+                mProgressDialog.setMessage(getString(R.string.loading_form));
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return mProgressDialog;
         }
-        return mAlertDialog;
+        return null;
     }
 
 
@@ -141,18 +163,10 @@ public class FormManager extends FileChooser {
                 switch (i) {
                     case AlertDialog.BUTTON1: // ok, download form
                         EditText et = (EditText) v.findViewById(R.id.add_url);
-                        et.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
-                        try {
-                            URL u = new URL(et.getText().toString());
-                            getFormFromUrl(u);
-                        } catch (MalformedURLException e) {
-                            Toast.makeText(getBaseContext(), getString(R.string.url_error),
-                                    Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-
-                        refreshRoot();
-
+                        showDialog(PROGRESS_DIALOG);
+                        mFormDownloadTask = new FormDownloadTask();
+                        mFormDownloadTask.setDownloaderListener(FormManager.this);
+                        mFormDownloadTask.execute(et.getText().toString());
                         break;
                     case AlertDialog.BUTTON2: // cancel, do nothing
                         break;
@@ -162,6 +176,7 @@ public class FormManager extends FileChooser {
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), DialogUrl);
         mAlertDialog.setButton2(getString(R.string.cancel), DialogUrl);
+        mAlertDialog.show();
     }
 
 
@@ -170,7 +185,7 @@ public class FormManager extends FileChooser {
      */
     private void createDeleteDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mDeleteForm = super.mFileList.get(getListView().getCheckedItemPosition());
+        mDeleteForm = mFileList.get(getListView().getCheckedItemPosition());
         mAlertDialog.setMessage(getString(R.string.delete_confirm, mDeleteForm));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
@@ -178,7 +193,7 @@ public class FormManager extends FileChooser {
                         switch (i) {
                             case AlertDialog.BUTTON1: // yes, delete
                                 deleteSelectedForm();
-                                refreshRoot();
+                                refresh();
 
                                 break;
                             case AlertDialog.BUTTON2: // no, do nothing
@@ -189,6 +204,7 @@ public class FormManager extends FileChooser {
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
         mAlertDialog.setButton2(getString(R.string.no), dialogYesNoListener);
+        mAlertDialog.show();
     }
 
 
@@ -196,8 +212,8 @@ public class FormManager extends FileChooser {
      * Deletes the selected form
      */
     private void deleteSelectedForm() {
-        File f = new File(super.mRoot + "/" + mDeleteForm);
-        if (f.delete()) {
+        boolean deleted = FileUtils.deleteFile(SharedConstants.FORMS_PATH + "/" + mDeleteForm);
+        if (deleted) {
             Toast.makeText(getApplicationContext(),
                     getString(R.string.form_deleted_ok, mDeleteForm), Toast.LENGTH_SHORT).show();
         } else {
@@ -207,62 +223,47 @@ public class FormManager extends FileChooser {
     }
 
 
-    /**
-     * Downloads a valid form from a url to forms directory
-     */
-    private void getFormFromUrl(URL u) {
-        try {
-
-            // prevent deadlock when connection is invalid
-            URLConnection c = u.openConnection();
-            c.setConnectTimeout(SharedConstants.CONNECTION_TIMEOUT);
-            c.setReadTimeout(SharedConstants.CONNECTION_TIMEOUT);
-
-            InputStream is = c.getInputStream();
-
-            String filename = u.getFile();
-            filename = filename.substring(filename.lastIndexOf('/') + 1);
-
-            if (filename.matches(SharedConstants.VALID_FILENAME)) {
-                File f = new File(super.mRoot + "/" + filename);
-                OutputStream os = new FileOutputStream(f);
-                byte buf[] = new byte[1024];
-                int len;
-                while ((len = is.read(buf)) > 0)
-                    os.write(buf, 0, len);
-                os.flush();
-                os.close();
-                is.close();
-                Toast.makeText(this, getString(R.string.form_added_ok, filename),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, getString(R.string.url_error), Toast.LENGTH_SHORT).show();
-            }
-            mAlertDialog.dismiss();
-        } catch (IOException e) {
-            Toast.makeText(this, getString(R.string.url_error), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+    public void downloadingComplete(Boolean result) {
+        Log.e("carl", "finished downloading with result " + result);
+        dismissDialog(PROGRESS_DIALOG);
+        if (result) {
+            Toast.makeText(this, "Download Successful", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Download Failed", Toast.LENGTH_LONG).show();
         }
-
-    }
-
-
-    /**
-     * Managed dialogs require setting your variables beforehand
-     */
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        super.onPrepareDialog(id, dialog);
-        switch (id) {
-            case DIALOG_DELETE_FORM:
-                mDeleteForm = super.mFileList.get(getListView().getCheckedItemPosition());
-                ((AlertDialog) dialog).setMessage(getString(R.string.delete_confirm, mDeleteForm));
-                break;
-        }
+        refresh();
     }
 
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    public Object onRetainNonConfigurationInstance() {
+        return mFormDownloadTask;
     }
+
+
+    @Override
+    protected void onDestroy() {
+        if (mFormDownloadTask != null) mFormDownloadTask.setDownloaderListener(null);
+        super.onDestroy();
+    }
+
+
+    @Override
+    protected void onResume() {
+        if (mFormDownloadTask != null) mFormDownloadTask.setDownloaderListener(this);
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        //TODO:
+        // need to make sure none of the un-managed dialogs are showing
+        // that is, dismiss them.
+        // managed dialogs may work here?
+        super.onPause();
+    }
+
+
+
 }

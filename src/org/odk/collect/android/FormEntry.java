@@ -16,6 +16,10 @@
 
 package org.odk.collect.android;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,7 +31,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -45,10 +48,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 
 /**

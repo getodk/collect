@@ -16,9 +16,11 @@
 
 package org.odk.collect.android;
 
+
+
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface FormLoaderListener {
-    void loadingComplete(FormHandler formHandler);
+public interface FormDownloaderListener {
+    void downloadingComplete(Boolean result);
 }

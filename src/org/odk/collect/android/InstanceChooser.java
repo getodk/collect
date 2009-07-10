@@ -16,13 +16,16 @@
 
 package org.odk.collect.android;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import java.io.File;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -31,23 +34,29 @@ import java.io.File;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class InstanceChooser extends FileChooser {
+public class InstanceChooser extends ListActivity {
 
     private final String t = "Instance Chooser";
-
+    private ArrayList<String> mFileList;
     
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        Log.i(t,"called onCreate");
+        Log.i(t, "called onCreate");
 
         // start file lister with app name, path to search, display style
-        super.initialize(getString(R.string.edit_data), SharedConstants.ANSWERS_PATH, false);
-        
-    }
+        // super.initialize(getString(R.string.edit_data),
+        // SharedConstants.ANSWERS_PATH, 0);
 
+        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.ANSWERS_PATH);
+        ArrayAdapter<String> fileAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mFileList);
+        setListAdapter(fileAdapter);
+
+
+    }
 
 
 
@@ -57,7 +66,7 @@ public class InstanceChooser extends FileChooser {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
-        File f = new File(mRoot + "/" + mFileList.get(position));
+        File f = new File(SharedConstants.ANSWERS_PATH + "/" + mFileList.get(position));
 
         Intent i = new Intent();
         i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());
