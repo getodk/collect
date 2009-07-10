@@ -51,7 +51,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
     private TextView mDisplayText;
 
     private Uri mExternalUri;
-    private String mFiletype;
     private String mCaptureIntent;
     private String mType;
     private int mRequestCode;
@@ -70,7 +69,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mType = type;
         if (mType.equals("image")) {
             mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            mFiletype = "image/jpeg";
             mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
             mRequestCode = SharedConstants.IMAGE_CAPTURE;
             mCaptureText = R.string.capture_image;
@@ -78,7 +76,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
             mPlayText = R.string.play_image;
         } else if (mType.equals("audio")) {
             mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            mFiletype = "audio/3gp";
             mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
             mRequestCode = SharedConstants.AUDIO_CAPTURE;
             mCaptureText = R.string.capture_audio;
@@ -87,7 +84,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         } else if (mType.equals("video")) {
             mExternalUri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            mFiletype = "video/3gp";
             mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
             mRequestCode = SharedConstants.VIDEO_CAPTURE;
             mCaptureText = R.string.capture_video;
@@ -174,7 +170,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
                 Cursor c =
                         getContext().getContentResolver().query(mUriAnswer, null, null, null, null);
                 c.moveToFirst();
-                i.setDataAndType(mUriAnswer, mFiletype);
+                i.setData(mUriAnswer);
                 ((Activity) getContext()).startActivity(i);
             }
         });
