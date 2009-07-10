@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
@@ -43,15 +44,14 @@ import java.io.File;
 public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
     // private static final String t = "VideoWidget";
 
-    /*
-     * TODO: This works, but needs to get cleaned up a bit TODO: Also need to
-     * add features to move files to/from the answer folder, but that'll be in
-     * the export in FormHandler. Videos are currently in /sdcard/dcim/Camera/
-     */
+    // TODO: move files to/from the answer folder using form handler.
+    // TODO: Videos are currently in /sdcard/dcim/Camera/
+
     private Button mCaptureButton;
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
+
 
     public VideoWidget(Context context) {
         super(context);
@@ -59,12 +59,30 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void clearAnswer() {
-        File f = new File(mStringAnswer);
-        f.delete();
-        mStringAnswer = null;
+        deleteFile();
         mPlayButton.setEnabled(false);
         mCaptureButton.setText(getContext().getString(R.string.capture_video));
         mDisplayText.setText(getContext().getString(R.string.no_capture));
+    }
+
+
+    private void deleteFile() {
+        Cursor c =
+                getContext().getContentResolver().query(
+                        android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
+                        "_display_name='" + mStringAnswer + "'", null, null);
+        c.moveToFirst();
+
+        int id = c.getInt(c.getColumnIndex("_id"));
+        String path = c.getString(c.getColumnIndex("_data"));
+
+        File f = new File(path);
+        f.delete();
+        getContext().getContentResolver().delete(
+                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "_id='" + id + "'",
+                null);
+        mStringAnswer = null;
+
     }
 
 
@@ -82,7 +100,8 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_video));
 
-        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mCaptureButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadonly());
 
@@ -90,7 +109,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
             public void onClick(View v) {
                 Intent i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.VIDEO_CAPTURE);
-              
+
             }
         });
 
@@ -102,8 +121,18 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                i.setDataAndType(Uri.fromFile(new File(mStringAnswer)), "video/3gpp");
+                Cursor c =
+                        getContext().getContentResolver().query(
+                                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
+                                "_display_name='" + mStringAnswer + "'", null, null);
+                c.moveToFirst();
+                int id = c.getInt(c.getColumnIndex("_id"));
+                i.setDataAndType(Uri
+                        .parse(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI + "/"
+                                + id), "video/3gp");
                 ((Activity) getContext()).startActivity(i);
+
+
             }
         });
 
@@ -126,7 +155,14 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         this.addView(mPlayButton);
     }
 
+
     public void setBinaryData(Object answer) {
-        mStringAnswer = (String) answer;
+        if (mStringAnswer != null) {
+            deleteFile();
+        }
+        String str = (String) answer;
+        Cursor c = getContext().getContentResolver().query(Uri.parse(str), null, null, null, null);
+        c.moveToFirst();
+        mStringAnswer = c.getString(c.getColumnIndex("_display_name"));
     }
 }

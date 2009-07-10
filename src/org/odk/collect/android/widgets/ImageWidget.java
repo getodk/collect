@@ -19,7 +19,9 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -49,15 +51,40 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     private TextView mDisplayText;
 
 
-
     public ImageWidget(Context context) {
         super(context);
     }
 
 
+    private void deleteFile() {
+        Cursor c =
+                getContext().getContentResolver().query(
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,
+                        "_display_name='" + mStringAnswer + "'", null, null);
+        c.moveToFirst();
+
+        int id = c.getInt(c.getColumnIndex("_id"));
+        String path = c.getString(c.getColumnIndex("_data"));
+
+        Log.i("yaw", "del id: " + id);
+        Log.i("yaw", "del path: " + path);
+
+
+        File f = new File(path);
+        Log.i("yaw", "del status: " +  f.delete());
+        
+        getContext().getContentResolver().delete(
+                Uri.parse(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI+"/"+id),null,
+                null);
+
+        // delete thumbnail
+        mStringAnswer = null;
+
+    }
+
+
     public void clearAnswer() {
-        File f = new File(mStringAnswer);
-        f.delete();
+        deleteFile();
         mStringAnswer = null;
         mPlayButton.setEnabled(false);
         mCaptureButton.setText(getContext().getString(R.string.capture_image));
@@ -88,10 +115,9 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         // launch image capture intent on click
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                Uri u = Uri.fromFile(new File(SharedConstants.TMPFILE_PATH));
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, u);
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString());
                 ((Activity) getContext()).startActivityForResult(i, SharedConstants.IMAGE_CAPTURE);
 
             }
@@ -106,7 +132,22 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                i.setDataAndType(Uri.fromFile(new File(mStringAnswer)), "image/jpeg");
+
+                Cursor c =
+                        getContext().getContentResolver().query(
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                null, "_display_name='" + mStringAnswer + "'", null, null);
+                c.moveToFirst();
+                int id = c.getInt(c.getColumnIndex("_id"));
+
+
+                i.setDataAndType(Uri
+                        .parse(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI + "/"
+                                + id), "image/jpeg");
+                Log.i("yaw", "viewing: "
+                        + Uri.parse(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                + "/" + id));
+
                 ((Activity) getContext()).startActivity(i);
             }
         });
@@ -133,7 +174,14 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void setBinaryData(Object answer) {
-        mStringAnswer = (String) answer;
+        if (mStringAnswer != null) {
+            deleteFile();
+        }
+        String str = (String) answer;
+        Cursor c = getContext().getContentResolver().query(Uri.parse(str), null, null, null, null);
+        c.moveToFirst();
+        mStringAnswer = c.getString(c.getColumnIndex("_display_name"));
+        Log.i("yaw", "answer: " + mStringAnswer);
     }
 
 

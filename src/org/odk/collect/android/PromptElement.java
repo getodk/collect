@@ -84,8 +84,8 @@ public class PromptElement {
      * The instance name (question id) and the repeat count
      */
     public String getInstanceId() {
-       int count = getLastRepeatCount();
-       if (count == -1) {
+       int count = getLastRepeatCount()+1;
+       if (count < 1) {
            return mBinding.instanceNode.getName();
        } else {
            return mBinding.instanceNode.getName()+count;

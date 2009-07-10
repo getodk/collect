@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
@@ -42,28 +43,42 @@ import java.io.File;
  */
 public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
-    /*
-     * TODO: This works, but needs to get cleaned up a bit TODO: Also need to
-     * add features to move files to/from the answer folder, but that'll be in
-     * the export in FormHandler. Audio clips are currently in /sdcard/ The
-     * value in the answers.xml file is currently content://media/audio/4 or
-     * something similar to that which only android understands. It needs to be
-     * changed to a path (VideoWidget has an example that does it right).
-     */
+    // TODO: move files from root to answer folder
+    // TODO: change answers in xml from content uri to filepath
+
     private Button mCaptureButton;
     private Button mPlayButton;
     private String mStringAnswer;
     private TextView mDisplayText;
+
 
     public AudioWidget(Context context) {
         super(context);
     }
 
 
-    public void clearAnswer() {
-        File f = new File(mStringAnswer);
+    private void deleteFile() {
+        Cursor c =
+                getContext().getContentResolver().query(
+                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
+                        "_display_name='" + mStringAnswer + "'", null, null);
+        c.moveToFirst();
+        
+        int id = c.getInt(c.getColumnIndex("_id"));
+        String path = c.getString(c.getColumnIndex("_data"));
+
+        File f = new File(path);
         f.delete();
+        getContext().getContentResolver().delete(
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                "_id='" + id + "'", null);
         mStringAnswer = null;
+
+    }
+
+
+    public void clearAnswer() {
+        deleteFile();
         mPlayButton.setEnabled(false);
         mCaptureButton.setText(getContext().getString(R.string.capture_audio));
         mDisplayText.setText(getContext().getString(R.string.no_capture));
@@ -83,7 +98,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_audio));
-        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mCaptureButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadonly());
 
@@ -103,7 +119,15 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                i.setDataAndType(Uri.fromFile(new File(mStringAnswer)), "audio/3gpp");
+                Cursor c =
+                        getContext().getContentResolver().query(
+                                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
+                                "_display_name='" + mStringAnswer + "'", null, null);
+                c.moveToFirst();
+                int id = c.getInt(c.getColumnIndex("_id"));
+                i.setDataAndType(Uri
+                        .parse(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
+                                + id), "audio/3gp");
                 ((Activity) getContext()).startActivity(i);
             }
         });
@@ -129,7 +153,13 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void setBinaryData(Object answer) {
-        mStringAnswer = (String) answer;
+        if (mStringAnswer != null) {
+            deleteFile();
+        }
+        String str = (String) answer;
+        Cursor c = getContext().getContentResolver().query(Uri.parse(str), null, null, null, null);
+        c.moveToFirst();
+        mStringAnswer = c.getString(c.getColumnIndex("_display_name"));
     }
 
 }

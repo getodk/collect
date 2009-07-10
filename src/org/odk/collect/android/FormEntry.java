@@ -23,10 +23,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -65,7 +66,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
     private static final int MENU_QUIT = Menu.FIRST + 2;
     private static final int MENU_LANGUAGES = Menu.FIRST + 3;
-    
+
     private static final int PROGRESS_DIALOG = 1;
 
     private ProgressBar mProgressBar;
@@ -85,7 +86,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private ProgressDialog mProgressDialog;
 
     private boolean mBeenSwiped;
-    
+
     private FormLoaderTask mFormLoaderTask;
 
     enum AnimationType {
@@ -113,9 +114,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 mFormPath = savedInstanceState.getString(FORMPATH);
             }
         }
-        
+
         Object data = getLastNonConfigurationInstance();
-        if (data instanceof FormLoaderTask) {        
+        if (data instanceof FormLoaderTask) {
             mFormLoaderTask = (FormLoaderTask) data;
         } else if (data instanceof FormHandler) {
             mFormHandler = (FormHandler) data;
@@ -160,7 +161,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         outState.putString(FORMPATH, mFormPath);
     }
 
-    
+
     private String createAnswerPath() {
         // check to see if sd card exists
         String cardstatus = Environment.getExternalStorageState();
@@ -237,11 +238,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.IMAGE_CAPTURE):
                 PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
                 if (!pi.isReadonly()) {
-                    String s = mAnswerPath + "/" + pi.getInstanceId() + ".jpg";
-                    File f = new File(SharedConstants.TMPFILE_PATH);
-                    f.renameTo(new File(s));
-                    ((QuestionView) mCurrentView).setBinaryData(s);
+
+                    Bitmap bm = (Bitmap) intent.getExtras().get("data");
+                    String si = android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), bm, null, null);                   
+                    ((QuestionView) mCurrentView).setBinaryData(si);
                     mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(), false);
+                    refreshCurrentView();
                 }
                 break;
             case (SharedConstants.BARCODE_CAPTURE):
@@ -255,57 +257,21 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case SharedConstants.AUDIO_CAPTURE:
                 PromptElement pa = ((QuestionView) mCurrentView).getPrompt();
                 if (!pa.isReadonly()) {
-                    
-                    //find id of new item
-                    String ai = intent.getDataString();
-                    ai = ai.substring(ai.lastIndexOf("/") + 1);
-                    Cursor c =
-                            getContentResolver().query(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                    null, "_id='" + ai + "'", null, null);
-                    
-                    // get path of item
-                    c.moveToFirst();
-                    String ap = c.getString(c.getColumnIndex("_data"));
-                 
-                    // delete db entry
-                    getContentResolver().delete(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "_id='" + ai + "'", null);
-                    
-                    // move file
-                    String s = mAnswerPath + "/" + pa.getInstanceId() + ".3gpp";
-                    File f = new File(ap);
-                    f.renameTo(new File(s));
-                    
+                    String ua = intent.getDataString();
                     // save answer in data model
-                    ((QuestionView) mCurrentView).setBinaryData(s);
+                    ((QuestionView) mCurrentView).setBinaryData(ua);
                     mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);
+                    refreshCurrentView();
                 }
                 break;
             case SharedConstants.VIDEO_CAPTURE:
                 PromptElement pv = ((QuestionView) mCurrentView).getPrompt();
                 if (!pv.isReadonly()) {
-                    
-                    //find id of new item
-                    String av = intent.getDataString();
-                    av = av.substring(av.lastIndexOf("/") + 1);
-                    Cursor c =
-                            getContentResolver().query(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                    null, "_id='" + av + "'", null, null);
-                    
-                    // get path of item
-                    c.moveToFirst();
-                    String ap = c.getString(c.getColumnIndex("_data"));
-                 
-                    // delete db entry
-                    getContentResolver().delete(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "_id='" + av + "'", null);
-                    
-                    // move file
-                    String s = mAnswerPath + "/" + pv.getInstanceId() + ".3gpp";
-                    File f = new File(ap);
-                    f.renameTo(new File(s));
-                    
+                    String uv = intent.getDataString();
                     // save answer in data model
-                    ((QuestionView) mCurrentView).setBinaryData(s);
+                    ((QuestionView) mCurrentView).setBinaryData(uv);
                     mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);
+                    refreshCurrentView();
                 }
                 break;
         }
@@ -436,15 +402,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /*
      * (non-Javadoc)
      * 
-     * @see android.app.Activity#onRetainNonConfigurationInstance()
-     * If we're loading, then we pass the loading thread to our next instance.  If we've
+     * @see android.app.Activity#onRetainNonConfigurationInstance() If we're
+     * loading, then we pass the loading thread to our next instance. If we've
      * finished loading, we pass the formhandler.
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
-        synchronized(this) {
-        if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
-            return mFormLoaderTask;
+        synchronized (this) {
+            if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
+                return mFormLoaderTask;
         }
         if (mFormHandler != null && isQuestionView()) {
             PromptElement p = ((QuestionView) mCurrentView).getPrompt();
@@ -657,7 +623,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         mInAnimation.setAnimationListener(this);
 
-        // We must call setMax() first because it doesn't redraw the progress bar.
+        // We must call setMax() first because it doesn't redraw the progress
+        // bar.
         mProgressBar.setMax(mFormHandler.getQuestionCount());
         mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
@@ -678,13 +645,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     /*
      * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
-     * and onPrepareDialog(), but dialogs with dynamic content are broken 
-     * in 1.5 (cupcake).  We do use managed dialogs for our static loading ProgressDialog.
+     * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
+     * (cupcake). We do use managed dialogs for our static loading
+     * ProgressDialog.
      * 
      * The main issue we noticed and are waiting to see fixed is:
      * onPrepareDialog() is not called after a screen orientation change.
      * http://code.google.com/p/android/issues/detail?id=1639
-     * 
      */
 
 
@@ -900,10 +867,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         }).create();
         mAlertDialog.show();
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
+     * 
      * @see android.app.Activity#onCreateDialog(int)
      */
     @Override
@@ -935,7 +903,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         }
     }
 
-    
+
 
     /*
      * (non-Javadoc)
@@ -972,6 +940,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     /*
      * (non-Javadoc)
+     * 
      * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
      */
     @Override
@@ -984,6 +953,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         return super.onKeyDown(keyCode, event);
     }
 
+
     /*
      * (non-Javadoc)
      * 
@@ -991,8 +961,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     @Override
     protected void onDestroy() {
-        if (mFormLoaderTask != null)
-            mFormLoaderTask.setFormLoaderListener(null);
+        if (mFormLoaderTask != null) mFormLoaderTask.setFormLoaderListener(null);
         super.onDestroy();
     }
 
@@ -1034,13 +1003,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
     /**
-     * loadingComplete() is called by FormLoaderTask once it has finished loading a
-     * form.
+     * loadingComplete() is called by FormLoaderTask once it has finished
+     * loading a form.
      */
     public void loadingComplete(FormHandler formHandler) {
         dismissDialog(PROGRESS_DIALOG);
         if (formHandler == null) {
-            createErrorDialog(getString(R.string.form_load_error, mFormPath), true); 
+            createErrorDialog(getString(R.string.form_load_error, mFormPath), true);
         } else {
             mFormHandler = formHandler;
             mFormHandler.initialize(getApplicationContext());
@@ -1050,5 +1019,5 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         }
     }
 
-    
+
 }
