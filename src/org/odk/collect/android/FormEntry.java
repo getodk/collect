@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -237,10 +238,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.IMAGE_CAPTURE):
                 PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
                 if (!pi.isReadonly()) {
-
                     Bitmap bm = (Bitmap) intent.getExtras().get("data");
-                    String si = android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), bm, null, null);                   
-                    ((QuestionView) mCurrentView).setBinaryData(si);
+                    Uri ui = Uri.parse(android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), bm, null, null));                   
+                    ((QuestionView) mCurrentView).setBinaryData(ui);
                     mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(), false);
                     refreshCurrentView();
                 }
@@ -256,7 +256,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case SharedConstants.AUDIO_CAPTURE:
                 PromptElement pa = ((QuestionView) mCurrentView).getPrompt();
                 if (!pa.isReadonly()) {
-                    String ua = intent.getDataString();
+                    Uri ua = intent.getData();
                     // save answer in data model
                     ((QuestionView) mCurrentView).setBinaryData(ua);
                     mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);
@@ -266,7 +266,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case SharedConstants.VIDEO_CAPTURE:
                 PromptElement pv = ((QuestionView) mCurrentView).getPrompt();
                 if (!pv.isReadonly()) {
-                    String uv = intent.getDataString();
+                    Uri uv = intent.getData();
                     // save answer in data model
                     ((QuestionView) mCurrentView).setBinaryData(uv);
                     mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);

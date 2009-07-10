@@ -88,20 +88,21 @@ the License.
 
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
-	
+ 	
 	<string name="play_image">View Image</string>
 	<string name="play_audio">Play Audio</string>
 	<string name="play_video">Play Video</string>
+	
 	<string name="capture_image">Capture Image</string>
 	<string name="capture_audio">Capture Audio</string>
 	<string name="capture_video">Capture Video</string>
+	
 	<string name="replace_image">Replace Image</string>
   <string name="replace_audio">Replace Audio</string>
   <string name="replace_video">Replace Video</string>
 
   <string name="no_capture">Nothing captured yet.</string>
   <string name="one_capture">One item saved.</string>
-  
 
 	<string name="add_form">Add Form</string>
 	<string name="delete_form">Delete Form</string>
