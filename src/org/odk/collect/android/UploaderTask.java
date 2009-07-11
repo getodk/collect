@@ -50,7 +50,7 @@ class UploaderTask extends AsyncTask<String, Integer, Void> {
             this.publishProgress(i+1, values.length);
  
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            //this should get set in a preferences window or something.
+            //TODO: this should get set in a preferences window or something.
             HttpPost mypost = new HttpPost("http://opendatakit.appspot.com/submission");
             File dir = new File(SharedConstants.ANSWERS_PATH + values[i]);
             File[] files = dir.listFiles();
@@ -58,7 +58,7 @@ class UploaderTask extends AsyncTask<String, Integer, Void> {
                 this.cancel(true);
             
             MultipartEntity entity = new MultipartEntity();
-            Log.e(t, "# of files " + files.length);
+            Log.i(t, "# of files " + files.length);
             
             for(int j = 0; j < files.length; j++) {
                 File f = files[j];

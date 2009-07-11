@@ -454,14 +454,14 @@ public class FormHandler {
         i = nextIndexForCount(i);
 
         while (!i.isEndOfFormIndex()) {
-            if (indexIsGroup(i)) {
-            } else {
+            if (!indexIsGroup(i)) {
                 // we have a question
                 count++;
             }
             i = nextIndexForCount(i);
         }
 
+        // +1 for end screen
         return count + 1;
     }
 
