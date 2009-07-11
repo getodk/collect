@@ -63,14 +63,14 @@ class UploaderTask extends AsyncTask<String, Integer, Void> {
             for(int j = 0; j < files.length; j++) {
                 File f = files[j];
                 if (f.getName().endsWith(".xml")) {
-                    Log.i(t, "adding xml file: " + f.getName());
+                    Log.i(t, "adding xml file: " + f.getAbsolutePath());
                     entity.addPart("xml_submission_file", new FileBody(f));
                 }
-                if (f.getName().endsWith(".png")) {
-                    Log.i(t, "adding image file: " + f.getName());
-                    entity.addPart("datafile", new FileBody(f));
+                else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
+                    Log.i(t, "adding image file: " + f.getAbsolutePath());
+                    entity.addPart(f.getName(), new FileBody(f));
                 } else {
-                    Log.i(t, "unhandled file: " + f.getName());
+                    Log.i(t, "unhandled file: " + f.getAbsolutePath());
                 }
                 
             }
