@@ -16,10 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,7 +23,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +44,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 /**
@@ -238,10 +238,21 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case (SharedConstants.IMAGE_CAPTURE):
                 PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
                 if (!pi.isReadonly()) {
-                    Bitmap bm = (Bitmap) intent.getExtras().get("data");
-                    Uri ui = Uri.parse(android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), bm, null, null));                   
-                    ((QuestionView) mCurrentView).setBinaryData(ui);
-                    mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(), false);
+                    File fi = new File(SharedConstants.TMPFILE_PATH);
+                    try {
+                        Uri ui =
+                                Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
+                                        getContentResolver(), fi.getAbsolutePath(), null, null));
+                        fi.delete();
+                        ((QuestionView) mCurrentView).setBinaryData(ui);
+                        mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(),
+                                false);
+
+                    } catch (FileNotFoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
                     refreshCurrentView();
                 }
                 break;
@@ -458,8 +469,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 ((Button) nextView.findViewById(R.id.submit))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
-                                mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData()) {
+                                mFormHandler.finalizeDataModel(mAnswerPath);
+                                if (mFormHandler.exportData(mAnswerPath)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();

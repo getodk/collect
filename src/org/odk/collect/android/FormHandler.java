@@ -17,29 +17,30 @@
 package org.odk.collect.android;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.IService;
 import org.javarosa.core.services.transport.ByteArrayPayload;
-import org.javarosa.core.services.transport.DataPointerPayload;
 import org.javarosa.core.services.transport.IDataPayload;
-import org.javarosa.core.services.transport.MultiMessagePayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.xform.parse.XFormParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,6 +62,7 @@ public class FormHandler {
     private FormIndex mCurrentIndex;
     private int mQuestionCount;
     private String mSourcePath;
+    private Context mContext;
 
 
     public FormHandler(FormDef formDef) {
@@ -73,17 +75,19 @@ public class FormHandler {
 
 
     public void initialize(Context context) {
-        
+
+        mContext = context;
+
         // load services
         Vector<IService> v = new Vector<IService>();
         v.add(new PropertyManager(context));
         JavaRosaServiceProvider.instance().initialize(v);
-        
+
         // set evaluation context
         EvaluationContext ec = new EvaluationContext();
         ec.addFunctionHandler(new RegexFunction());
         mForm.setEvaluationContext(ec);
-        
+
         // initialize form
         mForm.initialize(true);
 
@@ -107,6 +111,7 @@ public class FormHandler {
         }
     }
 
+
     /**
      * Deletes the innermost group that repeats that this node belongs to.
      */
@@ -128,7 +133,8 @@ public class FormHandler {
         for (int i = 0; i < elements.size(); i++) {
             IFormElement fi = elements.get(i);
             if (fi instanceof GroupDef) {
-                groups.add(new GroupElement(((GroupDef) fi).getLongText(), mult.get(i).intValue(), ((GroupDef)fi).getRepeat()));
+                groups.add(new GroupElement(((GroupDef) fi).getLongText(), mult.get(i).intValue(),
+                        ((GroupDef) fi).getRepeat()));
             }
         }
 
@@ -144,27 +150,26 @@ public class FormHandler {
     public void setFormIndex(FormIndex newIndex) {
         mCurrentIndex = newIndex;
     }
-    
+
+
     private void createModelIfNecessary(FormIndex index) {
         if (index.isInForm()) {
             IFormElement e = getForm().getChild(index);
             if (e instanceof GroupDef) {
                 GroupDef g = (GroupDef) e;
                 if (g.getRepeat() && g.getCountReference() != null) {
-                    IAnswerData count = getForm().getDataModel().getDataValue(
-                            g.getCountReference());
+                    IAnswerData count =
+                            getForm().getDataModel().getDataValue(g.getCountReference());
                     if (count != null) {
                         int fullcount = ((Integer) count.getValue()).intValue();
-                        TreeReference ref = getForm()
-                                .getChildInstanceRef(index);
-                        TreeElement element = getForm().getDataModel()
-                                .resolveReference(ref);
+                        TreeReference ref = getForm().getChildInstanceRef(index);
+                        TreeElement element = getForm().getDataModel().resolveReference(ref);
                         if (element == null) {
                             if (index.getInstanceIndex() < fullcount) {
                                 getForm().createNewRepeat(index);
                             }
-                        } 
-                    } 
+                        }
+                    }
                 }
             }
         }
@@ -175,14 +180,15 @@ public class FormHandler {
     public FormIndex getIndex() {
         return mCurrentIndex;
     }
-    
+
+
     private boolean isNoAsk(FormIndex index) {
         Vector<IFormElement> defs = getIndexVector(index);
         IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
         if (last instanceof GroupDef) {
             GroupDef end = (GroupDef) last;
             return end.noAddRemove;
-        } 
+        }
         return false;
     }
 
@@ -194,11 +200,10 @@ public class FormHandler {
      */
     public PromptElement nextPrompt() {
         nextRelevantIndex();
-        
+
         /*
-         * First see if we need to build a set of repeats.  
-         * Then Check here to see if the noaskrepeat is set. 
-         * If it is, then this node would
+         * First see if we need to build a set of repeats. Then Check here to
+         * see if the noaskrepeat is set. If it is, then this node would
          * normally trigger a "add repeat?" dialog, so we just skip it.
          */
         createModelIfNecessary(mCurrentIndex);
@@ -210,7 +215,7 @@ public class FormHandler {
             Vector<IFormElement> defs = getIndexVector(mCurrentIndex);
             if (indexIsGroup(mCurrentIndex)) {
                 GroupDef last = (defs.size() == 0 ? null : (GroupDef) defs.lastElement());
-                
+
                 if (last.getRepeat() && resolveReferenceForCurrentIndex() == null) {
                     return new PromptElement(getGroups());
                 } else {
@@ -290,7 +295,8 @@ public class FormHandler {
             mCurrentIndex = mForm.decrementIndex(mCurrentIndex);
         } while (mCurrentIndex.isInForm() && !isRelevant(mCurrentIndex));
 
-        // recursively skip backwards past any groups, and pop them from our stack
+        // recursively skip backwards past any groups, and pop them from our
+        // stack
         if (indexIsGroup(mCurrentIndex)) {
             prevQuestion();
         }
@@ -482,7 +488,7 @@ public class FormHandler {
 
 
     // TODO report directory fail
-    private boolean exportXMLPayload(ByteArrayPayload payload, String now) {
+    private boolean exportXMLPayload(ByteArrayPayload payload, String path) {
 
         InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();
@@ -494,23 +500,10 @@ public class FormHandler {
             e.printStackTrace();
             return false;
         }
-
-        String fname =
-                getSourcePath().substring(getSourcePath().lastIndexOf("/") + 1,
-                        getSourcePath().lastIndexOf("."));
-
-        String dname = SharedConstants.ANSWERS_PATH + "/" + fname + "_" + now + "/";
-
-        File dir = new File(dname);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                return false;
-            }
-        }
-
         try {
             BufferedWriter o =
-                    new BufferedWriter(new FileWriter(dname + fname + "_" + now + ".xml"));
+                    new BufferedWriter(new FileWriter(path + "/"
+                            + path.substring(path.lastIndexOf('/') + 1) + ".xml"));
             o.write(new String(data, "UTF-8"));
             o.flush();
             o.close();
@@ -525,107 +518,119 @@ public class FormHandler {
     }
 
 
-    private boolean exportJPGPayload(DataPointerPayload payload, String now) {
-        InputStream is = payload.getPayloadStream();
-        int len = (int) payload.getLength();
-
-        byte[] data = new byte[len];
-        try {
-            is.read(data, 0, len);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        String fname =
-                getSourcePath().substring(getSourcePath().lastIndexOf("/") + 1,
-                        getSourcePath().lastIndexOf("."));
-
-        String dname = SharedConstants.ANSWERS_PATH + "/" + fname + "_" + now + "/";
-
-        File d = new File(dname);
-        if (!d.exists()) {
-            if (!d.mkdirs()) {
-                return false;
-            }
-        }
-        try {
-
-            FileOutputStream o = new FileOutputStream(dname + payload.getPayloadId() + ".jpg");
-            o.write(data);
-            o.flush();
-            o.close();
-            return true;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-
     /**
      * Runs post processing handlers. Necessary to get end time.
      */
-    public void finalizeDataModel() {
+    public void finalizeDataModel(String path) {
+
         mForm.postProcessModel();
+        moveFiles(path);
+
+
+
     }
-    
+
+
+    private void moveFiles(String path) {
+
+        FormIndex fi;
+        PromptElement pe;
+        Uri ua;
+        Cursor ca;
+
+        fi = FormIndex.createBeginningOfFormIndex();
+        fi = nextIndexForCount(fi);
+
+        while (!fi.isEndOfFormIndex()) {
+
+            if (indexIsGroup(fi)) {
+            } else {
+
+                // we have a question
+                pe = new PromptElement(fi, mForm, null);
+
+                // should be data type driven...
+                if (pe.getQuestionType() != Constants.CONTROL_UPLOAD) {
+
+                    // we have an upload type
+                    String sa = (String) pe.getAnswerObject();
+                    if (sa != null) {
+                        ua = Uri.parse(sa);
+                        ca = mContext.getContentResolver().query(ua, null, null, null, null);
+                        ca.moveToFirst();
+
+
+                        // get the file path and move it the file
+                        File fo = new File(ca.getString(ca.getColumnIndex("_data")));
+                        String na = path + "/" + ca.getString(ca.getColumnIndex("_display_name"));
+                        fo.renameTo(new File(na));
+
+                        // remove the database entry
+                        mContext.getContentResolver().delete(ua, null, null);
+
+                        // replace the answer
+                        saveAnswer(pe, new StringData(na.substring(na.lastIndexOf("/") + 1)), true);
+
+                    }
+                }
+
+                pe.getAnswerObject();
+
+
+            }
+            fi = nextIndexForCount(fi);
+        }
+    }
+
+
 
     public void importData(byte[] savedXML) {
-        
+
         DataModelTree brokenTree = XFormParser.restoreDataModel(savedXML, null);
-        TreeElement fixedRoot = DataModelTree.processSavedDataModel(brokenTree.getRoot(), mForm.getDataModel(), mForm);
+        TreeElement fixedRoot =
+                DataModelTree.processSavedDataModel(brokenTree.getRoot(), mForm.getDataModel(),
+                        mForm);
         DataModelTree fixedTree = new DataModelTree(fixedRoot);
         mForm.setDataModel(fixedTree);
-        
-        }
+
+    }
 
 
     // should return something
     @SuppressWarnings("unchecked")
-    public boolean exportData() {
-        String now =
-                new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
-                        .format(Calendar.getInstance().getTime());
+    public boolean exportData(String path) {
+
         DataModelTree instance = mForm.getDataModel();
         IDataPayload payload = null;
 
         try {
             payload = (new XFormSerializingVisitor()).createSerializedPayload(instance);
+            exportXMLPayload((ByteArrayPayload) payload, path);
+            return true;
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
             return false;
         }
 
-        switch (payload.getPayloadType()) {
-            case IDataPayload.PAYLOAD_TYPE_MULTI:
-                Vector<IDataPayload> payloads = ((MultiMessagePayload) payload).getPayloads();
-                for (Object p : payloads) {
-                    switch (((IDataPayload) p).getPayloadType()) {
-                        case IDataPayload.PAYLOAD_TYPE_XML:
-                            if (!exportXMLPayload((ByteArrayPayload) p, now)) {
-                                return false;
-                            }
-                            break;
-                        case IDataPayload.PAYLOAD_TYPE_JPG:
-                            if (!exportJPGPayload((DataPointerPayload) p, now)) {
-                                return false;
-                            }
-                            break;
-                    }
-                }
-                break;
-            case IDataPayload.PAYLOAD_TYPE_XML:
-                if (!exportXMLPayload((ByteArrayPayload) payload, now)) {
-                    return false;
-                }
-                break;
 
-        }
-        return true;
-
+        /*
+         * switch (payload.getPayloadType()) {
+         * 
+         * case IDataPayload.PAYLOAD_TYPE_MULTI: Vector<IDataPayload> payloads =
+         * ((MultiMessagePayload) payload).getPayloads(); for (Object p :
+         * payloads) { switch (((IDataPayload) p).getPayloadType()) { case
+         * IDataPayload.PAYLOAD_TYPE_XML: if
+         * (!exportXMLPayload((ByteArrayPayload) p, now)) { return false; }
+         * break; case IDataPayload.PAYLOAD_TYPE_JPG: if
+         * (!exportJPGPayload((DataPointerPayload) p, now)) { return false; }
+         * break; } } break;
+         * 
+         * case IDataPayload.PAYLOAD_TYPE_XML: if
+         * (!exportXMLPayload((ByteArrayPayload) payload, now)) { return false;
+         * } break;
+         * 
+         * } return true;
+         */
     }
 
 

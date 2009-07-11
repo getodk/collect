@@ -82,6 +82,7 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
                     }
                 } else {
                     // handle leap years and number of days in month
+                    // TODO http://code.google.com/p/android/issues/detail?id=2081
                     c.set(year, month, 1);
                     int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (day > max) {

@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -151,8 +152,15 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
+                if (mType.equals("image")) {
+                    // http://code.google.com/p/android/issues/detail?id=1480
+                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
+                            SharedConstants.TMPFILE_PATH)));
+                } else {
+                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
+                }
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
+
 
             }
         });
@@ -171,7 +179,15 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
                         getContext().getContentResolver().query(mUriAnswer, null, null, null, null);
                 c.moveToFirst();
                 i.setData(mUriAnswer);
-                ((Activity) getContext()).startActivity(i);
+                try {
+                    ((Activity) getContext()).startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    // you deleted the image somewhere else
+                    mUriAnswer = null;
+                    mPlayButton.setEnabled(false);
+                    mCaptureButton.setText(getContext().getString(mCaptureText));
+                    mDisplayText.setText(getContext().getString(R.string.no_capture));
+                }
             }
         });
 
