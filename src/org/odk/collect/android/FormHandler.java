@@ -543,22 +543,23 @@ public class FormHandler {
 
         while (!fi.isEndOfFormIndex()) {
 
-            if (indexIsGroup(fi)) {
-            } else {
+            if (!indexIsGroup(fi)) {
 
                 // we have a question
                 pe = new PromptElement(fi, mForm, null);
 
                 // should be data type driven...
-                if (pe.getQuestionType() != Constants.CONTROL_UPLOAD) {
+                if (pe.getQuestionType() == Constants.CONTROL_IMAGE_CHOOSE
+                        || pe.getQuestionType() == Constants.CONTROL_AUDIO_CAPTURE
+                        || pe.getQuestionType() == Constants.CONTROL_VIDEO_CAPTURE) {
 
                     // we have an upload type
                     String sa = (String) pe.getAnswerObject();
                     if (sa != null) {
+
                         ua = Uri.parse(sa);
                         ca = mContext.getContentResolver().query(ua, null, null, null, null);
                         ca.moveToFirst();
-
 
                         // get the file path and move it the file
                         File fo = new File(ca.getString(ca.getColumnIndex("_data")));
