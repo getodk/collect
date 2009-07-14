@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="lib/javarosa.jar"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-0.5.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.0-beta2.jar"/>
+	<classpathentry kind="lib" path="lib/javarosa.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

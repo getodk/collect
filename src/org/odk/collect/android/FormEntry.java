@@ -457,9 +457,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 // set description using form title
                 ((TextView) nextView.findViewById(R.id.description)).setText(getString(
                         R.string.enter_data_description, mFormHandler.getFormTitle()));
-                
-               // mFormHandler.importData();
-                
+                                
                 break;
             case END_SCREEN:
                 nextView = View.inflate(this, R.layout.formentry_end, null);

@@ -541,110 +541,29 @@ public class FormHandler {
 
 
 
-    public void importData() {
+    public boolean importData(String filePath) {
 
-        File file =
-                new File(
-                        "/sdcard/odk/answers/training_form_8_2009-07-13_17-16-55/training_form_8_2009-07-13_17-16-55.xml");
+        byte[] fileBytes = FileUtils.getFileAsBytes(new File(filePath));
 
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
+        TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
+
+        if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
+            Log.e(t, "Saved form instance does not match template form definition");
+            return false;
+        } else {
+            
+            TreeReference tr = TreeReference.rootRef();
+            tr.add(templateRoot.getName(), TreeReference.INDEX_UNBOUND);
+            DataModelTree.populateNode(templateRoot, savedRoot, tr, mForm);
+
+            DataModelTree restoredRoot = new DataModelTree(templateRoot);
+            mForm.setDataModel(restoredRoot);
+
+            return true;
         }
-
-        // Get the size of the file
-        long length = file.length();
-
-        if (length > Integer.MAX_VALUE) {
-            // File is too large
-        }
-
-        // Create the byte array to hold the data
-        byte[] bytes = new byte[(int) length];
-
-        // Read in the bytes
-        int offset = 0;
-        int numRead = 0;
-        try {
-            while (offset < bytes.length
-                    && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
-                offset += numRead;
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        // Ensure all the bytes have been read in
-        if (offset < bytes.length) {
-            try {
-                throw new IOException("Could not completely read file " + file.getName());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        // Close the input stream and return bytes
-        try {
-            is.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        DataModelTree incoming = XFormParser.restoreDataModel(bytes, null);
-        TreeElement incoming_root = incoming.getRoot();
-        DataModelTree template = mForm.getDataModel();
-
-        // TreeElement fixedRoot =
-        // DataModelTree.processSavedDataModel(brokenTreeRoot, newDataModel,
-        // mForm);
-
-        TreeElement fixedRoot = processSavedDataModel(incoming_root, template, mForm);
-
-
-
-        DataModelTree fixedTree = new DataModelTree(fixedRoot);
-        mForm.setDataModel(fixedTree);
 
     }
-
-
-    public static TreeElement processSavedDataModel(TreeElement incoming_root,
-            DataModelTree template, FormDef f) {
-        TreeElement newModelRoot = template.getRoot().deepCopy(true);
-
-        TreeElement incomingRoot = incoming_root;
-        // TreeElement incomingRoot = (TreeElement)
-        // incoming_root.getChildren().elementAt(0);
-
-        if (!newModelRoot.getName().equals(incomingRoot.getName())) {
-            Log.i("yaw", "names don't match");
-            Log.i("yaw", "new model:" + newModelRoot.getName());
-            Log.i("yaw", "incoming root:" + incomingRoot.getName());
-
-        }
-        if (incomingRoot.getMult() != 0) {
-            Log.i("yaw", "incoming root ");
-
-        }
-
-        if (!newModelRoot.getName().equals(incomingRoot.getName()) || incomingRoot.getMult() != 0) {
-            throw new RuntimeException(
-                    "Saved form instance to restore does not match form definition");
-        }
-        TreeReference ref = TreeReference.rootRef();
-        ref.add(newModelRoot.getName(), TreeReference.INDEX_UNBOUND);
-
-        DataModelTree.populateNode(newModelRoot, incomingRoot, ref, f);
-
-        return newModelRoot;
-    }
-
 
 
     /**
