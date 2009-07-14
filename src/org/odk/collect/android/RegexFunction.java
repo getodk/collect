@@ -16,9 +16,9 @@
 
 package org.odk.collect.android;
 
-import org.javarosa.core.model.condition.IFunctionHandler;
-
 import java.util.Vector;
+
+import org.javarosa.core.model.condition.IFunctionHandler;
 
 /**
  * Looks for a "regex" call in XForm and uses String matching to return true and

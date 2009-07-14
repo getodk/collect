@@ -161,14 +161,14 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
         DialogInterface.OnClickListener DialogUrl = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case AlertDialog.BUTTON1: // ok, download form
+                    case DialogInterface.BUTTON1: // ok, download form
                         EditText et = (EditText) v.findViewById(R.id.add_url);
                         showDialog(PROGRESS_DIALOG);
                         mFormDownloadTask = new FormDownloadTask();
                         mFormDownloadTask.setDownloaderListener(FormManager.this);
                         mFormDownloadTask.execute(et.getText().toString());
                         break;
-                    case AlertDialog.BUTTON2: // cancel, do nothing
+                    case DialogInterface.BUTTON2: // cancel, do nothing
                         break;
                 }
             }
@@ -191,12 +191,12 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
-                            case AlertDialog.BUTTON1: // yes, delete
+                            case DialogInterface.BUTTON1: // yes, delete
                                 deleteSelectedForm();
                                 refresh();
 
                                 break;
-                            case AlertDialog.BUTTON2: // no, do nothing
+                            case DialogInterface.BUTTON2: // no, do nothing
                                 break;
                         }
                     }
@@ -257,10 +257,8 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
 
     @Override
     protected void onPause() {
-        //TODO:
-        // need to make sure none of the un-managed dialogs are showing
-        // that is, dismiss them.
-        // managed dialogs may work here?
+        if (mAlertDialog != null && mAlertDialog.isShowing())
+            mAlertDialog.dismiss();
         super.onPause();
     }
 

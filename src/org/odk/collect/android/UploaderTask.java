@@ -15,8 +15,8 @@
  */
 package org.odk.collect.android;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -25,8 +25,8 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.File;
-import java.io.IOException;
+import android.os.AsyncTask;
+import android.util.Log;
 
 
 /**
@@ -35,23 +35,26 @@ import java.io.IOException;
  * @author Carl Hartung (carlhartung@gmail.com)
  * 
  */
-class UploaderTask extends AsyncTask<String, Integer, Void> {
+class UploaderTask extends AsyncTask<String, Integer, Boolean> {
     private final static String t = "UploaderTask";
     UploaderListener mStateListener;
-
+    String uploadServer;
+    
+    public void setUploadServer(String newServer) {
+        uploadServer = newServer;
+    }
 
     /*
      * (non-Javadoc)
      * @see android.os.AsyncTask#doInBackground(Params[])
      */
     @Override
-    protected Void doInBackground(String... values) {
+    protected Boolean doInBackground(String... values) {
         for (int i = 0; i < values.length; i++) {
             this.publishProgress(i+1, values.length);
  
-            DefaultHttpClient httpclient = new DefaultHttpClient();
-            //TODO: this should get set in a preferences window or something.
-            HttpPost mypost = new HttpPost("http://opendatakit.appspot.com/submission");
+            DefaultHttpClient httpclient = new DefaultHttpClient();            
+            HttpPost mypost = new HttpPost(uploadServer);
             File dir = new File(SharedConstants.ANSWERS_PATH + values[i]);
             File[] files = dir.listFiles();
             if (files == null)
@@ -82,29 +85,24 @@ class UploaderTask extends AsyncTask<String, Integer, Void> {
             } catch (ClientProtocolException e) {
                 Log.e(t, "Protocol Exception Error");
                 e.printStackTrace();
+                return false;
             } catch (IOException e) {
                 Log.e(t, "IO Execption Error");
                 e.printStackTrace();
+                return false;
+            } catch (IllegalStateException e) {
+                Log.e(t, "Illegal State Exception");
+                e.printStackTrace();
+                return false;
             }
             if (response != null && response.getStatusLine().getStatusCode() == 200) {
-                Log.d(t, "response: " + response.getStatusLine());
+                Log.d(t, "good response: " + response.getStatusLine());
             } else {
-                Log.d(t, "response: " + response.getStatusLine());
+                Log.d(t, "bad response: " + response.getStatusLine());
+                return false;
             }
         }
-         
-
-        // this is just for testing
-        /*   for (int j = 0; j < 5; j++) {
-               this.publishProgress(j, 5);
-           
-               for (int i = 0; i < 1000; i++) {
-                   Log.e("testing", "wasiting time " + i );
-               }   
-               if (j == 3)
-                   this.cancel(true);
-           }*/
-        return null;
+        return true;
     }
 
 
@@ -113,9 +111,9 @@ class UploaderTask extends AsyncTask<String, Integer, Void> {
      * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
      */
     @Override
-    protected void onPostExecute(Void unused) {
+    protected void onPostExecute(Boolean value) {
         synchronized (this) {
-            if (mStateListener != null) mStateListener.uploadingComplete();
+            if (mStateListener != null) mStateListener.uploadingComplete(value);
         }
     }
 

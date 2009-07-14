@@ -1,0 +1,10 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+    		android:id="@+id/UploadServer"
+            android:key="UploadServer"
+            android:defaultValue="http://opendatakit.appspot.com/submission"
+            android:title="Data submission server"
+            android:dialogTitle="Set data upload server" />
+</PreferenceScreen>

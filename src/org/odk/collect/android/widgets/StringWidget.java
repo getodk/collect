@@ -16,10 +16,10 @@
 
 package org.odk.collect.android.widgets;
 
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.SharedConstants;
 
 import android.R;
 import android.content.Context;

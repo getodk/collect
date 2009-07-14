@@ -22,6 +22,9 @@ package org.odk.collect.android;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface UploaderListener {
-    void uploadingComplete();
+    void uploadingComplete(boolean result);
     void progressUpdate(int progress, int total);
 }
+
+/* TODO: We should really make the result more meaningful so we know why it failed.
+ */

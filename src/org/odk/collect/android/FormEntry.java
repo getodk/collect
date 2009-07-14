@@ -16,6 +16,11 @@
 
 package org.odk.collect.android;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -44,11 +49,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 
 /**
@@ -709,11 +709,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case AlertDialog.BUTTON1: // yes, repeat
+                    case DialogInterface.BUTTON1: // yes, repeat
                         mFormHandler.newRepeat();
                         showNextView();
                         break;
-                    case AlertDialog.BUTTON2: // no, no repeat
+                    case DialogInterface.BUTTON2: // no, no repeat
                         showNextView();
                         break;
                 }
@@ -736,7 +736,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case AlertDialog.BUTTON1:
+                    case DialogInterface.BUTTON1:
                         if (shouldExit) {
                             finish();
                         }
@@ -766,11 +766,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case AlertDialog.BUTTON1: // yes
+                    case DialogInterface.BUTTON1: // yes
                         mFormHandler.deleteCurrentRepeat();
                         showPreviousView(false);
                         break;
-                    case AlertDialog.BUTTON2: // no
+                    case DialogInterface.BUTTON2: // no
                         break;
                 }
             }
@@ -792,11 +792,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case AlertDialog.BUTTON1: // yes
+                    case DialogInterface.BUTTON1: // yes
                         deleteAnswerFolder();
                         finish();
                         break;
-                    case AlertDialog.BUTTON2: // no
+                    case DialogInterface.BUTTON2: // no
                         break;
                 }
             }
@@ -818,12 +818,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case AlertDialog.BUTTON1: // yes
+                    case DialogInterface.BUTTON1: // yes
                         QuestionView qv = ((QuestionView) mCurrentView);
                         qv.clearAnswer();
                         mFormHandler.saveAnswer(qv.getPrompt(), qv.getAnswer(), false);
                         break;
-                    case AlertDialog.BUTTON2: // no
+                    case DialogInterface.BUTTON2: // no
                         break;
                 }
             }

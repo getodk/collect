@@ -18,12 +18,12 @@ package org.odk.collect.android.widgets;
 
 import java.util.Enumeration;
 
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.util.OrderedHashtable;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.SharedConstants;
 
 import android.content.Context;
 import android.util.TypedValue;

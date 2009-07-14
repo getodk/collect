@@ -16,6 +16,11 @@
 
 package org.odk.collect.android;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.IQuestionWidget;
+import org.odk.collect.android.widgets.WidgetFactory;
+
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
@@ -24,11 +29,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.widgets.IBinaryWidget;
-import org.odk.collect.android.widgets.IQuestionWidget;
-import org.odk.collect.android.widgets.WidgetFactory;
 
 
 /**

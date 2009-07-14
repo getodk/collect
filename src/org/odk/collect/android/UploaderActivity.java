@@ -22,8 +22,11 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Activity to upload completed forms.
@@ -33,6 +36,7 @@ import android.util.Log;
  */
 public class UploaderActivity extends Activity implements UploaderListener {
 
+    private static final String t = "UploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
     private ProgressDialog mProgressDialog;
     private UploaderTask mUploaderTask;
@@ -63,6 +67,10 @@ public class UploaderActivity extends Activity implements UploaderListener {
         if (mUploaderTask == null) {
             showDialog(PROGRESS_DIALOG);
             mUploaderTask = new UploaderTask();
+            SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+            String server = p.getString("UploadServer", "null");
+            Log.e(t, "Uploading to server: " + server);
+            mUploaderTask.setUploadServer(server);
             mUploaderTask.execute(toUpload.toArray(new String[toUpload.size()]));
         } else {
             Log.e("testing", "alreaedy running");
@@ -106,8 +114,12 @@ public class UploaderActivity extends Activity implements UploaderListener {
  * (non-Javadoc)
  * @see org.odk.collect.android.UploaderListener#uploadingComplete()
  */
-    public void uploadingComplete() {
-        //do some intelligent toast here.
+    public void uploadingComplete(boolean result) {
+        if (result) {
+            Toast.makeText(this, "Uploads Completed Successfully", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "One or more uploads Failed", Toast.LENGTH_LONG).show();
+        }
         finish();
     }
 
@@ -139,7 +151,7 @@ public class UploaderActivity extends Activity implements UploaderListener {
                                 finish();
                             }
                         };
-                mProgressDialog.setMessage(getString(R.string.loading_form));
+                mProgressDialog.setMessage("Uploading data");
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setMax(0);

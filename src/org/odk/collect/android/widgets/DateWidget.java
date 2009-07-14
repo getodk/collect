@@ -16,18 +16,18 @@
 
 package org.odk.collect.android.widgets;
 
-import android.content.Context;
-import android.view.Gravity;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.PromptElement;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import android.content.Context;
+import android.view.Gravity;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not

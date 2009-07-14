@@ -18,10 +18,10 @@ package org.odk.collect.android.widgets;
 
 import java.text.NumberFormat;
 
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.SharedConstants;
 
 import android.content.Context;
 import android.text.InputFilter;

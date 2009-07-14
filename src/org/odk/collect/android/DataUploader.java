@@ -9,7 +9,7 @@
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either expAress or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
  */
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -34,12 +35,20 @@ import android.widget.ListView;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
+
+
+/* TODO: It'd be great to be able to long click on a form and see a log of 
+ * successful and unsuccessful submission and servers they were submitted to.
+ * 
+ */
 public class DataUploader extends ListActivity {
 
     private final String t = "FormChooser";
     private ArrayList<String> mFileList;
 
-    private static final int MENU_UPLOAD = Menu.FIRST;
+    private static final int MENU_SET_SERVER = Menu.FIRST;
+    private static final int MENU_UPLOAD = Menu.FIRST + 1;
+
 
 
     /*
@@ -58,6 +67,8 @@ public class DataUploader extends ListActivity {
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         setListAdapter(fileAdapter);
+
+        PreferenceManager.setDefaultValues(this, R.xml.server_preferences, false);
     }
 
 
@@ -68,6 +79,7 @@ public class DataUploader extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        menu.add(0, MENU_SET_SERVER, 0, "set server");
         menu.add(0, MENU_UPLOAD, 0, "upload");
         return true;
     }
@@ -90,15 +102,19 @@ public class DataUploader extends ListActivity {
                         toUpload.add(getListView().getItemAtPosition(s.keyAt(i)).toString());
                     }
                 }
-                
+
                 Intent i = new Intent(this, UploaderActivity.class);
                 Bundle b = new Bundle();
                 b.putStringArrayList("UPLOAD", toUpload);
                 i.putExtra("BUNDLE", b);
                 startActivity(i);
                 return true;
+            case MENU_SET_SERVER:
+                Intent launchPreferencesIntent =
+                        new Intent().setClass(this, ServerPreferences.class);
+                startActivity(launchPreferencesIntent);
+                return true;
         }
         return super.onMenuItemSelected(featureId, item);
     }
-
 }
