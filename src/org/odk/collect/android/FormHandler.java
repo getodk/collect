@@ -39,6 +39,7 @@ import org.javarosa.core.services.IService;
 import org.javarosa.core.services.transport.ByteArrayPayload;
 import org.javarosa.core.services.transport.IDataPayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
+import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormAnswerDataParser;
@@ -79,46 +80,12 @@ public class FormHandler {
     }
 
 
-    public void registerXFormsModule() {
-        String[] classes =
-                {"org.javarosa.model.xform.XPathReference", "org.javarosa.xpath.XPathConditional"};
-
-        JavaRosaServiceProvider.instance().registerPrototypes(classes);
-        JavaRosaServiceProvider.instance().registerPrototypes(XPathParseTool.xpathClasses);
-        RestoreUtils.xfFact = new IXFormyFactory() {
-            public TreeReference ref(String refStr) {
-                return DataModelTree.unpackReference(new XPathReference(refStr));
-            }
-
-
-            public IDataPayload serializeModel(DataModelTree dm) {
-                try {
-                    return (new XFormSerializingVisitor()).createSerializedPayload(dm);
-                } catch (IOException e) {
-                    return null;
-                }
-            }
-
-
-            public DataModelTree parseRestore(byte[] data, Class restorableType) {
-                return XFormParser.restoreDataModel(data, restorableType);
-            }
-
-
-            public IAnswerData parseData(String textVal, int dataType, TreeReference ref, FormDef f) {
-                return XFormAnswerDataParser.getAnswerData(textVal, dataType, XFormParser
-                        .ghettoGetQuestionDef(dataType, f, ref));
-            }
-        };
-    }
-
-
     public void initialize(Context context) {
 
         mContext = context;
 
-        registerXFormsModule();
-
+        // load modules
+        new XFormsModule().registerModule(null);
 
         // load services
         Vector<IService> v = new Vector<IService>();
@@ -127,7 +94,6 @@ public class FormHandler {
 
         // set evaluation context
         EvaluationContext ec = new EvaluationContext();
-        ec.addFunctionHandler(new RegexFunction());
         mForm.setEvaluationContext(ec);
 
         // initialize form
@@ -540,25 +506,30 @@ public class FormHandler {
     }
 
 
-
+    /**
+     * Given a file, import the data from that file into the current form.
+     */
     public boolean importData(String filePath) {
 
+        // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(new File(filePath));
 
+        // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
 
+        // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
             Log.e(t, "Saved form instance does not match template form definition");
             return false;
         } else {
-            
+            // populate the data model
             TreeReference tr = TreeReference.rootRef();
             tr.add(templateRoot.getName(), TreeReference.INDEX_UNBOUND);
             DataModelTree.populateNode(templateRoot, savedRoot, tr, mForm);
 
-            DataModelTree restoredRoot = new DataModelTree(templateRoot);
-            mForm.setDataModel(restoredRoot);
+            // populated model to current form
+            mForm.setDataModel(new DataModelTree(templateRoot));
 
             return true;
         }
