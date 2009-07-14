@@ -457,6 +457,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 // set description using form title
                 ((TextView) nextView.findViewById(R.id.description)).setText(getString(
                         R.string.enter_data_description, mFormHandler.getFormTitle()));
+                
+               // mFormHandler.importData();
+                
                 break;
             case END_SCREEN:
                 nextView = View.inflate(this, R.layout.formentry_end, null);
@@ -469,7 +472,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 ((Button) nextView.findViewById(R.id.submit))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
-                                mFormHandler.finalizeDataModel(mAnswerPath);
+                            mFormHandler.finalizeDataModel();
                                 if (mFormHandler.exportData(mAnswerPath)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)

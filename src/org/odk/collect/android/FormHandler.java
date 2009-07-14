@@ -16,12 +16,10 @@
 
 package org.odk.collect.android;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.util.Log;
 
 import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.Constants;
@@ -35,16 +33,25 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.model.util.restorable.IXFormyFactory;
+import org.javarosa.core.model.util.restorable.RestoreUtils;
 import org.javarosa.core.services.IService;
 import org.javarosa.core.services.transport.ByteArrayPayload;
 import org.javarosa.core.services.transport.IDataPayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
+import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
+import org.javarosa.xform.util.XFormAnswerDataParser;
+import org.javarosa.xpath.XPathParseTool;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 /**
  * Given a {@link FormDef}, enables form iteration.
@@ -72,9 +79,46 @@ public class FormHandler {
     }
 
 
+    public void registerXFormsModule() {
+        String[] classes =
+                {"org.javarosa.model.xform.XPathReference", "org.javarosa.xpath.XPathConditional"};
+
+        JavaRosaServiceProvider.instance().registerPrototypes(classes);
+        JavaRosaServiceProvider.instance().registerPrototypes(XPathParseTool.xpathClasses);
+        RestoreUtils.xfFact = new IXFormyFactory() {
+            public TreeReference ref(String refStr) {
+                return DataModelTree.unpackReference(new XPathReference(refStr));
+            }
+
+
+            public IDataPayload serializeModel(DataModelTree dm) {
+                try {
+                    return (new XFormSerializingVisitor()).createSerializedPayload(dm);
+                } catch (IOException e) {
+                    return null;
+                }
+            }
+
+
+            public DataModelTree parseRestore(byte[] data, Class restorableType) {
+                return XFormParser.restoreDataModel(data, restorableType);
+            }
+
+
+            public IAnswerData parseData(String textVal, int dataType, TreeReference ref, FormDef f) {
+                return XFormAnswerDataParser.getAnswerData(textVal, dataType, XFormParser
+                        .ghettoGetQuestionDef(dataType, f, ref));
+            }
+        };
+    }
+
+
     public void initialize(Context context) {
 
         mContext = context;
+
+        registerXFormsModule();
+
 
         // load services
         Vector<IService> v = new Vector<IService>();
@@ -485,151 +529,246 @@ public class FormHandler {
     }
 
 
-    // TODO report directory fail
-    private boolean exportXMLPayload(ByteArrayPayload payload, String path) {
-
-        InputStream is = payload.getPayloadStream();
-        int len = (int) payload.getLength();
-
-        byte[] data = new byte[len];
-        try {
-            is.read(data, 0, len);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        try {
-            BufferedWriter o =
-                    new BufferedWriter(new FileWriter(path + "/"
-                            + path.substring(path.lastIndexOf('/') + 1) + ".xml"));
-            o.write(new String(data, "UTF-8"));
-            o.flush();
-            o.close();
-            return true;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-
-    }
-
 
     /**
      * Runs post processing handlers. Necessary to get end time.
      */
-    public void finalizeDataModel(String path) {
+    public void finalizeDataModel() {
 
         mForm.postProcessModel();
-        moveFiles(path);
-
-
 
     }
 
 
-    private void moveFiles(String path) {
 
-        FormIndex fi;
-        PromptElement pe;
-        Uri ua;
-        Cursor ca;
+    public void importData() {
 
-        fi = FormIndex.createBeginningOfFormIndex();
-        fi = nextIndexForCount(fi);
+        File file =
+                new File(
+                        "/sdcard/odk/answers/training_form_8_2009-07-13_17-16-55/training_form_8_2009-07-13_17-16-55.xml");
 
-        while (!fi.isEndOfFormIndex()) {
-
-            if (!indexIsGroup(fi)) {
-
-                // we have a question
-                pe = new PromptElement(fi, mForm, null);
-
-                // should be data type driven...
-                if (pe.getQuestionType() == Constants.CONTROL_IMAGE_CHOOSE
-                        || pe.getQuestionType() == Constants.CONTROL_AUDIO_CAPTURE
-                        || pe.getQuestionType() == Constants.CONTROL_VIDEO_CAPTURE) {
-
-                    // we have an upload type
-                    String sa = (String) pe.getAnswerObject();
-                    if (sa != null) {
-
-                        ua = Uri.parse(sa);
-                        ca = mContext.getContentResolver().query(ua, null, null, null, null);
-                        ca.moveToFirst();
-
-                        // get the file path and move it the file
-                        File fo = new File(ca.getString(ca.getColumnIndex("_data")));
-                        String na = path + "/" + ca.getString(ca.getColumnIndex("_display_name"));
-                        fo.renameTo(new File(na));
-
-                        // remove the database entry
-                        mContext.getContentResolver().delete(ua, null, null);
-
-                        // replace the answer
-                        saveAnswer(pe, new StringData(na.substring(na.lastIndexOf("/") + 1)), true);
-
-                    }
-                }
-
-                pe.getAnswerObject();
-
-
-            }
-            fi = nextIndexForCount(fi);
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-    }
+
+        // Get the size of the file
+        long length = file.length();
+
+        if (length > Integer.MAX_VALUE) {
+            // File is too large
+        }
+
+        // Create the byte array to hold the data
+        byte[] bytes = new byte[(int) length];
+
+        // Read in the bytes
+        int offset = 0;
+        int numRead = 0;
+        try {
+            while (offset < bytes.length
+                    && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+                offset += numRead;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Ensure all the bytes have been read in
+        if (offset < bytes.length) {
+            try {
+                throw new IOException("Could not completely read file " + file.getName());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        // Close the input stream and return bytes
+        try {
+            is.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        DataModelTree incoming = XFormParser.restoreDataModel(bytes, null);
+        TreeElement incoming_root = incoming.getRoot();
+        DataModelTree template = mForm.getDataModel();
+
+        // TreeElement fixedRoot =
+        // DataModelTree.processSavedDataModel(brokenTreeRoot, newDataModel,
+        // mForm);
+
+        TreeElement fixedRoot = processSavedDataModel(incoming_root, template, mForm);
 
 
 
-    public void importData(byte[] savedXML) {
-
-        DataModelTree brokenTree = XFormParser.restoreDataModel(savedXML, null);
-        TreeElement fixedRoot =
-                DataModelTree.processSavedDataModel(brokenTree.getRoot(), mForm.getDataModel(),
-                        mForm);
         DataModelTree fixedTree = new DataModelTree(fixedRoot);
         mForm.setDataModel(fixedTree);
 
     }
 
 
-    // should return something
-    @SuppressWarnings("unchecked")
-    public boolean exportData(String path) {
+    public static TreeElement processSavedDataModel(TreeElement incoming_root,
+            DataModelTree template, FormDef f) {
+        TreeElement newModelRoot = template.getRoot().deepCopy(true);
 
-        DataModelTree instance = mForm.getDataModel();
-        IDataPayload payload = null;
+        TreeElement incomingRoot = incoming_root;
+        // TreeElement incomingRoot = (TreeElement)
+        // incoming_root.getChildren().elementAt(0);
 
+        if (!newModelRoot.getName().equals(incomingRoot.getName())) {
+            Log.i("yaw", "names don't match");
+            Log.i("yaw", "new model:" + newModelRoot.getName());
+            Log.i("yaw", "incoming root:" + incomingRoot.getName());
+
+        }
+        if (incomingRoot.getMult() != 0) {
+            Log.i("yaw", "incoming root ");
+
+        }
+
+        if (!newModelRoot.getName().equals(incomingRoot.getName()) || incomingRoot.getMult() != 0) {
+            throw new RuntimeException(
+                    "Saved form instance to restore does not match form definition");
+        }
+        TreeReference ref = TreeReference.rootRef();
+        ref.add(newModelRoot.getName(), TreeReference.INDEX_UNBOUND);
+
+        DataModelTree.populateNode(newModelRoot, incomingRoot, ref, f);
+
+        return newModelRoot;
+    }
+
+
+
+    /**
+     * Loop through the data model and moves binary files into the answer
+     * folder. Also replace Android specific URI's with filenames.
+     */
+    private boolean exportBinaryFiles(String answerPath) {
+
+        Uri u;
+        Cursor c;
+        String b;
+
+        // move index to the beginning
+        FormIndex fi = FormIndex.createBeginningOfFormIndex();
+        fi = nextIndexForCount(fi);
+
+        // loop through entire data model.
+        while (!fi.isEndOfFormIndex()) {
+
+            if (!indexIsGroup(fi)) {
+                // we have a question
+                PromptElement pe = new PromptElement(fi, mForm, null);
+
+                // select only binary files with android specific uri
+                if (pe.getAnswerType() == Constants.DATATYPE_BINARY && pe.getAnswerObject() != null) {
+
+                    // get uri
+                    u = Uri.parse(pe.getAnswerText());
+                    c = mContext.getContentResolver().query(u, null, null, null, null);
+                    c.moveToFirst();
+
+                    // get the file path and move it to the answer folder
+                    File f = new File(c.getString(c.getColumnIndex("_data")));
+                    b = c.getString(c.getColumnIndex("_display_name"));
+                    boolean move = f.renameTo(new File(answerPath + "/" + b));
+
+                    // is move successful?
+                    if (move) {
+
+                        // remove the database entry
+                        mContext.getContentResolver().delete(u, null, null);
+
+                        // replace the answer
+                        saveAnswer(pe, new StringData(b), true);
+                    } else {
+
+                        Log.e(t, "Could not move " + pe.getAnswerText());
+                        return false;
+                    }
+
+                }
+            }
+
+            // next element
+            fi = nextIndexForCount(fi);
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Loop through the data model and writes the XML file into the answer
+     * folder.
+     */
+    private boolean exportXmlFile(ByteArrayPayload payload, String path) {
+
+        // create data stream
+        InputStream is = payload.getPayloadStream();
+        int len = (int) payload.getLength();
+
+        // read from data stream
+        byte[] data = new byte[len];
         try {
-            payload = (new XFormSerializingVisitor()).createSerializedPayload(instance);
-            exportXMLPayload((ByteArrayPayload) payload, path);
-            return true;
+            is.read(data, 0, len);
         } catch (IOException e) {
-            Log.e(t, "Error creating serialized payload");
+            Log.e(t, "Error reading from payload data stream");
+            e.printStackTrace();
             return false;
         }
 
+        // write xml file
+        try {
+            String filename = path + "/" + path.substring(path.lastIndexOf('/') + 1) + ".xml";
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            bw.write(new String(data, "UTF-8"));
+            bw.flush();
+            bw.close();
+            return true;
 
-        /*
-         * switch (payload.getPayloadType()) {
-         * 
-         * case IDataPayload.PAYLOAD_TYPE_MULTI: Vector<IDataPayload> payloads =
-         * ((MultiMessagePayload) payload).getPayloads(); for (Object p :
-         * payloads) { switch (((IDataPayload) p).getPayloadType()) { case
-         * IDataPayload.PAYLOAD_TYPE_XML: if
-         * (!exportXMLPayload((ByteArrayPayload) p, now)) { return false; }
-         * break; case IDataPayload.PAYLOAD_TYPE_JPG: if
-         * (!exportJPGPayload((DataPointerPayload) p, now)) { return false; }
-         * break; } } break;
-         * 
-         * case IDataPayload.PAYLOAD_TYPE_XML: if
-         * (!exportXMLPayload((ByteArrayPayload) payload, now)) { return false;
-         * } break;
-         * 
-         * } return true;
-         */
+        } catch (IOException e) {
+            Log.e(t, "Error writing XML file");
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+
+    /**
+     * Serialize data model and extract payload. Exports both binaries and xml.
+     */
+    @SuppressWarnings("unchecked")
+    public boolean exportData(String answerPath) {
+
+        ByteArrayPayload payload;
+
+        try {
+            // assume no binary data inside the model.
+            DataModelTree datamodel = mForm.getDataModel();
+            XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+            payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
+        } catch (IOException e) {
+            Log.e(t, "Error creating serialized payload");
+            e.printStackTrace();
+            return false;
+        }
+
+        // write out binary and xml
+        if (exportBinaryFiles(answerPath) && exportXmlFile(payload, answerPath)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
