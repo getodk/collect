@@ -437,7 +437,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswersPath)) {
+                                if (mFormHandler.exportData(mAnswersPath,false)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();
@@ -997,6 +997,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
 
             } else {
+                
+                // create new answer folder
                 String time =
                         new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()
                                 .getTime());

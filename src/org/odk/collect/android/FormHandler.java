@@ -63,7 +63,7 @@ public class FormHandler {
 
 
     public FormHandler(FormDef formDef) {
-        //Log.i(t, "calling constructor");
+        // Log.i(t, "calling constructor");
 
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
@@ -474,16 +474,13 @@ public class FormHandler {
         return mForm.getTitle();
     }
 
-/*
-    public void setSourcePath(String path) {
-        mSourcePath = path;
-    }
 
-
-    public String getSourcePath() {
-        return mSourcePath;
-    }
-*/
+    /*
+     * public void setSourcePath(String path) { mSourcePath = path; }
+     * 
+     * 
+     * public String getSourcePath() { return mSourcePath; }
+     */
 
 
     /**
@@ -549,7 +546,11 @@ public class FormHandler {
                 PromptElement pe = new PromptElement(fi, mForm, null);
 
                 // select only binary files with android specific uri
-                if (pe.getAnswerType() == Constants.DATATYPE_BINARY && pe.getAnswerObject() != null) {
+                if ((pe.getAnswerType() == Constants.DATATYPE_BINARY
+                        || pe.getQuestionType() == Constants.CONTROL_IMAGE_CHOOSE
+                        || pe.getQuestionType() == Constants.CONTROL_AUDIO_CAPTURE || pe
+                        .getQuestionType() == Constants.CONTROL_VIDEO_CAPTURE)
+                        && pe.getAnswerObject() != null) {
 
                     // get uri
                     u = Uri.parse(pe.getAnswerText());
@@ -628,7 +629,7 @@ public class FormHandler {
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
     @SuppressWarnings("unchecked")
-    public boolean exportData(String answerPath) {
+    public boolean exportData(String answerPath, boolean exportBinaries) {
 
         ByteArrayPayload payload;
 
@@ -644,11 +645,12 @@ public class FormHandler {
         }
 
         // write out binary and xml
-        if (exportBinaryFiles(answerPath) && exportXmlFile(payload, answerPath)) {
-            return true;
+        if (exportBinaries) {
+            return exportBinaryFiles(answerPath) && exportXmlFile(payload, answerPath);
         } else {
-            return false;
+            return exportXmlFile(payload, answerPath);
         }
+
     }
 
 

@@ -98,19 +98,19 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         mActionButton.setEnabled(!prompt.isReadonly());
 
         mStringAnswer = new TextView(getContext());
-
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mStringAnswer.setGravity(Gravity.CENTER);
+        
         String s = prompt.getAnswerText();
         if (s != null) {
+            
             mStringAnswer.setText(s);
-
-            mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
 
             // string manipulation for readability
             String str = (String) mStringAnswer.getText();
             if (!str.equals("")) {
                 mStringAnswer.setText("lat: " + str.replace(",", "\nlon: "));
             }
-            mStringAnswer.setGravity(Gravity.CENTER);
         }
 
         // when you press the button
