@@ -16,6 +16,7 @@
 
 package org.odk.collect.android;
 
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -73,9 +74,42 @@ public class FileUtils {
     }
 
 
+    public static boolean deleteFolder(String path) {
+        // not recursive
+        if (path != null && storageReady()) {
+            File dir = new File(path);
+            if (dir.exists() && dir.isDirectory()) {
+                File[] files = dir.listFiles();
+                for (File file : files) {
+                    file.delete();
+                }
+            }
+            return dir.delete();
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean createFolder(String path) {
+        if (storageReady()) {
+            boolean made = true;
+            File dir = new File(path);
+            if (!dir.exists()) {
+                made = dir.mkdirs();
+            }
+            return made;
+        } else {
+            return false;
+        }
+    }
+
     public static boolean deleteFile(String path) {
-        File f = new File(path);
-        return f.delete();
+        if (storageReady()) {
+            File f = new File(path);
+            return f.delete();
+        } else {
+            return false;
+        }
     }
 
 
@@ -133,9 +167,21 @@ public class FileUtils {
             e.printStackTrace();
             return null;
         }
-        
+
     }
 
+
+    private static boolean storageReady() {
+        String cardstatus = Environment.getExternalStorageState();
+        if (cardstatus.equals(Environment.MEDIA_REMOVED)
+                || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
+                || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
+                || cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     /*
      * private static boolean getDirectory(String path) {
      * 

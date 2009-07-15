@@ -147,6 +147,13 @@ public class MainMenu extends Activity {
                 i.putExtra(SharedConstants.FILEPATH_KEY, s);
                 startActivity(i);
                 break;
+            case INSTANCE_CHOOSER:
+                String si = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
+                Intent ii = new Intent(this, FormEntry.class);
+                ii.putExtra(SharedConstants.FILEPATH_KEY, si);
+                ii.putExtra("instance", true);
+                startActivity(ii);
+                break;
             case FORM_UPLOADER:
                 Toast.makeText(this.getApplicationContext(), "this worked", Toast.LENGTH_LONG).show();
                 //String path = intent.getStringExtra(SharedConstants.FILEPATH_KEY);

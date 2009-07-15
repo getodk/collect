@@ -68,6 +68,9 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
 
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
+        
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
+
 
         mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
         if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED)

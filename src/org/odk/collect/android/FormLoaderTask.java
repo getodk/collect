@@ -52,7 +52,9 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         }
 
         form = XFormUtils.getFormFromInputStream(fis);
-        if (form == null) return null;
+        if (form == null) {
+            return null;
+        }
 
         fh = new FormHandler(form);
         return fh;

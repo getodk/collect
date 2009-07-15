@@ -44,6 +44,10 @@ public class FormChooser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
+        
+        setTheme(SharedConstants.APPLICATION_THEME);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
+
 
         mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
         ArrayAdapter<String> fileAdapter =

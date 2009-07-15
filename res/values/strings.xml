@@ -32,7 +32,6 @@ the License.
 	<string name="send_data">Send Finished Data</string>
 	<string name="manage_forms">Manage Forms</string>
 
-	<string name="choose_form">Choose Form</string>
 	<string name="loading_form">Loading form. Please wait...</string>
 
 	<string name="save_data">Save Data</string>

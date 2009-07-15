@@ -46,11 +46,13 @@ public class InstanceChooser extends ListActivity {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
 
+        setTheme(SharedConstants.APPLICATION_THEME);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
         // start file lister with app name, path to search, display style
         // super.initialize(getString(R.string.edit_data),
         // SharedConstants.ANSWERS_PATH, 0);
 
-        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.ANSWERS_PATH);
+        mFileList = FileUtils.getFilesAsArrayListRecursive(SharedConstants.ANSWERS_PATH);
         ArrayAdapter<String> fileAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mFileList);
         setListAdapter(fileAdapter);
@@ -66,7 +68,9 @@ public class InstanceChooser extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
-        File f = new File(SharedConstants.ANSWERS_PATH + "/" + mFileList.get(position));
+        String name = mFileList.get(position);
+        name = name.substring(0, name.lastIndexOf("."));
+        File f = new File(SharedConstants.ANSWERS_PATH + "/" + name + "/" + name + ".xml");
 
         Intent i = new Intent();
         i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());

@@ -16,11 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -31,7 +26,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -49,6 +43,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.regex.Pattern;
 
 
 /**
@@ -71,7 +71,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private ProgressBar mProgressBar;
     private String mFormPath;
-    private String mAnswerPath;
+    private String mAnswersPath;
+    private String mInstancePath;
 
     private GestureDetector mGestureDetector;
     private FormHandler mFormHandler;
@@ -125,11 +126,36 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             // starting for the first time
             Intent intent = getIntent();
             if (intent != null) {
-                mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
+                // restoring from saved form
+                if (intent.getBooleanExtra(("instance"), false)) {
+                    mInstancePath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
+                    mFormPath = getFormPath(mInstancePath);
+                } else {
+                    mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
+                }
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath);
                 showDialog(PROGRESS_DIALOG);
             }
+        }
+    }
+
+
+    private String getFormPath(String path) {
+
+        // trim the date stamp off
+        String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
+        Pattern pattern = Pattern.compile(regex);
+        String formname = pattern.split(path)[0];
+        formname = formname.substring(formname.lastIndexOf("/") + 1);
+
+        File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
+        File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xtml");
+
+        if (xmlfile.exists() || xhtmlfile.exists()) {
+            return xmlfile.getAbsolutePath();
+        } else {
+            return null;
         }
     }
 
@@ -159,63 +185,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(FORMPATH, mFormPath);
-    }
-
-
-    private String createAnswerPath() {
-        // check to see if sd card exists
-        String cardstatus = Environment.getExternalStorageState();
-        if (cardstatus.equals(Environment.MEDIA_REMOVED)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
-                || cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-            return null;
-        }
-
-        // create folders
-        boolean made = true;
-        String ts =
-                new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
-                        .format(Calendar.getInstance().getTime());
-
-        String fn = mFormPath.toString();
-        fn = fn.substring(fn.lastIndexOf('/') + 1, fn.lastIndexOf('.'));
-
-        File dir = new File(SharedConstants.ANSWERS_PATH + "/" + fn + "_" + ts);
-        if (!dir.exists()) {
-            made = dir.mkdirs();
-        }
-
-        if (!made) {
-            return null;
-        } else {
-            return dir.toString();
-        }
-    }
-
-
-    private boolean deleteAnswerFolder() {
-        if (mAnswerPath != null) {
-            File dir = new File(mAnswerPath);
-
-            // remove everything in the folder (not recursive)
-            if (dir.exists() && dir.isDirectory()) {
-                File[] files = dir.listFiles();
-                for (File file : files) {
-                    file.delete();
-                }
-            }
-
-            // clean answer folder
-            if (dir.delete()) {
-                return true;
-            } else {
-                return false;
-            }
-
-        } else {
-            return false;
-        }
     }
 
 
@@ -428,6 +397,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), true);
             }
         }
+
         return mFormHandler;
     }
 
@@ -447,19 +417,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case START_SCREEN:
                 nextView = View.inflate(this, R.layout.formentry_start, null);
 
-                // set window title using form filename
-                String filename =
-                        mFormHandler.getSourcePath().substring(
-                                mFormHandler.getSourcePath().lastIndexOf("/") + 1,
-                                mFormHandler.getSourcePath().length());
-                setTitle(getString(R.string.app_name) + " > " + filename);
+                // set window title using form name
+                setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
 
                 // set description using form title
                 ((TextView) nextView.findViewById(R.id.description)).setText(getString(
                         R.string.enter_data_description, mFormHandler.getFormTitle()));
-                
-               mFormHandler.importData("/sdcard/ODK/restore/restore.xml");
-                
+
                 break;
             case END_SCREEN:
                 nextView = View.inflate(this, R.layout.formentry_end, null);
@@ -472,8 +436,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 ((Button) nextView.findViewById(R.id.submit))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
-                            mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswerPath)) {
+                                mFormHandler.finalizeDataModel();
+                                if (mFormHandler.exportData(mAnswersPath)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();
@@ -796,7 +760,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        deleteAnswerFolder();
+                        FileUtils.deleteFolder(mAnswersPath);
                         finish();
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -1026,8 +990,23 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         } else {
             mFormHandler = formHandler;
             mFormHandler.initialize(getApplicationContext());
-            mFormHandler.setSourcePath(mFormPath);
-            mAnswerPath = createAnswerPath();
+
+            // restore saved data
+            if (mInstancePath != null) {
+                mFormHandler.importData(mInstancePath);
+                mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
+
+            } else {
+                String time =
+                        new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()
+                                .getTime());
+                String file = mFormPath.toString();
+                file = file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.'));
+                String path = SharedConstants.ANSWERS_PATH + "/" + file + "_" + time;
+                if (FileUtils.createFolder(path)) {
+                    mAnswersPath = path;
+                }
+            }
             refreshCurrentView();
         }
     }

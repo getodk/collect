@@ -33,22 +33,14 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.core.model.util.restorable.IXFormyFactory;
-import org.javarosa.core.model.util.restorable.RestoreUtils;
 import org.javarosa.core.services.IService;
 import org.javarosa.core.services.transport.ByteArrayPayload;
-import org.javarosa.core.services.transport.IDataPayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
-import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
-import org.javarosa.xform.util.XFormAnswerDataParser;
-import org.javarosa.xpath.XPathParseTool;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,12 +59,11 @@ public class FormHandler {
     private FormDef mForm;
     private FormIndex mCurrentIndex;
     private int mQuestionCount;
-    private String mSourcePath;
     private Context mContext;
 
 
     public FormHandler(FormDef formDef) {
-        Log.i(t, "calling constructor");
+        //Log.i(t, "calling constructor");
 
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
@@ -93,8 +84,7 @@ public class FormHandler {
         JavaRosaServiceProvider.instance().initialize(v);
 
         // set evaluation context
-        EvaluationContext ec = new EvaluationContext();
-        mForm.setEvaluationContext(ec);
+        mForm.setEvaluationContext(new EvaluationContext());
 
         // initialize form
         mForm.initialize(true);
@@ -484,7 +474,7 @@ public class FormHandler {
         return mForm.getTitle();
     }
 
-
+/*
     public void setSourcePath(String path) {
         mSourcePath = path;
     }
@@ -493,7 +483,7 @@ public class FormHandler {
     public String getSourcePath() {
         return mSourcePath;
     }
-
+*/
 
 
     /**
@@ -545,7 +535,7 @@ public class FormHandler {
 
         Uri u;
         Cursor c;
-        String b;
+        String s;
 
         // move index to the beginning
         FormIndex fi = FormIndex.createBeginningOfFormIndex();
@@ -568,8 +558,8 @@ public class FormHandler {
 
                     // get the file path and move it to the answer folder
                     File f = new File(c.getString(c.getColumnIndex("_data")));
-                    b = c.getString(c.getColumnIndex("_display_name"));
-                    boolean move = f.renameTo(new File(answerPath + "/" + b));
+                    s = c.getString(c.getColumnIndex("_display_name"));
+                    boolean move = f.renameTo(new File(answerPath + "/" + s));
 
                     // is move successful?
                     if (move) {
@@ -578,7 +568,7 @@ public class FormHandler {
                         mContext.getContentResolver().delete(u, null, null);
 
                         // replace the answer
-                        saveAnswer(pe, new StringData(b), true);
+                        saveAnswer(pe, new StringData(s), true);
                     } else {
 
                         Log.e(t, "Could not move " + pe.getAnswerText());
