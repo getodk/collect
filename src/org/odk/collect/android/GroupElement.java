@@ -32,7 +32,7 @@ public class GroupElement {
     private boolean mRepeats;
 
     public GroupElement(String groupText, int repeatCount, boolean repeats) {
-        Log.i(t,"called constructor");
+       // Log.i(t,"called constructor");
         mGroupText = groupText;
         mRepeatCount = repeatCount;
         mRepeats = repeats;

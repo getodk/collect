@@ -437,7 +437,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswersPath,false)) {
+                                if (mFormHandler.exportData(mAnswersPath,true)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();
