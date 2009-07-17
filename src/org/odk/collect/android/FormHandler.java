@@ -542,6 +542,7 @@ public class FormHandler {
         while (!fi.isEndOfFormIndex()) {
 
             if (!indexIsGroup(fi)) {
+
                 // we have a question
                 PromptElement pe = new PromptElement(fi, mForm, null);
 
@@ -569,7 +570,8 @@ public class FormHandler {
                         mContext.getContentResolver().delete(u, null, null);
 
                         // replace the answer
-                        saveAnswer(pe, new StringData(s), true);
+                        saveAnswer(pe, new StringData(s), false);
+
                     } else {
 
                         Log.e(t, "Could not move " + pe.getAnswerText());
@@ -629,27 +631,29 @@ public class FormHandler {
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
     @SuppressWarnings("unchecked")
-    public boolean exportData(String answerPath, boolean exportBinaries) {
+    public boolean exportData(String answerPath) {
 
         ByteArrayPayload payload;
-
+        
         try {
+            
+            exportBinaryFiles(answerPath);
+            
             // assume no binary data inside the model.
             DataModelTree datamodel = mForm.getDataModel();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
+            
+            //write out xml
+            exportXmlFile(payload, answerPath);
+            return true;
+            
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
             e.printStackTrace();
             return false;
         }
 
-        // write out binary and xml
-        if (exportBinaries) {
-            return exportBinaryFiles(answerPath) && exportXmlFile(payload, answerPath);
-        } else {
-            return exportXmlFile(payload, answerPath);
-        }
 
     }
 
