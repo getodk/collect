@@ -335,9 +335,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             } else {
                 menu.removeItem(MENU_DELETE_REPEAT);
             }
+            if (menu.findItem(MENU_QUIT) == null) {
+                menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
+                        android.R.drawable.ic_menu_save);
+            }
+
         } else {
             menu.removeItem(MENU_CLEAR);
             menu.removeItem(MENU_DELETE_REPEAT);
+            menu.removeItem(MENU_QUIT);
         }
 
         return true;
@@ -360,6 +366,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return true;
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
+                return true;
+            case MENU_QUIT:
+                createSaveQuitDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -437,7 +446,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswersPath)) {
+                                if (mFormHandler.exportData(mAnswersPath, getApplicationContext())) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();
@@ -749,6 +758,45 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    private void saveData() {
+        mFormHandler.finalizeDataModel();
+        if (mFormHandler.exportData(mAnswersPath, getApplicationContext())) {
+            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Confirm save and quit dialog
+     */
+    private void createSaveQuitDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setMessage(getString(R.string.savequit_confirm));
+        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON1: // yes
+                        saveData();
+                        finish();
+                        break;
+                    case DialogInterface.BUTTON2: // no
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.yes), quitListener);
+        mAlertDialog.setButton2(getString(R.string.no), quitListener);
+        mAlertDialog.show();
+    }
+
+
     /**
      * Confirm quit dialog
      */
@@ -997,7 +1045,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
 
             } else {
-                
+
                 // create new answer folder
                 String time =
                         new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()

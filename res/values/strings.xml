@@ -77,6 +77,7 @@ the License.
 	
 	<string name="delete_confirm">Are you sure you want to delete %s?</string>
 	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>
+	<string name="savequit_confirm">Are you sure you want to quit? Your entered data will be saved.</string>
 	
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>
 

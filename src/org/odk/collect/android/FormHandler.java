@@ -59,9 +59,7 @@ public class FormHandler {
     private FormDef mForm;
     private FormIndex mCurrentIndex;
     private int mQuestionCount;
-    private Context mContext;
-
-
+    
     public FormHandler(FormDef formDef) {
         // Log.i(t, "calling constructor");
 
@@ -72,9 +70,7 @@ public class FormHandler {
 
 
     public void initialize(Context context) {
-
-        mContext = context;
-
+        
         // load modules
         new XFormsModule().registerModule(null);
 
@@ -528,7 +524,7 @@ public class FormHandler {
      * Loop through the data model and moves binary files into the answer
      * folder. Also replace Android specific URI's with filenames.
      */
-    private boolean exportBinaryFiles(String answerPath) {
+    private boolean exportBinaryFiles(String answerPath, Context context) {
 
         Uri u;
         Cursor c;
@@ -555,7 +551,7 @@ public class FormHandler {
 
                     // get uri
                     u = Uri.parse(pe.getAnswerText());
-                    c = mContext.getContentResolver().query(u, null, null, null, null);
+                    c = context.getContentResolver().query(u, null, null, null, null);
                     c.moveToFirst();
 
                     // get the file path and move it to the answer folder
@@ -567,7 +563,7 @@ public class FormHandler {
                     if (move) {
 
                         // remove the database entry
-                        mContext.getContentResolver().delete(u, null, null);
+                        context.getContentResolver().delete(u, null, null);
 
                         // replace the answer
                         saveAnswer(pe, new StringData(s), false);
@@ -631,23 +627,23 @@ public class FormHandler {
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
     @SuppressWarnings("unchecked")
-    public boolean exportData(String answerPath) {
+    public boolean exportData(String answerPath, Context context) {
 
         ByteArrayPayload payload;
-        
+
         try {
-            
-            exportBinaryFiles(answerPath);
-            
+
+            exportBinaryFiles(answerPath, context);
+
             // assume no binary data inside the model.
             DataModelTree datamodel = mForm.getDataModel();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
-            
-            //write out xml
+
+            // write out xml
             exportXmlFile(payload, answerPath);
             return true;
-            
+
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
             e.printStackTrace();
