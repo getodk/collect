@@ -40,6 +40,7 @@ public class UploaderActivity extends Activity implements UploaderListener {
     private final static int PROGRESS_DIALOG = 1;
     private ProgressDialog mProgressDialog;
     private UploaderTask mUploaderTask;
+    private int numUploading = -1;
 
 
     /*
@@ -55,9 +56,6 @@ public class UploaderActivity extends Activity implements UploaderListener {
         Bundle b = i.getBundleExtra("BUNDLE");
         if (b != null) {
             toUpload = b.getStringArrayList("UPLOAD");
-            //for (int j = 0; j < toUpload.size(); j++) {
-            //    Log.e("testing", "got " + toUpload.get(j));
-            //}
         } else {
             // nothing to upload
             return;
@@ -68,17 +66,38 @@ public class UploaderActivity extends Activity implements UploaderListener {
             showDialog(PROGRESS_DIALOG);
             mUploaderTask = new UploaderTask();
             SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
-            String server = p.getString("UploadServer", "null");
+            String server = p.getString("UploadServer", "http://opendatakit.appspot.com/submission");
             Log.e(t, "Uploading to server: " + server);
             mUploaderTask.setUploadServer(server);
+            numUploading = toUpload.size();
             mUploaderTask.execute(toUpload.toArray(new String[toUpload.size()]));
         } else {
-            Log.e("testing", "alreaedy running");
+            Log.e("testing", "already running");
         }
+    }
+    
+    
+
+
+@Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        numUploading = savedInstanceState.getInt("uploading");
     }
 
 
-/*
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("uploading", numUploading);
+    }
+
+
+
+
+    /*
  * (non-Javadoc)
  * @see android.app.Activity#onRetainNonConfigurationInstance()
  */
@@ -114,12 +133,26 @@ public class UploaderActivity extends Activity implements UploaderListener {
  * (non-Javadoc)
  * @see org.odk.collect.android.UploaderListener#uploadingComplete()
  */
-    public void uploadingComplete(boolean result) {
-        if (result) {
-            Toast.makeText(this, "Uploads Completed Successfully", Toast.LENGTH_LONG).show();
+    public void uploadingComplete(ArrayList<String> result) {
+        // TODO: his needs to be changed.  If the uploadingComplete() happens when the activity is in the background
+        // this won't work.  don't change the orientation.  fix coming soon.
+        Log.e("carl", "results = " + result.size() + " and numuploading = " + numUploading);
+        if (result.size() == numUploading) {
+            Toast.makeText(this, "Uploads Completed Successfully!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "One or more uploads Failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, 
+                    numUploading-result.size() + " of " + numUploading + " uploads failed",
+                    Toast.LENGTH_LONG).show();
         }
+        
+        FileDbAdapter fda = new FileDbAdapter(this);
+        for (int i = 0; i < result.size(); i++) {
+            String s = result.get(i);
+            fda.open();
+            fda.updateNote(s, "submitted");
+            fda.close();
+        }
+        
         finish();
     }
 

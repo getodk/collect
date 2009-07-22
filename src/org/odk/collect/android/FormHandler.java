@@ -627,9 +627,34 @@ public class FormHandler {
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
     @SuppressWarnings("unchecked")
-    public boolean exportData(String answerPath, Context context) {
+    public boolean exportData(String answerPath, Context context, boolean done) {
 
         ByteArrayPayload payload;
+        
+        FileDbAdapter fda = new FileDbAdapter(context);
+        fda.open();
+        File f = new File(answerPath);
+        Cursor c = fda.fetchNote(f.getName());
+        if (!done) {
+            Log.e("carl", "answer path = " + f.getName());
+            if (c != null && c.getCount() == 0) {
+                Log.e("Carl", "new file");
+                fda.createNote(f.getName(), "saved");
+            } else {
+                Log.e("carl", "updating");
+                fda.updateNote(f.getName(), "saved");
+            }
+        } else {
+            if (c != null && c.getCount() == 0) {
+                Log.e("Carl", "new done");
+                fda.createNote(f.getName(), "done");
+                
+            } else {
+                Log.e("Carl", "update done");
+                fda.updateNote(f.getName(), "done");
+            }
+        }
+        fda.close();
 
         try {
 

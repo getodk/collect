@@ -3,18 +3,16 @@ package org.odk.collect.android;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 
-public class ServerPreferences extends PreferenceActivity implements
+public class SavedPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.server_preferences);
-        updateSummary();
+        addPreferencesFromResource(R.xml.saved_preferences);
         updateFileTypeView();
     }
 
@@ -35,23 +33,14 @@ public class ServerPreferences extends PreferenceActivity implements
 
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("UploadServer")) {
-            updateSummary();
-        } else if (key.equals("list_file_type")) {
+        if (key.equals("saved_list_file_type")) {
             updateFileTypeView();
         }
-    }
-
-
-    private void updateSummary() {
-        EditTextPreference etp =
-                (EditTextPreference) this.getPreferenceScreen().findPreference("UploadServer");
-        etp.setSummary(etp.getText());
     }
     
     private void updateFileTypeView() {
         ListPreference lp =
-                (ListPreference) this.getPreferenceScreen().findPreference("list_file_type");
+                (ListPreference) this.getPreferenceScreen().findPreference("saved_list_file_type");
         lp.setSummary(lp.getEntry());
     }
 

@@ -7,4 +7,14 @@
             android:defaultValue="http://opendatakit.appspot.com/submission"
             android:title="Data submission server"
             android:dialogTitle="Set data upload server" />
+            
+            <ListPreference
+            	android:id="@+id/ListFiles"
+                android:key="list_file_type"
+                android:title="Select submissions to view"
+                android:defaultValue="saved"
+                android:entries="@array/entries_list_preference"
+                android:entryValues="@array/entryvalues_list_preference"
+                android:dialogTitle="View Submissions that are:" />
+                
 </PreferenceScreen>

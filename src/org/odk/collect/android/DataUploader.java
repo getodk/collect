@@ -20,14 +20,16 @@ import java.util.ArrayList;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -44,7 +46,7 @@ import android.widget.ListView;
 public class DataUploader extends ListActivity {
 
     private final String t = "FormChooser";
-    private ArrayList<String> mFileList;
+    //private ArrayList<String> mFileList;
 
     private static final int MENU_SET_SERVER = Menu.FIRST;
     private static final int MENU_UPLOAD = Menu.FIRST + 1;
@@ -60,13 +62,15 @@ public class DataUploader extends ListActivity {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
 
-        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.ANSWERS_PATH);
+       /* mFileList = FileUtils.getFilesAsArrayList(SharedConstants.ANSWERS_PATH);
         ArrayAdapter<String> fileAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
-                        mFileList);
+                        mFileList);*/
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        setListAdapter(fileAdapter);
+
+        refresh();
+        // setListAdapter(fileAdapter);
 
         PreferenceManager.setDefaultValues(this, R.xml.server_preferences, false);
     }
@@ -79,8 +83,8 @@ public class DataUploader extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_SET_SERVER, 0, "set server");
-        menu.add(0, MENU_UPLOAD, 0, "upload");
+        menu.add(0, MENU_SET_SERVER, 0, "Uploader Settings");
+        menu.add(0, MENU_UPLOAD, 0, "Upload Selected Files");
         return true;
     }
 
@@ -98,8 +102,11 @@ public class DataUploader extends ListActivity {
                 ArrayList<String> toUpload = new ArrayList<String>();
                 for (int i = 0; i < s.size(); i++) {
                     if (s.get(s.keyAt(i)) == true) {
-                        Log.e(t, "adding " + getListView().getItemAtPosition(s.keyAt(i)));
-                        toUpload.add(getListView().getItemAtPosition(s.keyAt(i)).toString());
+                        Cursor c = (Cursor) this.getListAdapter().getItem(s.keyAt(i));
+                        String str = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILENAME));
+
+                        Log.i(t, "Adding form for upload: " + str);
+                        toUpload.add(str);
                     }
                 }
 
@@ -107,7 +114,8 @@ public class DataUploader extends ListActivity {
                 Bundle b = new Bundle();
                 b.putStringArrayList("UPLOAD", toUpload);
                 i.putExtra("BUNDLE", b);
-                startActivity(i);
+                if (toUpload.size() > 0)
+                    startActivity(i);
                 return true;
             case MENU_SET_SERVER:
                 Intent launchPreferencesIntent =
@@ -117,4 +125,41 @@ public class DataUploader extends ListActivity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+
+    private void refresh() {
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+        String status = p.getString("list_file_type", "done");
+
+        Log.e(t, "displaying: " + status);
+        Cursor c = fda.fetchNotes(status);
+        startManagingCursor(c);
+
+        String[] from = new String[] {FileDbAdapter.KEY_FILENAME};
+        int[] to = new int[] {android.R.id.text1};
+
+        // Now create an array adapter and set it to display using our row
+        SimpleCursorAdapter notes;
+        if (status.equalsIgnoreCase("submitted")) {
+            notes = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
+        } else {
+            notes =
+                    new SimpleCursorAdapter(this,
+                            android.R.layout.simple_list_item_multiple_choice, c, from, to);
+
+        }
+        setListAdapter(notes);
+        fda.close();
+    }
+
+
 }

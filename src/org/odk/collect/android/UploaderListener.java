@@ -16,13 +16,15 @@
 
 package org.odk.collect.android;
 
+import java.util.ArrayList;
+
 
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface UploaderListener {
-    void uploadingComplete(boolean result);
+    void uploadingComplete(ArrayList<String> result);
     void progressUpdate(int progress, int total);
 }
 

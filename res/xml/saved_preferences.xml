@@ -1,0 +1,13 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+            
+            <ListPreference
+            	android:id="@+id/SavedListFiles"
+                android:key="saved_list_file_type"
+                android:title="Select submissions to view"
+                android:defaultValue="saved"
+                android:entries="@array/entries_saved_preference"
+                android:entryValues="@array/entryvalues_saved_preference"
+                android:dialogTitle="View Saved forms that are:" />
+                
+</PreferenceScreen>

@@ -23,6 +23,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -445,8 +446,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 ((Button) nextView.findViewById(R.id.submit))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
+                                // Form is markd as 'done' here.
                                 mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswersPath, getApplicationContext())) {
+                                if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), true)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();
@@ -758,9 +760,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    /*
+     * Called during a 'save and exit' command. The form is not 'done' here.
+     */
     private void saveData() {
         mFormHandler.finalizeDataModel();
-        if (mFormHandler.exportData(mAnswersPath, getApplicationContext())) {
+        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), false)) {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
                     Toast.LENGTH_SHORT).show();
             finish();
@@ -808,7 +813,16 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        FileUtils.deleteFolder(mAnswersPath);
+                        FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
+                        fda.open();
+                        Cursor c = fda.fetchNote(new File(mAnswersPath).getName());
+                        if (c != null && c.getCount() > 0) {
+                            Log.e("carl", "prevously saved");
+                        } else {
+                            Log.e("carl", "not previously saved, cleaning up");
+                            FileUtils.deleteFolder(mAnswersPath);
+                        }
+                        fda.close();
                         finish();
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -1043,7 +1057,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             if (mInstancePath != null) {
                 mFormHandler.importData(mInstancePath);
                 mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
-
+                Log.e("carl", "answers path = " + mAnswersPath);
             } else {
 
                 // create new answer folder
@@ -1052,9 +1066,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                 .getTime());
                 String file = mFormPath.toString();
                 file = file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.'));
-                String path = SharedConstants.ANSWERS_PATH + "/" + file + "_" + time;
+                String path = SharedConstants.ANSWERS_PATH + file + "_" + time;
                 if (FileUtils.createFolder(path)) {
                     mAnswersPath = path;
+                    Log.e("carl", "answers path 1= " + mAnswersPath);
                 }
             }
             refreshCurrentView();

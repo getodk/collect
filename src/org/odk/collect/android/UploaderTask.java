@@ -17,6 +17,7 @@ package org.odk.collect.android;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -35,7 +36,7 @@ import android.util.Log;
  * @author Carl Hartung (carlhartung@gmail.com)
  * 
  */
-class UploaderTask extends AsyncTask<String, Integer, Boolean> {
+class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
     private final static String t = "UploaderTask";
     UploaderListener mStateListener;
     String uploadServer;
@@ -49,7 +50,8 @@ class UploaderTask extends AsyncTask<String, Integer, Boolean> {
      * @see android.os.AsyncTask#doInBackground(Params[])
      */
     @Override
-    protected Boolean doInBackground(String... values) {
+    protected ArrayList<String> doInBackground(String... values) {
+        ArrayList<String> sent = new ArrayList<String>();
         for (int i = 0; i < values.length; i++) {
             this.publishProgress(i+1, values.length);
  
@@ -85,24 +87,28 @@ class UploaderTask extends AsyncTask<String, Integer, Boolean> {
             } catch (ClientProtocolException e) {
                 Log.e(t, "Protocol Exception Error");
                 e.printStackTrace();
-                return false;
+                return sent;
             } catch (IOException e) {
                 Log.e(t, "IO Execption Error");
                 e.printStackTrace();
-                return false;
+                return sent;
             } catch (IllegalStateException e) {
                 Log.e(t, "Illegal State Exception");
                 e.printStackTrace();
-                return false;
+                return sent;
             }
             if (response != null && response.getStatusLine().getStatusCode() == 200) {
                 Log.d(t, "good response: " + response.getStatusLine());
+                sent.add(values[i]);
+            } else if (response == null) {
+                Log.e(t, "response was null");
+                break;
             } else {
                 Log.d(t, "bad response: " + response.getStatusLine());
-                return false;
+                break;
             }
         }
-        return true;
+        return sent;
     }
 
 
@@ -111,7 +117,7 @@ class UploaderTask extends AsyncTask<String, Integer, Boolean> {
      * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
      */
     @Override
-    protected void onPostExecute(Boolean value) {
+    protected void onPostExecute(ArrayList<String> value) {
         synchronized (this) {
             if (mStateListener != null) mStateListener.uploadingComplete(value);
         }
