@@ -115,6 +115,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             if (savedInstanceState.containsKey(FORMPATH)) {
                 mFormPath = savedInstanceState.getString(FORMPATH);
             }
+            if (savedInstanceState.containsKey("answerpath")) {
+                mAnswersPath = savedInstanceState.getString("answerpath");
+            }
         }
 
         Object data = getLastNonConfigurationInstance();
@@ -186,6 +189,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(FORMPATH, mFormPath);
+        outState.putString("answerpath", mAnswersPath);
     }
 
 
@@ -815,6 +819,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     case DialogInterface.BUTTON1: // yes
                         FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
                         fda.open();
+                        Log.e("carl", "file ansewrs path = " + mAnswersPath);
                         Cursor c = fda.fetchNote(new File(mAnswersPath).getName());
                         if (c != null && c.getCount() > 0) {
                             Log.e("carl", "prevously saved");
