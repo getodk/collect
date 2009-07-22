@@ -18,6 +18,7 @@ package org.odk.collect.android;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -48,11 +49,15 @@ public class InstanceChooser extends ListActivity {
 
         setTheme(SharedConstants.APPLICATION_THEME);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
+        setContentView(R.layout.filelister);
+
         // start file lister with app name, path to search, display style
         // super.initialize(getString(R.string.edit_data),
         // SharedConstants.ANSWERS_PATH, 0);
 
         mFileList = FileUtils.getFilesAsArrayListRecursive(SharedConstants.ANSWERS_PATH);
+        Collections.sort(mFileList);
+        
         ArrayAdapter<String> fileAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mFileList);
         setListAdapter(fileAdapter);
