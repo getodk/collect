@@ -31,14 +31,14 @@ public class WidgetFactory {
     /**
      * Returns the appropriate QuestionWidget for the given PromptElement.
      * 
-     * @param p
+     * @param pe
      * @param context
      */
-    static public IQuestionWidget createWidgetFromPrompt(PromptElement p, Context context) {
+    static public IQuestionWidget createWidgetFromPrompt(PromptElement pe, Context context, String answerspath) {
         IQuestionWidget questionWidget = null;
-        switch (p.getQuestionType()) {
+        switch (pe.getQuestionType()) {
             case Constants.CONTROL_INPUT:
-                switch (p.getAnswerType()) {
+                switch (pe.getAnswerType()) {
                     case Constants.DATATYPE_DATE:
                         questionWidget = new DateWidget(context);
                         break;
@@ -60,13 +60,13 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new MediaWidget(context,"image");
+                questionWidget = new MediaWidget(context,"image", answerspath);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new MediaWidget(context,"audio");
+                questionWidget = new MediaWidget(context,"audio", answerspath);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new MediaWidget(context,"video");
+                questionWidget = new MediaWidget(context,"video", answerspath);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(context);
@@ -78,7 +78,7 @@ public class WidgetFactory {
                 questionWidget = new StringWidget(context);
                 break;
         }
-        questionWidget.buildView(p);
+        questionWidget.buildView(pe);
         return questionWidget;
     }
 

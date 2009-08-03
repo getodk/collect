@@ -18,18 +18,15 @@ package org.odk.collect.android;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.util.Log;
 
 import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -519,70 +516,70 @@ public class FormHandler {
 
     }
 
-
-    /**
-     * Loop through the data model and moves binary files into the answer
-     * folder. Also replace Android specific URI's with filenames.
-     */
-    private boolean exportBinaryFiles(String answerPath, Context context) {
-
-        Uri u;
-        Cursor c;
-        String s;
-
-        // move index to the beginning
-        FormIndex fi = FormIndex.createBeginningOfFormIndex();
-        fi = nextIndexForCount(fi);
-
-        // loop through entire data model.
-        while (!fi.isEndOfFormIndex()) {
-
-            if (!indexIsGroup(fi)) {
-
-                // we have a question
-                PromptElement pe = new PromptElement(fi, mForm, null);
-
-                // select only binary files with android specific uri
-                if ((pe.getAnswerType() == Constants.DATATYPE_BINARY
-                        || pe.getQuestionType() == Constants.CONTROL_IMAGE_CHOOSE
-                        || pe.getQuestionType() == Constants.CONTROL_AUDIO_CAPTURE || pe
-                        .getQuestionType() == Constants.CONTROL_VIDEO_CAPTURE)
-                        && pe.getAnswerObject() != null) {
-
-                    // get uri
-                    u = Uri.parse(pe.getAnswerText());
-                    c = context.getContentResolver().query(u, null, null, null, null);
-                    c.moveToFirst();
-
-                    // get the file path and move it to the answer folder
-                    File f = new File(c.getString(c.getColumnIndex("_data")));
-                    s = c.getString(c.getColumnIndex("_display_name"));
-                    boolean move = f.renameTo(new File(answerPath + "/" + s));
-
-                    // is move successful?
-                    if (move) {
-
-                        // remove the database entry
-                        context.getContentResolver().delete(u, null, null);
-
-                        // replace the answer
-                        saveAnswer(pe, new StringData(s), false);
-
-                    } else {
-
-                        Log.e(t, "Could not move " + pe.getAnswerText());
-                        return false;
-                    }
-
-                }
-            }
-
-            // next element
-            fi = nextIndexForCount(fi);
-        }
-
-        return true;
-    }
+//
+//    /**
+//     * Loop through the data model and moves binary files into the answer
+//     * folder. Also replace Android specific URI's with filenames.
+//     */
+//    private boolean exportBinaryFiles(String answerPath, Context context) {
+//
+//        Uri u;
+//        Cursor c;
+//        String s;
+//
+//        // move index to the beginning
+//        FormIndex fi = FormIndex.createBeginningOfFormIndex();
+//        fi = nextIndexForCount(fi);
+//
+//        // loop through entire data model.
+//        while (!fi.isEndOfFormIndex()) {
+//
+//            if (!indexIsGroup(fi)) {
+//
+//                // we have a question
+//                PromptElement pe = new PromptElement(fi, mForm, null);
+//
+//                // select only binary files with android specific uri
+//                if ((pe.getAnswerType() == Constants.DATATYPE_BINARY
+//                        || pe.getQuestionType() == Constants.CONTROL_IMAGE_CHOOSE
+//                        || pe.getQuestionType() == Constants.CONTROL_AUDIO_CAPTURE || pe
+//                        .getQuestionType() == Constants.CONTROL_VIDEO_CAPTURE)
+//                        && pe.getAnswerObject() != null) {
+//
+//                    // get uri
+//                    u = Uri.parse(pe.getAnswerText());
+//                    c = context.getContentResolver().query(u, null, null, null, null);
+//                    c.moveToFirst();
+//
+//                    // get the file path and move it to the answer folder
+//                    File f = new File(c.getString(c.getColumnIndex("_data")));
+//                    s = c.getString(c.getColumnIndex("_display_name"));
+//                    boolean move = f.renameTo(new File(answerPath + "/" + s));
+//
+//                    // is move successful?
+//                    if (move) {
+//
+//                        // remove the database entry
+//                        context.getContentResolver().delete(u, null, null);
+//
+//                        // replace the answer
+//                        saveAnswer(pe, new StringData(s), false);
+//
+//                    } else {
+//
+//                        Log.e(t, "Could not move " + pe.getAnswerText());
+//                        return false;
+//                    }
+//
+//                }
+//            }
+//
+//            // next element
+//            fi = nextIndexForCount(fi);
+//        }
+//
+//        return true;
+//    }
 
 
     /**
@@ -657,9 +654,7 @@ public class FormHandler {
         fda.close();
 
         try {
-
-            exportBinaryFiles(answerPath, context);
-
+            
             // assume no binary data inside the model.
             DataModelTree datamodel = mForm.getDataModel();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();

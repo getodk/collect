@@ -16,16 +16,7 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
-
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -35,6 +26,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
+
+import java.io.File;
 
 
 /**
@@ -48,26 +47,30 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Button mCaptureButton;
     private Button mPlayButton;
 
-    private Uri mUriAnswer;
+    private String mBinaryName;
     private TextView mDisplayText;
 
     private Uri mExternalUri;
     private String mCaptureIntent;
     private String mType;
+    private String mAnswersPath;
     private int mRequestCode;
     private int mCaptureText;
     private int mReplaceText;
     private int mPlayText;
 
 
-    public MediaWidget(Context context, String type) {
+    public MediaWidget(Context context, String type, String path) {
         super(context);
-        initialize(type);
+        initialize(type, path);
     }
 
 
-    private void initialize(String type) {
+    private void initialize(String type, String path) {
+
         mType = type;
+        mAnswersPath = path;
+
         if (mType.equals("image")) {
             mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
@@ -82,7 +85,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
             mCaptureText = R.string.capture_audio;
             mReplaceText = R.string.replace_audio;
             mPlayText = R.string.play_audio;
-
         } else if (mType.equals("video")) {
             mExternalUri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
@@ -90,27 +92,18 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
             mCaptureText = R.string.capture_video;
             mReplaceText = R.string.replace_video;
             mPlayText = R.string.play_video;
-
         }
     }
 
 
     private void deleteMedia() {
 
-        // find entry in content provider for the file
-        Cursor c = getContext().getContentResolver().query(mUriAnswer, null, null, null, null);
-        c.moveToFirst();
-
         // get the file path and delete the file
-        String p = c.getString(c.getColumnIndex("_data"));
-        File f = new File(p);
+        File f = new File(mAnswersPath + "/" + mBinaryName);
         f.delete();
 
-        // remove the database entry
-        getContext().getContentResolver().delete(mUriAnswer, null, null);
-
         // clean up variables
-        mUriAnswer = null;
+        mBinaryName = null;
 
     }
 
@@ -128,8 +121,8 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public IAnswerData getAnswer() {
-        if (mUriAnswer != null) {
-            return new StringData(mUriAnswer.toString());
+        if (mBinaryName != null) {
+            return new StringData(mBinaryName.toString());
         } else {
             return null;
         }
@@ -153,6 +146,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
             public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
                 if (mType.equals("image")) {
+                    // TODO only way to get large image from android
                     // http://code.google.com/p/android/issues/detail?id=1480
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
                             SharedConstants.TMPFILE_PATH)));
@@ -175,32 +169,20 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                Cursor c =
-                        getContext().getContentResolver().query(mUriAnswer, null, null, null, null);
-                c.moveToFirst();
-                i.setData(mUriAnswer);
-                try {
-                    ((Activity) getContext()).startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    // you deleted the image somewhere else
-                    mUriAnswer = null;
-                    mPlayButton.setEnabled(false);
-                    mCaptureButton.setText(getContext().getString(mCaptureText));
-                    mDisplayText.setText(getContext().getString(R.string.no_capture));
-                }
+                File f = new File(mAnswersPath + "/" + mBinaryName);
+                i.setDataAndType(Uri.fromFile(f), mType + "/*");
+                ((Activity) getContext()).startActivity(i);
+
             }
         });
 
         // retrieve answer from data model and update ui
         mDisplayText = new TextView(getContext());
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            mUriAnswer = Uri.parse(s);
-            if (mUriAnswer != null) {
-                mPlayButton.setEnabled(true);
-                mCaptureButton.setText(getContext().getString(mReplaceText));
-                mDisplayText.setText(getContext().getString(R.string.one_capture));
-            }
+        mBinaryName = prompt.getAnswerText();
+        if (mBinaryName != null) {
+            mPlayButton.setEnabled(true);
+            mCaptureButton.setText(getContext().getString(mReplaceText));
+            mDisplayText.setText(getContext().getString(R.string.one_capture));
         } else {
             mPlayButton.setEnabled(false);
             mDisplayText.setText(getContext().getString(R.string.no_capture));
@@ -214,17 +196,51 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void setBinaryData(Object answer) {
+    private Uri getUriFromPath(String path) {
 
-        // you are replacing an answer. remove the media.
-        if (mUriAnswer != null) {
-            deleteMedia();
-        }
+        // find entry in content provider
+        Cursor c =
+                getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
+                        null, null);
+        c.moveToFirst();
 
-        // store the uri
-        mUriAnswer = (Uri) answer;
+        // create uri from path
+        return Uri.parse(mExternalUri + "/" + c.getInt(c.getColumnIndex("_id")));
+
 
     }
 
+
+    private String getPathFromUri(Uri uri) {
+
+        // find entry in content provider
+        Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
+        c.moveToFirst();
+
+        // get data path
+        return c.getString(c.getColumnIndex("_data"));
+
+    }
+
+
+
+    public void setBinaryData(Object binaryuri) {
+
+        // you are replacing an answer. remove the media.
+        if (mBinaryName != null) {
+            deleteMedia();
+        }
+
+        // get the file path and move the file
+        String binarypath = getPathFromUri((Uri) binaryuri);
+        File f = new File(binarypath);
+        String s = mAnswersPath + binarypath.substring(binarypath.lastIndexOf('/'));
+        f.renameTo(new File(s));
+
+        // remove the database entry and update the name
+        getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
+        mBinaryName = s.substring(s.lastIndexOf('/') + 1);
+
+    }
 
 }

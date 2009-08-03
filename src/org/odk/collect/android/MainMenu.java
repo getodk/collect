@@ -82,7 +82,7 @@ public class MainMenu extends Activity {
                 Intent i = new Intent(getApplicationContext(), DataUploader.class);
                 startActivityForResult(i, FORM_UPLOADER);
             }
-            
+
         });
 
         Button editdata = (Button) findViewById(R.id.editdata);
@@ -155,11 +155,13 @@ public class MainMenu extends Activity {
                 startActivity(ii);
                 break;
             case FORM_UPLOADER:
-                Toast.makeText(this.getApplicationContext(), "this worked", Toast.LENGTH_LONG).show();
-                //String path = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                //Intent in = new Intent(this, FormUploader.class);
-                //in.putExtra(SharedConstants.FILEPATH_KEY, path);
-                //startActivity(in);
+                Toast.makeText(this.getApplicationContext(), "this worked", Toast.LENGTH_LONG)
+                        .show();
+                // String path =
+                // intent.getStringExtra(SharedConstants.FILEPATH_KEY);
+                // Intent in = new Intent(this, FormUploader.class);
+                // in.putExtra(SharedConstants.FILEPATH_KEY, path);
+                // startActivity(in);
         }
     }
 }

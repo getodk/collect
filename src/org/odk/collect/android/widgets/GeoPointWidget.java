@@ -16,12 +16,6 @@
 
 package org.odk.collect.android.widgets;
 
-import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +30,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
 
 
 /**
@@ -70,12 +70,10 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
-        }
-
-        if (s != null) {
+        } else {
             try {
                 // segment lat and lon
-                String[] sga = s.replace("lat: ", "").replace("\nlon: ", ",").split("[,]");
+                String[] sga = s.replace("lat: ", "").replace("\nlon: ", " ").split(" ");
                 double gp[] = new double[2];
                 gp[0] = Double.valueOf(sga[0]).doubleValue();
                 gp[1] = Double.valueOf(sga[1]).doubleValue();
@@ -84,11 +82,11 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
                 return null;
             }
         }
-        return null;
     }
 
 
     public void buildView(PromptElement prompt) {
+
         setOrientation(LinearLayout.VERTICAL);
 
         mActionButton = new Button(getContext());
@@ -100,17 +98,10 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         mStringAnswer = new TextView(getContext());
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
-        
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            
-            mStringAnswer.setText(s);
 
-            // string manipulation for readability
-            String str = (String) mStringAnswer.getText();
-            if (!str.equals("")) {
-                mStringAnswer.setText("lat: " + str.replace(",", "\nlon: "));
-            }
+        String s = prompt.getAnswerText();
+        if (s != null && !s.equals("")) {
+            mStringAnswer.setText("lat: " + s.replace(" ", "\nlon: "));
         }
 
         // when you press the button
@@ -160,6 +151,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
                     stopGPS();
                 }
 
+
                 // close gps dialogs, alert user, stop gps
                 public void onProviderDisabled(String provider) {
                     stopGPS();
@@ -189,6 +181,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
      * Stop listening to any updates from GPS
      */
     private void stopGPS() {
+
         if (mLocationDialog != null && mLocationDialog.isShowing()) {
             mLocationDialog.dismiss();
             if (mLocation != null) {

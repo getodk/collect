@@ -16,8 +16,6 @@
 
 package org.odk.collect.android;
 
-import android.util.Log;
-
 /**
  * Used by {@link FormHandler} to create a Vector of groups.
  * 
@@ -25,7 +23,6 @@ import android.util.Log;
  */
 public class GroupElement {
     
-    private final static String t = "GroupElement";
 
     private String mGroupText;
     private int mRepeatCount;

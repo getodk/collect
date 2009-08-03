@@ -47,14 +47,16 @@ public class QuestionView extends ScrollView {
     private IQuestionWidget mQuestionWidget;
     private PromptElement mPrompt;
     private LinearLayout mView;
+    private String mAnswersPath;
     private final static int TEXTSIZE = 10;
 
 
-    public QuestionView(Context context, PromptElement prompt) {
+    public QuestionView(Context context, PromptElement prompt, String answerspath) {
         super(context);
 
         // Log.i(t, "calling constructor");
         this.mPrompt = prompt;
+        this.mAnswersPath = answerspath;
     }
 
 
@@ -78,7 +80,7 @@ public class QuestionView extends ScrollView {
         AddHelpText();
 
         // if question or answer type is not supported, use text widget
-        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(mPrompt, getContext());
+        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(mPrompt, getContext(), mAnswersPath);
 
         mView.addView((View) mQuestionWidget);
         addView(mView);
@@ -88,15 +90,7 @@ public class QuestionView extends ScrollView {
     public IAnswerData getAnswer() {
         return mQuestionWidget.getAnswer();
     }
-/*
-    public void setBinaryPath(String path) {
-        if (mQuestionWidget instanceof IBinaryWidget)
-            ((IBinaryWidget) mQuestionWidget).setBinaryPath(path);
-        else
-            Log.e(t, "Attempted to setBinaryPath() on a non-binary widget ");
-    }
-    
-*/
+
     public void setBinaryData(Object answer) {
         if (mQuestionWidget instanceof IBinaryWidget)
             ((IBinaryWidget) mQuestionWidget).setBinaryData(answer);
@@ -170,11 +164,7 @@ public class QuestionView extends ScrollView {
         tv.setHorizontallyScrolling(false);
 
         String s = mPrompt.getHelpText();
-        /*
-         * if (mPrompt.isReadonly()) { if (s == null) { s =
-         * getContext().getString(R.string.readonly_question); } else { s =
-         * getContext().getString(R.string.readonly_question) + " " + s; } }
-         */
+
         if (s != null && !s.equals("")) {
             tv.setText(s);
             mView.addView(tv);

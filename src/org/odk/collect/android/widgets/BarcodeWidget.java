@@ -46,6 +46,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     private Button mActionButton;
     private TextView mStringAnswer;
 
+
     public BarcodeWidget(Context context) {
         super(context);
     }
@@ -80,22 +81,23 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
             public void onClick(View v) {
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
-                    ((Activity) getContext()).startActivityForResult(i, SharedConstants.BARCODE_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i,
+                            SharedConstants.BARCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
-                    Toast
-                    .makeText(getContext(),
+                    Toast.makeText(getContext(),
                             getContext().getString(R.string.barcode_scanner_error),
                             Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        
-        
+
+
         mStringAnswer = new TextView(getContext());
         String s = prompt.getAnswerText();
         if (s != null) {
             mStringAnswer.setText(s);
-            mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+            mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT,
+                    SharedConstants.APPLICATION_FONTSIZE);
             mStringAnswer.setGravity(Gravity.CENTER);
         }
 
@@ -107,12 +109,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
 
     public void setBinaryData(Object answer) {
-        mStringAnswer.setText((String)answer);
-        
-    }
-    
-    public void setBinaryPath(String path) {
+        mStringAnswer.setText((String) answer);
+
     }
 
-
-}      
+}

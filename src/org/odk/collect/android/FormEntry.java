@@ -466,7 +466,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         });
                 break;
             case QUESTION_VIEW:
-                nextView = new QuestionView(this, prompt);
+                nextView = new QuestionView(this, prompt, mAnswersPath);
                 ((QuestionView) nextView).buildView();
                 break;
         }
