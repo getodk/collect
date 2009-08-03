@@ -23,7 +23,9 @@ import java.io.FileNotFoundException;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.xform.util.XFormUtils;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Background task for loading a form.  Eventually we're moving this to a service so that
@@ -34,7 +36,11 @@ import android.os.AsyncTask;
  */
 class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
     FormLoaderListener mStateListener;
-
+    private Context context;
+    
+    public FormLoaderTask(Context c) {
+        context = c;
+    }
 
     /*
      * (non-Javadoc)
@@ -45,6 +51,7 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         FormHandler fh = null;
         FormDef form = null;
         FileInputStream fis = null;
+        String instancePath = path[1];
         try {
             fis = new FileInputStream(new File(path[0]));
         } catch (FileNotFoundException e) {
@@ -55,8 +62,16 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         if (form == null) {
             return null;
         }
-
+        
         fh = new FormHandler(form);
+        fh.initialize(context);
+        fis = null;
+        form = null;
+        
+        if (instancePath != null) {
+            fh.importData(instancePath);
+        }
+        
         return fh;
     }
 

@@ -16,9 +16,12 @@
 
 package org.odk.collect.android;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;
@@ -36,12 +39,11 @@ import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParser;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
+
+
 
 /**
  * Given a {@link FormDef}, enables form iteration.
@@ -494,9 +496,17 @@ public class FormHandler {
         // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(new File(filePath));
 
+      /*  DataModelTree savedRoot = XFormParser.restoreDataModel(fileBytes, null);
+        mForm.setDataModel(savedRoot);
+        return true;
+        */
+        
+        
+        
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
+        fileBytes = null;
 
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
@@ -510,9 +520,11 @@ public class FormHandler {
 
             // populated model to current form
             mForm.setDataModel(new DataModelTree(templateRoot));
-
+  
             return true;
         }
+        
+        
 
     }
 
@@ -633,21 +645,16 @@ public class FormHandler {
         File f = new File(answerPath);
         Cursor c = fda.fetchNote(f.getName());
         if (!done) {
-            Log.e("carl", "answer path = " + f.getName());
             if (c != null && c.getCount() == 0) {
-                Log.e("Carl", "new file");
                 fda.createNote(f.getName(), "saved");
             } else {
-                Log.e("carl", "updating");
                 fda.updateNote(f.getName(), "saved");
             }
         } else {
             if (c != null && c.getCount() == 0) {
-                Log.e("Carl", "new done");
                 fda.createNote(f.getName(), "done");
                 
             } else {
-                Log.e("Carl", "update done");
                 fda.updateNote(f.getName(), "done");
             }
         }

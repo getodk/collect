@@ -137,8 +137,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 } else {
                     mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 }
-                mFormLoaderTask = new FormLoaderTask();
-                mFormLoaderTask.execute(mFormPath);
+                mFormLoaderTask = new FormLoaderTask(getApplicationContext());
+                mFormLoaderTask.execute(mFormPath, mInstancePath);
                 showDialog(PROGRESS_DIALOG);
             }
         }
@@ -154,10 +154,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         formname = formname.substring(formname.lastIndexOf("/") + 1);
 
         File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
-        File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xtml");
+        File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xhtml");
 
-        if (xmlfile.exists() || xhtmlfile.exists()) {
+        if (xmlfile.exists()){
             return xmlfile.getAbsolutePath();
+        } else if (xhtmlfile.exists()) {
+            return xhtmlfile.getAbsolutePath();
         } else {
             return null;
         }
@@ -175,6 +177,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mInAnimation = null;
         mOutAnimation = null;
         mBeenSwiped = false;
+        mInstancePath = null;
 
         mGestureDetector = new GestureDetector();
     }
@@ -819,12 +822,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     case DialogInterface.BUTTON1: // yes
                         FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
                         fda.open();
-                        Log.e("carl", "file ansewrs path = " + mAnswersPath);
                         Cursor c = fda.fetchNote(new File(mAnswersPath).getName());
                         if (c != null && c.getCount() > 0) {
-                            Log.e("carl", "prevously saved");
+                            Log.i(t, "prevously saved");
                         } else {
-                            Log.e("carl", "not previously saved, cleaning up");
+                            // not previously saved, cleaning up
                             FileUtils.deleteFolder(mAnswersPath);
                         }
                         fda.close();
@@ -928,6 +930,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 mFormLoaderTask.setFormLoaderListener(null);
+                                mFormLoaderTask.cancel(true);
                                 finish();
                             }
                         };
@@ -1056,13 +1059,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             createErrorDialog(getString(R.string.form_load_error, mFormPath), true);
         } else {
             mFormHandler = formHandler;
-            mFormHandler.initialize(getApplicationContext());
+            //mFormHandler.initialize(getApplicationContext());
 
             // restore saved data
             if (mInstancePath != null) {
-                mFormHandler.importData(mInstancePath);
+                //mFormHandler.importData(mInstancePath);
                 mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
-                Log.e("carl", "answers path = " + mAnswersPath);
             } else {
 
                 // create new answer folder
@@ -1074,7 +1076,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 String path = SharedConstants.ANSWERS_PATH + file + "_" + time;
                 if (FileUtils.createFolder(path)) {
                     mAnswersPath = path;
-                    Log.e("carl", "answers path 1= " + mAnswersPath);
                 }
             }
             refreshCurrentView();
