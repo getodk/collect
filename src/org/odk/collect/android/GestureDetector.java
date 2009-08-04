@@ -26,14 +26,12 @@ import android.view.MotionEvent;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class GestureDetector {
-
-    //private final static String t = "GestureDetector";
+    private final static String t = "GestureDetector";
 
     private GestureDirection mDirectionPoint;
 
-    public GestureDetector() {
-        // Log.i(t,"called constructor");
 
+    public GestureDetector() {
         mDirectionPoint = null;
     }
 

@@ -25,6 +25,8 @@ import java.util.ArrayList;
  */
 public interface UploaderListener {
     void uploadingComplete(ArrayList<String> result);
+
+
     void progressUpdate(int progress, int total);
 }
 

@@ -49,7 +49,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
 import java.util.regex.Pattern;
+
+import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.services.IService;
+import org.javarosa.model.xform.XFormsModule;
 
 
 /**
@@ -59,7 +64,6 @@ import java.util.regex.Pattern;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
-
     private final String t = "FormEntry";
     private final String FORMPATH = "formpath";
 
@@ -137,7 +141,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 } else {
                     mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 }
-                mFormLoaderTask = new FormLoaderTask(getApplicationContext());
+                mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath, mInstancePath);
                 showDialog(PROGRESS_DIALOG);
             }
@@ -156,7 +160,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
         File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xhtml");
 
-        if (xmlfile.exists()){
+        if (xmlfile.exists()) {
             return xmlfile.getAbsolutePath();
         } else if (xhtmlfile.exists()) {
             return xhtmlfile.getAbsolutePath();
@@ -180,6 +184,14 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mInstancePath = null;
 
         mGestureDetector = new GestureDetector();
+
+        // load modules
+        new XFormsModule().registerModule(null);
+
+        // load services
+        Vector<IService> v = new Vector<IService>();
+        v.add(new PropertyManager(getApplicationContext()));
+        JavaRosaServiceProvider.instance().initialize(v);
     }
 
 
@@ -455,7 +467,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
                                 mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), true)) {
+                                if (mFormHandler.exportData(mAnswersPath, getApplicationContext(),
+                                        true)) {
                                     Toast.makeText(getApplicationContext(),
                                             getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
                                             .show();
@@ -822,7 +835,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     case DialogInterface.BUTTON1: // yes
                         FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
                         fda.open();
-                        Cursor c = fda.fetchNote(new File(mAnswersPath).getName());
+                        Cursor c = fda.fetchFile(new File(mAnswersPath).getName());
                         if (c != null && c.getCount() > 0) {
                             Log.i(t, "prevously saved");
                         } else {
@@ -1059,14 +1072,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             createErrorDialog(getString(R.string.form_load_error, mFormPath), true);
         } else {
             mFormHandler = formHandler;
-            //mFormHandler.initialize(getApplicationContext());
 
             // restore saved data
             if (mInstancePath != null) {
-                //mFormHandler.importData(mInstancePath);
                 mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
             } else {
-
                 // create new answer folder
                 String time =
                         new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()
@@ -1081,6 +1091,5 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             refreshCurrentView();
         }
     }
-
 
 }

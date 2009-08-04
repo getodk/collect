@@ -23,24 +23,19 @@ import java.io.FileNotFoundException;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.xform.util.XFormUtils;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 /**
- * Background task for loading a form.  Eventually we're moving this to a service so that
- * creating the formdef object happens automatically in order to dramatically speed form loading.
+ * Background task for loading a form. Eventually we're moving this to a service
+ * so that creating the formdef object happens automatically in order to
+ * dramatically speed form loading.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
- *
+ * 
  */
 class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
     FormLoaderListener mStateListener;
-    private Context context;
-    
-    public FormLoaderTask(Context c) {
-        context = c;
-    }
+
 
     /*
      * (non-Javadoc)
@@ -62,16 +57,16 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         if (form == null) {
             return null;
         }
-        
+
         fh = new FormHandler(form);
-        fh.initialize(context);
+        fh.initialize();
         fis = null;
         form = null;
-        
+
         if (instancePath != null) {
             fh.importData(instancePath);
         }
-        
+
         return fh;
     }
 

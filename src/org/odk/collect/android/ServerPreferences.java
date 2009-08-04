@@ -48,7 +48,8 @@ public class ServerPreferences extends PreferenceActivity implements
                 (EditTextPreference) this.getPreferenceScreen().findPreference("UploadServer");
         etp.setSummary(etp.getText());
     }
-    
+
+
     private void updateFileTypeView() {
         ListPreference lp =
                 (ListPreference) this.getPreferenceScreen().findPreference("list_file_type");

@@ -31,7 +31,7 @@ import android.os.AsyncTask;
  * Background task for downloading forms from a url.
  * 
  * @author carlhartung
- *
+ * 
  */
 class FormDownloadTask extends AsyncTask<String, String, Boolean> {
     FormDownloaderListener mStateListener;
@@ -52,28 +52,28 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
         }
 
         try {
-        // prevent deadlock when connection is invalid
-        URLConnection c = u.openConnection();
-        c.setConnectTimeout(SharedConstants.CONNECTION_TIMEOUT);
-        c.setReadTimeout(SharedConstants.CONNECTION_TIMEOUT);
+            // prevent deadlock when connection is invalid
+            URLConnection c = u.openConnection();
+            c.setConnectTimeout(SharedConstants.CONNECTION_TIMEOUT);
+            c.setReadTimeout(SharedConstants.CONNECTION_TIMEOUT);
 
-        InputStream is = c.getInputStream();
+            InputStream is = c.getInputStream();
 
-        String filename = u.getFile();
-        filename = filename.substring(filename.lastIndexOf('/') + 1);
+            String filename = u.getFile();
+            filename = filename.substring(filename.lastIndexOf('/') + 1);
 
-        if (filename.matches(SharedConstants.VALID_FILENAME)) {
-            File f = new File(SharedConstants.FORMS_PATH + "/" + filename);
-            OutputStream os = new FileOutputStream(f);
-            byte buf[] = new byte[1024];
-            int len;
-            while ((len = is.read(buf)) > 0)
-                os.write(buf, 0, len);
-            os.flush();
-            os.close();
-            is.close();
-        } 
-        }catch (IOException e) {
+            if (filename.matches(SharedConstants.VALID_FILENAME)) {
+                File f = new File(SharedConstants.FORMS_PATH + "/" + filename);
+                OutputStream os = new FileOutputStream(f);
+                byte buf[] = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0)
+                    os.write(buf, 0, len);
+                os.flush();
+                os.close();
+                is.close();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }

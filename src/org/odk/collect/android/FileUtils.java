@@ -33,7 +33,6 @@ import java.util.ArrayList;
  * 
  */
 public class FileUtils {
-
     private final static String t = "FileUtils";
 
 
@@ -90,6 +89,7 @@ public class FileUtils {
         }
     }
 
+
     public static boolean createFolder(String path) {
         if (storageReady()) {
             boolean made = true;
@@ -102,6 +102,7 @@ public class FileUtils {
             return false;
         }
     }
+
 
     public static boolean deleteFile(String path) {
         if (storageReady()) {

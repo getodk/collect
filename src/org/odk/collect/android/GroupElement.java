@@ -22,30 +22,32 @@ package org.odk.collect.android;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class GroupElement {
-    
-
     private String mGroupText;
     private int mRepeatCount;
     private boolean mRepeats;
 
+
     public GroupElement(String groupText, int repeatCount, boolean repeats) {
-       // Log.i(t,"called constructor");
         mGroupText = groupText;
         mRepeatCount = repeatCount;
         mRepeats = repeats;
     }
 
+
     public boolean isRepeat() {
         return mRepeats;
     }
+
 
     public void setRepeat(boolean repeats) {
         mRepeats = repeats;
     }
 
+
     public String getGroupText() {
         return mGroupText;
     }
+
 
     public int getRepeatCount() {
         return mRepeatCount;

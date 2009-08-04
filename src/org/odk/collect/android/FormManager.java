@@ -45,9 +45,7 @@ import android.widget.Toast;
 public class FormManager extends ListActivity implements FormDownloaderListener {
 
     private final String t = "Form Manager";
-
-    //private static final int DIALOG_ADD_FORM = 0;
-    //private static final int DIALOG_DELETE_FORM = 1;
+    
     private static final int PROGRESS_DIALOG = 2;
 
     // add or delete form
@@ -65,12 +63,10 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
-        
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
 
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
 
         mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
         if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED)
@@ -260,11 +256,8 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
 
     @Override
     protected void onPause() {
-        if (mAlertDialog != null && mAlertDialog.isShowing())
-            mAlertDialog.dismiss();
+        if (mAlertDialog != null && mAlertDialog.isShowing()) mAlertDialog.dismiss();
         super.onPause();
     }
-
-
 
 }

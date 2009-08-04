@@ -36,7 +36,6 @@ import android.widget.ListView;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormChooser extends ListActivity {
-
     private final String t = "FormChooser";
     private ArrayList<String> mFileList;
 
@@ -45,7 +44,7 @@ public class FormChooser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
-        
+
         setTheme(SharedConstants.APPLICATION_THEME);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
         setContentView(R.layout.filelister);
@@ -64,7 +63,6 @@ public class FormChooser extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-
         File f = new File(SharedConstants.FORMS_PATH + "/" + mFileList.get(position));
 
         Intent i = new Intent();

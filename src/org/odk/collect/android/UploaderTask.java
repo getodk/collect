@@ -38,12 +38,15 @@ import android.util.Log;
  */
 class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
     private final static String t = "UploaderTask";
+
     UploaderListener mStateListener;
     String uploadServer;
-    
+
+
     public void setUploadServer(String newServer) {
         uploadServer = newServer;
     }
+
 
     /*
      * (non-Javadoc)
@@ -53,33 +56,31 @@ class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
     protected ArrayList<String> doInBackground(String... values) {
         ArrayList<String> sent = new ArrayList<String>();
         for (int i = 0; i < values.length; i++) {
-            this.publishProgress(i+1, values.length);
- 
-            DefaultHttpClient httpclient = new DefaultHttpClient();            
+            this.publishProgress(i + 1, values.length);
+
+            DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpPost mypost = new HttpPost(uploadServer);
             File dir = new File(SharedConstants.ANSWERS_PATH + values[i]);
             File[] files = dir.listFiles();
-            if (files == null)
-                this.cancel(true);
-            
+            if (files == null) this.cancel(true);
+
             MultipartEntity entity = new MultipartEntity();
             Log.i(t, "# of files " + files.length);
-            
-            for(int j = 0; j < files.length; j++) {
+
+            for (int j = 0; j < files.length; j++) {
                 File f = files[j];
                 if (f.getName().endsWith(".xml")) {
                     Log.i(t, "adding xml file: " + f.getAbsolutePath());
                     entity.addPart("xml_submission_file", new FileBody(f));
-                }
-                else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
+                } else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
                     Log.i(t, "adding image file: " + f.getAbsolutePath());
                     entity.addPart(f.getName(), new FileBody(f));
                 } else {
                     Log.i(t, "unhandled file: " + f.getAbsolutePath());
                 }
-                
+
             }
-            
+
             mypost.setEntity(entity);
             HttpResponse response = null;
             try {
@@ -124,7 +125,10 @@ class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
     }
 
 
-
+    /*
+     * (non-Javadoc)
+     * @see android.os.AsyncTask#onProgressUpdate(Progress[])
+     */
     @Override
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {

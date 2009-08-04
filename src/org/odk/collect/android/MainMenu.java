@@ -35,7 +35,6 @@ import android.widget.Toast;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenu extends Activity {
-
     private static final String t = "MainMenu";
 
     // The request code for returning chosen form to main menu.
@@ -121,7 +120,6 @@ public class MainMenu extends Activity {
             case MENU_PREFERENCES:
                 // createPreferencesMenu();
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,14 +152,8 @@ public class MainMenu extends Activity {
                 ii.putExtra("instance", true);
                 startActivity(ii);
                 break;
-            case FORM_UPLOADER:
-                Toast.makeText(this.getApplicationContext(), "this worked", Toast.LENGTH_LONG)
-                        .show();
-                // String path =
-                // intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                // Intent in = new Intent(this, FormUploader.class);
-                // in.putExtra(SharedConstants.FILEPATH_KEY, path);
-                // startActivity(in);
+            default:
+                break;
         }
     }
 }

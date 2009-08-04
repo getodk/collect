@@ -41,13 +41,11 @@ import android.widget.SimpleCursorAdapter;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class InstanceChooser extends ListActivity {
-
     private final String t = "Instance Chooser";
     private ArrayList<String> mFileList;
     private static final int MENU_SET_SERVER = Menu.FIRST;
-    
-/*TODO:  This doesn't display any messages when there are no files*/
-    
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -58,26 +56,13 @@ public class InstanceChooser extends ListActivity {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
         setContentView(R.layout.filelister);
 
-        // start file lister with app name, path to search, display style
-        // super.initialize(getString(R.string.edit_data),
-        // SharedConstants.ANSWERS_PATH, 0);
-
-
         mFileList = FileUtils.getFilesAsArrayListRecursive(SharedConstants.ANSWERS_PATH);
         Collections.sort(mFileList);
-        
-        //ArrayAdapter<String> fileAdapter =
-        //        new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mFileList);
-        //setListAdapter(fileAdapter);
-        
-        //new
+
         refresh();
-        
+
         PreferenceManager.setDefaultValues(this, R.xml.saved_preferences, false);
-        
-
     }
-
 
 
     /**
@@ -85,8 +70,7 @@ public class InstanceChooser extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-
-        Cursor c = (Cursor)this.getListAdapter().getItem(position);
+        Cursor c = (Cursor) this.getListAdapter().getItem(position);
         String name = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILENAME));
         Log.e("carl", "doing " + name);
         File f = new File(SharedConstants.ANSWERS_PATH + "/" + name + "/" + name + ".xml");
@@ -97,7 +81,8 @@ public class InstanceChooser extends ListActivity {
 
         finish();
     }
-    
+
+
     /*
      * (non-Javadoc)
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
@@ -108,8 +93,8 @@ public class InstanceChooser extends ListActivity {
         menu.add(0, MENU_SET_SERVER, 0, "Display Settings");
         return true;
     }
-    
-    
+
+
     /*
      * (non-Javadoc)
      * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
@@ -125,30 +110,34 @@ public class InstanceChooser extends ListActivity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
-    
+
+
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onResume()
+     */
     @Override
     protected void onResume() {
         super.onResume();
         refresh();
     }
-    
+
+
     private void refresh() {
-        
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
         String status = p.getString("saved_list_file_type", "saved");
-        
+
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchNotes(status);
+        Cursor c = fda.fetchFiles(status);
         startManagingCursor(c);
 
-        String[] from = new String[] { FileDbAdapter.KEY_FILENAME };
-        int[] to = new int[] { android.R.id.text1 };
-        
-        Log.e("Carl", "mylist items");
+        String[] from = new String[] {FileDbAdapter.KEY_FILENAME};
+        int[] to = new int[] {android.R.id.text1};
+
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =
-            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
+                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
         setListAdapter(notes);
         fda.close();
     }

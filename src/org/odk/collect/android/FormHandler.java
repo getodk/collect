@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
-import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -33,10 +32,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.DataModelTree;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.core.services.IService;
 import org.javarosa.core.services.transport.ByteArrayPayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
-import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParser;
 
 import android.content.Context;
@@ -46,44 +43,32 @@ import android.util.Log;
 
 
 /**
- * Given a {@link FormDef}, enables form iteration.
+ * Given a {@link FormDef}, enables form iteration.  We intend to replace this method when the next
+ * version of JavaROSA implements a form handler.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormHandler {
-
     public final String t = "FormHandler";
 
     private FormDef mForm;
     private FormIndex mCurrentIndex;
     private int mQuestionCount;
-    
-    public FormHandler(FormDef formDef) {
-        // Log.i(t, "calling constructor");
 
+
+    public FormHandler(FormDef formDef) {
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
-
     }
 
 
-    public void initialize(Context context) {
-        
-        // load modules
-        new XFormsModule().registerModule(null);
-
-        // load services
-        Vector<IService> v = new Vector<IService>();
-        v.add(new PropertyManager(context));
-        JavaRosaServiceProvider.instance().initialize(v);
-
+    public void initialize() {
         // set evaluation context
         mForm.setEvaluationContext(new EvaluationContext());
 
         // initialize form
         mForm.initialize(true);
-
     }
 
 
@@ -145,6 +130,14 @@ public class FormHandler {
     }
 
 
+    /**
+     * This method uses a previous question answer to determine if we need to
+     * create a set of repeats. for example, if a question asked number of
+     * children and the user entered 5, this would create 5 repeats of children
+     * (this is all specified in the xform).
+     * 
+     * @param index
+     */
     private void createModelIfNecessary(FormIndex index) {
         if (index.isInForm()) {
             IFormElement e = getForm().getChild(index);
@@ -169,12 +162,14 @@ public class FormHandler {
     }
 
 
-
     public FormIndex getIndex() {
         return mCurrentIndex;
     }
 
 
+    /*
+     * Skips a prompt asking "add another repeat?"
+     */
     private boolean isNoAsk(FormIndex index) {
         Vector<IFormElement> defs = getIndexVector(index);
         IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
@@ -250,6 +245,9 @@ public class FormHandler {
     }
 
 
+    /**
+     * returns the PrompElement for the current index.
+     */
     public PromptElement currentPrompt() {
         if (indexIsGroup(mCurrentIndex))
             return new PromptElement(getGroups());
@@ -349,9 +347,11 @@ public class FormHandler {
             relevant = node.isRelevant(); // check instance flag first
         }
 
-        if (relevant) { // if instance flag/condition says relevant, we still
-            // have
-            // to check the <group>/<repeat> hierarchy
+        if (relevant) {
+            /* 
+             * if instance flag/condition says relevant, we still have check the <group>/<repeat> hierarchy 
+             * 
+             */
             FormIndex ancestorIndex = null;
             FormIndex cur = null;
             FormIndex qcur = questionIndex;
@@ -469,15 +469,7 @@ public class FormHandler {
         return mForm.getTitle();
     }
 
-
-    /*
-     * public void setSourcePath(String path) { mSourcePath = path; }
-     * 
-     * 
-     * public String getSourcePath() { return mSourcePath; }
-     */
-
-
+    
     /**
      * Runs post processing handlers. Necessary to get end time.
      */
@@ -496,13 +488,6 @@ public class FormHandler {
         // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(new File(filePath));
 
-      /*  DataModelTree savedRoot = XFormParser.restoreDataModel(fileBytes, null);
-        mForm.setDataModel(savedRoot);
-        return true;
-        */
-        
-        
-        
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
@@ -520,78 +505,11 @@ public class FormHandler {
 
             // populated model to current form
             mForm.setDataModel(new DataModelTree(templateRoot));
-  
+
             return true;
         }
-        
-        
-
     }
 
-//
-//    /**
-//     * Loop through the data model and moves binary files into the answer
-//     * folder. Also replace Android specific URI's with filenames.
-//     */
-//    private boolean exportBinaryFiles(String answerPath, Context context) {
-//
-//        Uri u;
-//        Cursor c;
-//        String s;
-//
-//        // move index to the beginning
-//        FormIndex fi = FormIndex.createBeginningOfFormIndex();
-//        fi = nextIndexForCount(fi);
-//
-//        // loop through entire data model.
-//        while (!fi.isEndOfFormIndex()) {
-//
-//            if (!indexIsGroup(fi)) {
-//
-//                // we have a question
-//                PromptElement pe = new PromptElement(fi, mForm, null);
-//
-//                // select only binary files with android specific uri
-//                if ((pe.getAnswerType() == Constants.DATATYPE_BINARY
-//                        || pe.getQuestionType() == Constants.CONTROL_IMAGE_CHOOSE
-//                        || pe.getQuestionType() == Constants.CONTROL_AUDIO_CAPTURE || pe
-//                        .getQuestionType() == Constants.CONTROL_VIDEO_CAPTURE)
-//                        && pe.getAnswerObject() != null) {
-//
-//                    // get uri
-//                    u = Uri.parse(pe.getAnswerText());
-//                    c = context.getContentResolver().query(u, null, null, null, null);
-//                    c.moveToFirst();
-//
-//                    // get the file path and move it to the answer folder
-//                    File f = new File(c.getString(c.getColumnIndex("_data")));
-//                    s = c.getString(c.getColumnIndex("_display_name"));
-//                    boolean move = f.renameTo(new File(answerPath + "/" + s));
-//
-//                    // is move successful?
-//                    if (move) {
-//
-//                        // remove the database entry
-//                        context.getContentResolver().delete(u, null, null);
-//
-//                        // replace the answer
-//                        saveAnswer(pe, new StringData(s), false);
-//
-//                    } else {
-//
-//                        Log.e(t, "Could not move " + pe.getAnswerText());
-//                        return false;
-//                    }
-//
-//                }
-//            }
-//
-//            // next element
-//            fi = nextIndexForCount(fi);
-//        }
-//
-//        return true;
-//    }
 
 
     /**
@@ -628,40 +546,37 @@ public class FormHandler {
             e.printStackTrace();
             return false;
         }
-
     }
 
 
     /**
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
-    @SuppressWarnings("unchecked")
     public boolean exportData(String answerPath, Context context, boolean done) {
-
         ByteArrayPayload payload;
-        
+
         FileDbAdapter fda = new FileDbAdapter(context);
         fda.open();
         File f = new File(answerPath);
-        Cursor c = fda.fetchNote(f.getName());
+        Cursor c = fda.fetchFile(f.getName());
         if (!done) {
             if (c != null && c.getCount() == 0) {
-                fda.createNote(f.getName(), "saved");
+                fda.createFile(f.getName(), "saved");
             } else {
-                fda.updateNote(f.getName(), "saved");
+                fda.updateFile(f.getName(), "saved");
             }
         } else {
             if (c != null && c.getCount() == 0) {
-                fda.createNote(f.getName(), "done");
-                
+                fda.createFile(f.getName(), "done");
+
             } else {
-                fda.updateNote(f.getName(), "done");
+                fda.updateFile(f.getName(), "done");
             }
         }
         fda.close();
 
         try {
-            
+
             // assume no binary data inside the model.
             DataModelTree datamodel = mForm.getDataModel();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
@@ -676,8 +591,6 @@ public class FormHandler {
             e.printStackTrace();
             return false;
         }
-
-
     }
 
 

@@ -34,17 +34,17 @@ public class SharedConstants {
      * Request code for returning image capture data from camera intent.
      */
     public static final int BARCODE_CAPTURE = 2;
-    
+
     /**
      * Request code for returning audio data from mediarecorder intent.
      */
     public static final int AUDIO_CAPTURE = 3;
-    
+
     /**
      * Request code for returning video data from mediarecorder intent.
      */
     public static final int VIDEO_CAPTURE = 4;
-    
+
     /**
      * Answer saved with no errors.
      */
@@ -100,8 +100,9 @@ public class SharedConstants {
      * Default font size in entire application
      */
     public final static int APPLICATION_FONTSIZE = 10;
-    
-    // TODO (carlhartung):  we may need this.  Keeping it until I'm done implementing audio/video.
+
+    // TODO (carlhartung): we may need this. Keeping it until I'm done
+    // implementing audio/video.
     /*public final static boolean createTempDirectory(Context context, String className) {
         File tempdir = new File(SharedConstants.TMPFILE_PATH);
         if (!tempdir.exists()) {

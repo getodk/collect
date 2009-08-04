@@ -41,7 +41,6 @@ import android.widget.TextView;
  */
 
 public class QuestionView extends ScrollView {
-
     private final static String t = "QuestionView";
 
     private IQuestionWidget mQuestionWidget;
@@ -54,7 +53,6 @@ public class QuestionView extends ScrollView {
     public QuestionView(Context context, PromptElement prompt, String answerspath) {
         super(context);
 
-        // Log.i(t, "calling constructor");
         this.mPrompt = prompt;
         this.mAnswersPath = answerspath;
     }
@@ -91,6 +89,7 @@ public class QuestionView extends ScrollView {
         return mQuestionWidget.getAnswer();
     }
 
+
     public void setBinaryData(Object answer) {
         if (mQuestionWidget instanceof IBinaryWidget)
             ((IBinaryWidget) mQuestionWidget).setBinaryData(answer);
@@ -124,7 +123,6 @@ public class QuestionView extends ScrollView {
                 }
                 s += " > ";
             }
-
         }
 
         // build view

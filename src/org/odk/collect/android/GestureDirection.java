@@ -23,8 +23,7 @@ package org.odk.collect.android;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class GestureDirection {
-    
-    //private final static String t = "GestureDirection";
+    private final static String t = "GestureDirection";
 
     enum UserGesture {
         SWIPE_RIGHT, SWIPE_LEFT, SWIPE_UP, SWIPE_DOWN, SWIPE_UNKNOWN
@@ -40,8 +39,6 @@ public class GestureDirection {
 
 
     public GestureDirection(float x, float y) {
-        //Log.i(t,"called constructor");
-
         mStartX = x;
         mStartY = y;
         mEndX = x;

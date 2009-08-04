@@ -37,7 +37,8 @@ public class SavedPreferences extends PreferenceActivity implements
             updateFileTypeView();
         }
     }
-    
+
+
     private void updateFileTypeView() {
         ListPreference lp =
                 (ListPreference) this.getPreferenceScreen().findPreference("saved_list_file_type");

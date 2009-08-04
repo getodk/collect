@@ -38,8 +38,7 @@ import org.javarosa.formmanager.view.FormElementBinding;
  */
 
 public class PromptElement {
-
-   // private final static String t = "PromptElement";
+    // private final static String t = "PromptElement";
 
     // object to access question and answer data
     private FormElementBinding mBinding;
@@ -52,21 +51,15 @@ public class PromptElement {
 
 
     public PromptElement(Vector<GroupElement> groups) {
-        //Log.i(t,"calling constructor");
-
         mGroups = groups;
         isRepeat = true;
     }
 
 
     public PromptElement(FormIndex formIndex, FormDef formDef, Vector<GroupElement> groups) {
-        //Log.i(t,"calling constructor");
-
         mBinding = new FormElementBinding(null, formIndex, formDef);
         mGroups = groups;
         isRepeat = false;
-        
-        
     }
 
 
@@ -78,21 +71,21 @@ public class PromptElement {
     public QuestionDef getQuestionDef() {
         return (QuestionDef) mBinding.element;
     }
-    
-    
+
+
     /**
      * The instance name (question id) and the repeat count
      */
     public String getInstanceId() {
-       int count = getLastRepeatCount()+1;
-       if (count < 1) {
-           return mBinding.instanceNode.getName();
-       } else {
-           return mBinding.instanceNode.getName()+count;
-       }
+        int count = getLastRepeatCount() + 1;
+        if (count < 1) {
+            return mBinding.instanceNode.getName();
+        } else {
+            return mBinding.instanceNode.getName() + count;
+        }
     }
-    
-    
+
+
     /**
      * The data type of the answer (input, upload, etc)
      */
@@ -116,12 +109,14 @@ public class PromptElement {
         return mBinding.instanceNode.required;
     }
 
+
     /**
      * Is this question read only?
      */
     public boolean isReadonly() {
         return !mBinding.instanceNode.isEnabled();
     }
+
 
     /**
      * @see TreeReference
@@ -194,6 +189,7 @@ public class PromptElement {
         return (((QuestionDef) mBinding.element).getLongText());
     }
 
+
     /**
      * The help text of question in the prompt.
      */
@@ -201,7 +197,7 @@ public class PromptElement {
         return (((QuestionDef) mBinding.element).getHelpText());
     }
 
-    
+
     /**
      * The repeat count of closest group the prompt belongs to.
      */
@@ -222,25 +218,25 @@ public class PromptElement {
         }
         return null;
     }
-    
+
+
     /**
      * The name of the closest group that repeats or null.
      */
     public String getLastRepeatedGroupName() {
         for (GroupElement g : mGroups) {
-            if (g.isRepeat())
-                return g.getGroupText();
+            if (g.isRepeat()) return g.getGroupText();
         }
         return null;
     }
-    
+
+
     /**
      * The count of the closest group that repeats or -1.
      */
     public int getLastRepeatedGroupRepeatCount() {
         for (GroupElement g : mGroups) {
-            if (g.isRepeat())
-                return g.getRepeatCount();            
+            if (g.isRepeat()) return g.getRepeatCount();
         }
         return -1;
     }
@@ -265,21 +261,20 @@ public class PromptElement {
         }
         return null;
     }
-    
-    
+
+
     /**
      * Is the prompt a repeat dialog?
      */
     public boolean isRepeat() {
         return isRepeat;
     }
-    
+
+
     public boolean isInRepeatableGroup() {
-        if (mGroups.isEmpty())
-            return false;
+        if (mGroups.isEmpty()) return false;
         for (GroupElement group : mGroups) {
-            if (group.isRepeat())
-                return true;
+            if (group.isRepeat()) return true;
         }
         return false;
     }

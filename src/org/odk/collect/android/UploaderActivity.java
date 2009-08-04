@@ -32,7 +32,7 @@ import android.widget.Toast;
  * Activity to upload completed forms.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
- *
+ * 
  */
 public class UploaderActivity extends Activity implements UploaderListener {
 
@@ -66,7 +66,8 @@ public class UploaderActivity extends Activity implements UploaderListener {
             showDialog(PROGRESS_DIALOG);
             mUploaderTask = new UploaderTask();
             SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
-            String server = p.getString("UploadServer", "http://opendatakit.appspot.com/submission");
+            String server =
+                    p.getString("UploadServer", "http://opendatakit.appspot.com/submission");
             Log.e(t, "Uploading to server: " + server);
             mUploaderTask.setUploadServer(server);
             numUploading = toUpload.size();
@@ -75,19 +76,23 @@ public class UploaderActivity extends Activity implements UploaderListener {
             Log.e("testing", "already running");
         }
     }
-    
-    
 
 
-@Override
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+     */
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         numUploading = savedInstanceState.getInt("uploading");
     }
 
 
-
-
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -95,22 +100,20 @@ public class UploaderActivity extends Activity implements UploaderListener {
     }
 
 
-
-
     /*
- * (non-Javadoc)
- * @see android.app.Activity#onRetainNonConfigurationInstance()
- */
+    * (non-Javadoc)
+    * @see android.app.Activity#onRetainNonConfigurationInstance()
+    */
     @Override
     public Object onRetainNonConfigurationInstance() {
         return mUploaderTask;
     }
 
 
-/*
- * (non-Javadoc)
- * @see android.app.Activity#onDestroy()
- */
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onDestroy()
+     */
     @Override
     protected void onDestroy() {
         mUploaderTask.setUploaderListener(null);
@@ -118,10 +121,10 @@ public class UploaderActivity extends Activity implements UploaderListener {
     }
 
 
-/*
- * (non-Javadoc)
- * @see android.app.Activity#onResume()
- */
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onResume()
+     */
     @Override
     protected void onResume() {
         if (mUploaderTask != null) mUploaderTask.setUploaderListener(this);
@@ -129,38 +132,39 @@ public class UploaderActivity extends Activity implements UploaderListener {
     }
 
 
-/*
- * (non-Javadoc)
- * @see org.odk.collect.android.UploaderListener#uploadingComplete()
- */
+    /*
+     * (non-Javadoc)
+     * @see org.odk.collect.android.UploaderListener#uploadingComplete()
+     */
     public void uploadingComplete(ArrayList<String> result) {
-        // TODO: his needs to be changed.  If the uploadingComplete() happens when the activity is in the background
-        // this won't work.  don't change the orientation.  fix coming soon.
+        // TODO: his needs to be changed. If the uploadingComplete() happens
+        // when the activity is in the background
+        // this won't work. don't change the orientation. fix coming soon.
         Log.e("carl", "results = " + result.size() + " and numuploading = " + numUploading);
         if (result.size() == numUploading) {
             Toast.makeText(this, "Uploads Completed Successfully!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, 
-                    numUploading-result.size() + " of " + numUploading + " uploads failed",
+            Toast.makeText(this,
+                    numUploading - result.size() + " of " + numUploading + " uploads failed",
                     Toast.LENGTH_LONG).show();
         }
-        
+
         FileDbAdapter fda = new FileDbAdapter(this);
         for (int i = 0; i < result.size(); i++) {
             String s = result.get(i);
             fda.open();
-            fda.updateNote(s, "submitted");
+            fda.updateFile(s, "submitted");
             fda.close();
         }
-        
+
         finish();
     }
 
 
-/*
- * (non-Javadoc)
- * @see org.odk.collect.android.UploaderListener#progressUpdate(int, int)
- */
+    /*
+     * (non-Javadoc)
+     * @see org.odk.collect.android.UploaderListener#progressUpdate(int, int)
+     */
     public void progressUpdate(int progress, int total) {
         mProgressDialog.setMax(total);
         mProgressDialog.setProgress(progress);
@@ -193,7 +197,5 @@ public class UploaderActivity extends Activity implements UploaderListener {
         }
         return null;
     }
-
-
 
 }
