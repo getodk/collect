@@ -684,12 +684,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog.setMessage(constraintText);
         DialogInterface.OnClickListener constraintListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                mBeenSwiped = false;
+                // do nothing.  should pry remove this.
             }
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), constraintListener);
         mAlertDialog.show();
+        mBeenSwiped = false;
     }
 
 
@@ -715,13 +716,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         showNextView();
                         break;
                 }
-                mBeenSwiped = false;
             }
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.yes), repeatListener);
         mAlertDialog.setButton2(getString(R.string.no), repeatListener);
         mAlertDialog.show();
+        mBeenSwiped = false;
     }
 
 
