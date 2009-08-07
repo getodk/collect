@@ -29,5 +29,5 @@ the License.
     android:minHeight="20dip" 
     android:maxHeight="20dip"
     android:layout_alignParentBottom="true" />
-
+    
 </RelativeLayout>

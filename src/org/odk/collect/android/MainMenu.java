@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Also
@@ -39,7 +38,7 @@ public class MainMenu extends Activity {
 
     // The request code for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
-    private static final int INSTANCE_CHOOSER = 1;
+    private static final int INSTANCE_CHOOSER_TABS = 1;
     private static final int FORM_UPLOADER = 2;
 
     public static final int MENU_PREFERENCES = Menu.FIRST;
@@ -87,8 +86,10 @@ public class MainMenu extends Activity {
         Button editdata = (Button) findViewById(R.id.editdata);
         editdata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceChooser.class);
-                startActivityForResult(i, INSTANCE_CHOOSER);
+                Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
+                Log.e("yaw", "starting activity looking for " + INSTANCE_CHOOSER_TABS);
+                //i.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                startActivityForResult(i, INSTANCE_CHOOSER_TABS);
             }
         });
     }
@@ -130,9 +131,12 @@ public class MainMenu extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
+        Log.i("yaw", "mainmenu "+requestCode+" "+resultCode+" "+intent);
+
+
 
         if (resultCode == RESULT_CANCELED) {
+            Log.e("carl", "cancelled");
             // The request was canceled, so do nothing.
             return;
         }
@@ -145,7 +149,8 @@ public class MainMenu extends Activity {
                 i.putExtra(SharedConstants.FILEPATH_KEY, s);
                 startActivity(i);
                 break;
-            case INSTANCE_CHOOSER:
+            case INSTANCE_CHOOSER_TABS:
+                Log.e("carl", "got something from instance chooser tabs");
                 String si = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 Intent ii = new Intent(this, FormEntry.class);
                 ii.putExtra(SharedConstants.FILEPATH_KEY, si);
@@ -155,5 +160,6 @@ public class MainMenu extends Activity {
             default:
                 break;
         }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 }

@@ -16,22 +16,18 @@
 
 package org.odk.collect.android;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -43,7 +39,7 @@ import android.widget.SimpleCursorAdapter;
 public class InstanceChooser extends ListActivity {
     private final String t = "Instance Chooser";
     private ArrayList<String> mFileList;
-    private static final int MENU_SET_SERVER = Menu.FIRST;
+   // private static final int MENU_SET_SERVER = Menu.FIRST;
 
 
     @Override
@@ -61,7 +57,7 @@ public class InstanceChooser extends ListActivity {
 
         refresh();
 
-        PreferenceManager.setDefaultValues(this, R.xml.saved_preferences, false);
+      //  PreferenceManager.setDefaultValues(this, R.xml.saved_preferences, false);
     }
 
 
@@ -87,18 +83,19 @@ public class InstanceChooser extends ListActivity {
      * (non-Javadoc)
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
-    @Override
+    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_SET_SERVER, 0, "Display Settings");
         return true;
-    }
+    } */
 
 
     /*
      * (non-Javadoc)
      * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
      */
+    /*
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
@@ -110,7 +107,7 @@ public class InstanceChooser extends ListActivity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
-
+*/
 
     /*
      * (non-Javadoc)
@@ -124,8 +121,9 @@ public class InstanceChooser extends ListActivity {
 
 
     private void refresh() {
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
-        String status = p.getString("saved_list_file_type", "saved");
+       // SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+        Intent i = getIntent();
+        String status = i.getStringExtra("status");
 
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
@@ -142,5 +140,12 @@ public class InstanceChooser extends ListActivity {
         fda.close();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        Log.i("yaw", "oar instancechooser");
+
+
+    }
 
 }

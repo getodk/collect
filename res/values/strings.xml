@@ -110,5 +110,9 @@ the License.
 	<string name="clear_answer">Clear Answer</string>
 	<string name="quit_entry">Save and Exit</string>
 	<string name="change_language">Change Language</string>
+	
+	<string name="saved_data">Saved</string>
+	<string name="completed_data">Completed</string>
+	<string name="edit_saved_completed_data">Edit Saved or Completed Data</string>
 
 </resources>

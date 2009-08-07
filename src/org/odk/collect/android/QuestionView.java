@@ -22,6 +22,7 @@ import org.odk.collect.android.widgets.IQuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -157,6 +158,7 @@ public class QuestionView extends ScrollView {
     private void AddHelpText() {
         TextView tv = new TextView(getContext());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
+        tv.setTypeface(null, Typeface.ITALIC);
         tv.setPadding(0, 0, 0, 7);
         // wrap to the widget of view
         tv.setHorizontallyScrolling(false);
