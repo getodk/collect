@@ -835,7 +835,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         PromptElement p = FormEntry.this.mFormHandler.currentPrompt();
                         int saveStatus =
                                 mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView)
-                                        .getAnswer(), false);
+                                        .getAnswer(), true);
                         if (saveStatus != SharedConstants.ANSWER_OK) {
                             createConstraintDialog(p, saveStatus);
                             return;
