@@ -68,12 +68,11 @@ public class InstanceChooser extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Cursor c = (Cursor) this.getListAdapter().getItem(position);
         String name = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILENAME));
-        Log.e("carl", "doing " + name);
         File f = new File(SharedConstants.ANSWERS_PATH + "/" + name + "/" + name + ".xml");
 
         Intent i = new Intent();
         i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());
-        setResult(RESULT_OK, i);
+        getParent().setResult(RESULT_OK, i);
 
         finish();
     }
@@ -143,9 +142,6 @@ public class InstanceChooser extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Log.i("yaw", "oar instancechooser");
-
-
     }
 
 }

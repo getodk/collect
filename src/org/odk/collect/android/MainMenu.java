@@ -87,8 +87,6 @@ public class MainMenu extends Activity {
         editdata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
-                Log.e("yaw", "starting activity looking for " + INSTANCE_CHOOSER_TABS);
-                //i.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivityForResult(i, INSTANCE_CHOOSER_TABS);
             }
         });
@@ -131,12 +129,8 @@ public class MainMenu extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.i("yaw", "mainmenu "+requestCode+" "+resultCode+" "+intent);
-
-
 
         if (resultCode == RESULT_CANCELED) {
-            Log.e("carl", "cancelled");
             // The request was canceled, so do nothing.
             return;
         }
@@ -150,7 +144,6 @@ public class MainMenu extends Activity {
                 startActivity(i);
                 break;
             case INSTANCE_CHOOSER_TABS:
-                Log.e("carl", "got something from instance chooser tabs");
                 String si = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 Intent ii = new Intent(this, FormEntry.class);
                 ii.putExtra(SharedConstants.FILEPATH_KEY, si);

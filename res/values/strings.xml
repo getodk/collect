@@ -28,7 +28,7 @@ the License.
 		for more options.</string>
 	<string name="enter_data_description">%s has been selected for data entry.</string>
 
-	<string name="edit_data">Review/Edit Saved Data</string>
+	<string name="edit_data">Review Saved Data</string>
 	<string name="send_data">Send Finished Data</string>
 	<string name="manage_forms">Manage Forms</string>
 
