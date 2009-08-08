@@ -28,13 +28,14 @@ the License.
 		for more options.</string>
 	<string name="enter_data_description">%s has been selected for data entry.</string>
 
-	<string name="edit_data">Edit Saved Data</string>
+	<string name="edit_data">Review/Edit Saved Data</string>
 	<string name="send_data">Send Finished Data</string>
 	<string name="manage_forms">Manage Forms</string>
 
 	<string name="loading_form">Loading form. Please wait...</string>
 
-	<string name="save_data">Save Data</string>
+	<string name="save_data">Save For Later</string>
+	<string name="save_complete">Mark Complete</string>
 	<string name="save_data_message">Please save to keep results.</string>
 	<string name="save_data_description">%s has been completed.</string>
 

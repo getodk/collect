@@ -58,6 +58,8 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
 
 
     public IAnswerData getAnswer() {
+        // clear focus first so the datewidget gets the value in the text box
+        mDatePicker.clearFocus();
         Date d = new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(), mDatePicker.getDayOfMonth());
         return new DateData(d);
     }

@@ -16,6 +16,18 @@
 
 package org.odk.collect.android;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
+import java.util.regex.Pattern;
+
+import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.services.IService;
+import org.javarosa.model.xform.XFormsModule;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -44,17 +56,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Vector;
-import java.util.regex.Pattern;
-
-import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.services.IService;
-import org.javarosa.model.xform.XFormsModule;
 
 
 /**
@@ -156,7 +157,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         Pattern pattern = Pattern.compile(regex);
         String formname = pattern.split(path)[0];
         formname = formname.substring(formname.lastIndexOf("/") + 1);
-
+        
+       
         File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
         File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xhtml");
 
@@ -461,8 +463,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 ((TextView) nextView.findViewById(R.id.description)).setText(getString(
                         R.string.save_data_description, mFormHandler.getFormTitle()));
 
-                // create save data dialog box
-                ((Button) nextView.findViewById(R.id.submit))
+                // create save complete dialog box
+                ((Button) nextView.findViewById(R.id.save_complete))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
@@ -480,6 +482,25 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                 }
                             }
                         });
+                
+                ((Button) nextView.findViewById(R.id.save_exit))
+                .setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        // Form is markd as 'saved' here.
+                        mFormHandler.finalizeDataModel();
+                        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(),
+                                false)) {
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
+                                    .show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.data_saved_error),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 break;
             case QUESTION_VIEW:
                 nextView = new QuestionView(this, prompt, mAnswersPath);
@@ -583,8 +604,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         // constraints.
         if (isQuestionView() && save) {
             PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-            if (!p.isReadonly()) {
-                mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), false);
+            int saveStatus =
+                    mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), true);
+            if (saveStatus != SharedConstants.ANSWER_OK) {
+                createConstraintDialog(p, saveStatus);
+                return;
             }
         }
 
@@ -808,8 +832,17 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        saveData();
-                        finish();
+                        PromptElement p = FormEntry.this.mFormHandler.currentPrompt();
+                        int saveStatus =
+                                mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView)
+                                        .getAnswer(), true);
+                        if (saveStatus != SharedConstants.ANSWER_OK) {
+                            createConstraintDialog(p, saveStatus);
+                            return;
+                        } else {
+                            saveData();
+                            finish();
+                        }
                         break;
                     case DialogInterface.BUTTON2: // no
                         break;
