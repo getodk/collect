@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -51,8 +52,9 @@ public class FormChooser extends ListActivity {
 
         mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
         if (mFileList == null) {
-            this.setContentView(R.layout.sdcarderror);
-            return;
+            mFileList = new ArrayList();
+            TextView t = (TextView)this.findViewById(android.R.id.empty);
+            t.setText("SD Card error.  Not present or corrupt.");
         }
         Collections.sort(mFileList);
 
