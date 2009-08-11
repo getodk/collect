@@ -40,6 +40,12 @@ public class FileUtils {
         ArrayList<String> mFileList = new ArrayList<String>();
         File root = new File(path);
 
+        if (!storageReady())
+            return null;
+        if (!root.exists()){
+            if (!createFolder(path))
+                return null;
+        }
         if (root.isDirectory()) {
             File[] children = root.listFiles();
             for (File child : children) {

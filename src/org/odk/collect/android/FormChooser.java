@@ -50,6 +50,10 @@ public class FormChooser extends ListActivity {
         setContentView(R.layout.filelister);
 
         mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        if (mFileList == null) {
+            this.setContentView(R.layout.sdcarderror);
+            return;
+        }
         Collections.sort(mFileList);
 
         ArrayAdapter<String> fileAdapter =
