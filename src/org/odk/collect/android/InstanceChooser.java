@@ -39,7 +39,6 @@ import java.util.Collections;
 public class InstanceChooser extends ListActivity {
     private final String t = "Instance Chooser";
     private ArrayList<String> mFileList;
-   // private static final int MENU_SET_SERVER = Menu.FIRST;
 
 
     @Override
@@ -48,7 +47,6 @@ public class InstanceChooser extends ListActivity {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
 
-        setTheme(SharedConstants.APPLICATION_THEME);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
         setContentView(R.layout.filelister);
 
@@ -57,7 +55,6 @@ public class InstanceChooser extends ListActivity {
 
         refresh();
 
-      //  PreferenceManager.setDefaultValues(this, R.xml.saved_preferences, false);
     }
 
 
@@ -120,7 +117,6 @@ public class InstanceChooser extends ListActivity {
 
 
     private void refresh() {
-       // SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
         Intent i = getIntent();
         String status = i.getStringExtra("status");
 

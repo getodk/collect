@@ -50,7 +50,6 @@ public class MainMenu extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        setTheme(SharedConstants.APPLICATION_THEME);
 
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
@@ -69,7 +68,7 @@ public class MainMenu extends Activity {
         Button manageforms = (Button) findViewById(R.id.manageform);
         manageforms.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), FormManager.class);
+                Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
                 startActivity(i);
             }
         });

@@ -95,6 +95,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         mStringAnswer = new TextView(getContext());
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
+
         String s = prompt.getAnswerText();
         if (s != null) {
             mStringAnswer.setText(s);
@@ -111,5 +112,11 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         mStringAnswer.setText((String) answer);
 
     }
+
+
+    public void setFocus() {
+
+    }
+
 
 }

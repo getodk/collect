@@ -30,27 +30,23 @@ import android.widget.TextView;
  * An example of tab content that launches an activity via
  * {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
  */
-public class InstanceChooserTabs extends TabActivity {
+public class FormManagerTabs extends TabActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
 
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.BLACK);
 
-        Intent saved = new Intent(this, InstanceChooser.class);
-        saved.putExtra("status", "saved");
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.saved_data))
+        Intent saved = new Intent(this, LocalFormManager.class);
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_forms))
                 .setContent(saved));
 
-        Intent completed = new Intent(this, InstanceChooser.class);
-        completed.putExtra("status", "done");
-
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.completed_data))
-                .setContent(completed));
+        Intent completed = new Intent(this, RemoteFormManager.class);
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_forms)).setContent(completed));
 
         // hack to set font size
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);

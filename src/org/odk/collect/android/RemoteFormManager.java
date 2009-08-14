@@ -42,7 +42,7 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManager extends ListActivity implements FormDownloaderListener {
+public class RemoteFormManager extends ListActivity implements FormDownloaderListener {
 
     private final String t = "Form Manager";
     
@@ -50,7 +50,6 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
 
     // add or delete form
     private static final int MENU_ADD = Menu.FIRST;
-    private static final int MENU_DELETE = Menu.FIRST + 1;
 
     private String mDeleteForm;
     private AlertDialog mAlertDialog;
@@ -83,10 +82,10 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
     private void refresh() {
         mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
         ArrayAdapter<String> fileAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
                         mFileList);
         getListView().setItemsCanFocus(false);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         setListAdapter(fileAdapter);
     }
 
@@ -95,8 +94,6 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_ADD, 0, getString(R.string.add_form)).setIcon(
                 android.R.drawable.ic_menu_add);
-        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_form)).setIcon(
-                android.R.drawable.ic_menu_delete);
         return true;
     }
 
@@ -106,14 +103,6 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
         switch (item.getItemId()) {
             case MENU_ADD:
                 createAddDialog();
-                return true;
-            case MENU_DELETE:
-                if (getListView().getCheckedItemPosition() != -1) {
-                    createDeleteDialog();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.delete_error),
-                            Toast.LENGTH_SHORT).show();
-                }
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
@@ -164,7 +153,7 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
                         EditText et = (EditText) v.findViewById(R.id.add_url);
                         showDialog(PROGRESS_DIALOG);
                         mFormDownloadTask = new FormDownloadTask();
-                        mFormDownloadTask.setDownloaderListener(FormManager.this);
+//                        mFormDownloadTask.setDownloaderListener(LocalFormManager.this);
                         mFormDownloadTask.execute(et.getText().toString());
                         break;
                     case DialogInterface.BUTTON2: // cancel, do nothing
@@ -179,47 +168,6 @@ public class FormManager extends ListActivity implements FormDownloaderListener 
     }
 
 
-    /**
-     * Create the form delete dialog
-     */
-    private void createDeleteDialog() {
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mDeleteForm = mFileList.get(getListView().getCheckedItemPosition());
-        mAlertDialog.setMessage(getString(R.string.delete_confirm, mDeleteForm));
-        DialogInterface.OnClickListener dialogYesNoListener =
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int i) {
-                        switch (i) {
-                            case DialogInterface.BUTTON1: // yes, delete
-                                deleteSelectedForm();
-                                refresh();
-
-                                break;
-                            case DialogInterface.BUTTON2: // no, do nothing
-                                break;
-                        }
-                    }
-                };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.no), dialogYesNoListener);
-        mAlertDialog.show();
-    }
-
-
-    /**
-     * Deletes the selected form
-     */
-    private void deleteSelectedForm() {
-        boolean deleted = FileUtils.deleteFile(SharedConstants.FORMS_PATH + "/" + mDeleteForm);
-        if (deleted) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_ok, mDeleteForm), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_error, mDeleteForm), Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
     public void downloadingComplete(Boolean result) {

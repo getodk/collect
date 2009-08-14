@@ -24,6 +24,8 @@ import org.odk.collect.android.SharedConstants;
 import android.R;
 import android.content.Context;
 import android.text.InputType;
+import android.text.method.TextKeyListener;
+import android.text.method.TextKeyListener.Capitalize;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.EditText;
@@ -79,7 +81,8 @@ public class StringWidget extends EditText implements IQuestionWidget {
         }
 
         this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        this.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        //this.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        this.setKeyListener(new TextKeyListener(Capitalize.SENTENCES,false));
         
         // needed to make long readonly text scroll
         this.setHorizontallyScrolling(false);

@@ -46,7 +46,6 @@ public class FormChooser extends ListActivity {
         super.onCreate(savedInstanceState);
         Log.i(t, "called onCreate");
 
-        setTheme(SharedConstants.APPLICATION_THEME);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
         setContentView(R.layout.filelister);
 
