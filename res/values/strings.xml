@@ -117,6 +117,8 @@ the License.
 	<string name="submitted_data">Submitted</string>
 	<string name="local_forms">Local</string>
 	<string name="remote_forms">Remote</string>
+	<string name="long_hint_message">Press Menu button for the hint.</string>
+	 <string name="get_hint">Get Hint</string>
 	
 	<string name="edit_saved_completed_data">Edit Saved or Completed Data</string>
 

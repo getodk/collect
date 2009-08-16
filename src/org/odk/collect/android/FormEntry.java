@@ -72,6 +72,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
     private static final int MENU_QUIT = Menu.FIRST + 2;
     private static final int MENU_LANGUAGES = Menu.FIRST + 3;
+    private static final int MENU_HELP_TEXT = Menu.FIRST + 4;
+
 
     private static final int PROGRESS_DIALOG = 1;
 
@@ -324,6 +326,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 android.R.drawable.ic_menu_more);
         menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
                 android.R.drawable.ic_menu_save);
+        menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
+                android.R.drawable.ic_menu_help);
+
         return true;
     }
 
@@ -356,6 +361,16 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             } else {
                 menu.removeItem(MENU_DELETE_REPEAT);
             }
+            if (((QuestionView) mCurrentView).getPrompt().getHelpText() != null
+                    && ((QuestionView) mCurrentView).getPrompt().getHelpText().length() > 100) {
+                if (menu.findItem(MENU_HELP_TEXT) == null) {
+                    menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
+                            android.R.drawable.ic_menu_help);
+                }
+
+            } else {
+                menu.removeItem(MENU_HELP_TEXT);
+            }
             if (menu.findItem(MENU_QUIT) == null) {
                 menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
                         android.R.drawable.ic_menu_save);
@@ -365,6 +380,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             menu.removeItem(MENU_CLEAR);
             menu.removeItem(MENU_DELETE_REPEAT);
             menu.removeItem(MENU_QUIT);
+            menu.removeItem(MENU_HELP_TEXT);
+
         }
 
         return true;
@@ -384,6 +401,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return true;
             case MENU_CLEAR:
                 createClearDialog();
+                return true;
+            case MENU_HELP_TEXT:
+                createHelpDialog();
                 return true;
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
@@ -888,6 +908,29 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog.setButton2(getString(R.string.no), quitListener);
         mAlertDialog.show();
     }
+
+    /**
+     * Help text dialog
+     */
+    private void createHelpDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        String msg = ((QuestionView) mCurrentView).getPrompt().getHelpText();
+        msg = msg.replaceAll("\t", "");
+        mAlertDialog.setMessage(msg);
+        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case AlertDialog.BUTTON1:
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.ok), quitListener);
+        mAlertDialog.show();
+    }
+
 
 
     /**

@@ -156,17 +156,22 @@ public class QuestionView extends ScrollView {
      * Add a TextView containing the help text.
      */
     private void AddHelpText() {
-        TextView tv = new TextView(getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
-        tv.setTypeface(null, Typeface.ITALIC);
-        tv.setPadding(0, 0, 0, 7);
-        // wrap to the widget of view
-        tv.setHorizontallyScrolling(false);
-
         String s = mPrompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            tv.setText(s);
+            TextView tv = new TextView(getContext());
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
+            tv.setPadding(0, 0, 0, 7);
+            // wrap to the widget of view
+            tv.setHorizontallyScrolling(false);
+            if (s.length() <= 100) {
+                tv.setText(s);
+            } else {
+                tv.setText(R.string.long_hint_message);
+            }
+            tv.setTypeface(null, Typeface.ITALIC);
+            tv.setPressed(true);
+
             mView.addView(tv);
         }
     }
