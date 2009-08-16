@@ -186,7 +186,7 @@ public class PromptElement {
      * The text of question in the prompt.
      */
     public String getQuestionText() {
-        return (((QuestionDef) mBinding.element).getLongText());
+        return mBinding.form.fillTemplateString(((QuestionDef) mBinding.element).getLongText(),  mBinding.instanceRef);
     }
 
 
