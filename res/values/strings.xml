@@ -122,8 +122,8 @@ the License.
 	<string name="quit_entry">Save and Exit</string>
 	<string name="change_language">Change Language</string>
 	
-	<string name="saved_data">Saved</string>
-	<string name="completed_data">Completed</string>
+	<string name="saved_data">Saved (%s)</string>
+	<string name="completed_data">Completed (%s)</string>
 	<string name="submitted_data">Submitted</string>
 	<string name="local_forms">Local</string>
 	<string name="remote_forms">Remote</string>

@@ -32,9 +32,13 @@ import android.widget.TextView;
  */
 public class InstanceChooserTabs extends TabActivity {
 
+    private static int saved_count;
+    private static int done_count;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updateButtonCount();
 
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
 
@@ -43,13 +47,13 @@ public class InstanceChooserTabs extends TabActivity {
 
         Intent saved = new Intent(this, InstanceChooser.class);
         saved.putExtra("status", "saved");
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.saved_data))
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.saved_data, saved_count ))
                 .setContent(saved));
 
         Intent completed = new Intent(this, InstanceChooser.class);
         completed.putExtra("status", "done");
 
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.completed_data))
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.completed_data, done_count))
                 .setContent(completed));
 
         // hack to set font size
@@ -58,14 +62,21 @@ public class InstanceChooserTabs extends TabActivity {
 
         RelativeLayout rls = (RelativeLayout) tw.getChildAt(0);
         TextView tvs = (TextView) rls.getChildAt(1);
-        tvs.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
+        tvs.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 10);
         tvs.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlc = (RelativeLayout) tw.getChildAt(1);
         TextView tvc = (TextView) rlc.getChildAt(1);
-        tvc.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
+        tvc.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 10);
         tvc.setPadding(0, 0, 0, 6);
 
+    }
+    
+    private void updateButtonCount() {
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        saved_count = fda.fetchFiles("saved").getCount();
+        done_count = fda.fetchFiles("done").getCount();
     }
 
 
