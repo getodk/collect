@@ -20,7 +20,9 @@ the License.
 	<string name="form">form</string>
 
 	<string name="main_menu">Main Menu</string>
-	<string name="main_menu_message">Welcome to ODK Collect</string>
+	<string name="main_menu_message">ODK Collect v1.1</string>
+	 <string name="main_menu_details">making data collection a little easier</string>
+	
 
 	<string name="enter_data">Enter New Data</string>
 	<string name="enter_data_message">Slide your finger from right to left for the

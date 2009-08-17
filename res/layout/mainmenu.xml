@@ -21,13 +21,22 @@ the License.
   android:orientation="vertical"
   android:padding="5px" >
   
-  <!-- <TextView
+  <TextView
+    android:gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="1px"
+    android:paddingBottom="4px"
+    android:textSize="10pt"
+    android:text="@string/main_menu_message" />
+  
+  <TextView
     android:gravity="center"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingTop="1px"
     android:paddingBottom="6px"
-    android:text="@string/main_menu_message" /> -->
+    android:text="@string/main_menu_details" />
 
   <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
