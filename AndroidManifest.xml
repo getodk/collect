@@ -13,7 +13,7 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="1" android:versionName="1.0.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="2" android:versionName="1.1.0">
 <!-- Icon Credit: Tango Desktop Project -->
   <application android:icon="@drawable/paper_icon" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
   <activity android:name=".MainMenu" android:label="@string/app_name">
