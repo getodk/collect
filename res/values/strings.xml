@@ -25,14 +25,22 @@ the License.
 	
 
 	<string name="enter_data">Enter New Data</string>
+	 <string name="enter_data_button">Enter New Data (%s)</string>
+	
 	<string name="enter_data_message">Slide your finger from right to left for the
 		next question. Reverse the slide for the previous question. Press Menu
 		for more options.</string>
 	<string name="enter_data_description">%s has been selected for data entry.</string>
 
-	<string name="edit_data">Review Saved Data</string>
+	<string name="edit_data">Review Stored Data</string>
+	 <string name="edit_data_button">Review Stored Data (%s)</string>
+	
 	<string name="send_data">Send Finished Data</string>
+	  <string name="send_data_button">Send Finished Data (%s)</string>
+	
 	<string name="manage_forms">Manage Forms</string>
+	  <string name="manage_forms_button">Manage Forms (%s)</string>
+	
 
 	<string name="loading_form">Loading form. Please wait...</string>
 

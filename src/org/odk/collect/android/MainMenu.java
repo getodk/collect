@@ -18,6 +18,7 @@ package org.odk.collect.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -43,6 +44,10 @@ public class MainMenu extends Activity {
 
     public static final int MENU_PREFERENCES = Menu.FIRST;
 
+    private static int saved;
+    private static int done;
+    private static int available;
+
 
     /**
      * Create View with buttons to launch activities.
@@ -56,8 +61,11 @@ public class MainMenu extends Activity {
 
         setContentView(R.layout.mainmenu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
+        updateButtonCount();
+
 
         Button chooseform = (Button) findViewById(R.id.chooseform);
+        chooseform.setText(getString(R.string.enter_data_button, available));
         chooseform.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormChooser.class);
@@ -66,6 +74,7 @@ public class MainMenu extends Activity {
         });
 
         Button manageforms = (Button) findViewById(R.id.manageform);
+        manageforms.setText(getString(R.string.manage_forms));
         manageforms.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
@@ -74,6 +83,8 @@ public class MainMenu extends Activity {
         });
 
         Button senddata = (Button) findViewById(R.id.senddata);
+        senddata.setText(getString(R.string.send_data_button, done));
+
         senddata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), DataUploader.class);
@@ -83,12 +94,14 @@ public class MainMenu extends Activity {
         });
 
         Button editdata = (Button) findViewById(R.id.editdata);
+        editdata.setText(getString(R.string.edit_data_button, saved + done));
         editdata.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
                 startActivityForResult(i, INSTANCE_CHOOSER_TABS);
             }
         });
+
     }
 
 
@@ -154,6 +167,13 @@ public class MainMenu extends Activity {
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
-    
-   // private void update
+
+
+    private void updateButtonCount() {
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        saved = fda.fetchFiles("saved").getCount();
+        done = fda.fetchFiles("done").getCount();
+        available = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+    }
 }
