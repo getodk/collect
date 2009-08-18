@@ -18,7 +18,6 @@ package org.odk.collect.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -47,6 +46,12 @@ public class MainMenu extends Activity {
     private static int saved;
     private static int done;
     private static int available;
+    
+    Button mChooseFormButton;
+    Button mManageFormButton;
+    Button mSendDataButton;
+    Button mEditDataButton;
+    
 
 
     /**
@@ -61,31 +66,31 @@ public class MainMenu extends Activity {
 
         setContentView(R.layout.mainmenu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-        updateButtonCount();
+        
 
 
-        Button chooseform = (Button) findViewById(R.id.chooseform);
-        chooseform.setText(getString(R.string.enter_data_button, available));
-        chooseform.setOnClickListener(new OnClickListener() {
+        mChooseFormButton = (Button) findViewById(R.id.chooseform);
+        mChooseFormButton.setText(getString(R.string.enter_data_button, available));
+        mChooseFormButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormChooser.class);
                 startActivityForResult(i, FORM_CHOOSER);
             }
         });
 
-        Button manageforms = (Button) findViewById(R.id.manageform);
-        manageforms.setText(getString(R.string.manage_forms));
-        manageforms.setOnClickListener(new OnClickListener() {
+        mManageFormButton = (Button) findViewById(R.id.manageform);
+        mManageFormButton.setText(getString(R.string.manage_forms));
+        mManageFormButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
                 startActivity(i);
             }
         });
 
-        Button senddata = (Button) findViewById(R.id.senddata);
-        senddata.setText(getString(R.string.send_data_button, done));
+        mSendDataButton = (Button) findViewById(R.id.senddata);
+        mSendDataButton.setText(getString(R.string.send_data_button, done));
 
-        senddata.setOnClickListener(new OnClickListener() {
+        mSendDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), DataUploader.class);
                 startActivityForResult(i, FORM_UPLOADER);
@@ -93,9 +98,9 @@ public class MainMenu extends Activity {
 
         });
 
-        Button editdata = (Button) findViewById(R.id.editdata);
-        editdata.setText(getString(R.string.edit_data_button, saved + done));
-        editdata.setOnClickListener(new OnClickListener() {
+        mEditDataButton = (Button) findViewById(R.id.editdata);
+        mEditDataButton.setText(getString(R.string.edit_data_button, saved + done));
+        mEditDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
                 startActivityForResult(i, INSTANCE_CHOOSER_TABS);
@@ -167,6 +172,19 @@ public class MainMenu extends Activity {
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
+    
+    
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateButtonCount();
+        
+        mChooseFormButton.setText(getString(R.string.enter_data_button, available));
+        mSendDataButton.setText(getString(R.string.send_data_button, done));
+        mEditDataButton.setText(getString(R.string.edit_data_button, saved));
+    }
 
 
     private void updateButtonCount() {
@@ -175,5 +193,8 @@ public class MainMenu extends Activity {
         saved = fda.fetchFiles("saved").getCount();
         done = fda.fetchFiles("done").getCount();
         available = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+        fda.close();
     }
+    
+    
 }
