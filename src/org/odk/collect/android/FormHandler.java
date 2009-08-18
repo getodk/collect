@@ -73,15 +73,18 @@ public class FormHandler {
 
 
     /**
-     * Attempts to save the answer 'answer' into prompt.
+     * Attempts to save the answer 'answer' into prompt.  If evaluateConstraints is true
+     * then the answer won't be saved to the data model unless it passes all the constraints.  If it's
+     * false, any value can be saved to the data model.
      * 
      * @param prompt
      * @param answer
      */
-    public int saveAnswer(PromptElement prompt, IAnswerData answer, boolean validate) {
-        if (!mForm.evaluateConstraint(prompt.getInstanceRef(), answer) && validate) {
+    //TODO:  logic here? in ANSWER_REQUIRED_BUT_EMPTY
+    public int saveAnswer(PromptElement prompt, IAnswerData answer, boolean evaluateConstraints) {
+        if (!mForm.evaluateConstraint(prompt.getInstanceRef(), answer) && evaluateConstraints) {
             return SharedConstants.ANSWER_CONSTRAINT_VIOLATED;
-        } else if (prompt.isRequired() && answer == null && validate) {
+        } else if (prompt.isRequired() && answer == null && evaluateConstraints) {
             return SharedConstants.ANSWER_REQUIRED_BUT_EMPTY;
         } else {
             mForm.setValue(answer, prompt.getInstanceRef(), prompt.getInstanceNode());
@@ -573,6 +576,7 @@ public class FormHandler {
                 fda.updateFile(f.getName(), "done");
             }
         }
+        c.close();
         fda.close();
 
         try {

@@ -18,7 +18,6 @@ package org.odk.collect.android;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
@@ -74,7 +73,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private static final int MENU_LANGUAGES = Menu.FIRST + 3;
     private static final int MENU_HELP_TEXT = Menu.FIRST + 4;
 
-
     private static final int PROGRESS_DIALOG = 1;
 
     private ProgressBar mProgressBar;
@@ -83,7 +81,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private String mInstancePath;
 
     private GestureDetector mGestureDetector;
-    private FormHandler mFormHandler;
+    public static FormHandler mFormHandler;
 
     private Animation mInAnimation;
     private Animation mOutAnimation;
@@ -111,12 +109,34 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(t, "called onCreate");
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
-        initializeVariables();
+        // initialize view elements
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
 
+        // prevents swiping through a dialog
+        mBeenSwiped = false;
+
+        mAlertDialog = null;
+        mCurrentView = null;
+        mInAnimation = null;
+        mOutAnimation = null;
+        mInstancePath = null;
+
+        mGestureDetector = new GestureDetector();
+
+        // load JavaRosa modules
+        new XFormsModule().registerModule(null);
+
+        // load JavaRosa services
+        Vector<IService> v = new Vector<IService>();
+        v.add(new PropertyManager(getApplicationContext()));
+        JavaRosaServiceProvider.instance().initialize(v);
+
+
+        Boolean newForm = true;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(FORMPATH)) {
                 mFormPath = savedInstanceState.getString(FORMPATH);
@@ -124,23 +144,32 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             if (savedInstanceState.containsKey("answerpath")) {
                 mAnswersPath = savedInstanceState.getString("answerpath");
             }
+            if (savedInstanceState.containsKey("orientation")) {
+                newForm = savedInstanceState.getBoolean("orientation", true);
+            }
         }
 
+        // check to see if this is a screen flip or a new load
         Object data = getLastNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             mFormLoaderTask = (FormLoaderTask) data;
-        } else if (data instanceof FormHandler) {
-            mFormHandler = (FormHandler) data;
-            refreshCurrentView();
         } else if (data == null) {
-            // starting for the first time
+            if (!newForm) {
+                refreshCurrentView();
+                return;
+            }
+
+            // we need to load a new form.
+            mFormHandler = null;
+
             Intent intent = getIntent();
             if (intent != null) {
-                // restoring from saved form
                 if (intent.getBooleanExtra(("instance"), false)) {
+                    // loading saved form
                     mInstancePath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                    mFormPath = getFormPath(mInstancePath);
+                    mFormPath = getFormPathFromInstancePath(mInstancePath);
                 } else {
+                    // loading new form
                     mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 }
                 mFormLoaderTask = new FormLoaderTask();
@@ -151,15 +180,14 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
-    private String getFormPath(String path) {
-
+    private String getFormPathFromInstancePath(String instancePath) {
         // trim the date stamp off
         String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
         Pattern pattern = Pattern.compile(regex);
-        String formname = pattern.split(path)[0];
+        String formname = pattern.split(instancePath)[0];
         formname = formname.substring(formname.lastIndexOf("/") + 1);
-        
-       
+
+
         File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
         File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xhtml");
 
@@ -173,31 +201,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
-    /** Initializes all member variables */
-    public void initializeVariables() {
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
-
-        mAlertDialog = null;
-        mFormHandler = null;
-        mCurrentView = null;
-        mInAnimation = null;
-        mOutAnimation = null;
-        mBeenSwiped = false;
-        mInstancePath = null;
-
-        mGestureDetector = new GestureDetector();
-
-        // load modules
-        new XFormsModule().registerModule(null);
-
-        // load services
-        Vector<IService> v = new Vector<IService>();
-        v.add(new PropertyManager(getApplicationContext()));
-        JavaRosaServiceProvider.instance().initialize(v);
-    }
-
-
     /*
      * (non-Javadoc)
      * 
@@ -208,6 +211,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         super.onSaveInstanceState(outState);
         outState.putString(FORMPATH, mFormPath);
         outState.putString("answerpath", mAnswersPath);
+        outState.putBoolean("orientation", false);
     }
 
 
@@ -228,53 +232,38 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         switch (requestCode) {
             case (SharedConstants.IMAGE_CAPTURE):
-                PromptElement pi = ((QuestionView) mCurrentView).getPrompt();
-                if (!pi.isReadonly()) {
-                    File fi = new File(SharedConstants.TMPFILE_PATH);
-                    try {
-                        Uri ui =
-                                Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
-                                        getContentResolver(), fi.getAbsolutePath(), null, null));
-                        fi.delete();
-                        ((QuestionView) mCurrentView).setBinaryData(ui);
-                        mFormHandler.saveAnswer(pi, ((QuestionView) mCurrentView).getAnswer(),
-                                false);
+                File fi = new File(SharedConstants.TMPFILE_PATH);
+                try {
+                    Uri ui =
+                            Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
+                                    getContentResolver(), fi.getAbsolutePath(), null, null));
+                    fi.delete();
+                    ((QuestionView) mCurrentView).setBinaryData(ui);
+                    saveCurrentAnswer(false);
 
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                    refreshCurrentView();
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
+
+                refreshCurrentView();
                 break;
             case (SharedConstants.BARCODE_CAPTURE):
-                PromptElement pb = ((QuestionView) mCurrentView).getPrompt();
-                if (!pb.isReadonly()) {
-                    String s = intent.getStringExtra("SCAN_RESULT");
-                    ((QuestionView) mCurrentView).setBinaryData(s);
-                    mFormHandler.saveAnswer(pb, ((QuestionView) mCurrentView).getAnswer(), false);
-                }
+                String s = intent.getStringExtra("SCAN_RESULT");
+                ((QuestionView) mCurrentView).setBinaryData(s);
+                saveCurrentAnswer(false);
                 break;
             case SharedConstants.AUDIO_CAPTURE:
-                PromptElement pa = ((QuestionView) mCurrentView).getPrompt();
-                if (!pa.isReadonly()) {
-                    Uri ua = intent.getData();
-                    // save answer in data model
-                    ((QuestionView) mCurrentView).setBinaryData(ua);
-                    mFormHandler.saveAnswer(pa, ((QuestionView) mCurrentView).getAnswer(), false);
-                    refreshCurrentView();
-                }
+                Uri ua = intent.getData();
+                ((QuestionView) mCurrentView).setBinaryData(ua);
+                saveCurrentAnswer(false);
+                refreshCurrentView();
                 break;
             case SharedConstants.VIDEO_CAPTURE:
-                PromptElement pv = ((QuestionView) mCurrentView).getPrompt();
-                if (!pv.isReadonly()) {
-                    Uri uv = intent.getData();
-                    // save answer in data model
-                    ((QuestionView) mCurrentView).setBinaryData(uv);
-                    mFormHandler.saveAnswer(pv, ((QuestionView) mCurrentView).getAnswer(), false);
-                    refreshCurrentView();
-                }
+                Uri uv = intent.getData();
+                ((QuestionView) mCurrentView).setBinaryData(uv);
+                saveCurrentAnswer(false);
+                refreshCurrentView();
                 break;
         }
     }
@@ -383,7 +372,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             menu.removeItem(MENU_HELP_TEXT);
 
         }
-
         return true;
     }
 
@@ -428,6 +416,23 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    private boolean saveCurrentAnswer(boolean evaluateConstraints) {
+        PromptElement p = ((QuestionView) mCurrentView).getPrompt();
+
+        // if it's readonly there's nothing to save
+        if (!p.isReadonly()) {
+            int saveStatus =
+                    mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(),
+                            evaluateConstraints);
+            if (evaluateConstraints && saveStatus != SharedConstants.ANSWER_OK) {
+                createConstraintDialog(p, saveStatus);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     /*
      * (non-Javadoc)
      * 
@@ -441,14 +446,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
                 return mFormLoaderTask;
         }
-        if (mFormHandler != null && isQuestionView()) {
-            PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-            if (!p.isReadonly()) {
-                mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), true);
-            }
-        }
 
-        return mFormHandler;
+        if (mFormHandler != null && isQuestionView()) {
+            saveCurrentAnswer(true);
+        }
+        return null;
     }
 
 
@@ -482,44 +484,23 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 ((TextView) nextView.findViewById(R.id.description)).setText(getString(
                         R.string.save_data_description, mFormHandler.getFormTitle()));
 
-                // create save complete dialog box
+                // create save complete button
                 ((Button) nextView.findViewById(R.id.save_complete))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
-                                mFormHandler.finalizeDataModel();
-                                if (mFormHandler.exportData(mAnswersPath, getApplicationContext(),
-                                        true)) {
-                                    Toast.makeText(getApplicationContext(),
-                                            getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
-                                            .show();
-                                    finish();
-                                } else {
-                                    Toast.makeText(getApplicationContext(),
-                                            getString(R.string.data_saved_error),
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                                saveDataToDisk(true);
                             }
                         });
-                
+
+                // create save for later button
                 ((Button) nextView.findViewById(R.id.save_exit))
-                .setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        // Form is markd as 'saved' here.
-                        mFormHandler.finalizeDataModel();
-                        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(),
-                                false)) {
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.data_saved_ok), Toast.LENGTH_SHORT)
-                                    .show();
-                            finish();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.data_saved_error),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                        .setOnClickListener(new OnClickListener() {
+                            public void onClick(View v) {
+                                // Form is markd as 'saved' here.
+                                saveDataToDisk(false);
+                            }
+                        });
                 break;
             case QUESTION_VIEW:
                 nextView = new QuestionView(this, prompt, mAnswersPath);
@@ -559,7 +540,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             switch (mGestureDetector.getGesture(motionEvent)) {
                 case SWIPE_RIGHT:
                     mBeenSwiped = true;
-                    showPreviousView(true);
+                    showPreviousView();
                     handled = true;
                     break;
                 case SWIPE_LEFT:
@@ -581,14 +562,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     private void showNextView() {
         // The beginning and end Views aren't questions.
         if (isQuestionView()) {
-            PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-            if (!p.isReadonly()) {
-                int saveStatus =
-                        mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), true);
-                if (saveStatus != SharedConstants.ANSWER_OK) {
-                    createConstraintDialog(p, saveStatus);
-                    return;
-                }
+            if (!saveCurrentAnswer(true)) {
+                // constraint violated so dialog is now showing.
+                return;
             }
         }
 
@@ -617,18 +593,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * screen and displays the appropriate view. Also saves answers to the data
      * model without checking constraints.
      */
-    private void showPreviousView(boolean save) {
+    private void showPreviousView() {
         // The beginning and end Views aren't questions.
         // Also, we save the answer on a back swipe, but we ignore the question
         // constraints.
-        if (isQuestionView() && save) {
-            PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-            int saveStatus =
-                    mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(), true);
-            if (saveStatus != SharedConstants.ANSWER_OK) {
-                createConstraintDialog(p, saveStatus);
-                return;
-            }
+        if (isQuestionView()) {
+            saveCurrentAnswer(false);
         }
 
         if (!mFormHandler.isBeginning()) {
@@ -676,8 +646,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         // We must call setMax() first because it doesn't redraw the progress
         // bar.
-        mProgressBar.setMax(mFormHandler.getQuestionCount());
-        mProgressBar.setProgress(mFormHandler.getQuestionNumber());
+
+        // UnComment to make progress bar work.
+        // WARNING: will currently slow large forms considerably
+        // mProgressBar.setMax(mFormHandler.getQuestionCount());
+        // mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
         RelativeLayout.LayoutParams p =
                 new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -727,7 +700,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog.setMessage(constraintText);
         DialogInterface.OnClickListener constraintListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // do nothing.  should pry remove this.
+                // do nothing. should pry remove this.
             }
         };
         mAlertDialog.setCancelable(false);
@@ -810,7 +783,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
                         mFormHandler.deleteCurrentRepeat();
-                        showPreviousView(false);
+                        showPreviousView();
                         break;
                     case DialogInterface.BUTTON2: // no
                         break;
@@ -827,9 +800,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /*
      * Called during a 'save and exit' command. The form is not 'done' here.
      */
-    private void saveData() {
+    private void saveDataToDisk(boolean done) {
         mFormHandler.finalizeDataModel();
-        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), false)) {
+        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), done)) {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
                     Toast.LENGTH_SHORT).show();
             finish();
@@ -851,15 +824,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        PromptElement p = FormEntry.this.mFormHandler.currentPrompt();
-                        int saveStatus =
-                                mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView)
-                                        .getAnswer(), true);
-                        if (saveStatus != SharedConstants.ANSWER_OK) {
-                            createConstraintDialog(p, saveStatus);
+                        if (!saveCurrentAnswer(true)) {
+                            // save constraint violated, so just return
                             return;
                         } else {
-                            saveData();
+                            saveDataToDisk(false);
                             finish();
                         }
                         break;
@@ -895,6 +864,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             // not previously saved, cleaning up
                             FileUtils.deleteFolder(mAnswersPath);
                         }
+                        c.close();
                         fda.close();
                         finish();
                         break;
@@ -908,6 +878,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog.setButton2(getString(R.string.no), quitListener);
         mAlertDialog.show();
     }
+
 
     /**
      * Help text dialog
@@ -946,7 +917,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     case DialogInterface.BUTTON1: // yes
                         QuestionView qv = ((QuestionView) mCurrentView);
                         qv.clearAnswer();
-                        mFormHandler.saveAnswer(qv.getPrompt(), qv.getAnswer(), false);
+                        saveCurrentAnswer(false);
                         break;
                     case DialogInterface.BUTTON2: // no
                         break;
@@ -987,11 +958,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                 mFormHandler.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
                                 if (isQuestionView()) {
-                                    PromptElement p = ((QuestionView) mCurrentView).getPrompt();
-                                    if (!p.isReadonly()) {
-                                        mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView)
-                                                .getAnswer(), false);
-                                    }
+                                    saveCurrentAnswer(false);
                                 }
                                 refreshCurrentView();
                             }

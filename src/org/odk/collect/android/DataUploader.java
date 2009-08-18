@@ -98,6 +98,7 @@ public class DataUploader extends ListActivity {
                         String str = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILENAME));
 
                         Log.i(t, "Adding form for upload: " + str);
+                        c.close();
                         toUpload.add(str);
                     }
                 }

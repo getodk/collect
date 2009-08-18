@@ -16,6 +16,14 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,14 +34,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
-
-import java.io.File;
 
 
 /**
@@ -205,8 +205,9 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         c.moveToFirst();
 
         // create uri from path
-        return Uri.parse(mExternalUri + "/" + c.getInt(c.getColumnIndex("_id")));
-
+         String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
+         c.close();
+         return Uri.parse(newPath);
 
     }
 
@@ -218,8 +219,9 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         c.moveToFirst();
 
         // get data path
-        return c.getString(c.getColumnIndex("_data"));
-
+        String colString = c.getString(c.getColumnIndex("_data"));
+        c.close();
+        return colString;
     }
 
 

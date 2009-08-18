@@ -16,6 +16,10 @@
 
 package org.odk.collect.android;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,10 +28,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -70,7 +70,7 @@ public class InstanceChooser extends ListActivity {
         Intent i = new Intent();
         i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());
         getParent().setResult(RESULT_OK, i);
-
+        c.close();
         finish();
     }
 

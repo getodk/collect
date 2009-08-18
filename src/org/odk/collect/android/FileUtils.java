@@ -16,15 +16,15 @@
 
 package org.odk.collect.android;
 
-import android.os.Environment;
-import android.util.Log;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import android.os.Environment;
+import android.util.Log;
 
 /**
  * Static methods used for common file operations.

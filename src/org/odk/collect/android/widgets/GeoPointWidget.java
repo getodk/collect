@@ -16,6 +16,12 @@
 
 package org.odk.collect.android.widgets;
 
+import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.SharedConstants;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,7 +29,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -31,12 +36,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
 
 
 /**

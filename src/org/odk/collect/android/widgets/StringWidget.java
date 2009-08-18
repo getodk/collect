@@ -23,7 +23,6 @@ import org.odk.collect.android.SharedConstants;
 
 import android.R;
 import android.content.Context;
-import android.text.InputType;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.AttributeSet;

@@ -191,13 +191,13 @@ public class MainMenu extends Activity {
     private void updateButtonCount() {
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor sc = fda.fetchFiles("saved");
-        startManagingCursor(sc);
-        saved = sc.getCount();
+        Cursor c = fda.fetchFiles("saved");
+        saved = c.getCount();
+        c.close();
         
-        Cursor dc = fda.fetchFiles("done");
-        startManagingCursor(dc);
-        done = dc.getCount();
+        c = fda.fetchFiles("done");
+        done = c.getCount();
+        c.close();
 
         available = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
         fda.close();
