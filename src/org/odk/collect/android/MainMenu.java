@@ -18,6 +18,7 @@ package org.odk.collect.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -190,8 +191,14 @@ public class MainMenu extends Activity {
     private void updateButtonCount() {
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        saved = fda.fetchFiles("saved").getCount();
-        done = fda.fetchFiles("done").getCount();
+        Cursor sc = fda.fetchFiles("saved");
+        startManagingCursor(sc);
+        saved = sc.getCount();
+        
+        Cursor dc = fda.fetchFiles("done");
+        startManagingCursor(dc);
+        done = dc.getCount();
+
         available = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
         fda.close();
     }
