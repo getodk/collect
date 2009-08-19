@@ -70,7 +70,6 @@ public class InstanceChooser extends ListActivity {
         Intent i = new Intent();
         i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());
         getParent().setResult(RESULT_OK, i);
-        c.close();
         finish();
     }
 
