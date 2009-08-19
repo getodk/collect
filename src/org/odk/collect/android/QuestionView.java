@@ -23,6 +23,7 @@ import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -45,7 +46,6 @@ public class QuestionView extends ScrollView {
     private final static String t = "QuestionView";
 
     private IQuestionWidget mQuestionWidget;
-    private PromptElement mPrompt;
     private LinearLayout mView;
     private String mAnswersPath;
     private final static int TEXTSIZE = 10;
@@ -54,32 +54,26 @@ public class QuestionView extends ScrollView {
     public QuestionView(Context context, PromptElement prompt, String answerspath) {
         super(context);
 
-        this.mPrompt = prompt;
         this.mAnswersPath = answerspath;
-    }
-
-
-    public PromptElement getPrompt() {
-        return mPrompt;
     }
 
 
     /**
      * Create the appropriate view given your prompt.
      */
-    public void buildView() {
+    public void buildView(PromptElement p) {
         mView = new LinearLayout(getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
         mView.setGravity(Gravity.LEFT);
         setPadding(10, 10, 10, 10);
 
         // display which group you are in as well as the question
-        AddGroupText();
-        AddQuestionText();
-        AddHelpText();
+        AddGroupText(p);
+        AddQuestionText(p);
+        AddHelpText(p);
 
         // if question or answer type is not supported, use text widget
-        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(mPrompt, getContext(), mAnswersPath);
+        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mAnswersPath);
 
         mView.addView((View) mQuestionWidget);
         addView(mView);
@@ -100,7 +94,7 @@ public class QuestionView extends ScrollView {
 
 
     public void clearAnswer() {
-        if (!mPrompt.isReadonly()) mQuestionWidget.clearAnswer();
+        mQuestionWidget.clearAnswer();
     }
 
 
@@ -108,13 +102,13 @@ public class QuestionView extends ScrollView {
      * Add a TextView containing the hierarchy of groups to which the question
      * belongs.
      */
-    private void AddGroupText() {
+    private void AddGroupText(PromptElement p) {
         String s = "";
         String t = "";
         int i;
 
         // list all groups in one string
-        for (GroupElement g : mPrompt.getGroups()) {
+        for (GroupElement g : p.getGroups()) {
             i = g.getRepeatCount() + 1;
             t = g.getGroupText();
             if (t != null) {
@@ -140,9 +134,9 @@ public class QuestionView extends ScrollView {
     /**
      * Add a TextView containing the question text.
      */
-    private void AddQuestionText() {
+    private void AddQuestionText(PromptElement p) {
         TextView tv = new TextView(getContext());
-        tv.setText(mPrompt.getQuestionText());
+        tv.setText(p.getQuestionText());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
         tv.setPadding(0, 0, 0, 5);
 
@@ -155,8 +149,8 @@ public class QuestionView extends ScrollView {
     /**
      * Add a TextView containing the help text.
      */
-    private void AddHelpText() {
-        String s = mPrompt.getHelpText();
+    private void AddHelpText(PromptElement p) {
+        String s = p.getHelpText();
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());

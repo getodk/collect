@@ -221,7 +221,7 @@ public class FormHandler {
         }
         mQuestionCount++;
         // we're at the end of our form
-        return null;
+        return new PromptElement(PromptElement.TYPE_END);
     }
 
 
@@ -244,7 +244,7 @@ public class FormHandler {
             }
         }
 
-        return null;
+        return new PromptElement(PromptElement.TYPE_END);
     }
 
 
@@ -254,6 +254,10 @@ public class FormHandler {
     public PromptElement currentPrompt() {
         if (indexIsGroup(mCurrentIndex))
             return new PromptElement(getGroups());
+        else if (isEnd())
+            return new PromptElement(PromptElement.TYPE_END);
+        else if (isBeginning())
+            return new PromptElement(PromptElement.TYPE_START);
         else
             return new PromptElement(mCurrentIndex, getForm(), getGroups());
     }
@@ -267,7 +271,7 @@ public class FormHandler {
         mQuestionCount--;
         prevQuestion();
         if (isBeginning())
-            return null;
+            return new PromptElement(PromptElement.TYPE_START);
         else
             return new PromptElement(mCurrentIndex, getForm(), getGroups());
     }
@@ -555,14 +559,14 @@ public class FormHandler {
     /**
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
-    public boolean exportData(String answerPath, Context context, boolean done) {
+    public boolean exportData(String answerPath, Context context, boolean markCompleted) {
         ByteArrayPayload payload;
 
         FileDbAdapter fda = new FileDbAdapter(context);
         fda.open();
         File f = new File(answerPath);
         Cursor c = fda.fetchFile(f.getName());
-        if (!done) {
+        if (!markCompleted) {
             if (c != null && c.getCount() == 0) {
                 fda.createFile(f.getName(), "saved");
             } else {

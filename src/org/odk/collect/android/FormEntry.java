@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.services.IService;
 import org.javarosa.model.xform.XFormsModule;
 
@@ -66,12 +67,15 @@ import android.widget.Toast;
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
     private final String t = "FormEntry";
     private final String FORMPATH = "formpath";
+    private final String ANSWERPATH = "answerpath";
+    private final String NEWFORM = "newform";
 
     private static final int MENU_CLEAR = Menu.FIRST;
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
     private static final int MENU_QUIT = Menu.FIRST + 2;
     private static final int MENU_LANGUAGES = Menu.FIRST + 3;
     private static final int MENU_HELP_TEXT = Menu.FIRST + 4;
+    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 5;
 
     private static final int PROGRESS_DIALOG = 1;
 
@@ -100,10 +104,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         LEFT, RIGHT, FADE
     }
 
-    enum FormEntryViews {
-        START_SCREEN, QUESTION_VIEW, END_SCREEN
-    }
-
 
     /** Called when the activity is first created. */
     @Override
@@ -112,44 +112,40 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
-        // initialize view elements
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
 
-        // prevents swiping through a dialog
         mBeenSwiped = false;
-
         mAlertDialog = null;
         mCurrentView = null;
         mInAnimation = null;
         mOutAnimation = null;
         mInstancePath = null;
-
         mGestureDetector = new GestureDetector();
 
-        // load JavaRosa modules
+        // Load JavaRosa modules.
+        // TODO: Does this even do anything?
         new XFormsModule().registerModule(null);
 
-        // load JavaRosa services
+        // Load JavaRosa services.
         Vector<IService> v = new Vector<IService>();
         v.add(new PropertyManager(getApplicationContext()));
         JavaRosaServiceProvider.instance().initialize(v);
-
 
         Boolean newForm = true;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(FORMPATH)) {
                 mFormPath = savedInstanceState.getString(FORMPATH);
             }
-            if (savedInstanceState.containsKey("answerpath")) {
-                mAnswersPath = savedInstanceState.getString("answerpath");
+            if (savedInstanceState.containsKey(ANSWERPATH)) {
+                mAnswersPath = savedInstanceState.getString(ANSWERPATH);
             }
-            if (savedInstanceState.containsKey("orientation")) {
-                newForm = savedInstanceState.getBoolean("orientation", true);
+            if (savedInstanceState.containsKey(NEWFORM)) {
+                newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
         }
 
-        // check to see if this is a screen flip or a new load
+        // Check to see if this is a screen flip or a new form load.
         Object data = getLastNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             mFormLoaderTask = (FormLoaderTask) data;
@@ -159,17 +155,17 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return;
             }
 
-            // we need to load a new form.
+            // Not a restart from a screen orientation change (or other).
             mFormHandler = null;
 
             Intent intent = getIntent();
             if (intent != null) {
                 if (intent.getBooleanExtra(("instance"), false)) {
-                    // loading saved form
+                    // Loading saved form.
                     mInstancePath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                     mFormPath = getFormPathFromInstancePath(mInstancePath);
                 } else {
-                    // loading new form
+                    // Loading new form.
                     mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
                 }
                 mFormLoaderTask = new FormLoaderTask();
@@ -181,12 +177,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
     private String getFormPathFromInstancePath(String instancePath) {
-        // trim the date stamp off
+        // Trim the date stamp off.
         String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
         Pattern pattern = Pattern.compile(regex);
         String formname = pattern.split(instancePath)[0];
         formname = formname.substring(formname.lastIndexOf("/") + 1);
-
 
         File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
         File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xhtml");
@@ -210,8 +205,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(FORMPATH, mFormPath);
-        outState.putString("answerpath", mAnswersPath);
-        outState.putBoolean("orientation", false);
+        outState.putString(ANSWERPATH, mAnswersPath);
+        outState.putBoolean(NEWFORM, false);
     }
 
 
@@ -240,12 +235,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     fi.delete();
                     ((QuestionView) mCurrentView).setBinaryData(ui);
                     saveCurrentAnswer(false);
-
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
                 refreshCurrentView();
                 break;
             case (SharedConstants.BARCODE_CAPTURE):
@@ -275,26 +268,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * changes, so they're resynchronized here.
      */
     public void refreshCurrentView() {
-        View current;
-        if (mFormHandler.isBeginning()) {
-            current = createView(FormEntryViews.START_SCREEN, null);
-        } else if (mFormHandler.isEnd()) {
-            current = createView(FormEntryViews.END_SCREEN, null);
-        } else {
-            PromptElement p = mFormHandler.currentPrompt();
-
-            if (!p.isRepeat()) {
-                current = createView(FormEntryViews.QUESTION_VIEW, p);
-            } else {
-                // repeat prompt, so go back to the previous question.
-                PromptElement pr = mFormHandler.prevPrompt();
-                if (pr != null) {
-                    current = createView(FormEntryViews.QUESTION_VIEW, pr);
-                } else {
-                    current = createView(FormEntryViews.START_SCREEN, null);
-                }
-            }
+        PromptElement p = mFormHandler.currentPrompt();
+        /*
+         * Since we're not using managed dialogs, go back to the 
+         * last actual question if it's a repeat dialog.
+         */
+        if (p.getType() == PromptElement.TYPE_REPEATDIALOG) {
+            p = mFormHandler.prevPrompt();
         }
+        View current = createView(p);
         showView(current, AnimationType.FADE);
     }
 
@@ -317,6 +299,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 android.R.drawable.ic_menu_save);
         menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
                 android.R.drawable.ic_menu_help);
+        menu.add(0, MENU_HIERARCHY_VIEW, 0, "VH");
 
         return true;
     }
@@ -333,8 +316,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
          * Menu options are added only for views where they're appropriate, and
          * removed for those that they're not.
          */
-        if (isQuestionView()) {
-            if (!((QuestionView) mCurrentView).getPrompt().isReadonly()) {
+        if (currentPromptIsQuestion()) {
+            if (!mFormHandler.currentPrompt().isReadonly()) {
                 if (menu.findItem(MENU_CLEAR) == null) {
                     menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                             android.R.drawable.ic_menu_close_clear_cancel);
@@ -342,7 +325,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             } else {
                 menu.removeItem(MENU_CLEAR);
             }
-            if (((QuestionView) mCurrentView).getPrompt().isInRepeatableGroup()) {
+            if (mFormHandler.currentPrompt().isInRepeatableGroup()) {
                 if (menu.findItem(MENU_DELETE_REPEAT) == null) {
                     menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
                             R.drawable.ic_menu_clear_playlist);
@@ -350,8 +333,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             } else {
                 menu.removeItem(MENU_DELETE_REPEAT);
             }
-            if (((QuestionView) mCurrentView).getPrompt().getHelpText() != null
-                    && ((QuestionView) mCurrentView).getPrompt().getHelpText().length() > 100) {
+            if (mFormHandler.currentPrompt().getHelpText() != null
+                    && mFormHandler.currentPrompt().getHelpText().length() > 100) {
                 if (menu.findItem(MENU_HELP_TEXT) == null) {
                     menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
                             android.R.drawable.ic_menu_help);
@@ -370,7 +353,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             menu.removeItem(MENU_DELETE_REPEAT);
             menu.removeItem(MENU_QUIT);
             menu.removeItem(MENU_HELP_TEXT);
-
         }
         return true;
     }
@@ -399,6 +381,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case MENU_QUIT:
                 createSaveQuitDialog();
                 return true;
+            case MENU_HIERARCHY_VIEW:
+                Intent i = new Intent(this, FormHierarchyActivity.class);
+                startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -406,20 +391,17 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     /**
      * 
-     * @return true if the current View is a QuestionView.
+     * @return true if the current View represents a question in the form
      */
-    private boolean isQuestionView() {
-        if (mCurrentView instanceof QuestionView) {
-            return true;
-        }
-        return false;
+    private boolean currentPromptIsQuestion() {
+        return (mFormHandler.currentPrompt().getType() == PromptElement.TYPE_QUESTION);
     }
 
 
     private boolean saveCurrentAnswer(boolean evaluateConstraints) {
-        PromptElement p = ((QuestionView) mCurrentView).getPrompt();
+        PromptElement p = mFormHandler.currentPrompt();
 
-        // if it's readonly there's nothing to save
+        // If the question is readonly there's nothing to save.
         if (!p.isReadonly()) {
             int saveStatus =
                     mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(),
@@ -433,21 +415,24 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    private void clearCurrentAnswer() {
+        if (!mFormHandler.currentPrompt().isReadonly())
+            ((QuestionView) mCurrentView).clearAnswer();
+    }
+
+
     /*
      * (non-Javadoc)
      * 
      * @see android.app.Activity#onRetainNonConfigurationInstance() If we're
-     * loading, then we pass the loading thread to our next instance. If we've
-     * finished loading, we pass the formhandler.
+     * loading, then we pass the loading thread to our next instance.
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
-        synchronized (this) {
-            if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
-                return mFormLoaderTask;
-        }
+        if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
+            return mFormLoaderTask;
 
-        if (mFormHandler != null && isQuestionView()) {
+        if (mFormHandler != null && currentPromptIsQuestion()) {
             saveCurrentAnswer(true);
         }
         return null;
@@ -461,53 +446,46 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * @param prompt
      * @return newly created View
      */
-    private View createView(FormEntryViews viewType, PromptElement prompt) {
+    private View createView(PromptElement prompt) {
         setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
 
-        View nextView = null;
-        switch (viewType) {
-            case START_SCREEN:
-                nextView = View.inflate(this, R.layout.formentry_start, null);
-
-                // set window title using form name
+        switch (prompt.getType()) {
+            case PromptElement.TYPE_START:
+                View startView = View.inflate(this, R.layout.formentry_start, null);
                 setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
-
-                // set description using form title
-                ((TextView) nextView.findViewById(R.id.description)).setText(getString(
+                ((TextView) startView.findViewById(R.id.description)).setText(getString(
                         R.string.enter_data_description, mFormHandler.getFormTitle()));
-
-                break;
-            case END_SCREEN:
-                nextView = View.inflate(this, R.layout.formentry_end, null);
-
-                // set description using form title
-                ((TextView) nextView.findViewById(R.id.description)).setText(getString(
+                return startView;
+            case PromptElement.TYPE_END:
+                View endView = View.inflate(this, R.layout.formentry_end, null);
+                ((TextView) endView.findViewById(R.id.description)).setText(getString(
                         R.string.save_data_description, mFormHandler.getFormTitle()));
 
-                // create save complete button
-                ((Button) nextView.findViewById(R.id.save_complete))
+                // Create 'save complete' button.
+                ((Button) endView.findViewById(R.id.save_complete))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
-                                saveDataToDisk(true);
+                                if (saveDataToDisk(true))
+                                    finish();
                             }
                         });
-
-                // create save for later button
-                ((Button) nextView.findViewById(R.id.save_exit))
+                // Create 'save for later' button
+                ((Button) endView.findViewById(R.id.save_exit))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'saved' here.
-                                saveDataToDisk(false);
+                                if(saveDataToDisk(false))
+                                    finish();
                             }
                         });
-                break;
-            case QUESTION_VIEW:
-                nextView = new QuestionView(this, prompt, mAnswersPath);
-                ((QuestionView) nextView).buildView();
-                break;
+                return endView;
+            case PromptElement.TYPE_QUESTION:
+            default:
+                QuestionView qv = new QuestionView(this, prompt, mAnswersPath);
+                qv.buildView(prompt);
+                return qv;
         }
-        return nextView;
     }
 
 
@@ -533,8 +511,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        // constrain the user to only be able to swipe (that causes an action)
-        // once per screen with the mBeenSwiped variable.
+        /*
+         * constrain the user to only be able to swipe 
+         * (that causes a view transition) once per screen 
+         * with the mBeenSwiped variable.
+         */
         boolean handled = false;
         if (!mBeenSwiped) {
             switch (mGestureDetector.getGesture(motionEvent)) {
@@ -560,10 +541,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * answers to the data model after checking constraints.
      */
     private void showNextView() {
-        // The beginning and end Views aren't questions.
-        if (isQuestionView()) {
+        if (currentPromptIsQuestion()) {
             if (!saveCurrentAnswer(true)) {
-                // constraint violated so dialog is now showing.
+                // A constraint was violated so a dialog should be showing.
                 return;
             }
         }
@@ -572,15 +552,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             PromptElement p = mFormHandler.nextPrompt();
             View next;
 
-            if (p == null) {
-                // We've reached the end of the form.
-                next = createView(FormEntryViews.END_SCREEN, null);
-                showView(next, AnimationType.RIGHT);
-            } else if (p.isRepeat()) {
-                createRepeatDialog(p);
-            } else {
-                next = createView(FormEntryViews.QUESTION_VIEW, p);
-                showView(next, AnimationType.RIGHT);
+            switch (p.getType()) {
+                case PromptElement.TYPE_QUESTION:
+                case PromptElement.TYPE_END:
+                    next = createView(p);
+                    showView(next, AnimationType.RIGHT);
+                    break;
+                case PromptElement.TYPE_REPEATDIALOG:
+                    createRepeatDialog(p);
+                    break;
             }
         } else {
             mBeenSwiped = false;
@@ -594,21 +574,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      * model without checking constraints.
      */
     private void showPreviousView() {
-        // The beginning and end Views aren't questions.
-        // Also, we save the answer on a back swipe, but we ignore the question
-        // constraints.
-        if (isQuestionView()) {
+        // The answer is saved on a 'back', but question constraints are
+        // ignored.
+        if (currentPromptIsQuestion()) {
             saveCurrentAnswer(false);
         }
 
         if (!mFormHandler.isBeginning()) {
             PromptElement p = mFormHandler.prevPrompt();
-            View next;
-            if (p == null) {
-                next = createView(FormEntryViews.START_SCREEN, null);
-            } else {
-                next = createView(FormEntryViews.QUESTION_VIEW, p);
-            }
+            View next = createView(p);
             showView(next, AnimationType.LEFT);
         } else {
             mBeenSwiped = false;
@@ -639,7 +613,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         if (mCurrentView != null) {
             mCurrentView.startAnimation(mOutAnimation);
-            mRelativeLayout.removeView(mCurrentView);
+            mRelativeLayout.removeView((View) mCurrentView);
         }
 
         mInAnimation.setAnimationListener(this);
@@ -649,24 +623,28 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         // UnComment to make progress bar work.
         // WARNING: will currently slow large forms considerably
+        // TODO:  make the progress bar fast.
         // mProgressBar.setMax(mFormHandler.getQuestionCount());
         // mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
-        RelativeLayout.LayoutParams p =
+        RelativeLayout.LayoutParams lp =
                 new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        p.addRule(RelativeLayout.ABOVE, R.id.progressbar);
+        lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
 
         mCurrentView = next;
-        mRelativeLayout.addView(mCurrentView, p);
-        // hide the soft keyboard if it's showing.
+        mRelativeLayout.addView(mCurrentView, lp);
+        
+        // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
                 (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
+        
         mCurrentView.startAnimation(mInAnimation);
     }
 
 
+    // TODO: use managed dialogs when the bugs are fixed
     /*
      * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
      * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
@@ -700,7 +678,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog.setMessage(constraintText);
         DialogInterface.OnClickListener constraintListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // do nothing. should pry remove this.
             }
         };
         mAlertDialog.setCancelable(false);
@@ -770,15 +747,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        String name = ((QuestionView) mCurrentView).getPrompt().getLastRepeatedGroupName();
-        int repeatcount =
-                ((QuestionView) mCurrentView).getPrompt().getLastRepeatedGroupRepeatCount();
+        String name = mFormHandler.currentPrompt().getLastRepeatedGroupName();
+        int repeatcount = mFormHandler.currentPrompt().getLastRepeatedGroupRepeatCount();
         if (repeatcount != -1) {
             name += " (" + (repeatcount + 1) + ")";
         }
         mAlertDialog.setMessage(getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
@@ -800,16 +775,37 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /*
      * Called during a 'save and exit' command. The form is not 'done' here.
      */
-    private void saveDataToDisk(boolean done) {
+    private boolean saveDataToDisk(boolean markCompleted) {
+        if (!validateAnswers(markCompleted)) {
+            return false;
+        }
         mFormHandler.finalizeDataModel();
-        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), done)) {
+        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), markCompleted)) {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
                     Toast.LENGTH_SHORT).show();
-            finish();
+            return true;
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
                     Toast.LENGTH_SHORT).show();
+            return false;
         }
+    }
+    
+    // make sure this validates for all on done
+    private boolean validateAnswers(boolean markCompleted) {
+        mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
+        mFormHandler.nextQuestionPrompt();
+        while (!mFormHandler.isEnd()) {
+            int saveStatus = mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler.currentPrompt().getAnswerValue(), true);
+            if (saveStatus == SharedConstants.ANSWER_CONSTRAINT_VIOLATED || (markCompleted && saveStatus != SharedConstants.ANSWER_OK)) {
+                refreshCurrentView();
+                createConstraintDialog(mFormHandler.currentPrompt(), saveStatus);
+                return false;
+            }
+            mFormHandler.nextQuestionPrompt();
+        }
+        
+        return true;
     }
 
 
@@ -828,8 +824,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             // save constraint violated, so just return
                             return;
                         } else {
-                            saveDataToDisk(false);
-                            finish();
+                            if (saveDataToDisk(false))
+                                finish();
                         }
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -885,11 +881,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     private void createHelpDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        String msg = ((QuestionView) mCurrentView).getPrompt().getHelpText();
+        String msg = mFormHandler.currentPrompt().getHelpText();
         msg = msg.replaceAll("\t", "");
         mAlertDialog.setMessage(msg);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case AlertDialog.BUTTON1:
@@ -915,8 +910,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        QuestionView qv = ((QuestionView) mCurrentView);
-                        qv.clearAnswer();
+                        clearCurrentAnswer();
                         saveCurrentAnswer(false);
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -957,7 +951,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 mFormHandler.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
-                                if (isQuestionView()) {
+                                if (currentPromptIsQuestion()) {
                                     saveCurrentAnswer(false);
                                 }
                                 refreshCurrentView();
@@ -1116,11 +1110,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         } else {
             mFormHandler = formHandler;
 
-            // restore saved data
+            // Set saved answer path
             if (mInstancePath != null) {
                 mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
             } else {
-                // create new answer folder
+                // Create new answer folder.
                 String time =
                         new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()
                                 .getTime());

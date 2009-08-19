@@ -39,27 +39,38 @@ import org.javarosa.formmanager.view.FormElementBinding;
 
 public class PromptElement {
     // private final static String t = "PromptElement";
+    
+    public static final int TYPE_QUESTION = 0;
+    public static final int TYPE_START = 1;
+    public static final int TYPE_END = 2;
+    public static final int TYPE_REPEATDIALOG = 3;
 
     // object to access question and answer data
     private FormElementBinding mBinding;
 
     // every group the prompt belongs to
     private Vector<GroupElement> mGroups;
+    
+    private int type;
 
-    // needed to trigger repeat dialog
-    private boolean isRepeat;
-
+    public PromptElement(int promptType){
+        type = promptType;
+    }
 
     public PromptElement(Vector<GroupElement> groups) {
         mGroups = groups;
-        isRepeat = true;
+        type = TYPE_REPEATDIALOG;
     }
 
 
     public PromptElement(FormIndex formIndex, FormDef formDef, Vector<GroupElement> groups) {
         mBinding = new FormElementBinding(null, formIndex, formDef);
         mGroups = groups;
-        isRepeat = false;
+        type = TYPE_QUESTION;
+    }
+    
+    public int getType() {
+        return type;
     }
 
 
@@ -260,14 +271,6 @@ public class PromptElement {
             return mGroups.get(mGroups.size() - 1);
         }
         return null;
-    }
-
-
-    /**
-     * Is the prompt a repeat dialog?
-     */
-    public boolean isRepeat() {
-        return isRepeat;
     }
 
 
