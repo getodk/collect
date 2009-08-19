@@ -16,10 +16,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.Context;
+import android.util.Log;
+
 import org.javarosa.core.model.Constants;
 import org.odk.collect.android.PromptElement;
-
-import android.content.Context;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -73,6 +74,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 questionWidget = new SelectMultiWidget(context);
+                break;
+            case Constants.CONTROL_TRIGGER:
+                questionWidget = new TriggerWidget(context);
                 break;
             default:
                 questionWidget = new StringWidget(context);

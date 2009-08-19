@@ -113,7 +113,7 @@ the License.
   <string name="replace_video">Replace Video</string>
 
   <string name="no_capture">Nothing captured yet.</string>
-  <string name="one_capture">One item saved.</string>
+  <string name="one_capture">Multimedia captured.</string>
 
 	<string name="add_form">Add Forms</string>
 	<string name="delete_form">Delete Form</string>
@@ -128,8 +128,13 @@ the License.
 	<string name="local_forms">Local</string>
 	<string name="remote_forms">Remote</string>
 	<string name="long_hint_message">Press Menu button for the hint.</string>
-	 <string name="get_hint">Get Hint</string>
+	<string name="get_hint">Get Hint</string>
 	
-	<string name="edit_saved_completed_data">Edit Saved or Completed Data</string>
+	<string name="ack">Acknowledge</string>
+	<string name="no_ack">Nothing acknowledged yet.</string>
+	<string name="yes_ack">Action acknowledged.</string>
+	
+  
+  	<string name="edit_saved_completed_data">Edit Saved or Completed Data</string>
 
 </resources>
