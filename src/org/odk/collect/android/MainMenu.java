@@ -44,9 +44,9 @@ public class MainMenu extends Activity {
 
     public static final int MENU_PREFERENCES = Menu.FIRST;
 
-    private static int saved;
-    private static int done;
-    private static int available;
+    private static int saved_count;
+    private static int done_count;
+    private static int available_count;
     
     Button mChooseFormButton;
     Button mManageFormButton;
@@ -71,7 +71,7 @@ public class MainMenu extends Activity {
 
 
         mChooseFormButton = (Button) findViewById(R.id.chooseform);
-        mChooseFormButton.setText(getString(R.string.enter_data_button, available));
+        mChooseFormButton.setText(getString(R.string.enter_data_button, available_count));
         mChooseFormButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormChooser.class);
@@ -89,7 +89,7 @@ public class MainMenu extends Activity {
         });
 
         mSendDataButton = (Button) findViewById(R.id.senddata);
-        mSendDataButton.setText(getString(R.string.send_data_button, done));
+        mSendDataButton.setText(getString(R.string.send_data_button, done_count));
 
         mSendDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -100,7 +100,7 @@ public class MainMenu extends Activity {
         });
 
         mEditDataButton = (Button) findViewById(R.id.editdata);
-        mEditDataButton.setText(getString(R.string.edit_data_button, saved + done));
+        mEditDataButton.setText(getString(R.string.edit_data_button, saved_count + done_count));
         mEditDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
@@ -182,24 +182,24 @@ public class MainMenu extends Activity {
         super.onResume();
         updateButtonCount();
         
-        mChooseFormButton.setText(getString(R.string.enter_data_button, available));
-        mSendDataButton.setText(getString(R.string.send_data_button, done));
-        mEditDataButton.setText(getString(R.string.edit_data_button, saved));
+        mChooseFormButton.setText(getString(R.string.enter_data_button, available_count));
+        mSendDataButton.setText(getString(R.string.send_data_button, done_count));
+        mEditDataButton.setText(getString(R.string.edit_data_button, saved_count));
     }
 
 
     private void updateButtonCount() {
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFiles("saved");
-        saved = c.getCount();
+        Cursor c = fda.fetchFiles("saved_count");
+        saved_count = c.getCount();
         c.close();
         
         c = fda.fetchFiles("done");
-        done = c.getCount();
+        done_count = c.getCount();
         c.close();
 
-        available = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+        available_count = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
         fda.close();
     }
     

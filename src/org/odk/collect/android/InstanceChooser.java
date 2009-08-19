@@ -77,36 +77,7 @@ public class InstanceChooser extends ListActivity {
 
     /*
      * (non-Javadoc)
-     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-     */
-    /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_SET_SERVER, 0, "Display Settings");
-        return true;
-    } */
-
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
-     */
-    /*
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_SET_SERVER:
-                Intent launchPreferencesIntent =
-                        new Intent().setClass(this, SavedPreferences.class);
-                startActivity(launchPreferencesIntent);
-                return true;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }
-*/
-
-    /*
-     * (non-Javadoc)
+     * 
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -134,6 +105,7 @@ public class InstanceChooser extends ListActivity {
         setListAdapter(notes);
         fda.close();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
