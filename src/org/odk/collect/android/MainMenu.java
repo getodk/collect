@@ -184,14 +184,14 @@ public class MainMenu extends Activity {
         
         mChooseFormButton.setText(getString(R.string.enter_data_button, available_count));
         mSendDataButton.setText(getString(R.string.send_data_button, done_count));
-        mEditDataButton.setText(getString(R.string.edit_data_button, saved_count));
+        mEditDataButton.setText(getString(R.string.edit_data_button, saved_count+done_count));
     }
 
 
     private void updateButtonCount() {
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFiles("saved_count");
+        Cursor c = fda.fetchFiles("saved");
         saved_count = c.getCount();
         c.close();
         

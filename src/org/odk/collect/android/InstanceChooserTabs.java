@@ -18,6 +18,7 @@ package org.odk.collect.android;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -75,10 +76,16 @@ public class InstanceChooserTabs extends TabActivity {
     private void updateButtonCount() {
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        saved_count = fda.fetchFiles("saved").getCount();
-        done_count = fda.fetchFiles("done").getCount();
-    }
+        Cursor c = fda.fetchFiles("saved");
+        saved_count = c.getCount();
+        c.close();
+        
+        c = fda.fetchFiles("done");
+        done_count = c.getCount();
+        c.close();
 
+        fda.close();
+    }
 
 
 }
