@@ -17,6 +17,7 @@
 package org.odk.collect.android;
 
 import android.os.AsyncTask;
+import android.text.format.Time;
 import android.util.Log;
 
 import org.javarosa.core.JavaRosaServiceProvider;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Background task for loading a form. Eventually we're moving this to a service
@@ -63,6 +65,7 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         File fd = new File(SharedConstants.CACHE_PATH + sx + ".formdef");
         if (fd.exists()) {
             form = deserializeFormDef(fd);
+
         } else {
             try {
                 fis = new FileInputStream(fx);
@@ -79,6 +82,7 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
 
         fh = new FormHandler(form);
         fh.initialize();
+
         fis = null;
         form = null;
 
