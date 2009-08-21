@@ -78,7 +78,7 @@ public class SharedConstants {
     /**
      * Temp path
      */
-    public static final String TMP_PATH = "/sdcard/odk/tmp/";
+    public static final String CACHE_PATH = "/sdcard/odk/cache/";
 
 
     /**

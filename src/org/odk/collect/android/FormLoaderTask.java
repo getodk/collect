@@ -60,7 +60,7 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
 
         File fx = new File(path[0]);
         String sx = FileUtils.getMd5Hash(fx);
-        File fd = new File(SharedConstants.TMP_PATH + sx + ".formdef");
+        File fd = new File(SharedConstants.CACHE_PATH + sx + ".formdef");
         if (fd.exists()) {
             form = deserializeFormDef(fd);
         } else {
