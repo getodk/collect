@@ -74,6 +74,11 @@ public class SharedConstants {
      * Answers storage path
      */
     public static final String ANSWERS_PATH = "/sdcard/odk/answers/";
+    
+    /**
+     * Temp path
+     */
+    public static final String TMP_PATH = "/sdcard/odk/tmp/";
 
 
     /**
