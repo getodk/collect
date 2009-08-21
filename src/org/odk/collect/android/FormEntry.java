@@ -16,18 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Vector;
-import java.util.regex.Pattern;
-
-import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.services.IService;
-import org.javarosa.model.xform.XFormsModule;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -56,6 +44,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.model.CoreModelModule;
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.services.IService;
+import org.javarosa.model.xform.XFormsModule;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
+import java.util.regex.Pattern;
 
 
 /**
@@ -124,14 +125,40 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mGestureDetector = new GestureDetector();
 
         // Load JavaRosa modules.
-        // TODO: Does this even do anything?
+        // needed to restore forms.
         new XFormsModule().registerModule(null);
+        // needed to deserialize forms def.
+        //new CoreModelModule().registerModule(null);
 
+
+            
+        
         // Load JavaRosa services.
         Vector<IService> v = new Vector<IService>();
         v.add(new PropertyManager(getApplicationContext()));
         JavaRosaServiceProvider.instance().initialize(v);
+        
+        String[] classes = {
+                "org.javarosa.core.model.FormDef",
+                "org.javarosa.core.model.QuestionDef",
+                "org.javarosa.core.model.GroupDef",
+                "org.javarosa.core.model.instance.DataModelTree",
+                "org.javarosa.core.model.data.StringData",
+                "org.javarosa.core.model.data.IntegerData",
+                "org.javarosa.core.model.data.DecimalData",
+                "org.javarosa.core.model.data.GeoPointData",
+                "org.javarosa.core.model.data.SelectOneData",
+                "org.javarosa.core.model.data.SelectMultiData",
+                "org.javarosa.core.model.data.DateData",
+                "org.javarosa.core.model.data.DateTimeData",
+                "org.javarosa.core.model.data.TimeData",
+                "org.javarosa.core.model.data.PointerAnswerData",
+                "org.javarosa.core.model.data.MultiPointerAnswerData",
+                "org.javarosa.core.model.data.helper.BasicDataPointer"
+        }; 
+        JavaRosaServiceProvider.instance().registerPrototypes(classes);
 
+        
         Boolean newForm = true;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(FORMPATH)) {
@@ -382,8 +409,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 createSaveQuitDialog();
                 return true;
             case MENU_HIERARCHY_VIEW:
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                startActivity(i);
+           //     Intent i = new Intent(this, FormHierarchyActivity.class);
+           //     startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1124,6 +1151,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 if (FileUtils.createFolder(path)) {
                     mAnswersPath = path;
                 }
+                
+                mFormHandler.serializeFormDef(mFormPath);
             }
             refreshCurrentView();
         }

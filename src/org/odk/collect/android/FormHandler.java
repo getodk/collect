@@ -16,12 +16,9 @@
 
 package org.odk.collect.android;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -36,15 +33,21 @@ import org.javarosa.core.services.transport.ByteArrayPayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.xform.parse.XFormParser;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 
 
 /**
- * Given a {@link FormDef}, enables form iteration.  We intend to replace this method when the next
- * version of JavaROSA implements a form handler.
+ * Given a {@link FormDef}, enables form iteration. We intend to replace this
+ * method when the next version of JavaROSA implements a form handler.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author @author Yaw Anokwa (yanokwa@gmail.com)
@@ -73,14 +76,15 @@ public class FormHandler {
 
 
     /**
-     * Attempts to save the answer 'answer' into prompt.  If evaluateConstraints is true
-     * then the answer won't be saved to the data model unless it passes all the constraints.  If it's
-     * false, any value can be saved to the data model.
+     * Attempts to save the answer 'answer' into prompt. If evaluateConstraints
+     * is true then the answer won't be saved to the data model unless it passes
+     * all the constraints. If it's false, any value can be saved to the data
+     * model.
      * 
      * @param prompt
      * @param answer
      */
-    //TODO:  logic here? in ANSWER_REQUIRED_BUT_EMPTY
+    // TODO: logic here? in ANSWER_REQUIRED_BUT_EMPTY
     public int saveAnswer(PromptElement prompt, IAnswerData answer, boolean evaluateConstraints) {
         if (!mForm.evaluateConstraint(prompt.getInstanceRef(), answer) && evaluateConstraints) {
             return SharedConstants.ANSWER_CONSTRAINT_VIOLATED;
@@ -355,9 +359,9 @@ public class FormHandler {
         }
 
         if (relevant) {
-            /* 
-             * if instance flag/condition says relevant, we still have check the <group>/<repeat> hierarchy 
-             * 
+            /*
+             * if instance flag/condition says relevant, we still have check the
+             * <group>/<repeat> hierarchy
              */
             FormIndex ancestorIndex = null;
             FormIndex cur = null;
@@ -476,7 +480,7 @@ public class FormHandler {
         return mForm.getTitle();
     }
 
-    
+
     /**
      * Runs post processing handlers. Necessary to get end time.
      */
@@ -554,6 +558,30 @@ public class FormHandler {
             return false;
         }
     }
+
+
+    public void serializeFormDef(String filepath) {
+
+        String s = "."+FileUtils.getMd5Hash(new File(filepath));
+        File fd = new File(SharedConstants.FORMS_PATH + s + ".formdef");
+
+        if (!fd.exists()) {
+            FileOutputStream fos;
+            try {
+                fos = new FileOutputStream(fd);
+                DataOutputStream dos = new DataOutputStream(fos);
+                mForm.writeExternal(dos);
+                dos.flush();
+                dos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
 
     /**

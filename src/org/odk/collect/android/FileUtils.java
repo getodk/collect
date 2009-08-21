@@ -16,15 +16,18 @@
 
 package org.odk.collect.android;
 
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
-import android.os.Environment;
-import android.util.Log;
 
 /**
  * Static methods used for common file operations.
@@ -40,20 +43,25 @@ public class FileUtils {
         ArrayList<String> mFileList = new ArrayList<String>();
         File root = new File(path);
 
-        if (!storageReady())
-            return null;
-        if (!root.exists()){
-            if (!createFolder(path))
-                return null;
+        if (!storageReady()) return null;
+        if (!root.exists()) {
+            if (!createFolder(path)) return null;
         }
         if (root.isDirectory()) {
             File[] children = root.listFiles();
             for (File child : children) {
-                mFileList.add(child.getName());
+                String filename = child.getName();
+                // no hidden files
+                if (!filename.startsWith(".")) {
+                    mFileList.add(filename);
+                }
             }
         } else {
             String filename = root.getName();
-            mFileList.add(filename);
+            // no hidden files
+            if (!filename.startsWith(".")) {
+                mFileList.add(filename);
+            }
         }
         return mFileList;
     }
@@ -187,6 +195,25 @@ public class FileUtils {
             return false;
         } else {
             return true;
+        }
+    }
+
+
+    public static String getMd5Hash(File file) {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(getFileAsBytes(file));
+            BigInteger number = new BigInteger(1, messageDigest);
+            String md5 = number.toString(16);
+            while (md5.length() < 32)
+                md5 = "0" + md5;
+            return md5;
+
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("MD5", e.getMessage());
+            return null;
+
         }
     }
     /*
