@@ -16,8 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -32,6 +30,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the
  * forms directory.
@@ -42,7 +45,7 @@ import android.widget.Toast;
 public class LocalFormManager extends ListActivity implements FormDownloaderListener {
 
     private final String t = "Form Manager";
-    
+
     private static final int PROGRESS_DIALOG = 2;
 
     // add or delete form
@@ -87,6 +90,7 @@ public class LocalFormManager extends ListActivity implements FormDownloaderList
     }
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_DELETE, 0, getString(R.string.delete_form)).setIcon(
@@ -114,6 +118,7 @@ public class LocalFormManager extends ListActivity implements FormDownloaderList
 
     /*
      * (non-Javadoc)
+     * 
      * @see android.app.Activity#onCreateDialog(int)
      */
     @Override

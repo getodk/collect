@@ -19,6 +19,8 @@ package org.odk.collect.android;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -60,9 +62,29 @@ public class FormChooser extends ListActivity {
         ArrayAdapter<String> fileAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mFileList);
         setListAdapter(fileAdapter);
+        
+        clean();
     }
 
 
+    private void clean() {
+
+        Set<String> f = new HashSet<String>();
+        Set<String> fd = new HashSet<String>(FileUtils.getFilesAsArrayList(SharedConstants.CACHE_PATH));
+
+        for (String s : mFileList) {
+            f.add(FileUtils.getMd5Hash(new File(SharedConstants.FORMS_PATH + "/" + s))
+                    + ".formdef");
+        }
+        
+        fd.removeAll(f);
+        
+        for (String s : fd) {
+            (new File(SharedConstants.CACHE_PATH + "/" + s)).delete();
+        }
+        
+    }
+    
     /**
      * Stores the path of clicked file in the intent and exits.
      */
