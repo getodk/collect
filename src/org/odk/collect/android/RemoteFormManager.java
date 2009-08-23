@@ -51,7 +51,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
     // add or delete form
     private static final int MENU_ADD = Menu.FIRST;
 
-    private String mDeleteForm;
+    // private String mDeleteForm;
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
 

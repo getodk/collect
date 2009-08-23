@@ -47,39 +47,40 @@ public class IntegerWidget extends StringWidget {
 
     @Override
     public void buildView(PromptElement prompt) {
-
-        Integer i = (Integer) prompt.getAnswerObject();
-        if (i != null) {
-            this.setText(i.toString());
-        }
-        if (prompt.isReadonly()) {
-            this.setBackgroundDrawable(null);
-            this.setFocusable(false);
-            this.setClickable(false);
-        }
-
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        this.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        
+        // formatting
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
-        this.setHorizontallyScrolling(false);
-        this.setSingleLine(false);
-
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        setHorizontallyScrolling(false);
+        setSingleLine(false);
 
         // only allows numbers and no periods
-        this.setKeyListener(new DigitsKeyListener(true, false));
+        setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
         setFilters(fa);
+        
+        if (prompt.isReadonly()) {
+            setBackgroundDrawable(null);
+            setFocusable(false);
+            setClickable(false);
+        }
+        
+        Integer i = (Integer) prompt.getAnswerObject();
+        if (i != null) {
+            setText(i.toString());
+        }
+     
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        String s = this.getText().toString();
+        String s = getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

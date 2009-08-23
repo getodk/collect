@@ -20,125 +20,106 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
- * Responsible for displaying buttons to launch the major activities. Also
- * launches some activities based on returns of others.
+ * Responsible for displaying buttons to launch the major activities. Launches
+ * some activities based on returns of others.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenu extends Activity {
-    private static final String t = "MainMenu";
 
-    // The request code for returning chosen form to main menu.
+    // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
     private static final int INSTANCE_CHOOSER_TABS = 1;
-    private static final int FORM_UPLOADER = 2;
+    private static final int INSTANCE_UPLOADER = 2;
 
+    // menu options
     public static final int MENU_PREFERENCES = Menu.FIRST;
 
-    private static int saved_count;
-    private static int done_count;
-    private static int available_count;
-    
-    Button mChooseFormButton;
-    Button mManageFormButton;
-    Button mSendDataButton;
-    Button mEditDataButton;
-    
+    // buttons
+    private Button mEnterDataButton;
+    private Button mManageFormsButton;
+    private Button mSendDataButton;
+    private Button mReviewDataButton;
+
+    // counts for buttons
+    private static int mSavedCount;
+    private static int mCompletedCount;
+    private static int mAvailableCount;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        buildView();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshView();
+    }
 
 
     /**
      * Create View with buttons to launch activities.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private void buildView() {
 
-
-        super.onCreate(savedInstanceState);
-        Log.i(t, "called onCreate");
-
-        setContentView(R.layout.mainmenu);
+        setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-        
 
-
-        mChooseFormButton = (Button) findViewById(R.id.chooseform);
-        mChooseFormButton.setText(getString(R.string.enter_data_button, available_count));
-        mChooseFormButton.setOnClickListener(new OnClickListener() {
+        // enter data button. expects a result.
+        mEnterDataButton = (Button) findViewById(R.id.enter_data);
+        mEnterDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormChooser.class);
                 startActivityForResult(i, FORM_CHOOSER);
             }
         });
 
-        mManageFormButton = (Button) findViewById(R.id.manageform);
-        mManageFormButton.setText(getString(R.string.manage_forms));
-        mManageFormButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
-                startActivity(i);
-            }
-        });
-
-        mSendDataButton = (Button) findViewById(R.id.senddata);
-        mSendDataButton.setText(getString(R.string.send_data_button, done_count));
-
-        mSendDataButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DataUploader.class);
-                startActivityForResult(i, FORM_UPLOADER);
-            }
-
-        });
-
-        mEditDataButton = (Button) findViewById(R.id.editdata);
-        mEditDataButton.setText(getString(R.string.edit_data_button, saved_count + done_count));
-        mEditDataButton.setOnClickListener(new OnClickListener() {
+        // review data button. expects a result.
+        mReviewDataButton = (Button) findViewById(R.id.review_data);
+        mReviewDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
                 startActivityForResult(i, INSTANCE_CHOOSER_TABS);
             }
         });
 
-    }
+        // send data button. expects a result.
+        mSendDataButton = (Button) findViewById(R.id.send_data);
+        mSendDataButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), InstanceUploader.class);
+                startActivityForResult(i, INSTANCE_UPLOADER);
+            }
+
+        });
+
+        // manage forms button. no result expected.
+        mManageFormsButton = (Button) findViewById(R.id.manage_forms);
+        mManageFormsButton.setText(getString(R.string.manage_forms));
+        mManageFormsButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
+                startActivity(i);
+            }
+        });
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.preferences)).setIcon(
-                android.R.drawable.ic_menu_preferences);
+        // gets count and updates buttons.
+        refreshView();
 
-        return true;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_PREFERENCES:
-                // createPreferencesMenu();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -149,59 +130,99 @@ public class MainMenu extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         if (resultCode == RESULT_CANCELED) {
-            // The request was canceled, so do nothing.
             return;
         }
 
+        String formPath = null;
+        Intent i = null;
         switch (requestCode) {
-            // if form chooser returns with a form name, start entry
+            // returns with a form path, start entry
             case FORM_CHOOSER:
-                String s = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                Intent i = new Intent(this, FormEntry.class);
-                i.putExtra(SharedConstants.FILEPATH_KEY, s);
+                formPath = intent.getStringExtra(SharedConstants.KEY_FORMPATH);
+                i = new Intent(this, FormEntry.class);
+                i.putExtra(SharedConstants.KEY_FORMPATH, formPath);
                 startActivity(i);
                 break;
+            // returns with an instance path, start entry
             case INSTANCE_CHOOSER_TABS:
-                String si = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                Intent ii = new Intent(this, FormEntry.class);
-                ii.putExtra(SharedConstants.FILEPATH_KEY, si);
-                ii.putExtra("instance", true);
-                startActivity(ii);
+                formPath = intent.getStringExtra(SharedConstants.KEY_FORMPATH);
+                String instancePath = intent.getStringExtra(SharedConstants.KEY_INSTANCEPATH);
+                i = new Intent(this, FormEntry.class);
+                i.putExtra(SharedConstants.KEY_FORMPATH, formPath);
+                i.putExtra(SharedConstants.KEY_INSTANCEPATH, instancePath);
+                startActivity(i);
                 break;
             default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
-    
-    
+
+
+    private void refreshView() {
+        updateButtonCount();
+    }
+
+
+
+    /**
+     * Updates the button count and sets the text in the buttons.
+     */
+    private void updateButtonCount() {
+
+        // create adapter
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+
+        // count for saved instances
+        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
+        mSavedCount = c.getCount();
+        c.close();
+
+        // count for completed instances
+        c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        mCompletedCount = c.getCount();
+        c.close();
+
+        // count for available forms
+        int fsCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+        c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
+        mAvailableCount = c.getCount();
+        c.close();
+        fda.close();
+
+        // update button text
+        mEnterDataButton.setText(getString(R.string.enter_data_button, mAvailableCount));
+        mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
+        mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
+                + mCompletedCount));
+    }
+
+
+    private void createPreferencesMenu() {
+        Toast.makeText(getApplicationContext(), "Sorry, not yet implemented.", Toast.LENGTH_SHORT)
+                .show();
+    }
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        updateButtonCount();
-        
-        mChooseFormButton.setText(getString(R.string.enter_data_button, available_count));
-        mSendDataButton.setText(getString(R.string.send_data_button, done_count));
-        mEditDataButton.setText(getString(R.string.edit_data_button, saved_count+done_count));
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
+        return true;
     }
 
 
-    private void updateButtonCount() {
-        FileDbAdapter fda = new FileDbAdapter(this);
-        fda.open();
-        Cursor c = fda.fetchFiles("saved");
-        saved_count = c.getCount();
-        c.close();
-        
-        c = fda.fetchFiles("done");
-        done_count = c.getCount();
-        c.close();
-
-        available_count = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
-        fda.close();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_PREFERENCES:
+                createPreferencesMenu();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
-    
-    
+
+
 }

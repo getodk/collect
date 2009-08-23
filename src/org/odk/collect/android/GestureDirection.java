@@ -23,7 +23,6 @@ package org.odk.collect.android;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class GestureDirection {
-    private final static String t = "GestureDirection";
 
     enum UserGesture {
         SWIPE_RIGHT, SWIPE_LEFT, SWIPE_UP, SWIPE_DOWN, SWIPE_UNKNOWN

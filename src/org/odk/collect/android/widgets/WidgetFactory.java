@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.javarosa.core.model.Constants;
 import org.odk.collect.android.PromptElement;
@@ -32,10 +31,12 @@ public class WidgetFactory {
     /**
      * Returns the appropriate QuestionWidget for the given PromptElement.
      * 
-     * @param pe
-     * @param context
+     * @param pe prompt element to be rendered
+     * @param context Android context
+     * @param instancePath path to the instance file
      */
-    static public IQuestionWidget createWidgetFromPrompt(PromptElement pe, Context context, String answerspath) {
+    static public IQuestionWidget createWidgetFromPrompt(PromptElement pe, Context context,
+            String instancePath) {
         IQuestionWidget questionWidget = null;
         switch (pe.getQuestionType()) {
             case Constants.CONTROL_INPUT:
@@ -61,13 +62,13 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new MediaWidget(context,"image", answerspath);
+                questionWidget = new MediaWidget(context, "image", instancePath);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new MediaWidget(context,"audio", answerspath);
+                questionWidget = new MediaWidget(context, "audio", instancePath);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new MediaWidget(context,"video", answerspath);
+                questionWidget = new MediaWidget(context, "video", instancePath);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(context);

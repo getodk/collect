@@ -101,7 +101,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            mStringAnswer.setText("lat: " + s.replace(" ", "\nlon: "));
+            mStringAnswer.setText("Lat: " + s.replace(" ", "\n:Lon: "));
         }
 
         // when you press the button
@@ -185,7 +185,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         if (mLocationDialog != null && mLocationDialog.isShowing()) {
             mLocationDialog.dismiss();
             if (mLocation != null) {
-                mStringAnswer.setText("lat: " + mLocation.getLatitude() + "\nlon: "
+                mStringAnswer.setText("Lat: " + mLocation.getLatitude() + "\nLon: "
                         + mLocation.getLongitude());
             }
         }

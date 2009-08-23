@@ -47,7 +47,6 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         super(context);
     }
 
-
     public void clearAnswer() {
         mStringAnswer.setText(null);
         mActionButton.setEnabled(true);
@@ -76,7 +75,9 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                actionClick();
+                TriggerWidget.this.mActionButton.setEnabled(false);
+                TriggerWidget.this.mStringAnswer.setText(mActionButton.getText());
+                TriggerWidget.this.mDisplayText.setText(getContext().getString(R.string.yes_ack));
             }
         });
 
@@ -96,17 +97,9 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
             mDisplayText.setText(getContext().getString(R.string.no_ack));
         }
 
-
         // finish complex layout
         this.addView(mDisplayText);
         this.addView(mActionButton);
-    }
-
-    protected void actionClick() {
-        mActionButton.setEnabled(false);
-        mStringAnswer.setText(mActionButton.getText());
-        mDisplayText.setText(getContext().getString(R.string.yes_ack));
-
     }
 
 }

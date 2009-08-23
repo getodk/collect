@@ -40,13 +40,11 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.services.IService;
 import org.javarosa.model.xform.XFormsModule;
@@ -56,7 +54,6 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
-import java.util.regex.Pattern;
 
 
 /**
@@ -67,9 +64,10 @@ import java.util.regex.Pattern;
  */
 public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
     private final String t = "FormEntry";
-    private final String FORMPATH = "formpath";
-    private final String ANSWERPATH = "answerpath";
-    private final String NEWFORM = "newform";
+
+    private static final String FORMPATH = "formpath";
+    private static final String INSTANCEPATH = "instancepath";
+    private static final String NEWFORM = "newform";
 
     private static final int MENU_CLEAR = Menu.FIRST;
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
@@ -80,9 +78,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private static final int PROGRESS_DIALOG = 1;
 
-    private ProgressBar mProgressBar;
+    // private ProgressBar mProgressBar;
     private String mFormPath;
-    private String mAnswersPath;
     private String mInstancePath;
 
     private GestureDetector mGestureDetector;
@@ -113,7 +110,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         setContentView(R.layout.formentry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        // mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
 
         mBeenSwiped = false;
@@ -121,51 +118,26 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mCurrentView = null;
         mInAnimation = null;
         mOutAnimation = null;
-        mInstancePath = null;
         mGestureDetector = new GestureDetector();
 
         // Load JavaRosa modules.
         // needed to restore forms.
         new XFormsModule().registerModule(null);
-        // needed to deserialize forms def.
-        //new CoreModelModule().registerModule(null);
 
-
-            
-        
-        // Load JavaRosa services.
+        // load JavaRosa services
+        // needed to overwrite rms property manager
         Vector<IService> v = new Vector<IService>();
         v.add(new PropertyManager(getApplicationContext()));
         JavaRosaServiceProvider.instance().initialize(v);
-        
-        String[] classes = {
-                "org.javarosa.core.model.FormDef",
-                "org.javarosa.core.model.QuestionDef",
-                "org.javarosa.core.model.GroupDef",
-                "org.javarosa.core.model.instance.DataModelTree",
-                "org.javarosa.core.model.data.StringData",
-                "org.javarosa.core.model.data.IntegerData",
-                "org.javarosa.core.model.data.DecimalData",
-                "org.javarosa.core.model.data.GeoPointData",
-                "org.javarosa.core.model.data.SelectOneData",
-                "org.javarosa.core.model.data.SelectMultiData",
-                "org.javarosa.core.model.data.DateData",
-                "org.javarosa.core.model.data.DateTimeData",
-                "org.javarosa.core.model.data.TimeData",
-                "org.javarosa.core.model.data.PointerAnswerData",
-                "org.javarosa.core.model.data.MultiPointerAnswerData",
-                "org.javarosa.core.model.data.helper.BasicDataPointer"
-        }; 
-        JavaRosaServiceProvider.instance().registerPrototypes(classes);
 
-        
+
         Boolean newForm = true;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(FORMPATH)) {
                 mFormPath = savedInstanceState.getString(FORMPATH);
             }
-            if (savedInstanceState.containsKey(ANSWERPATH)) {
-                mAnswersPath = savedInstanceState.getString(ANSWERPATH);
+            if (savedInstanceState.containsKey(INSTANCEPATH)) {
+                mInstancePath = savedInstanceState.getString(INSTANCEPATH);
             }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
@@ -187,14 +159,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
             Intent intent = getIntent();
             if (intent != null) {
-                if (intent.getBooleanExtra(("instance"), false)) {
-                    // Loading saved form.
-                    mInstancePath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                    mFormPath = getFormPathFromInstancePath(mInstancePath);
-                } else {
-                    // Loading new form.
-                    mFormPath = intent.getStringExtra(SharedConstants.FILEPATH_KEY);
-                }
+                mFormPath = intent.getStringExtra(SharedConstants.KEY_FORMPATH);
+                mInstancePath = intent.getStringExtra(SharedConstants.KEY_INSTANCEPATH);
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath, mInstancePath);
                 showDialog(PROGRESS_DIALOG);
@@ -202,25 +168,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         }
     }
 
-
-    private String getFormPathFromInstancePath(String instancePath) {
-        // Trim the date stamp off.
-        String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
-        Pattern pattern = Pattern.compile(regex);
-        String formname = pattern.split(instancePath)[0];
-        formname = formname.substring(formname.lastIndexOf("/") + 1);
-
-        File xmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xml");
-        File xhtmlfile = new File(SharedConstants.FORMS_PATH + "/" + formname + ".xhtml");
-
-        if (xmlfile.exists()) {
-            return xmlfile.getAbsolutePath();
-        } else if (xhtmlfile.exists()) {
-            return xhtmlfile.getAbsolutePath();
-        } else {
-            return null;
-        }
-    }
 
 
     /*
@@ -232,7 +179,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(FORMPATH, mFormPath);
-        outState.putString(ANSWERPATH, mAnswersPath);
+        outState.putString(INSTANCEPATH, mInstancePath);
         outState.putBoolean(NEWFORM, false);
     }
 
@@ -297,8 +244,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     public void refreshCurrentView() {
         PromptElement p = mFormHandler.currentPrompt();
         /*
-         * Since we're not using managed dialogs, go back to the 
-         * last actual question if it's a repeat dialog.
+         * Since we're not using managed dialogs, go back to the last actual
+         * question if it's a repeat dialog.
          */
         if (p.getType() == PromptElement.TYPE_REPEATDIALOG) {
             p = mFormHandler.prevPrompt();
@@ -409,8 +356,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 createSaveQuitDialog();
                 return true;
             case MENU_HIERARCHY_VIEW:
-           //     Intent i = new Intent(this, FormHierarchyActivity.class);
-           //     startActivity(i);
+                // Intent i = new Intent(this, FormHierarchyActivity.class);
+                // startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -469,7 +416,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /**
      * Creates a view given the View type and a prompt
      * 
-     * @param viewType
      * @param prompt
      * @return newly created View
      */
@@ -493,8 +439,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
-                                if (saveDataToDisk(true))
-                                    finish();
+                                if (saveDataToDisk(true)) finish();
                             }
                         });
                 // Create 'save for later' button
@@ -502,14 +447,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'saved' here.
-                                if(saveDataToDisk(false))
-                                    finish();
+                                if (saveDataToDisk(false)) finish();
                             }
                         });
                 return endView;
             case PromptElement.TYPE_QUESTION:
             default:
-                QuestionView qv = new QuestionView(this, prompt, mAnswersPath);
+                QuestionView qv = new QuestionView(this, prompt, mInstancePath);
                 qv.buildView(prompt);
                 return qv;
         }
@@ -539,9 +483,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         /*
-         * constrain the user to only be able to swipe 
-         * (that causes a view transition) once per screen 
-         * with the mBeenSwiped variable.
+         * constrain the user to only be able to swipe (that causes a view
+         * transition) once per screen with the mBeenSwiped variable.
          */
         boolean handled = false;
         if (!mBeenSwiped) {
@@ -640,7 +583,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         if (mCurrentView != null) {
             mCurrentView.startAnimation(mOutAnimation);
-            mRelativeLayout.removeView((View) mCurrentView);
+            mRelativeLayout.removeView(mCurrentView);
         }
 
         mInAnimation.setAnimationListener(this);
@@ -650,7 +593,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         // UnComment to make progress bar work.
         // WARNING: will currently slow large forms considerably
-        // TODO:  make the progress bar fast.
+        // TODO: make the progress bar fast.
         // mProgressBar.setMax(mFormHandler.getQuestionCount());
         // mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
@@ -660,13 +603,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, lp);
-        
+
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
                 (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
-        
+
         mCurrentView.startAnimation(mInAnimation);
     }
 
@@ -807,7 +750,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             return false;
         }
         mFormHandler.finalizeDataModel();
-        if (mFormHandler.exportData(mAnswersPath, getApplicationContext(), markCompleted)) {
+        if (mFormHandler.exportData(mInstancePath, getApplicationContext(), markCompleted)) {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
                     Toast.LENGTH_SHORT).show();
             return true;
@@ -817,21 +760,25 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             return false;
         }
     }
-    
+
+
     // make sure this validates for all on done
     private boolean validateAnswers(boolean markCompleted) {
         mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
         mFormHandler.nextQuestionPrompt();
         while (!mFormHandler.isEnd()) {
-            int saveStatus = mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler.currentPrompt().getAnswerValue(), true);
-            if (saveStatus == SharedConstants.ANSWER_CONSTRAINT_VIOLATED || (markCompleted && saveStatus != SharedConstants.ANSWER_OK)) {
+            int saveStatus =
+                    mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler
+                            .currentPrompt().getAnswerValue(), true);
+            if (saveStatus == SharedConstants.ANSWER_CONSTRAINT_VIOLATED
+                    || (markCompleted && saveStatus != SharedConstants.ANSWER_OK)) {
                 refreshCurrentView();
                 createConstraintDialog(mFormHandler.currentPrompt(), saveStatus);
                 return false;
             }
             mFormHandler.nextQuestionPrompt();
         }
-        
+
         return true;
     }
 
@@ -851,8 +798,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             // save constraint violated, so just return
                             return;
                         } else {
-                            if (saveDataToDisk(false))
-                                finish();
+                            if (saveDataToDisk(false)) finish();
                         }
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -880,12 +826,14 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     case DialogInterface.BUTTON1: // yes
                         FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
                         fda.open();
-                        Cursor c = fda.fetchFile(new File(mAnswersPath).getName());
+                        Cursor c = fda.fetchFile(mInstancePath, null);
                         if (c != null && c.getCount() > 0) {
                             Log.i(t, "prevously saved");
                         } else {
                             // not previously saved, cleaning up
-                            FileUtils.deleteFolder(mAnswersPath);
+                            String instanceFolder =
+                                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/")+1);
+                            FileUtils.deleteFolder(instanceFolder);
                         }
                         c.close();
                         fda.close();
@@ -1138,22 +1086,24 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             mFormHandler = formHandler;
 
             // Set saved answer path
-            if (mInstancePath != null) {
-                mAnswersPath = mInstancePath.substring(0, mInstancePath.lastIndexOf("/"));
-            } else {
+            if (mInstancePath == null) {
+
                 // Create new answer folder.
                 String time =
                         new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()
                                 .getTime());
-                String file = mFormPath.toString();
-                file = file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.'));
-                String path = SharedConstants.ANSWERS_PATH + file + "_" + time;
+                String file =
+                        mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath
+                                .lastIndexOf('.'));
+                String path = SharedConstants.INSTANCES_PATH + file + "_" + time;
                 if (FileUtils.createFolder(path)) {
-                    mAnswersPath = path;
+                    mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }
-                
-                mFormHandler.serializeFormDef(mFormPath);
+
+
             }
+            mFormHandler.serializeFormDef(mFormPath);
+
             refreshCurrentView();
         }
     }

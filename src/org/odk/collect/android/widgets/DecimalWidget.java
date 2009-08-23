@@ -49,41 +49,46 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
 
     @Override
     public void buildView(PromptElement prompt) {
+
+        // formatting
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        // needed to make long readonly text scroll
+        setHorizontallyScrolling(false);
+        setSingleLine(false);
+
+        // only numbers are allowed
+        setKeyListener(new DigitsKeyListener(true, true));
+
+        // only 15 characters allowed
+        InputFilter[] fa = new InputFilter[1];
+        fa[0] = new InputFilter.LengthFilter(15);
+        setFilters(fa);
+        
+        // in case xforms calcuate returns a double, convert to integer
         Double d = (Double) prompt.getAnswerObject();
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(15);
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
         if (d != null) {
-            this.setText(nf.format(d));
+            setText(nf.format(d));
         }
+
+        // disable if read only
         if (prompt.isReadonly()) {
-            this.setBackgroundDrawable(null);
-            this.setFocusable(false);
-            this.setClickable(false);
+            setBackgroundDrawable(null);
+            setFocusable(false);
+            setClickable(false);
         }
 
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        this.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // needed to make long readonly text scroll
-        this.setHorizontallyScrolling(false);
-        this.setSingleLine(false);
-
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-
-        this.setKeyListener(new DigitsKeyListener(true, true));
-
-        // only 15 characters allowed
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(15);
-        setFilters(fa);
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        String s = this.getText().toString();
+        String s = getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

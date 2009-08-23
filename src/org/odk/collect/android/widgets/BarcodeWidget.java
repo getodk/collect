@@ -42,20 +42,16 @@ import android.widget.Toast;
  */
 public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
-
     private Button mActionButton;
     private TextView mStringAnswer;
-
 
     public BarcodeWidget(Context context) {
         super(context);
     }
 
-
     public void clearAnswer() {
         mStringAnswer.setText(null);
     }
-
 
     public IAnswerData getAnswer() {
         String s = mStringAnswer.getText().toString();
@@ -66,17 +62,17 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         }
     }
 
-
     public void buildView(PromptElement prompt) {
-        this.setOrientation(LinearLayout.VERTICAL);
+        setOrientation(LinearLayout.VERTICAL);
 
+        // set button formatting
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_barcode));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadonly());
 
-        // launch image capture intent on click
+        // launch barcode capture intent on click
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
@@ -91,7 +87,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
             }
         });
 
-
+        // set text formatting
         mStringAnswer = new TextView(getContext());
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
@@ -102,21 +98,16 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         }
 
         // finish complex layout
-        this.addView(mActionButton);
-        this.addView(mStringAnswer);
+        addView(mActionButton);
+        addView(mStringAnswer);
 
     }
 
-
+    /**
+     * Allows answer to be set externally in {@Link FormEntry}.
+     */
     public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);
-
     }
-
-
-    public void setFocus() {
-
-    }
-
 
 }

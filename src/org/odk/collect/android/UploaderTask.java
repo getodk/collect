@@ -60,7 +60,7 @@ class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpPost mypost = new HttpPost(uploadServer);
-            File dir = new File(SharedConstants.ANSWERS_PATH + values[i]);
+            File dir = new File(SharedConstants.INSTANCES_PATH + values[i]);
             File[] files = dir.listFiles();
             if (files == null) this.cancel(true);
 

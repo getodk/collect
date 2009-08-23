@@ -54,12 +54,12 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
 
     public void clearAnswer() {
-        this.setText(null);
+        setText(null);
     }
 
 
     public IAnswerData getAnswer() {
-        String s = this.getText().toString();
+        String s = getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -69,23 +69,27 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
 
     public void buildView(PromptElement prompt) {
+        
+        // font size
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        
+        // capitalize the first letter of the sentence
+        setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
+
+        // needed to make long read only text scroll
+        setHorizontallyScrolling(false);
+        setSingleLine(false);
+
         String s = (String) prompt.getAnswerObject();
         if (s != null) {
-            this.setText(s);
+            setText(s);
         }
         if (prompt.isReadonly()) {
-            this.setBackgroundDrawable(null);
-            this.setFocusable(false);
-            this.setClickable(false);
+            setBackgroundDrawable(null);
+            setFocusable(false);
+            setClickable(false);
         }
 
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        //this.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        this.setKeyListener(new TextKeyListener(Capitalize.SENTENCES,false));
-        
-        // needed to make long readonly text scroll
-        this.setHorizontallyScrolling(false);
-        this.setSingleLine(false);
 
     }
 

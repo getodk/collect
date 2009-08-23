@@ -48,12 +48,12 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
 
     public void clearAnswer() {
-        this.clearCheck();
+        clearCheck();
     }
 
 
     public IAnswerData getAnswer() {
-        int i = this.getCheckedRadioButtonId();
+        int i = getCheckedRadioButtonId();
         if (i == -1) {
             return null;
         } else {
@@ -67,7 +67,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
     public void buildView(final PromptElement prompt) {
         mItems = prompt.getSelectItems();
 
-        this.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (mRadioChecked != -1 && prompt.isReadonly()) {
                     SelectOneWidget.this.check(mRadioChecked);
@@ -98,7 +98,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
                 r.setId(i);
                 r.setEnabled(!prompt.isReadonly());
                 r.setFocusable(!prompt.isReadonly());
-                this.addView(r);
+                addView(r);
 
                 if (v.equals(s)) {
                     r.setChecked(true);

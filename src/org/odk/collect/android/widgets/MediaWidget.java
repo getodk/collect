@@ -16,7 +16,17 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -24,16 +34,7 @@ import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.R;
 import org.odk.collect.android.SharedConstants;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import java.io.File;
 
 
 /**
@@ -53,24 +54,25 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Uri mExternalUri;
     private String mCaptureIntent;
     private String mType;
-    private String mAnswersPath;
+    private String mInstanceFolder;
     private int mRequestCode;
     private int mCaptureText;
     private int mReplaceText;
     private int mPlayText;
 
 
-    public MediaWidget(Context context, String type, String path) {
+    public MediaWidget(Context context, String type, String instancePath) {
         super(context);
-        initialize(type, path);
+        initialize(type, instancePath);
     }
 
 
-    private void initialize(String type, String path) {
+    private void initialize(String type, String instancePath) {
 
         mType = type;
-        mAnswersPath = path;
+        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
 
+        // initialize based on type
         if (mType.equals("image")) {
             mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
@@ -99,7 +101,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
     private void deleteMedia() {
 
         // get the file path and delete the file
-        File f = new File(mAnswersPath + "/" + mBinaryName);
+        File f = new File(mInstanceFolder + "/" + mBinaryName);
         f.delete();
 
         // clean up variables
@@ -169,7 +171,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(mAnswersPath + "/" + mBinaryName);
+                File f = new File(mInstanceFolder + "/" + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), mType + "/*");
                 ((Activity) getContext()).startActivity(i);
 
@@ -205,9 +207,9 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         c.moveToFirst();
 
         // create uri from path
-         String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
-         c.close();
-         return Uri.parse(newPath);
+        String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
+        c.close();
+        return Uri.parse(newPath);
 
     }
 
@@ -236,12 +238,14 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         // get the file path and move the file
         String binarypath = getPathFromUri((Uri) binaryuri);
         File f = new File(binarypath);
-        String s = mAnswersPath + binarypath.substring(binarypath.lastIndexOf('/'));
+        String s = mInstanceFolder + "/" + binarypath.substring(binarypath.lastIndexOf('/') + 1);
         f.renameTo(new File(s));
 
         // remove the database entry and update the name
         getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
         mBinaryName = s.substring(s.lastIndexOf('/') + 1);
+
+
 
     }
 

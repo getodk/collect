@@ -16,86 +16,154 @@
 
 package org.odk.collect.android;
 
+import android.app.ListActivity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import java.util.HashMap;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenu}.
  * 
- * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
+ * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormChooser extends ListActivity {
-    private final String t = "FormChooser";
-    private ArrayList<String> mFileList;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(t, "called onCreate");
+        buildView();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+
+    /**
+     * Get form list from database and insert into view.
+     */
+    private void buildView() {
+
+        updateFormDirectory();
 
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
-        setContentView(R.layout.filelister);
 
-        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
-        if (mFileList == null) {
-            mFileList = new ArrayList();
-            TextView t = (TextView)this.findViewById(android.R.id.empty);
-            t.setText("SD Card error.  Not present or corrupt.");
-        }
-        Collections.sort(mFileList);
+        // get all forms that match the status.
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, null);
+        startManagingCursor(c);
 
-        ArrayAdapter<String> fileAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mFileList);
-        setListAdapter(fileAdapter);
-        
-        clean();
+        // create data and views for cursor adapter
+        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
+        int[] view = new int[] {android.R.id.text1, android.R.id.text2};
+
+        // render total instance view
+        SimpleCursorAdapter instances =
+                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+        setListAdapter(instances);
+
+        // cleanup
+        fda.close();
     }
 
 
-    private void clean() {
-
-        Set<String> f = new HashSet<String>();
-        Set<String> fd = new HashSet<String>(FileUtils.getFilesAsArrayList(SharedConstants.CACHE_PATH));
-
-        for (String s : mFileList) {
-            f.add(FileUtils.getMd5Hash(new File(SharedConstants.FORMS_PATH + "/" + s))
-                    + ".formdef");
-        }
-        
-        fd.removeAll(f);
-        
-        for (String s : fd) {
-            (new File(SharedConstants.CACHE_PATH + "/" + s)).delete();
-        }
-        
-    }
-    
     /**
-     * Stores the path of clicked file in the intent and exits.
+     * Stores new forms in the database and removes old processed formdefs.
+     */
+    private void updateFormDirectory() {
+
+        // full path to the files
+        ArrayList<String> storedForms = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        ArrayList<String> cachedForms = FileUtils.getFilesAsArrayList(SharedConstants.CACHE_PATH);
+
+        // the hashes of the forms in the db
+        HashMap<String, String> availableForms = new HashMap<String, String>();
+
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+
+        // find all forms in database and grab all their hashes and filenames
+        Cursor c = null;
+        c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, null);
+        if (c != null) {
+            if (c.moveToFirst()) {
+                int i = c.getColumnIndex(FileDbAdapter.KEY_HASH);
+                int j = c.getColumnIndex(FileDbAdapter.KEY_FILEPATH);
+                do {
+                    availableForms.put(c.getString(i), c.getString(j));
+                } while (c.moveToNext());
+            }
+        }
+        // clean up cursor
+        c.close();
+
+
+        // sort, then loop through forms on sdcard. add and remove as necessary.
+        Collections.sort(storedForms, String.CASE_INSENSITIVE_ORDER);
+        for (String formPath : storedForms) {
+            String hash = FileUtils.getMd5Hash(new File(formPath));
+            // if hash is not in db, add the form.
+            if (!availableForms.containsKey((hash))) {
+                fda.createFile(formPath, FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
+            } else if (availableForms.containsKey((hash))) {
+                // if duplicate form found on sd card, remove it.
+                if (!formPath.equals(availableForms.get(hash))) {
+                    (new File(formPath)).delete();
+                }
+            }
+        }
+
+        // clean up adapter
+        fda.close();
+
+        // remove orphaned form defs
+        for (String cachePath : cachedForms) {
+            String hash =
+                    cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath.lastIndexOf("."));
+            if (!availableForms.containsKey(hash)) {
+                (new File(cachePath)).delete();
+            }
+        }
+
+    }
+
+
+    /**
+     * Stores the path of selected form and finishes.
      */
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        File f = new File(SharedConstants.FORMS_PATH + "/" + mFileList.get(position));
+    protected void onListItemClick(ListView listView, View view, int position, long id) {
 
+        // get full path to the form
+        Cursor c = (Cursor) getListAdapter().getItem(position);
+        String formPath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+
+        // create intent for return and store path
         Intent i = new Intent();
-        i.putExtra(SharedConstants.FILEPATH_KEY, f.getAbsolutePath());
+        i.putExtra(SharedConstants.KEY_FORMPATH, formPath);
         setResult(RESULT_OK, i);
 
+        // close cursor and finish
+        c.close();
         finish();
     }
 

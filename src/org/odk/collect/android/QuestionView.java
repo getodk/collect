@@ -16,14 +16,8 @@
 
 package org.odk.collect.android;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.widgets.IBinaryWidget;
-import org.odk.collect.android.widgets.IQuestionWidget;
-import org.odk.collect.android.widgets.WidgetFactory;
-
 import android.content.Context;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -31,6 +25,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.IQuestionWidget;
+import org.odk.collect.android.widgets.WidgetFactory;
 
 
 /**
@@ -47,14 +46,14 @@ public class QuestionView extends ScrollView {
 
     private IQuestionWidget mQuestionWidget;
     private LinearLayout mView;
-    private String mAnswersPath;
+    private String mInstancePath;
     private final static int TEXTSIZE = 10;
 
 
-    public QuestionView(Context context, PromptElement prompt, String answerspath) {
+    public QuestionView(Context context, PromptElement prompt, String instancePath) {
         super(context);
 
-        this.mAnswersPath = answerspath;
+        this.mInstancePath = instancePath;
     }
 
 
@@ -73,7 +72,7 @@ public class QuestionView extends ScrollView {
         AddHelpText(p);
 
         // if question or answer type is not supported, use text widget
-        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mAnswersPath);
+        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
 
         mView.addView((View) mQuestionWidget);
         addView(mView);

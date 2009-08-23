@@ -43,7 +43,7 @@ import android.widget.SimpleCursorAdapter;
  * successful and unsuccessful submission and servers they were submitted to.
  * 
  */
-public class DataUploader extends ListActivity {
+public class InstanceUploader extends ListActivity {
     private final String t = "FormChooser";
 
     private static final int MENU_SET_SERVER = Menu.FIRST;
@@ -95,7 +95,7 @@ public class DataUploader extends ListActivity {
                 for (int i = 0; i < s.size(); i++) {
                     if (s.get(s.keyAt(i)) == true) {
                         Cursor c = (Cursor) this.getListAdapter().getItem(s.keyAt(i));
-                        String str = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILENAME));
+                        String str = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
 
                         Log.i(t, "Adding form for upload: " + str);
                         c.close();
@@ -133,23 +133,23 @@ public class DataUploader extends ListActivity {
         String status = p.getString("list_file_type", "done");
 
         Log.e(t, "displaying: " + status);
-        Cursor c = fda.fetchFiles(status);
+        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE,FileDbAdapter.STATUS_COMPLETED);
         startManagingCursor(c);
 
-        String[] from = new String[] {FileDbAdapter.KEY_FILENAME};
+        String[] from = new String[] {FileDbAdapter.KEY_FILEPATH};
         int[] to = new int[] {android.R.id.text1};
 
         // Now create an array adapter and set it to display using our row
-        SimpleCursorAdapter notes;
+        SimpleCursorAdapter files;
         if (status.equalsIgnoreCase("submitted")) {
-            notes = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
+            files = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
         } else {
-            notes =
+            files =
                     new SimpleCursorAdapter(this,
                             android.R.layout.simple_list_item_multiple_choice, c, from, to);
 
         }
-        setListAdapter(notes);
+        setListAdapter(files);
         fda.close();
     }
 

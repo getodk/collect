@@ -53,14 +53,14 @@ public class FileUtils {
                 String filename = child.getName();
                 // no hidden files
                 if (!filename.startsWith(".")) {
-                    mFileList.add(filename);
+                    mFileList.add(child.getAbsolutePath());
                 }
             }
         } else {
             String filename = root.getName();
             // no hidden files
             if (!filename.startsWith(".")) {
-                mFileList.add(filename);
+                mFileList.add(root.getAbsolutePath());
             }
         }
         return mFileList;
@@ -83,7 +83,7 @@ public class FileUtils {
             }
             return;
         }
-        filelist.add(f.getName());
+        filelist.add(f.getAbsolutePath());
     }
 
 

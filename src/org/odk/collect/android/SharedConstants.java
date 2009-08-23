@@ -71,10 +71,10 @@ public class SharedConstants {
     public static final String FORMS_PATH = "/sdcard/odk/forms/";
 
     /**
-     * Answers storage path
+     * Instances storage path
      */
-    public static final String ANSWERS_PATH = "/sdcard/odk/answers/";
-    
+    public static final String INSTANCES_PATH = "/sdcard/odk/instances/";
+
     /**
      * Temp path
      */
@@ -84,7 +84,9 @@ public class SharedConstants {
     /**
      * Identifies the location of the form used to launch form entry
      */
-    public static final String FILEPATH_KEY = "formpath";
+    public static final String KEY_FORMPATH = "formpath";
+    public static final String KEY_INSTANCEPATH = "instancepath";
+
 
     /**
      * How long to wait when opening network connection in milliseconds
@@ -106,19 +108,35 @@ public class SharedConstants {
      */
     public final static int APPLICATION_FONTSIZE = 10;
 
-    // TODO (carlhartung): we may need this. Keeping it until I'm done
-    // implementing audio/video.
-    /*public final static boolean createTempDirectory(Context context, String className) {
-        File tempdir = new File(SharedConstants.TMPFILE_PATH);
-        if (!tempdir.exists()) {
-            if (!tempdir.mkdirs()) {
-                Toast.makeText(context, "Cannot create temporary directory", Toast.LENGTH_LONG).show();
-                Log.e(className, "Cannot create directory: " + SharedConstants.TMPFILE_PATH);
-                return false;
-            }
-        }
-        return true;
-    }*/
-
+    /**
+     * Classes needed to serialize objects
+     */
+    public final static String[] SERIALIABLE_CLASSES =
+            {"org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
+                    "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
+                    "org.javarosa.core.model.data.DateTimeData",
+                    "org.javarosa.core.model.data.DecimalData",
+                    "org.javarosa.core.model.data.GeoPointData",
+                    "org.javarosa.core.model.data.helper.BasicDataPointer",
+                    "org.javarosa.core.model.data.IntegerData",
+                    "org.javarosa.core.model.data.MultiPointerAnswerData",
+                    "org.javarosa.core.model.data.PointerAnswerData",
+                    "org.javarosa.core.model.data.SelectMultiData",
+                    "org.javarosa.core.model.data.SelectOneData",
+                    "org.javarosa.core.model.data.StringData",
+                    "org.javarosa.core.model.data.TimeData",
+                    "org.javarosa.core.model.instance.DataModelTree",
+                    "org.javarosa.core.services.locale.TableLocaleSource",
+                    "org.javarosa.xpath.expr.XPathArithExpr",
+                    "org.javarosa.xpath.expr.XPathBoolExpr",
+                    "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
+                    "org.javarosa.xpath.expr.XPathFilterExpr",
+                    "org.javarosa.xpath.expr.XPathFuncExpr",
+                    "org.javarosa.xpath.expr.XPathNumericLiteral",
+                    "org.javarosa.xpath.expr.XPathNumNegExpr",
+                    "org.javarosa.xpath.expr.XPathPathExpr",
+                    "org.javarosa.xpath.expr.XPathStringLiteral",
+                    "org.javarosa.xpath.expr.XPathUnionExpr",
+                    "org.javarosa.xpath.expr.XPathVariableReference"};
 
 }

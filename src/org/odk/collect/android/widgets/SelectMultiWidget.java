@@ -94,7 +94,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     public void buildView(final PromptElement prompt) {
         mItems = prompt.getSelectItems();
 
-        this.setOrientation(LinearLayout.VERTICAL);
+        setOrientation(LinearLayout.VERTICAL);
 
         Vector ve = new Vector();
         if (prompt.getAnswerValue() != null) {
@@ -145,7 +145,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
                 c.setFocusable(!prompt.isReadonly());
                 c.setEnabled(!prompt.isReadonly());
-                this.addView(c);
+                addView(c);
                 i++;
             }
         }

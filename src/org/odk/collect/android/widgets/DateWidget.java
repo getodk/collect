@@ -44,12 +44,13 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     // convert from j2me date to android date
     private final static int YEARSHIFT = 1900;
 
-
     public DateWidget(Context context) {
         super(context);
     }
 
-
+    /**
+     * Resets date to today.
+     */
     public void clearAnswer() {
         final Calendar c = new GregorianCalendar();
         mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
@@ -72,6 +73,11 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
         final Calendar c = new GregorianCalendar();
         
         mDatePicker = new DatePicker(getContext());
+        if (!prompt.isReadonly()) {
+            mDatePicker.setFocusable(true);
+            mDatePicker.setEnabled(true);
+        }
+        
         mDateListener = new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
                 if (prompt.isReadonly()) {
@@ -103,12 +109,9 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
             // create date widget with now
             clearAnswer();
         }
-
-        mDatePicker.setFocusable(!prompt.isReadonly());
-        mDatePicker.setEnabled(!prompt.isReadonly());
         
-        this.setGravity(Gravity.LEFT);
-        this.addView(mDatePicker);
+        setGravity(Gravity.LEFT);
+        addView(mDatePicker);
     }
 
 }

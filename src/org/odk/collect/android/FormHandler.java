@@ -545,8 +545,9 @@ public class FormHandler {
 
         // write xml file
         try {
-            String filename = path + "/" + path.substring(path.lastIndexOf('/') + 1) + ".xml";
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            // String filename = path + "/" +
+            // path.substring(path.lastIndexOf('/') + 1) + ".xml";
+            BufferedWriter bw = new BufferedWriter(new FileWriter(path));
             bw.write(new String(data, "UTF-8"));
             bw.flush();
             bw.close();
@@ -560,17 +561,25 @@ public class FormHandler {
     }
 
 
+    /**
+     * Write the FormDef to the file system as a binary blog.
+     * 
+     * @param filepath path to the form file
+     */
     public void serializeFormDef(String filepath) {
 
+        // if cache folder is missing, create it.
         if (FileUtils.createFolder(SharedConstants.CACHE_PATH)) {
 
-            String s = FileUtils.getMd5Hash(new File(filepath));
-            File fd = new File(SharedConstants.CACHE_PATH + s + ".formdef");
+            // calculate unique md5 identifier
+            String hash = FileUtils.getMd5Hash(new File(filepath));
+            File formDef = new File(SharedConstants.CACHE_PATH + hash + ".formdef");
 
-            if (!fd.exists()) {
+            // formdef does not exist, create one.
+            if (!formDef.exists()) {
                 FileOutputStream fos;
                 try {
-                    fos = new FileOutputStream(fd);
+                    fos = new FileOutputStream(formDef);
                     DataOutputStream dos = new DataOutputStream(fos);
                     mForm.writeExternal(dos);
                     dos.flush();
@@ -590,30 +599,9 @@ public class FormHandler {
     /**
      * Serialize data model and extract payload. Exports both binaries and xml.
      */
-    public boolean exportData(String answerPath, Context context, boolean markCompleted) {
+    public boolean exportData(String instancePath, Context context, boolean markCompleted) {
+
         ByteArrayPayload payload;
-
-        FileDbAdapter fda = new FileDbAdapter(context);
-        fda.open();
-        File f = new File(answerPath);
-        Cursor c = fda.fetchFile(f.getName());
-        if (!markCompleted) {
-            if (c != null && c.getCount() == 0) {
-                fda.createFile(f.getName(), "saved");
-            } else {
-                fda.updateFile(f.getName(), "saved");
-            }
-        } else {
-            if (c != null && c.getCount() == 0) {
-                fda.createFile(f.getName(), "done");
-
-            } else {
-                fda.updateFile(f.getName(), "done");
-            }
-        }
-        c.close();
-        fda.close();
-
         try {
 
             // assume no binary data inside the model.
@@ -622,14 +610,39 @@ public class FormHandler {
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
             // write out xml
-            exportXmlFile(payload, answerPath);
-            return true;
+            exportXmlFile(payload, instancePath);
 
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
             e.printStackTrace();
             return false;
         }
+
+        FileDbAdapter fda = new FileDbAdapter(context);
+        fda.open();
+        File f = new File(instancePath);
+        Cursor c = fda.fetchFile(f.getAbsolutePath(), null);
+        if (!markCompleted) {
+            if (c != null && c.getCount() == 0) {
+                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                        FileDbAdapter.STATUS_SAVED);
+            } else {
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_SAVED);
+            }
+        } else {
+            if (c != null && c.getCount() == 0) {
+                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                        FileDbAdapter.STATUS_COMPLETED);
+
+            } else {
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETED);
+            }
+        }
+        c.close();
+        fda.close();
+        return true;
+
+
     }
 
 

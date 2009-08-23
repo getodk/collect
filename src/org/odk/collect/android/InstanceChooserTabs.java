@@ -1,7 +1,5 @@
-package org.odk.collect.android;
-
 /*
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2009 Google Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +14,8 @@ package org.odk.collect.android;
  * the License.
  */
 
+package org.odk.collect.android;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,36 +28,53 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 /**
- * An example of tab content that launches an activity via
- * {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
+ * A host activity for {@link InstanceChooser}.
+ * 
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class InstanceChooserTabs extends TabActivity {
 
-    private static int saved_count;
-    private static int done_count;
-    
+    // count for tab menu bar
+    private static int mSavedCount;
+    private static int mCompletedCount;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        updateButtonCount();
+        buildView();
+    }
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.edit_data));
 
+    /**
+     * Build tab host view and setup tab intents.
+     */
+    private void buildView() {
+
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+
+        // update tab host count
+        updateTabHostCount();
+
+        // create tab host and tweak color
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.BLACK);
 
+        // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooser.class);
-        saved.putExtra("status", "saved");
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.saved_data, saved_count ))
-                .setContent(saved));
+        saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_SAVED);
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(
+                getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
+        // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooser.class);
-        completed.putExtra("status", "done");
+        completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETED);
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(
+                getString(R.string.completed_data, mCompletedCount)).setContent(completed));
 
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.completed_data, done_count))
-                .setContent(completed));
-
-        // hack to set font size
+        // hack to set font size and padding in tab headers
+        // arrived at these paths by using hierarchy viewer
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
         TabWidget tw = (TabWidget) ll.getChildAt(0);
 
@@ -70,20 +87,29 @@ public class InstanceChooserTabs extends TabActivity {
         TextView tvc = (TextView) rlc.getChildAt(1);
         tvc.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 10);
         tvc.setPadding(0, 0, 0, 6);
-
     }
-    
-    private void updateButtonCount() {
+
+
+    /**
+     * Update count of saved and completed instances for tab host header.
+     */
+    private void updateTabHostCount() {
+
+        // create file adapter
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFiles("saved");
-        saved_count = c.getCount();
-        c.close();
-        
-        c = fda.fetchFiles("done");
-        done_count = c.getCount();
+
+        // get saved instances
+        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
+        mSavedCount = c.getCount();
         c.close();
 
+        // get completed instances
+        c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        mCompletedCount = c.getCount();
+        c.close();
+
+        // memory cleanup
         fda.close();
     }
 
