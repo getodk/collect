@@ -17,7 +17,6 @@
 package org.odk.collect.android;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;

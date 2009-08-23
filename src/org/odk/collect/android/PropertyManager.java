@@ -71,39 +71,32 @@ public class PropertyManager implements IService, IPropertyManager {
 
     @SuppressWarnings("unchecked")
     public Vector getProperty(String propertyName) {
-        // Log.i(t, "get property:" + propertyName);
         return null;
     }
 
 
     public String getSingularProperty(String propertyName) {
-        // Log.i(t, propertyName + ":" + mProperties.get(propertyName));
         return mProperties.get(propertyName.toLowerCase());
     }
 
 
     public void setProperty(String propertyName, String propertyValue) {
-        // Log.i(t, "set property string:" + propertyName + " value:" +
-        // propertyValue);
     }
 
 
     @SuppressWarnings("unchecked")
     public void setProperty(String propertyName, Vector propertyValue) {
-        // Log.i(t, "set property vector:" + propertyName + " value:" +
-        // propertyValue);
+
     }
 
 
     public void addRules(IPropertyRules rules) {
-        // TODO Auto-generated method stub
 
     }
 
 
     @SuppressWarnings("unchecked")
     public Vector getRules() {
-        // TODO Auto-generated method stub
         return null;
     }
 
