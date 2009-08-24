@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Responsible for displaying, adding and deleting all the valid forms in the
+ * Responsible for displaying and deleting all the valid forms in the
  * forms directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
@@ -81,9 +81,12 @@ public class LocalFormManager extends ListActivity {
     }
 
 
+    /**
+     * Notify the file adapter of data changes and clear radio buttons.
+     */
     private void refreshData() {
-        setSelection(-1);
         mFileAdapter.notifyDataSetChanged();
+        getListView().clearChoices();
     }
 
 
