@@ -192,7 +192,11 @@ public class MainMenu extends Activity {
         fda.close();
 
         // update button text
-        mEnterDataButton.setText(getString(R.string.enter_data_button, mAvailableCount));
+        if(mAvailableCount == fsCount) {
+            mEnterDataButton.setText(getString(R.string.enter_data_button, mAvailableCount));
+        } else {
+            mEnterDataButton.setText(getString(R.string.enter_data));
+        }
         mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
         mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
                 + mCompletedCount));

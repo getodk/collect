@@ -17,13 +17,9 @@
 package org.odk.collect.android;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -31,6 +27,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the
@@ -39,53 +36,55 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class LocalFormManager extends ListActivity implements FormDownloaderListener {
-
-    private final String t = "Form Manager";
-
-    private static final int PROGRESS_DIALOG = 2;
+public class LocalFormManager extends ListActivity {
 
     // add or delete form
     private static final int MENU_DELETE = Menu.FIRST;
 
-    private String mDeleteForm;
+    private int mDeletePosition;
     private AlertDialog mAlertDialog;
-    private ProgressDialog mProgressDialog;
-
-    private ArrayList<String> mFileList;
-
-    private FormDownloadTask mFormDownloadTask;
+    private ArrayList<String> mFiles;
+    private ArrayList<String> mFilenames = new ArrayList<String>();
+    private ArrayAdapter<String> mFileAdapter;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(t, "called onCreate");
+        buildView();
+    }
 
+
+    private void buildView() {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
 
-        mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
-        if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED)
-            try {
-                dismissDialog(PROGRESS_DIALOG);
-            } catch (IllegalArgumentException e) {
-                Log.e(t, "dialog wasn't previously shown.  totally fine");
-            }
+        // check directories for files
+        mFiles = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        Collections.sort(mFiles, String.CASE_INSENSITIVE_ORDER);
 
-        refresh();
-    }
+        // parse list for filenames
+        for (int i = 0; i < mFiles.size(); i++) {
+            String file = mFiles.get(i);
+            mFilenames.add(file.substring(file.lastIndexOf("/") + 1));
+        }
 
-
-    private void refresh() {
-        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
-        ArrayAdapter<String> fileAdapter =
+        // set adapter
+        mFileAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
-                        mFileList);
+                        mFilenames);
+
+        // view options
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        setListAdapter(fileAdapter);
+        setListAdapter(mFileAdapter);
+
     }
 
+
+    private void refreshData() {
+        setSelection(-1);
+        mFileAdapter.notifyDataSetChanged();
+    }
 
 
     @Override
@@ -112,50 +111,23 @@ public class LocalFormManager extends ListActivity implements FormDownloaderList
     }
 
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onCreateDialog(int)
-     */
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS_DIALOG:
-                mProgressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                mFormDownloadTask.setDownloaderListener(null);
-                                finish();
-                            }
-                        };
-                mProgressDialog.setMessage(getString(R.string.loading_form));
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return mProgressDialog;
-        }
-        return null;
-    }
-
-
     /**
-     * Create the form delete dialog
+     * Á Create the form delete dialog
      */
     private void createDeleteDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mDeleteForm = mFileList.get(getListView().getCheckedItemPosition());
-        mAlertDialog.setMessage(getString(R.string.delete_confirm, mDeleteForm));
+
+        // match the selected item in mFilenames with the form in mFiles
+        mDeletePosition = getListView().getCheckedItemPosition();
+        mAlertDialog
+                .setMessage(getString(R.string.delete_confirm, mFilenames.get(mDeletePosition)));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
-                            case DialogInterface.BUTTON1: // yes, delete
+                            case DialogInterface.BUTTON1: // yes, delete and refresh
                                 deleteSelectedForm();
-                                refresh();
-
+                                refreshData();
                                 break;
                             case DialogInterface.BUTTON2: // no, do nothing
                                 break;
@@ -173,53 +145,36 @@ public class LocalFormManager extends ListActivity implements FormDownloaderList
      * Deletes the selected form
      */
     private void deleteSelectedForm() {
-        boolean deleted = FileUtils.deleteFile(SharedConstants.FORMS_PATH + "/" + mDeleteForm);
+        
+        // delete from mFiles because it has full path
+        String filename = mFilenames.get(mDeletePosition);
+        String filepath = mFiles.get(mDeletePosition);
+        
+        boolean deleted = FileUtils.deleteFile(filepath);
         if (deleted) {
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_ok, mDeleteForm), Toast.LENGTH_SHORT).show();
+                    getString(R.string.form_deleted_ok, filename), Toast.LENGTH_SHORT)
+                    .show();
         } else {
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_error, mDeleteForm), Toast.LENGTH_SHORT).show();
+                    getString(R.string.form_deleted_error, filename), Toast.LENGTH_SHORT)
+                    .show();
         }
-    }
+        
+        // remove item both arrays
+        mFilenames.remove(mDeletePosition);
+        mFiles.remove(mDeletePosition);
 
-
-    public void downloadingComplete(Boolean result) {
-        Log.e("carl", "finished downloading with result " + result);
-        dismissDialog(PROGRESS_DIALOG);
-        if (result) {
-            Toast.makeText(this, "Download Successful", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Download Failed", Toast.LENGTH_LONG).show();
-        }
-        refresh();
-    }
-
-
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mFormDownloadTask;
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        if (mFormDownloadTask != null) mFormDownloadTask.setDownloaderListener(null);
-        super.onDestroy();
-    }
-
-
-    @Override
-    protected void onResume() {
-        if (mFormDownloadTask != null) mFormDownloadTask.setDownloaderListener(this);
-        super.onResume();
     }
 
 
     @Override
     protected void onPause() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) mAlertDialog.dismiss();
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        }
         super.onPause();
     }
+
 
 }

@@ -122,6 +122,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
                 // back button doesn't cancel
                 mLocationDialog.setCancelable(false);
                 mLocationDialog.setIndeterminate(true);
+                mLocationDialog.setTitle(getContext().getString(R.string.get_location));
                 mLocationDialog.setMessage(getContext().getString(R.string.getting_location));
                 mLocationDialog.setButton(getContext().getString(R.string.cancel),
                         geopointButtonListener);
