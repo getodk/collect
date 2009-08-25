@@ -1102,7 +1102,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
             }
-            mFormHandler.serializeFormDef(mFormPath);
 
             refreshCurrentView();
         }

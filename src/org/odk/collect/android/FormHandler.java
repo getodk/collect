@@ -66,15 +66,6 @@ public class FormHandler {
     }
 
 
-    public void initialize() {
-        // set evaluation context
-        mForm.setEvaluationContext(new EvaluationContext());
-
-        // initialize form
-        mForm.initialize(true);
-    }
-
-
     /**
      * Attempts to save the answer 'answer' into prompt. If evaluateConstraints
      * is true then the answer won't be saved to the data model unless it passes
@@ -559,42 +550,7 @@ public class FormHandler {
             return false;
         }
     }
-
-
-    /**
-     * Write the FormDef to the file system as a binary blog.
-     * 
-     * @param filepath path to the form file
-     */
-    public void serializeFormDef(String filepath) {
-
-        // if cache folder is missing, create it.
-        if (FileUtils.createFolder(SharedConstants.CACHE_PATH)) {
-
-            // calculate unique md5 identifier
-            String hash = FileUtils.getMd5Hash(new File(filepath));
-            File formDef = new File(SharedConstants.CACHE_PATH + hash + ".formdef");
-
-            // formdef does not exist, create one.
-            if (!formDef.exists()) {
-                FileOutputStream fos;
-                try {
-                    fos = new FileOutputStream(formDef);
-                    DataOutputStream dos = new DataOutputStream(fos);
-                    mForm.writeExternal(dos);
-                    dos.flush();
-                    dos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
-
+    
 
     /**
      * Serialize data model and extract payload. Exports both binaries and xml.
