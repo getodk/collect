@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -64,7 +63,7 @@ public class LocalFormManager extends ListActivity {
 
         // check directories for files
         mFiles = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
-        Collections.sort(mFiles, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(mFiles, NaturalOrderComparator.NUMERICAL_ORDER);
 
         // parse list for filenames
         for (int i = 0; i < mFiles.size(); i++) {

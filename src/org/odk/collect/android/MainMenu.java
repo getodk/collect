@@ -54,6 +54,7 @@ public class MainMenu extends Activity {
     private static int mSavedCount;
     private static int mCompletedCount;
     private static int mAvailableCount;
+    private static int mFormsCount;
 
 
     @Override
@@ -108,7 +109,6 @@ public class MainMenu extends Activity {
 
         // manage forms button. no result expected.
         mManageFormsButton = (Button) findViewById(R.id.manage_forms);
-        mManageFormsButton.setText(getString(R.string.manage_forms));
         mManageFormsButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
@@ -184,19 +184,23 @@ public class MainMenu extends Activity {
         mCompletedCount = c.getCount();
         c.close();
 
+        // count for downloaded forms
+        mFormsCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+
         // count for available forms
-        int fsCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
         c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
         mAvailableCount = c.getCount();
         c.close();
         fda.close();
 
         // update button text
-        if(mAvailableCount == fsCount) {
+        if(mAvailableCount == mFormsCount) {
             mEnterDataButton.setText(getString(R.string.enter_data_button, mAvailableCount));
         } else {
             mEnterDataButton.setText(getString(R.string.enter_data));
         }
+
+        mManageFormsButton.setText(getString(R.string.manage_forms_button, mFormsCount));
         mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
         mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
                 + mCompletedCount));

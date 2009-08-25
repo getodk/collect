@@ -118,7 +118,7 @@ public class FormChooser extends ListActivity {
 
 
         // sort, then loop through forms on sdcard. add and remove as necessary.
-        Collections.sort(storedForms, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(storedForms, NaturalOrderComparator.NUMERICAL_ORDER);
         for (String formPath : storedForms) {
             String hash = FileUtils.getMd5Hash(new File(formPath));
             // if hash is not in db, add the form.
