@@ -16,6 +16,8 @@
 
 package org.odk.collect.android;
 
+import android.os.AsyncTask;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,8 +27,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import android.os.AsyncTask;
-
 /**
  * Background task for downloading forms from a url.
  * 
@@ -35,17 +35,24 @@ import android.os.AsyncTask;
  */
 class FormDownloadTask extends AsyncTask<String, String, Boolean> {
     FormDownloaderListener mStateListener;
+    String mName;
 
-
-    /*
-     * (non-Javadoc)
-     * @see android.os.AsyncTask#doInBackground(Params[])
-     */
     @Override
-    protected Boolean doInBackground(String... path) {
+    protected Boolean doInBackground(String... args) {
+
+        String url = args[0];
+        String path = args[1];
+        
+        int slash = path.lastIndexOf("/")+1;
+        int period =  path.lastIndexOf(".")+1;
+        String base = path.substring(0,slash-1);
+        String filename = path.substring(slash, period-1);
+        String ext = path.substring(period);
+        
+        // create url
         URL u = null;
         try {
-            u = new URL(path[0]);
+            u = new URL(args[0]);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return false;
@@ -57,38 +64,44 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
             c.setConnectTimeout(SharedConstants.CONNECTION_TIMEOUT);
             c.setReadTimeout(SharedConstants.CONNECTION_TIMEOUT);
 
+            // write connection to file
             InputStream is = c.getInputStream();
-
-            String filename = u.getFile();
-            filename = filename.substring(filename.lastIndexOf('/') + 1);
-
-            if (filename.matches(SharedConstants.VALID_FILENAME)) {
-                File f = new File(SharedConstants.FORMS_PATH + "/" + filename);
-                OutputStream os = new FileOutputStream(f);
-                byte buf[] = new byte[1024];
-                int len;
-                while ((len = is.read(buf)) > 0)
-                    os.write(buf, 0, len);
-                os.flush();
-                os.close();
-                is.close();
+            
+            // if file exists, append a number
+            File f = new File(path);
+            int i =  2;
+            while(f.exists()) {
+                f = new File(base + "/" + filename + " " + i + "." + ext);
+                i++;
             }
+            path = f.getAbsolutePath();
+            
+            OutputStream os = new FileOutputStream(f);
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = is.read(buf)) > 0) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+            os.close();
+            is.close();
+
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        
+        mName = path.substring(path.lastIndexOf("/")+1);
         return true;
     }
 
-
-    /*
-     * (non-Javadoc)
-     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-     */
     @Override
     protected void onPostExecute(Boolean result) {
+        
         synchronized (this) {
-            if (mStateListener != null) mStateListener.downloadingComplete(result);
+            if (mStateListener != null) {
+                mStateListener.downloadingComplete(result, mName);
+            }
         }
     }
 

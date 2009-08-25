@@ -20,8 +20,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -138,10 +140,11 @@ public class FileDbAdapter {
             // remove time stamp from instance
             String r = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
             Pattern p = Pattern.compile(r);
-            return p.split(filename)[0] + " "+ mCtx.getString(R.string.data);
+            return p.split(filename)[0] + " " + mCtx.getString(R.string.data);
         } else if (type.equals(TYPE_FORM)) {
             // remove extension from form
-            return filename.substring(0, filename.lastIndexOf(".")) +" "+mCtx.getString(R.string.form);
+            return filename.substring(0, filename.lastIndexOf(".")) + " "
+                    + mCtx.getString(R.string.form);
         } else {
             return filename;
         }
@@ -175,7 +178,13 @@ public class FileDbAdapter {
         // second row of the row display
         cv.put(KEY_META, generateMeta(f.lastModified()));
 
-        return mDb.insert(DATABASE_TABLE, null, cv);
+        long id = -1;
+        try {
+            id = mDb.insert(DATABASE_TABLE, null, cv);
+        } catch (SQLiteConstraintException e) {
+        }
+
+        return id;
     }
 
 

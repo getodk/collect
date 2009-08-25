@@ -91,7 +91,7 @@ public class SharedConstants {
     /**
      * How long to wait when opening network connection in milliseconds
      */
-    public static final int CONNECTION_TIMEOUT = 5000;
+    public static final int CONNECTION_TIMEOUT = 20000;
 
     /**
      * Temporary file

@@ -22,5 +22,5 @@ package org.odk.collect.android;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormDownloaderListener {
-    void downloadingComplete(Boolean result);
+    void downloadingComplete(Boolean result, String path);
 }

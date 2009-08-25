@@ -38,8 +38,9 @@ the License.
 	<string name="manage_forms">Manage Forms</string>
 	  <string name="manage_forms_button">Manage Forms (%s)</string>
 	
-
-	<string name="loading_form">Loading form. Please wait...</string>
+<string name="getting_formlist">Getting Form List...</string>
+<string name="loading_form">Loading Form...</string>
+	<string name="please_wait">Please wait for a few moments.</string>
 
 	<string name="save_data">Mark Saved</string>
 	<string name="save_complete">Mark Completed</string>
@@ -54,7 +55,7 @@ the License.
 	 <string name="add_another_repeat">Add another \"%s\"?</string>
 
 	<string name="get_location">Capture Location</string>
-	<string name="getting_location">Getting location. Please wait...</string>
+	<string name="getting_location">Loading GPS...</string>
 	 <string name="get_barcode">Capture Barcode</string>
 	
 
@@ -67,7 +68,7 @@ the License.
 	 <string name="no_files_error">Sorry, there are no files!</string>
 	
 	<string name="questionview_error">Sorry, you are not in a form yet!</string>
-	<string name="delete_error">Sorry, you have not selected a form!</string>
+	<string name="noselect_error">Sorry, you have not selected a form!</string>
 	<string name="languages_error">Sorry, this form has no other languages!</string>
 	<string name="sdcard_error">Sorry, you have no SD card!</string>
 	<string name="url_error">Sorry, URL is invalid!</string>
@@ -78,6 +79,10 @@ the License.
   <string name="form_added_ok">%s successfully added!</string>
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
+	
+	<string name="downloading_data">Downloading Data...</string>
+	<string name="download_successful">Download of %s successful!</string>
+	<string name="download_fail">Sorry, download of %s failed!</string>
 	
 	<string name="readonly_question">This question is read only.</string>
 	<string name="form_deleted_error">Sorry, unable to delete %s</string>
@@ -114,7 +119,7 @@ the License.
   <string name="no_capture">Nothing captured yet.</string>
   <string name="one_capture">Multimedia captured.</string>
 
-	<string name="add_form">Add Forms</string>
+	<string name="add_form">Add Form</string>
 	<string name="delete_form">Delete Form</string>
 	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>

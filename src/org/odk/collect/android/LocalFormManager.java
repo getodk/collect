@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -30,8 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Responsible for displaying and deleting all the valid forms in the
- * forms directory.
+ * Responsible for displaying and deleting all the valid forms in the forms
+ * directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -43,7 +44,7 @@ public class LocalFormManager extends ListActivity {
 
     private int mDeletePosition;
     private AlertDialog mAlertDialog;
-    private ArrayList<String> mFiles;
+    private ArrayList<String> mFiles = new ArrayList<String>();
     private ArrayList<String> mFilenames = new ArrayList<String>();
     private ArrayAdapter<String> mFileAdapter;
 
@@ -51,12 +52,15 @@ public class LocalFormManager extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupView();
         buildView();
     }
 
 
-    private void buildView() {
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
+    private void setupView() {
+
+        mFiles.clear();
+        mFilenames.clear();
 
         // check directories for files
         mFiles = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
@@ -67,6 +71,11 @@ public class LocalFormManager extends ListActivity {
             String file = mFiles.get(i);
             mFilenames.add(file.substring(file.lastIndexOf("/") + 1));
         }
+
+    }
+
+
+    private void buildView() {
 
         // set adapter
         mFileAdapter =
@@ -105,7 +114,7 @@ public class LocalFormManager extends ListActivity {
                 if (getListView().getCheckedItemPosition() != -1) {
                     createDeleteDialog();
                 } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.delete_error),
+                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
@@ -128,7 +137,8 @@ public class LocalFormManager extends ListActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
-                            case DialogInterface.BUTTON1: // yes, delete and refresh
+                            case DialogInterface.BUTTON1: // yes, delete and
+                                // refresh
                                 deleteSelectedForm();
                                 refreshData();
                                 break;
@@ -148,22 +158,20 @@ public class LocalFormManager extends ListActivity {
      * Deletes the selected form
      */
     private void deleteSelectedForm() {
-        
+
         // delete from mFiles because it has full path
         String filename = mFilenames.get(mDeletePosition);
         String filepath = mFiles.get(mDeletePosition);
-        
+
         boolean deleted = FileUtils.deleteFile(filepath);
         if (deleted) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_ok, filename), Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getApplicationContext(), getString(R.string.form_deleted_ok, filename),
+                    Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_error, filename), Toast.LENGTH_SHORT)
-                    .show();
+                    getString(R.string.form_deleted_error, filename), Toast.LENGTH_SHORT).show();
         }
-        
+
         // remove item both arrays
         mFilenames.remove(mDeletePosition);
         mFiles.remove(mDeletePosition);
@@ -179,5 +187,15 @@ public class LocalFormManager extends ListActivity {
         super.onPause();
     }
 
+
+    @Override
+    protected void onResume() {
+
+        // update the list (for returning from the remote manager)
+        setupView();
+        refreshData();
+
+        super.onResume();
+    }
 
 }

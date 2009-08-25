@@ -16,24 +16,29 @@
 
 package org.odk.collect.android;
 
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the
@@ -42,52 +47,90 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+
 public class RemoteFormManager extends ListActivity implements FormDownloaderListener {
 
-    private final String t = "Form Manager";
-    
-    private static final int PROGRESS_DIALOG = 2;
-
-    // add or delete form
+    private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_ADD = Menu.FIRST;
 
-    // private String mDeleteForm;
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
 
-    private ArrayList<String> mFileList;
-
     private FormDownloadTask mFormDownloadTask;
 
+    private boolean mLoadingList;
+    private int mAddPosition;
+
+    // TODO: don't hard code this
+    private String mUrl = "http://opendatakit.appspot.com/formList";
+    private String mFormList = SharedConstants.CACHE_PATH + "formlist.xml";
+
+    private ArrayList<String> mFormName = new ArrayList<String>();
+    private ArrayList<String> mFormUrl = new ArrayList<String>();
+    private ArrayAdapter<String> mFileAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(t, "called onCreate");
+        setupView();
+    }
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
 
+    private void setupView() {
+                
+        // need white background before load
+        getListView().setBackgroundColor(Color.WHITE);
+        
+        // check for existing dialog
         mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
-        if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED)
+        if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED) {
             try {
                 dismissDialog(PROGRESS_DIALOG);
-            } catch (IllegalArgumentException e) {
-                Log.e(t, "dialog wasn't previously shown.  totally fine");
-            }
+            } catch (IllegalArgumentException e) {}
+        }
 
-        refresh();
+        // display dialog for form list download
+        showDialog(PROGRESS_DIALOG);
+
+        // download form list
+        mLoadingList = true;
+        mFormDownloadTask = new FormDownloadTask();
+        mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
+        mFormDownloadTask.execute(mUrl, mFormList);
+
     }
 
 
-    private void refresh() {
-        mFileList = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
-        ArrayAdapter<String> fileAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
-                        mFileList);
+    private void buildView() {
+
+        // create xml document
+        Document doc = null;
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            doc = db.parse(new File(mFormList));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // populate arrays with form names and urls
+        NodeList formElements = doc.getElementsByTagName("form");
+        int formCount = formElements.getLength();
+        for (int i = 0; i < formCount; i++) {
+            Node n = formElements.item(i);
+            mFormName.add(n.getChildNodes().item(0).getNodeValue() + ".xml");
+            mFormUrl.add(n.getAttributes().item(0).getNodeValue());
+        }
+
+        // create file adapter and create view
+        mFileAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
+                        mFormName);
         getListView().setItemsCanFocus(false);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        setListAdapter(fileAdapter);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        setListAdapter(mFileAdapter);
     }
+
 
 
     @Override
@@ -102,18 +145,17 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ADD:
-                createAddDialog();
+                if (getListView().getCheckedItemPosition() != -1) {
+                    addSelectedForm();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.noselect_error,
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
     }
 
-
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onCreateDialog(int)
-     */
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -127,7 +169,8 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
                                 finish();
                             }
                         };
-                mProgressDialog.setMessage(getString(R.string.loading_form));
+                mProgressDialog.setTitle(getString(R.string.downloading_data));
+                mProgressDialog.setMessage(getString(R.string.please_wait));
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
@@ -138,47 +181,46 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
 
 
     /**
-     * Create the form add dialog
+     * Adds the selected form
      */
-    private void createAddDialog() {
-        LayoutInflater li = LayoutInflater.from(this);
-        final View v = li.inflate(R.layout.add_form, null);
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.add_form));
-        mAlertDialog.setView(v);
-        DialogInterface.OnClickListener DialogUrl = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // ok, download form
-                        EditText et = (EditText) v.findViewById(R.id.add_url);
-                        showDialog(PROGRESS_DIALOG);
-                        mFormDownloadTask = new FormDownloadTask();
-//                        mFormDownloadTask.setDownloaderListener(LocalFormManager.this);
-                        mFormDownloadTask.execute(et.getText().toString());
-                        break;
-                    case DialogInterface.BUTTON2: // cancel, do nothing
-                        break;
-                }
-            }
-        };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), DialogUrl);
-        mAlertDialog.setButton2(getString(R.string.cancel), DialogUrl);
-        mAlertDialog.show();
+    private void addSelectedForm() {
+
+        // show dialog box
+        showDialog(PROGRESS_DIALOG);
+
+        // position of the form
+        mAddPosition = getListView().getCheckedItemPosition();
+
+        mLoadingList = false;
+        mFormDownloadTask = new FormDownloadTask();
+        mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
+        mFormDownloadTask.execute(mFormUrl.get(mAddPosition), SharedConstants.FORMS_PATH
+                + mFormName.get(mAddPosition));
+
     }
 
 
+    public void downloadingComplete(Boolean result, String name) {
 
-
-    public void downloadingComplete(Boolean result) {
-        Log.e("carl", "finished downloading with result " + result);
+        // no need for dialog
         dismissDialog(PROGRESS_DIALOG);
-        if (result) {
-            Toast.makeText(this, "Download Successful", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Download Failed", Toast.LENGTH_LONG).show();
+
+        // show message only if successful and not loading formlist
+        if (result && !mLoadingList) {
+            Toast.makeText(this, getString(R.string.download_successful, name), Toast.LENGTH_SHORT)
+                    .show();
+        } else if (!result) {
+            Toast.makeText(this, getString(R.string.download_fail, name), Toast.LENGTH_LONG).show();
         }
-        refresh();
+
+        if (mLoadingList) {
+            // process the form
+            buildView();
+        } else {
+            // clean up choices
+            mFileAdapter.notifyDataSetChanged();
+            getListView().clearChoices();
+        }
     }
 
 
@@ -190,22 +232,29 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
 
     @Override
     protected void onDestroy() {
-        if (mFormDownloadTask != null) mFormDownloadTask.setDownloaderListener(null);
+        if (mFormDownloadTask != null) {
+            mFormDownloadTask.setDownloaderListener(null);
+        }
         super.onDestroy();
     }
 
 
     @Override
     protected void onResume() {
-        if (mFormDownloadTask != null) mFormDownloadTask.setDownloaderListener(this);
+        if (mFormDownloadTask != null) {
+            mFormDownloadTask.setDownloaderListener(this);
+        }
         super.onResume();
     }
 
 
     @Override
     protected void onPause() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) mAlertDialog.dismiss();
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        }
         super.onPause();
     }
+
 
 }

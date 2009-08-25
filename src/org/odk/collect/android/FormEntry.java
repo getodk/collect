@@ -959,7 +959,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                 finish();
                             }
                         };
-                mProgressDialog.setMessage(getString(R.string.loading_form));
+                mProgressDialog.setTitle(getString(R.string.loading_form));
+                mProgressDialog.setMessage(getString(R.string.please_wait));
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
