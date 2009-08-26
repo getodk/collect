@@ -32,6 +32,10 @@ import android.widget.TextView;
  */
 public class FormManagerTabs extends TabActivity {
 
+    private static TextView tvl;
+    private static TextView tvr;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,26 +45,37 @@ public class FormManagerTabs extends TabActivity {
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.BLACK);
 
-        Intent saved = new Intent(this, LocalFormManager.class);
+        Intent local = new Intent(this, LocalFormManager.class);
         tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_forms))
-                .setContent(saved));
+                .setContent(local));
 
-        Intent completed = new Intent(this, RemoteFormManager.class);
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_forms)).setContent(completed));
+        Intent remote = new Intent(this, RemoteFormManager.class);
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_forms))
+                .setContent(remote));
 
         // hack to set font size
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
         TabWidget tw = (TabWidget) ll.getChildAt(0);
 
         RelativeLayout rls = (RelativeLayout) tw.getChildAt(0);
-        TextView tvs = (TextView) rls.getChildAt(1);
-        tvs.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
-        tvs.setPadding(0, 0, 0, 6);
+        tvl = (TextView) rls.getChildAt(1);
+        tvl.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
+        tvl.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlc = (RelativeLayout) tw.getChildAt(1);
-        TextView tvc = (TextView) rlc.getChildAt(1);
-        tvc.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
-        tvc.setPadding(0, 0, 0, 6);
+        tvr = (TextView) rlc.getChildAt(1);
+        tvr.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
+        tvr.setPadding(0, 0, 0, 6);
+
+    }
+
+
+    public static void setTabHeader(String string, String tab) {
+        if (tab.equals("tab1")) {
+            tvl.setText(string);
+        } else if (tab.equals("tab2")) {
+            tvr.setText(string);
+        }
 
     }
 

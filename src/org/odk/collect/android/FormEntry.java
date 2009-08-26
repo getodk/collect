@@ -201,7 +201,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         switch (requestCode) {
             case (SharedConstants.IMAGE_CAPTURE):
-                File fi = new File(SharedConstants.TMPFILE_PATH);
+                File fi = new File(SharedConstants.IMAGE_PATH);
                 try {
                     Uri ui =
                             Uri.parse(android.provider.MediaStore.Images.Media.insertImage(

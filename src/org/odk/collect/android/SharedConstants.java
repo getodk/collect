@@ -96,7 +96,7 @@ public class SharedConstants {
     /**
      * Temporary file
      */
-    public static final String TMPFILE_PATH = "/sdcard/odk/tmp";
+    public static final String IMAGE_PATH = CACHE_PATH + "tmp.jpg";
 
     /**
      * Theme used in entire application

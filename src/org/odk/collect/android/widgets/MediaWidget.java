@@ -150,7 +150,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
                     // TODO only way to get large image from android
                     // http://code.google.com/p/android/issues/detail?id=1480
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-                            SharedConstants.TMPFILE_PATH)));
+                            SharedConstants.IMAGE_PATH)));
                 } else {
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 }

@@ -95,6 +95,7 @@ public class LocalFormManager extends ListActivity {
     private void refreshData() {
         mFileAdapter.notifyDataSetChanged();
         getListView().clearChoices();
+        FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab,mFiles.size()),"tab1");
     }
 
 

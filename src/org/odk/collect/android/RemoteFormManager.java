@@ -129,6 +129,8 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         setListAdapter(mFileAdapter);
+        FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab,formCount),"tab2");
+
     }
 
 
