@@ -34,12 +34,12 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * 
  */
-public class UploaderActivity extends Activity implements UploaderListener {
+public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
 
-    private static final String t = "UploaderActivity";
+    private static final String t = "InstanceUploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
     private ProgressDialog mProgressDialog;
-    private UploaderTask mUploaderTask;
+    private InstanceUploaderTask mUploaderTask;
     private int numUploading = -1;
 
 
@@ -61,17 +61,19 @@ public class UploaderActivity extends Activity implements UploaderListener {
             return;
         }
 
-        mUploaderTask = (UploaderTask) getLastNonConfigurationInstance();
+        mUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mUploaderTask == null) {
             showDialog(PROGRESS_DIALOG);
-            mUploaderTask = new UploaderTask();
+            mUploaderTask = new InstanceUploaderTask();
             SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
             String server =
                     p.getString("UploadServer", "http://opendatakit.appspot.com/submission");
             Log.e(t, "Uploading to server: " + server);
             mUploaderTask.setUploadServer(server);
             numUploading = toUpload.size();
-            mUploaderTask.execute(toUpload.toArray(new String[toUpload.size()]));
+            
+            String[] array = toUpload.toArray(new String[toUpload.size()]);            
+            mUploaderTask.execute(array);
         } else {
             Log.e("testing", "already running");
         }
@@ -127,14 +129,16 @@ public class UploaderActivity extends Activity implements UploaderListener {
      */
     @Override
     protected void onResume() {
-        if (mUploaderTask != null) mUploaderTask.setUploaderListener(this);
+        if (mUploaderTask != null) { 
+            mUploaderTask.setUploaderListener(this);
+        }
         super.onResume();
     }
 
 
     /*
      * (non-Javadoc)
-     * @see org.odk.collect.android.UploaderListener#uploadingComplete()
+     * @see org.odk.collect.android.InstanceUploaderListener#uploadingComplete()
      */
     public void uploadingComplete(ArrayList<String> result) {
         // TODO: his needs to be changed. If the uploadingComplete() happens
@@ -163,7 +167,7 @@ public class UploaderActivity extends Activity implements UploaderListener {
 
     /*
      * (non-Javadoc)
-     * @see org.odk.collect.android.UploaderListener#progressUpdate(int, int)
+     * @see org.odk.collect.android.InstanceUploaderListener#progressUpdate(int, int)
      */
     public void progressUpdate(int progress, int total) {
         mProgressDialog.setMax(total);

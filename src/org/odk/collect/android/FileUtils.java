@@ -38,14 +38,43 @@ import java.util.ArrayList;
 public class FileUtils {
     private final static String t = "FileUtils";
 
+    
+    public static ArrayList<String> getFoldersAsArrayList(String path) {
+        ArrayList<String> mFolderList = new ArrayList<String>();
+        File root = new File(path);
+
+        if (!storageReady()) {
+            return null;
+        }
+        if (!root.exists()) {
+            if (!createFolder(path)) {
+                return null;
+            }
+        }
+        if (root.isDirectory()) {
+            File[] children = root.listFiles();
+            for (File child : children) {
+                boolean directory = child.isDirectory();
+                String filename = child.getName();
+                if (directory) {
+                    mFolderList.add(child.getAbsolutePath());
+                }
+            }
+        } 
+        return mFolderList;
+    }
 
     public static ArrayList<String> getFilesAsArrayList(String path) {
         ArrayList<String> mFileList = new ArrayList<String>();
         File root = new File(path);
 
-        if (!storageReady()) return null;
+        if (!storageReady()) {
+            return null;
+        }
         if (!root.exists()) {
-            if (!createFolder(path)) return null;
+            if (!createFolder(path)) {
+                return null;
+            }
         }
         if (root.isDirectory()) {
             File[] children = root.listFiles();

@@ -101,7 +101,7 @@ public class MainMenu extends Activity {
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceUploader.class);
+                Intent i = new Intent(getApplicationContext(), InstanceSubmitter.class);
                 startActivityForResult(i, INSTANCE_UPLOADER);
             }
 

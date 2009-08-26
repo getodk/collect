@@ -18,17 +18,13 @@ package org.odk.collect.android;
 
 import java.util.ArrayList;
 
-
-
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface UploaderListener {
+// TODO: more useful errors in results
+public interface InstanceUploaderListener {
     void uploadingComplete(ArrayList<String> result);
 
 
     void progressUpdate(int progress, int total);
 }
-
-/* TODO: We should really make the result more meaningful so we know why it failed.
- */

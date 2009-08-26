@@ -36,10 +36,10 @@ import android.util.Log;
  * @author Carl Hartung (carlhartung@gmail.com)
  * 
  */
-class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
-    private final static String t = "UploaderTask";
+class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
+    private final static String t = "InstanceUploaderTask";
 
-    UploaderListener mStateListener;
+    InstanceUploaderListener mStateListener;
     String uploadServer;
 
 
@@ -54,15 +54,21 @@ class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
      */
     @Override
     protected ArrayList<String> doInBackground(String... values) {
+        
         ArrayList<String> sent = new ArrayList<String>();
         for (int i = 0; i < values.length; i++) {
-            this.publishProgress(i + 1, values.length);
+            Log.i(t, "value i " + values[i]);
+
+            
+            publishProgress(i + 1, values.length);
 
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpPost mypost = new HttpPost(uploadServer);
-            File dir = new File(SharedConstants.INSTANCES_PATH + values[i]);
-            File[] files = dir.listFiles();
-            if (files == null) this.cancel(true);
+            File file = new File(values[i]);
+            File[] files = file.getParentFile().listFiles();
+            if (files == null) {
+                cancel(true);
+            }
 
             MultipartEntity entity = new MultipartEntity();
             Log.i(t, "# of files " + files.length);
@@ -120,7 +126,15 @@ class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
     @Override
     protected void onPostExecute(ArrayList<String> value) {
         synchronized (this) {
-            if (mStateListener != null) mStateListener.uploadingComplete(value);
+            if (mStateListener != null) {
+                if (value != null) {
+                    Log.i("yaw","value is not null");
+                } else {
+                    Log.i("yaw","value is null");
+
+                }
+                mStateListener.uploadingComplete(value);
+            }
         }
     }
 
@@ -138,7 +152,7 @@ class UploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
     }
 
 
-    public void setUploaderListener(UploaderListener sl) {
+    public void setUploaderListener(InstanceUploaderListener sl) {
         mStateListener = sl;
     }
 }

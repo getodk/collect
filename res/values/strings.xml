@@ -32,8 +32,9 @@ the License.
 	<string name="review_data">Review Stored Data</string>
 	 <string name="review_data_button">Review Stored Data (%s)</string>
 	
-	<string name="send_data">Send Finished Data</string>
-	  <string name="send_data_button">Send Finished Data (%s)</string>
+	<string name="send_selected_data">Send Selected Data</string>
+	<string name="send_data">Send Completed Data</string>
+	  <string name="send_data_button">Send Completed Data (%s)</string>
 	
 	<string name="manage_forms">Manage Forms</string>
 	  <string name="manage_forms_button">Manage Forms (%s)</string>
@@ -68,7 +69,7 @@ the License.
 	 <string name="no_files_error">Sorry, there are no files!</string>
 	
 	<string name="questionview_error">Sorry, you are not in a form yet!</string>
-	<string name="noselect_error">Sorry, you have not selected a form!</string>
+	<string name="noselect_error">Sorry, you have not selected an item!</string>
 	<string name="languages_error">Sorry, this form has no other languages!</string>
 	<string name="sdcard_error">Sorry, you have no SD card!</string>
 	<string name="url_error">Sorry, URL is invalid!</string>
@@ -90,7 +91,7 @@ the License.
 	
 	<string name="delete_confirm">Are you sure you want to delete %s?</string>
 	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>
-	<string name="savequit_confirm">Are you sure you want to quit? Your data will be saved.</string>
+	<string name="savequit_confirm">Are you sure you want to exit? Your data will be saved.</string>
 	
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>
 
@@ -119,8 +120,8 @@ the License.
   <string name="no_capture">Nothing captured yet.</string>
   <string name="one_capture">Multimedia captured.</string>
 
-	<string name="add_form">Add Form</string>
-	<string name="delete_form">Delete Form</string>
+	<string name="add_form">Add Selected Form</string>
+	<string name="delete_form">Delete Selected Form</string>
 	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>
 	<string name="quit_entry">Save and Exit</string>

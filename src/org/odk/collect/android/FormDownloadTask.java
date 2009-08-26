@@ -37,18 +37,19 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
     FormDownloaderListener mStateListener;
     String mName;
 
+
     @Override
     protected Boolean doInBackground(String... args) {
 
         String url = args[0];
         String path = args[1];
-        
-        int slash = path.lastIndexOf("/")+1;
-        int period =  path.lastIndexOf(".")+1;
-        String base = path.substring(0,slash-1);
-        String filename = path.substring(slash, period-1);
+
+        int slash = path.lastIndexOf("/") + 1;
+        int period = path.lastIndexOf(".") + 1;
+        String base = path.substring(0, slash - 1);
+        String filename = path.substring(slash, period - 1);
         String ext = path.substring(period);
-        
+
         // create url
         URL u = null;
         try {
@@ -66,16 +67,16 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
 
             // write connection to file
             InputStream is = c.getInputStream();
-            
+
             // if file exists, append a number
             File f = new File(path);
-            int i =  2;
-            while(f.exists()) {
+            int i = 2;
+            while (f.exists()) {
                 f = new File(base + "/" + filename + " " + i + "." + ext);
                 i++;
             }
             path = f.getAbsolutePath();
-            
+
             OutputStream os = new FileOutputStream(f);
             byte buf[] = new byte[1024];
             int len;
@@ -90,16 +91,21 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
             e.printStackTrace();
             return false;
         }
-        
-        mName = path.substring(path.lastIndexOf("/")+1);
+
+        mName = path.substring(path.lastIndexOf("/") + 1);
+
         return true;
     }
 
+
     @Override
     protected void onPostExecute(Boolean result) {
-        
+
         synchronized (this) {
             if (mStateListener != null) {
+                if (mName == null) {
+                    mName = "item";
+                }
                 mStateListener.downloadingComplete(result, mName);
             }
         }

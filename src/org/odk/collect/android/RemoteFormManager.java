@@ -69,6 +69,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
     private ArrayList<String> mFormUrl = new ArrayList<String>();
     private ArrayAdapter<String> mFileAdapter;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,16 +78,17 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
 
 
     private void setupView() {
-                
+
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);
-        
+
         // check for existing dialog
         mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
         if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED) {
             try {
                 dismissDialog(PROGRESS_DIALOG);
-            } catch (IllegalArgumentException e) {}
+            } catch (IllegalArgumentException e) {
+            }
         }
 
         // display dialog for form list download
@@ -129,7 +131,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         setListAdapter(mFileAdapter);
-        FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab,formCount),"tab2");
+        FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab, formCount), "tab2");
 
     }
 
@@ -157,6 +159,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         }
         return super.onMenuItemSelected(featureId, item);
     }
+
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -207,21 +210,20 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         // no need for dialog
         dismissDialog(PROGRESS_DIALOG);
 
-        // show message only if successful and not loading formlist
-        if (result && !mLoadingList) {
-            Toast.makeText(this, getString(R.string.download_successful, name), Toast.LENGTH_SHORT)
-                    .show();
-        } else if (!result) {
+        // show message only if successful and not loading formlist'
+        if (!result) {
             Toast.makeText(this, getString(R.string.download_fail, name), Toast.LENGTH_LONG).show();
-        }
-
-        if (mLoadingList) {
-            // process the form
-            buildView();
         } else {
-            // clean up choices
-            mFileAdapter.notifyDataSetChanged();
-            getListView().clearChoices();
+
+            if (mLoadingList) {
+                buildView();
+            } else {
+                // clean up choices
+                Toast.makeText(this, getString(R.string.download_successful, name),
+                        Toast.LENGTH_SHORT).show();
+                mFileAdapter.notifyDataSetChanged();
+                getListView().clearChoices();
+            }
         }
     }
 

@@ -86,7 +86,7 @@ public class SharedConstants {
      */
     public static final String KEY_FORMPATH = "formpath";
     public static final String KEY_INSTANCEPATH = "instancepath";
-
+    public static final String KEY_INSTANCES = "instances";
 
     /**
      * How long to wait when opening network connection in milliseconds

@@ -17,6 +17,7 @@
 package org.odk.collect.android;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import android.app.ListActivity;
@@ -84,6 +85,8 @@ public class InstanceChooser extends ListActivity {
      */
     private void buildView() {
 
+        updateInstanceDirectory();
+
         // retrieve status information from instance. needed for tabs.
         Intent i = getIntent();
         String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
@@ -105,8 +108,24 @@ public class InstanceChooser extends ListActivity {
 
         // cleanup
         fda.close();
+        
     }
 
+    /**
+     * Remove empty folders from instance directory
+     */
+    private void updateInstanceDirectory() {
+        ArrayList<String> storedInstances = FileUtils.getFoldersAsArrayList(SharedConstants.INSTANCES_PATH);
+
+        // remove orphaned form defs
+        for (String instanceFolder : storedInstances) {
+            File folder = new File(instanceFolder);
+            int count = folder.list().length;
+            if (count == 0) {
+                folder.delete();
+            }
+        }
+    }
 
     /**
      * Given an instance path, return the full path to the form

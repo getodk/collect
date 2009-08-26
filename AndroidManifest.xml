@@ -30,8 +30,8 @@ the License.
     <activity android:name=".LocalFormManager" android:label="@string/app_name"/>
     <activity android:name=".RemoteFormManager" android:label="@string/app_name"/>
     <activity android:name=".FormManagerTabs" android:label="@string/app_name"/>
-    <activity android:name=".InstanceUploader" android:label="@string/app_name"/>
-    <activity android:name=".UploaderActivity" android:label="@string/app_name"/>
+    <activity android:name=".InstanceSubmitter" android:label="@string/app_name"/>
+    <activity android:name=".InstanceUploaderActivity" android:label="@string/app_name"/>
     <activity android:name=".ServerPreferences" android:label="@string/app_name"/>
     <activity android:name=".SavedPreferences" android:label="@string/app_name"/>
   <activity android:name=".FormHierarchyActivity" android:label="@string/app_name"/>
