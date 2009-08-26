@@ -81,7 +81,10 @@ the License.
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
 	
+	<string name="uploading_data">Uploading Data...</string>
 	<string name="downloading_data">Downloading Data...</string>
+	<string name="upload_all_successful">Upload of %s item(s) successful!</string>
+	 <string name="upload_some_failed">Sorry, %s item(s) failed!</string>
 	<string name="download_successful">Download of %s successful!</string>
 	<string name="download_fail">Sorry, download of %s failed!</string>
 	

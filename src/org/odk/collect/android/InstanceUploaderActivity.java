@@ -15,18 +15,15 @@
  */
 package org.odk.collect.android;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Activity to upload completed forms.
@@ -36,128 +33,63 @@ import android.widget.Toast;
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
 
-    private static final String t = "InstanceUploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
+    private final static String KEY_TOTALCOUNT = "totalcount";
     private ProgressDialog mProgressDialog;
-    private InstanceUploaderTask mUploaderTask;
-    private int numUploading = -1;
+
+    private InstanceUploaderTask mInstanceUploaderTask;
+    private int totalCount = -1;
+
+    // TODO: don't hard code this
+    private String mUrl = "http://opendatakit.appspot.com/submission";
 
 
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onCreate(android.os.Bundle)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<String> toUpload = null;
-        Intent i = this.getIntent();
-        Bundle b = i.getBundleExtra("BUNDLE");
-        if (b != null) {
-            toUpload = b.getStringArrayList("UPLOAD");
-        } else {
+        // get instances to upload
+        Intent i = getIntent();
+        ArrayList<String> instances = i.getStringArrayListExtra(SharedConstants.KEY_INSTANCES);
+        if (instances == null) {
             // nothing to upload
             return;
         }
 
-        mUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
-        if (mUploaderTask == null) {
+        mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
+        if (mInstanceUploaderTask == null) {
+
+            // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            mUploaderTask = new InstanceUploaderTask();
-            SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
-            String server =
-                    p.getString("UploadServer", "http://opendatakit.appspot.com/submission");
-            Log.e(t, "Uploading to server: " + server);
-            mUploaderTask.setUploadServer(server);
-            numUploading = toUpload.size();
-            
-            String[] array = toUpload.toArray(new String[toUpload.size()]);            
-            mUploaderTask.execute(array);
-        } else {
-            Log.e("testing", "already running");
+            mInstanceUploaderTask = new InstanceUploaderTask();
+            mInstanceUploaderTask.setUploadServer(mUrl);
+            totalCount = instances.size();
+
+            // convert array list to an array
+            String[] sa = instances.toArray(new String[totalCount]);
+            mInstanceUploaderTask.execute(sa);
         }
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
-     */
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        numUploading = savedInstanceState.getInt("uploading");
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("uploading", numUploading);
-    }
-
-
-    /*
-    * (non-Javadoc)
-    * @see android.app.Activity#onRetainNonConfigurationInstance()
-    */
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mUploaderTask;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onDestroy()
-     */
-    @Override
-    protected void onDestroy() {
-        mUploaderTask.setUploaderListener(null);
-        super.onDestroy();
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onResume()
-     */
-    @Override
-    protected void onResume() {
-        if (mUploaderTask != null) { 
-            mUploaderTask.setUploaderListener(this);
-        }
-        super.onResume();
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * @see org.odk.collect.android.InstanceUploaderListener#uploadingComplete()
-     */
+    // TODO: if uploadingComplete() when activity backgrounded, won't work.
     public void uploadingComplete(ArrayList<String> result) {
-        // TODO: his needs to be changed. If the uploadingComplete() happens
-        // when the activity is in the background
-        // this won't work. don't change the orientation. fix coming soon.
-        Log.e("carl", "results = " + result.size() + " and numuploading = " + numUploading);
-        if (result.size() == numUploading) {
-            Toast.makeText(this, "Uploads Completed Successfully!", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this,
-                    numUploading - result.size() + " of " + numUploading + " uploads failed",
+
+        int resultSize = result.size();
+        if (resultSize == totalCount) {
+            Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
                     Toast.LENGTH_LONG).show();
+        } else {
+            String s = totalCount - resultSize + " of " + totalCount;
+            Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
+                    .show();
         }
 
+        // for each path, update the status
         FileDbAdapter fda = new FileDbAdapter(this);
-        for (int i = 0; i < result.size(); i++) {
-            String s = result.get(i);
+        for (int i = 0; i < resultSize; i++) {
             fda.open();
-            fda.updateFile(s, "submitted");
+            fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
             fda.close();
         }
 
@@ -165,20 +97,12 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see org.odk.collect.android.InstanceUploaderListener#progressUpdate(int, int)
-     */
     public void progressUpdate(int progress, int total) {
         mProgressDialog.setMax(total);
         mProgressDialog.setProgress(progress);
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onCreateDialog(int)
-     */
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -188,11 +112,12 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                mUploaderTask.setUploaderListener(null);
+                                mInstanceUploaderTask.setUploaderListener(null);
                                 finish();
                             }
                         };
-                mProgressDialog.setMessage("Uploading data");
+                mProgressDialog.setTitle(getString(R.string.uploading_data));
+                mProgressDialog.setMessage(getString(R.string.please_wait));
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setMax(0);
@@ -200,6 +125,42 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 return mProgressDialog;
         }
         return null;
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        totalCount = savedInstanceState.getInt(KEY_TOTALCOUNT);
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_TOTALCOUNT, totalCount);
+    }
+
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return mInstanceUploaderTask;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        mInstanceUploaderTask.setUploaderListener(null);
+        super.onDestroy();
+    }
+
+
+    @Override
+    protected void onResume() {
+        if (mInstanceUploaderTask != null) {
+            mInstanceUploaderTask.setUploaderListener(this);
+        }
+        super.onResume();
     }
 
 }

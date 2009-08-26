@@ -48,18 +48,14 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see android.os.AsyncTask#doInBackground(Params[])
-     */
     @Override
     protected ArrayList<String> doInBackground(String... values) {
-        
+
         ArrayList<String> sent = new ArrayList<String>();
         for (int i = 0; i < values.length; i++) {
             Log.i(t, "value i " + values[i]);
 
-            
+
             publishProgress(i + 1, values.length);
 
             DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -119,30 +115,16 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-     */
     @Override
     protected void onPostExecute(ArrayList<String> value) {
         synchronized (this) {
             if (mStateListener != null) {
-                if (value != null) {
-                    Log.i("yaw","value is not null");
-                } else {
-                    Log.i("yaw","value is null");
-
-                }
                 mStateListener.uploadingComplete(value);
             }
         }
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see android.os.AsyncTask#onProgressUpdate(Progress[])
-     */
     @Override
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {

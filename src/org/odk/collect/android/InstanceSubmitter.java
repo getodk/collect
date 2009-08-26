@@ -44,7 +44,6 @@ public class InstanceSubmitter extends ListActivity {
 
     private static final int MENU_UPLOAD = Menu.FIRST;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
