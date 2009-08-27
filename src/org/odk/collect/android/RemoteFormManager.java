@@ -229,6 +229,11 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
                         Toast.LENGTH_SHORT).show();
                 mFileAdapter.notifyDataSetChanged();
                 getListView().clearChoices();
+                // update local form tab
+                int formCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+                FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab, formCount),
+                        "tab1");
+
             }
         }
     }
