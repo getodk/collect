@@ -96,6 +96,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
 
         // download form list
         mLoadingList = true;
+        FileUtils.createFolder(SharedConstants.CACHE_PATH);
         mFormDownloadTask = new FormDownloadTask();
         mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
         mFormDownloadTask.execute(mUrl, mFormList);
@@ -106,33 +107,37 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
     private void buildView() {
 
         // create xml document
-        Document doc = null;
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            doc = db.parse(new File(mFormList));
-        } catch (Exception e) {
-            e.printStackTrace();
+        File file = new File(mFormList);
+        if (file.exists()) {
+
+            Document doc = null;
+            try {
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                doc = db.parse(file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // populate arrays with form names and urls
+            NodeList formElements = doc.getElementsByTagName("form");
+            int formCount = formElements.getLength();
+            for (int i = 0; i < formCount; i++) {
+                Node n = formElements.item(i);
+                mFormName.add(n.getChildNodes().item(0).getNodeValue() + ".xml");
+                mFormUrl.add(n.getAttributes().item(0).getNodeValue());
+            }
+
+            // create file adapter and create view
+            mFileAdapter =
+                    new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
+                            mFormName);
+            getListView().setItemsCanFocus(false);
+            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            setListAdapter(mFileAdapter);
+            FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab, formCount), "tab2");
+
         }
-
-        // populate arrays with form names and urls
-        NodeList formElements = doc.getElementsByTagName("form");
-        int formCount = formElements.getLength();
-        for (int i = 0; i < formCount; i++) {
-            Node n = formElements.item(i);
-            mFormName.add(n.getChildNodes().item(0).getNodeValue() + ".xml");
-            mFormUrl.add(n.getAttributes().item(0).getNodeValue());
-        }
-
-        // create file adapter and create view
-        mFileAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
-                        mFormName);
-        getListView().setItemsCanFocus(false);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        setListAdapter(mFileAdapter);
-        FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab, formCount), "tab2");
-
     }
 
 
@@ -197,6 +202,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         mAddPosition = getListView().getCheckedItemPosition();
 
         mLoadingList = false;
+        FileUtils.createFolder(SharedConstants.FORMS_PATH);
         mFormDownloadTask = new FormDownloadTask();
         mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
         mFormDownloadTask.execute(mFormUrl.get(mAddPosition), SharedConstants.FORMS_PATH

@@ -51,14 +51,13 @@ public class LocalFormManager extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupView();
-        buildView();
+        // buildView takes place in resume
     }
 
 
-    private void setupView() {
 
-        mFiles.clear();
+    private void buildView() {
+
         mFilenames.clear();
 
         // check directories for files
@@ -70,11 +69,6 @@ public class LocalFormManager extends ListActivity {
             String file = mFiles.get(i);
             mFilenames.add(file.substring(file.lastIndexOf("/") + 1));
         }
-
-    }
-
-
-    private void buildView() {
 
         // set adapter
         mFileAdapter =
@@ -95,7 +89,7 @@ public class LocalFormManager extends ListActivity {
     private void refreshData() {
         mFileAdapter.notifyDataSetChanged();
         getListView().clearChoices();
-        FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab,mFiles.size()),"tab1");
+        FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab, mFiles.size()), "tab1");
     }
 
 
@@ -192,7 +186,7 @@ public class LocalFormManager extends ListActivity {
     protected void onResume() {
 
         // update the list (for returning from the remote manager)
-        setupView();
+        buildView();
         refreshData();
 
         super.onResume();

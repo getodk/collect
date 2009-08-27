@@ -104,7 +104,7 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
         synchronized (this) {
             if (mStateListener != null) {
                 if (mName == null) {
-                    mName = "item";
+                    mName = "item(s)";
                 }
                 mStateListener.downloadingComplete(result, mName);
             }

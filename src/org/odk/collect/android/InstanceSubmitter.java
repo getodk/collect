@@ -43,11 +43,13 @@ import java.util.ArrayList;
 public class InstanceSubmitter extends ListActivity {
 
     private static final int MENU_UPLOAD = Menu.FIRST;
+    private SimpleCursorAdapter mInstances;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        buildView();
+        // buildView takes place in resume
     }
 
 
@@ -58,7 +60,7 @@ public class InstanceSubmitter extends ListActivity {
     private void buildView() {
 
 
-        // get all instances that match the status.
+        // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
         Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
@@ -69,10 +71,10 @@ public class InstanceSubmitter extends ListActivity {
         int[] view = new int[] {android.R.id.text1};
 
         // render total instance view
-        SimpleCursorAdapter instances =
+        mInstances =
                 new SimpleCursorAdapter(this, android.R.layout.simple_list_item_multiple_choice, c,
                         data, view);
-        setListAdapter(instances);
+        setListAdapter(mInstances);
 
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -82,31 +84,34 @@ public class InstanceSubmitter extends ListActivity {
 
         // cleanup
         fda.close();
+       // c.close();
     }
 
 
     private void uploadSelectedData() {
 
         // paths to upload
-        ArrayList<String> instances = new ArrayList<String>();
+        ArrayList<String> selectedInstances = new ArrayList<String>();
 
         // get all checked items
+        Cursor c = null;
         SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
         for (int i = 0; i < checkedItems.size(); i++) {
             if (checkedItems.get(checkedItems.keyAt(i)) == true) {
-
                 // put path of item into array
-                Cursor c = (Cursor) getListAdapter().getItem(checkedItems.keyAt(i));
+                c = (Cursor) getListAdapter().getItem(checkedItems.keyAt(i));
+                c.moveToFirst();
                 String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-                instances.add(s);
-                c.close();
-
+                selectedInstances.add(s);
             }
+        }
+        if (c != null) {
+            c.close();
         }
 
         // bundle intent with upload files
         Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(SharedConstants.KEY_INSTANCES, instances);
+        i.putExtra(SharedConstants.KEY_INSTANCES, selectedInstances);
         startActivity(i);
     }
 
@@ -139,6 +144,7 @@ public class InstanceSubmitter extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        buildView();
     }
 
 

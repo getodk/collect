@@ -15,9 +15,8 @@
  */
 package org.odk.collect.android;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -25,9 +24,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
@@ -40,78 +43,84 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
     private final static String t = "InstanceUploaderTask";
 
     InstanceUploaderListener mStateListener;
-    String uploadServer;
+    String mUrl;
 
 
     public void setUploadServer(String newServer) {
-        uploadServer = newServer;
+        mUrl = newServer;
     }
 
 
     @Override
     protected ArrayList<String> doInBackground(String... values) {
 
-        ArrayList<String> sent = new ArrayList<String>();
-        for (int i = 0; i < values.length; i++) {
-            Log.i(t, "value i " + values[i]);
+        ArrayList<String> uploadedIntances = new ArrayList<String>();
+        int instanceCount = values.length;
 
+        for (int i = 0; i < instanceCount; i++) {
 
-            publishProgress(i + 1, values.length);
+            publishProgress(i + 1, instanceCount);
 
+            // configure connection
+            HttpParams params = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(params, SharedConstants.CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(params, SharedConstants.CONNECTION_TIMEOUT);
+
+            // setup client
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpPost mypost = new HttpPost(uploadServer);
+            HttpPost httppost = new HttpPost(mUrl);
+
+            // get instance file
             File file = new File(values[i]);
+
+            // find all files in parent directory
             File[] files = file.getParentFile().listFiles();
             if (files == null) {
                 cancel(true);
             }
 
+            // mime post
             MultipartEntity entity = new MultipartEntity();
-            Log.i(t, "# of files " + files.length);
-
             for (int j = 0; j < files.length; j++) {
                 File f = files[j];
+
                 if (f.getName().endsWith(".xml")) {
-                    Log.i(t, "adding xml file: " + f.getAbsolutePath());
+                    // uploading xml file
                     entity.addPart("xml_submission_file", new FileBody(f));
                 } else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
-                    Log.i(t, "adding image file: " + f.getAbsolutePath());
+                    // upload image file
                     entity.addPart(f.getName(), new FileBody(f));
                 } else {
-                    Log.i(t, "unhandled file: " + f.getAbsolutePath());
+                    // Log.i(t, "unhandled file: " + f.getAbsolutePath());
                 }
-
             }
+            httppost.setEntity(entity);
 
-            mypost.setEntity(entity);
+            // prepare response and return uploaded
             HttpResponse response = null;
             try {
-                response = httpclient.execute(mypost);
+                response = httpclient.execute(httppost);
             } catch (ClientProtocolException e) {
-                Log.e(t, "Protocol Exception Error");
                 e.printStackTrace();
-                return sent;
+                return uploadedIntances;
             } catch (IOException e) {
-                Log.e(t, "IO Execption Error");
                 e.printStackTrace();
-                return sent;
+                return uploadedIntances;
             } catch (IllegalStateException e) {
-                Log.e(t, "Illegal State Exception");
                 e.printStackTrace();
-                return sent;
+                return uploadedIntances;
             }
-            if (response != null && response.getStatusLine().getStatusCode() == 200) {
-                Log.d(t, "good response: " + response.getStatusLine());
-                sent.add(values[i]);
-            } else if (response == null) {
-                Log.e(t, "response was null");
-                break;
+
+            // check response
+            int responseCode = response.getStatusLine().getStatusCode();
+            if (responseCode == 200) {
+                uploadedIntances.add(values[i]);
             } else {
-                Log.d(t, "bad response: " + response.getStatusLine());
+                Log.d(t, "bad response: " + responseCode);
                 break;
             }
         }
-        return sent;
+        return uploadedIntances;
     }
 
 
@@ -128,8 +137,11 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
     @Override
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {
-            if (mStateListener != null)
+            if (mStateListener != null) {
+                // update progress and total
                 mStateListener.progressUpdate(values[0].intValue(), values[1].intValue());
+            }
+
         }
     }
 

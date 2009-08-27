@@ -96,7 +96,7 @@ public class SharedConstants {
     /**
      * Temporary file
      */
-    public static final String IMAGE_PATH = CACHE_PATH + "tmp.jpg";
+    public static final String IMAGE_PATH = CACHE_PATH + "tmp.bin";
 
     /**
      * Theme used in entire application
