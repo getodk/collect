@@ -112,7 +112,6 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
             // check response
             String serverLocation = response.getHeaders("Location")[0].getValue();
             int responseCode = response.getStatusLine().getStatusCode();
-            Log.i("yaw",serverLocation + " " + responseCode);
             if (mUrl.contains(serverLocation) && responseCode == 201) {
                 uploadedIntances.add(values[i]);
             }
