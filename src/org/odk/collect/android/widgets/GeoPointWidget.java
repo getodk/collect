@@ -48,6 +48,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
 
     private Button mActionButton;
     private TextView mStringAnswer;
+    private TextView mAnswerDisplay;
 
     private ProgressDialog mLocationDialog;
     private LocationManager mLocationManager;
@@ -73,10 +74,10 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         } else {
             try {
                 // segment lat and lon
-                String[] sga = s.replace("lat: ", "").replace("\nlon: ", " ").split(" ");
+                String[] sa = s.split(" ");
                 double gp[] = new double[2];
-                gp[0] = Double.valueOf(sga[0]).doubleValue();
-                gp[1] = Double.valueOf(sga[1]).doubleValue();
+                gp[0] = Double.valueOf(sa[0]).doubleValue();
+                gp[1] = Double.valueOf(sa[1]).doubleValue();
                 return new GeoPointData(gp);
             } catch (Exception NumberFormatException) {
                 return null;
@@ -96,12 +97,15 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         mActionButton.setEnabled(!prompt.isReadonly());
 
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
-        mStringAnswer.setGravity(Gravity.CENTER);
+
+        mAnswerDisplay = new TextView(getContext());
+        mAnswerDisplay
+                .setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE-1);
+        mAnswerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            mStringAnswer.setText("Lat: " + s.replace(" ", "\n:Lon: "));
+            setAnswer(s);
         }
 
         // when you press the button
@@ -132,8 +136,16 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
 
         // finish complex layout
         addView(mActionButton);
-        addView(mStringAnswer);
+        addView(mAnswerDisplay);
 
+    }
+
+
+    private void setAnswer(String s) {
+        mStringAnswer.setText(s);
+
+        String[] sa = s.split(" ");
+        mAnswerDisplay.setText("Lat: " + sa[0] + "\n" + "Lon: " + sa[1]);
     }
 
 
@@ -186,8 +198,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         if (mLocationDialog != null && mLocationDialog.isShowing()) {
             mLocationDialog.dismiss();
             if (mLocation != null) {
-                mStringAnswer.setText("Lat: " + mLocation.getLatitude() + "\nLon: "
-                        + mLocation.getLongitude());
+                setAnswer(mLocation.getLatitude() + " " + mLocation.getLongitude());
             }
         }
         if (mLocationManager != null) {
