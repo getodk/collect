@@ -16,12 +16,11 @@
 package org.odk.collect.android;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -41,7 +40,6 @@ import java.util.ArrayList;
  * 
  */
 class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
-    private final static String t = "InstanceUploaderTask";
 
     InstanceUploaderListener mStateListener;
     String mUrl;
@@ -66,9 +64,10 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
             HttpParams params = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(params, SharedConstants.CONNECTION_TIMEOUT);
             HttpConnectionParams.setSoTimeout(params, SharedConstants.CONNECTION_TIMEOUT);
+            HttpClientParams.setRedirecting(params, false);
 
             // setup client
-            DefaultHttpClient httpclient = new DefaultHttpClient();
+            DefaultHttpClient httpclient = new DefaultHttpClient(params);
             HttpPost httppost = new HttpPost(mUrl);
 
             // get instance file
@@ -82,17 +81,14 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
 
             // mime post
             MultipartEntity entity = new MultipartEntity();
-            for (int j = 0; j < files.length; j++) {
+            for (int j = 0; j < 1; j++) {
                 File f = files[j];
-
                 if (f.getName().endsWith(".xml")) {
                     // uploading xml file
                     entity.addPart("xml_submission_file", new FileBody(f));
                 } else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
                     // upload image file
                     entity.addPart(f.getName(), new FileBody(f));
-                } else {
-                    // Log.i(t, "unhandled file: " + f.getAbsolutePath());
                 }
             }
             httppost.setEntity(entity);
@@ -113,16 +109,10 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
             }
 
             // check response
-            Header[] h = response.getAllHeaders();
-            for (Header header : h) {
-                Log.i("submit-test",header.getName() + "," + header.getValue());
-            }
+            String serverLocation = response.getHeaders("Location")[0].getValue();
             int responseCode = response.getStatusLine().getStatusCode();
-            if (responseCode == 200) {
+            if (mUrl.startsWith(serverLocation) && responseCode == 302) {
                 uploadedIntances.add(values[i]);
-            } else {
-                Log.d(t, "bad response: " + responseCode);
-                break;
             }
         }
         return uploadedIntances;

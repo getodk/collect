@@ -16,11 +16,6 @@
 
 package org.odk.collect.android.widgets;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
-
 import android.R;
 import android.content.Context;
 import android.text.method.TextKeyListener;
@@ -28,6 +23,11 @@ import android.text.method.TextKeyListener.Capitalize;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.EditText;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.SharedConstants;
 
 /**
  * The most basic widget that allows for entry of any text.

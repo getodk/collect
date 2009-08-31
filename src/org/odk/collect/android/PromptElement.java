@@ -16,8 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.util.Vector;
-
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
@@ -26,6 +24,8 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.util.OrderedHashtable;
 import org.javarosa.formmanager.view.FormElementBinding;
+
+import java.util.Vector;
 
 /**
  * Used by {@link QuestionView} to display Questions and by {@link FormEntry} to

@@ -16,8 +16,6 @@
 
 package org.odk.collect.android;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,6 +26,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches

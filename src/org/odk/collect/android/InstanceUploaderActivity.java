@@ -89,7 +89,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         FileDbAdapter fda = new FileDbAdapter(this);
         for (int i = 0; i < resultSize; i++) {
             fda.open();
-            fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
+            //fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
             fda.close();
         }
 

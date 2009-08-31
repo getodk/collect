@@ -16,8 +16,11 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import android.content.Context;
+import android.util.TypedValue;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -26,11 +29,8 @@ import org.javarosa.core.util.OrderedHashtable;
 import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.SharedConstants;
 
-import android.content.Context;
-import android.util.TypedValue;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.

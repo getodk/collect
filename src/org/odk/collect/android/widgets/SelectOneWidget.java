@@ -16,7 +16,10 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Enumeration;
+import android.content.Context;
+import android.util.TypedValue;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -25,10 +28,7 @@ import org.javarosa.core.util.OrderedHashtable;
 import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.SharedConstants;
 
-import android.content.Context;
-import android.util.TypedValue;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import java.util.Enumeration;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
