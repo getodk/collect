@@ -28,7 +28,8 @@ the License.
       android:layout_height="fill_parent"
       android:text="@string/no_items_error" 
       android:textSize="7pt" 
-      android:padding="20px"
+      android:paddingLeft="20px"
+      android:paddingRight="20px"
       android:gravity="center" 
       android:background="@drawable/white" 
       android:textColor="@drawable/black"/>

@@ -28,6 +28,7 @@ the License.
 		next question. Reverse the slide for the previous question. Press Menu
 		for more options.</string>
 	<string name="enter_data_description">%s has been selected for data entry.</string>
+  <string name="review_data_description">%s has been selected for data review.</string>
 
 	<string name="review_data">Review Stored Data</string>
 	 <string name="review_data_button">Review Stored Data (%s)</string>
@@ -94,7 +95,7 @@ the License.
 	 <string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
 	
 	<string name="delete_confirm">Are you sure you want to delete %s?</string>
-	<string name="entryquit_confirm">Going back now will delete the entered data. Are you sure?</string>
+	<string name="entryquit_confirm">Going back will delete any unsaved data. Are you sure?</string>
 	<string name="savequit_confirm">Are you sure you want to exit? Your data will be saved.</string>
 	
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>

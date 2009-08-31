@@ -426,8 +426,21 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case PromptElement.TYPE_START:
                 View startView = View.inflate(this, R.layout.formentry_start, null);
                 setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
-                ((TextView) startView.findViewById(R.id.description)).setText(getString(
-                        R.string.enter_data_description, mFormHandler.getFormTitle()));
+
+                FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
+                fda.open();
+                Cursor c = fda.fetchFile(mInstancePath, null);
+                if (c != null && c.getCount() > 0) {
+                    ((TextView) startView.findViewById(R.id.description)).setText(getString(
+                            R.string.review_data_description, c.getString(c
+                                    .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
+                } else {
+                    ((TextView) startView.findViewById(R.id.description)).setText(getString(
+                            R.string.enter_data_description, mFormHandler.getFormTitle()));
+                }
+
+                c.close();
+                fda.close();
                 return startView;
             case PromptElement.TYPE_END:
                 View endView = View.inflate(this, R.layout.formentry_end, null);
@@ -832,7 +845,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         } else {
                             // not previously saved, cleaning up
                             String instanceFolder =
-                                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/")+1);
+                                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
                             FileUtils.deleteFolder(instanceFolder);
                         }
                         c.close();
