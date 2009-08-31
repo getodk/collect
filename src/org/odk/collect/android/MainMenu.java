@@ -16,6 +16,8 @@
 
 package org.odk.collect.android;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -101,7 +103,7 @@ public class MainMenu extends Activity {
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceSubmitter.class);
+                Intent i = new Intent(getApplicationContext(), InstanceUploader.class);
                 startActivityForResult(i, INSTANCE_UPLOADER);
             }
 
@@ -185,7 +187,12 @@ public class MainMenu extends Activity {
         c.close();
 
         // count for downloaded forms
-        mFormsCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+        ArrayList<String> forms = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        if (forms != null) {
+            mFormsCount = forms.size();
+        } else {
+            mFormsCount = 0;
+        }
 
         // count for available forms
         c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);

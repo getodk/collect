@@ -18,6 +18,7 @@ package org.odk.collect.android;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
@@ -112,6 +113,10 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
             }
 
             // check response
+            Header[] h = response.getAllHeaders();
+            for (Header header : h) {
+                Log.i("submit-test",header.getName() + "," + header.getValue());
+            }
             int responseCode = response.getStatusLine().getStatusCode();
             if (responseCode == 200) {
                 uploadedIntances.add(values[i]);

@@ -80,6 +80,11 @@ public class FormChooser extends ListActivity {
         SimpleCursorAdapter instances =
                 new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
+        if (c.getCount() > 0) {
+            setListAdapter(instances);
+        } else {
+            setContentView(R.layout.no_items);
+        }
 
         // cleanup
         fda.close();
@@ -118,31 +123,39 @@ public class FormChooser extends ListActivity {
 
 
         // sort, then loop through forms on sdcard. add and remove as necessary.
-        Collections.sort(storedForms, NaturalOrderComparator.NUMERICAL_ORDER);
-        for (String formPath : storedForms) {
-            String hash = FileUtils.getMd5Hash(new File(formPath));
-            // if hash is not in db, add the form.
-            if (!availableForms.containsKey((hash))) {
-                fda.createFile(formPath, FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
-            } else if (availableForms.containsKey((hash))) {
-                // if duplicate form found on sd card, remove it.
-                if (!formPath.equals(availableForms.get(hash))) {
-                    (new File(formPath)).delete();
+        if (storedForms != null) {
+            Collections.sort(storedForms, NaturalOrderComparator.NUMERICAL_ORDER);
+            for (String formPath : storedForms) {
+                String hash = FileUtils.getMd5Hash(new File(formPath));
+                // if hash is not in db, add the form.
+                if (!availableForms.containsKey((hash))) {
+                    fda.createFile(formPath, FileDbAdapter.TYPE_FORM,
+                            FileDbAdapter.STATUS_AVAILABLE);
+                } else if (availableForms.containsKey((hash))) {
+                    // if duplicate form found on sd card, remove it.
+                    if (!formPath.equals(availableForms.get(hash))) {
+                        (new File(formPath)).delete();
+                    }
                 }
             }
         }
+
 
         // clean up adapter
         fda.close();
 
         // remove orphaned form defs
-        for (String cachePath : cachedForms) {
-            String hash =
-                    cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath.lastIndexOf("."));
-            if (!availableForms.containsKey(hash)) {
-                (new File(cachePath)).delete();
+        if (cachedForms != null) {
+            for (String cachePath : cachedForms) {
+                String hash =
+                        cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
+                                .lastIndexOf("."));
+                if (!availableForms.containsKey(hash)) {
+                    (new File(cachePath)).delete();
+                }
             }
         }
+
 
     }
 

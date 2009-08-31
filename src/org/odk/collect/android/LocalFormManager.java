@@ -62,12 +62,14 @@ public class LocalFormManager extends ListActivity {
 
         // check directories for files
         mFiles = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
-        Collections.sort(mFiles, NaturalOrderComparator.NUMERICAL_ORDER);
+        if (mFiles != null) {
+            Collections.sort(mFiles, NaturalOrderComparator.NUMERICAL_ORDER);
 
-        // parse list for filenames
-        for (int i = 0; i < mFiles.size(); i++) {
-            String file = mFiles.get(i);
-            mFilenames.add(file.substring(file.lastIndexOf("/") + 1));
+            // parse list for filenames
+            for (int i = 0; i < mFiles.size(); i++) {
+                String file = mFiles.get(i);
+                mFilenames.add(file.substring(file.lastIndexOf("/") + 1));
+            }
         }
 
         // set adapter
@@ -76,9 +78,14 @@ public class LocalFormManager extends ListActivity {
                         mFilenames);
 
         // view options
-        getListView().setItemsCanFocus(false);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        setListAdapter(mFileAdapter);
+        if (mFilenames.size() > 0) {
+            getListView().setItemsCanFocus(false);
+            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            setListAdapter(mFileAdapter);
+       } else {
+            setContentView(R.layout.no_items);
+        }
+
 
     }
 
@@ -89,7 +96,9 @@ public class LocalFormManager extends ListActivity {
     private void refreshData() {
         mFileAdapter.notifyDataSetChanged();
         getListView().clearChoices();
-        FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab, mFiles.size()), "tab1");
+        if (mFiles != null) {
+            FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab, mFiles.size()), "tab1");
+        }
     }
 
 

@@ -132,9 +132,15 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
             mFileAdapter =
                     new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
                             mFormName);
-            getListView().setItemsCanFocus(false);
-            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            setListAdapter(mFileAdapter);
+            // view options
+            if (mFormName.size() > 0) {
+                getListView().setItemsCanFocus(false);
+                getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                setListAdapter(mFileAdapter);
+            } else {
+                setContentView(R.layout.no_items);
+            }
+
             FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab, formCount), "tab2");
 
         }
@@ -231,8 +237,8 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
                 getListView().clearChoices();
                 // update local form tab
                 int formCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
-                FormManagerTabs.setTabHeader(getString(R.string.local_forms_tab, formCount),
-                        "tab1");
+                FormManagerTabs
+                        .setTabHeader(getString(R.string.local_forms_tab, formCount), "tab1");
 
             }
         }

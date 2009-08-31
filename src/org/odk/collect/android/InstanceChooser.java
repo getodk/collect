@@ -16,17 +16,18 @@
 
 package org.odk.collect.android;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -104,28 +105,37 @@ public class InstanceChooser extends ListActivity {
         // render total instance view
         SimpleCursorAdapter instances =
                 new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
-        setListAdapter(instances);
+        if (c.getCount() > 0) {
+            setListAdapter(instances);
+        } else {
+            setContentView(R.layout.no_items);
+        }
 
         // cleanup
         fda.close();
-        
+
     }
+
 
     /**
      * Remove empty folders from instance directory
      */
     private void updateInstanceDirectory() {
-        ArrayList<String> storedInstances = FileUtils.getFoldersAsArrayList(SharedConstants.INSTANCES_PATH);
+        ArrayList<String> storedInstances =
+                FileUtils.getFoldersAsArrayList(SharedConstants.INSTANCES_PATH);
 
-        // remove orphaned form defs
-        for (String instanceFolder : storedInstances) {
-            File folder = new File(instanceFolder);
-            int count = folder.list().length;
-            if (count == 0) {
-                folder.delete();
+        if (storedInstances != null) {
+            // remove orphaned form defs
+            for (String instanceFolder : storedInstances) {
+                File folder = new File(instanceFolder);
+                int count = folder.list().length;
+                if (count == 0) {
+                    folder.delete();
+                }
             }
         }
     }
+
 
     /**
      * Given an instance path, return the full path to the form

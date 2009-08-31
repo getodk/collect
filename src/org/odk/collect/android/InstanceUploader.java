@@ -20,7 +20,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
@@ -38,10 +37,9 @@ import java.util.ArrayList;
 
 // TODO long click form for submission log
 // TODO support individual submits
-public class InstanceSubmitter extends ListActivity {
+public class InstanceUploader extends ListActivity {
 
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
-    //private static final int MENU_UPLOAD_SELECTED = Menu.FIRST + 1;
 
     private SimpleCursorAdapter mInstances;
 
@@ -66,29 +64,24 @@ public class InstanceSubmitter extends ListActivity {
         Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
         startManagingCursor(c);
 
-        // create data and views for cursor adapter
-        // String[] data = new String[] {FileDbAdapter.KEY_DISPLAY};
-        // int[] view = new int[] {android.R.id.text1};
-
         String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
         int[] view = new int[] {android.R.id.text1, android.R.id.text2};
-        
+
         // render total instance view
         mInstances =
-                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c,
-                        data, view);
+                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(mInstances);
-        
-
-        //getListView().setItemsCanFocus(false);
-        //getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        if (c.getCount() > 0) {
+            setListAdapter(mInstances);
+        } else {
+            setContentView(R.layout.no_items);
+        }
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
 
         // cleanup
         fda.close();
-        // c.close();
     }
 
 
@@ -118,40 +111,9 @@ public class InstanceSubmitter extends ListActivity {
     }
 
 
-    private void uploadSelectedData() {
-
-        // paths to upload
-        ArrayList<String> selectedInstances = new ArrayList<String>();
-
-        // get all checked items
-        Cursor c = null;
-        SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
-        for (int i = 0; i < checkedItems.size(); i++) {
-            if (checkedItems.get(checkedItems.keyAt(i)) == true) {
-                // put path of checked item into array
-                c = (Cursor) getListAdapter().getItem(checkedItems.keyAt(i));
-                c.moveToFirst();
-                String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-                selectedInstances.add(s);
-            }
-
-        }
-        if (c != null) {
-            c.close();
-        }
-
-        // bundle intent with upload files
-        Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(SharedConstants.KEY_INSTANCES, selectedInstances);
-        startActivity(i);
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-//        menu.add(0, MENU_UPLOAD_SELECTED, 0, R.string.send_selected_data).setIcon(
-//                android.R.drawable.ic_menu_upload);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_data).setIcon(
                 android.R.drawable.ic_menu_upload);
         return true;
@@ -161,14 +123,6 @@ public class InstanceSubmitter extends ListActivity {
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
-//            case MENU_UPLOAD_SELECTED:
-//                if (getListView().getCheckedItemPositions().size() > 0) {
-//                    uploadSelectedData();
-//                } else {
-//                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//                return true;
             case MENU_UPLOAD_ALL:
                 uploadAllData();
                 return true;

@@ -23,6 +23,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -193,8 +194,15 @@ public class FileDbAdapter {
      * @param path path to the file
      * @return number of affected rows
      */
-    public boolean deleteFile(String path) {
-        return mDb.delete(DATABASE_TABLE, KEY_FILEPATH + "='" + path + "'", null) > 0;
+    public boolean deleteFile(String path, String hash) {
+        if (hash == null) {
+            return mDb.delete(DATABASE_TABLE, KEY_FILEPATH + "='" + path + "'", null) > 0;
+        } else if (path == null) {
+            return mDb.delete(DATABASE_TABLE, KEY_HASH + "='" + hash + "'", null) > 0;
+        } else {
+            return mDb.delete(DATABASE_TABLE, KEY_FILEPATH + "='" + path + "'" + " and " + KEY_HASH
+                    + "='" + hash + "'", null) > 0;
+        }
     }
 
 
@@ -303,14 +311,23 @@ public class FileDbAdapter {
      */
     private void cleanFiles() {
         Cursor c =
-                mDb.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_STATUS}, null,
-                        null, null, null, null);
+                mDb.query(DATABASE_TABLE,
+                        new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_STATUS}, null, null,
+                        null, null, null);
 
         while (c.moveToNext()) {
             String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
+            String hash = c.getString(c.getColumnIndex(KEY_HASH));
+
             File f = new File(path);
             if (!f.exists()) {
-                deleteFile(path);
+                // delete entry for file not on sd
+                deleteFile(path, null);
+            } else {
+                // delete entry for file on sd, but with outdated hash
+                if (!FileUtils.getMd5Hash(f).equals(hash)) {
+                    deleteFile(null, hash);
+                }
             }
         }
         c.close();

@@ -27,7 +27,7 @@ the License.
     android:layout_height="wrap_content"
     android:paddingTop="1px"
     android:paddingBottom="1px"
-    android:textSize="10pt"
+    android:textSize="9pt"
     android:textStyle="bold"
     android:text="@string/main_menu_message" />
   
@@ -58,7 +58,7 @@ the License.
           
           <Button
           android:id="@+id/enter_data"
-          android:textSize="10pt"
+          android:textSize="9pt"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content" 
           android:padding="20px"/>
@@ -70,7 +70,7 @@ the License.
 
           <Button
           android:id="@+id/review_data"
-          android:textSize="10pt"
+          android:textSize="9pt"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content" 
           android:padding="20px"/>
@@ -82,7 +82,7 @@ the License.
           
           <Button
           android:id="@+id/send_data"
-          android:textSize="10pt"
+          android:textSize="9pt"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content" 
           android:padding="20px" />
@@ -94,7 +94,7 @@ the License.
     
           <Button
           android:id="@+id/manage_forms"
-          android:textSize="10pt"
+          android:textSize="9pt"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content" 
           android:padding="20px" />
