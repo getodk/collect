@@ -16,6 +16,7 @@
 package org.odk.collect.android;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -111,7 +112,8 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
             // check response
             String serverLocation = response.getHeaders("Location")[0].getValue();
             int responseCode = response.getStatusLine().getStatusCode();
-            if (mUrl.startsWith(serverLocation) && responseCode == 302) {
+            Log.i("yaw",serverLocation + " " + responseCode);
+            if (mUrl.contains(serverLocation) && responseCode == 201) {
                 uploadedIntances.add(values[i]);
             }
         }
