@@ -114,7 +114,9 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
             if (mUrl.contains(serverLocation) && responseCode == 201) {
                 uploadedIntances.add(values[i]);
             }
+            
         }
+
         return uploadedIntances;
     }
 

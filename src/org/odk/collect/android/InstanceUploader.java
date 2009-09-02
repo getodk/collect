@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
@@ -57,7 +58,6 @@ public class InstanceUploader extends ListActivity {
      */
     private void buildView() {
 
-
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
@@ -84,6 +84,7 @@ public class InstanceUploader extends ListActivity {
         fda.close();
     }
 
+
     private void uploadAllData() {
 
         // paths to upload
@@ -94,7 +95,6 @@ public class InstanceUploader extends ListActivity {
 
         for (int i = 0; i < mInstances.getCount(); i++) {
             c = (Cursor) getListAdapter().getItem(i);
-            c.moveToFirst();
             String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
             allInstances.add(s);
         }

@@ -18,6 +18,7 @@ public class GlobalPreferences extends PreferenceActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.global_preferences);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.preferences));
         updateServer();
         updateUsername();
         updatePassword();
