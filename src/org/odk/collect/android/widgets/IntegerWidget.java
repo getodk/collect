@@ -26,7 +26,7 @@ import android.util.TypedValue;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
+import org.odk.collect.android.GlobalConstants;
 
 /**
  * Widget that restricts values to integers.
@@ -49,7 +49,7 @@ public class IntegerWidget extends StringWidget {
     public void buildView(PromptElement prompt) {
         
         // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll

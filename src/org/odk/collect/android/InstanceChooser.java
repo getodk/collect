@@ -68,8 +68,8 @@ public class InstanceChooser extends ListActivity {
 
         // create intent for return and store path
         Intent i = new Intent();
-        i.putExtra(SharedConstants.KEY_INSTANCEPATH, instancePath);
-        i.putExtra(SharedConstants.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
+        i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
+        i.putExtra(GlobalConstants.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
 
         // return the result to the parent class
         getParent().setResult(RESULT_OK, i);
@@ -121,7 +121,7 @@ public class InstanceChooser extends ListActivity {
      */
     private void updateInstanceDirectory() {
         ArrayList<String> storedInstances =
-                FileUtils.getFoldersAsArrayList(SharedConstants.INSTANCES_PATH);
+                FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
 
         if (storedInstances != null) {
             // remove orphaned form defs
@@ -150,8 +150,8 @@ public class InstanceChooser extends ListActivity {
         String formName = pattern.split(instancePath)[0];
         formName = formName.substring(formName.lastIndexOf("/") + 1);
 
-        File xmlFile = new File(SharedConstants.FORMS_PATH + "/" + formName + ".xml");
-        File xhtmlFile = new File(SharedConstants.FORMS_PATH + "/" + formName + ".xhtml");
+        File xmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName + ".xml");
+        File xhtmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName + ".xhtml");
 
         // form is either xml or xhtml file. find the appropriate one.
         if (xmlFile.exists()) {

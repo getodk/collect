@@ -20,7 +20,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -40,9 +42,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private InstanceUploaderTask mInstanceUploaderTask;
     private int totalCount = -1;
 
-    // TODO: don't hard code this
-    private String mUrl = "http://opendatakit.appspot.com/submission";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // get instances to upload
         Intent i = getIntent();
-        ArrayList<String> instances = i.getStringArrayListExtra(SharedConstants.KEY_INSTANCES);
+        ArrayList<String> instances = i.getStringArrayListExtra(GlobalConstants.KEY_INSTANCES);
         if (instances == null) {
             // nothing to upload
             return;
@@ -62,7 +61,14 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
             mInstanceUploaderTask = new InstanceUploaderTask();
-            mInstanceUploaderTask.setUploadServer(mUrl);
+
+            SharedPreferences settings =
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            String url =
+                    settings.getString(GlobalPreferences.KEY_SERVER,
+                            getString(R.string.default_server))
+                            + "/submission";
+            mInstanceUploaderTask.setUploadServer(url);
             totalCount = instances.size();
 
             // convert array list to an array
@@ -87,12 +93,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // for each path, update the status
         FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
         for (int i = 0; i < resultSize; i++) {
-            fda.open();
             fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
-            fda.close();
         }
-
+        fda.close();
         finish();
     }
 

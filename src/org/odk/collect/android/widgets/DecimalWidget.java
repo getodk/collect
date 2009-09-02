@@ -26,7 +26,7 @@ import android.util.TypedValue;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
+import org.odk.collect.android.GlobalConstants;
 
 import java.text.NumberFormat;
 
@@ -51,7 +51,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
     public void buildView(PromptElement prompt) {
 
         // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // needed to make long readonly text scroll

@@ -74,12 +74,12 @@ public class FormHandler {
     // TODO: logic here? in ANSWER_REQUIRED_BUT_EMPTY
     public int saveAnswer(PromptElement prompt, IAnswerData answer, boolean evaluateConstraints) {
         if (!mForm.evaluateConstraint(prompt.getInstanceRef(), answer) && evaluateConstraints) {
-            return SharedConstants.ANSWER_CONSTRAINT_VIOLATED;
+            return GlobalConstants.ANSWER_CONSTRAINT_VIOLATED;
         } else if (prompt.isRequired() && answer == null && evaluateConstraints) {
-            return SharedConstants.ANSWER_REQUIRED_BUT_EMPTY;
+            return GlobalConstants.ANSWER_REQUIRED_BUT_EMPTY;
         } else {
             mForm.setValue(answer, prompt.getInstanceRef(), prompt.getInstanceNode());
-            return SharedConstants.ANSWER_OK;
+            return GlobalConstants.ANSWER_OK;
         }
     }
 

@@ -32,7 +32,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
+import org.odk.collect.android.GlobalConstants;
 
 
 /**
@@ -68,7 +68,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         // set button formatting
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadonly());
 
@@ -78,7 +78,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
                     ((Activity) getContext()).startActivityForResult(i,
-                            SharedConstants.BARCODE_CAPTURE);
+                            GlobalConstants.BARCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.barcode_scanner_error),
@@ -89,7 +89,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         // set text formatting
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

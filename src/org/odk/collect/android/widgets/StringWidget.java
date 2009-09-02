@@ -27,7 +27,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
+import org.odk.collect.android.GlobalConstants;
 
 /**
  * The most basic widget that allows for entry of any text.
@@ -71,7 +71,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
     public void buildView(PromptElement prompt) {
         
         // font size
-        setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         
         // capitalize the first letter of the sentence
         setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));

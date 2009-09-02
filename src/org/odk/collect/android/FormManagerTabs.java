@@ -59,12 +59,12 @@ public class FormManagerTabs extends TabActivity {
 
         RelativeLayout rls = (RelativeLayout) tw.getChildAt(0);
         tvl = (TextView) rls.getChildAt(1);
-        tvl.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
+        tvl.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 12);
         tvl.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlc = (RelativeLayout) tw.getChildAt(1);
         tvr = (TextView) rlc.getChildAt(1);
-        tvr.setTextSize(SharedConstants.APPLICATION_FONTSIZE + 12);
+        tvr.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 12);
         tvr.setPadding(0, 0, 0, 6);
 
     }

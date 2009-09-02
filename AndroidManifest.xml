@@ -32,8 +32,7 @@ the License.
     <activity android:name=".FormManagerTabs" android:label="@string/app_name"/>
     <activity android:name=".InstanceUploader" android:label="@string/app_name"/>
     <activity android:name=".InstanceUploaderActivity" android:label="@string/app_name"/>
-    <activity android:name=".ServerPreferences" android:label="@string/app_name"/>
-    <activity android:name=".SavedPreferences" android:label="@string/app_name"/>
+    <activity android:name=".GlobalPreferences" android:label="@string/app_name"/>
   <activity android:name=".FormHierarchyActivity" android:label="@string/app_name"/>
   </application>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>

@@ -16,7 +16,6 @@
 package org.odk.collect.android;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -63,8 +62,8 @@ class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>>
 
             // configure connection
             HttpParams params = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(params, SharedConstants.CONNECTION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, SharedConstants.CONNECTION_TIMEOUT);
+            HttpConnectionParams.setConnectionTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
             HttpClientParams.setRedirecting(params, false);
 
             // setup client

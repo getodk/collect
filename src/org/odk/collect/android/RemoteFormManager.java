@@ -21,9 +21,11 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -61,9 +63,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
     private boolean mLoadingList;
     private int mAddPosition;
 
-    // TODO: don't hard code this
-    private String mUrl = "http://opendatakit.appspot.com/formList";
-    private String mFormList = SharedConstants.CACHE_PATH + "formlist.xml";
+    private String mFormList = GlobalConstants.CACHE_PATH + "formlist.xml";
 
     private ArrayList<String> mFormName = new ArrayList<String>();
     private ArrayList<String> mFormUrl = new ArrayList<String>();
@@ -96,10 +96,17 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
 
         // download form list
         mLoadingList = true;
-        FileUtils.createFolder(SharedConstants.CACHE_PATH);
+        FileUtils.createFolder(GlobalConstants.CACHE_PATH);
         mFormDownloadTask = new FormDownloadTask();
         mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
-        mFormDownloadTask.execute(mUrl, mFormList);
+
+        SharedPreferences settings =
+                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String url =
+                settings
+                        .getString(GlobalPreferences.KEY_SERVER, getString(R.string.default_server))
+                        + "/formList";
+        mFormDownloadTask.execute(url, mFormList);
 
     }
 
@@ -208,10 +215,10 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         mAddPosition = getListView().getCheckedItemPosition();
 
         mLoadingList = false;
-        FileUtils.createFolder(SharedConstants.FORMS_PATH);
+        FileUtils.createFolder(GlobalConstants.FORMS_PATH);
         mFormDownloadTask = new FormDownloadTask();
         mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
-        mFormDownloadTask.execute(mFormUrl.get(mAddPosition), SharedConstants.FORMS_PATH
+        mFormDownloadTask.execute(mFormUrl.get(mAddPosition), GlobalConstants.FORMS_PATH
                 + mFormName.get(mAddPosition));
 
     }
@@ -236,7 +243,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
                 mFileAdapter.notifyDataSetChanged();
                 getListView().clearChoices();
                 // update local form tab
-                int formCount = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH).size();
+                int formCount = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH).size();
                 FormManagerTabs
                         .setTabHeader(getString(R.string.local_forms_tab, formCount), "tab1");
 

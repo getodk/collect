@@ -62,8 +62,8 @@ class FormDownloadTask extends AsyncTask<String, String, Boolean> {
         try {
             // prevent deadlock when connection is invalid
             URLConnection c = u.openConnection();
-            c.setConnectTimeout(SharedConstants.CONNECTION_TIMEOUT);
-            c.setReadTimeout(SharedConstants.CONNECTION_TIMEOUT);
+            c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+            c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
 
             // write connection to file
             InputStream is = c.getInputStream();

@@ -61,7 +61,7 @@ public class LocalFormManager extends ListActivity {
         mFilenames.clear();
 
         // check directories for files
-        mFiles = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        mFiles = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
         if (mFiles != null) {
             Collections.sort(mFiles, NaturalOrderComparator.NUMERICAL_ORDER);
 

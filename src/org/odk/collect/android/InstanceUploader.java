@@ -84,7 +84,6 @@ public class InstanceUploader extends ListActivity {
         fda.close();
     }
 
-
     private void uploadAllData() {
 
         // paths to upload
@@ -106,7 +105,7 @@ public class InstanceUploader extends ListActivity {
 
         // bundle intent with upload files
         Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(SharedConstants.KEY_INSTANCES, allInstances);
+        i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
         startActivity(i);
     }
 

@@ -18,7 +18,7 @@ the License.
 	<string name="app_name">ODK Collect</string>
 	<string name="main_menu">Main Menu</string>
 	<string name="main_menu_message">ODK Collect v1.1</string>
-	 <string name="main_menu_details">making data collection a little easier</string>
+	 <string name="main_menu_details">Making data collection a little easier.</string>
 	
 
 	<string name="enter_data">Enter New Data</string>
@@ -52,7 +52,7 @@ the License.
 
 	<string name="enter_url">Enter URL</string>
 
-	<string name="preferences">Preferences</string>
+	<string name="preferences">Global Preferences</string>
 
 	<string name="add_repeat">Add a \"%s\"?</string>
 	 <string name="add_another_repeat">Add another \"%s\"?</string>
@@ -147,6 +147,17 @@ the License.
 	<string name="no_ack">Nothing acknowledged yet.</string>
 	<string name="yes_ack">Action acknowledged.</string>
 	
+  <string name="change_password">Change Password</string>
+<string name="change_server">Change Server</string>
+<string name="change_server_summary">Your server (required)</string>
+<string name="change_user">Change Username</string>
+<string name="change_user_summary">Your username (optional)</string>
+<string name="change_password_summary">Your password (optional)</string>
+
+<string name="default_server">http://opendatakit.appspot.com</string>
+<string name="password">Password</string>
+<string name="server">Server</string>
+<string name="username">Username</string>
   
   	<string name="edit_saved_completed_data">Edit Saved or Completed Data</string>
 

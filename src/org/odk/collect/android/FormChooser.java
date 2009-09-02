@@ -97,8 +97,8 @@ public class FormChooser extends ListActivity {
     private void updateFormDirectory() {
 
         // full path to the files
-        ArrayList<String> storedForms = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
-        ArrayList<String> cachedForms = FileUtils.getFilesAsArrayList(SharedConstants.CACHE_PATH);
+        ArrayList<String> storedForms = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+        ArrayList<String> cachedForms = FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
 
         // the hashes of the forms in the db
         HashMap<String, String> availableForms = new HashMap<String, String>();
@@ -172,7 +172,7 @@ public class FormChooser extends ListActivity {
 
         // create intent for return and store path
         Intent i = new Intent();
-        i.putExtra(SharedConstants.KEY_FORMPATH, formPath);
+        i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
         setResult(RESULT_OK, i);
 
         // close cursor and finish

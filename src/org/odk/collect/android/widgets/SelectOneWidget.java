@@ -26,7 +26,7 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.util.OrderedHashtable;
 import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.SharedConstants;
+import org.odk.collect.android.GlobalConstants;
 
 import java.util.Enumeration;
 
@@ -94,7 +94,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
                 RadioButton r = new RadioButton(getContext());
                 r.setText(k);
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
                 r.setId(i);
                 r.setEnabled(!prompt.isReadonly());
                 r.setFocusable(!prompt.isReadonly());

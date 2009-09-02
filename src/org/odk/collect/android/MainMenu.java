@@ -140,18 +140,18 @@ public class MainMenu extends Activity {
         switch (requestCode) {
             // returns with a form path, start entry
             case FORM_CHOOSER:
-                formPath = intent.getStringExtra(SharedConstants.KEY_FORMPATH);
+                formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
                 i = new Intent(this, FormEntry.class);
-                i.putExtra(SharedConstants.KEY_FORMPATH, formPath);
+                i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
                 startActivity(i);
                 break;
             // returns with an instance path, start entry
             case INSTANCE_CHOOSER_TABS:
-                formPath = intent.getStringExtra(SharedConstants.KEY_FORMPATH);
-                String instancePath = intent.getStringExtra(SharedConstants.KEY_INSTANCEPATH);
+                formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
+                String instancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
                 i = new Intent(this, FormEntry.class);
-                i.putExtra(SharedConstants.KEY_FORMPATH, formPath);
-                i.putExtra(SharedConstants.KEY_INSTANCEPATH, instancePath);
+                i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
+                i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);
                 break;
             default:
@@ -187,7 +187,7 @@ public class MainMenu extends Activity {
         c.close();
 
         // count for downloaded forms
-        ArrayList<String> forms = FileUtils.getFilesAsArrayList(SharedConstants.FORMS_PATH);
+        ArrayList<String> forms = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
         if (forms != null) {
             mFormsCount = forms.size();
         } else {
@@ -207,7 +207,7 @@ public class MainMenu extends Activity {
             mEnterDataButton.setText(getString(R.string.enter_data));
         }
 
-        mManageFormsButton.setText(getString(R.string.manage_forms_button, mFormsCount));
+        mManageFormsButton.setText(getString(R.string.manage_forms));
         mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
         mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
                 + mCompletedCount));
@@ -215,8 +215,8 @@ public class MainMenu extends Activity {
 
 
     private void createPreferencesMenu() {
-        Toast.makeText(getApplicationContext(), "Sorry, not yet implemented.", Toast.LENGTH_SHORT)
-                .show();
+        Intent i = new Intent(this, GlobalPreferences.class);
+        startActivity(i);
     }
 
 

@@ -23,7 +23,7 @@ package org.odk.collect.android;
  * @author @author Yaw Anokwa (yanokwa@gmail.com)
  * 
  */
-public class SharedConstants {
+public class GlobalConstants {
 
     /**
      * Request code for returning image capture data from camera intent.

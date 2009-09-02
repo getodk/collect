@@ -31,7 +31,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.R;
-import org.odk.collect.android.SharedConstants;
+import org.odk.collect.android.GlobalConstants;
 
 import java.io.File;
 
@@ -75,21 +75,21 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         if (mType.equals("image")) {
             mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
-            mRequestCode = SharedConstants.IMAGE_CAPTURE;
+            mRequestCode = GlobalConstants.IMAGE_CAPTURE;
             mCaptureText = R.string.capture_image;
             mReplaceText = R.string.replace_image;
             mPlayText = R.string.play_image;
         } else if (mType.equals("audio")) {
             mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
-            mRequestCode = SharedConstants.AUDIO_CAPTURE;
+            mRequestCode = GlobalConstants.AUDIO_CAPTURE;
             mCaptureText = R.string.capture_audio;
             mReplaceText = R.string.replace_audio;
             mPlayText = R.string.play_audio;
         } else if (mType.equals("video")) {
             mExternalUri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
-            mRequestCode = SharedConstants.VIDEO_CAPTURE;
+            mRequestCode = GlobalConstants.VIDEO_CAPTURE;
             mCaptureText = R.string.capture_video;
             mReplaceText = R.string.replace_video;
             mPlayText = R.string.play_video;
@@ -138,7 +138,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadonly());
 
@@ -150,7 +150,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
                     // TODO only way to get large image from android
                     // http://code.google.com/p/android/issues/detail?id=1480
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-                            SharedConstants.IMAGE_PATH)));
+                            GlobalConstants.IMAGE_PATH)));
                 } else {
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 }
@@ -163,7 +163,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         // setup play button
         mPlayButton = new Button(getContext());
         mPlayButton.setText(getContext().getString(mPlayText));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, SharedConstants.APPLICATION_FONTSIZE);
+        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
         // on play, launch the appropriate viewer

@@ -63,7 +63,7 @@ public class FileDbAdapter {
 
     private static final String DATABASE_CREATE =
             "create table files (_id integer primary key autoincrement, "
-                    + "path text not null, hash text not null unique, type text not null, status text not null, display text not null, meta text not null);";
+                    + "path text not null, hash text not null, type text not null, status text not null, display text not null, meta text not null);";
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
@@ -311,20 +311,21 @@ public class FileDbAdapter {
     private void cleanFiles() {
         Cursor c =
                 mDb.query(DATABASE_TABLE,
-                        new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_STATUS}, null, null,
+                        new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS}, null, null,
                         null, null, null);
 
         while (c.moveToNext()) {
             String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
             String hash = c.getString(c.getColumnIndex(KEY_HASH));
+            String type = c.getString(c.getColumnIndex(KEY_TYPE));
 
             File f = new File(path);
             if (!f.exists()) {
                 // delete entry for file not on sd
                 deleteFile(path, null);
             } else {
-                // delete entry for file on sd, but with outdated hash
-                if (!FileUtils.getMd5Hash(f).equals(hash)) {
+                // delete entry for form on sd, but with outdated hash
+                if (!FileUtils.getMd5Hash(f).equals(hash) && type.equals(TYPE_FORM)) {
                     deleteFile(null, hash);
                 }
             }

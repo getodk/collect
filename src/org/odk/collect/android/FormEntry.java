@@ -159,8 +159,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
             Intent intent = getIntent();
             if (intent != null) {
-                mFormPath = intent.getStringExtra(SharedConstants.KEY_FORMPATH);
-                mInstancePath = intent.getStringExtra(SharedConstants.KEY_INSTANCEPATH);
+                mFormPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
+                mInstancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath, mInstancePath);
                 showDialog(PROGRESS_DIALOG);
@@ -200,8 +200,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         }
 
         switch (requestCode) {
-            case (SharedConstants.IMAGE_CAPTURE):
-                File fi = new File(SharedConstants.IMAGE_PATH);
+            case (GlobalConstants.IMAGE_CAPTURE):
+                File fi = new File(GlobalConstants.IMAGE_PATH);
                 try {
                     Uri ui =
                             Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
@@ -215,18 +215,18 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 }
                 refreshCurrentView();
                 break;
-            case (SharedConstants.BARCODE_CAPTURE):
+            case (GlobalConstants.BARCODE_CAPTURE):
                 String s = intent.getStringExtra("SCAN_RESULT");
                 ((QuestionView) mCurrentView).setBinaryData(s);
                 saveCurrentAnswer(false);
                 break;
-            case SharedConstants.AUDIO_CAPTURE:
+            case GlobalConstants.AUDIO_CAPTURE:
                 Uri ua = intent.getData();
                 ((QuestionView) mCurrentView).setBinaryData(ua);
                 saveCurrentAnswer(false);
                 refreshCurrentView();
                 break;
-            case SharedConstants.VIDEO_CAPTURE:
+            case GlobalConstants.VIDEO_CAPTURE:
                 Uri uv = intent.getData();
                 ((QuestionView) mCurrentView).setBinaryData(uv);
                 saveCurrentAnswer(false);
@@ -380,7 +380,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             int saveStatus =
                     mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(),
                             evaluateConstraints);
-            if (evaluateConstraints && saveStatus != SharedConstants.ANSWER_OK) {
+            if (evaluateConstraints && saveStatus != GlobalConstants.ANSWER_OK) {
                 createConstraintDialog(p, saveStatus);
                 return false;
             }
@@ -647,14 +647,14 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mAlertDialog = new AlertDialog.Builder(this).create();
         String constraintText = null;
         switch (saveStatus) {
-            case SharedConstants.ANSWER_CONSTRAINT_VIOLATED:
+            case GlobalConstants.ANSWER_CONSTRAINT_VIOLATED:
                 if (p.getConstraintText() != null) {
                     constraintText = p.getConstraintText();
                 } else {
                     constraintText = getString(R.string.invalid_answer_error);
                 }
                 break;
-            case SharedConstants.ANSWER_REQUIRED_BUT_EMPTY:
+            case GlobalConstants.ANSWER_REQUIRED_BUT_EMPTY:
                 constraintText = getString(R.string.required_answer_error);
                 break;
         }
@@ -783,8 +783,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             int saveStatus =
                     mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler
                             .currentPrompt().getAnswerValue(), true);
-            if (saveStatus == SharedConstants.ANSWER_CONSTRAINT_VIOLATED
-                    || (markCompleted && saveStatus != SharedConstants.ANSWER_OK)) {
+            if (saveStatus == GlobalConstants.ANSWER_CONSTRAINT_VIOLATED
+                    || (markCompleted && saveStatus != GlobalConstants.ANSWER_OK)) {
                 refreshCurrentView();
                 createConstraintDialog(mFormHandler.currentPrompt(), saveStatus);
                 return false;
@@ -1109,7 +1109,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 String file =
                         mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath
                                 .lastIndexOf('.'));
-                String path = SharedConstants.INSTANCES_PATH + file + "_" + time;
+                String path = GlobalConstants.INSTANCES_PATH + file + "_" + time;
                 if (FileUtils.createFolder(path)) {
                     mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }

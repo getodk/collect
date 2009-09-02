@@ -59,7 +59,7 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
 
         File formXml = new File(formPath);
         File formBin =
-                new File(SharedConstants.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
+                new File(GlobalConstants.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -112,7 +112,7 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         // TODO: any way to remove reliance on jrsp?
 
         // need a list of classes that formdef uses
-        JavaRosaServiceProvider.instance().registerPrototypes(SharedConstants.SERIALIABLE_CLASSES);
+        JavaRosaServiceProvider.instance().registerPrototypes(GlobalConstants.SERIALIABLE_CLASSES);
         FileInputStream fis = null;
         FormDef fd = null;
         try {
@@ -145,11 +145,11 @@ class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
     public void serializeFormDef(FormDef fd, String filepath) {
 
         // if cache folder is missing, create it.
-        if (FileUtils.createFolder(SharedConstants.CACHE_PATH)) {
+        if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
 
             // calculate unique md5 identifier
             String hash = FileUtils.getMd5Hash(new File(filepath));
-            File formDef = new File(SharedConstants.CACHE_PATH + hash + ".formdef");
+            File formDef = new File(GlobalConstants.CACHE_PATH + hash + ".formdef");
 
             // formdef does not exist, create one.
             if (!formDef.exists()) {
