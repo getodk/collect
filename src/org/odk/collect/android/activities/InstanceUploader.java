@@ -16,20 +16,17 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.layout;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
 
 import java.util.ArrayList;
 

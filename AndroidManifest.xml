@@ -16,24 +16,24 @@ the License.
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="2" android:versionName="1.1.0">
 <!-- Icon Credit: Tango Desktop Project -->
   <application android:icon="@drawable/paper_icon" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
-  <activity android:name=".MainMenu" android:label="@string/app_name">
+  <activity android:label="@string/app_name" android:name=".activities.MainMenu">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".FormEntry" android:label="@string/app_name" android:theme="@android:style/Theme.Light" />
-    <activity android:name=".InstanceChooser" android:label="@string/app_name"/>
-    <activity android:name=".InstanceChooserTabs" android:label="@string/app_name"/>
-    <activity android:name=".FormChooser" android:label="@string/app_name"/>
-    <activity android:name=".LocalFormManager" android:label="@string/app_name"/>
-    <activity android:name=".RemoteFormManager" android:label="@string/app_name"/>
-    <activity android:name=".FormManagerTabs" android:label="@string/app_name"/>
-    <activity android:name=".InstanceUploader" android:label="@string/app_name"/>
-    <activity android:name=".InstanceUploaderActivity" android:label="@string/app_name"/>
-    <activity android:name=".GlobalPreferences" android:label="@string/app_name"/>
-  <activity android:name=".FormHierarchyActivity" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormEntry" android:label="@string/app_name" android:theme="@android:style/Theme.Light" />
+    <activity android:name=".activities.InstanceChooser" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormChooser" android:label="@string/app_name"/>
+    <activity android:name=".activities.LocalFormManager" android:label="@string/app_name"/>
+    <activity android:name=".activities.RemoteFormManager" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormManagerTabs" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceUploader" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
+    <activity android:name=".prefs.GlobalPreferences" android:label="@string/app_name"/>
+  <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
   </application>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>

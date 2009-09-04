@@ -16,15 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.id;
-import org.odk.collect.android.R.layout;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.prefs.GlobalPreferences;
-import org.odk.collect.android.utils.FileUtils;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,7 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.prefs.GlobalPreferences;
+import org.odk.collect.android.utils.FileUtils;
 
 import java.util.ArrayList;
 

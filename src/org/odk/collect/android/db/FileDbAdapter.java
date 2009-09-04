@@ -16,10 +16,6 @@
 
 package org.odk.collect.android.db;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.utils.FileUtils;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -27,6 +23,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.utils.FileUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

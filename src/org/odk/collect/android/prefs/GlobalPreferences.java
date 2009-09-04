@@ -1,14 +1,12 @@
 package org.odk.collect.android.prefs;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.R.xml;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
+
+import org.odk.collect.android.R;
 
 public class GlobalPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {

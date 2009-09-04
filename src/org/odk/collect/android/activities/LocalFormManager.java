@@ -16,13 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.layout;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utils.FileUtils;
-import org.odk.collect.android.utils.NaturalOrderComparator;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -32,6 +25,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.utils.NaturalOrderComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

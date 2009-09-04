@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.R;
-import org.odk.collect.android.R.string;
 import org.odk.collect.android.logic.GroupElement;
 import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.widgets.IBinaryWidget;

@@ -16,14 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.layout;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utils.FileUtils;
-import org.odk.collect.android.utils.NaturalOrderComparator;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,6 +23,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.utils.NaturalOrderComparator;
 
 import java.io.File;
 import java.util.ArrayList;
