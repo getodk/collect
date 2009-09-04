@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -40,6 +41,8 @@ import java.util.regex.Pattern;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceChooser extends ListActivity {
+
+    private final static String t = "InstanceChooser";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +137,9 @@ public class InstanceChooser extends ListActivity {
                 File folder = new File(instanceFolder);
                 int count = folder.list().length;
                 if (count == 0) {
-                    folder.delete();
+                    if (!folder.delete()) {
+                        Log.i(t, "Failed to delete " + folder);
+                    }
                 }
             }
         }

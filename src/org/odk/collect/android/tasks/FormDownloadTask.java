@@ -56,7 +56,7 @@ public class FormDownloadTask extends AsyncTask<String, String, Boolean> {
         // create url
         URL u = null;
         try {
-            u = new URL(args[0]);
+            u = new URL(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return false;
@@ -95,7 +95,9 @@ public class FormDownloadTask extends AsyncTask<String, String, Boolean> {
             return false;
         }
 
-        mName = path.substring(path.lastIndexOf("/") + 1);
+        synchronized (this) {
+            mName = path.substring(path.lastIndexOf("/") + 1);
+        }
 
         return true;
     }
@@ -116,6 +118,8 @@ public class FormDownloadTask extends AsyncTask<String, String, Boolean> {
 
 
     public void setDownloaderListener(FormDownloaderListener sl) {
-        mStateListener = sl;
+        synchronized (this) {
+            mStateListener = sl;
+        }
     }
 }

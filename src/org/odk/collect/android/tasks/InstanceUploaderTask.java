@@ -146,6 +146,8 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
 
 
     public void setUploaderListener(InstanceUploaderListener sl) {
-        mStateListener = sl;
+        synchronized (this) {
+            mStateListener = sl;
+        }
     }
 }

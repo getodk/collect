@@ -71,7 +71,7 @@ public class ArrowAnimation extends View {
 
         int centerX = canvas.getWidth() / 2;
 
-        canvas.drawBitmap(mArrow, centerX - mImgXOffset, mArrow.getHeight() / 4, null);
+        canvas.drawBitmap(mArrow, centerX - mImgXOffset, (float) mArrow.getHeight() / 4, null);
     }
 
 

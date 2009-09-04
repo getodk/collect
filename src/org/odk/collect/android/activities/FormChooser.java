@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -43,6 +44,9 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormChooser extends ListActivity {
+
+    private final static String t = "FormChooser";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +129,9 @@ public class FormChooser extends ListActivity {
             }
         }
         // clean up cursor
-        c.close();
+        if (c != null) {
+            c.close();
+        }
 
 
         // sort, then loop through forms on sdcard. add and remove as necessary.
@@ -140,7 +146,9 @@ public class FormChooser extends ListActivity {
                 } else if (availableForms.containsKey((hash))) {
                     // if duplicate form found on sd card, remove it.
                     if (!formPath.equals(availableForms.get(hash))) {
-                        (new File(formPath)).delete();
+                        if (!(new File(formPath)).delete()) {
+                            Log.i(t, "Failed to delete " + formPath);
+                        }
                     }
                 }
             }
@@ -157,7 +165,9 @@ public class FormChooser extends ListActivity {
                         cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
                                 .lastIndexOf("."));
                 if (!availableForms.containsKey(hash)) {
-                    (new File(cachePath)).delete();
+                    if (!(new File(cachePath)).delete()) {
+                        Log.i(t, "Failed to delete " + cachePath);
+                    }
                 }
             }
         }

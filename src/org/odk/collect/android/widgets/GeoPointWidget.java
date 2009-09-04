@@ -99,8 +99,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay
-                .setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE-1);
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_PT,
+                GlobalConstants.APPLICATION_FONTSIZE - 1);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
@@ -185,8 +185,11 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         }
 
         // start listening for changes
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3, 3,
-                mLocationListener);
+        if (mLocationManager != null) {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3, 3,
+                    mLocationListener);
+        }
+
     }
 
 

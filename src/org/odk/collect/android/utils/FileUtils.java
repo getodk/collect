@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class FileUtils {
     private final static String t = "FileUtils";
 
-    
+
     public static ArrayList<String> getFoldersAsArrayList(String path) {
         ArrayList<String> mFolderList = new ArrayList<String>();
         File root = new File(path);
@@ -60,9 +60,10 @@ public class FileUtils {
                     mFolderList.add(child.getAbsolutePath());
                 }
             }
-        } 
+        }
         return mFolderList;
     }
+
 
     public static ArrayList<String> getFilesAsArrayList(String path) {
         ArrayList<String> mFileList = new ArrayList<String>();
@@ -123,7 +124,9 @@ public class FileUtils {
             if (dir.exists() && dir.isDirectory()) {
                 File[] files = dir.listFiles();
                 for (File file : files) {
-                    file.delete();
+                    if (!file.delete()) {
+                        Log.i(t, "Failed to delete " + file);
+                    }
                 }
             }
             return dir.delete();
@@ -159,58 +162,64 @@ public class FileUtils {
 
     public static byte[] getFileAsBytes(File file) {
 
+        byte[] bytes = null;
         InputStream is = null;
         try {
             is = new FileInputStream(file);
+
+            // Get the size of the file
+            long length = file.length();
+            if (length > Integer.MAX_VALUE) {
+                Log.e(t, "File " + file.getName() + "is too large");
+                return null;
+            }
+
+            // Create the byte array to hold the data
+            bytes = new byte[(int) length];
+
+            // Read in the bytes
+            int offset = 0;
+            int read = 0;
+            try {
+                while (offset < bytes.length && read >= 0) {
+                    read = is.read(bytes, offset, bytes.length - offset);
+                    offset += read;
+                }
+            } catch (IOException e) {
+                Log.e(t, "Cannot read " + file.getName());
+                e.printStackTrace();
+                return null;
+            }
+
+            // Ensure all the bytes have been read in
+            if (offset < bytes.length) {
+                try {
+                    throw new IOException("Could not completely read file " + file.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            return bytes;
+
         } catch (FileNotFoundException e) {
             Log.e(t, "Cannot find " + file.getName());
             e.printStackTrace();
             return null;
-        }
 
-        // Get the size of the file
-        long length = file.length();
-        if (length > Integer.MAX_VALUE) {
-            Log.e(t, "File " + file.getName() + "is too large");
-            return null;
-        }
-
-        // Create the byte array to hold the data
-        byte[] bytes = new byte[(int) length];
-
-        // Read in the bytes
-        int offset = 0;
-        int read = 0;
-        try {
-            while (offset < bytes.length && read >= 0) {
-                read = is.read(bytes, offset, bytes.length - offset);
-                offset += read;
-            }
-        } catch (IOException e) {
-            Log.e(t, "Cannot read " + file.getName());
-            e.printStackTrace();
-            return null;
-        }
-
-        // Ensure all the bytes have been read in
-        if (offset < bytes.length) {
+        } finally {
+            // Close the input stream
             try {
-                throw new IOException("Could not completely read file " + file.getName());
+                is.close();
             } catch (IOException e) {
+                Log.e(t, "Cannot close input stream for " + file.getName());
                 e.printStackTrace();
                 return null;
             }
         }
 
-        // Close the input stream and return bytes
-        try {
-            is.close();
-            return bytes;
-        } catch (IOException e) {
-            Log.e(t, "Cannot close input stream for " + file.getName());
-            e.printStackTrace();
-            return null;
-        }
+
 
     }
 

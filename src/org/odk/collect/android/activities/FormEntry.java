@@ -217,7 +217,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     Uri ui =
                             Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
                                     getContentResolver(), fi.getAbsolutePath(), null, null));
-                    fi.delete();
+                    if (!fi.delete()) {
+                        Log.i(t, "Failed to delete " + fi);
+                    }
                     ((QuestionView) mCurrentView).setBinaryData(ui);
                     saveCurrentAnswer(false);
                 } catch (FileNotFoundException e) {
@@ -450,7 +452,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             R.string.enter_data_description, mFormHandler.getFormTitle()));
                 }
 
-                c.close();
+                // clean up cursor
+                if (c != null) {
+                    c.close();
+                }
+
                 fda.close();
                 return startView;
             case PromptElement.TYPE_END:
@@ -859,7 +865,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                     mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
                             FileUtils.deleteFolder(instanceFolder);
                         }
-                        c.close();
+                        // clean up cursor
+                        if (c != null) {
+                            c.close();
+                        }
+
                         fda.close();
                         finish();
                         break;

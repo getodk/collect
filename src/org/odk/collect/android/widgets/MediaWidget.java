@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +44,8 @@ import java.io.File;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
+
+    private final static String t = "MediaWidget";
 
     private Button mCaptureButton;
     private Button mPlayButton;
@@ -101,7 +104,9 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // get the file path and delete the file
         File f = new File(mInstanceFolder + "/" + mBinaryName);
-        f.delete();
+        if (!f.delete()) {
+            Log.i(t, "Failed to delete " + f);
+        }
 
         // clean up variables
         mBinaryName = null;
@@ -238,7 +243,11 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         String binarypath = getPathFromUri((Uri) binaryuri);
         File f = new File(binarypath);
         String s = mInstanceFolder + "/" + binarypath.substring(binarypath.lastIndexOf('/') + 1);
-        f.renameTo(new File(s));
+        if (!f.renameTo(new File(s))) {
+            Log.i(t, "Failed to rename " + f.getAbsolutePath());
+        }
+        
+        
 
         // remove the database entry and update the name
         getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);

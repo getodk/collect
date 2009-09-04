@@ -38,7 +38,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Vector;
 
 
@@ -200,7 +199,7 @@ public class FormHandler {
             if (indexIsGroup(mCurrentIndex)) {
                 GroupDef last = (defs.size() == 0 ? null : (GroupDef) defs.lastElement());
 
-                if (last.getRepeat() && resolveReferenceForCurrentIndex() == null) {
+                if (last != null && last.getRepeat() && resolveReferenceForCurrentIndex() == null) {
                     return new PromptElement(getGroups());
                 } else {
                     // this group doesn't repeat, so skip passed it
@@ -425,7 +424,7 @@ public class FormHandler {
 
 
     public float getQuestionProgress() {
-        return mQuestionCount / getQuestionCount();
+        return (float) mQuestionCount / getQuestionCount();
     }
 
 
@@ -491,7 +490,6 @@ public class FormHandler {
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
-        fileBytes = null;
 
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
@@ -518,20 +516,11 @@ public class FormHandler {
      */
     private boolean exportXmlFile(ByteArrayPayload payload, String path) {
 
-        // create data stream
-        InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();
 
         // read from data stream
         byte[] data = new byte[len];
-        try {
-            is.read(data, 0, len);
-        } catch (IOException e) {
-            Log.e(t, "Error reading from payload data stream");
-            e.printStackTrace();
-            return false;
-        }
-
+       
         // write xml file
         try {
             // String filename = path + "/" +
@@ -592,7 +581,11 @@ public class FormHandler {
                 fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETED);
             }
         }
-        c.close();
+        // clean up cursor
+        if (c != null) {
+            c.close();
+        }
+
         fda.close();
         return true;
 

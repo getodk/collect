@@ -183,6 +183,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
 
 
     public void setFormLoaderListener(FormLoaderListener sl) {
-        mStateListener = sl;
+        synchronized (this) {
+            mStateListener = sl;
+        }
     }
 }

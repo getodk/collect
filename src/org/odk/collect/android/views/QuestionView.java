@@ -105,7 +105,7 @@ public class QuestionView extends ScrollView {
      * belongs.
      */
     private void AddGroupText(PromptElement p) {
-        String s = "";
+        StringBuffer s = new StringBuffer("");
         String t = "";
         int i;
 
@@ -114,16 +114,16 @@ public class QuestionView extends ScrollView {
             i = g.getRepeatCount() + 1;
             t = g.getGroupText();
             if (t != null) {
-                s += t;
+                s.append(t);
                 if (g.isRepeat() && i > 0) {
-                    s += " (" + i + ")";
+                    s.append(" (" + i + ")");
                 }
-                s += " > ";
+                s.append(" > ");
             }
         }
 
         // build view
-        if (!s.equals("")) {
+        if (s.length() > 0) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
