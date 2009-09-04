@@ -1,0 +1,37 @@
+<LinearLayout 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent" 
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  >
+  
+  <TextView 
+  android:id = "@+id/stacklist"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  />
+  
+  <Button 
+android:id = "@+id/backbutton"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="back"
+/>
+
+  
+  <ListView 
+    android:id="@android:id/list" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"/>
+    
+    <TextView 
+      android:id="@android:id/empty"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:text="shouldn't get here" 
+      android:textSize="7pt" 
+      android:padding="20px"
+      android:gravity="center" 
+      android:background="@drawable/white" />
+
+</LinearLayout>
