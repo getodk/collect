@@ -25,8 +25,8 @@ import android.util.TypedValue;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.GlobalConstants;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
 
 /**
  * Widget that restricts values to integers.

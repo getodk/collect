@@ -26,8 +26,8 @@ import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.GlobalConstants;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
 
 /**
  * The most basic widget that allows for entry of any text.

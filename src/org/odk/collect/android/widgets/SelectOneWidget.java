@@ -25,8 +25,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.util.OrderedHashtable;
-import org.odk.collect.android.PromptElement;
-import org.odk.collect.android.GlobalConstants;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
 
 import java.util.Enumeration;
 

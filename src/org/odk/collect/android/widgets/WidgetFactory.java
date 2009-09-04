@@ -19,7 +19,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.Constants;
-import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.logic.PromptElement;
 
 /**
  * Convenience class that handles creation of widgets.

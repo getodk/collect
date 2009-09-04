@@ -33,9 +33,9 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.PromptElement;
 import org.odk.collect.android.R;
-import org.odk.collect.android.GlobalConstants;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
 
 
 /**

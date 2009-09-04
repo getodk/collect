@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.PromptElement;
+import org.odk.collect.android.logic.PromptElement;
 
 import java.util.Calendar;
 import java.util.Date;

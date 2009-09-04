@@ -14,21 +14,13 @@
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.listeners;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.PromptElement;
+import org.odk.collect.android.logic.FormHandler;
 
 /**
- * QuestionWidgets are the main elements in QuestionView. QuestionView is a
- * ScrollView, so widget designers don't need to worry about scrolling.
- * 
- * Each widget does need to handle the 'ReadOnly' case in BuildView().
- * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface IQuestionWidget {
-    public IAnswerData getAnswer();
-    public void clearAnswer();
-    public void buildView(PromptElement prompt);
+public interface FormLoaderListener {
+    void loadingComplete(FormHandler formHandler);
 }
