@@ -118,7 +118,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.formentry);
+        setContentView(R.layout.form_entry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
         // mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
@@ -435,7 +435,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
         switch (prompt.getType()) {
             case PromptElement.TYPE_START:
-                View startView = View.inflate(this, R.layout.formentry_start, null);
+                View startView = View.inflate(this, R.layout.form_entry_start, null);
                 setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
 
                 FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
@@ -454,7 +454,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 fda.close();
                 return startView;
             case PromptElement.TYPE_END:
-                View endView = View.inflate(this, R.layout.formentry_end, null);
+                View endView = View.inflate(this, R.layout.form_entry_end, null);
                 ((TextView) endView.findViewById(R.id.description)).setText(getString(
                         R.string.save_data_description, mFormHandler.getFormTitle()));
 
