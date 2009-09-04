@@ -166,7 +166,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             }
 
             // Not a restart from a screen orientation change (or other).
-            mFormHandler = null;
+            setFormHandler(null);
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -178,7 +178,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             }
         }
     }
-
 
 
     /*
@@ -1011,6 +1010,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    private void setFormHandler(FormHandler formHandler) {
+        mFormHandler = formHandler;
+    }
+
+
 
     /*
      * (non-Javadoc)
@@ -1118,7 +1122,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         if (formHandler == null) {
             createErrorDialog(getString(R.string.form_load_error, mFormPath), true);
         } else {
-            mFormHandler = formHandler;
+            setFormHandler(formHandler);
 
             // Set saved answer path
             if (mInstancePath == null) {

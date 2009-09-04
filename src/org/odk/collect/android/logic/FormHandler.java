@@ -62,7 +62,6 @@ public class FormHandler {
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
     }
 
-
     /**
      * Attempts to save the answer 'answer' into prompt. If evaluateConstraints
      * is true then the answer won't be saved to the data model unless it passes
