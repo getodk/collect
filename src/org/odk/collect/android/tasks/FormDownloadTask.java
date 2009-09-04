@@ -36,7 +36,7 @@ import java.net.URLConnection;
  * @author carlhartung
  * 
  */
-class FormDownloadTask extends AsyncTask<String, String, Boolean> {
+public class FormDownloadTask extends AsyncTask<String, String, Boolean> {
     FormDownloaderListener mStateListener;
     String mName;
 

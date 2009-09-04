@@ -24,7 +24,7 @@ package org.odk.collect.android.utils;
  */
 public class GestureDirection {
 
-    enum UserGesture {
+    public enum UserGesture {
         SWIPE_RIGHT, SWIPE_LEFT, SWIPE_UP, SWIPE_DOWN, SWIPE_UNKNOWN
     }
 

@@ -33,8 +33,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.R.layout;
-import org.odk.collect.android.R.string;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.prefs.GlobalPreferences;

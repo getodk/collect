@@ -15,14 +15,6 @@
  */
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.R.string;
-import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.prefs.GlobalPreferences;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -32,6 +24,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.prefs.GlobalPreferences;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
 
 import java.util.ArrayList;
 

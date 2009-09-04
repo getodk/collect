@@ -41,7 +41,7 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * 
  */
-class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
+public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
     InstanceUploaderListener mStateListener;
     String mUrl;

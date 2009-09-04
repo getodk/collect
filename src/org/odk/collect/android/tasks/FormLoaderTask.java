@@ -43,7 +43,7 @@ import java.io.IOException;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
+public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
     FormLoaderListener mStateListener;
 
 
