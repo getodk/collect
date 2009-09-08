@@ -35,6 +35,7 @@ the License.
 	
 	<string name="send_selected_data">Send Selected Data</string>
 	<string name="send_all_data">Send All Data</string>
+	
 	<string name="send_data">Send Completed Data</string>
 	  <string name="send_data_button">Send Completed Data (%s)</string>
 	
@@ -45,8 +46,9 @@ the License.
 <string name="loading_form">Loading Form...</string>
 	<string name="please_wait">Please wait a few moments.</string>
 
-	<string name="save_data">Mark Saved</string>
-	<string name="save_complete">Mark Completed</string>
+  <string name="save_exit">Save and Exit</string> 
+	<string name="complete_exit">Complete and Exit</string>
+	
 	<string name="save_data_message">Please choose one to keep results.</string>
 	<string name="save_data_description">%s has been completed.</string>
 
@@ -95,8 +97,10 @@ the License.
 	 <string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
 	
 	<string name="delete_confirm">Are you sure you want to delete %s?</string>
-	<string name="entryquit_confirm">Going back will delete any unsaved data. Are you sure?</string>
-	<string name="savequit_confirm">Are you sure you want to exit? Your data will be saved.</string>
+	<string name="entry_exit_confirm">Going back will delete any unsaved data. Are you sure?</string>
+	<string name="save_exit_confirm">Are you sure you want to save and exit? Your data will be saved.</string>
+	 <string name="complete_exit_confirm">Are you sure you want to complete and exit? Your data will be saved.</string>
+	
 	
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>
 
@@ -125,7 +129,7 @@ the License.
   <string name="no_capture">Nothing captured yet.</string>
   <string name="one_capture">Multimedia captured.</string>
 
-	<string name="add_form">Add Selected Form</string>
+	<string name="add_form">Add Selected Form(s)</string>
 	<string name="delete_form">Delete Selected Form</string>
 	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>

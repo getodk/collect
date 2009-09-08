@@ -82,10 +82,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private static final int MENU_CLEAR = Menu.FIRST;
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
-    private static final int MENU_QUIT = Menu.FIRST + 2;
+    private static final int MENU_SAVE = Menu.FIRST + 2;
     private static final int MENU_LANGUAGES = Menu.FIRST + 3;
     private static final int MENU_HELP_TEXT = Menu.FIRST + 4;
     private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 5;
+    private static final int MENU_COMPLETE = Menu.FIRST + 6;
+
 
     private static final int PROGRESS_DIALOG = 1;
 
@@ -281,11 +283,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 R.drawable.ic_menu_clear_playlist);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 android.R.drawable.ic_menu_more);
-        menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
+        menu.add(0, MENU_SAVE, 0, getString(R.string.save_exit)).setIcon(
                 android.R.drawable.ic_menu_save);
         menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
                 android.R.drawable.ic_menu_help);
         menu.add(0, MENU_HIERARCHY_VIEW, 0, "VH");
+        menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
+                android.R.drawable.ic_menu_save);
 
         return true;
     }
@@ -329,16 +333,24 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             } else {
                 menu.removeItem(MENU_HELP_TEXT);
             }
-            if (menu.findItem(MENU_QUIT) == null) {
-                menu.add(0, MENU_QUIT, 0, getString(R.string.quit_entry)).setIcon(
+            if (menu.findItem(MENU_SAVE) == null) {
+                menu.add(0, MENU_SAVE, 0, getString(R.string.save_exit)).setIcon(
                         android.R.drawable.ic_menu_save);
             }
+            if (menu.findItem(MENU_COMPLETE) == null) {
+                menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
+                        android.R.drawable.ic_menu_save);
+            }
+
+
 
         } else {
             menu.removeItem(MENU_CLEAR);
             menu.removeItem(MENU_DELETE_REPEAT);
-            menu.removeItem(MENU_QUIT);
+            menu.removeItem(MENU_SAVE);
             menu.removeItem(MENU_HELP_TEXT);
+            menu.removeItem(MENU_COMPLETE);
+
         }
         return true;
     }
@@ -364,8 +376,11 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
                 return true;
-            case MENU_QUIT:
-                createSaveQuitDialog();
+            case MENU_SAVE:
+                createSaveExitDialog();
+                return true;
+            case MENU_COMPLETE:
+                createCompleteExitDialog();
                 return true;
             case MENU_HIERARCHY_VIEW:
                 // Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -464,7 +479,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                         R.string.save_data_description, mFormHandler.getFormTitle()));
 
                 // Create 'save complete' button.
-                ((Button) endView.findViewById(R.id.save_complete))
+                ((Button) endView.findViewById(R.id.complete_exit_button))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
@@ -472,7 +487,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             }
                         });
                 // Create 'save for later' button
-                ((Button) endView.findViewById(R.id.save_exit))
+                ((Button) endView.findViewById(R.id.save_exit_button))
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'saved' here.
@@ -815,9 +830,9 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /**
      * Confirm save and quit dialog
      */
-    private void createSaveQuitDialog() {
+    private void createSaveExitDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setMessage(getString(R.string.savequit_confirm));
+        mAlertDialog.setMessage(getString(R.string.save_exit_confirm));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int i) {
@@ -827,7 +842,41 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                             // save constraint violated, so just return
                             return;
                         } else {
-                            if (saveDataToDisk(false)) finish();
+                            if (saveDataToDisk(false)) {
+                                finish();
+                            }
+                        }
+                        break;
+                    case DialogInterface.BUTTON2: // no
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.yes), quitListener);
+        mAlertDialog.setButton2(getString(R.string.no), quitListener);
+        mAlertDialog.show();
+    }
+
+
+    /**
+     * Confirm save and quit dialog
+     */
+    private void createCompleteExitDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setMessage(getString(R.string.complete_exit_confirm));
+        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON1: // yes
+                        if (!saveCurrentAnswer(true)) {
+                            // save constraint violated, so just return
+                            return;
+                        } else {
+                            if (saveDataToDisk(true)) {
+                                finish();
+                            }
                         }
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -847,7 +896,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     private void createQuitDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setMessage(getString(R.string.entryquit_confirm));
+        mAlertDialog.setMessage(getString(R.string.entry_exit_confirm));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int i) {

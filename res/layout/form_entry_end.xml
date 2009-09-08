@@ -47,16 +47,16 @@ the License.
 		android:paddingBottom="6px" />
   
   <Button 
-	   android:id="@+id/save_exit"
-	   android:text="@string/save_data"
+	   android:id="@+id/save_exit_button"
+	   android:text="@string/save_exit"
 	   android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:padding="20px"
      android:textSize="10pt" />
      
   <Button 
-	   android:id="@+id/save_complete"
-	   android:text="@string/save_complete"
+	   android:id="@+id/complete_exit_button"
+	   android:text="@string/complete_exit"
 	   android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:padding="20px"
