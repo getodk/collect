@@ -287,9 +287,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 android.R.drawable.ic_menu_save);
         menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
                 android.R.drawable.ic_menu_help);
-        //menu.add(0, MENU_HIERARCHY_VIEW, 0, "VH");
+        menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
+                R.drawable.ic_menu_goto).setEnabled(false);
         menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
-                android.R.drawable.ic_menu_save);
+                R.drawable.ic_menu_mark);
 
         return true;
     }
@@ -333,6 +334,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             } else {
                 menu.removeItem(MENU_HELP_TEXT);
             }
+
             if (menu.findItem(MENU_SAVE) == null) {
                 menu.add(0, MENU_SAVE, 0, getString(R.string.save_exit)).setIcon(
                         android.R.drawable.ic_menu_save);
@@ -340,6 +342,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             if (menu.findItem(MENU_COMPLETE) == null) {
                 menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
                         android.R.drawable.ic_menu_save);
+            }
+            if (menu.findItem(MENU_HIERARCHY_VIEW) == null) {
+                menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
+                        R.drawable.ic_menu_goto).setEnabled(false);
             }
 
 
@@ -448,15 +454,17 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
      */
     private View createView(PromptElement prompt) {
         setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
+        FileDbAdapter fda;
+        Cursor c;
 
         switch (prompt.getType()) {
             case PromptElement.TYPE_START:
                 View startView = View.inflate(this, R.layout.form_entry_start, null);
                 setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
 
-                FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
+                fda = new FileDbAdapter(FormEntry.this);
                 fda.open();
-                Cursor c = fda.fetchFile(mInstancePath, null);
+                c = fda.fetchFile(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
                     ((TextView) startView.findViewById(R.id.description)).setText(getString(
                             R.string.review_data_description, c.getString(c
@@ -475,8 +483,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return startView;
             case PromptElement.TYPE_END:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
+                fda = new FileDbAdapter(FormEntry.this);
+                fda.open();
+                c = fda.fetchFile(mInstancePath, null);
                 ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                        R.string.save_data_description, mFormHandler.getFormTitle()));
+                        R.string.save_data_description, c.getString(c
+                                .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
 
                 // Create 'save complete' button.
                 ((Button) endView.findViewById(R.id.complete_exit_button))

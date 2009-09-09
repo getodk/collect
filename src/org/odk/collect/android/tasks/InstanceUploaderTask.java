@@ -18,6 +18,7 @@ package org.odk.collect.android.tasks;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import android.util.Log;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -113,7 +114,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 return uploadedIntances;
             }
 
-            // check response
+            // check response.
             // TODO:  This isn't handled correctly.
             String serverLocation = null;
             Header[] h = response.getHeaders("Location");
@@ -125,10 +126,12 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 serverLocation = "null";
             }
             int responseCode = response.getStatusLine().getStatusCode();
-            if (mUrl.contains(serverLocation) && responseCode == 201) {
+
+            // verify that your response came from a known server
+            if (serverLocation != null && mUrl.contains(serverLocation) && responseCode == 201) {
                 uploadedIntances.add(values[i]);
             }
-            
+
         }
 
         return uploadedIntances;

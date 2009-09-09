@@ -63,6 +63,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
 
     public void clearAnswer() {
         mStringAnswer.setText(null);
+        mAnswerDisplay.setText(null);
     }
 
 

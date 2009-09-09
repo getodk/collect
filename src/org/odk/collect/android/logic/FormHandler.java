@@ -38,6 +38,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
 
 
@@ -61,6 +62,7 @@ public class FormHandler {
         mForm = formDef;
         mCurrentIndex = FormIndex.createBeginningOfFormIndex();
     }
+
 
     /**
      * Attempts to save the answer 'answer' into prompt. If evaluateConstraints
@@ -508,35 +510,48 @@ public class FormHandler {
     }
 
 
-
     /**
      * Loop through the data model and writes the XML file into the answer
      * folder.
      */
     private boolean exportXmlFile(ByteArrayPayload payload, String path) {
 
+        // create data stream
+        InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();
 
         // read from data stream
         byte[] data = new byte[len];
-       
-        // write xml file
         try {
-            // String filename = path + "/" +
-            // path.substring(path.lastIndexOf('/') + 1) + ".xml";
-            BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-            bw.write(new String(data, "UTF-8"));
-            bw.flush();
-            bw.close();
-            return true;
+            int read = is.read(data, 0, len);
+            if (read > 0) {
+                // write xml file
+                try {
+                    // String filename = path + "/" +
+                    // path.substring(path.lastIndexOf('/') + 1) + ".xml";
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    bw.write(new String(data, "UTF-8"));
+                    bw.flush();
+                    bw.close();
+                    return true;
 
+                } catch (IOException e) {
+                    Log.e(t, "Error writing XML file");
+                    e.printStackTrace();
+                    return false;
+                }
+            }
         } catch (IOException e) {
-            Log.e(t, "Error writing XML file");
+            Log.e(t, "Error reading from payload data stream");
             e.printStackTrace();
             return false;
         }
+        
+        return false;
+
     }
-    
+
+
 
     /**
      * Serialize data model and extract payload. Exports both binaries and xml.

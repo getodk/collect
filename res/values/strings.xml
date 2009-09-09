@@ -143,6 +143,7 @@ the License.
 	<string name="local_forms_tab">Local (%s)</string>
 	<string name="remote_forms">Remote</string>
 	 <string name="remote_forms_tab">Remote (%s)</string>
+	 <string name="view_hierarchy">Jump to Question</string>
 	
 	<string name="long_hint_message">Press Menu button for the hint.</string>
 	<string name="get_hint">Get Hint</string>
