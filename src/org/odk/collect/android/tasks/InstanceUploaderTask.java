@@ -15,7 +15,9 @@
  */
 package org.odk.collect.android.tasks;
 
-import android.os.AsyncTask;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -31,9 +33,8 @@ import org.apache.http.params.HttpParams;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import android.os.AsyncTask;
+import android.util.Log;
 
 
 /**
@@ -44,6 +45,7 @@ import java.util.ArrayList;
  */
 public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
+    private static String t = "InstanceUploaderTask";
     InstanceUploaderListener mStateListener;
     String mUrl;
 
@@ -112,10 +114,15 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             }
 
             // check response
+            // TODO:  This isn't handled correctly.
             String serverLocation = null;
             Header[] h = response.getHeaders("Location");
             if (h != null && h.length > 0) {
                 serverLocation = h[0].getValue();
+            } else {
+                // something should be done here...
+                Log.e(t, "Location header was absent");
+                serverLocation = "null";
             }
             int responseCode = response.getStatusLine().getStatusCode();
             if (mUrl.contains(serverLocation) && responseCode == 201) {
