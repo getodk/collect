@@ -287,7 +287,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 android.R.drawable.ic_menu_save);
         menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
                 android.R.drawable.ic_menu_help);
-        menu.add(0, MENU_HIERARCHY_VIEW, 0, "VH");
+        //menu.add(0, MENU_HIERARCHY_VIEW, 0, "VH");
         menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
                 android.R.drawable.ic_menu_save);
 
@@ -383,8 +383,8 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 createCompleteExitDialog();
                 return true;
             case MENU_HIERARCHY_VIEW:
-                // Intent i = new Intent(this, FormHierarchyActivity.class);
-                // startActivity(i);
+                Intent i = new Intent(this, FormHierarchyActivity.class);
+                startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
