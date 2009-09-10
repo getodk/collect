@@ -81,19 +81,24 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             // find all files in parent directory
             File[] files = file.getParentFile().listFiles();
             if (files == null) {
+                Log.e(t, "no files to upload");
                 cancel(true);
             }
 
             // mime post
             MultipartEntity entity = new MultipartEntity();
-            for (int j = 0; j < 1; j++) {
+            for (int j = 0; j < files.length; j++) {
                 File f = files[j];
                 if (f.getName().endsWith(".xml")) {
                     // uploading xml file
                     entity.addPart("xml_submission_file", new FileBody(f));
+                    Log.i(t, "added xml file " + f.getName());
                 } else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
                     // upload image file
                     entity.addPart(f.getName(), new FileBody(f));
+                    Log.i(t, "added image file" + f.getName());
+                } else {
+                    Log.e(t, "unsupported file type, not adding file: " + f.getName());
                 }
             }
             httppost.setEntity(entity);
