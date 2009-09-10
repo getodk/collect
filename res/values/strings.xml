@@ -159,7 +159,7 @@ the License.
 <string name="change_user_summary">Your username (optional)</string>
 <string name="change_password_summary">Your password (optional)</string>
 
-<string name="default_server">http://opendatakit.appspot.com</string>
+<string name="default_server">http://open-data-kit.appspot.com</string>
 <string name="password">Password</string>
 <string name="server">Server</string>
 <string name="username">Username</string>
