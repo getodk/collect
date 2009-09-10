@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.logic;
 
-import android.util.Log;
 
 /**
  * Used by {@link FormHandler} to create a Vector of groups.

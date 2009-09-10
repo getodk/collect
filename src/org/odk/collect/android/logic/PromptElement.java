@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.logic;
 
-import android.util.Log;
-
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;

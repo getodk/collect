@@ -15,9 +15,7 @@
  */
 package org.odk.collect.android.tasks;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.apache.http.Header;
@@ -34,8 +32,9 @@ import org.apache.http.params.HttpParams;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**

@@ -1,8 +1,13 @@
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -16,14 +21,9 @@ import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.HierarchyElement;
 
-import android.app.ListActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 
 /**
@@ -197,7 +197,7 @@ public class FormHierarchyActivity extends ListActivity {
 
         if (!beginning) {
             // we're displaying only things only within a given group
-            displayGroup = mForm.getChildInstanceRef(startTest).toString(false);;
+            displayGroup = mForm.getChildInstanceRef(startTest).toString(false);
             asdf = nextRelevantIndex(asdf);
 
         } else {
