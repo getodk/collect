@@ -60,21 +60,21 @@ public class GlobalPreferences extends PreferenceActivity implements
         if (s.endsWith("/")) {
             s = s.substring(0, s.lastIndexOf("/"));
         }
-        etp.setText(s);
+        etp.setSummary(s);
     }
 
 
     private void updateUsername() {
         EditTextPreference etp =
                 (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_USERNAME);
-        etp.setText(etp.getText());
+        etp.setSummary(etp.getText());
     }
 
 
     private void updatePassword() {
         EditTextPreference etp =
                 (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_PASSWORD);
-        etp.setText(etp.getText());
+        etp.setSummary(etp.getText());
     }
 
 

@@ -6,20 +6,20 @@
             android:key="server"
             android:defaultValue="@string/default_server"
             android:title="@string/server"
-            android:dialogTitle="@string/change_server" android:summary="@string/change_server_summary"/>
+            android:dialogTitle="@string/change_server" />
             
                 <EditTextPreference
         android:id="@+id/username"
             android:key="username"
             android:defaultValue=""
             android:title="@string/username"
-            android:dialogTitle="@string/change_user" android:summary="@string/change_user_summary" android:enabled="false"/>
+            android:dialogTitle="@string/change_user" android:enabled="false"/>
             
                 <EditTextPreference
         android:id="@+id/password"
             android:key="password"
             android:defaultValue=""
             android:title="@string/password"
-            android:dialogTitle="@string/change_password" android:summary="@string/change_password_summary" android:enabled="false"/>
+            android:dialogTitle="@string/change_password" android:enabled="false"/>
                 
 </PreferenceScreen>
