@@ -115,7 +115,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             }
 
             // check response.
-            // TODO:  This isn't handled correctly.
+            // TODO: This isn't handled correctly.
             String serverLocation = null;
             Header[] h = response.getHeaders("Location");
             if (h != null && h.length > 0) {
@@ -123,9 +123,10 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             } else {
                 // something should be done here...
                 Log.e(t, "Location header was absent");
-                serverLocation = "null";
             }
             int responseCode = response.getStatusLine().getStatusCode();
+            Log.e(t, "Response code:" + responseCode);
+
 
             // verify that your response came from a known server
             if (serverLocation != null && mUrl.contains(serverLocation) && responseCode == 201) {

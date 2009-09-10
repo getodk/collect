@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.logic;
 
+import android.util.Log;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
@@ -41,27 +43,29 @@ import java.util.Vector;
 
 public class PromptElement {
     // private final static String t = "PromptElement";
-    
+
     public static final int TYPE_QUESTION = 0;
     public static final int TYPE_START = 1;
     public static final int TYPE_END = 2;
-    public static final int TYPE_REPEATDIALOG = 3;
+    public static final int TYPE_REPEAT_DIALOG = 3;
 
     // object to access question and answer data
     private FormElementBinding mBinding;
 
     // every group the prompt belongs to
     private Vector<GroupElement> mGroups;
-    
+
     private int type;
 
-    public PromptElement(int promptType){
+
+    public PromptElement(int promptType) {
         type = promptType;
     }
 
+
     public PromptElement(Vector<GroupElement> groups) {
         mGroups = groups;
-        type = TYPE_REPEATDIALOG;
+        type = TYPE_REPEAT_DIALOG;
     }
 
 
@@ -70,7 +74,8 @@ public class PromptElement {
         mGroups = groups;
         type = TYPE_QUESTION;
     }
-    
+
+
     public int getType() {
         return type;
     }
@@ -199,7 +204,8 @@ public class PromptElement {
      * The text of question in the prompt.
      */
     public String getQuestionText() {
-        return mBinding.form.fillTemplateString(((QuestionDef) mBinding.element).getLongText(),  mBinding.instanceRef);
+        return mBinding.form.fillTemplateString(((QuestionDef) mBinding.element).getLongText(),
+                mBinding.instanceRef);
     }
 
 
@@ -237,9 +243,17 @@ public class PromptElement {
      * The name of the closest group that repeats or null.
      */
     public String getLastRepeatedGroupName() {
-        for (GroupElement g : mGroups) {
-            if (g.isRepeat()) return g.getGroupText();
+        if (mGroups != null) {
+            int count = mGroups.size() - 1;
+            GroupElement ge;
+            for (int i = count; i > -1; i--) {
+                ge = mGroups.get(i);
+                if (ge.isRepeat()) {
+                    return ge.getGroupText();
+                }
+            }
         }
+
         return null;
     }
 
@@ -248,9 +262,17 @@ public class PromptElement {
      * The count of the closest group that repeats or -1.
      */
     public int getLastRepeatedGroupRepeatCount() {
-        for (GroupElement g : mGroups) {
-            if (g.isRepeat()) return g.getRepeatCount();
+        if (mGroups != null) {
+            int count = mGroups.size() - 1;
+            GroupElement ge;
+            for (int i = count; i > -1; i--) {
+                ge = mGroups.get(i);
+                if (ge.isRepeat()) {
+                    return ge.getRepeatCount();
+                }
+            }
         }
+
         return -1;
     }
 

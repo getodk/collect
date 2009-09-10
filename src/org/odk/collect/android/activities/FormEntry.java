@@ -261,7 +261,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
          * Since we're not using managed dialogs, go back to the last actual
          * question if it's a repeat dialog.
          */
-        if (p.getType() == PromptElement.TYPE_REPEATDIALOG) {
+        if (p.getType() == PromptElement.TYPE_REPEAT_DIALOG) {
             p = mFormHandler.prevPrompt();
         }
         View current = createView(p);
@@ -486,10 +486,14 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 fda = new FileDbAdapter(FormEntry.this);
                 fda.open();
                 c = fda.fetchFile(mInstancePath, null);
-                ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                        R.string.save_data_description, c.getString(c
-                                .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
-
+                if (c != null && c.getCount() > 0) {
+                    ((TextView) endView.findViewById(R.id.description)).setText(getString(
+                            R.string.save_data_description, c.getString(c
+                                    .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
+                } else {
+                    ((TextView) endView.findViewById(R.id.description)).setText(getString(
+                            R.string.save_data_description, mFormHandler.getFormTitle()));
+                }
                 // Create 'save complete' button.
                 ((Button) endView.findViewById(R.id.complete_exit_button))
                         .setOnClickListener(new OnClickListener() {
@@ -506,6 +510,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                                 if (saveDataToDisk(false)) finish();
                             }
                         });
+
+                // clean up cursor
+                if (c != null) {
+                    c.close();
+                }
+
+                fda.close();
                 return endView;
             case PromptElement.TYPE_QUESTION:
             default:
@@ -584,7 +595,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     next = createView(p);
                     showView(next, AnimationType.RIGHT);
                     break;
-                case PromptElement.TYPE_REPEATDIALOG:
+                case PromptElement.TYPE_REPEAT_DIALOG:
                     createRepeatDialog(p);
                     break;
             }
