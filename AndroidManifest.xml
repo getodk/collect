@@ -27,9 +27,9 @@ the License.
     <activity android:name=".activities.InstanceChooser" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
     <activity android:name=".activities.FormChooser" android:label="@string/app_name"/>
-    <activity android:name=".activities.LocalFormManager" android:label="@string/app_name"/>
-    <activity android:name=".activities.RemoteFormManager" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormManagerTabs" android:label="@string/app_name"/>
+    <activity android:name=".activities.LocalFileManager" android:label="@string/app_name"/>
+    <activity android:name=".activities.RemoteFileManager" android:label="@string/app_name"/>
+    <activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceUploader" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
     <activity android:name=".prefs.GlobalPreferences" android:label="@string/app_name"/>

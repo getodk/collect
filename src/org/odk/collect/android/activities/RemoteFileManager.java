@@ -56,7 +56,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class RemoteFormManager extends ListActivity implements FormDownloaderListener {
+public class RemoteFileManager extends ListActivity implements FormDownloaderListener {
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_ADD = Menu.FIRST;
@@ -104,7 +104,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         mLoadingList = true;
         FileUtils.createFolder(GlobalConstants.CACHE_PATH);
         mFormDownloadTask = new FormDownloadTask();
-        mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
+        mFormDownloadTask.setDownloaderListener(RemoteFileManager.this);
 
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -156,7 +156,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
                 setContentView(R.layout.no_items);
             }
 
-            FormManagerTabs.setTabHeader(getString(R.string.remote_forms_tab, formCount), "tab2");
+            FileManagerTabs.setTabHeader(getString(R.string.remote_files_tab, formCount), "tab2");
 
         }
     }
@@ -165,7 +165,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, MENU_ADD, 0, getString(R.string.add_form)).setIcon(
+        menu.add(0, MENU_ADD, 0, getString(R.string.add_file)).setIcon(
                 android.R.drawable.ic_menu_add);
         return true;
     }
@@ -225,7 +225,7 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
         mLoadingList = false;
         FileUtils.createFolder(GlobalConstants.FORMS_PATH);
         mFormDownloadTask = new FormDownloadTask();
-        mFormDownloadTask.setDownloaderListener(RemoteFormManager.this);
+        mFormDownloadTask.setDownloaderListener(RemoteFileManager.this);
         mFormDownloadTask.execute(mFormUrl.get(mAddPosition), GlobalConstants.FORMS_PATH
                 + mFormName.get(mAddPosition));
 
@@ -252,8 +252,8 @@ public class RemoteFormManager extends ListActivity implements FormDownloaderLis
                 getListView().clearChoices();
                 // update local form tab
                 int formCount = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH).size();
-                FormManagerTabs
-                        .setTabHeader(getString(R.string.local_forms_tab, formCount), "tab1");
+                FileManagerTabs
+                        .setTabHeader(getString(R.string.local_files_tab, formCount), "tab1");
 
             }
         }

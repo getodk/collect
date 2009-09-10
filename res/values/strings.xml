@@ -39,8 +39,7 @@ the License.
 	<string name="send_data">Send Completed Data</string>
 	  <string name="send_data_button">Send Completed Data (%s)</string>
 	
-	<string name="manage_forms">Manage Forms</string>
-	  <string name="manage_forms_button">Manage Forms (%s)</string>
+	<string name="manage_files">Manage Files</string>
 	
 <string name="getting_formlist">Getting Form List...</string>
 <string name="loading_form">Loading Form...</string>
@@ -82,8 +81,10 @@ the License.
 
   <string name="form_deleted_ok">%s successfully deleted!</string>
   <string name="form_added_ok">%s successfully added!</string>
+  <string name="instance_deleted_ok">%s successfully deleted!</string>
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
+	<string name="instance_deleted_error">Sorry, unable to delete %s</string>
 	
 	<string name="uploading_data">Uploading Data...</string>
 	<string name="downloading_data">Downloading Data...</string>
@@ -129,8 +130,9 @@ the License.
   <string name="no_capture">Nothing captured yet.</string>
   <string name="one_capture">Multimedia captured.</string>
 
-	<string name="add_form">Add Selected Form(s)</string>
-	<string name="delete_form">Delete Selected Form</string>
+	<string name="add_file">Add Selected File</string>
+	<string name="delete_file">Delete Selected File</string>
+	
 	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>
 	<string name="quit_entry">Save and Exit</string>
@@ -139,10 +141,12 @@ the License.
 	<string name="saved_data">Saved (%s)</string>
 	<string name="completed_data">Completed (%s)</string>
 	<string name="submitted_data">Submitted</string>
-	<string name="local_forms">Local</string>
-	<string name="local_forms_tab">Local (%s)</string>
-	<string name="remote_forms">Remote</string>
-	 <string name="remote_forms_tab">Remote (%s)</string>
+	<string name="local_files">Local</string>
+	<string name="local_files_tab">Local (%s)</string>
+	<string name="remote_files">Remote</string>
+	<string name="remote_files_tab">Remote (%s)</string>
+
+	 
 	 <string name="view_hierarchy">Jump to Question</string>
 	
 	<string name="long_hint_message">Press Menu button for the hint.</string>

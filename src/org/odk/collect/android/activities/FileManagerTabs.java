@@ -33,51 +33,51 @@ import org.odk.collect.android.logic.GlobalConstants;
  * An example of tab content that launches an activity via
  * {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
  */
-public class FormManagerTabs extends TabActivity {
+public class FileManagerTabs extends TabActivity {
 
-    private static TextView tvl;
-    private static TextView tvr;
+    private static TextView tvlf;
+    private static TextView tvrf;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_forms));
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_files));
 
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.BLACK);
 
-        Intent local = new Intent(this, LocalFormManager.class);
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_forms))
+        Intent local = new Intent(this, LocalFileManager.class);
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_files))
                 .setContent(local));
 
-        Intent remote = new Intent(this, RemoteFormManager.class);
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_forms))
+        Intent remote = new Intent(this, RemoteFileManager.class);
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_files))
                 .setContent(remote));
 
         // hack to set font size
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
         TabWidget tw = (TabWidget) ll.getChildAt(0);
 
-        RelativeLayout rls = (RelativeLayout) tw.getChildAt(0);
-        tvl = (TextView) rls.getChildAt(1);
-        tvl.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 12);
-        tvl.setPadding(0, 0, 0, 6);
-
-        RelativeLayout rlc = (RelativeLayout) tw.getChildAt(1);
-        tvr = (TextView) rlc.getChildAt(1);
-        tvr.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 12);
-        tvr.setPadding(0, 0, 0, 6);
+        RelativeLayout rllf = (RelativeLayout) tw.getChildAt(0);
+        tvlf = (TextView) rllf.getChildAt(1);
+        tvlf.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 12);
+        tvlf.setPadding(0, 0, 0, 6);
+        
+        RelativeLayout rlrf = (RelativeLayout) tw.getChildAt(1);
+        tvrf = (TextView) rlrf.getChildAt(1);
+        tvrf.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 12);
+        tvrf.setPadding(0, 0, 0, 6);
 
     }
 
 
     public static void setTabHeader(String string, String tab) {
         if (tab.equals("tab1")) {
-            tvl.setText(string);
+            tvlf.setText(string);
         } else if (tab.equals("tab2")) {
-            tvr.setText(string);
+            tvrf.setText(string);
         }
 
     }

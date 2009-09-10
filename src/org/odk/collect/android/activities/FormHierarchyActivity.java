@@ -365,19 +365,19 @@ public class FormHierarchyActivity extends ListActivity {
     }
 
 
-    private boolean indexIsGroup(FormIndex index) {
-        Vector<IFormElement> defs = getIndexVector(index);
-        IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
-        if (last instanceof GroupDef) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    private TreeElement resolveReferenceForCurrentIndex(FormIndex i) {
-        return mForm.getDataModel().resolveReference(mForm.getChildInstanceRef(i));
-    }
+//    private boolean indexIsGroup(FormIndex index) {
+//        Vector<IFormElement> defs = getIndexVector(index);
+//        IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
+//        if (last instanceof GroupDef) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//
+//
+//    private TreeElement resolveReferenceForCurrentIndex(FormIndex i) {
+//        return mForm.getDataModel().resolveReference(mForm.getChildInstanceRef(i));
+//    }
 
 }

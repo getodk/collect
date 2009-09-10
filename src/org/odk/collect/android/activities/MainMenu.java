@@ -53,7 +53,7 @@ public class MainMenu extends Activity {
 
     // buttons
     private Button mEnterDataButton;
-    private Button mManageFormsButton;
+    private Button mManageFilesButton;
     private Button mSendDataButton;
     private Button mReviewDataButton;
 
@@ -115,10 +115,10 @@ public class MainMenu extends Activity {
         });
 
         // manage forms button. no result expected.
-        mManageFormsButton = (Button) findViewById(R.id.manage_forms);
-        mManageFormsButton.setOnClickListener(new OnClickListener() {
+        mManageFilesButton = (Button) findViewById(R.id.manage_forms);
+        mManageFilesButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), FormManagerTabs.class);
+                Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
                 startActivity(i);
             }
         });
@@ -212,7 +212,7 @@ public class MainMenu extends Activity {
             mEnterDataButton.setText(getString(R.string.enter_data));
         }
 
-        mManageFormsButton.setText(getString(R.string.manage_forms));
+        mManageFilesButton.setText(getString(R.string.manage_files));
         mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
         mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
                 + mCompletedCount));
