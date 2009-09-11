@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -246,8 +247,8 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         if (!f.renameTo(new File(s))) {
             Log.i(t, "Failed to rename " + f.getAbsolutePath());
         }
-        
-        
+
+
 
         // remove the database entry and update the name
         getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
@@ -255,6 +256,14 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
 
+    }
+
+
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 }

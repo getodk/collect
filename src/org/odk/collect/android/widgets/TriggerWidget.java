@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
     public TriggerWidget(Context context) {
         super(context);
     }
+
 
     public void clearAnswer() {
         mStringAnswer.setText(null);
@@ -102,4 +104,12 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         this.addView(mActionButton);
     }
 
+
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+
+    }
 }

@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 
@@ -38,15 +39,17 @@ import java.util.GregorianCalendar;
  */
 public class DateWidget extends LinearLayout implements IQuestionWidget {
 
-	private DatePicker mDatePicker;
+    private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
 
     // convert from j2me date to android date
     private final static int YEARSHIFT = 1900;
 
+
     public DateWidget(Context context) {
         super(context);
     }
+
 
     /**
      * Resets date to today.
@@ -61,7 +64,9 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     public IAnswerData getAnswer() {
         // clear focus first so the datewidget gets the value in the text box
         mDatePicker.clearFocus();
-        Date d = new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(), mDatePicker.getDayOfMonth());
+        Date d =
+                new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(), mDatePicker
+                        .getDayOfMonth());
         return new DateData(d);
     }
 
@@ -71,13 +76,13 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
      */
     public void buildView(final PromptElement prompt) {
         final Calendar c = new GregorianCalendar();
-        
+
         mDatePicker = new DatePicker(getContext());
         if (!prompt.isReadonly()) {
             mDatePicker.setFocusable(true);
             mDatePicker.setEnabled(true);
         }
-        
+
         mDateListener = new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
                 if (prompt.isReadonly()) {
@@ -90,7 +95,8 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
                     }
                 } else {
                     // handle leap years and number of days in month
-                    // TODO http://code.google.com/p/android/issues/detail?id=2081
+                    // TODO
+                    // http://code.google.com/p/android/issues/detail?id=2081
                     c.set(year, month, 1);
                     int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (day > max) {
@@ -109,9 +115,17 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
             // create date widget with now
             clearAnswer();
         }
-        
+
         setGravity(Gravity.LEFT);
         addView(mDatePicker);
+    }
+
+
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 }

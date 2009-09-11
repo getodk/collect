@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -208,6 +209,14 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(mLocationListener);
         }
+    }
+
+
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 }

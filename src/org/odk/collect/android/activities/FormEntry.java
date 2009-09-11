@@ -288,7 +288,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
                 android.R.drawable.ic_menu_help);
         menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                R.drawable.ic_menu_goto).setEnabled(false);
+                R.drawable.ic_menu_goto).setEnabled(true);
         menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
                 R.drawable.ic_menu_mark);
 
@@ -671,13 +671,14 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, lp);
 
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-
         mCurrentView.startAnimation(mInAnimation);
+        if (mCurrentView instanceof QuestionView)
+            ((QuestionView) mCurrentView).setFocus(this);
+        else {
+            InputMethodManager inputManager =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), 0);
+        }
     }
 
 

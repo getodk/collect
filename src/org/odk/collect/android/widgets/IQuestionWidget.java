@@ -19,6 +19,8 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.logic.PromptElement;
 
+import android.content.Context;
+
 /**
  * QuestionWidgets are the main elements in QuestionView. QuestionView is a
  * ScrollView, so widget designers don't need to worry about scrolling.
@@ -31,4 +33,5 @@ public interface IQuestionWidget {
     public IAnswerData getAnswer();
     public void clearAnswer();
     public void buildView(PromptElement prompt);
+    public void setFocus(Context context);
 }

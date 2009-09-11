@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.util.TypedValue;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -151,6 +152,15 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
         }
 
         mCheckboxInit = false;
+    }
+
+
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+
     }
 
 }

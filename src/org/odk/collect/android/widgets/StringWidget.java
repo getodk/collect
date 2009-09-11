@@ -16,18 +16,20 @@
 
 package org.odk.collect.android.widgets;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
+
 import android.R;
 import android.content.Context;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 
 /**
  * The most basic widget that allows for entry of any text.
@@ -69,10 +71,10 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
 
     public void buildView(PromptElement prompt) {
-        
+
         // font size
         setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
-        
+
         // capitalize the first letter of the sentence
         setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
 
@@ -91,6 +93,15 @@ public class StringWidget extends EditText implements IQuestionWidget {
         }
 
 
+    }
+
+
+    public void setFocus(Context context) {
+        // Put focus on text input field and display soft keyboard if appropriate.
+        this.requestFocus();
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(this, 0);
     }
 
 }

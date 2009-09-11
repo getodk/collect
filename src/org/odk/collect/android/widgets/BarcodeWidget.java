@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,13 +46,16 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     private Button mActionButton;
     private TextView mStringAnswer;
 
+
     public BarcodeWidget(Context context) {
         super(context);
     }
 
+
     public void clearAnswer() {
         mStringAnswer.setText(null);
     }
+
 
     public IAnswerData getAnswer() {
         String s = mStringAnswer.getText().toString();
@@ -61,6 +65,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
             return new StringData(s);
         }
     }
+
 
     public void buildView(PromptElement prompt) {
         setOrientation(LinearLayout.VERTICAL);
@@ -100,14 +105,22 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         // finish complex layout
         addView(mActionButton);
         addView(mStringAnswer);
-
     }
+
 
     /**
      * Allows answer to be set externally in {@Link FormEntry}.
      */
     public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);
+    }
+
+
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 }

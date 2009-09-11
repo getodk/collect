@@ -171,4 +171,9 @@ public class QuestionView extends ScrollView {
             mView.addView(tv);
         }
     }
+
+
+    public void setFocus(Context context) {
+        mQuestionWidget.setFocus(context);
+    }
 }
