@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
@@ -43,12 +44,12 @@ import java.util.ArrayList;
 
 
 // TODO long click form for submission log
-// TODO support individual submits
 public class InstanceUploader extends ListActivity {
 
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
 
     private SimpleCursorAdapter mInstances;
+    private ArrayList<Long> mSelected = new ArrayList<Long>();
 
 
     @Override
@@ -91,16 +92,18 @@ public class InstanceUploader extends ListActivity {
     }
 
 
-    private void uploadAllData() {
+    private void uploadSelectedFiles() {
 
-        // paths to upload
         ArrayList<String> allInstances = new ArrayList<String>();
 
         // get all checked items
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+
         Cursor c = null;
 
-        for (int i = 0; i < mInstances.getCount(); i++) {
-            c = (Cursor) getListAdapter().getItem(i);
+        for (int i = 0; i < mSelected.size(); i++) {
+            c = fda.fetchFile(mSelected.get(i));
             String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
             allInstances.add(s);
         }
@@ -113,13 +116,24 @@ public class InstanceUploader extends ListActivity {
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
         startActivity(i);
+        
+        fda.close();
     }
 
 
+    private void refreshData() {
+        if (mInstances != null) {
+            mInstances.getCursor().requery();
+        }
+        mSelected.clear();
+        buildView();
+    }
+
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_data).setIcon(
+        menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_selected_data).setIcon(
                 android.R.drawable.ic_menu_upload);
         return true;
     }
@@ -129,7 +143,15 @@ public class InstanceUploader extends ListActivity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_UPLOAD_ALL:
-                uploadAllData();
+                if (mSelected.size() > 0) {
+                    // items selected
+                    uploadSelectedFiles();
+                    refreshData();
+                } else {
+                    // no items selected
+                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
@@ -140,16 +162,26 @@ public class InstanceUploader extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
-        cb.setChecked(!cb.isChecked());
+        // get row id from db
+        Cursor c = (Cursor) getListAdapter().getItem(position);
+        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
 
+        // toggle checkbox and add/remove from selected list
+        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
+        if (cb.isChecked()) {
+            mSelected.remove(k);
+            cb.setChecked(false);
+        } else {
+            mSelected.add(k);
+            cb.setChecked(true);
+        }
     }
 
 
     @Override
     protected void onResume() {
+        refreshData();
         super.onResume();
-        buildView();
     }
 
 

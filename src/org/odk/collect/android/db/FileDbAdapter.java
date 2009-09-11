@@ -259,6 +259,21 @@ public class FileDbAdapter {
     }
 
 
+    public Cursor fetchFile(long id) throws SQLException {
+        Cursor c =
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
+                        KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_ID + "='" + id + "'",
+                        null, null, null, null, null);
+
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+
+    }
+
+
+
     /**
      * Get a cursor to multiple files from the database.
      * 
