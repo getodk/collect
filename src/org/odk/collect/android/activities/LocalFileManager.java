@@ -19,20 +19,22 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.db.FileDbAdapter;
 import org.odk.collect.android.utils.FileUtils;
-import org.odk.collect.android.utils.NaturalOrderComparator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -43,14 +45,13 @@ import java.util.Collections;
  */
 public class LocalFileManager extends ListActivity {
 
-    // add or delete form
+    // delete an item
     private static final int MENU_DELETE = Menu.FIRST;
 
-    private int mDeletePosition;
     private AlertDialog mAlertDialog;
-    private ArrayList<String> mFiles = new ArrayList<String>();
-    private ArrayList<String> mFilenames = new ArrayList<String>();
-    private ArrayAdapter<String> mFileAdapter;
+
+    private SimpleCursorAdapter mInstances;
+    private ArrayList<Long> mSelected = new ArrayList<Long>();
 
 
     @Override
@@ -62,52 +63,29 @@ public class LocalFileManager extends ListActivity {
 
     private void buildView() {
 
-        mFilenames.clear();
+        FileUtils.addOrphans(getBaseContext());
 
-        // check directories for files
-        mFiles = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
-        mFiles.addAll(FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH));
+        // get all mInstances that match the status.
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        Cursor c = fda.fetchAllFiles();
+        startManagingCursor(c);
 
-        if (mFiles != null) {
-            Collections.sort(mFiles, NaturalOrderComparator.NUMERICAL_ORDER);
+        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
+        int[] view = new int[] {R.id.text1, R.id.text2};
 
-            // parse list for filenames
-            for (int i = 0; i < mFiles.size(); i++) {
-                String file = mFiles.get(i);
-                if (!file.endsWith(".xml")) {
-                    file = file + ".xml";
-                }
-                mFilenames.add(file.substring(file.lastIndexOf("/") + 1));
-            }
-        }
-
-        // set adapter
-        mFileAdapter =
-                new ArrayAdapter<String>(this, R.layout.simple_list_item_single_choice, mFilenames);
-
-        // view options
-        if (mFilenames.size() > 0) {
-            getListView().setItemsCanFocus(false);
-            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            setListAdapter(mFileAdapter);
+        // render total instance view
+        mInstances =
+                new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
+        if (c.getCount() > 0) {
+            setListAdapter(mInstances);
         } else {
             setContentView(R.layout.no_items);
         }
 
+        // cleanup
+        fda.close();
 
-    }
-
-
-    /**
-     * Notify the file adapter of data changes and clear radio buttons.
-     */
-    private void refreshData() {
-        mFileAdapter.notifyDataSetChanged();
-        getListView().clearChoices();
-        if (mFiles != null) {
-            FileManagerTabs
-                    .setTabHeader(getString(R.string.local_files_tab, mFiles.size()), "tab1");
-        }
     }
 
 
@@ -123,9 +101,11 @@ public class LocalFileManager extends ListActivity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_DELETE:
-                if (getListView().getCheckedItemPosition() != -1) {
+                if (mSelected.size() > 0) {
+                    // items selected
                     createDeleteDialog();
                 } else {
+                    // no items selected
                     Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
                             Toast.LENGTH_SHORT).show();
                 }
@@ -141,23 +121,21 @@ public class LocalFileManager extends ListActivity {
     private void createDeleteDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
 
-        // match the selected item in mFilenames with the file in mFiles
-        mDeletePosition = getListView().getCheckedItemPosition();
-        mAlertDialog
-                .setMessage(getString(R.string.delete_confirm, mFilenames.get(mDeletePosition)));
+        mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
-                            case DialogInterface.BUTTON1: // yes, delete and
-                                // refresh
-                                deleteSelectedFile();
+                            case DialogInterface.BUTTON1: // delete and
+                                deleteSelectedFiles();
                                 refreshData();
                                 break;
-                            case DialogInterface.BUTTON2: // no, do nothing
+                            case DialogInterface.BUTTON2: // do nothing
                                 break;
                         }
                     }
+
+
                 };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
@@ -166,27 +144,67 @@ public class LocalFileManager extends ListActivity {
     }
 
 
+    private void refreshData() {
+        if (mInstances != null) {
+            mInstances.getCursor().requery();
+        }
+        mSelected.clear();
+        buildView();
+    }
+
+
     /**
-     * Deletes the selected form
+     * Deletes the selected files.First from the database then from the file
+     * system
      */
-    private void deleteSelectedFile() {
+    private void deleteSelectedFiles() {
 
-        // delete from mFiles because it has full path
-        String filename = mFilenames.get(mDeletePosition);
-        String filepath = mFiles.get(mDeletePosition);
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
 
-        boolean deleted = FileUtils.deleteFolder(filepath);
-        if (deleted) {
-            Toast.makeText(getApplicationContext(), getString(R.string.form_deleted_ok, filename),
+        // delete removes the file from the database first
+        int deleted = 0;
+        for (int i = 0; i < mSelected.size(); i++) {
+            if (fda.deleteFile(mSelected.get(i))) {
+                deleted++;
+            }
+        }
+
+        if (deleted > 0) {
+            // all deletes were successful
+            Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
                     Toast.LENGTH_SHORT).show();
-
-            // remove item both arrays
-            mFilenames.remove(mDeletePosition);
-            mFiles.remove(mDeletePosition);
-
         } else {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.form_deleted_error, filename), Toast.LENGTH_SHORT).show();
+            // had some failures
+            Toast.makeText(
+                    getApplicationContext(),
+                    getString(R.string.file_deleted_error, mSelected.size() - deleted + " of "
+                            + mSelected.size()), Toast.LENGTH_SHORT).show();
+        }
+
+        // remove the actual files and close db
+        FileUtils.removeOrphans(getBaseContext());
+        fda.close();
+
+    }
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        // get row id from db
+        Cursor c = (Cursor) getListAdapter().getItem(position);
+        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+
+        // toggle checkbox and add/remove from selected list
+        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
+        if (cb.isChecked()) {
+            mSelected.remove(k);
+            cb.setChecked(false);
+        } else {
+            mSelected.add(k);
+            cb.setChecked(true);
         }
 
     }
@@ -203,11 +221,8 @@ public class LocalFileManager extends ListActivity {
 
     @Override
     protected void onResume() {
-
         // update the list (for returning from the remote manager)
-        buildView();
         refreshData();
-
         super.onResume();
     }
 

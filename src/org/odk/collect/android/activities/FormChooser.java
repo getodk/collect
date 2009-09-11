@@ -20,7 +20,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -29,12 +28,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utils.FileUtils;
-import org.odk.collect.android.utils.NaturalOrderComparator;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -44,9 +37,6 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormChooser extends ListActivity {
-
-    private final static String t = "FormChooser";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +62,8 @@ public class FormChooser extends ListActivity {
      */
     private void buildView() {
 
-        updateFormDirectory();
-
+        FileUtils.addOrphans(getBaseContext());
+        
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
         // get all forms that match the status.
@@ -101,79 +91,7 @@ public class FormChooser extends ListActivity {
     }
 
 
-    /**
-     * Stores new forms in the database and removes old processed formdefs.
-     */
-    private void updateFormDirectory() {
-
-        // full path to the files
-        ArrayList<String> storedForms = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
-        ArrayList<String> cachedForms = FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
-
-        // the hashes of the forms in the db
-        HashMap<String, String> availableForms = new HashMap<String, String>();
-
-        FileDbAdapter fda = new FileDbAdapter(this);
-        fda.open();
-
-        // find all forms in database and grab all their hashes and filenames
-        Cursor c = null;
-        c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, null);
-        if (c != null) {
-            if (c.moveToFirst()) {
-                int i = c.getColumnIndex(FileDbAdapter.KEY_HASH);
-                int j = c.getColumnIndex(FileDbAdapter.KEY_FILEPATH);
-                do {
-                    availableForms.put(c.getString(i), c.getString(j));
-                } while (c.moveToNext());
-            }
-        }
-        // clean up cursor
-        if (c != null) {
-            c.close();
-        }
-
-
-        // sort, then loop through forms on sdcard. add and remove as necessary.
-        if (storedForms != null) {
-            Collections.sort(storedForms, NaturalOrderComparator.NUMERICAL_ORDER);
-            for (String formPath : storedForms) {
-                String hash = FileUtils.getMd5Hash(new File(formPath));
-                // if hash is not in db, add the form.
-                if (!availableForms.containsKey((hash))) {
-                    fda.createFile(formPath, FileDbAdapter.TYPE_FORM,
-                            FileDbAdapter.STATUS_AVAILABLE);
-                } else if (availableForms.containsKey((hash))) {
-                    // if duplicate form found on sd card, remove it.
-                    if (!formPath.equals(availableForms.get(hash))) {
-                        if (!(new File(formPath)).delete()) {
-                            Log.i(t, "Failed to delete " + formPath);
-                        }
-                    }
-                }
-            }
-        }
-
-
-        // clean up adapter
-        fda.close();
-
-        // remove orphaned form defs
-        if (cachedForms != null) {
-            for (String cachePath : cachedForms) {
-                String hash =
-                        cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
-                                .lastIndexOf("."));
-                if (!availableForms.containsKey(hash)) {
-                    if (!(new File(cachePath)).delete()) {
-                        Log.i(t, "Failed to delete " + cachePath);
-                    }
-                }
-            }
-        }
-
-
-    }
+   
 
 
     /**

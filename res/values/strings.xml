@@ -17,7 +17,7 @@ the License.
 
 	<string name="app_name">ODK Collect</string>
 	<string name="main_menu">Main Menu</string>
-	<string name="main_menu_message">ODK Collect v1.1 Alpha 1</string>
+	<string name="main_menu_message">ODK Collect v1.1 Alpha 2</string>
 	 <string name="main_menu_details">Making data collection a little easier.</string>
 	
 
@@ -33,7 +33,7 @@ the License.
 	<string name="review_data">Review Stored Data</string>
 	 <string name="review_data_button">Review Stored Data (%s)</string>
 	
-	<string name="send_selected_data">Send Selected Data</string>
+	<string name="send_selected_data">Send Selected File(s)</string>
 	<string name="send_all_data">Send All Data</string>
 	
 	<string name="send_data">Send Completed Data</string>
@@ -72,14 +72,14 @@ the License.
 	 <string name="no_items_error">Sorry, there is nothing to display.</string>
 	
 	<string name="questionview_error">Sorry, you are not in a form yet!</string>
-	<string name="noselect_error">Sorry, you have not selected an item!</string>
+	<string name="noselect_error">Sorry, you have not selected any items!</string>
 	<string name="languages_error">Sorry, this form has no other languages!</string>
 	<string name="sdcard_error">Sorry, you have no SD card!</string>
 	<string name="url_error">Sorry, URL is invalid!</string>
 	<string name="load_error">Sorry, unable to load form %s</string>
   <string name="directory_error">Sorry, unable to create directory %s</string>  
 
-  <string name="form_deleted_ok">%s successfully deleted!</string>
+  <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
   <string name="form_added_ok">%s successfully added!</string>
   <string name="instance_deleted_ok">%s successfully deleted!</string>
 	<string name="data_saved_ok">Data successfully saved!</string>
@@ -94,10 +94,10 @@ the License.
 	<string name="download_fail">Sorry, download of %s failed!</string>
 	
 	<string name="readonly_question">This question is read only.</string>
-	<string name="form_deleted_error">Sorry, unable to delete %s</string>
+	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 	 <string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
 	
-	<string name="delete_confirm">Are you sure you want to delete %s?</string>
+	<string name="delete_confirm">Are you sure you want to delete %s item(s)?</string>
 	<string name="entry_exit_confirm">Going back will delete any unsaved data. Are you sure?</string>
 	<string name="save_exit_confirm">Are you sure you want to save and exit? Your data will be saved.</string>
 	 <string name="complete_exit_confirm">Are you sure you want to complete and exit? Your data will be saved.</string>
@@ -130,8 +130,8 @@ the License.
   <string name="no_capture">Nothing captured yet.</string>
   <string name="one_capture">Multimedia captured.</string>
 
-	<string name="add_file">Add Selected File</string>
-	<string name="delete_file">Delete Selected File</string>
+	<string name="add_file">Add Selected File(s)</string>
+	<string name="delete_file">Delete Selected File(s)</string>
 	
 	<string name="delete_repeat">Delete Repeat</string>
 	<string name="clear_answer">Clear Answer</string>

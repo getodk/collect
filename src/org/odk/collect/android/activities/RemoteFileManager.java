@@ -28,7 +28,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -145,12 +147,12 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
             }
             // create file adapter and create view
             mFileAdapter =
-                    new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
+                    new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
                             mFormName);
             // view options
             if (mFormName.size() > 0) {
                 getListView().setItemsCanFocus(false);
-                getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                 setListAdapter(mFileAdapter);
             } else {
                 setContentView(R.layout.no_items);
@@ -258,6 +260,16 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
             }
         }
     }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
+        cb.setChecked(!cb.isChecked());
+
+    }
+
 
 
     @Override

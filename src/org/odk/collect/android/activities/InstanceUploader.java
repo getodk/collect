@@ -22,6 +22,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
@@ -68,11 +71,11 @@ public class InstanceUploader extends ListActivity {
         startManagingCursor(c);
 
         String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
-        int[] view = new int[] {android.R.id.text1, android.R.id.text2};
+        int[] view = new int[] {R.id.text1, R.id.text2};
 
         // render total instance view
         mInstances =
-                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+                new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
         setListAdapter(mInstances);
         if (c.getCount() > 0) {
             setListAdapter(mInstances);
@@ -130,6 +133,16 @@ public class InstanceUploader extends ListActivity {
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
+        cb.setChecked(!cb.isChecked());
+
     }
 
 

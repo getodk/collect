@@ -345,7 +345,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             }
             if (menu.findItem(MENU_HIERARCHY_VIEW) == null) {
                 menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                        R.drawable.ic_menu_goto).setEnabled(false);
+                        R.drawable.ic_menu_mark).setEnabled(true);
             }
 
 
@@ -383,10 +383,10 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 createDeleteRepeatConfirmDialog();
                 return true;
             case MENU_SAVE:
-                createSaveExitDialog();
+                createSaveExitDialog(false);
                 return true;
             case MENU_COMPLETE:
-                createCompleteExitDialog();
+                createSaveExitDialog(true);
                 return true;
             case MENU_HIERARCHY_VIEW:
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -851,67 +851,15 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
-    /**
-     * Confirm save and quit dialog
-     */
-    private void createSaveExitDialog() {
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setMessage(getString(R.string.save_exit_confirm));
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // yes
-                        if (!saveCurrentAnswer(true)) {
-                            // save constraint violated, so just return
-                            return;
-                        } else {
-                            if (saveDataToDisk(false)) {
-                                finish();
-                            }
-                        }
-                        break;
-                    case DialogInterface.BUTTON2: // no
-                        break;
-                }
-            }
-        };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), quitListener);
-        mAlertDialog.setButton2(getString(R.string.no), quitListener);
-        mAlertDialog.show();
-    }
-
 
     /**
      * Confirm save and quit dialog
      */
-    private void createCompleteExitDialog() {
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setMessage(getString(R.string.complete_exit_confirm));
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+    private void createSaveExitDialog(boolean markCompleted) {
 
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // yes
-                        if (!saveCurrentAnswer(true)) {
-                            // save constraint violated, so just return
-                            return;
-                        } else {
-                            if (saveDataToDisk(true)) {
-                                finish();
-                            }
-                        }
-                        break;
-                    case DialogInterface.BUTTON2: // no
-                        break;
-                }
-            }
-        };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), quitListener);
-        mAlertDialog.setButton2(getString(R.string.no), quitListener);
-        mAlertDialog.show();
+        if (saveCurrentAnswer(true) && saveDataToDisk(markCompleted)) {
+            finish();
+        }
     }
 
 

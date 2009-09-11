@@ -123,7 +123,7 @@ public class FileDbAdapter {
      */
     private String generateMeta(Long timestamp) {
         Date d = new Date(timestamp);
-        return new SimpleDateFormat("'Modified on' EEE, MMM dd, yyyy 'at' HH:mm").format(d);
+        return new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(d);
     }
 
 
@@ -187,6 +187,19 @@ public class FileDbAdapter {
         }
 
         return id;
+    }
+
+
+    /**
+     * Remove the file from the database.
+     * 
+     * @param id row id
+     * @return number of affected rows
+     */
+    public boolean deleteFile(long id) {
+
+        return mDb.delete(DATABASE_TABLE, KEY_ID + "='" + id + "'", null) > 0;
+
     }
 
 
@@ -287,6 +300,22 @@ public class FileDbAdapter {
     }
 
 
+    public Cursor fetchAllFiles() throws SQLException {
+        cleanFiles();
+        Cursor c = null;
+        c =
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
+                        KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, null, null, null, null, null,
+                        null);
+
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+
+    }
+
+
     /**
      * Update file in the database. Updates the date modified.
      * 
@@ -311,11 +340,10 @@ public class FileDbAdapter {
     /**
      * Find orphaned files on the file system
      */
-    private void cleanFiles() {
+    public void cleanFiles() {
         Cursor c =
-                mDb.query(DATABASE_TABLE,
-                        new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS}, null, null,
-                        null, null, null);
+                mDb.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE,
+                        KEY_STATUS}, null, null, null, null, null);
 
         while (c.moveToNext()) {
             String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
