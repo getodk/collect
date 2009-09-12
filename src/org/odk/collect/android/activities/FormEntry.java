@@ -824,7 +824,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             return true;
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
             return false;
         }
     }
@@ -970,7 +970,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             }
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.languages_error),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
             return;
         }
 

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
@@ -48,6 +49,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     private InstanceUploaderTask mInstanceUploaderTask;
     private int totalCount = -1;
+    private boolean mSuccess = false;
 
 
     @Override
@@ -91,13 +93,21 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         int resultSize = result.size();
         if (resultSize == totalCount) {
             Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_SHORT).show();
+            
+            mSuccess=true;
         } else {
             String s = totalCount - resultSize + " of " + totalCount;
             Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
                     .show();
         }
 
+        Log.i("yaw"," setting activity result");
+
+        Intent in = new Intent();
+        in.putExtra(GlobalConstants.KEY_SUCCESS, mSuccess);
+        setResult(RESULT_OK, in);
+        
         // for each path, update the status
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
@@ -106,8 +116,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
         fda.close();
         finish();
-    }
 
+    }
 
     public void progressUpdate(int progress, int total) {
         mProgressDialog.setMax(total);

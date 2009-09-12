@@ -87,6 +87,8 @@ public class GlobalConstants {
     public static final String KEY_FORMPATH = "formpath";
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_INSTANCES = "instances";
+    public static final String KEY_SUCCESS = "success";
+
 
     /**
      * How long to wait when opening network connection in milliseconds

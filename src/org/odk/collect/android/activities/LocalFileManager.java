@@ -104,7 +104,7 @@ public class LocalFileManager extends ListActivity {
                 } else {
                     // no items selected
                     Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 }
                 return true;
         }
@@ -176,7 +176,7 @@ public class LocalFileManager extends ListActivity {
             Toast.makeText(
                     getApplicationContext(),
                     getString(R.string.file_deleted_error, mSelected.size() - deleted + " of "
-                            + mSelected.size()), Toast.LENGTH_SHORT).show();
+                            + mSelected.size()), Toast.LENGTH_LONG).show();
         }
 
         // remove the actual files and close db

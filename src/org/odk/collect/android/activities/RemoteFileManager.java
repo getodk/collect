@@ -181,7 +181,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
                     addSelectedForm();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.noselect_error,
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 }
                 return true;
         }
@@ -249,7 +249,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
             } else {
                 // clean up choices
                 Toast.makeText(this, getString(R.string.download_successful, name),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
                 mFileAdapter.notifyDataSetChanged();
                 getListView().clearChoices();
                 // update local form tab

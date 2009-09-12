@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,8 @@ import java.util.ArrayList;
 public class InstanceUploader extends ListActivity {
 
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
+    private static final int INSTANCE_UPLOADER = 0;
+
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -114,7 +117,8 @@ public class InstanceUploader extends ListActivity {
         // bundle intent with upload files
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
-        startActivity(i);
+        startActivityForResult(i, INSTANCE_UPLOADER);
+        Log.i("yaw","starting instanceuploader activity for result");
 
         fda.close();
     }
@@ -149,7 +153,7 @@ public class InstanceUploader extends ListActivity {
                 } else {
                     // no items selected
                     Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 }
                 return true;
         }
@@ -182,6 +186,33 @@ public class InstanceUploader extends ListActivity {
         refreshData();
         super.onResume();
     }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        Log.i("yaw"," instance uploader on activity result");
+
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+
+        switch (requestCode) {
+            // returns with a form path, start entry
+            case INSTANCE_UPLOADER:
+                Log.i("yaw"," inside uploader switch");
+
+                if (intent.getBooleanExtra(GlobalConstants.KEY_SUCCESS, false)) {
+                    Log.i("yaw"," inside uploader switch 2");
+
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
 
 
 }

@@ -86,12 +86,12 @@ the License.
 	<string name="data_saved_error">Sorry, data save failed!</string>
 	<string name="instance_deleted_error">Sorry, unable to delete %s</string>
 	
-	<string name="uploading_data">Uploading Data...</string>
-	<string name="downloading_data">Downloading Data...</string>
-	<string name="upload_all_successful">Upload of %s item(s) successful!</string>
-	 <string name="upload_some_failed">Sorry, %s item(s) failed!</string>
-	<string name="download_successful">Download of %s successful!</string>
-	<string name="download_fail">Sorry, download of %s failed!</string>
+	<string name="uploading_data">Sending Data...</string>
+	<string name="downloading_data">Fetching Data...</string>
+	<string name="upload_all_successful">%s item(s) sent successfully.</string>
+	 <string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
+	<string name="download_successful">%s item(s) fetched successfully.</string>
+	<string name="download_fail">Sorry, %s item(s) were not fetched!</string>
 	
 	<string name="readonly_question">This question is read only.</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
