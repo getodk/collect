@@ -23,6 +23,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.sax.StartElementListener;
 import android.util.Log;
 
 import org.odk.collect.android.R;
@@ -406,8 +407,12 @@ public class FileDbAdapter {
                     if (c.getCount() == 0 && !(new File(cachePath)).delete()) {
                         Log.i(t, "Failed to delete " + cachePath);
                     }
-
+                    c.close();
                 }
+            }
+            // clean up adapter
+            if (c != null) {
+                c.close();
             }
         }
 
@@ -445,7 +450,7 @@ public class FileDbAdapter {
                         if (!path.equals(formPath) && !(new File(formPath)).delete()) {
                             Log.i(t, "Failed to delete " + formPath);
                         }
-
+                        c.close();
                     } else {
                         // no hash in db, but file path is there.
                         c = fetchFilesByPath(formPath, null);
@@ -453,6 +458,7 @@ public class FileDbAdapter {
                             // delete db entry and hash
                             deleteFile(c.getLong(c.getColumnIndex((FileDbAdapter.KEY_ID))));
                         }
+                        c.close();
 
                         // add this raw form
                         createFile(formPath, FileDbAdapter.TYPE_FORM,
@@ -495,6 +501,7 @@ public class FileDbAdapter {
                     if (c.getCount() == 0 && !(new File(formPath)).delete()) {
                         Log.i(t, "Failed to delete " + formPath);
                     }
+                    c.close();
                 }
             }
             // clean up adapter
@@ -534,6 +541,7 @@ public class FileDbAdapter {
                     if (c.getCount() == 0 && !FileUtils.deleteFolder(instancePath)) {
                         Log.i(t, "Failed to delete " + instancePath);
                     }
+                    c.close();
                 }
             }
 
