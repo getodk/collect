@@ -341,7 +341,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             }
             if (menu.findItem(MENU_COMPLETE) == null) {
                 menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
-                        android.R.drawable.ic_menu_save);
+                        R.drawable.ic_menu_mark);
             }
             if (menu.findItem(MENU_HIERARCHY_VIEW) == null) {
                 menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(

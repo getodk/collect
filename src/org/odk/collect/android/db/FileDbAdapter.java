@@ -379,7 +379,10 @@ public class FileDbAdapter {
                 deleteFile(path, null);
             }
         }
-        c.close();
+        if (c!=null) {
+            c.close();
+
+        }
     }
 
 

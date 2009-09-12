@@ -36,8 +36,8 @@ the License.
 	<string name="send_selected_data">Send Selected File(s)</string>
 	<string name="send_all_data">Send All Data</string>
 	
-	<string name="send_data">Send Completed Data</string>
-	  <string name="send_data_button">Send Completed Data (%s)</string>
+	<string name="send_data">Send Finalized Data</string>
+	  <string name="send_data_button">Send Finalized Data (%s)</string>
 	
 	<string name="manage_files">Manage Files</string>
 	
@@ -45,11 +45,11 @@ the License.
 <string name="loading_form">Loading Form...</string>
 	<string name="please_wait">Please wait a few moments.</string>
 
-  <string name="save_exit">Save and Exit</string> 
-	<string name="complete_exit">Complete and Exit</string>
+  <string name="save_exit">Save for Later</string> 
+	<string name="complete_exit">Finalize for Sending</string>
 	
 	<string name="save_data_message">Please choose one to keep results.</string>
-	<string name="save_data_description">%s has been completed.</string>
+	<string name="save_data_description">%s has ended.</string>
 
 	<string name="enter_url">Enter URL</string>
 
@@ -100,7 +100,7 @@ the License.
 	<string name="delete_confirm">Are you sure you want to delete %s item(s)?</string>
 	<string name="entry_exit_confirm">Going back will delete any unsaved data. Are you sure?</string>
 	<string name="save_exit_confirm">Are you sure you want to save and exit? Your data will be saved.</string>
-	 <string name="complete_exit_confirm">Are you sure you want to complete and exit? Your data will be saved.</string>
+	 <string name="complete_exit_confirm">Are you sure you want to finalize and exit? Your data will be saved.</string>
 	
 	
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated element \"%s\" and all of its sub-elements?</string>
@@ -139,7 +139,7 @@ the License.
 	<string name="change_language">Change Language</string>
 	
 	<string name="saved_data">Saved (%s)</string>
-	<string name="completed_data">Completed (%s)</string>
+	<string name="completed_data">Finalized (%s)</string>
 	<string name="submitted_data">Submitted</string>
 	<string name="local_files">Local</string>
 	<string name="local_files_tab">Local (%s)</string>
@@ -167,6 +167,6 @@ the License.
 <string name="server">Server</string>
 <string name="username">Username</string>
   
-  	<string name="edit_saved_completed_data">Edit Saved or Completed Data</string>
+  	<string name="edit_saved_completed_data">Edit Saved or Finalized Data</string>
 
 </resources>
