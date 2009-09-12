@@ -16,11 +16,6 @@
 
 package org.odk.collect.android.utils;
 
-import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Environment;
 import android.util.Log;
 
@@ -33,8 +28,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 
 /**
  * Static methods used for common file operations.
@@ -262,146 +255,6 @@ public class FileUtils {
         }
     }
 
-
-    public static void removeOrphans(Context context) {
-
-        if (createFolder(GlobalConstants.FORMS_PATH)
-                && createFolder(GlobalConstants.INSTANCES_PATH)) {
-
-            // full path to the files
-            ArrayList<String> storedForms =
-                    FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
-            ArrayList<String> storedInstances =
-                    FileUtils.getFilesAsArrayListRecursive(GlobalConstants.INSTANCES_PATH);
-            HashMap<String, String> availableFiles = getAvailableFiles(context);
-
-            final FileDbAdapter fda = new FileDbAdapter(context);
-            fda.open();
-
-            // loop through forms on sdcard. add and remove as necessary.
-            if (storedForms != null) {
-                for (String formPath : storedForms) {
-
-                    String hash = FileUtils.getMd5Hash(new File(formPath));
-                    // if hash is not in db, remove the form.
-                    if (!availableFiles.containsKey(hash) && !(new File(formPath)).delete()) {
-                        Log.i(t, "Failed to delete " + formPath);
-                    }
-
-                    // if duplicate form found on sd card, remove it.
-                    if (availableFiles.containsKey(hash)
-                            && !formPath.equals(availableFiles.get(hash))
-                            && !(new File(formPath)).delete()) {
-                        Log.i(t, "Failed to delete " + formPath);
-                    }
-
-                }
-            }
-
-            if (storedInstances != null) {
-                for (String instancePath : storedInstances) {
-                    // if path is not in db, remove the instance folder.
-                    if (instancePath.endsWith(".xml")) {
-                        String hash = FileUtils.getMd5Hash(new File(instancePath));
-                        if (!availableFiles.containsKey(hash)
-                                && !deleteFolder((new File(instancePath)).getParent())) {
-                            Log.i(t, "Failed to delete " + instancePath);
-                        }
-                    }
-
-                }
-            }
-
-            fda.close();
-        }
-    }
-
-
-    private static HashMap<String, String> getAvailableFiles(Context context) {
-
-        if (createFolder(GlobalConstants.CACHE_PATH)) {
-
-            // the hashes of the forms in the db
-            HashMap<String, String> availableFiles = new HashMap<String, String>();
-            ArrayList<String> cachedForms =
-                    FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
-
-            final FileDbAdapter fda = new FileDbAdapter(context);
-            fda.open();
-
-            // find all forms in database and grab all their hashes and
-            // filenames
-            Cursor c = null;
-            c = fda.fetchAllFiles();
-            if (c != null) {
-                if (c.moveToFirst()) {
-                    int i = c.getColumnIndex(FileDbAdapter.KEY_HASH);
-                    int j = c.getColumnIndex(FileDbAdapter.KEY_FILEPATH);
-                    do {
-                        availableFiles.put(c.getString(i), c.getString(j));
-                    } while (c.moveToNext());
-                }
-            }
-            // clean up cursor
-            if (c != null) {
-                c.close();
-            }
-
-            // remove orphaned form defs
-            if (cachedForms != null) {
-                for (String cachePath : cachedForms) {
-                    String hash =
-                            cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
-                                    .lastIndexOf("."));
-                    if (!availableFiles.containsKey(hash) && !(new File(cachePath)).delete()) {
-                        Log.i(t, "Failed to delete " + cachePath);
-                    }
-                }
-            }
-
-            fda.close();
-
-            return availableFiles;
-        } else {
-            return null;
-        }
-    }
-
-
-    /**
-     * Stores new forms in the database
-     */
-    public static void addOrphans(Context context) {
-
-        if (createFolder(GlobalConstants.FORMS_PATH)) {
-            // full path to the files
-            ArrayList<String> storedForms =
-                    FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
-            HashMap<String, String> availableFiles = getAvailableFiles(context);
-
-            final FileDbAdapter fda = new FileDbAdapter(context);
-            fda.open();
-
-            // loop through forms on sdcard. add and remove as necessary.
-            if (storedForms != null) {
-                for (String formPath : storedForms) {
-                    String hash = FileUtils.getMd5Hash(new File(formPath));
-                    // if hash is not in db, add the form.
-                    if (!availableFiles.containsKey((hash))) {
-                        fda.createFile(formPath, FileDbAdapter.TYPE_FORM,
-                                FileDbAdapter.STATUS_AVAILABLE);
-                    }
-                }
-            }
-
-            // clean up adapter
-            fda.close();
-
-            removeOrphans(context);
-
-
-        }
-    }
 
 
 }

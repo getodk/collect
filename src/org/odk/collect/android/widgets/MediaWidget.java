@@ -185,6 +185,8 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // retrieve answer from data model and update ui
         mDisplayText = new TextView(getContext());
+        mDisplayText.setPadding(5,0,0,0);
+
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
             mPlayButton.setEnabled(true);
@@ -196,8 +198,8 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         }
 
         // finish complex layout
-        this.addView(mDisplayText);
         this.addView(mCaptureButton);
+        // this.addView(mDisplayText);
         this.addView(mPlayButton);
 
     }

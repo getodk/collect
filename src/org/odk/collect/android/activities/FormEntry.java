@@ -464,7 +464,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
                 fda = new FileDbAdapter(FormEntry.this);
                 fda.open();
-                c = fda.fetchFile(mInstancePath, null);
+                c = fda.fetchFilesByPath(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
                     ((TextView) startView.findViewById(R.id.description)).setText(getString(
                             R.string.review_data_description, c.getString(c
@@ -485,7 +485,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 fda = new FileDbAdapter(FormEntry.this);
                 fda.open();
-                c = fda.fetchFile(mInstancePath, null);
+                c = fda.fetchFilesByPath(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
                     ((TextView) endView.findViewById(R.id.description)).setText(getString(
                             R.string.save_data_description, c.getString(c
@@ -876,7 +876,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     case DialogInterface.BUTTON1: // yes
                         FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
                         fda.open();
-                        Cursor c = fda.fetchFile(mInstancePath, null);
+                        Cursor c = fda.fetchFilesByPath(mInstancePath, null);
                         if (c != null && c.getCount() > 0) {
                             Log.i(t, "prevously saved");
                         } else {

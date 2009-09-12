@@ -27,7 +27,6 @@ import android.widget.SimpleCursorAdapter;
 import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utils.FileUtils;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -61,15 +60,14 @@ public class FormChooser extends ListActivity {
      * Get form list from database and insert into view.
      */
     private void buildView() {
-
-        FileUtils.addOrphans(getBaseContext());
         
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
         // get all forms that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, null);
+        fda.addOrphanForms();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
         startManagingCursor(c);
 
         // create data and views for cursor adapter
@@ -83,15 +81,14 @@ public class FormChooser extends ListActivity {
         if (c.getCount() > 0) {
             setListAdapter(instances);
         } else {
-            setContentView(R.layout.no_items);
+            setContentView(R.layout.list_view_empty);
         }
 
         // cleanup
+       // c.close();
         fda.close();
     }
 
-
-   
 
 
     /**

@@ -104,12 +104,12 @@ public class InstanceChooserTabs extends TabActivity {
         fda.open();
 
         // get saved instances
-        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
         mSavedCount = c.getCount();
         c.close();
 
         // get completed instances
-        c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
         mCompletedCount = c.getCount();
         c.close();
 

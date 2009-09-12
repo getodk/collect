@@ -68,7 +68,7 @@ public class InstanceUploader extends ListActivity {
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
         startManagingCursor(c);
 
         String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
@@ -77,11 +77,10 @@ public class InstanceUploader extends ListActivity {
         // render total instance view
         mInstances =
                 new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(mInstances);
         if (c.getCount() > 0) {
             setListAdapter(mInstances);
         } else {
-            setContentView(R.layout.no_items);
+            setContentView(R.layout.list_view_empty);
         }
 
         // set title
@@ -116,7 +115,7 @@ public class InstanceUploader extends ListActivity {
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
         startActivity(i);
-        
+
         fda.close();
     }
 
@@ -129,7 +128,7 @@ public class InstanceUploader extends ListActivity {
         buildView();
     }
 
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

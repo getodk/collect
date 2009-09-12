@@ -20,7 +20,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -28,10 +27,8 @@ import android.widget.SimpleCursorAdapter;
 import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utils.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
@@ -41,8 +38,6 @@ import java.util.regex.Pattern;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceChooser extends ListActivity {
-
-    private final static String t = "InstanceChooser";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,8 +88,6 @@ public class InstanceChooser extends ListActivity {
      */
     private void buildView() {
 
-        updateInstanceDirectory();
-
         // retrieve status information from instance. needed for tabs.
         Intent i = getIntent();
         String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
@@ -102,7 +95,7 @@ public class InstanceChooser extends ListActivity {
         // get all instances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, status);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, status);
         startManagingCursor(c);
 
         // create data and views for cursor adapter
@@ -115,34 +108,12 @@ public class InstanceChooser extends ListActivity {
         if (c.getCount() > 0) {
             setListAdapter(instances);
         } else {
-            setContentView(R.layout.no_items);
+            setContentView(R.layout.list_view_empty);
         }
 
         // cleanup
         fda.close();
 
-    }
-
-
-    /**
-     * Remove empty folders from instance directory
-     */
-    private void updateInstanceDirectory() {
-        ArrayList<String> storedInstances =
-                FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
-
-        if (storedInstances != null) {
-            // remove orphaned form defs
-            for (String instanceFolder : storedInstances) {
-                File folder = new File(instanceFolder);
-                int count = folder.list().length;
-                if (count == 0) {
-                    if (!folder.delete()) {
-                        Log.i(t, "Failed to delete " + folder);
-                    }
-                }
-            }
-        }
     }
 
 

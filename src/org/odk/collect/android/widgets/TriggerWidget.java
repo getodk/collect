@@ -52,7 +52,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
     public void clearAnswer() {
         mStringAnswer.setText(null);
         mActionButton.setEnabled(true);
-        mDisplayText.setText(getContext().getString(R.string.no_ack));
+        mDisplayText.setText(getContext().getString(R.string.ack));
     }
 
 
@@ -88,20 +88,24 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mStringAnswer.setGravity(Gravity.CENTER);
 
         mDisplayText = new TextView(getContext());
+        mDisplayText.setPadding(5,0,0,0);
 
         String s = prompt.getAnswerText();
         if (s != null) {
+            mActionButton.setText(getContext().getString(R.string.yes_ack));
             mActionButton.setEnabled(false);
             mStringAnswer.setText(s);
-            mDisplayText.setText(getContext().getString(R.string.yes_ack));
+           // mDisplayText.setText(getContext().getString(R.string.yes_ack));
         } else {
+            mActionButton.setText(getContext().getString(R.string.ack));
+
             mActionButton.setEnabled(true);
-            mDisplayText.setText(getContext().getString(R.string.no_ack));
+           // mDisplayText.setText(getContext().getString(R.string.no_ack));
         }
 
         // finish complex layout
-        this.addView(mDisplayText);
         this.addView(mActionButton);
+        // this.addView(mDisplayText);
     }
 
 

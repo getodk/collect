@@ -21,7 +21,6 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +31,6 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.utils.FileUtils;
 
 import java.util.ArrayList;
 
@@ -63,11 +61,10 @@ public class LocalFileManager extends ListActivity {
 
     private void buildView() {
 
-        FileUtils.addOrphans(getBaseContext());
-
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
+        fda.addOrphanForms();
         Cursor c = fda.fetchAllFiles();
         startManagingCursor(c);
 
@@ -80,7 +77,7 @@ public class LocalFileManager extends ListActivity {
         if (c.getCount() > 0) {
             setListAdapter(mInstances);
         } else {
-            setContentView(R.layout.no_items);
+            setContentView(R.layout.list_view_empty);
         }
 
         // cleanup
@@ -183,7 +180,8 @@ public class LocalFileManager extends ListActivity {
         }
 
         // remove the actual files and close db
-        FileUtils.removeOrphans(getBaseContext());
+        fda.removeOrphanForms();
+        fda.removeOrphanInstances();
         fda.close();
 
     }

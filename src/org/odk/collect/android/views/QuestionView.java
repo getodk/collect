@@ -126,7 +126,7 @@ public class QuestionView extends ScrollView {
         if (s.length() > 0) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 4);
             tv.setPadding(0, 0, 0, 5);
             mView.addView(tv);
         }
@@ -140,6 +140,8 @@ public class QuestionView extends ScrollView {
         TextView tv = new TextView(getContext());
         tv.setText(p.getQuestionText());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
+        tv.setTypeface(null, Typeface.BOLD);
+
         tv.setPadding(0, 0, 0, 5);
 
         // wrap to the widget of view

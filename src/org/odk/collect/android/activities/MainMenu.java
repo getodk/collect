@@ -166,10 +166,19 @@ public class MainMenu extends Activity {
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        fda.removeOrphanFormDefs();
+        fda.close();
+    }
+
+
     private void refreshView() {
         updateButtonCount();
     }
-
 
 
     /**
@@ -182,12 +191,12 @@ public class MainMenu extends Activity {
         fda.open();
 
         // count for saved instances
-        Cursor c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
         mSavedCount = c.getCount();
         c.close();
 
         // count for completed instances
-        c = fda.fetchFiles(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
         mCompletedCount = c.getCount();
         c.close();
 
@@ -200,13 +209,13 @@ public class MainMenu extends Activity {
         }
 
         // count for available forms
-        c = fda.fetchFiles(FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
+        c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
         mAvailableCount = c.getCount();
         c.close();
         fda.close();
 
         // update button text
-        if(mAvailableCount == mFormsCount) {
+        if (mAvailableCount == mFormsCount) {
             mEnterDataButton.setText(getString(R.string.enter_data_button, mAvailableCount));
         } else {
             mEnterDataButton.setText(getString(R.string.enter_data));

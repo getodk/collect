@@ -153,8 +153,7 @@ the License.
 	<string name="get_hint">Get Hint</string>
 	
 	<string name="ack">Acknowledge</string>
-	<string name="no_ack">Nothing acknowledged yet.</string>
-	<string name="yes_ack">Action acknowledged.</string>
+	<string name="yes_ack">Acknowledged</string>
 	
   <string name="change_password">Change Password</string>
 <string name="change_server">Change Server</string>

@@ -155,7 +155,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
                 getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                 setListAdapter(mFileAdapter);
             } else {
-                setContentView(R.layout.no_items);
+                setContentView(R.layout.list_view_empty);
             }
 
             FileManagerTabs.setTabHeader(getString(R.string.remote_files_tab, formCount), "tab2");

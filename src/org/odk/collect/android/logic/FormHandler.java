@@ -578,7 +578,7 @@ public class FormHandler {
         FileDbAdapter fda = new FileDbAdapter(context);
         fda.open();
         File f = new File(instancePath);
-        Cursor c = fda.fetchFile(f.getAbsolutePath(), null);
+        Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
         if (!markCompleted) {
             if (c != null && c.getCount() == 0) {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,

@@ -23,12 +23,16 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utils.FileUtils;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -39,6 +43,8 @@ import java.util.regex.Pattern;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FileDbAdapter {
+
+    private final static String t = "FileDbAdapter";
 
     // database columns
     public static final String KEY_ID = "_id";
@@ -106,6 +112,7 @@ public class FileDbAdapter {
 
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
+        cleanFiles();
         return this;
     }
 
@@ -222,14 +229,14 @@ public class FileDbAdapter {
 
 
     /**
-     * Get a cursor to a single file from the database.
+     * Get a cursor to a multiple files from the database.
      * 
      * @param path path to the file
      * @param hash hash of the file
      * @return cursor to the file
      * @throws SQLException
      */
-    public Cursor fetchFile(String path, String hash) throws SQLException {
+    public Cursor fetchFilesByPath(String path, String hash) throws SQLException {
         Cursor c = null;
         if (path == null) {
             // no path given, search using hash
@@ -260,6 +267,7 @@ public class FileDbAdapter {
 
 
     public Cursor fetchFile(long id) throws SQLException {
+
         Cursor c =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
                         KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_ID + "='" + id + "'",
@@ -282,8 +290,8 @@ public class FileDbAdapter {
      * @return cursor to the files
      * @throws SQLException
      */
-    public Cursor fetchFiles(String type, String status) throws SQLException {
-        cleanFiles();
+    public Cursor fetchFilesByType(String type, String status) throws SQLException {
+        // cleanFiles();
 
         Cursor c = null;
         if (type == null) {
@@ -316,7 +324,7 @@ public class FileDbAdapter {
 
 
     public Cursor fetchAllFiles() throws SQLException {
-        cleanFiles();
+        // cleanFiles();
         Cursor c = null;
         c =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
@@ -369,13 +377,169 @@ public class FileDbAdapter {
             if (!f.exists()) {
                 // delete entry for file not on sd
                 deleteFile(path, null);
-            } else {
-                // delete entry for form on sd, but with outdated hash
-                if (!FileUtils.getMd5Hash(f).equals(hash) && type.equals(TYPE_FORM)) {
-                    deleteFile(null, hash);
-                }
             }
         }
         c.close();
     }
+
+
+
+    public void removeOrphanFormDefs() {
+
+        if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
+            ArrayList<String> cachedForms =
+                    FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
+
+            Cursor c = null;
+            // remove orphaned form defs
+            if (cachedForms != null) {
+                for (String cachePath : cachedForms) {
+                    String hash =
+                            cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
+                                    .lastIndexOf("."));
+
+                    // if hash is not in db, delete
+                    c = fetchFilesByPath(null, hash);
+                    if (c.getCount() == 0 && !(new File(cachePath)).delete()) {
+                        Log.i(t, "Failed to delete " + cachePath);
+                    }
+
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * Stores new forms in the database
+     */
+    public void addOrphanForms() {
+
+        // create forms and cache path folder
+        if (FileUtils.createFolder(GlobalConstants.FORMS_PATH)) {
+
+            // full path to the raw xml forms stored on sd card
+            ArrayList<String> storedForms =
+                    FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+
+            String hash = null;
+            String path = null;
+            Cursor c = null;
+
+            // loop through forms on sdcard.
+            if (storedForms != null) {
+                for (String formPath : storedForms) {
+
+                    // hash of raw form
+                    hash = FileUtils.getMd5Hash(new File(formPath));
+
+                    c = fetchFilesByPath(null, hash);
+                    // db has the hash
+                    if (c.getCount() > 0) {
+                        path = c.getString(c.getColumnIndex((FileDbAdapter.KEY_FILEPATH)));
+                        // file path is different, remove file
+                        if (!path.equals(formPath) && !(new File(formPath)).delete()) {
+                            Log.i(t, "Failed to delete " + formPath);
+                        }
+
+                    } else {
+                        // no hash in db, but file path is there.
+                        c = fetchFilesByPath(formPath, null);
+                        if (c.getCount() > 0) {
+                            // delete db entry and hash
+                            deleteFile(c.getLong(c.getColumnIndex((FileDbAdapter.KEY_ID))));
+                        }
+
+                        // add this raw form
+                        createFile(formPath, FileDbAdapter.TYPE_FORM,
+                                FileDbAdapter.STATUS_AVAILABLE);
+
+                    }
+                }
+            }
+
+            // clean up adapter
+            if (c != null) {
+                c.close();
+            }
+
+        }
+    }
+
+
+    public void removeOrphanForms() {
+
+        if (FileUtils.createFolder(GlobalConstants.FORMS_PATH)) {
+
+            // full path to the raw xml forms stored on sd card
+            ArrayList<String> storedForms =
+                    FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+
+            String hash = null;
+            String path = null;
+            Cursor c = null;
+
+            // loop through forms on sdcard.
+            if (storedForms != null) {
+                for (String formPath : storedForms) {
+
+                    // hash of raw form
+                    hash = FileUtils.getMd5Hash(new File(formPath));
+
+                    c = fetchFilesByPath(null, hash);
+                    // db does not the hash
+                    if (c.getCount() == 0 && !(new File(formPath)).delete()) {
+                        Log.i(t, "Failed to delete " + formPath);
+                    }
+                }
+            }
+            // clean up adapter
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+
+    public void removeOrphanInstances() {
+
+        if (FileUtils.createFolder(GlobalConstants.INSTANCES_PATH)) {
+
+            File fo = null;
+            File fi = null;
+            Cursor c = null;
+            ArrayList<String> storedInstances =
+                    FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
+
+            FilenameFilter ff = new FilenameFilter() {
+                public boolean accept(File dir, String filename) {
+                    return filename.endsWith("xml");
+                }
+            };
+
+            if (storedInstances != null) {
+                for (String instancePath : storedInstances) {
+                    Log.i(t, "getting" + instancePath);
+                    fo = new File(instancePath);
+                    // delete empty folders
+                    if (fo.listFiles().length == 0 && !fo.delete()) {
+                        Log.i(t, "Failed to delete " + instancePath);
+                    }
+                    // find xml file in folder and delete folder
+                    c = fetchFilesByPath(fo.list(ff)[0], null);
+                    if (c.getCount() == 0 && !FileUtils.deleteFolder(instancePath)) {
+                        Log.i(t, "Failed to delete " + instancePath);
+                    }
+                }
+            }
+
+            // clean up adapter
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+
 }
