@@ -970,7 +970,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             }
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.languages_error),
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 

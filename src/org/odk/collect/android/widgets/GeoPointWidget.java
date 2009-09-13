@@ -173,7 +173,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
                     Toast
                             .makeText(getContext(),
                                     getContext().getString(R.string.gps_disabled_error),
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
                 }
 
 

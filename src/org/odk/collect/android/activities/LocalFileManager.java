@@ -21,6 +21,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,7 +105,7 @@ public class LocalFileManager extends ListActivity {
                 } else {
                     // no items selected
                     Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
                 return true;
         }

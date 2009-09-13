@@ -23,7 +23,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.sax.StartElementListener;
 import android.util.Log;
 
 import org.odk.collect.android.R;
@@ -380,7 +379,7 @@ public class FileDbAdapter {
                 deleteFile(path, null);
             }
         }
-        if (c!=null) {
+        if (c != null) {
             c.close();
 
         }
@@ -518,6 +517,7 @@ public class FileDbAdapter {
 
             File fo = null;
             File fi = null;
+            String[] fis = null;
             Cursor c = null;
             ArrayList<String> storedInstances =
                     FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
@@ -530,19 +530,22 @@ public class FileDbAdapter {
 
             if (storedInstances != null) {
                 for (String instancePath : storedInstances) {
-                    Log.i(t, "getting" + instancePath);
                     fo = new File(instancePath);
                     // delete empty folders
                     if (fo.listFiles().length == 0 && !fo.delete()) {
                         Log.i(t, "Failed to delete " + instancePath);
                     }
                     // find xml file in folder and delete folder
-                    c = fetchFilesByPath(fo.list(ff)[0], null);
-                    if (c.getCount() == 0 && !FileUtils.deleteFolder(instancePath)) {
-                        Log.i(t, "Failed to delete " + instancePath);
+                    fis = fo.list(ff);
+                    if (fis != null) {
+                        c = fetchFilesByPath(instancePath + "/" + fo.list(ff)[0], null);
+                        if (c.getCount() == 0 && !FileUtils.deleteFolder(instancePath)) {
+                            Log.i(t, "Failed to delete " + instancePath);
+                        }
+                        c.close();
                     }
-                    c.close();
                 }
+
             }
 
             // clean up adapter

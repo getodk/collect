@@ -87,7 +87,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.barcode_scanner_error),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });

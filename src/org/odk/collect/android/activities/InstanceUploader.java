@@ -20,7 +20,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +49,6 @@ public class InstanceUploader extends ListActivity {
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
     private static final int INSTANCE_UPLOADER = 0;
 
-
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
 
@@ -71,7 +69,8 @@ public class InstanceUploader extends ListActivity {
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        Cursor c =
+                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
         startManagingCursor(c);
 
         String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
@@ -83,7 +82,7 @@ public class InstanceUploader extends ListActivity {
         if (c.getCount() > 0) {
             setListAdapter(mInstances);
         } else {
-            setContentView(R.layout.list_view_empty);
+            finish();
         }
 
         // set title
@@ -118,8 +117,6 @@ public class InstanceUploader extends ListActivity {
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
         startActivityForResult(i, INSTANCE_UPLOADER);
-        Log.i("yaw","starting instanceuploader activity for result");
-
         fda.close();
     }
 
@@ -153,7 +150,7 @@ public class InstanceUploader extends ListActivity {
                 } else {
                     // no items selected
                     Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
                 return true;
         }
@@ -186,24 +183,18 @@ public class InstanceUploader extends ListActivity {
         refreshData();
         super.onResume();
     }
-    
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
-        Log.i("yaw"," instance uploader on activity result");
-
         if (resultCode == RESULT_CANCELED) {
             return;
         }
-
         switch (requestCode) {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
-                Log.i("yaw"," inside uploader switch");
-
                 if (intent.getBooleanExtra(GlobalConstants.KEY_SUCCESS, false)) {
-                    Log.i("yaw"," inside uploader switch 2");
-
                     finish();
                 }
                 break;
@@ -212,7 +203,6 @@ public class InstanceUploader extends ListActivity {
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
-
 
 
 }

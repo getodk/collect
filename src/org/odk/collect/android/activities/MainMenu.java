@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
@@ -99,8 +100,15 @@ public class MainMenu extends Activity {
         mReviewDataButton = (Button) findViewById(R.id.review_data);
         mReviewDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
-                startActivityForResult(i, INSTANCE_CHOOSER_TABS);
+                if ((mSavedCount + mCompletedCount) == 0) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.no_items_error, getString(R.string.review)),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
+                    startActivityForResult(i, INSTANCE_CHOOSER_TABS);
+                }
+
             }
         });
 
@@ -108,8 +116,15 @@ public class MainMenu extends Activity {
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceUploader.class);
-                startActivityForResult(i, INSTANCE_UPLOADER);
+                if (mCompletedCount == 0) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.no_items_error, getString(R.string.send)),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent i = new Intent(getApplicationContext(), InstanceUploader.class);
+                    startActivityForResult(i, INSTANCE_UPLOADER);
+                }
+
             }
 
         });

@@ -49,8 +49,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     private InstanceUploaderTask mInstanceUploaderTask;
     private int totalCount = -1;
-    private boolean mSuccess = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,21 +89,20 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     public void uploadingComplete(ArrayList<String> result) {
 
         int resultSize = result.size();
+        boolean success = false;
         if (resultSize == totalCount) {
             Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
                     Toast.LENGTH_SHORT).show();
             
-            mSuccess=true;
+            success=true;
         } else {
             String s = totalCount - resultSize + " of " + totalCount;
             Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
                     .show();
         }
 
-        Log.i("yaw"," setting activity result");
-
         Intent in = new Intent();
-        in.putExtra(GlobalConstants.KEY_SUCCESS, mSuccess);
+        in.putExtra(GlobalConstants.KEY_SUCCESS, success);
         setResult(RESULT_OK, in);
         
         // for each path, update the status

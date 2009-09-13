@@ -21,15 +21,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.db.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.utils.FileUtils;
 
 /**
  * A host activity for {@link InstanceChooser}.
@@ -91,6 +94,12 @@ public class InstanceChooserTabs extends TabActivity {
         TextView tvc = (TextView) rlc.getChildAt(1);
         tvc.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 10);
         tvc.setPadding(0, 0, 0, 6);
+
+        if (mSavedCount >= mCompletedCount)  {
+            getTabHost().setCurrentTabByTag("tab1");
+        } else {
+            getTabHost().setCurrentTabByTag("tab2");
+        }
     }
 
 
@@ -115,6 +124,8 @@ public class InstanceChooserTabs extends TabActivity {
 
         // memory cleanup
         fda.close();
+
+      
     }
 
 
