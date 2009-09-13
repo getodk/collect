@@ -157,9 +157,6 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
             } else {
                 setContentView(R.layout.list_view_empty);
             }
-
-            FileManagerTabs.setTabHeader(getString(R.string.remote_files_tab, formCount), "tab2");
-
         }
     }
 
@@ -199,7 +196,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 mFormDownloadTask.setDownloaderListener(null);
-                                finish();
+                                //finish();
                             }
                         };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
@@ -252,11 +249,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
                         Toast.LENGTH_SHORT).show();
                 mFileAdapter.notifyDataSetChanged();
                 getListView().clearChoices();
-                // update local form tab
-                int formCount = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH).size();
-                FileManagerTabs
-                        .setTabHeader(getString(R.string.local_files_tab, formCount), "tab1");
-
+                
             }
         }
     }

@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -39,9 +40,11 @@ import org.odk.collect.android.logic.PromptElement;
  */
 public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 
-    private Button mActionButton;
+    private ToggleButton mActionButton;
     private TextView mStringAnswer;
     private TextView mDisplayText;
+    private String yes = "yes";
+    private String no = "no";
 
 
     public TriggerWidget(Context context) {
@@ -51,8 +54,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 
     public void clearAnswer() {
         mStringAnswer.setText(null);
-        mActionButton.setEnabled(true);
-        mDisplayText.setText(getContext().getString(R.string.ack));
+        mActionButton.setChecked(false);
     }
 
 
@@ -69,17 +71,21 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
     public void buildView(PromptElement prompt) {
         this.setOrientation(LinearLayout.VERTICAL);
 
-        mActionButton = new Button(getContext());
+        mActionButton = new ToggleButton(getContext());
         mActionButton.setText(getContext().getString(R.string.ack));
+        mActionButton.setTextOff(getContext().getString(R.string.ack));
+        mActionButton.setTextOn(getContext().getString(R.string.acked));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadonly());
 
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                TriggerWidget.this.mActionButton.setEnabled(false);
-                TriggerWidget.this.mStringAnswer.setText(mActionButton.getText());
-                TriggerWidget.this.mDisplayText.setText(getContext().getString(R.string.yes_ack));
+                if (TriggerWidget.this.mActionButton.isChecked()) {
+                    TriggerWidget.this.mStringAnswer.setText(yes);
+                } else {
+                    TriggerWidget.this.mStringAnswer.setText(no);
+                }
             }
         });
 
@@ -88,24 +94,24 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mStringAnswer.setGravity(Gravity.CENTER);
 
         mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5,0,0,0);
+        mDisplayText.setPadding(5, 0, 0, 0);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mActionButton.setText(getContext().getString(R.string.yes_ack));
-            mActionButton.setEnabled(false);
+            if (s.equals(yes)) {
+                mActionButton.setChecked(true);
+            } else if (s.equals(no)) {
+                mActionButton.setChecked(false);
+            } else {
+                mActionButton.setChecked(false);
+            }
             mStringAnswer.setText(s);
-           // mDisplayText.setText(getContext().getString(R.string.yes_ack));
-        } else {
-            mActionButton.setText(getContext().getString(R.string.ack));
 
-            mActionButton.setEnabled(true);
-           // mDisplayText.setText(getContext().getString(R.string.no_ack));
         }
 
         // finish complex layout
         this.addView(mActionButton);
-        // this.addView(mDisplayText);
+        this.addView(mStringAnswer);
     }
 
 
