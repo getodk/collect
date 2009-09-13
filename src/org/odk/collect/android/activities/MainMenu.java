@@ -91,8 +91,23 @@ public class MainMenu extends Activity {
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), FormChooser.class);
-                startActivityForResult(i, FORM_CHOOSER);
+                // make sure we haven't added forms
+                ArrayList<String> forms = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+                if (forms != null) {
+                    mFormsCount = forms.size();
+                } else {
+                    mFormsCount = 0;
+                }
+                
+                if (mFormsCount == 0 && mAvailableCount == 0) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.no_items_error, getString(R.string.enter)),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent i = new Intent(getApplicationContext(), FormChooser.class);
+                    startActivityForResult(i, FORM_CHOOSER);
+                }
+
             }
         });
 
