@@ -282,7 +282,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
                 R.drawable.ic_menu_clear_playlist);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
-                android.R.drawable.ic_menu_more);
+                R.drawable.ic_menu_start_conversation);
         menu.add(0, MENU_SAVE, 0, getString(R.string.save_exit)).setIcon(
                 android.R.drawable.ic_menu_save);
         menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(

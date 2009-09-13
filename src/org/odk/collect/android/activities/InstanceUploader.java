@@ -134,7 +134,7 @@ public class InstanceUploader extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_selected_data).setIcon(
-                android.R.drawable.ic_menu_upload);
+                R.drawable.ic_menu_send);
         return true;
     }
 
