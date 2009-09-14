@@ -28,10 +28,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -82,11 +85,13 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private static final int MENU_CLEAR = Menu.FIRST;
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
-    private static final int MENU_SAVE = Menu.FIRST + 2;
-    private static final int MENU_LANGUAGES = Menu.FIRST + 3;
-    private static final int MENU_HELP_TEXT = Menu.FIRST + 4;
-    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 5;
+    private static final int MENU_LANGUAGES = Menu.FIRST + 2;
+    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 3;
+    private static final int MENU_SUBMENU = Menu.FIRST + 4;
+
+    private static final int MENU_SAVE = Menu.FIRST + 5;
     private static final int MENU_COMPLETE = Menu.FIRST + 6;
+
 
 
     private static final int PROGRESS_DIALOG = 1;
@@ -272,90 +277,49 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /*
      * (non-Javadoc)
      * 
-     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
-                android.R.drawable.ic_menu_close_clear_cancel);
-        menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
-                R.drawable.ic_menu_clear_playlist);
-        menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
-                R.drawable.ic_menu_start_conversation);
-        menu.add(0, MENU_SAVE, 0, getString(R.string.save_exit)).setIcon(
-                android.R.drawable.ic_menu_save);
-        menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
-                android.R.drawable.ic_menu_help);
-        menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                R.drawable.ic_menu_goto).setEnabled(true);
-        menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
-                R.drawable.ic_menu_mark);
-
-        return true;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        /*
-         * Menu options are added only for views where they're appropriate, and
-         * removed for those that they're not.
-         */
-        if (currentPromptIsQuestion()) {
-            if (!mFormHandler.currentPrompt().isReadonly()) {
-                if (menu.findItem(MENU_CLEAR) == null) {
-                    menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
-                            android.R.drawable.ic_menu_close_clear_cancel);
-                }
-            } else {
-                menu.removeItem(MENU_CLEAR);
-            }
-            if (mFormHandler.currentPrompt().isInRepeatableGroup()) {
-                if (menu.findItem(MENU_DELETE_REPEAT) == null) {
-                    menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
-                            R.drawable.ic_menu_clear_playlist);
-                }
-            } else {
-                menu.removeItem(MENU_DELETE_REPEAT);
-            }
-            if (mFormHandler.currentPrompt().getHelpText() != null
-                    && mFormHandler.currentPrompt().getHelpText().length() > 100) {
-                if (menu.findItem(MENU_HELP_TEXT) == null) {
-                    menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint)).setIcon(
-                            android.R.drawable.ic_menu_help);
-                }
 
-            } else {
-                menu.removeItem(MENU_HELP_TEXT);
-            }
-
-            if (menu.findItem(MENU_SAVE) == null) {
-                menu.add(0, MENU_SAVE, 0, getString(R.string.save_exit)).setIcon(
-                        android.R.drawable.ic_menu_save);
-            }
-            if (menu.findItem(MENU_COMPLETE) == null) {
-                menu.add(0, MENU_COMPLETE, 0, getString(R.string.complete_exit)).setIcon(
-                        R.drawable.ic_menu_mark);
-            }
-            if (menu.findItem(MENU_HIERARCHY_VIEW) == null) {
-                menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                        R.drawable.ic_menu_mark).setEnabled(true);
-            }
+        // remove any old menus
+        menu.removeItem(MENU_CLEAR);
+        menu.removeItem(MENU_DELETE_REPEAT);
+        menu.removeItem(MENU_LANGUAGES);
+        menu.removeItem(MENU_HIERARCHY_VIEW);
+        menu.removeItem(MENU_SUBMENU);
 
 
-
+        //
+        MenuItem mi = null;
+        if (currentPromptIsStart()) {
+            mi =
+                    menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
+                            R.drawable.ic_menu_start_conversation);
+            if (mFormHandler.getLanguages() == null) {
+                mi.setEnabled(false);
+            }
+            menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
+                    R.drawable.ic_menu_goto);
+        } else if (currentPromptIsEnd()) {
+            menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
+                    R.drawable.ic_menu_goto);
         } else {
-            menu.removeItem(MENU_CLEAR);
-            menu.removeItem(MENU_DELETE_REPEAT);
-            menu.removeItem(MENU_SAVE);
-            menu.removeItem(MENU_HELP_TEXT);
-            menu.removeItem(MENU_COMPLETE);
+
+            SubMenu sm =
+                    menu.addSubMenu(0, MENU_SUBMENU, 0, R.string.quit_entry).setIcon(
+                            android.R.drawable.ic_menu_save);
+            sm.add(0, MENU_SAVE, 0, getString(R.string.save_for_later));
+            sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
+
+            menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
+                    R.drawable.ic_menu_goto);
+            menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
+                    android.R.drawable.ic_menu_close_clear_cancel).setEnabled(
+                    !mFormHandler.currentPrompt().isReadonly());
+            menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
+                    R.drawable.ic_menu_clear_playlist).setEnabled(
+                    mFormHandler.currentPrompt().isInRepeatableGroup());
 
         }
         return true;
@@ -375,9 +339,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return true;
             case MENU_CLEAR:
                 createClearDialog();
-                return true;
-            case MENU_HELP_TEXT:
-                createHelpDialog();
                 return true;
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
@@ -405,6 +366,24 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     }
 
 
+    /**
+     * 
+     * @return true if the current View represents the start of the form
+     */
+    private boolean currentPromptIsStart() {
+        return (mFormHandler.currentPrompt().getType() == PromptElement.TYPE_START);
+    }
+
+
+    /**
+     * 
+     * @return true if the current View represents then end of the form
+     */
+    private boolean currentPromptIsEnd() {
+        return (mFormHandler.currentPrompt().getType() == PromptElement.TYPE_END);
+    }
+
+
     private boolean saveCurrentAnswer(boolean evaluateConstraints) {
         PromptElement p = mFormHandler.currentPrompt();
 
@@ -414,7 +393,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(),
                             evaluateConstraints);
             if (evaluateConstraints && saveStatus != GlobalConstants.ANSWER_OK) {
-                createConstraintDialog(p, saveStatus);
+                createConstraintToast(p, saveStatus);
                 return false;
             }
         }
@@ -698,8 +677,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
-    private void createConstraintDialog(PromptElement p, int saveStatus) {
-        mAlertDialog = new AlertDialog.Builder(this).create();
+    private void createConstraintToast(PromptElement p, int saveStatus) {
         String constraintText = null;
         switch (saveStatus) {
             case GlobalConstants.ANSWER_CONSTRAINT_VIOLATED:
@@ -713,15 +691,28 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 constraintText = getString(R.string.required_answer_error);
                 break;
         }
-        mAlertDialog.setMessage(constraintText);
-        DialogInterface.OnClickListener constraintListener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), constraintListener);
-        mAlertDialog.show();
+
+        showCustomToast(constraintText);
         mBeenSwiped = false;
+    }
+
+
+    private void showCustomToast(String message) {
+
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.toast_view, null);
+
+        // set the text in the view
+        TextView tv = (TextView) view.findViewById(R.id.message);
+        tv.setText(message);
+
+        Toast t = new Toast(this);
+        t.setView(view);
+        t.setDuration(Toast.LENGTH_SHORT);
+        t.setGravity(Gravity.CENTER, 0, 0);
+        t.show();
     }
 
 
@@ -841,7 +832,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             if (saveStatus == GlobalConstants.ANSWER_CONSTRAINT_VIOLATED
                     || (markCompleted && saveStatus != GlobalConstants.ANSWER_OK)) {
                 refreshCurrentView();
-                createConstraintDialog(mFormHandler.currentPrompt(), saveStatus);
+                createConstraintToast(mFormHandler.currentPrompt(), saveStatus);
                 return false;
             }
             mFormHandler.nextQuestionPrompt();
@@ -906,29 +897,6 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
 
     /**
-     * Help text dialog
-     */
-    private void createHelpDialog() {
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        String msg = mFormHandler.currentPrompt().getHelpText();
-        msg = msg.replaceAll("\t", "");
-        mAlertDialog.setMessage(msg);
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case AlertDialog.BUTTON1:
-                        break;
-                }
-            }
-        };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.show();
-    }
-
-
-
-    /**
      * Confirm clear dialog
      */
     private void createClearDialog() {
@@ -968,12 +936,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                     selected = i;
                 }
             }
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.languages_error),
-                    Toast.LENGTH_SHORT).show();
-            return;
         }
-
         mAlertDialog =
                 new AlertDialog.Builder(this).setSingleChoiceItems(languages, selected,
                         new DialogInterface.OnClickListener() {

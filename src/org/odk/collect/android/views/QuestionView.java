@@ -27,7 +27,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GroupElement;
 import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.widgets.IBinaryWidget;
@@ -162,13 +161,8 @@ public class QuestionView extends ScrollView {
             tv.setPadding(0, 0, 0, 7);
             // wrap to the widget of view
             tv.setHorizontallyScrolling(false);
-            if (s.length() <= 100) {
-                tv.setText(s);
-            } else {
-                tv.setText(R.string.long_hint_message);
-            }
+            tv.setText(s);
             tv.setTypeface(null, Typeface.ITALIC);
-            tv.setPressed(true);
 
             mView.addView(tv);
         }
