@@ -45,18 +45,18 @@ the License.
 		android:gravity="center" 
     android:textSize="7pt"
 		android:paddingBottom="6px" />
-
-  <Button 
-	   android:id="@+id/complete_exit_button"
-	   android:text="@string/finalize_for_send"
-	   android:layout_width="fill_parent"
-     android:layout_height="wrap_content"
-     android:padding="20px"
-     android:textSize="10pt" />
        
   <Button 
      android:id="@+id/save_exit_button"
      android:text="@string/save_for_later"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:padding="20px"
+     android:textSize="10pt" />
+     
+     <Button 
+     android:id="@+id/complete_exit_button"
+     android:text="@string/finalize_for_send"
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:padding="20px"
