@@ -96,7 +96,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
 
     private static final int PROGRESS_DIALOG = 1;
 
-    // private ProgressBar mProgressBar;
+    //private ProgressBar mProgressBar;
     private String mFormPath;
     private String mInstancePath;
 
@@ -643,12 +643,12 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
         // mProgressBar.setMax(mFormHandler.getQuestionCount());
         // mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
-//        RelativeLayout.LayoutParams lp =
-//                new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-//        lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
 
         mCurrentView = next;
-//        mRelativeLayout.addView(mCurrentView, lp);
+        mRelativeLayout.addView(mCurrentView, lp);
 
         mCurrentView.startAnimation(mInAnimation);
         if (mCurrentView instanceof QuestionView)
