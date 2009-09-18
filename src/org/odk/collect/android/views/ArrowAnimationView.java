@@ -33,23 +33,23 @@ import org.odk.collect.android.R;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class ArrowAnimation extends View {
+public class ArrowAnimationView extends View {
 
-    private final static String t = "ArrowAnimation";
+    private final static String t = "ArrowAnimationView";
 
     private Animation mAnimation;
     private Bitmap mArrow;
 
     private int mImgXOffset;
 
-    public ArrowAnimation(Context context, AttributeSet attrs) {
+    public ArrowAnimationView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Log.i(t,"called constructor");
         init();
     }
 
 
-    public ArrowAnimation(Context context) {
+    public ArrowAnimationView(Context context) {
         super(context);
         init();
     }

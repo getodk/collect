@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 /**
  * Background task for downloading forms from a url.
@@ -36,84 +37,110 @@ import java.net.URLConnection;
  * @author carlhartung
  * 
  */
-public class FormDownloadTask extends AsyncTask<String, String, Boolean> {
+public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<String>> {
+
     FormDownloaderListener mStateListener;
     String mName;
 
 
     @Override
-    protected Boolean doInBackground(String... args) {
+    protected ArrayList<String> doInBackground(String... values) {
 
-        String url = args[0];
-        String path = args[1];
 
-        int slash = path.lastIndexOf("/") + 1;
-        int period = path.lastIndexOf(".") + 1;
-        String base = path.substring(0, slash - 1);
-        String filename = path.substring(slash, period - 1);
-        String ext = path.substring(period);
+        ArrayList<String> downloadedForms = new ArrayList<String>();
+        int formCount = values.length;
 
-        // create url
-        URL u = null;
-        try {
-            u = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return false;
+        for (int i = 0; i < formCount; i++) {
+
+            publishProgress(i + 1, formCount);
+            downloadedForms.add("test " + i);
+
         }
 
-        try {
-            // prevent deadlock when connection is invalid
-            URLConnection c = u.openConnection();
-            c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
-            c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
-
-            // write connection to file
-            InputStream is = c.getInputStream();
-
-            // if file exists, append a number
-            File f = new File(path);
-            int i = 2;
-            while (f.exists()) {
-                f = new File(base + "/" + filename + " " + i + "." + ext);
-                i++;
-            }
-            path = f.getAbsolutePath();
-
-            OutputStream os = new FileOutputStream(f);
-            byte buf[] = new byte[1024];
-            int len;
-            while ((len = is.read(buf)) > 0) {
-                os.write(buf, 0, len);
-            }
-            os.flush();
-            os.close();
-            is.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        synchronized (this) {
-            mName = path.substring(path.lastIndexOf("/") + 1);
-        }
-
-        return true;
+        return downloadedForms;
     }
 
 
+    // String url = args[0];
+    // String path = args[1];
+    //
+    // int slash = path.lastIndexOf("/") + 1;
+    // int period = path.lastIndexOf(".") + 1;
+    // String base = path.substring(0, slash - 1);
+    // String filename = path.substring(slash, period - 1);
+    // String ext = path.substring(period);
+    //
+    // // create url
+    // URL u = null;
+    // try {
+    // u = new URL(url);
+    // } catch (MalformedURLException e) {
+    // e.printStackTrace();
+    // return false;
+    // }
+    //
+    // try {
+    // // prevent deadlock when connection is invalid
+    // URLConnection c = u.openConnection();
+    // c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+    // c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+    //
+    // // write connection to file
+    // InputStream is = c.getInputStream();
+    //
+    // // if file exists, append a number
+    // File f = new File(path);
+    // int i = 2;
+    // while (f.exists()) {
+    // f = new File(base + "/" + filename + " " + i + "." + ext);
+    // i++;
+    // }
+    // path = f.getAbsolutePath();
+    //
+    // OutputStream os = new FileOutputStream(f);
+    // byte buf[] = new byte[1024];
+    // int len;
+    // while ((len = is.read(buf)) > 0) {
+    // os.write(buf, 0, len);
+    // }
+    // os.flush();
+    // os.close();
+    // is.close();
+    //
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // return false;
+    // }
+    //
+    // synchronized (this) {
+    // mName = path.substring(path.lastIndexOf("/") + 1);
+    // }
+    //
+    // }
+
+
+
     @Override
-    protected void onPostExecute(Boolean result) {
+    protected void onPostExecute(ArrayList<String> value) {
 
         synchronized (this) {
             if (mStateListener != null) {
-                if (mName == null) {
-                    mName = "item(s)";
-                }
-                mStateListener.downloadingComplete(result, mName);
+                mStateListener.downloadingComplete(value);
             }
         }
+    }
+
+
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        synchronized (this) {
+            if (mStateListener != null) {
+                // update progress and total
+                mStateListener.progressUpdate(values[0].intValue(), values[1].intValue());
+            }
+        }
+
     }
 
 

@@ -32,7 +32,7 @@ import org.odk.collect.android.db.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
 
 /**
- * A host activity for {@link InstanceChooser}.
+ * A host activity for {@link InstanceChooserList}.
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -66,13 +66,13 @@ public class InstanceChooserTabs extends TabActivity {
         tabHost.setBackgroundColor(Color.BLACK);
 
         // create intent for saved tab
-        Intent saved = new Intent(this, InstanceChooser.class);
+        Intent saved = new Intent(this, InstanceChooserList.class);
         saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_SAVED);
         tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(
                 getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
         // create intent for completed tab
-        Intent completed = new Intent(this, InstanceChooser.class);
+        Intent completed = new Intent(this, InstanceChooserList.class);
         completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETED);
         tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(
                 getString(R.string.completed_data, mCompletedCount)).setContent(completed));

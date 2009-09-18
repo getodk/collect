@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenu extends Activity {
+public class MainMenuActivity extends Activity {
 
     // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
@@ -104,7 +104,7 @@ public class MainMenu extends Activity {
                             getString(R.string.no_items_error, getString(R.string.enter)),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent i = new Intent(getApplicationContext(), FormChooser.class);
+                    Intent i = new Intent(getApplicationContext(), FormChooserList.class);
                     startActivityForResult(i, FORM_CHOOSER);
                 }
 
@@ -136,7 +136,7 @@ public class MainMenu extends Activity {
                             getString(R.string.no_items_error, getString(R.string.send)),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent i = new Intent(getApplicationContext(), InstanceUploader.class);
+                    Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
                     startActivityForResult(i, INSTANCE_UPLOADER);
                 }
 
@@ -176,7 +176,7 @@ public class MainMenu extends Activity {
             // returns with a form path, start entry
             case FORM_CHOOSER:
                 formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
-                i = new Intent(this, FormEntry.class);
+                i = new Intent(this, FormEntryActivity.class);
                 i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
                 startActivity(i);
                 break;
@@ -184,7 +184,7 @@ public class MainMenu extends Activity {
             case INSTANCE_CHOOSER_TABS:
                 formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
                 String instancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
-                i = new Intent(this, FormEntry.class);
+                i = new Intent(this, FormEntryActivity.class);
                 i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
                 i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);

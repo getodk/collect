@@ -48,11 +48,11 @@ public class FileManagerTabs extends TabActivity {
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.BLACK);
 
-        Intent local = new Intent(this, LocalFileManager.class);
+        Intent local = new Intent(this, LocalFileManagerList.class);
         tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_files))
                 .setContent(local));
 
-        Intent remote = new Intent(this, RemoteFileManager.class);
+        Intent remote = new Intent(this, RemoteFileManagerList.class);
         tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_files))
                 .setContent(remote));
 

@@ -71,13 +71,13 @@ import java.util.Vector;
 
 
 /**
- * FormEntry is responsible for displaying questions, animating transitions
+ * FormEntryActivity is responsible for displaying questions, animating transitions
  * between questions, and allowing the user to enter data.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormEntry extends Activity implements AnimationListener, FormLoaderListener {
-    private final String t = "FormEntry";
+public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener {
+    private final String t = "FormEntryActivity";
 
     private static final String FORMPATH = "formpath";
     private static final String INSTANCEPATH = "instancepath";
@@ -441,7 +441,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 View startView = View.inflate(this, R.layout.form_entry_start, null);
                 setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
 
-                fda = new FileDbAdapter(FormEntry.this);
+                fda = new FileDbAdapter(FormEntryActivity.this);
                 fda.open();
                 c = fda.fetchFilesByPath(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
@@ -462,7 +462,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
                 return startView;
             case PromptElement.TYPE_END:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
-                fda = new FileDbAdapter(FormEntry.this);
+                fda = new FileDbAdapter(FormEntryActivity.this);
                 fda.open();
                 c = fda.fetchFilesByPath(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
@@ -865,7 +865,7 @@ public class FormEntry extends Activity implements AnimationListener, FormLoader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        FileDbAdapter fda = new FileDbAdapter(FormEntry.this);
+                        FileDbAdapter fda = new FileDbAdapter(FormEntryActivity.this);
                         fda.open();
                         Cursor c = fda.fetchFilesByPath(mInstancePath, null);
                         if (c != null && c.getCount() > 0) {

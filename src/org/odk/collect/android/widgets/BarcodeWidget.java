@@ -109,7 +109,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
 
     /**
-     * Allows answer to be set externally in {@Link FormEntry}.
+     * Allows answer to be set externally in {@Link FormEntryActivity}.
      */
     public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);

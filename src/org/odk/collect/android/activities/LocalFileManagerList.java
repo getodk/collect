@@ -41,7 +41,7 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class LocalFileManager extends ListActivity {
+public class LocalFileManagerList extends ListActivity {
 
     // delete an item
     private static final int MENU_DELETE = Menu.FIRST;

@@ -24,13 +24,13 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.util.OrderedHashtable;
 import org.javarosa.formmanager.view.FormElementBinding;
-import org.odk.collect.android.activities.FormEntry;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.views.QuestionView;
 
 import java.util.Vector;
 
 /**
- * Used by {@link QuestionView} to display Questions and by {@link FormEntry} to
+ * Used by {@link QuestionView} to display Questions and by {@link FormEntryActivity} to
  * display Repeat dialogs. Much of this class is a wrapper for @ link
  * FormElementBinding}
  * 

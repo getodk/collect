@@ -28,9 +28,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,7 +56,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class RemoteFileManager extends ListActivity implements FormDownloaderListener {
+public class RemoteFileManagerList extends ListActivity implements FormDownloaderListener {
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_ADD = Menu.FIRST;
@@ -106,7 +104,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
         mLoadingList = true;
         FileUtils.createFolder(GlobalConstants.CACHE_PATH);
         mFormDownloadTask = new FormDownloadTask();
-        mFormDownloadTask.setDownloaderListener(RemoteFileManager.this);
+        mFormDownloadTask.setDownloaderListener(RemoteFileManagerList.this);
 
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -224,7 +222,7 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
         mLoadingList = false;
         FileUtils.createFolder(GlobalConstants.FORMS_PATH);
         mFormDownloadTask = new FormDownloadTask();
-        mFormDownloadTask.setDownloaderListener(RemoteFileManager.this);
+        mFormDownloadTask.setDownloaderListener(RemoteFileManagerList.this);
         mFormDownloadTask.execute(mFormUrl.get(mAddPosition), GlobalConstants.FORMS_PATH
                 + mFormName.get(mAddPosition));
 
@@ -253,16 +251,6 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
             }
         }
     }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
-        cb.setChecked(!cb.isChecked());
-
-    }
-
 
 
     @Override
@@ -295,6 +283,18 @@ public class RemoteFileManager extends ListActivity implements FormDownloaderLis
             mAlertDialog.dismiss();
         }
         super.onPause();
+    }
+
+
+    public void downloadingComplete(ArrayList<String> result) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void progressUpdate(int progress, int total) {
+        // TODO Auto-generated method stub
+        
     }
 
 

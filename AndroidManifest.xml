@@ -15,21 +15,21 @@ the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="2" android:versionName="1.1.0">
   <application android:icon="@drawable/notes" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
-  <activity android:label="@string/app_name" android:name=".activities.MainMenu">
+  <activity android:label="@string/app_name" android:name=".activities.MainMenuActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".activities.FormEntry" android:label="@string/app_name" android:theme="@android:style/Theme.Light" />
-    <activity android:name=".activities.InstanceChooser" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormEntryActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Light" />
+    <activity android:name=".activities.InstanceChooserList" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormChooser" android:label="@string/app_name"/>
-    <activity android:name=".activities.LocalFileManager" android:label="@string/app_name"/>
-    <activity android:name=".activities.RemoteFileManager" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormChooserList" android:label="@string/app_name"/>
+    <activity android:name=".activities.LocalFileManagerList" android:label="@string/app_name"/>
+    <activity android:name=".activities.RemoteFileManagerList" android:label="@string/app_name"/>
     <activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceUploader" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
     <activity android:name=".prefs.GlobalPreferences" android:label="@string/app_name"/>
   <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>

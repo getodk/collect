@@ -107,10 +107,10 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
             mStringAnswer.setText(s);
 
         }
-
+        
         // finish complex layout
         this.addView(mActionButton);
-        this.addView(mStringAnswer);
+       // this.addView(mStringAnswer);
     }
 
 

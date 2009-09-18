@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
- * the path to selected form for use by {@link MainMenu}.
+ * the path to selected form for use by {@link MainMenuActivity}.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -44,7 +44,7 @@ import java.util.ArrayList;
 
 
 // TODO long click form for submission log
-public class InstanceUploader extends ListActivity {
+public class InstanceUploaderList extends ListActivity {
 
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
     private static final int INSTANCE_UPLOADER = 0;

@@ -30,12 +30,12 @@ import org.odk.collect.android.logic.GlobalConstants;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
- * the path to selected form for use by {@link MainMenu}.
+ * the path to selected form for use by {@link MainMenuActivity}.
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooser extends ListActivity {
+public class FormChooserList extends ListActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

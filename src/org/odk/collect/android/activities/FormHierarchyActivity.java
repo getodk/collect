@@ -52,8 +52,8 @@ public class FormHierarchyActivity extends ListActivity {
         setContentView(R.layout.hierarchy_layout);
 
         
-        // We'll use formhandler to set the CurrentIndex before returning to FormEntry
-        FormHandler mFormHandler = FormEntry.mFormHandler;
+        // We'll use formhandler to set the CurrentIndex before returning to FormEntryActivity
+        FormHandler mFormHandler = FormEntryActivity.mFormHandler;
         
 
         mForm = mFormHandler.getForm();

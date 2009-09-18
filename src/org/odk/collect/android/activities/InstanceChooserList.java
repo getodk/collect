@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooser extends ListActivity {
+public class InstanceChooserList extends ListActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
