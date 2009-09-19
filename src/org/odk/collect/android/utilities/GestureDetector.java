@@ -14,11 +14,11 @@
  * the License.
  */
 
-package org.odk.collect.android.utils;
+package org.odk.collect.android.utilities;
 
 import android.view.MotionEvent;
 
-import org.odk.collect.android.utils.GestureDirection.UserGesture;
+import org.odk.collect.android.utilities.GestureDirection.UserGesture;
 
 /**
  * Detects when a gesture/fling has occurred and in what direction.

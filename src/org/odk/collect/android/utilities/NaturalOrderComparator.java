@@ -52,7 +52,7 @@
 //   replaced "import java.util.*" with explicit imports,
 //   added "main" file reader support
 
-package org.odk.collect.android.utils;
+package org.odk.collect.android.utilities;
 
 import java.util.Comparator;
 

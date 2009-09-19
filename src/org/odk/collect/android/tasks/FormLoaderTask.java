@@ -27,7 +27,7 @@ import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

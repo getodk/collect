@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utils;
+package org.odk.collect.android.utilities;
 
 import android.os.Environment;
 import android.util.Log;

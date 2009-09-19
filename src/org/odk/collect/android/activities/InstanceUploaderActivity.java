@@ -26,10 +26,10 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.prefs.GlobalPreferences;
+import org.odk.collect.android.preferences.GlobalPreferences;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 
 import java.util.ArrayList;

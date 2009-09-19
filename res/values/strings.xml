@@ -88,9 +88,11 @@ the License.
 	<string name="uploading_data">Sending Data...</string>
 	<string name="downloading_data">Fetching Data...</string>
 	<string name="upload_all_successful">%s item(s) sent successfully.</string>
-	 <string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
-	<string name="download_successful">%s item(s) fetched successfully.</string>
-	<string name="download_fail">Sorry, %s item(s) were not fetched!</string>
+	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
+	<string name="download_all_successful">%s item(s) fetched successfully.</string>
+	<string name="download_some_failed">Sorry, %s item(s) not fetched!</string>
+	 <string name="load_remote_form_error">Sorry, unable to load remote form list!</string>
+	
 	
 	<string name="readonly_question">This question is read only.</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>

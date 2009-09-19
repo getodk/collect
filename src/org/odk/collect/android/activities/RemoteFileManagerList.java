@@ -26,6 +26,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -35,9 +37,9 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.prefs.GlobalPreferences;
+import org.odk.collect.android.preferences.GlobalPreferences;
 import org.odk.collect.android.tasks.FormDownloadTask;
-import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -74,6 +76,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private ArrayList<String> mFormName = new ArrayList<String>();
     private ArrayList<String> mFormUrl = new ArrayList<String>();
     private ArrayAdapter<String> mFileAdapter;
+
+    private int totalCount = -1;
 
 
     @Override
@@ -112,7 +116,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 settings
                         .getString(GlobalPreferences.KEY_SERVER, getString(R.string.default_server))
                         + "/formList";
-        mFormDownloadTask.execute(url, mFormList);
+        mFormDownloadTask.setDownloadServer(url);
+        mFormDownloadTask.execute();
 
     }
 
@@ -145,8 +150,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             }
             // create file adapter and create view
             mFileAdapter =
-                    new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
-                            mFormName);
+                    new ArrayAdapter<String>(this,
+                            android.R.layout.simple_list_item_multiple_choice, mFormName);
             // view options
             if (mFormName.size() > 0) {
                 getListView().setItemsCanFocus(false);
@@ -172,12 +177,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ADD:
-                if (getListView().getCheckedItemPosition() != -1) {
-                    addSelectedForm();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.noselect_error,
-                            Toast.LENGTH_SHORT).show();
-                }
+                downloadSelectedFiles();
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
@@ -194,7 +194,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 mFormDownloadTask.setDownloaderListener(null);
-                                //finish();
+                                // finish();
                             }
                         };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
@@ -211,44 +211,33 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     /**
      * Adds the selected form
      */
-    private void addSelectedForm() {
+    private void downloadSelectedFiles() {
 
-        // show dialog box
-        showDialog(PROGRESS_DIALOG);
+        totalCount = 0;
+        ArrayList<String> files = new ArrayList<String>();
 
-        // position of the form
-        mAddPosition = getListView().getCheckedItemPosition();
-
-        mLoadingList = false;
-        FileUtils.createFolder(GlobalConstants.FORMS_PATH);
-        mFormDownloadTask = new FormDownloadTask();
-        mFormDownloadTask.setDownloaderListener(RemoteFileManagerList.this);
-        mFormDownloadTask.execute(mFormUrl.get(mAddPosition), GlobalConstants.FORMS_PATH
-                + mFormName.get(mAddPosition));
-
-    }
-
-
-    public void downloadingComplete(Boolean result, String name) {
-
-        // no need for dialog
-        dismissDialog(PROGRESS_DIALOG);
-
-        // show message only if successful and not loading formlist'
-        if (!result) {
-            Toast.makeText(this, getString(R.string.download_fail, name), Toast.LENGTH_LONG).show();
-        } else {
-
-            if (mLoadingList) {
-                buildView();
-            } else {
-                // clean up choices
-                Toast.makeText(this, getString(R.string.download_successful, name),
-                        Toast.LENGTH_SHORT).show();
-                mFileAdapter.notifyDataSetChanged();
-                getListView().clearChoices();
-                
+        SparseBooleanArray sba = getListView().getCheckedItemPositions();
+        for (int i = 0; i < getListView().getCount(); i++) {
+            if (sba.get(i, false)) {
+                files.add(mFormUrl.get(i));
+                files.add(mFormName.get(i));
             }
+        }
+        totalCount = files.size();
+
+        if (totalCount > 0) {
+
+            // show dialog box
+            showDialog(PROGRESS_DIALOG);
+
+            mLoadingList = false;
+            FileUtils.createFolder(GlobalConstants.FORMS_PATH);
+            mFormDownloadTask = new FormDownloadTask();
+            mFormDownloadTask.setDownloaderListener(RemoteFileManagerList.this);
+            mFormDownloadTask.execute(files.toArray(new String[totalCount]));
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.noselect_error, Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -287,14 +276,37 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
 
     public void downloadingComplete(ArrayList<String> result) {
-        // TODO Auto-generated method stub
-        
+
+        int resultSize = 0;
+        dismissDialog(PROGRESS_DIALOG);
+
+        if (result == null) {
+            Toast.makeText(this, getString(R.string.load_remote_form_error), Toast.LENGTH_LONG)
+                    .show();
+        } else {
+            if (mLoadingList) {
+                buildView();
+            } else {
+                resultSize = result.size();
+                if (resultSize == totalCount / 2) {
+                    Toast.makeText(this,
+                            getString(R.string.download_all_successful, totalCount / 2),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    String s = totalCount / 2 - resultSize + " of " + totalCount / 2;
+                    Toast.makeText(this, getString(R.string.download_some_failed, s),
+                            Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+        }
     }
 
 
     public void progressUpdate(int progress, int total) {
-        // TODO Auto-generated method stub
-        
+        mProgressDialog.setMax(total);
+        mProgressDialog.setProgress(progress);
     }
 
 

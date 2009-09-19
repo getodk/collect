@@ -28,10 +28,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.prefs.GlobalPreferences;
-import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.ArrayList;
 

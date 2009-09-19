@@ -52,15 +52,15 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.services.IService;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
-import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.utils.FileUtils;
-import org.odk.collect.android.utils.GestureDetector;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.GestureDetector;
 import org.odk.collect.android.views.QuestionView;
 
 import java.io.File;

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.odk.collect.android.db;
+package org.odk.collect.android.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,7 +27,7 @@ import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;

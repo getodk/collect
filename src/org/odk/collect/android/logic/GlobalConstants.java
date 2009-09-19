@@ -93,7 +93,7 @@ public class GlobalConstants {
     /**
      * How long to wait when opening network connection in milliseconds
      */
-    public static final int CONNECTION_TIMEOUT = 20000;
+    public static final int CONNECTION_TIMEOUT = 10000;
 
     /**
      * Temporary file

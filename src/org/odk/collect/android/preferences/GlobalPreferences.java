@@ -1,4 +1,4 @@
-package org.odk.collect.android.prefs;
+package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;

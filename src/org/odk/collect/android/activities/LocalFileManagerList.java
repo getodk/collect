@@ -30,7 +30,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.database.FileDbAdapter;
 
 import java.util.ArrayList;
 

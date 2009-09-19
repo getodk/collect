@@ -31,8 +31,8 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.ByteArrayPayload;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.xform.parse.XFormParser;
-import org.odk.collect.android.db.FileDbAdapter;
-import org.odk.collect.android.utils.FileUtils;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;

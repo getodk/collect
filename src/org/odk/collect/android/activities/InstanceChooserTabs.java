@@ -28,7 +28,7 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
 
 /**

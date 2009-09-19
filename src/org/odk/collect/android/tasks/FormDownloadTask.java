@@ -16,10 +16,11 @@
 
 package org.odk.collect.android.tasks;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-
-import android.os.AsyncTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,84 +41,85 @@ import java.util.ArrayList;
 public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
     FormDownloaderListener mStateListener;
-    String mName;
+    String mUrl;
+    ArrayList<String> mDownloadedForms = new ArrayList<String>();
+
+    String formList = "formlist.xml";
+
+
+    public void setDownloadServer(String newServer) {
+        mUrl = newServer;
+    }
+
 
 
     @Override
     protected ArrayList<String> doInBackground(String... values) {
 
-
-        ArrayList<String> downloadedForms = new ArrayList<String>();
-        int formCount = values.length;
-
-        for (int i = 0; i < formCount; i++) {
-
-            publishProgress(i + 1, formCount);
-            downloadedForms.add("test " + i);
-
+        if (mUrl != null && mUrl.endsWith("formList")) {
+            if (downloadFile(mUrl, formList)) {
+                return mDownloadedForms;
+            } else {
+                return null;
+            }
+        } else {
+            int formCount = values.length;
+            for (int i = 0; i < formCount; i = i + 2) {
+                downloadFile(values[i], values[i + 1]);
+                // publishProgress(i + 2, formCount);
+            }
+            return mDownloadedForms;
         }
 
-        return downloadedForms;
     }
 
 
-    // String url = args[0];
-    // String path = args[1];
-    //
-    // int slash = path.lastIndexOf("/") + 1;
-    // int period = path.lastIndexOf(".") + 1;
-    // String base = path.substring(0, slash - 1);
-    // String filename = path.substring(slash, period - 1);
-    // String ext = path.substring(period);
-    //
-    // // create url
-    // URL u = null;
-    // try {
-    // u = new URL(url);
-    // } catch (MalformedURLException e) {
-    // e.printStackTrace();
-    // return false;
-    // }
-    //
-    // try {
-    // // prevent deadlock when connection is invalid
-    // URLConnection c = u.openConnection();
-    // c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
-    // c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
-    //
-    // // write connection to file
-    // InputStream is = c.getInputStream();
-    //
-    // // if file exists, append a number
-    // File f = new File(path);
-    // int i = 2;
-    // while (f.exists()) {
-    // f = new File(base + "/" + filename + " " + i + "." + ext);
-    // i++;
-    // }
-    // path = f.getAbsolutePath();
-    //
-    // OutputStream os = new FileOutputStream(f);
-    // byte buf[] = new byte[1024];
-    // int len;
-    // while ((len = is.read(buf)) > 0) {
-    // os.write(buf, 0, len);
-    // }
-    // os.flush();
-    // os.close();
-    // is.close();
-    //
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // return false;
-    // }
-    //
-    // synchronized (this) {
-    // mName = path.substring(path.lastIndexOf("/") + 1);
-    // }
-    //
-    // }
+    private boolean downloadFile(String url, String name) {
 
+        // create url
+        URL u = null;
+        try {
+            u = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            // prevent deadlock when connection is invalid
+            URLConnection c = u.openConnection();
+            c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+            c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+
+            // write connection to file
+            InputStream is = c.getInputStream();
+
+            // if file exists, append a number
+            File f;
+            if (name.equals(formList)) {
+                f = new File(GlobalConstants.CACHE_PATH + name);
+            } else {
+                f = new File(GlobalConstants.FORMS_PATH + name);
+            }
+
+            OutputStream os = new FileOutputStream(f);
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = is.read(buf)) > 0) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+            os.close();
+            is.close();
+            mDownloadedForms.add(url);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 
 
     @Override

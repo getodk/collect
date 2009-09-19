@@ -25,7 +25,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.db.FileDbAdapter;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
 
 import java.io.File;
