@@ -99,18 +99,16 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         if (s != null) {
             if (s.equals(yes)) {
                 mActionButton.setChecked(true);
-            } else if (s.equals(no)) {
-                mActionButton.setChecked(false);
             } else {
                 mActionButton.setChecked(false);
             }
             mStringAnswer.setText(s);
 
         }
-        
+
         // finish complex layout
         this.addView(mActionButton);
-       // this.addView(mStringAnswer);
+        // this.addView(mStringAnswer);
     }
 
 

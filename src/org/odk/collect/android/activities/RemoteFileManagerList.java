@@ -26,7 +26,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,15 +68,12 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private FormDownloadTask mFormDownloadTask;
 
     private boolean mLoadingList;
-    private int mAddPosition;
-
-    private String mFormList = GlobalConstants.CACHE_PATH + "formlist.xml";
 
     private ArrayList<String> mFormName = new ArrayList<String>();
     private ArrayList<String> mFormUrl = new ArrayList<String>();
     private ArrayAdapter<String> mFileAdapter;
 
-    private int totalCount = -1;
+    private int totalCount;
 
 
     @Override
@@ -125,7 +121,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private void buildView() {
 
         // create xml document
-        File file = new File(mFormList);
+        File file = new File(GlobalConstants.CACHE_PATH + mFormDownloadTask.formList);
         if (file.exists()) {
 
             Document doc = null;
@@ -297,6 +293,17 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                     Toast.makeText(this, getString(R.string.download_some_failed, s),
                             Toast.LENGTH_LONG).show();
                 }
+                int i;
+                for (String url : result) {
+                    i = mFormUrl.indexOf(url);
+                    if (i > -1) {
+                        mFormUrl.remove(i);
+                        mFormName.remove(i);
+                    }
+                }
+                
+                mFileAdapter.notifyDataSetChanged();
+                getListView().clearChoices();
 
             }
 

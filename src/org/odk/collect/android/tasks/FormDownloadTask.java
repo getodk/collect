@@ -17,7 +17,6 @@
 package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
@@ -44,7 +43,7 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
     String mUrl;
     ArrayList<String> mDownloadedForms = new ArrayList<String>();
 
-    String formList = "formlist.xml";
+    public String formList = "formlist.xml";
 
 
     public void setDownloadServer(String newServer) {
@@ -99,7 +98,19 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
             if (name.equals(formList)) {
                 f = new File(GlobalConstants.CACHE_PATH + name);
             } else {
-                f = new File(GlobalConstants.FORMS_PATH + name);
+                String path = GlobalConstants.FORMS_PATH + name;
+                int i = 2;
+                int slash = path.lastIndexOf("/") + 1;
+                int period = path.lastIndexOf(".") + 1;
+                String base = path.substring(0, slash - 1);
+                String filename = path.substring(slash, period - 1);
+                String ext = path.substring(period);
+                f = new File(path);
+                while (f.exists()) {
+                    f = new File(base + "/" + filename + " " + i + "." + ext);
+                    i++;
+                }
+
             }
 
             OutputStream os = new FileOutputStream(f);

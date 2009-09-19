@@ -367,21 +367,19 @@ public class FileDbAdapter {
         Cursor c =
                 mDb.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE,
                         KEY_STATUS}, null, null, null, null, null);
-
-        while (c.moveToNext()) {
-            String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
-            String hash = c.getString(c.getColumnIndex(KEY_HASH));
-            String type = c.getString(c.getColumnIndex(KEY_TYPE));
-
-            File f = new File(path);
-            if (!f.exists()) {
-                // delete entry for file not on sd
-                deleteFile(path, null);
-            }
-        }
         if (c != null) {
-            c.close();
+            while (c.moveToNext()) {
+                String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
+                String hash = c.getString(c.getColumnIndex(KEY_HASH));
+                String type = c.getString(c.getColumnIndex(KEY_TYPE));
 
+                File f = new File(path);
+                if (!f.exists()) {
+                    // delete entry for file not on sd
+                    deleteFile(path, null);
+                }
+            }
+            c.close();
         }
     }
 
