@@ -68,21 +68,24 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         if (formBin.exists()) {
             // if we have binary, deserialize binary
             fd = deserializeFormDef(formBin);
+            if (fd == null) {
+                return null;
+            }
         } else {
             // no binary, read from xml
             try {
                 fis = new FileInputStream(formXml);
                 fd = XFormUtils.getFormFromInputStream(fis);
+                if (fd == null) {
+                    return null;
+                }
                 fd.setEvaluationContext(new EvaluationContext());
                 fd.initialize(true);
                 serializeFormDef(fd, formPath);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        }
-
-        if (fd == null) {
-            return null;
         }
 
         // create formhandler from formdef
@@ -140,7 +143,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
 
         return fd;
     }
-    
+
+
     /**
      * Write the FormDef to the file system as a binary blog.
      * 

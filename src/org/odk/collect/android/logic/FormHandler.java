@@ -344,7 +344,12 @@ public class FormHandler {
             relevant = mForm.canCreateRepeat(ref);
         } else {
             TreeElement node = mForm.getDataModel().resolveReference(ref);
+            if (node == null) {
+                // you probably a bind error
+                return false;
+            } 
             relevant = node.isRelevant(); // check instance flag first
+
         }
 
         if (relevant) {

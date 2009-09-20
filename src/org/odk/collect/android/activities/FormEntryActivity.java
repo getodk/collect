@@ -433,8 +433,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private View createView(PromptElement prompt) {
         setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
-        FileDbAdapter fda;
-        Cursor c;
+        FileDbAdapter fda = null;
+        Cursor c = null;
 
         switch (prompt.getType()) {
             case PromptElement.TYPE_START:
@@ -1104,7 +1104,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void loadingComplete(FormHandler formHandler) {
         dismissDialog(PROGRESS_DIALOG);
         if (formHandler == null) {
-            createErrorDialog(getString(R.string.form_load_error, mFormPath), true);
+            createErrorDialog(getString(R.string.load_error,  mFormPath.substring(mFormPath.lastIndexOf('/') + 1)), true);
         } else {
             setFormHandler(formHandler);
 
