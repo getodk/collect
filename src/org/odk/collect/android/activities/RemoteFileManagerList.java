@@ -288,6 +288,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                     Toast.makeText(this,
                             getString(R.string.download_all_successful, totalCount / 2),
                             Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     String s = totalCount / 2 - resultSize + " of " + totalCount / 2;
                     Toast.makeText(this, getString(R.string.download_some_failed, s),

@@ -166,11 +166,17 @@ public class LocalFileManagerList extends ListActivity {
                 deleted++;
             }
         }
+        
+        // remove the actual files and close db
+        fda.removeOrphanForms();
+        fda.removeOrphanInstances();
+        fda.close();
 
         if (deleted > 0) {
             // all deletes were successful
             Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
                     Toast.LENGTH_SHORT).show();
+            finish();
         } else {
             // had some failures
             Toast.makeText(
@@ -178,11 +184,6 @@ public class LocalFileManagerList extends ListActivity {
                     getString(R.string.file_deleted_error, mSelected.size() - deleted + " of "
                             + mSelected.size()), Toast.LENGTH_LONG).show();
         }
-
-        // remove the actual files and close db
-        fda.removeOrphanForms();
-        fda.removeOrphanInstances();
-        fda.close();
 
     }
 
