@@ -300,10 +300,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mi.setEnabled(false);
             }
             menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                    R.drawable.ic_menu_goto);
+                    R.drawable.ic_menu_goto).setEnabled(false);
         } else if (currentPromptIsEnd()) {
             menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                    R.drawable.ic_menu_goto);
+                    R.drawable.ic_menu_goto).setEnabled(false);
         } else {
 
             SubMenu sm =
@@ -313,7 +313,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
 
             menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                    R.drawable.ic_menu_goto);
+                    R.drawable.ic_menu_goto).setEnabled(false);
             menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                     android.R.drawable.ic_menu_close_clear_cancel).setEnabled(
                     !mFormHandler.currentPrompt().isReadonly());
