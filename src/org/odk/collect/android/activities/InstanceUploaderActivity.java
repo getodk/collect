@@ -116,8 +116,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
     public void progressUpdate(int progress, int total) {
-        mProgressDialog.setMax(total);
-        mProgressDialog.setProgress(progress);
+        mProgressDialog.setMessage("Sending " + progress + " of " + total + " item(s)");
     }
 
 
@@ -136,9 +135,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                         };
                 mProgressDialog.setTitle(getString(R.string.uploading_data));
                 mProgressDialog.setMessage(getString(R.string.please_wait));
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setCancelable(false);
-                mProgressDialog.setMax(0);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
         }
