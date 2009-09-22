@@ -71,8 +71,8 @@ import java.util.Vector;
 
 
 /**
- * FormEntryActivity is responsible for displaying questions, animating transitions
- * between questions, and allowing the user to enter data.
+ * FormEntryActivity is responsible for displaying questions, animating
+ * transitions between questions, and allowing the user to enter data.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
@@ -96,7 +96,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     private static final int PROGRESS_DIALOG = 1;
 
-    //private ProgressBar mProgressBar;
+    // private ProgressBar mProgressBar;
     private String mFormPath;
     private String mInstancePath;
 
@@ -217,40 +217,43 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         switch (requestCode) {
-            case (GlobalConstants.IMAGE_CAPTURE):
-                File fi = new File(GlobalConstants.IMAGE_PATH);
-                try {
-                    Uri ui =
-                            Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
-                                    getContentResolver(), fi.getAbsolutePath(), null, null));
-                    if (!fi.delete()) {
-                        Log.i(t, "Failed to delete " + fi);
-                    }
-                    ((QuestionView) mCurrentView).setBinaryData(ui);
-                    saveCurrentAnswer(false);
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                refreshCurrentView();
-                break;
-            case (GlobalConstants.BARCODE_CAPTURE):
+            case GlobalConstants.BARCODE_CAPTURE:
                 String s = intent.getStringExtra("SCAN_RESULT");
                 ((QuestionView) mCurrentView).setBinaryData(s);
                 saveCurrentAnswer(false);
                 break;
+            case GlobalConstants.IMAGE_CAPTURE:
+                if (!android.os.Build.MODEL.equals("HTC Magic")) {
+                    File fi = new File(GlobalConstants.IMAGE_PATH);
+                    try {
+                        Uri ui =
+                                Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
+                                        getContentResolver(), fi.getAbsolutePath(), null, null));
+                        if (!fi.delete()) {
+                            Log.i(t, "Failed to delete " + fi);
+                        }
+                        ((QuestionView) mCurrentView).setBinaryData(ui);
+                        saveCurrentAnswer(false);
+                    } catch (FileNotFoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    refreshCurrentView();
+                    break;
+                }
+                //$FALL-THROUGH$
             case GlobalConstants.AUDIO_CAPTURE:
-                Uri ua = intent.getData();
-                ((QuestionView) mCurrentView).setBinaryData(ua);
-                saveCurrentAnswer(false);
-                refreshCurrentView();
-                break;
             case GlobalConstants.VIDEO_CAPTURE:
-                Uri uv = intent.getData();
-                ((QuestionView) mCurrentView).setBinaryData(uv);
+                Uri um = intent.getData();
+                ((QuestionView) mCurrentView).setBinaryData(um);
                 saveCurrentAnswer(false);
                 refreshCurrentView();
                 break;
+            // Uri uv = intent.getData();
+            // ((QuestionView) mCurrentView).setBinaryData(uv);
+            // saveCurrentAnswer(false);
+            // refreshCurrentView();
+            // break;
         }
     }
 
@@ -1104,7 +1107,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void loadingComplete(FormHandler formHandler) {
         dismissDialog(PROGRESS_DIALOG);
         if (formHandler == null) {
-            createErrorDialog(getString(R.string.load_error,  mFormPath.substring(mFormPath.lastIndexOf('/') + 1)), true);
+            createErrorDialog(getString(R.string.load_error, mFormPath.substring(mFormPath
+                    .lastIndexOf('/') + 1)), true);
         } else {
             setFormHandler(formHandler);
 
