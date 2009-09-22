@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author carlhartung
  * 
  */
-public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<String>> {
+public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
     FormDownloaderListener mStateListener;
     String mUrl;
@@ -63,9 +63,11 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
             }
         } else {
             int formCount = values.length;
+            int count = 1;
             for (int i = 0; i < formCount; i = i + 2) {
                 downloadFile(values[i], values[i + 1]);
-                // publishProgress(i + 2, formCount);
+                publishProgress(count, formCount / 2);
+                count++;
             }
             return mDownloadedForms;
         }

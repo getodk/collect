@@ -37,7 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.preferences.GlobalPreferences;
-import org.odk.collect.android.tasks.FormDownloadTask;
+import org.odk.collect.android.tasks.FormDownloaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -65,7 +65,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
 
-    private FormDownloadTask mFormDownloadTask;
+    private FormDownloaderTask mFormDownloadTask;
 
     private boolean mLoadingList;
 
@@ -89,7 +89,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         getListView().setBackgroundColor(Color.WHITE);
 
         // check for existing dialog
-        mFormDownloadTask = (FormDownloadTask) getLastNonConfigurationInstance();
+        mFormDownloadTask = (FormDownloaderTask) getLastNonConfigurationInstance();
         if (mFormDownloadTask != null && mFormDownloadTask.getStatus() == AsyncTask.Status.FINISHED) {
             try {
                 dismissDialog(PROGRESS_DIALOG);
@@ -103,7 +103,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         // download form list
         mLoadingList = true;
         FileUtils.createFolder(GlobalConstants.CACHE_PATH);
-        mFormDownloadTask = new FormDownloadTask();
+        mFormDownloadTask = new FormDownloaderTask();
         mFormDownloadTask.setDownloaderListener(RemoteFileManagerList.this);
 
         SharedPreferences settings =
@@ -228,7 +228,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
             mLoadingList = false;
             FileUtils.createFolder(GlobalConstants.FORMS_PATH);
-            mFormDownloadTask = new FormDownloadTask();
+            mFormDownloadTask = new FormDownloaderTask();
             mFormDownloadTask.setDownloaderListener(RemoteFileManagerList.this);
             mFormDownloadTask.execute(files.toArray(new String[totalCount]));
         } else {
@@ -302,7 +302,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                         mFormName.remove(i);
                     }
                 }
-                
+
                 mFileAdapter.notifyDataSetChanged();
                 getListView().clearChoices();
 
@@ -313,9 +313,9 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
 
     public void progressUpdate(int progress, int total) {
-        mProgressDialog.setMax(total);
-        mProgressDialog.setProgress(progress);
+        mProgressDialog.setMessage("Fetching " + progress + " of " + total + " item(s)");
     }
+
 
 
 }
