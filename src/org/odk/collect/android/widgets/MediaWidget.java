@@ -146,7 +146,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton
                 .setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
-        mCaptureButton.setEnabled(!prompt.isReadonly());
+        mCaptureButton.setEnabled(!prompt.isReadOnly());
 
         // launch capture intent on click
         mCaptureButton.setOnClickListener(new View.OnClickListener() {

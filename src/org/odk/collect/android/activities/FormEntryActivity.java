@@ -277,55 +277,41 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        // remove any old menus
         menu.removeItem(MENU_CLEAR);
         menu.removeItem(MENU_DELETE_REPEAT);
         menu.removeItem(MENU_LANGUAGES);
         menu.removeItem(MENU_HIERARCHY_VIEW);
         menu.removeItem(MENU_SUBMENU);
 
+        SubMenu sm =
+                menu.addSubMenu(0, MENU_SUBMENU, 0, R.string.quit_entry).setIcon(
+                        android.R.drawable.ic_menu_save);
+        sm.add(0, MENU_SAVE, 0, getString(R.string.save_for_later));
+        sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
 
-        //
-        MenuItem mi = null;
-        if (currentPromptIsStart()) {
-            mi =
-                    menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
-                            R.drawable.ic_menu_start_conversation);
-            if (mFormHandler.getLanguages() == null) {
-                mi.setEnabled(false);
-            }
-            menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                    R.drawable.ic_menu_goto).setEnabled(false);
-        } else if (currentPromptIsEnd()) {
-            menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                    R.drawable.ic_menu_goto).setEnabled(false);
-        } else {
 
-            SubMenu sm =
-                    menu.addSubMenu(0, MENU_SUBMENU, 0, R.string.quit_entry).setIcon(
-                            android.R.drawable.ic_menu_save);
-            sm.add(0, MENU_SAVE, 0, getString(R.string.save_for_later));
-            sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
-
-            menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-                    R.drawable.ic_menu_goto).setEnabled(false);
-            menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
-                    android.R.drawable.ic_menu_close_clear_cancel).setEnabled(
-                    !mFormHandler.currentPrompt().isReadonly());
-            menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
-                    R.drawable.ic_menu_clear_playlist).setEnabled(
-                    mFormHandler.currentPrompt().isInRepeatableGroup());
-
+        PromptElement pe = null;
+        if (currentPromptIsQuestion()) {
+            pe = mFormHandler.currentPrompt();
         }
+        menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
+                android.R.drawable.ic_menu_close_clear_cancel).setEnabled(
+                pe != null && !pe.isReadOnly() ? true : false);
+        menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
+                R.drawable.ic_menu_clear_playlist).setEnabled(
+                pe != null && pe.isInRepeatableGroup() ? true : false);
+        menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
+                R.drawable.ic_menu_goto);
+
+        menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
+                R.drawable.ic_menu_start_conversation).setEnabled(
+                mFormHandler.getLanguages() == null ? false : true);
+
         return true;
+
     }
 
 
@@ -369,29 +355,32 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /**
-     * 
-     * @return true if the current View represents the start of the form
-     */
-    private boolean currentPromptIsStart() {
-        return (mFormHandler.currentPrompt().getType() == PromptElement.TYPE_START);
-    }
-
-
-    /**
-     * 
-     * @return true if the current View represents then end of the form
-     */
-    private boolean currentPromptIsEnd() {
-        return (mFormHandler.currentPrompt().getType() == PromptElement.TYPE_END);
-    }
+    //
+    // /**
+    // *
+    // * @return true if the current View represents the start of the form
+    // */
+    // private boolean currentPromptIsStart() {
+    // return (mFormHandler.currentPrompt().getType() ==
+    // PromptElement.TYPE_START);
+    // }
+    //
+    //
+    // /**
+    // *
+    // * @return true if the current View represents then end of the form
+    // */
+    // private boolean currentPromptIsEnd() {
+    // return (mFormHandler.currentPrompt().getType() ==
+    // PromptElement.TYPE_END);
+    // }
 
 
     private boolean saveCurrentAnswer(boolean evaluateConstraints) {
         PromptElement p = mFormHandler.currentPrompt();
 
         // If the question is readonly there's nothing to save.
-        if (!p.isReadonly()) {
+        if (!p.isReadOnly()) {
             int saveStatus =
                     mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(),
                             evaluateConstraints);
@@ -405,7 +394,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     private void clearCurrentAnswer() {
-        if (!mFormHandler.currentPrompt().isReadonly())
+        if (!mFormHandler.currentPrompt().isReadOnly())
             ((QuestionView) mCurrentView).clearAnswer();
     }
 

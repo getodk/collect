@@ -30,9 +30,9 @@ import org.odk.collect.android.views.QuestionView;
 import java.util.Vector;
 
 /**
- * Used by {@link QuestionView} to display Questions and by {@link FormEntryActivity} to
- * display Repeat dialogs. Much of this class is a wrapper for @ link
- * FormElementBinding}
+ * Used by {@link QuestionView} to display Questions and by
+ * {@link FormEntryActivity} to display Repeat dialogs. Much of this class is a
+ * wrapper for @ link FormElementBinding}
  * 
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -129,8 +129,12 @@ public class PromptElement {
     /**
      * Is this question read only?
      */
-    public boolean isReadonly() {
-        return !mBinding.instanceNode.isEnabled();
+    public boolean isReadOnly() {
+        if (mBinding != null) {
+            return !mBinding.instanceNode.isEnabled();
+        } else {
+            return false;
+        }
     }
 
 
@@ -297,9 +301,13 @@ public class PromptElement {
 
 
     public boolean isInRepeatableGroup() {
-        if (mGroups.isEmpty()) return false;
-        for (GroupElement group : mGroups) {
-            if (group.isRepeat()) return true;
+        if (mGroups != null) {
+            if (mGroups.isEmpty()) {
+                return false;
+            }
+            for (GroupElement group : mGroups) {
+                if (group.isRepeat()) return true;
+            }
         }
         return false;
     }

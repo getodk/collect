@@ -70,7 +70,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
         setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (mRadioChecked != -1 && prompt.isReadonly()) {
+                if (mRadioChecked != -1 && prompt.isReadOnly()) {
                     SelectOneWidget.this.check(mRadioChecked);
                 }
             }
@@ -97,8 +97,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
                 r.setText(k);
                 r.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
                 r.setId(i);
-                r.setEnabled(!prompt.isReadonly());
-                r.setFocusable(!prompt.isReadonly());
+                r.setEnabled(!prompt.isReadOnly());
+                r.setFocusable(!prompt.isReadOnly());
                 addView(r);
 
                 if (v.equals(s)) {

@@ -75,7 +75,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         mActionButton.setText(getContext().getString(R.string.get_barcode));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!prompt.isReadonly());
+        mActionButton.setEnabled(!prompt.isReadOnly());
 
         // launch barcode capture intent on click
         mActionButton.setOnClickListener(new View.OnClickListener() {

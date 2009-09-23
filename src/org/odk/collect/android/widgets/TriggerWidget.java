@@ -76,7 +76,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mActionButton.setTextOn(getContext().getString(R.string.acked));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!prompt.isReadonly());
+        mActionButton.setEnabled(!prompt.isReadOnly());
 
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

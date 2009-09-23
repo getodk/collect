@@ -78,14 +78,14 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
         final Calendar c = new GregorianCalendar();
 
         mDatePicker = new DatePicker(getContext());
-        if (!prompt.isReadonly()) {
+        if (!prompt.isReadOnly()) {
             mDatePicker.setFocusable(true);
             mDatePicker.setEnabled(true);
         }
 
         mDateListener = new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                if (prompt.isReadonly()) {
+                if (prompt.isReadOnly()) {
                     if (prompt.getAnswerValue() != null) {
                         Date d = (Date) prompt.getAnswerObject();
                         view.updateDate(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate());

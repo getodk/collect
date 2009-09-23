@@ -122,7 +122,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
                 // when clicked, check for readonly before toggling
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && prompt.isReadonly()) {
+                        if (!mCheckboxInit && prompt.isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                             } else {
@@ -144,8 +144,8 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
                     }
                 }
 
-                c.setFocusable(!prompt.isReadonly());
-                c.setEnabled(!prompt.isReadonly());
+                c.setFocusable(!prompt.isReadOnly());
+                c.setEnabled(!prompt.isReadOnly());
                 addView(c);
                 i++;
             }

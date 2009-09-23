@@ -85,7 +85,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
         if (s != null) {
             setText(s);
         }
-        if (prompt.isReadonly()) {
+        if (prompt.isReadOnly()) {
             setBackgroundDrawable(null);
             setFocusable(false);
             setClickable(false);

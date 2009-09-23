@@ -64,7 +64,7 @@ public class IntegerWidget extends StringWidget {
         fa[0] = new InputFilter.LengthFilter(9);
         setFilters(fa);
         
-        if (prompt.isReadonly()) {
+        if (prompt.isReadOnly()) {
             setBackgroundDrawable(null);
             setFocusable(false);
             setClickable(false);

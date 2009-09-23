@@ -77,7 +77,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
         }
 
         // disable if read only
-        if (prompt.isReadonly()) {
+        if (prompt.isReadOnly()) {
             setBackgroundDrawable(null);
             setFocusable(false);
             setClickable(false);
