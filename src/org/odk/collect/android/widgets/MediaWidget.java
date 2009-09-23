@@ -152,7 +152,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
-                if (mType.equals("image") && !android.os.Build.MODEL.equals("HTC Magic")) {
+                if (mType.equals("image") && !android.os.Build.MODEL.equals("HTC")) {
                     // TODO only way to get large image from android
                     // http://code.google.com/p/android/issues/detail?id=1480
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(

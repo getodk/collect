@@ -223,7 +223,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveCurrentAnswer(false);
                 break;
             case GlobalConstants.IMAGE_CAPTURE:
-                if (!android.os.Build.MODEL.equals("HTC Magic")) {
+                if (!android.os.Build.MODEL.contains("HTC")) {
                     File fi = new File(GlobalConstants.IMAGE_PATH);
                     try {
                         Uri ui =
