@@ -29,7 +29,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
-                    settings.getString(GlobalPreferences.KEY_SERVER,
+                    settings.getString(ServerPreferences.KEY_SERVER,
                             getString(R.string.default_server))
                             + "/submission";
             mInstanceUploaderTask.setUploadServer(url);

@@ -31,6 +31,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,10 @@ import java.util.ArrayList;
 // TODO long click form for submission log
 public class InstanceUploaderList extends ListActivity {
 
-    private static final int MENU_UPLOAD_ALL = Menu.FIRST;
+
+    private static final int MENU_PREFERENCES = Menu.FIRST;
+    private static final int MENU_UPLOAD_ALL = Menu.FIRST+1;
+
     private static final int INSTANCE_UPLOADER = 0;
 
     private SimpleCursorAdapter mInstances;
@@ -133,6 +137,8 @@ public class InstanceUploaderList extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_selected_data).setIcon(
                 R.drawable.ic_menu_send);
         return true;
@@ -153,8 +159,17 @@ public class InstanceUploaderList extends ListActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            case MENU_PREFERENCES:
+                createPreferencesMenu();
+                return true;
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+
+    private void createPreferencesMenu() {
+        Intent i = new Intent(this, ServerPreferences.class);
+        startActivity(i);
     }
 
 

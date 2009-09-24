@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -36,7 +37,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.tasks.FormDownloaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
@@ -60,7 +61,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class RemoteFileManagerList extends ListActivity implements FormDownloaderListener {
 
     private static final int PROGRESS_DIALOG = 1;
-    private static final int MENU_ADD = Menu.FIRST;
+    private static final int MENU_PREFERENCES = Menu.FIRST;
+
+    private static final int MENU_ADD = Menu.FIRST+1;
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
@@ -110,7 +113,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String url =
                 settings
-                        .getString(GlobalPreferences.KEY_SERVER, getString(R.string.default_server))
+                        .getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
                         + "/formList";
         mFormDownloadTask.setDownloadServer(url);
         mFormDownloadTask.execute();
@@ -163,6 +166,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
         menu.add(0, MENU_ADD, 0, getString(R.string.add_file)).setIcon(
                 android.R.drawable.ic_menu_add);
         return true;
@@ -175,8 +180,16 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             case MENU_ADD:
                 downloadSelectedFiles();
                 return true;
+            case MENU_PREFERENCES:
+                createPreferencesMenu();
+                return true;
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    private void createPreferencesMenu() {
+        Intent i = new Intent(this, ServerPreferences.class);
+        startActivity(i);
     }
 
 

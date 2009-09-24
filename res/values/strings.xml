@@ -47,11 +47,13 @@ the License.
 	<string name="finalize_for_send">Finalize for Sending</string>
 	
 	<string name="save_data_message">Please choose one to keep results.</string>
-	<string name="save_data_description">%s has ended.</string>
+	<string name="save_review_data_description">%s review has ended.</string>
+	 <string name="save_enter_data_description">%s entry has ended.</string>
+	
 
 	<string name="enter_url">Enter URL</string>
 
-	<string name="preferences">Global Preferences</string>
+	<string name="server_preferences">Server Preferences</string>
 
 	<string name="add_repeat">Add a \"%s\"?</string>
 	 <string name="add_another_repeat">Add another \"%s\"?</string>

@@ -30,7 +30,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class MainMenuActivity extends Activity {
     private static final int INSTANCE_UPLOADER = 2;
 
     // menu options
-    public static final int MENU_PREFERENCES = Menu.FIRST;
+    private static final int MENU_PREFERENCES = Menu.FIRST;
 
     // buttons
     private Button mEnterDataButton;
@@ -259,7 +259,7 @@ public class MainMenuActivity extends Activity {
 
 
     private void createPreferencesMenu() {
-        Intent i = new Intent(this, GlobalPreferences.class);
+        Intent i = new Intent(this, ServerPreferences.class);
         startActivity(i);
     }
 
@@ -267,7 +267,7 @@ public class MainMenuActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.preferences)).setIcon(
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
         return true;
     }

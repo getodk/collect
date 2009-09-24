@@ -8,7 +8,7 @@ import android.preference.PreferenceActivity;
 
 import org.odk.collect.android.R;
 
-public class GlobalPreferences extends PreferenceActivity implements
+public class ServerPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     public static String KEY_SERVER = "server";
@@ -19,8 +19,8 @@ public class GlobalPreferences extends PreferenceActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.global_preferences);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.preferences));
+        addPreferencesFromResource(R.xml.server_preferences);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.server_preferences));
         updateServer();
         updateUsername();
         updatePassword();

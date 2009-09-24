@@ -355,37 +355,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    //
-    // /**
-    // *
-    // * @return true if the current View represents the start of the form
-    // */
-    // private boolean currentPromptIsStart() {
-    // return (mFormHandler.currentPrompt().getType() ==
-    // PromptElement.TYPE_START);
-    // }
-    //
-    //
-    // /**
-    // *
-    // * @return true if the current View represents then end of the form
-    // */
-    // private boolean currentPromptIsEnd() {
-    // return (mFormHandler.currentPrompt().getType() ==
-    // PromptElement.TYPE_END);
-    // }
-
-
     private boolean saveCurrentAnswer(boolean evaluateConstraints) {
-        PromptElement p = mFormHandler.currentPrompt();
+
+        PromptElement pe = mFormHandler.currentPrompt();
+
+        if (pe.getType() == PromptElement.TYPE_START) {
+            pe = mFormHandler.nextPrompt();
+        } else if (pe.getType() == PromptElement.TYPE_END) {
+            pe = mFormHandler.prevPrompt();
+        }
 
         // If the question is readonly there's nothing to save.
-        if (!p.isReadOnly()) {
+        if (!pe.isReadOnly()) {
             int saveStatus =
-                    mFormHandler.saveAnswer(p, ((QuestionView) mCurrentView).getAnswer(),
+                    mFormHandler.saveAnswer(pe, ((QuestionView) createView(pe)).getAnswer(),
                             evaluateConstraints);
             if (evaluateConstraints && saveStatus != GlobalConstants.ANSWER_OK) {
-                createConstraintToast(p, saveStatus);
+                createConstraintToast(pe, saveStatus);
                 return false;
             }
         }
@@ -459,11 +445,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 c = fda.fetchFilesByPath(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
                     ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                            R.string.save_data_description, c.getString(c
+                            R.string.save_review_data_description, c.getString(c
                                     .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
                 } else {
                     ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                            R.string.save_data_description, mFormHandler.getFormTitle()));
+                            R.string.save_enter_data_description, mFormHandler.getFormTitle()));
                 }
                 // Create 'save complete' button.
                 ((Button) endView.findViewById(R.id.complete_exit_button))
