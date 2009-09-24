@@ -347,7 +347,7 @@ public class FormHandler {
             if (node == null) {
                 // you probably a bind error
                 return false;
-            } 
+            }
             relevant = node.isRelevant(); // check instance flag first
 
         }
@@ -510,7 +510,13 @@ public class FormHandler {
             // populated model to current form
             mForm.setDataModel(new DataModelTree(templateRoot));
 
+            // fix any language issues
+            // TODO:
+            // http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
+            mForm.localeChanged(mForm.getLocalizer().getLocale(), mForm.getLocalizer());
+
             return true;
+
         }
     }
 
@@ -551,7 +557,7 @@ public class FormHandler {
             e.printStackTrace();
             return false;
         }
-        
+
         return false;
 
     }
