@@ -513,7 +513,9 @@ public class FormHandler {
             // fix any language issues
             // TODO:
             // http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
-            mForm.localeChanged(mForm.getLocalizer().getLocale(), mForm.getLocalizer());
+            if (getLanguages() != null) {
+                mForm.localeChanged(getCurrentLanguage(), mForm.getLocalizer());                
+            }
 
             return true;
 
