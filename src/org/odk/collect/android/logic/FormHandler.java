@@ -474,11 +474,18 @@ public class FormHandler {
         return mForm.getTitle();
     }
 
+    
+    public void preProcessForm(boolean newInstance) {
 
+        mForm.initialize(newInstance);
+
+    }
+
+    
     /**
      * Runs post processing handlers. Necessary to get end time.
      */
-    public void finalizeDataModel() {
+    public void postProcessForm() {
 
         mForm.postProcessModel();
 
@@ -511,8 +518,7 @@ public class FormHandler {
             mForm.setDataModel(new DataModelTree(templateRoot));
 
             // fix any language issues
-            // TODO:
-            // http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
+            // TODO: http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
             if (getLanguages() != null) {
                 mForm.localeChanged(getCurrentLanguage(), mForm.getLocalizer());                
             }

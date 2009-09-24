@@ -43,8 +43,8 @@ the License.
 <string name="loading_form">Loading Form...</string>
 	<string name="please_wait">Please wait a few moments.</string>
 
-  <string name="save_for_later">Mark as Incomplete</string> 
-	<string name="finalize_for_send">Mark as Complete</string>
+  <string name="save_for_later">Save as Incomplete</string> 
+	<string name="finalize_for_send">Save as Complete</string>
 	
 	<string name="save_data_message">Please choose one to save results.</string>
 	<string name="save_review_data_description">%s review has ended.</string>

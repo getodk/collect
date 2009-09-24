@@ -786,7 +786,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (!validateAnswers(markCompleted)) {
             return false;
         }
-        mFormHandler.finalizeDataModel();
+        mFormHandler.postProcessForm();
         if (mFormHandler.exportData(mInstancePath, getApplicationContext(), markCompleted)) {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
                     Toast.LENGTH_SHORT).show();

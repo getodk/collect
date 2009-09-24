@@ -80,7 +80,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
                     return null;
                 }
                 fd.setEvaluationContext(new EvaluationContext());
-                fd.initialize(true);
                 serializeFormDef(fd, formPath);
 
             } catch (FileNotFoundException e) {
@@ -93,7 +92,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
 
         // import existing data into formdef
         if (instancePath != null) {
+            fh.preProcessForm(false);
             fh.importData(instancePath);
+        } else {
+            fh.preProcessForm(true);
         }
 
         // clean up vars
