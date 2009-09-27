@@ -61,6 +61,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.GestureDetector;
+import org.odk.collect.android.utilities.ImageUtils;
 import org.odk.collect.android.views.QuestionView;
 
 import java.io.File;
@@ -223,7 +224,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveCurrentAnswer(false);
                 break;
             case GlobalConstants.IMAGE_CAPTURE:
-                if (!android.os.Build.MODEL.contains("HTC")) {
+                if (ImageUtils.hasImageCaptureBug()) {
                     File fi = new File(GlobalConstants.IMAGE_PATH);
                     try {
                         Uri ui =

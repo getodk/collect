@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,8 +86,9 @@ public class MainMenuActivity extends Activity {
     private void buildView() {
 
         setContentView(R.layout.main_menu);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-
+        //setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
+        setTitle(android.os.Build.BRAND + " > " + android.os.Build.VERSION.INCREMENTAL);
+        
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
