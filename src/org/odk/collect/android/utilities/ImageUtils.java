@@ -6,9 +6,15 @@ public class ImageUtils {
     public static boolean hasImageCaptureBug() {
 
         String brand = android.os.Build.BRAND.toLowerCase();
-
-        if (brand.contains("google") || brand.contains("android") || brand.contains("generic")) {
+        String version = android.os.Build.VERSION.INCREMENTAL.toLowerCase();
+        if (brand.contains("google") || brand.contains("android")) {
             return true;
+        } else if (brand.contains("generic")) {
+            if (version.equals("eng.u70000.20090527.151446")) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
         return false;
