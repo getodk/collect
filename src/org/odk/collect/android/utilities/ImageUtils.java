@@ -6,18 +6,13 @@ public class ImageUtils {
     public static boolean hasImageCaptureBug() {
 
         String brand = android.os.Build.BRAND.toLowerCase();
-        String version = android.os.Build.VERSION.INCREMENTAL.toLowerCase();
-        if (brand.contains("google") || brand.contains("android")) {
+        String device = android.os.Build.DEVICE.toLowerCase();
+        String board = android.os.Build.BOARD.toLowerCase();
+        
+        if ((brand.contains("google") || brand.contains("android"))
+                || (brand.equals("generic") && device.equals("generic") && board.equals("unknown"))) {
             return true;
-        } else if (brand.contains("generic")) {
-            if (version.equals("eng.u70000.20090527.151446")) {
-                return false;
-            } else {
-                return true;
-            }
         }
-
         return false;
     }
-
 }
