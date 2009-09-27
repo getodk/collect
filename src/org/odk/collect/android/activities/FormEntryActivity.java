@@ -359,16 +359,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         PromptElement pe = mFormHandler.currentPrompt();
 
-        if (pe.getType() == PromptElement.TYPE_START) {
-            pe = mFormHandler.nextPrompt();
-        } else if (pe.getType() == PromptElement.TYPE_END) {
-            pe = mFormHandler.prevPrompt();
-        }
-
         // If the question is readonly there's nothing to save.
         if (!pe.isReadOnly()) {
+
             int saveStatus =
-                    mFormHandler.saveAnswer(pe, ((QuestionView) createView(pe)).getAnswer(),
+                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(),
                             evaluateConstraints);
             if (evaluateConstraints && saveStatus != GlobalConstants.ANSWER_OK) {
                 createConstraintToast(pe, saveStatus);
@@ -826,9 +821,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createSaveExitDialog(boolean markCompleted) {
 
-        if (saveCurrentAnswer(true) && saveDataToDisk(markCompleted)) {
+        int promptType = mFormHandler.currentPrompt().getType();
+        boolean saveStatus = true;
+
+        if (promptType != PromptElement.TYPE_START && promptType != PromptElement.TYPE_END) {
+            saveStatus = saveCurrentAnswer(true);
+        }
+
+        if (saveStatus && saveDataToDisk(markCompleted)) {
             finish();
         }
+
     }
 
 
