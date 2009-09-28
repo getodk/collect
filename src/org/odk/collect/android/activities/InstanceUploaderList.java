@@ -16,6 +16,13 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,17 +30,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -60,6 +62,24 @@ public class InstanceUploaderList extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.instance_uploader_list);
+        
+        Button b = (Button)findViewById(R.id.upload_button);
+        b.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View arg0) {
+				if (mSelected.size() > 0) {
+                    // items selected
+                    uploadSelectedFiles();
+                    refreshData();
+                } else {
+                    // no items selected
+                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
+                            Toast.LENGTH_SHORT).show();
+                }
+			}
+        	
+        });
         // buildView takes place in resume
     }
 
@@ -83,11 +103,7 @@ public class InstanceUploaderList extends ListActivity {
         // render total instance view
         mInstances =
                 new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
-        if (c.getCount() > 0) {
             setListAdapter(mInstances);
-        } else {
-            finish();
-        }
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
@@ -109,12 +125,9 @@ public class InstanceUploaderList extends ListActivity {
 
         for (int i = 0; i < mSelected.size(); i++) {
             c = fda.fetchFile(mSelected.get(i));
+            startManagingCursor(c);
             String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
             allInstances.add(s);
-        }
-
-        if (c != null) {
-            c.close();
         }
 
         // bundle intent with upload files
@@ -139,8 +152,6 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
-        menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_selected_data).setIcon(
-                R.drawable.ic_menu_send);
         return true;
     }
 
@@ -148,17 +159,6 @@ public class InstanceUploaderList extends ListActivity {
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_UPLOAD_ALL:
-                if (mSelected.size() > 0) {
-                    // items selected
-                    uploadSelectedFiles();
-                    refreshData();
-                } else {
-                    // no items selected
-                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                            Toast.LENGTH_SHORT).show();
-                }
-                return true;
             case MENU_PREFERENCES:
                 createPreferencesMenu();
                 return true;
