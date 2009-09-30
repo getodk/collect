@@ -30,7 +30,10 @@ import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -82,6 +85,17 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.remote_file_manage_list);
+        
+        Button b = (Button)findViewById(R.id.upload_button);
+        b.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View arg0) {
+				downloadSelectedFiles();
+			}
+        	
+        });
+        
         setupView();
     }
 
@@ -151,14 +165,10 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             mFileAdapter =
                     new ArrayAdapter<String>(this,
                             android.R.layout.simple_list_item_multiple_choice, mFormName);
-            // view options
-            if (mFormName.size() > 0) {
+
                 getListView().setItemsCanFocus(false);
                 getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                 setListAdapter(mFileAdapter);
-            } else {
-                setContentView(R.layout.list_view_empty);
-            }
         }
     }
 
@@ -168,8 +178,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
-        menu.add(0, MENU_ADD, 0, getString(R.string.add_file)).setIcon(
-                android.R.drawable.ic_menu_add);
         return true;
     }
 
@@ -177,9 +185,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_ADD:
-                downloadSelectedFiles();
-                return true;
             case MENU_PREFERENCES:
                 createPreferencesMenu();
                 return true;
