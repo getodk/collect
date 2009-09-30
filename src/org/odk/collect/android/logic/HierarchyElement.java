@@ -1,5 +1,7 @@
 package org.odk.collect.android.logic;
 
+import java.util.ArrayList;
+
 import org.javarosa.core.model.FormIndex;
 
 import android.graphics.drawable.Drawable;
@@ -12,7 +14,7 @@ public class HierarchyElement {
     private Drawable mIcon;
     int mType;
     FormIndex mFormIndex;
-
+    ArrayList<HierarchyElement> mChildren;
 
     public HierarchyElement(String text1, String text2, Drawable bullet, int type, FormIndex f) {
         mIcon = bullet;
@@ -20,6 +22,8 @@ public class HierarchyElement {
         mSecondaryText = text2;
         mFormIndex = f;
         mType = type;
+        mChildren = new ArrayList<HierarchyElement>();
+        
     }
 
 
@@ -60,6 +64,22 @@ public class HierarchyElement {
 
     public int getType() {
         return mType;
+    }
+    
+    public void setType(int newType) {
+    	mType = newType;
+    }
+    
+    public ArrayList<HierarchyElement> getChildren() {
+    	return mChildren;
+    }
+    
+    public void AddChild(HierarchyElement h) {
+    	mChildren.add(h);
+    }
+    
+    public void setChildren(ArrayList<HierarchyElement> children) {
+    	mChildren = children;
     }
 
 
