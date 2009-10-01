@@ -192,7 +192,7 @@ public class FormHierarchyActivity extends ListActivity {
 				FormIndex localTest = currentIndex;
 				for (int i = 0; i < level; i++) {
 					localTest = localTest.getNextLevel();
-				}
+				} 
 				Log.e("carl", "localtest local = " + localTest.getLocalIndex()
 						+ " and instance = " + localTest.getInstanceIndex());
 				if (localTest.getLocalIndex() == 0)
