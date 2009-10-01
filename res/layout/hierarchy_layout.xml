@@ -1,37 +1,63 @@
-<LinearLayout 
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent" 
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
-  >
-  
-  <TextView 
-  android:id = "@+id/stacklist"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  />
-  
-  <Button 
-android:id = "@+id/backbutton"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:text="back"
-/>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
-  
-  <ListView 
-    android:id="@android:id/list" 
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"/>
-    
-    <TextView 
-      android:id="@android:id/empty"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:text="shouldn't get here" 
-      android:textSize="7pt" 
-      android:padding="20px"
-      android:gravity="center" 
-      android:background="@drawable/white" />
+	<!--
+		would prefer not to use an extra LinearLayout here, but weights don't
+		seem to work properly in RelativeLayout
+	-->
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_alignParentBottom="true"
+		android:id="@+id/buttonholder">
+		<Button
+			android:id="@+id/startbutton"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="start"
+			android:layout_weight="1" />
+		<Button
+			android:id="@+id/backbutton"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="back"
+			android:layout_weight="1" />
+		<Button
+			android:id="@+id/endbutton"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:text="end"
+			android:layout_weight="1" />
 
-</LinearLayout>
+	</LinearLayout>
+
+	<TextView
+		android:id="@+id/stacklist"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
+
+	<ListView
+		android:id="@android:id/list"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@id/stacklist"
+		android:layout_above="@id/buttonholder" />
+
+	<TextView
+		android:id="@android:id/empty"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:text="shouldn't get here"
+		android:textSize="7pt"
+		android:padding="20px"
+		android:gravity="center"
+		android:background="@drawable/white"
+		android:layout_below="@id/stacklist" />
+
+
+
+
+</RelativeLayout>

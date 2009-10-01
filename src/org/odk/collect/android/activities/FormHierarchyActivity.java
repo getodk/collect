@@ -36,6 +36,7 @@ import android.widget.Toast;
  */
 public class FormHierarchyActivity extends ListActivity {
 
+	private static final String t = "FormHierarchyActivity";
 	FormDef mForm;
 	int state;
 
@@ -43,7 +44,8 @@ public class FormHierarchyActivity extends ListActivity {
 	private static final int EXPANDED = 2;
 	private static final int COLLAPSED = 3;
 	private static final int QUESTION = 4;
-
+	
+	private Button mBackButton;
 
 	private FormIndex mCurrentIndex;
 	List<HierarchyElement> formList;
@@ -65,21 +67,21 @@ public class FormHierarchyActivity extends ListActivity {
 			mCurrentIndex = mForm.incrementIndex(mCurrentIndex);
 		}
 
-		Button b = (Button) findViewById(R.id.backbutton);
-		b.setOnClickListener(new OnClickListener() {
+		mBackButton = (Button) findViewById(R.id.backbutton);
+		mBackButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Log.e("carl", "clicked back");
 				mCurrentIndex = stepIndexOut(mCurrentIndex);
-				Log.e("carl", "mCurrentIndex = " + mCurrentIndex);
+				/*Log.e("carl", "mCurrentIndex = " + mCurrentIndex);
 				Log.e("Carl", "local index = " + mCurrentIndex.getLocalIndex());
 				Log.e("carl", "instance index = "
-						+ mCurrentIndex.getInstanceIndex());
+						+ mCurrentIndex.getInstanceIndex());*/
 
 				if (mCurrentIndex == null || indexIsBeginning(mCurrentIndex)) {
 					mCurrentIndex = FormIndex.createBeginningOfFormIndex();
 					mCurrentIndex = mForm.incrementIndex(mCurrentIndex);
 				} else {
-					
+
 					FormIndex levelTest = mCurrentIndex;
 					int level = 0;
 					while (levelTest.getNextLevel() != null) {
@@ -103,10 +105,12 @@ public class FormHierarchyActivity extends ListActivity {
 						} else {
 							mCurrentIndex = prevIndex(mCurrentIndex);
 						}
-						//Log.e("carl", "temp instance = " + tempIndex.getInstanceIndex());
+						// Log.e("carl", "temp instance = " +
+						// tempIndex.getInstanceIndex());
 					}
 					Log.e("carl", "now showing : " + mCurrentIndex);
-					Log.e("Carl", "now shoing instance index = " + mCurrentIndex.getInstanceIndex());
+					Log.e("Carl", "now shoing instance index = "
+							+ mCurrentIndex.getInstanceIndex());
 				}
 				refreshView();
 
@@ -118,7 +122,7 @@ public class FormHierarchyActivity extends ListActivity {
 		refreshView();
 
 	}
-	
+
 	private boolean indexIsBeginning(FormIndex fi) {
 		String startTest = fi.toString();
 		int firstComma = startTest.indexOf(",");
@@ -143,8 +147,8 @@ public class FormHierarchyActivity extends ListActivity {
 
 		// begin hack around:
 		boolean beginning = indexIsBeginning(currentIndex);
-
 		// end hack around
+
 		String displayGroup = "";
 		int level = 0;
 		String repeatGroup = "-1";
@@ -155,15 +159,13 @@ public class FormHierarchyActivity extends ListActivity {
 			FormIndex prevIndex = prevIndex(currentIndex);
 			displayGroup = mForm.getChildInstanceRef(prevIndex).toString(false);
 			Log.e("carl", "display group is: " + displayGroup);
-			// currentIndex = nextRelevantIndex(currentIndex); //not begining, I
-			// don't think we want this...
-
 			FormIndex levelTest = currentIndex;
 			while (levelTest.getNextLevel() != null) {
 				level++;
 				levelTest = levelTest.getNextLevel();
 			}
 			Log.e("Carl", "level is: " + level);
+			mBackButton.setEnabled(true);
 
 		} else {
 			Log.e("carl", "at beginning");
@@ -172,6 +174,7 @@ public class FormHierarchyActivity extends ListActivity {
 			Log.e("carl", "index is now "
 					+ mForm.getChildInstanceRef(currentIndex).toString(false));
 			Log.e("carl", "index # is " + currentIndex);
+			mBackButton.setEnabled(false);
 		}
 
 		int repeatIndex = -1;
@@ -183,22 +186,33 @@ public class FormHierarchyActivity extends ListActivity {
 			}
 			Log.e("carl", "index # is: " + currentIndex + " for: "
 					+ mForm.getChildInstanceRef(currentIndex).toString(false));
-			// Log.e("carl", "out of curiosity # is: " + normalizedLevel +
-			// " for: " +
-			// mForm.getChildInstanceRef(normalizedLevel).toString(false));
 
 			IFormElement e = mForm.getChild(currentIndex);
 			String currentGroupName = mForm.getChildInstanceRef(currentIndex)
 					.toString(false);
 
+			// we're displaying only a particular group, and we've reached the
+			// end of that group
 			if (displayGroup.equalsIgnoreCase(currentGroupName)) {
 				break;
 			}
 
+			// Here we're adding new child elements to a group, or skipping over
+			// elements in the index
+			// that are just members of the current group.
 			if (currentGroupName.startsWith(repeatGroup)) {
 				Log.e("carl", "testing: " + repeatIndex + " against: "
 						+ normalizedLevel.getInstanceIndex());
-				if (repeatIndex != normalizedLevel.getInstanceIndex()) {
+
+				// the last repeated group doesn't exist, so make sure the next
+				// item is still in the group.
+				FormIndex nextIndex = nextRelevantIndex(currentIndex);
+				if (nextIndex.isEndOfFormIndex())
+					break;
+				String nextIndexName = mForm.getChildInstanceRef(nextIndex)
+						.toString(false);
+				if (repeatIndex != normalizedLevel.getInstanceIndex()
+						&& nextIndexName.startsWith(repeatGroup)) {
 
 					repeatIndex = normalizedLevel.getInstanceIndex();
 					Log.e("Carl", "adding new group: " + currentGroupName
@@ -219,22 +233,36 @@ public class FormHierarchyActivity extends ListActivity {
 				// h += "\t" + g.getLongText() + "\t" + g.getRepeat();
 
 				if (g.getRepeat() && !currentGroupName.startsWith(repeatGroup)) {
-					// we have a new repeated group that we haven't seen before
+
+					// we have a new repeated group that we haven't seen
+					// before
 					repeatGroup = currentGroupName;
 					repeatIndex = normalizedLevel.getInstanceIndex();
 					Log.e("carl", "found new repeat: " + repeatGroup
 							+ " with instance index: " + repeatIndex);
 
-					// add the group, but it's also the first instance of a
-					// repeat, so add it as a
-					// child of the group
-					HierarchyElement group = new HierarchyElement(g
-							.getLongText(), g.getLongText(), getResources()
-							.getDrawable(R.drawable.arrow_right_float),
-							COLLAPSED, currentIndex);
-					group.AddChild(new HierarchyElement(g.getLongText(),
-							"groupchild", null, CHILD, currentIndex));
-					formList.add(group);
+					FormIndex nextIndex = nextRelevantIndex(currentIndex);
+					if (nextIndex.isEndOfFormIndex())
+						break;
+					String nextIndexName = mForm.getChildInstanceRef(nextIndex)
+							.toString(false);
+					// Make sure the next element is in this group, else no
+					// reason to add it
+					if (nextIndexName.startsWith(repeatGroup)) {
+
+						// add the group, but this index is also the first
+						// instance of a
+						// repeat, so add it as a child of the group
+						HierarchyElement group = new HierarchyElement(g
+								.getLongText(), g.getLongText(), getResources()
+								.getDrawable(R.drawable.arrow_right_float),
+								COLLAPSED, currentIndex);
+						group.AddChild(new HierarchyElement(g.getLongText(),
+								"groupchild", null, CHILD, currentIndex));
+						formList.add(group);
+					} else {
+						Log.e("Carl", "no children, so skipping");
+					}
 					currentIndex = nextRelevantIndex(currentIndex);
 					continue;
 
@@ -246,19 +274,17 @@ public class FormHierarchyActivity extends ListActivity {
 				formList.add(new HierarchyElement(q.getLongText(), "answer",
 						null, QUESTION, currentIndex));
 			} else {
-				Log.e("error", "we shouldn't get here");
+				Log.e(t, "we shouldn't get here");
 			}
 
 			currentIndex = nextRelevantIndex(currentIndex);
 		}
-		
+
 		HierarchyListAdapter itla = new HierarchyListAdapter(this);
 		itla.setListItems(formList);
 		setListAdapter(itla);
 
 	}
-
-	
 
 	// used to go 'back', the only problem is this changes whatever it's
 	// referencing
@@ -270,8 +296,6 @@ public class FormHierarchyActivity extends ListActivity {
 			return index;
 		}
 	}
-
-	
 
 	private FormIndex prevIndex(FormIndex index) {
 		do {
@@ -310,7 +334,7 @@ public class FormHierarchyActivity extends ListActivity {
 			break;
 		case QUESTION:
 			Toast.makeText(this, "Question", Toast.LENGTH_SHORT).show();
-			break;
+			return;
 		case CHILD:
 			Toast.makeText(this, "CHILD", Toast.LENGTH_SHORT).show();
 			mCurrentIndex = h.getFormIndex();
