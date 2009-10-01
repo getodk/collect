@@ -9,8 +9,10 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.formmanager.view.FormElementBinding;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.logic.FormHandler;
@@ -44,7 +46,9 @@ public class FormHierarchyActivity extends ListActivity {
 	private static final int EXPANDED = 2;
 	private static final int COLLAPSED = 3;
 	private static final int QUESTION = 4;
-	
+
+	private final String mIndent = " -- ";
+
 	private Button mBackButton;
 
 	private FormIndex mCurrentIndex;
@@ -72,10 +76,12 @@ public class FormHierarchyActivity extends ListActivity {
 			public void onClick(View v) {
 				Log.e("carl", "clicked back");
 				mCurrentIndex = stepIndexOut(mCurrentIndex);
-				/*Log.e("carl", "mCurrentIndex = " + mCurrentIndex);
-				Log.e("Carl", "local index = " + mCurrentIndex.getLocalIndex());
-				Log.e("carl", "instance index = "
-						+ mCurrentIndex.getInstanceIndex());*/
+				/*
+				 * Log.e("carl", "mCurrentIndex = " + mCurrentIndex);
+				 * Log.e("Carl", "local index = " +
+				 * mCurrentIndex.getLocalIndex()); Log.e("carl",
+				 * "instance index = " + mCurrentIndex.getInstanceIndex());
+				 */
 
 				if (mCurrentIndex == null || indexIsBeginning(mCurrentIndex)) {
 					mCurrentIndex = FormIndex.createBeginningOfFormIndex();
@@ -119,6 +125,25 @@ public class FormHierarchyActivity extends ListActivity {
 			}
 		});
 
+		Button startButton = (Button) findViewById(R.id.startbutton);
+		startButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				mCurrentIndex = FormIndex.createBeginningOfFormIndex();
+				FormEntryActivity.mFormHandler.setFormIndex(mCurrentIndex);
+				finish();
+			}
+		});
+
+		Button endButton = (Button) findViewById(R.id.endbutton);
+		endButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				mCurrentIndex = FormIndex.createEndOfFormIndex();
+				FormEntryActivity.mFormHandler.setFormIndex(mCurrentIndex);
+				finish();
+
+			}
+		});
+
 		refreshView();
 
 	}
@@ -155,16 +180,34 @@ public class FormHierarchyActivity extends ListActivity {
 
 		Log.e("Carl", "just checking at beginnig " + currentIndex);
 		if (!beginning) {
-			// we're displaying only things only within a given group
-			FormIndex prevIndex = prevIndex(currentIndex);
-			displayGroup = mForm.getChildInstanceRef(prevIndex).toString(false);
-			Log.e("carl", "display group is: " + displayGroup);
 			FormIndex levelTest = currentIndex;
 			while (levelTest.getNextLevel() != null) {
 				level++;
 				levelTest = levelTest.getNextLevel();
 			}
 			Log.e("Carl", "level is: " + level);
+
+			boolean found = false;
+			while (!found) {
+				FormIndex localTest = currentIndex;
+				for (int i = 0; i < level; i++) {
+					localTest = localTest.getNextLevel();
+				}
+				Log.e("carl", "localtest local = " + localTest.getLocalIndex()
+						+ " and instance = " + localTest.getInstanceIndex());
+				if (localTest.getLocalIndex() == 0)
+						found = true;
+				else
+					currentIndex = prevIndex(currentIndex);
+			}
+
+			// we're displaying only things only within a given group
+			FormIndex prevIndex = prevIndex(currentIndex);
+			Log.e("Carl", "local = " + prevIndex.getLocalIndex()
+					+ " and instance = " + prevIndex.getInstanceIndex());
+			displayGroup = mForm.getChildInstanceRef(prevIndex).toString(false);
+			Log.e("carl", "display group is: " + displayGroup);
+
 			mBackButton.setEnabled(true);
 
 		} else {
@@ -178,6 +221,8 @@ public class FormHierarchyActivity extends ListActivity {
 		}
 
 		int repeatIndex = -1;
+		int groupCount = 1;
+		String repeatedGroupName = "";
 		while (!isEnd(currentIndex)) {
 			FormIndex normalizedLevel = currentIndex;
 			for (int i = 0; i < level; i++) {
@@ -218,8 +263,10 @@ public class FormHierarchyActivity extends ListActivity {
 					Log.e("Carl", "adding new group: " + currentGroupName
 							+ " in repeat");
 					HierarchyElement h = formList.get(formList.size() - 1);
-					h.AddChild(new HierarchyElement(currentGroupName,
-							"groupchild", null, CHILD, currentIndex));
+					h
+							.AddChild(new HierarchyElement(mIndent
+									+ repeatedGroupName + " " + groupCount++,
+									"", null, CHILD, currentIndex));
 				}
 
 				// if it's not a new repeat, we skip it because it's in the
@@ -249,16 +296,19 @@ public class FormHierarchyActivity extends ListActivity {
 					// Make sure the next element is in this group, else no
 					// reason to add it
 					if (nextIndexName.startsWith(repeatGroup)) {
-
+						groupCount = 0;
 						// add the group, but this index is also the first
 						// instance of a
 						// repeat, so add it as a child of the group
-						HierarchyElement group = new HierarchyElement(g
-								.getLongText(), g.getLongText(), getResources()
-								.getDrawable(R.drawable.arrow_right_float),
+						repeatedGroupName = g.getLongText();
+						HierarchyElement group = new HierarchyElement(
+								repeatedGroupName, "Repeated Group",
+								getResources().getDrawable(
+										R.drawable.arrow_right_float),
 								COLLAPSED, currentIndex);
-						group.AddChild(new HierarchyElement(g.getLongText(),
-								"groupchild", null, CHILD, currentIndex));
+						group.AddChild(new HierarchyElement(mIndent
+								+ repeatedGroupName + " " + groupCount++, "",
+								null, CHILD, currentIndex));
 						formList.add(group);
 					} else {
 						Log.e("Carl", "no children, so skipping");
@@ -271,7 +321,13 @@ public class FormHierarchyActivity extends ListActivity {
 				QuestionDef q = (QuestionDef) e;
 				// h += "\t" + q.getLongText();
 				// Log.e("FHV", h);
-				formList.add(new HierarchyElement(q.getLongText(), "answer",
+				String answer = "";
+				FormElementBinding feb = new FormElementBinding(null,
+						currentIndex, mForm);
+				IAnswerData a = feb.getValue();
+				if (a != null)
+					answer = a.getDisplayText();
+				formList.add(new HierarchyElement(q.getLongText(), answer,
 						null, QUESTION, currentIndex));
 			} else {
 				Log.e(t, "we shouldn't get here");
@@ -333,10 +389,12 @@ public class FormHierarchyActivity extends ListActivity {
 					android.R.drawable.arrow_down_float));
 			break;
 		case QUESTION:
-			Toast.makeText(this, "Question", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "Question", Toast.LENGTH_SHORT).show();
+			FormEntryActivity.mFormHandler.setFormIndex(h.getFormIndex());
+			finish();
 			return;
 		case CHILD:
-			Toast.makeText(this, "CHILD", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "CHILD", Toast.LENGTH_SHORT).show();
 			mCurrentIndex = h.getFormIndex();
 			mCurrentIndex = nextRelevantIndex(mCurrentIndex);
 			Log.e("carl", "clicked index was " + mCurrentIndex);
