@@ -16,13 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -35,6 +28,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+
+import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -59,6 +59,7 @@ public class InstanceUploaderList extends ListActivity {
 		setContentView(R.layout.instance_uploader_list);
 
 		Button b = (Button) findViewById(R.id.upload_button);
+		b.setTextSize(GlobalConstants.APPLICATION_FONTSIZE+9);
 		b.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {

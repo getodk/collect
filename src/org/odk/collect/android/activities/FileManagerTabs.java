@@ -46,7 +46,8 @@ public class FileManagerTabs extends TabActivity {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_files));
 
         final TabHost tabHost = getTabHost();
-        tabHost.setBackgroundColor(Color.BLACK);
+        tabHost.setBackgroundColor(Color.WHITE);
+        tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
 
         Intent local = new Intent(this, LocalFileManagerList.class);
         tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_files))

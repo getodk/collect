@@ -63,8 +63,9 @@ public class InstanceChooserTabs extends TabActivity {
 
         // create tab host and tweak color
         final TabHost tabHost = getTabHost();
-        tabHost.setBackgroundColor(Color.BLACK);
-
+        tabHost.setBackgroundColor(Color.WHITE);
+        tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
+        
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
         saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_INCOMPLETE);
