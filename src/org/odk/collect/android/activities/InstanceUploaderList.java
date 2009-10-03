@@ -20,6 +20,8 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +30,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -47,167 +50,182 @@ import java.util.ArrayList;
 // TODO long click form for submission log
 public class InstanceUploaderList extends ListActivity {
 
-	private static final int MENU_PREFERENCES = Menu.FIRST;
-	private static final int INSTANCE_UPLOADER = 0;
+    private static final int MENU_PREFERENCES = Menu.FIRST;
+    private static final int INSTANCE_UPLOADER = 0;
 
-	private SimpleCursorAdapter mInstances;
-	private ArrayList<Long> mSelected = new ArrayList<Long>();
+    private Button mActionButton;
+    private ToggleButton mToggleButton;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.instance_uploader_list);
+    private SimpleCursorAdapter mInstances;
+    private ArrayList<Long> mSelected = new ArrayList<Long>();
 
-		Button b = (Button) findViewById(R.id.upload_button);
-		b.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View arg0) {
-				if (mSelected.size() > 0) {
-					// items selected
-					uploadSelectedFiles();
-					refreshData();
-				} else {
-					// no items selected
-					Toast.makeText(getApplicationContext(),
-							getString(R.string.noselect_error),
-							Toast.LENGTH_SHORT).show();
-				}
-			}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.instance_uploader_list);
 
-		});
-		// buildView takes place in resume
-	}
+        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        mToggleButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+            }
+        });
 
-	/**
-	 * Retrieves instance information from {@link FileDbAdapter}, composes and
-	 * displays each row.
-	 */
-	private void buildView() {
-		// get all mInstances that match the status.
-		FileDbAdapter fda = new FileDbAdapter(this);
-		fda.open();
-		Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE,
-				FileDbAdapter.STATUS_COMPLETE);
-		startManagingCursor(c);
+        mActionButton = (Button) findViewById(R.id.upload_button);
+        mActionButton.setOnClickListener(new OnClickListener() {
 
-		String[] data = new String[] { FileDbAdapter.KEY_DISPLAY,
-				FileDbAdapter.KEY_META };
-		int[] view = new int[] { R.id.text1, R.id.text2 };
+            public void onClick(View arg0) {
+                if (mSelected.size() > 0) {
+                    // items selected
+                    uploadSelectedFiles();
+                    refreshData();
+                } else {
+                    // no items selected
+                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
 
-		// render total instance view
-		mInstances = new SimpleCursorAdapter(this,
-				R.layout.two_item_multiple_choice, c, data, view);
-		setListAdapter(mInstances);
-		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		getListView().setItemsCanFocus(false);
+        });
+        // buildView takes place in resume
+    }
 
-		// set title
-		setTitle(getString(R.string.app_name) + " > "
-				+ getString(R.string.send_data));
 
-		// cleanup
-		fda.close();
-	}
+    /**
+     * Retrieves instance information from {@link FileDbAdapter}, composes and
+     * displays each row.
+     */
+    private void buildView() {
+        // get all mInstances that match the status.
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
+        startManagingCursor(c);
 
-	private void uploadSelectedFiles() {
+        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
+        int[] view = new int[] {R.id.text1, R.id.text2};
 
-		ArrayList<String> allInstances = new ArrayList<String>();
+        // render total instance view
+        mInstances =
+                new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
+        setListAdapter(mInstances);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        getListView().setItemsCanFocus(false);
+        if (mInstances.isEmpty()) {
+            mToggleButton.setVisibility(View.GONE);
+            mActionButton.setVisibility(View.GONE);
+        }
 
-		// get all checked items
-		FileDbAdapter fda = new FileDbAdapter(this);
-		fda.open();
+        // set title
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
 
-		Cursor c = null;
+        // cleanup
+        fda.close();
+    }
 
-		for (int i = 0; i < mSelected.size(); i++) {
-			c = fda.fetchFile(mSelected.get(i));
-			startManagingCursor(c);
-			String s = c
-					.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-			allInstances.add(s);
-		}
 
-		// bundle intent with upload files
-		Intent i = new Intent(this, InstanceUploaderActivity.class);
-		i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
-		startActivityForResult(i, INSTANCE_UPLOADER);
-		fda.close();
-	}
+    private void uploadSelectedFiles() {
 
-	private void refreshData() {
-		if (mInstances != null) {
-			mInstances.getCursor().requery();
-		}
-		mSelected.clear();
-		buildView();
-	}
+        ArrayList<String> allInstances = new ArrayList<String>();
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		menu
-				.add(0, MENU_PREFERENCES, 0,
-						getString(R.string.server_preferences)).setIcon(
-						android.R.drawable.ic_menu_preferences);
-		return true;
-	}
+        // get all checked items
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
 
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case MENU_PREFERENCES:
-			createPreferencesMenu();
-			return true;
-		}
-		return super.onMenuItemSelected(featureId, item);
-	}
+        Cursor c = null;
 
-	private void createPreferencesMenu() {
-		Intent i = new Intent(this, ServerPreferences.class);
-		startActivity(i);
-	}
+        for (int i = 0; i < mSelected.size(); i++) {
+            c = fda.fetchFile(mSelected.get(i));
+            startManagingCursor(c);
+            String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+            allInstances.add(s);
+        }
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+        // bundle intent with upload files
+        Intent i = new Intent(this, InstanceUploaderActivity.class);
+        i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
+        startActivityForResult(i, INSTANCE_UPLOADER);
+        fda.close();
+    }
 
-		// get row id from db
-		Cursor c = (Cursor) getListAdapter().getItem(position);
-		long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
 
-		// add/remove from selected list
-		if (mSelected.contains(k))
-			mSelected.remove(k);
-		else
-			mSelected.add(k);
-	}
+    private void refreshData() {
+        if (mInstances != null) {
+            mInstances.getCursor().requery();
+        }
+        mSelected.clear();
+        buildView();
+    }
 
-	@Override
-	protected void onResume() {
-		refreshData();
-		super.onResume();
-	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
-		if (resultCode == RESULT_CANCELED) {
-			return;
-		}
-		switch (requestCode) {
-		// returns with a form path, start entry
-		case INSTANCE_UPLOADER:
-			if (intent.getBooleanExtra(GlobalConstants.KEY_SUCCESS, false)) {
-			    refreshData();
-			    if (mInstances.isEmpty()) {
-	                finish();
-	            }
-			}
-			break;
-		default:
-			break;
-		}
-		super.onActivityResult(requestCode, resultCode, intent);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
+        return true;
+    }
+
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_PREFERENCES:
+                createPreferencesMenu();
+                return true;
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
+
+
+    private void createPreferencesMenu() {
+        Intent i = new Intent(this, ServerPreferences.class);
+        startActivity(i);
+    }
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        // get row id from db
+        Cursor c = (Cursor) getListAdapter().getItem(position);
+        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+
+        // add/remove from selected list
+        if (mSelected.contains(k))
+            mSelected.remove(k);
+        else
+            mSelected.add(k);
+    }
+
+
+    @Override
+    protected void onResume() {
+        refreshData();
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        switch (requestCode) {
+            // returns with a form path, start entry
+            case INSTANCE_UPLOADER:
+                if (intent.getBooleanExtra(GlobalConstants.KEY_SUCCESS, false)) {
+                    refreshData();
+                    if (mInstances.isEmpty()) {
+                        finish();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
 
 }

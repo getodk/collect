@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -48,6 +49,7 @@ public class LocalFileManagerList extends ListActivity {
 
     private AlertDialog mAlertDialog;
     private Button mActionButton;
+    private Button mToggleButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -57,6 +59,13 @@ public class LocalFileManagerList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.local_file_manage_list);
+
+
+        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        mToggleButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+            }
+        });
 
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setOnClickListener(new OnClickListener() {
@@ -95,6 +104,7 @@ public class LocalFileManagerList extends ListActivity {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         if (mInstances.isEmpty()) {
+            mToggleButton.setVisibility(View.GONE);
             mActionButton.setVisibility(View.GONE);
         }
 
