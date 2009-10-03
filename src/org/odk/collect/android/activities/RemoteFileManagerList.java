@@ -66,7 +66,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
-    private static final int MENU_ADD = Menu.FIRST+1;
+    //private static final int MENU_ADD = Menu.FIRST+1;
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;

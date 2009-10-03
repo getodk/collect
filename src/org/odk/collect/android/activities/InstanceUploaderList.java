@@ -16,13 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,6 +29,13 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+
+import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -51,7 +51,7 @@ public class InstanceUploaderList extends ListActivity {
 
 
     private static final int MENU_PREFERENCES = Menu.FIRST;
-    private static final int MENU_UPLOAD_ALL = Menu.FIRST+1;
+    //private static final int MENU_UPLOAD_ALL = Menu.FIRST+1;
 
     private static final int INSTANCE_UPLOADER = 0;
 
