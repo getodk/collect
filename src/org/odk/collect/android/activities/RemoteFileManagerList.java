@@ -27,6 +27,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,10 +67,12 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
-    //private static final int MENU_ADD = Menu.FIRST+1;
+    // private static final int MENU_ADD = Menu.FIRST+1;
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
+    private Button mActionButton;
+
 
     private FormDownloaderTask mFormDownloadTask;
 
@@ -86,16 +89,17 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
-        
-        Button b = (Button)findViewById(R.id.upload_button);
-        b.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View arg0) {
-				downloadSelectedFiles();
-			}
-        	
+        mActionButton = (Button) findViewById(R.id.upload_button);
+        mActionButton.setVisibility(View.GONE);
+        mActionButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+                downloadSelectedFiles();
+            }
+
         });
-        
+
         setupView();
     }
 
@@ -165,9 +169,12 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             mFileAdapter =
                     new ArrayAdapter<String>(this,
                             android.R.layout.simple_list_item_multiple_choice, mFormName);
-            	setListAdapter(mFileAdapter);	
-                getListView().setItemsCanFocus(false);
-                getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            setListAdapter(mFileAdapter);
+            getListView().setItemsCanFocus(false);
+            getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            if (!mFileAdapter.isEmpty()) {
+                mActionButton.setVisibility(View.VISIBLE);
+            }
 
         }
     }
@@ -191,6 +198,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         }
         return super.onMenuItemSelected(featureId, item);
     }
+
 
     private void createPreferencesMenu() {
         Intent i = new Intent(this, ServerPreferences.class);
@@ -306,7 +314,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                     Toast.makeText(this,
                             getString(R.string.download_all_successful, totalCount / 2),
                             Toast.LENGTH_SHORT).show();
-                    finish();
                 } else {
                     String s = totalCount / 2 - resultSize + " of " + totalCount / 2;
                     Toast.makeText(this, getString(R.string.download_some_failed, s),
@@ -322,6 +329,9 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 }
 
                 mFileAdapter.notifyDataSetChanged();
+                if (mFileAdapter.isEmpty()) {
+                    finish();
+                }
                 getListView().clearChoices();
 
             }

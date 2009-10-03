@@ -19,13 +19,14 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_above="@id/delete_button"
-		android:layout_alignParentTop="true" />
+		android:layout_alignParentTop="true" /> 
 
    <TextView 
       android:id="@android:id/empty"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:text="@string/no_items_display"
-      android:textSize="7pt"/>
+      android:textSize="7pt" 
+      android:gravity="center"/>
       
 </RelativeLayout>

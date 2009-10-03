@@ -152,8 +152,13 @@ public class FileDbAdapter {
             return p.split(filename)[0] + " " + mCtx.getString(R.string.data);
         } else if (type.equals(TYPE_FORM)) {
             // remove extension from form
-            return filename.substring(0, filename.lastIndexOf(".")) + " "
-                    + mCtx.getString(R.string.form);
+            try {
+                return filename.substring(0, filename.lastIndexOf(".")) + " "
+                        + mCtx.getString(R.string.form);
+
+            } catch (StringIndexOutOfBoundsException e) {
+                return path;
+            }
         } else {
             return filename;
         }

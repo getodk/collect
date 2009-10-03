@@ -10,7 +10,7 @@
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:padding="15px"
-     android:textSize="10pt" 
+     android:textSize="8pt" 
      android:layout_alignParentBottom="true"
      />
 
@@ -19,10 +19,18 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/upload_button"
         android:layout_alignParentTop="true"/>
-  <TextView android:id="@android:id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_items_display"/>
+  
+  <TextView
+    android:id="@android:id/empty"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:text="@string/no_items_display"
+    android:textSize="7pt"
+    android:paddingLeft="20px"
+    android:paddingRight="20px"
+    android:gravity="center"
+    android:background="@drawable/white"
+    android:textColor="@drawable/black" />
     
      
 

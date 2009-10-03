@@ -53,6 +53,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
+
         // get instances to upload
         Intent i = getIntent();
         ArrayList<String> instances = i.getStringArrayListExtra(GlobalConstants.KEY_INSTANCES);

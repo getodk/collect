@@ -59,7 +59,6 @@ public class InstanceUploaderList extends ListActivity {
 		setContentView(R.layout.instance_uploader_list);
 
 		Button b = (Button) findViewById(R.id.upload_button);
-		b.setTextSize(GlobalConstants.APPLICATION_FONTSIZE+9);
 		b.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
@@ -199,7 +198,10 @@ public class InstanceUploaderList extends ListActivity {
 		// returns with a form path, start entry
 		case INSTANCE_UPLOADER:
 			if (intent.getBooleanExtra(GlobalConstants.KEY_SUCCESS, false)) {
-				finish();
+			    refreshData();
+			    if (mInstances.isEmpty()) {
+	                finish();
+	            }
 			}
 			break;
 		default:

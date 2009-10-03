@@ -57,6 +57,8 @@ public class FormHierarchyActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hierarchy_layout);
+        setTitle(getString(R.string.app_name) + " > " + mForm.getTitle());
+
 
 		// We'll use formhandler to set the CurrentIndex before returning to
 		// FormEntryActivity

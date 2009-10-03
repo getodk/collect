@@ -47,6 +47,7 @@ public class LocalFileManagerList extends ListActivity {
     // private static final int MENU_DELETE = Menu.FIRST;
 
     private AlertDialog mAlertDialog;
+    private Button mActionButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -57,8 +58,8 @@ public class LocalFileManagerList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.local_file_manage_list);
 
-        Button b = (Button) findViewById(R.id.delete_button);
-        b.setOnClickListener(new OnClickListener() {
+        mActionButton = (Button) findViewById(R.id.delete_button);
+        mActionButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
@@ -93,6 +94,9 @@ public class LocalFileManagerList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
+        if (mInstances.isEmpty()) {
+            mActionButton.setVisibility(View.GONE);
+        }
 
         // cleanup
         fda.close();
@@ -163,7 +167,10 @@ public class LocalFileManagerList extends ListActivity {
             // all deletes were successful
             Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
                     Toast.LENGTH_SHORT).show();
-            finish();
+            refreshData();
+            if (mInstances.isEmpty()) {
+                finish();
+            }
         } else {
             // had some failures
             Toast.makeText(
