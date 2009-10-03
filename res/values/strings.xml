@@ -51,7 +51,7 @@ the License.
 	 <string name="save_enter_data_description">%s entry has ended.</string>
 	
 
-   <string name="toggle_selected">Toggle</string>
+   <string name="toggle_selected"></string>
 
 	<string name="enter_url">Enter URL</string>
 

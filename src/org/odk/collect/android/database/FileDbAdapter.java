@@ -67,6 +67,11 @@ public class FileDbAdapter {
     // status for forms
     public static final String STATUS_AVAILABLE = "available";
 
+
+    private static final String added = "Added";
+    private static final String saved = "Saved";
+    private static final String submitted = "Submitted";
+
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
@@ -128,9 +133,16 @@ public class FileDbAdapter {
      * @param timestamp date modified of the file
      * @return date modified of the file formatted as human readable string
      */
-    private String generateMeta(Long timestamp) {
-        Date d = new Date(timestamp);
-        return new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(d);
+    private String generateMeta(Long timestamp, String status) {
+        String tag = added;
+        if (status.equals(STATUS_SUBMITTED)) {
+            tag = submitted;
+        } else if (status.equals(STATUS_COMPLETE) || status.equals(STATUS_INCOMPLETE)) {
+            tag = saved;
+        }
+        String ts =
+                new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(new Date(timestamp));
+        return tag + " on " + ts;
     }
 
 
@@ -190,7 +202,7 @@ public class FileDbAdapter {
         cv.put(KEY_DISPLAY, generateDisplay(f.getAbsolutePath(), type));
 
         // second row of the row display
-        cv.put(KEY_META, generateMeta(f.lastModified()));
+        cv.put(KEY_META, generateMeta(f.lastModified(), status));
 
         long id = -1;
         try {
@@ -359,7 +371,7 @@ public class FileDbAdapter {
         cv.put(KEY_FILEPATH, f.getAbsolutePath());
         cv.put(KEY_HASH, FileUtils.getMd5Hash(f));
         cv.put(KEY_STATUS, status);
-        cv.put(KEY_META, generateMeta(new Date().getTime()));
+        cv.put(KEY_META, generateMeta(new Date().getTime(), status));
 
         return mDb.update(DATABASE_TABLE, cv, KEY_FILEPATH + "='" + path + "'", null) > 0;
     }
