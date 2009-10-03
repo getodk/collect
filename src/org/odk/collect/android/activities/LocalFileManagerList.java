@@ -195,7 +195,6 @@ public class LocalFileManagerList extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        TwoTextItemCheckView t = (TwoTextItemCheckView) v;
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
