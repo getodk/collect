@@ -222,12 +222,12 @@ public class MainMenuActivity extends Activity {
         fda.open();
 
         // count for saved instances
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
         mSavedCount = c.getCount();
         c.close();
 
         // count for completed instances
-        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
         mCompletedCount = c.getCount();
         c.close();
 

@@ -81,7 +81,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
         setHorizontallyScrolling(false);
         setSingleLine(false);
 
-        String s = (String) prompt.getAnswerObject();
+        String s = prompt.getAnswerText();
         if (s != null) {
             setText(s);
         }

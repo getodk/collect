@@ -219,8 +219,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         switch (requestCode) {
             case GlobalConstants.BARCODE_CAPTURE:
-                String s = intent.getStringExtra("SCAN_RESULT");
-                ((QuestionView) mCurrentView).setBinaryData(s);
+                String sb = intent.getStringExtra("SCAN_RESULT");
+                ((QuestionView) mCurrentView).setBinaryData(sb);
                 saveCurrentAnswer(false);
                 break;
             case GlobalConstants.IMAGE_CAPTURE:
@@ -250,11 +250,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveCurrentAnswer(false);
                 refreshCurrentView();
                 break;
-            // Uri uv = intent.getData();
-            // ((QuestionView) mCurrentView).setBinaryData(uv);
-            // saveCurrentAnswer(false);
-            // refreshCurrentView();
-            // break;
+            case GlobalConstants.LOCATION_CAPTURE:
+                String sl = intent.getStringExtra("LOCATION_RESULT");
+                ((QuestionView) mCurrentView).setBinaryData(sl);
+                saveCurrentAnswer(false);
+                break;
         }
     }
 
@@ -648,6 +648,25 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
 
 
+    public void createLocationDialog() {
+            
+        mProgressDialog = new ProgressDialog(this);
+        DialogInterface.OnClickListener geopointButtonListener =
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i("yaw","inside form entry cancel button");
+                    }
+                };
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setTitle(getString(R.string.getting_location));
+                mProgressDialog.setMessage(getString(R.string.please_wait));
+                mProgressDialog.setButton(getString(R.string.cancel),
+                        geopointButtonListener);
+                mProgressDialog.show();
+    }
+    
+    
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */

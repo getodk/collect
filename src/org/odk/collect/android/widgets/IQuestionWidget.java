@@ -16,10 +16,10 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.Context;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.logic.PromptElement;
-
-import android.content.Context;
 
 /**
  * QuestionWidgets are the main elements in QuestionView. QuestionView is a

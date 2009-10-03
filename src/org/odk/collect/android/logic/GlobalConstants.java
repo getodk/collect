@@ -44,6 +44,11 @@ public class GlobalConstants {
      * Request code for returning video data from mediarecorder intent.
      */
     public static final int VIDEO_CAPTURE = 4;
+    
+    /**
+     * Request code for returning video data from geopoint intent.
+     */
+    public static final int LOCATION_CAPTURE = 5;
 
     /**
      * Answer saved with no errors.

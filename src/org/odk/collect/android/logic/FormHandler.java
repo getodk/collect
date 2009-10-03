@@ -601,17 +601,17 @@ public class FormHandler {
         if (!markCompleted) {
             if (c != null && c.getCount() == 0) {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_SAVED);
+                        FileDbAdapter.STATUS_INCOMPLETE);
             } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_SAVED);
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);
             }
         } else {
             if (c != null && c.getCount() == 0) {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_COMPLETED);
+                        FileDbAdapter.STATUS_COMPLETE);
 
             } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETED);
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
             }
         }
         // clean up cursor

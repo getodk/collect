@@ -94,7 +94,7 @@ public class InstanceUploaderList extends ListActivity {
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
         Cursor c =
-                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
         startManagingCursor(c);
 
         String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};

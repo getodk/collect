@@ -67,13 +67,13 @@ public class InstanceChooserTabs extends TabActivity {
 
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
-        saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_SAVED);
+        saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_INCOMPLETE);
         tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(
                 getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
-        completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETED);
+        completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
         tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(
                 getString(R.string.completed_data, mCompletedCount)).setContent(completed));
 
@@ -110,12 +110,12 @@ public class InstanceChooserTabs extends TabActivity {
         fda.open();
 
         // get saved instances
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SAVED);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
         mSavedCount = c.getCount();
         c.close();
 
         // get completed instances
-        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
         mCompletedCount = c.getCount();
         c.close();
 

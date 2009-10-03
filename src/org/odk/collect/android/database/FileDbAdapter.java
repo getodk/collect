@@ -60,8 +60,8 @@ public class FileDbAdapter {
     public static final String TYPE_INSTANCE = "instance";
 
     // status for instances
-    public static final String STATUS_SAVED = "saved";
-    public static final String STATUS_COMPLETED = "completed";
+    public static final String STATUS_INCOMPLETE = "incomplete";
+    public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
 
     // status for forms
