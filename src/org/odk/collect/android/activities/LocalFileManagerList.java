@@ -16,23 +16,25 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.views.TwoTextItemCheckView;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -43,186 +45,158 @@ import java.util.ArrayList;
  */
 public class LocalFileManagerList extends ListActivity {
 
-    // delete an item
-    private static final int MENU_DELETE = Menu.FIRST;
+	// delete an item
+	private static final int MENU_DELETE = Menu.FIRST;
 
-    private AlertDialog mAlertDialog;
+	private AlertDialog mAlertDialog;
 
-    private SimpleCursorAdapter mInstances;
-    private ArrayList<Long> mSelected = new ArrayList<Long>();
+	private SimpleCursorAdapter mInstances;
+	private ArrayList<Long> mSelected = new ArrayList<Long>();
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.local_file_manage_list);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // buildView takes place in resume
-    }
+		Button b = (Button) findViewById(R.id.delete_button);
+		b.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				createDeleteDialog();
+			}
+		});
+		// buildView takes place in resume
+	}
 
+	private void buildView() {
 
-    private void buildView() {
+		// get all mInstances that match the status.
+		FileDbAdapter fda = new FileDbAdapter(this);
+		fda.open();
+		fda.addOrphanForms();
+		Cursor c = fda.fetchAllFiles();
+		startManagingCursor(c);
 
-        // get all mInstances that match the status.
-        FileDbAdapter fda = new FileDbAdapter(this);
-        fda.open();
-        fda.addOrphanForms();
-        Cursor c = fda.fetchAllFiles();
-        startManagingCursor(c);
+		String[] data = new String[] { FileDbAdapter.KEY_DISPLAY,
+				FileDbAdapter.KEY_META };
+		int[] view = new int[] { R.id.text1, R.id.text2 };
 
-        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
-        int[] view = new int[] {R.id.text1, R.id.text2};
+		// render total instance view
+		// mInstances = new SimpleCursorAdapter(this,
+		// R.layout.two_item_multiple_choice, c, data, view);
+		mInstances = new SimpleCursorAdapter(this,
+				R.layout.two_item_multiple_choice, c, data, view);
+		setListAdapter(mInstances);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		getListView().setItemsCanFocus(false);
 
-        // render total instance view
-        mInstances =
-                new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
-        if (c.getCount() > 0) {
-            setListAdapter(mInstances);
-        } else {
-            setContentView(R.layout.list_view_empty);
-        }
+		// cleanup
+		fda.close();
 
-        // cleanup
-        fda.close();
+	}
 
-    }
+	/**
+	 * Create the file delete dialog
+	 */
+	private void createDeleteDialog() {
+		mAlertDialog = new AlertDialog.Builder(this).create();
 
+		mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected
+				.size()));
+		DialogInterface.OnClickListener dialogYesNoListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+				case DialogInterface.BUTTON1: // delete and
+					deleteSelectedFiles();
+					refreshData();
+					break;
+				case DialogInterface.BUTTON2: // do nothing
+					break;
+				}
+			}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, MENU_DELETE, 0, getString(R.string.delete_file)).setIcon(
-                android.R.drawable.ic_menu_delete);
-        return true;
-    }
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
+		mAlertDialog.setButton2(getString(R.string.no), dialogYesNoListener);
+		mAlertDialog.show();
+	}
 
+	private void refreshData() {
+		if (mInstances != null) {
+			mInstances.getCursor().requery();
+		}
+		mSelected.clear();
+		buildView();
+	}
 
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_DELETE:
-                if (mSelected.size() > 0) {
-                    // items selected
-                    createDeleteDialog();
-                } else {
-                    // no items selected
-                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                            Toast.LENGTH_SHORT).show();
-                }
-                return true;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }
+	/**
+	 * Deletes the selected files.First from the database then from the file
+	 * system
+	 */
+	private void deleteSelectedFiles() {
 
+		FileDbAdapter fda = new FileDbAdapter(this);
+		fda.open();
 
-    /**
-     * Create the file delete dialog
-     */
-    private void createDeleteDialog() {
-        mAlertDialog = new AlertDialog.Builder(this).create();
+		// delete removes the file from the database first
+		int deleted = 0;
+		for (int i = 0; i < mSelected.size(); i++) {
+			if (fda.deleteFile(mSelected.get(i))) {
+				deleted++;
+			}
+		}
 
-        mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
-        DialogInterface.OnClickListener dialogYesNoListener =
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int i) {
-                        switch (i) {
-                            case DialogInterface.BUTTON1: // delete and
-                                deleteSelectedFiles();
-                                refreshData();
-                                break;
-                            case DialogInterface.BUTTON2: // do nothing
-                                break;
-                        }
-                    }
+		// remove the actual files and close db
+		fda.removeOrphanForms();
+		fda.removeOrphanInstances();
+		fda.close();
 
+		if (deleted > 0) {
+			// all deletes were successful
+			Toast.makeText(getApplicationContext(),
+					getString(R.string.file_deleted_ok, deleted),
+					Toast.LENGTH_SHORT).show();
+			finish();
+		} else {
+			// had some failures
+			Toast.makeText(
+					getApplicationContext(),
+					getString(R.string.file_deleted_error, mSelected.size()
+							- deleted + " of " + mSelected.size()),
+					Toast.LENGTH_LONG).show();
+		}
 
-                };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.no), dialogYesNoListener);
-        mAlertDialog.show();
-    }
+	}
 
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		TwoTextItemCheckView t = (TwoTextItemCheckView) v;
 
-    private void refreshData() {
-        if (mInstances != null) {
-            mInstances.getCursor().requery();
-        }
-        mSelected.clear();
-        buildView();
-    }
+		// get row id from db
+		Cursor c = (Cursor) getListAdapter().getItem(position);
+		long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+		
+		// add/remove from selected list
+		if (mSelected.contains(k))
+			mSelected.remove(k);
+		else
+			mSelected.add(k);
+	}
 
+	@Override
+	protected void onPause() {
+		if (mAlertDialog != null && mAlertDialog.isShowing()) {
+			mAlertDialog.dismiss();
+		}
+		super.onPause();
+	}
 
-    /**
-     * Deletes the selected files.First from the database then from the file
-     * system
-     */
-    private void deleteSelectedFiles() {
-
-        FileDbAdapter fda = new FileDbAdapter(this);
-        fda.open();
-
-        // delete removes the file from the database first
-        int deleted = 0;
-        for (int i = 0; i < mSelected.size(); i++) {
-            if (fda.deleteFile(mSelected.get(i))) {
-                deleted++;
-            }
-        }
-        
-        // remove the actual files and close db
-        fda.removeOrphanForms();
-        fda.removeOrphanInstances();
-        fda.close();
-
-        if (deleted > 0) {
-            // all deletes were successful
-            Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
-                    Toast.LENGTH_SHORT).show();
-            finish();
-        } else {
-            // had some failures
-            Toast.makeText(
-                    getApplicationContext(),
-                    getString(R.string.file_deleted_error, mSelected.size() - deleted + " of "
-                            + mSelected.size()), Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        // get row id from db
-        Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
-
-        // toggle checkbox and add/remove from selected list
-        CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
-        if (cb.isChecked()) {
-            mSelected.remove(k);
-            cb.setChecked(false);
-        } else {
-            mSelected.add(k);
-            cb.setChecked(true);
-        }
-
-    }
-
-
-    @Override
-    protected void onPause() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
-        }
-        super.onPause();
-    }
-
-
-    @Override
-    protected void onResume() {
-        // update the list (for returning from the remote manager)
-        refreshData();
-        super.onResume();
-    }
+	@Override
+	protected void onResume() {
+		// update the list (for returning from the remote manager)
+		refreshData();
+		super.onResume();
+	}
 
 }

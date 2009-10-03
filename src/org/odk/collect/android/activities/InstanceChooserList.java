@@ -39,110 +39,112 @@ import java.util.regex.Pattern;
  */
 public class InstanceChooserList extends ListActivity {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        buildView();
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		buildView();
+	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		buildView();
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        buildView();
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+	}
 
+	/**
+	 * Stores the path of selected instance in the parent class and finishes.
+	 */
+	@Override
+	protected void onListItemClick(ListView listView, View view, int position,
+			long id) {
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
+		// get full path to the instance
+		Cursor c = (Cursor) getListAdapter().getItem(position);
+		String instancePath = c.getString(c
+				.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
 
+		// create intent for return and store path
+		Intent i = new Intent();
+		i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
+		i.putExtra(GlobalConstants.KEY_FORMPATH,
+				getFormPathFromInstancePath(instancePath));
 
-    /**
-     * Stores the path of selected instance in the parent class and finishes.
-     */
-    @Override
-    protected void onListItemClick(ListView listView, View view, int position, long id) {
+		// return the result to the parent class
+		getParent().setResult(RESULT_OK, i);
 
-        // get full path to the instance
-        Cursor c = (Cursor) getListAdapter().getItem(position);
-        String instancePath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+		// don't close cursor or tab host delays closing
+		finish();
+	}
 
-        // create intent for return and store path
-        Intent i = new Intent();
-        i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
-        i.putExtra(GlobalConstants.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
+	/**
+	 * Retrieves instance information from {@link FileDbAdapter}, composes and
+	 * displays each row.
+	 */
+	private void buildView() {
 
-        // return the result to the parent class
-        getParent().setResult(RESULT_OK, i);
+		// retrieve status information from instance. needed for tabs.
+		Intent i = getIntent();
+		String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
 
-        // don't close cursor or tab host delays closing
-        finish();
-    }
+		// get all instances that match the status.
+		FileDbAdapter fda = new FileDbAdapter(this);
+		fda.open();
+		Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, status);
+		startManagingCursor(c);
 
+		// create data and views for cursor adapter
+		String[] data = new String[] { FileDbAdapter.KEY_DISPLAY,
+				FileDbAdapter.KEY_META };
+		int[] view = new int[] { android.R.id.text1, android.R.id.text2 };
 
-    /**
-     * Retrieves instance information from {@link FileDbAdapter}, composes and
-     * displays each row.
-     */
-    private void buildView() {
+		// render total instance view
+		SimpleCursorAdapter instances = new SimpleCursorAdapter(this,
+				android.R.layout.simple_list_item_2, c, data, view);
+		if (c.getCount() > 0) {
+			setListAdapter(instances);
+		} else {
+			setContentView(R.layout.chooser_list_layout);
+		}
 
-        // retrieve status information from instance. needed for tabs.
-        Intent i = getIntent();
-        String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
+		// cleanup
+		fda.close();
 
-        // get all instances that match the status.
-        FileDbAdapter fda = new FileDbAdapter(this);
-        fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, status);
-        startManagingCursor(c);
+	}
 
-        // create data and views for cursor adapter
-        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
-        int[] view = new int[] {android.R.id.text1, android.R.id.text2};
+	/**
+	 * Given an instance path, return the full path to the form
+	 * 
+	 * @param instancePath
+	 *            full path to the instance
+	 * @return formPath full path to the form the instance was generated from
+	 */
+	private String getFormPathFromInstancePath(String instancePath) {
 
-        // render total instance view
-        SimpleCursorAdapter instances =
-                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
-        if (c.getCount() > 0) {
-            setListAdapter(instances);
-        } else {
-            setContentView(R.layout.list_view_empty);
-        }
+		// trim the timestamp
+		String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
+		Pattern pattern = Pattern.compile(regex);
+		String formName = pattern.split(instancePath)[0];
+		formName = formName.substring(formName.lastIndexOf("/") + 1);
 
-        // cleanup
-        fda.close();
+		File xmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName
+				+ ".xml");
+		File xhtmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName
+				+ ".xhtml");
 
-    }
-
-
-    /**
-     * Given an instance path, return the full path to the form
-     * 
-     * @param instancePath full path to the instance
-     * @return formPath full path to the form the instance was generated from
-     */
-    private String getFormPathFromInstancePath(String instancePath) {
-
-        // trim the timestamp
-        String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
-        Pattern pattern = Pattern.compile(regex);
-        String formName = pattern.split(instancePath)[0];
-        formName = formName.substring(formName.lastIndexOf("/") + 1);
-
-        File xmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName + ".xml");
-        File xhtmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName + ".xhtml");
-
-        // form is either xml or xhtml file. find the appropriate one.
-        if (xmlFile.exists()) {
-            return xmlFile.getAbsolutePath();
-        } else if (xhtmlFile.exists()) {
-            return xhtmlFile.getAbsolutePath();
-        } else {
-            return null;
-        }
-    }
-
+		// form is either xml or xhtml file. find the appropriate one.
+		if (xmlFile.exists()) {
+			return xmlFile.getAbsolutePath();
+		} else if (xhtmlFile.exists()) {
+			return xhtmlFile.getAbsolutePath();
+		} else {
+			return null;
+		}
+	}
 
 }

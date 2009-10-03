@@ -6,8 +6,8 @@
 	android:layout_alignParentTop="true">
 
 	<Button
-		android:id="@+id/upload_button"
-		android:text="@string/add_file"
+		android:id="@+id/delete_button"
+		android:text="@string/delete_file"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:padding="15px"
@@ -16,9 +16,9 @@
 
 	<ListView
 		android:id="@android:id/list"
-		android:layout_width="fill_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_above="@id/upload_button"
+		android:layout_above="@id/delete_button"
 		android:layout_alignParentTop="true" />
 	<TextView
 		android:id="@android:id/empty"

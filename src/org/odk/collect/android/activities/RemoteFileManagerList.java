@@ -165,10 +165,10 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             mFileAdapter =
                     new ArrayAdapter<String>(this,
                             android.R.layout.simple_list_item_multiple_choice, mFormName);
-
+            	setListAdapter(mFileAdapter);	
                 getListView().setItemsCanFocus(false);
                 getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                setListAdapter(mFileAdapter);
+
         }
     }
 
