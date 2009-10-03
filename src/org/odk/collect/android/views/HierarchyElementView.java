@@ -6,11 +6,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.logic.HierarchyElement;
 
 
 public class HierarchyElementView extends RelativeLayout {
-    
+
     private TextView mPrimaryTextView;
     private TextView mSecondaryTextView;
     private ImageView mIcon;
@@ -29,8 +30,10 @@ public class HierarchyElementView extends RelativeLayout {
         mPrimaryTextView = new TextView(context);
         mPrimaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
         mPrimaryTextView.setText(it.getPrimaryText());
+        mPrimaryTextView.setPadding(0, 7, 0, 0);
+
         mPrimaryTextView.setId(2);
-        LayoutParams l = 
+        LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
         l.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
@@ -38,6 +41,8 @@ public class HierarchyElementView extends RelativeLayout {
 
         mSecondaryTextView = new TextView(context);
         mSecondaryTextView.setText(it.getSecondaryText());
+        mSecondaryTextView.setPadding(0, 0, 0, 7);
+
         mSecondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
         LayoutParams lp =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,

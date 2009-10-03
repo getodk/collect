@@ -155,6 +155,19 @@ the License.
 <string name="enter">enter</string>
 <string name="send">send</string>
 
+<string name="go_back">Previous Level</string>
+<string name="jump_to">Jump to Form</string>
+<string name="jump_to_start">Beginning of Form</string>
+<string name="jump_to_end">End of Form</string>
+
+<string name="repeated_group">[Repeated Group]</string>
+<string name="no_answer">[Not Answered]</string>
+
+
+
+
+
+
 
 	 
 	 <string name="view_hierarchy">Jump to Question</string>
