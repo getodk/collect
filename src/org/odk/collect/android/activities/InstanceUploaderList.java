@@ -54,7 +54,7 @@ public class InstanceUploaderList extends ListActivity {
     private static final int INSTANCE_UPLOADER = 0;
 
     private Button mActionButton;
-    private ToggleButton mToggleButton;
+//    private ToggleButton mToggleButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -65,11 +65,11 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
 
-        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-        mToggleButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View arg0) {
-            }
-        });
+//        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+//        mToggleButton.setOnClickListener(new OnClickListener() {
+//            public void onClick(View arg0) {
+//            }
+//        });
 
         mActionButton = (Button) findViewById(R.id.upload_button);
         mActionButton.setOnClickListener(new OnClickListener() {
@@ -112,7 +112,7 @@ public class InstanceUploaderList extends ListActivity {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         if (mInstances.isEmpty()) {
-            mToggleButton.setVisibility(View.GONE);
+//            mToggleButton.setVisibility(View.GONE);
             mActionButton.setVisibility(View.GONE);
         }
 

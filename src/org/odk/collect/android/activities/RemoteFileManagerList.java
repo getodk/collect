@@ -73,7 +73,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private Button mActionButton;
-    private ToggleButton mToggleButton;
+    // private ToggleButton mToggleButton;
 
 
 
@@ -93,12 +93,12 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
 
-        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-        mToggleButton.setVisibility(View.GONE);
-        mToggleButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View arg0) {
-            }
-        });
+//        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+//        mToggleButton.setVisibility(View.GONE);
+//        mToggleButton.setOnClickListener(new OnClickListener() {
+//            public void onClick(View arg0) {
+//            }
+//        });
 
         mActionButton = (Button) findViewById(R.id.add_button);
         mActionButton.setVisibility(View.GONE);
@@ -183,7 +183,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             getListView().setItemsCanFocus(false);
             getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             if (!mFileAdapter.isEmpty()) {
-                mToggleButton.setVisibility(View.VISIBLE);
+//                mToggleButton.setVisibility(View.VISIBLE);
                 mActionButton.setVisibility(View.VISIBLE);
             }
 
