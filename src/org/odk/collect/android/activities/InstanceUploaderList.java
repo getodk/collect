@@ -111,10 +111,13 @@ public class InstanceUploaderList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        if (mInstances.isEmpty()) {
-//            mToggleButton.setVisibility(View.GONE);
-            mActionButton.setVisibility(View.GONE);
+        if (mInstances.getCount() == 0) {
+            // mToggleButton.setVisibility(View.GONE);
+            mActionButton.setEnabled(false);
+        } else {
+            mActionButton.setEnabled(true);
         }
+
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));

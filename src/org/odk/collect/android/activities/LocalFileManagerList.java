@@ -21,17 +21,16 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.views.TwoTextItemCheckView;
 
 import java.util.ArrayList;
 
@@ -49,7 +48,7 @@ public class LocalFileManagerList extends ListActivity {
 
     private AlertDialog mAlertDialog;
     private Button mActionButton;
-//    private Button mToggleButton;
+    // private Button mToggleButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -61,11 +60,11 @@ public class LocalFileManagerList extends ListActivity {
         setContentView(R.layout.local_file_manage_list);
 
 
-//        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-//        mToggleButton.setOnClickListener(new OnClickListener() {
-//            public void onClick(View arg0) {
-//            }
-//        });
+        // mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        // mToggleButton.setOnClickListener(new OnClickListener() {
+        // public void onClick(View arg0) {
+        // }
+        // });
 
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setOnClickListener(new OnClickListener() {
@@ -103,9 +102,11 @@ public class LocalFileManagerList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        if (mInstances.isEmpty()) {
-//            mToggleButton.setVisibility(View.GONE);
-            mActionButton.setVisibility(View.GONE);
+        if (mInstances.getCount() == 0) {
+            // mToggleButton.setVisibility(View.GONE);
+            mActionButton.setEnabled(false);
+        } else {
+            mActionButton.setEnabled(true);
         }
 
         // cleanup
@@ -221,6 +222,8 @@ public class LocalFileManagerList extends ListActivity {
     protected void onResume() {
         // update the list (for returning from the remote manager)
         refreshData();
+        Log.i("yaw", "resuming");
+
         super.onResume();
     }
 

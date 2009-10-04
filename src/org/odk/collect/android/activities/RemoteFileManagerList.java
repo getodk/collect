@@ -101,7 +101,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 //        });
 
         mActionButton = (Button) findViewById(R.id.add_button);
-        mActionButton.setVisibility(View.GONE);
+        mActionButton.setEnabled(false);
         mActionButton.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
@@ -182,9 +182,12 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             setListAdapter(mFileAdapter);
             getListView().setItemsCanFocus(false);
             getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-            if (!mFileAdapter.isEmpty()) {
+            if (mFileAdapter.getCount() == 0) {
 //                mToggleButton.setVisibility(View.VISIBLE);
-                mActionButton.setVisibility(View.VISIBLE);
+                mActionButton.setEnabled(false);
+            } else {
+                mActionButton.setEnabled(true);
+
             }
 
         }
