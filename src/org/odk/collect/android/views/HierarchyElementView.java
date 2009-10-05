@@ -1,12 +1,12 @@
 package org.odk.collect.android.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.logic.HierarchyElement;
 
 
@@ -20,6 +20,8 @@ public class HierarchyElementView extends RelativeLayout {
     public HierarchyElementView(Context context, HierarchyElement it) {
         super(context);
 
+        setColor(it.getColor());
+        
         mIcon = new ImageView(context);
         mIcon.setImageDrawable(it.getIcon());
         mIcon.setId(1);
@@ -31,7 +33,6 @@ public class HierarchyElementView extends RelativeLayout {
         mPrimaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
         mPrimaryTextView.setText(it.getPrimaryText());
         mPrimaryTextView.setPadding(0, 7, 0, 0);
-
         mPrimaryTextView.setId(2);
         LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -42,7 +43,6 @@ public class HierarchyElementView extends RelativeLayout {
         mSecondaryTextView = new TextView(context);
         mSecondaryTextView.setText(it.getSecondaryText());
         mSecondaryTextView.setPadding(0, 0, 0, 7);
-
         mSecondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
         LayoutParams lp =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -67,6 +67,9 @@ public class HierarchyElementView extends RelativeLayout {
         mIcon.setImageDrawable(icon);
     }
 
+    public void setColor(int color) {
+        this.setBackgroundColor(color);
+    }
 
 
 }

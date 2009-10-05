@@ -160,8 +160,11 @@ the License.
 <string name="jump_to_start">Beginning of Form</string>
 <string name="jump_to_end">End of Form</string>
 
-<string name="repeated_group">[Repeated Group]</string>
-<string name="no_answer">[Not Answered]</string>
+<string name="expanded_group">Expanded Group</string>
+<string name="collapsed_group">Collapsed Group</string>
+
+<string name="repeated_group">Repeated Group</string>
+<string name="no_answer">[No Answer]</string>
 
 
 

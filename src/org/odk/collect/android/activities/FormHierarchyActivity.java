@@ -3,6 +3,7 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,7 +49,7 @@ public class FormHierarchyActivity extends ListActivity {
     private static final int COLLAPSED = 3;
     private static final int QUESTION = 4;
 
-    private final String mIndent = " -- ";
+    private final String mIndent = "     ";
 
     private Button mBackButton;
 
@@ -281,7 +282,7 @@ public class FormHierarchyActivity extends ListActivity {
                     Log.e("Carl", "adding new group: " + currentGroupName + " in repeat");
                     HierarchyElement h = formList.get(formList.size() - 1);
                     h.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                            + groupCount++, "", null, CHILD, currentIndex));
+                            + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
                 }
 
                 // if it's not a new repeat, we skip it because it's in the
@@ -309,17 +310,18 @@ public class FormHierarchyActivity extends ListActivity {
                     // Make sure the next element is in this group, else no
                     // reason to add it
                     if (nextIndexName.startsWith(repeatGroup)) {
-                        groupCount = 0;
+                        groupCount = 1;
                         // add the group, but this index is also the first
                         // instance of a
                         // repeat, so add it as a child of the group
                         repeatedGroupName = g.getLongText();
                         HierarchyElement group =
-                                new HierarchyElement(repeatedGroupName, getString(R.string.repeated_group),
-                                        getResources().getDrawable(R.drawable.arrow_right_float),
+                                new HierarchyElement(repeatedGroupName,
+                                        getString(R.string.collapsed_group), getResources()
+                                                .getDrawable(R.drawable.expander_ic_minimized),Color.WHITE,
                                         COLLAPSED, currentIndex);
                         group.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                                + groupCount++, "", null, CHILD, currentIndex));
+                                + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
                         formList.add(group);
                     } else {
                         Log.e("Carl", "no children, so skipping");
@@ -336,7 +338,7 @@ public class FormHierarchyActivity extends ListActivity {
                 FormElementBinding feb = new FormElementBinding(null, currentIndex, mForm);
                 IAnswerData a = feb.getValue();
                 if (a != null) answer = a.getDisplayText();
-                formList.add(new HierarchyElement(q.getLongText(), answer, null, QUESTION,
+                formList.add(new HierarchyElement(q.getLongText(), answer, null, Color.WHITE, QUESTION,
                         currentIndex));
             } else {
                 Log.e(t, "we shouldn't get here");
@@ -385,7 +387,9 @@ public class FormHierarchyActivity extends ListActivity {
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(getResources().getDrawable(R.drawable.arrow_right_float));
+                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
+                h.setSecondaryText(getString(R.string.collapsed_group));
+                h.setColor(Color.WHITE);
                 break;
             case COLLAPSED:
                 Log.e("carl", "is collapsed group, expanding");
@@ -396,7 +400,10 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(getResources().getDrawable(android.R.drawable.arrow_down_float));
+                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
+                h.setSecondaryText(getString(R.string.expanded_group));
+                h.setColor(Color.LTGRAY);
+
                 break;
             case QUESTION:
                 // Toast.makeText(this, "Question", Toast.LENGTH_SHORT).show();
