@@ -172,13 +172,21 @@ public class FormHierarchyActivity extends ListActivity {
     }
 
 
+    /*
+     * This is a very not ideal way to do this, but JR needs to have some mechanism detect the 
+     * 'level' of an index and it doesn't right now.
+     * This basically turns a formindex to a string and checks to see if it contains two commas and an underscore.
+     * If there's no underscore you're at the root level of a form (ie 8, 0, 0, 0).  
+     * If there is, you're probably in an instance of a repeated group (ie 3, 2_0, 0).
+     */
     private boolean indexIsBeginning(FormIndex fi) {
         String startTest = fi.toString();
         int firstComma = startTest.indexOf(",");
         Log.e("carl", "firstcomma found at " + firstComma);
         int secondComma = startTest.indexOf(",", firstComma + 1);
         Log.e("carl", "secondcomma found at " + secondComma);
-        boolean beginning = (secondComma == -1);
+        int underscore = startTest.indexOf("_");
+        boolean beginning = (secondComma == -1 || underscore == -1);
         return beginning;
     }
 
@@ -252,8 +260,8 @@ public class FormHierarchyActivity extends ListActivity {
         while (!isEnd(currentIndex)) {
             FormIndex normalizedLevel = currentIndex;
             for (int i = 0; i < level; i++) {
-                normalizedLevel = normalizedLevel.getNextLevel();
-                Log.e("carl", "incrementing normalized level");
+            		normalizedLevel = normalizedLevel.getNextLevel();
+            		Log.e("carl", "incrementing normalized level");
             }
             Log.e("carl", "index # is: " + currentIndex + " for: "
                     + mForm.getChildInstanceRef(currentIndex).toString(false));
