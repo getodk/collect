@@ -11,11 +11,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -25,7 +27,9 @@ import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.HierarchyElement;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -282,7 +286,7 @@ public class FormHierarchyActivity extends ListActivity {
                     Log.e("Carl", "adding new group: " + currentGroupName + " in repeat");
                     HierarchyElement h = formList.get(formList.size() - 1);
                     h.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                            + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
+                            + groupCount++, "", null, Color.WHITE, CHILD, currentIndex));
                 }
 
                 // if it's not a new repeat, we skip it because it's in the
@@ -318,10 +322,10 @@ public class FormHierarchyActivity extends ListActivity {
                         HierarchyElement group =
                                 new HierarchyElement(repeatedGroupName,
                                         getString(R.string.collapsed_group), getResources()
-                                                .getDrawable(R.drawable.expander_ic_minimized),Color.WHITE,
-                                        COLLAPSED, currentIndex);
+                                                .getDrawable(R.drawable.expander_ic_minimized),
+                                        Color.WHITE, COLLAPSED, currentIndex);
                         group.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                                + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
+                                + groupCount++, "", null, Color.WHITE, CHILD, currentIndex));
                         formList.add(group);
                     } else {
                         Log.e("Carl", "no children, so skipping");
@@ -337,9 +341,18 @@ public class FormHierarchyActivity extends ListActivity {
                 String answer = "";
                 FormElementBinding feb = new FormElementBinding(null, currentIndex, mForm);
                 IAnswerData a = feb.getValue();
-                if (a != null) answer = a.getDisplayText();
-                formList.add(new HierarchyElement(q.getLongText(), answer, null, Color.WHITE, QUESTION,
-                        currentIndex));
+                if (a != null) {
+                    if (feb.instanceNode.dataType == Constants.DATATYPE_DATE) {
+                        answer = new SimpleDateFormat("MMM dd, yyyy").format((Date) ((DateData) a).getValue());
+                    } else {
+                        answer = a.getDisplayText();
+                    }
+                }
+
+                String questionText = feb.form.fillTemplateString(q.getLongText(), feb.instanceRef);
+
+                formList.add(new HierarchyElement(questionText, answer, null, Color.WHITE,
+                        QUESTION, currentIndex));
             } else {
                 Log.e(t, "we shouldn't get here");
             }
@@ -402,7 +415,7 @@ public class FormHierarchyActivity extends ListActivity {
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
                 h.setSecondaryText(getString(R.string.expanded_group));
-                h.setColor(Color.LTGRAY);
+                h.setColor(Color.WHITE);
 
                 break;
             case QUESTION:
