@@ -46,6 +46,7 @@ public class HierarchyListAdapter extends BaseAdapter {
             hev.setPrimaryText(mItems.get(position).getPrimaryText());
             hev.setSecondaryText(mItems.get(position).getSecondaryText());
             hev.setIcon(mItems.get(position).getIcon());
+            hev.setColor(mItems.get(position).getColor());
         }
         return hev;
 

@@ -286,7 +286,7 @@ public class FormHierarchyActivity extends ListActivity {
                     Log.e("Carl", "adding new group: " + currentGroupName + " in repeat");
                     HierarchyElement h = formList.get(formList.size() - 1);
                     h.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                            + groupCount++, "", null, Color.WHITE, CHILD, currentIndex));
+                            + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
                 }
 
                 // if it's not a new repeat, we skip it because it's in the
@@ -325,7 +325,7 @@ public class FormHierarchyActivity extends ListActivity {
                                                 .getDrawable(R.drawable.expander_ic_minimized),
                                         Color.WHITE, COLLAPSED, currentIndex);
                         group.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                                + groupCount++, "", null, Color.WHITE, CHILD, currentIndex));
+                                + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
                         formList.add(group);
                     } else {
                         Log.e("Carl", "no children, so skipping");
@@ -415,7 +415,7 @@ public class FormHierarchyActivity extends ListActivity {
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
                 h.setSecondaryText(getString(R.string.expanded_group));
-                h.setColor(Color.WHITE);
+                h.setColor(Color.LTGRAY);
 
                 break;
             case QUESTION:
