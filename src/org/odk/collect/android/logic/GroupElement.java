@@ -29,7 +29,6 @@ public class GroupElement {
 
 
     public GroupElement(String groupText, int repeatCount, boolean repeats) {
-
         mGroupText = groupText;
         mRepeatCount = repeatCount;
         mRepeats = repeats;

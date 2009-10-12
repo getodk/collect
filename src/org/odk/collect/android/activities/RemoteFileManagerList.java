@@ -66,14 +66,9 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
-    // private static final int MENU_ADD = Menu.FIRST+1;
-
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private Button mActionButton;
-    // private ToggleButton mToggleButton;
-
-
 
     private FormDownloaderTask mFormDownloadTask;
 
@@ -91,13 +86,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
 
-//        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-//        mToggleButton.setVisibility(View.GONE);
-//        mToggleButton.setOnClickListener(new OnClickListener() {
-//            public void onClick(View arg0) {
-//            }
-//        });
-
         mActionButton = (Button) findViewById(R.id.add_button);
         mActionButton.setEnabled(false);
         mActionButton.setOnClickListener(new OnClickListener() {
@@ -105,7 +93,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             public void onClick(View arg0) {
                 downloadSelectedFiles();
             }
-
         });
 
         setupView();
@@ -113,6 +100,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
 
     private void setupView() {
+        // TODO: this will actually re-download the list every time the view
+        // flips. Probably not desired behavior.
 
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);
@@ -143,12 +132,10 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                         + "/formList";
         mFormDownloadTask.setDownloadServer(url);
         mFormDownloadTask.execute();
-
     }
 
 
     private void buildView() {
-
         // create xml document
         File file = new File(GlobalConstants.CACHE_PATH + mFormDownloadTask.formList);
         if (file.exists()) {
@@ -181,13 +168,11 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             getListView().setItemsCanFocus(false);
             getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             if (mFileAdapter.getCount() == 0) {
-//                mToggleButton.setVisibility(View.VISIBLE);
                 mActionButton.setEnabled(false);
             } else {
                 mActionButton.setEnabled(true);
 
             }
-
         }
     }
 
@@ -246,7 +231,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
      * Adds the selected form
      */
     private void downloadSelectedFiles() {
-
         totalCount = 0;
         ArrayList<String> files = new ArrayList<String>();
 
@@ -310,7 +294,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
 
     public void downloadingComplete(ArrayList<String> result) {
-
         int resultSize = 0;
         dismissDialog(PROGRESS_DIALOG);
 
@@ -345,9 +328,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                     finish();
                 }
                 getListView().clearChoices();
-
             }
-
         }
     }
 

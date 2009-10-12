@@ -16,23 +16,22 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -43,12 +42,8 @@ import java.util.ArrayList;
  */
 public class LocalFileManagerList extends ListActivity {
 
-    // delete an item
-    // private static final int MENU_DELETE = Menu.FIRST;
-
     private AlertDialog mAlertDialog;
     private Button mActionButton;
-    // private Button mToggleButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -58,14 +53,6 @@ public class LocalFileManagerList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.local_file_manage_list);
-
-
-        // mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-        // mToggleButton.setOnClickListener(new OnClickListener() {
-        // public void onClick(View arg0) {
-        // }
-        // });
-
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -82,8 +69,7 @@ public class LocalFileManagerList extends ListActivity {
     }
 
 
-    private void buildView() {
-
+    private void refreshView() {
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
@@ -95,23 +81,15 @@ public class LocalFileManagerList extends ListActivity {
         int[] view = new int[] {R.id.text1, R.id.text2};
 
         // render total instance view
-        // mInstances = new SimpleCursorAdapter(this,
-        // R.layout.two_item_multiple_choice, c, data, view);
         mInstances =
                 new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        if (mInstances.getCount() == 0) {
-            // mToggleButton.setVisibility(View.GONE);
-            mActionButton.setEnabled(false);
-        } else {
-            mActionButton.setEnabled(true);
-        }
+        mActionButton.setEnabled(!(mInstances.getCount() == 0));
 
         // cleanup
         fda.close();
-
     }
 
 
@@ -148,7 +126,7 @@ public class LocalFileManagerList extends ListActivity {
             mInstances.getCursor().requery();
         }
         mSelected.clear();
-        buildView();
+        refreshView();
     }
 
 
@@ -157,7 +135,6 @@ public class LocalFileManagerList extends ListActivity {
      * system
      */
     private void deleteSelectedFiles() {
-
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
 
@@ -222,8 +199,6 @@ public class LocalFileManagerList extends ListActivity {
     protected void onResume() {
         // update the list (for returning from the remote manager)
         refreshData();
-        Log.i("yaw", "resuming");
-
         super.onResume();
     }
 

@@ -47,6 +47,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
 
+
     public GeoPointWidget(Context context) {
         super(context);
     }
@@ -102,8 +103,9 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         // when you press the button
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getContext(),GeoPointActivity.class);
-                ((Activity) getContext()).startActivityForResult(i,GlobalConstants.LOCATION_CAPTURE);
+                Intent i = new Intent(getContext(), GeoPointActivity.class);
+                ((Activity) getContext()).startActivityForResult(i,
+                        GlobalConstants.LOCATION_CAPTURE);
 
             }
         });
@@ -111,7 +113,6 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         // finish complex layout
         addView(mActionButton);
         addView(mAnswerDisplay);
-
     }
 
 
@@ -158,6 +159,5 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         String[] sa = s.split(" ");
         mAnswerDisplay.setText("Lat: " + formatGps(Double.parseDouble(sa[0]), "lat") + "\nLon: "
                 + formatGps(Double.parseDouble(sa[1]), "lon"));
-  
     }
 }

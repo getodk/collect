@@ -54,7 +54,6 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
 
     @Override
     protected ArrayList<String> doInBackground(String... values) {
-
         if (mUrl != null && mUrl.endsWith("formList")) {
             if (downloadFile(mUrl, formList)) {
                 return mDownloadedForms;
@@ -71,12 +70,10 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
             }
             return mDownloadedForms;
         }
-
     }
 
 
     private boolean downloadFile(String url, String name) {
-
         // create url
         URL u = null;
         try {
@@ -112,7 +109,6 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
                     f = new File(base + "/" + filename + " " + i + "." + ext);
                     i++;
                 }
-
             }
 
             OutputStream os = new FileOutputStream(f);
@@ -137,7 +133,6 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
 
     @Override
     protected void onPostExecute(ArrayList<String> value) {
-
         synchronized (this) {
             if (mStateListener != null) {
                 mStateListener.downloadingComplete(value);

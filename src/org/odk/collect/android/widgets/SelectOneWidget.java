@@ -117,7 +117,6 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
 }

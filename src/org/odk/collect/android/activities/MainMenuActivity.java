@@ -68,25 +68,9 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        buildView();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshView();
-    }
-
-
-    /**
-     * Create View with buttons to launch activities.
-     */
-    private void buildView() {
-
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-        
+
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
@@ -98,7 +82,7 @@ public class MainMenuActivity extends Activity {
                 } else {
                     mFormsCount = 0;
                 }
-                
+
                 if (mFormsCount == 0 && mAvailableCount == 0) {
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.no_items_error, getString(R.string.enter)),
@@ -141,7 +125,6 @@ public class MainMenuActivity extends Activity {
                 }
 
             }
-
         });
 
         // manage forms button. no result expected.
@@ -152,12 +135,20 @@ public class MainMenuActivity extends Activity {
                 startActivity(i);
             }
         });
-
-
-        // gets count and updates buttons.
-        refreshView();
-
     }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshView();
+    }
+
 
 
     /**
@@ -165,7 +156,6 @@ public class MainMenuActivity extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
         if (resultCode == RESULT_CANCELED) {
             return;
         }
@@ -215,13 +205,13 @@ public class MainMenuActivity extends Activity {
      * Updates the button count and sets the text in the buttons.
      */
     private void updateButtonCount() {
-
         // create adapter
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
 
         // count for saved instances
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
+        Cursor c =
+                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
         mSavedCount = c.getCount();
         c.close();
 

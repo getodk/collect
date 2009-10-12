@@ -160,7 +160,6 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
 }

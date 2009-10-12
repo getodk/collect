@@ -49,6 +49,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private InstanceUploaderTask mInstanceUploaderTask;
     private int totalCount = -1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +64,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             return;
         }
 
+        // get the task if we've changed orientations.  If it's null it's a new upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mInstanceUploaderTask == null) {
-
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
             mInstanceUploaderTask = new InstanceUploaderTask();
@@ -87,15 +88,15 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     // TODO: if uploadingComplete() when activity backgrounded, won't work.
+    // just check task status in onResume
     public void uploadingComplete(ArrayList<String> result) {
-
         int resultSize = result.size();
         boolean success = false;
         if (resultSize == totalCount) {
             Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
                     Toast.LENGTH_SHORT).show();
-            
-            success=true;
+
+            success = true;
         } else {
             String s = totalCount - resultSize + " of " + totalCount;
             Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
@@ -105,7 +106,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         Intent in = new Intent();
         in.putExtra(GlobalConstants.KEY_SUCCESS, success);
         setResult(RESULT_OK, in);
-        
+
         // for each path, update the status
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
@@ -114,8 +115,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
         fda.close();
         finish();
-
     }
+
 
     public void progressUpdate(int progress, int total) {
         mProgressDialog.setMessage("Sending " + progress + " of " + total + " item(s)");

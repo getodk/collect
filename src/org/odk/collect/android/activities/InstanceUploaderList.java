@@ -51,7 +51,6 @@ public class InstanceUploaderList extends ListActivity {
     private static final int INSTANCE_UPLOADER = 0;
 
     private Button mActionButton;
-//    private ToggleButton mToggleButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -61,12 +60,6 @@ public class InstanceUploaderList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
-
-//        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-//        mToggleButton.setOnClickListener(new OnClickListener() {
-//            public void onClick(View arg0) {
-//            }
-//        });
 
         mActionButton = (Button) findViewById(R.id.upload_button);
         mActionButton.setOnClickListener(new OnClickListener() {
@@ -84,7 +77,6 @@ public class InstanceUploaderList extends ListActivity {
             }
 
         });
-        // buildView takes place in resume
     }
 
 
@@ -92,7 +84,7 @@ public class InstanceUploaderList extends ListActivity {
      * Retrieves instance information from {@link FileDbAdapter}, composes and
      * displays each row.
      */
-    private void buildView() {
+    private void refreshView() {
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
@@ -108,13 +100,7 @@ public class InstanceUploaderList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        if (mInstances.getCount() == 0) {
-            // mToggleButton.setVisibility(View.GONE);
-            mActionButton.setEnabled(false);
-        } else {
-            mActionButton.setEnabled(true);
-        }
-
+        mActionButton.setEnabled(!(mInstances.getCount() == 0));
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
@@ -125,8 +111,7 @@ public class InstanceUploaderList extends ListActivity {
 
 
     private void uploadSelectedFiles() {
-
-        ArrayList<String> allInstances = new ArrayList<String>();
+        ArrayList<String> selectedInstances = new ArrayList<String>();
 
         // get all checked items
         FileDbAdapter fda = new FileDbAdapter(this);
@@ -138,12 +123,12 @@ public class InstanceUploaderList extends ListActivity {
             c = fda.fetchFile(mSelected.get(i));
             startManagingCursor(c);
             String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            allInstances.add(s);
+            selectedInstances.add(s);
         }
 
         // bundle intent with upload files
         Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
+        i.putExtra(GlobalConstants.KEY_INSTANCES, selectedInstances);
         startActivityForResult(i, INSTANCE_UPLOADER);
         fda.close();
     }
@@ -154,7 +139,7 @@ public class InstanceUploaderList extends ListActivity {
             mInstances.getCursor().requery();
         }
         mSelected.clear();
-        buildView();
+        refreshView();
     }
 
 

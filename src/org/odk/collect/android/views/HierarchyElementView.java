@@ -20,7 +20,7 @@ public class HierarchyElementView extends RelativeLayout {
         super(context);
 
         setColor(it.getColor());
-        
+
         mIcon = new ImageView(context);
         mIcon.setImageDrawable(it.getIcon());
         mIcon.setId(1);
@@ -65,6 +65,7 @@ public class HierarchyElementView extends RelativeLayout {
     public void setIcon(Drawable icon) {
         mIcon.setImageDrawable(icon);
     }
+
 
     public void setColor(int color) {
         this.setBackgroundColor(color);

@@ -47,7 +47,6 @@ public class IntegerWidget extends StringWidget {
 
     @Override
     public void buildView(PromptElement prompt) {
-        
         // formatting
         setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -63,18 +62,17 @@ public class IntegerWidget extends StringWidget {
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
         setFilters(fa);
-        
+
         if (prompt.isReadOnly()) {
             setBackgroundDrawable(null);
             setFocusable(false);
             setClickable(false);
         }
-        
+
         Integer i = (Integer) prompt.getAnswerObject();
         if (i != null) {
             setText(i.toString());
         }
-     
     }
 
 
@@ -90,6 +88,7 @@ public class IntegerWidget extends StringWidget {
                 return null;
             }
         }
-
     }
+    
+    
 }

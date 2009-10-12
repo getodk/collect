@@ -37,69 +37,53 @@ import org.odk.collect.android.logic.GlobalConstants;
  */
 public class FormChooserList extends ListActivity {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.chooser_list_layout);
-		buildView();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.chooser_list_layout);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
+        refreshView();
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-	}
+    /**
+     * Get form list from database and insert into view.
+     */
+    private void refreshView() {
+        // get all forms that match the status.
+        FileDbAdapter fda = new FileDbAdapter(this);
+        fda.open();
+        fda.addOrphanForms();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
+        startManagingCursor(c);
 
-	/**
-	 * Get form list from database and insert into view.
-	 */
-	private void buildView() {
+        // create data and views for cursor adapter
+        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
+        int[] view = new int[] {android.R.id.text1, android.R.id.text2};
 
-		setTitle(getString(R.string.app_name) + " > "
-				+ getString(R.string.enter_data));
+        // render total instance view
+        SimpleCursorAdapter instances =
+                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+        setListAdapter(instances);
+        fda.close();
+    }
 
-		// get all forms that match the status.
-		FileDbAdapter fda = new FileDbAdapter(this);
-		fda.open();
-		fda.addOrphanForms();
-		Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
-		startManagingCursor(c);
 
-		// create data and views for cursor adapter
-		String[] data = new String[] { FileDbAdapter.KEY_DISPLAY,
-				FileDbAdapter.KEY_META };
-		int[] view = new int[] { android.R.id.text1, android.R.id.text2 };
+    /**
+     * Stores the path of selected form and finishes.
+     */
+    @Override
+    protected void onListItemClick(ListView listView, View view, int position, long id) {
+        // get full path to the form
+        Cursor c = (Cursor) getListAdapter().getItem(position);
+        String formPath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
 
-		// render total instance view
-		SimpleCursorAdapter instances = new SimpleCursorAdapter(this,
-				android.R.layout.simple_list_item_2, c, data, view);
-		setListAdapter(instances);
-		fda.close();
-	}
+        // create intent for return and store path
+        Intent i = new Intent();
+        i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
+        setResult(RESULT_OK, i);
 
-	/**
-	 * Stores the path of selected form and finishes.
-	 */
-	@Override
-	protected void onListItemClick(ListView listView, View view, int position,
-			long id) {
-
-		// get full path to the form
-		Cursor c = (Cursor) getListAdapter().getItem(position);
-		String formPath = c.getString(c
-				.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-
-		// create intent for return and store path
-		Intent i = new Intent();
-		i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
-		setResult(RESULT_OK, i);
-
-		finish();
-	}
+        finish();
+    }
 
 }

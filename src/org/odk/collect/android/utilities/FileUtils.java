@@ -161,7 +161,6 @@ public class FileUtils {
 
 
     public static byte[] getFileAsBytes(File file) {
-
         byte[] bytes = null;
         InputStream is = null;
         try {
@@ -218,9 +217,6 @@ public class FileUtils {
                 return null;
             }
         }
-
-
-
     }
 
 
@@ -238,7 +234,6 @@ public class FileUtils {
 
 
     public static String getMd5Hash(File file) {
-
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] messageDigest = md.digest(getFileAsBytes(file));

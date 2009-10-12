@@ -40,7 +40,6 @@ import java.util.Vector;
  */
 
 public class PromptElement {
-    // private final static String t = "PromptElement";
 
     public static final int TYPE_QUESTION = 0;
     public static final int TYPE_START = 1;

@@ -25,6 +25,5 @@ import java.util.ArrayList;
  */
 public interface FormDownloaderListener {
     void downloadingComplete(ArrayList<String> result);
-
-
-    void progressUpdate(int progress, int total);}
+    void progressUpdate(int progress, int total);
+}

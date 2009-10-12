@@ -57,12 +57,10 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
 
     @Override
     protected ArrayList<String> doInBackground(String... values) {
-
         ArrayList<String> uploadedIntances = new ArrayList<String>();
         int instanceCount = values.length;
 
         for (int i = 0; i < instanceCount; i++) {
-
             publishProgress(i + 1, instanceCount);
 
             // configure connection
@@ -160,7 +158,6 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 // update progress and total
                 mStateListener.progressUpdate(values[0].intValue(), values[1].intValue());
             }
-
         }
     }
 

@@ -41,23 +41,22 @@ public class InstanceChooserTabs extends TabActivity {
     // count for tab menu bar
     private static int mSavedCount;
     private static int mCompletedCount;
+    private static final String SAVED_TAB = "saved_tab";
+    private static final String COMPLETED_TAB = "completed_tab";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        buildView();
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+        refreshView();
     }
 
 
     /**
      * Build tab host view and setup tab intents.
      */
-    private void buildView() {
-
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
-
+    private void refreshView() {
         // update tab host count
         updateTabHostCount();
 
@@ -65,17 +64,17 @@ public class InstanceChooserTabs extends TabActivity {
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.WHITE);
         tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
-        
+
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
         saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_INCOMPLETE);
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(
+        tabHost.addTab(tabHost.newTabSpec(SAVED_TAB).setIndicator(
                 getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
         completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(
+        tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB).setIndicator(
                 getString(R.string.completed_data, mCompletedCount)).setContent(completed));
 
         // hack to set font size and padding in tab headers
@@ -93,10 +92,10 @@ public class InstanceChooserTabs extends TabActivity {
         tvc.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
         tvc.setPadding(0, 0, 0, 6);
 
-        if (mSavedCount >= mCompletedCount)  {
-            getTabHost().setCurrentTabByTag("tab1");
+        if (mSavedCount >= mCompletedCount) {
+            getTabHost().setCurrentTabByTag(SAVED_TAB);
         } else {
-            getTabHost().setCurrentTabByTag("tab2");
+            getTabHost().setCurrentTabByTag(COMPLETED_TAB);
         }
     }
 
@@ -105,13 +104,13 @@ public class InstanceChooserTabs extends TabActivity {
      * Update count of saved and completed instances for tab host header.
      */
     private void updateTabHostCount() {
-
         // create file adapter
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
 
         // get saved instances
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
+        Cursor c =
+                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
         mSavedCount = c.getCount();
         c.close();
 
@@ -122,8 +121,6 @@ public class InstanceChooserTabs extends TabActivity {
 
         // memory cleanup
         fda.close();
-
-      
     }
 
 

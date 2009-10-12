@@ -89,14 +89,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final int MENU_LANGUAGES = Menu.FIRST + 2;
     private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 3;
     private static final int MENU_SUBMENU = Menu.FIRST + 4;
-
     private static final int MENU_SAVE = Menu.FIRST + 5;
     private static final int MENU_COMPLETE = Menu.FIRST + 6;
 
-
-
     private static final int PROGRESS_DIALOG = 1;
 
+    // uncomment when ProgressBar slowdown is fixed.
     // private ProgressBar mProgressBar;
     private String mFormPath;
     private String mInstancePath;
@@ -113,6 +111,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
 
+    // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped;
 
     private FormLoaderTask mFormLoaderTask;
@@ -149,7 +148,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         v.add(new PropertyManager(getApplicationContext()));
         JavaRosaServiceProvider.instance().initialize(v);
 
-
         Boolean newForm = true;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(FORMPATH)) {
@@ -174,7 +172,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
 
             // Not a restart from a screen orientation change (or other).
-            setFormHandler(null);
+            mFormHandler = null;
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -242,7 +240,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     refreshCurrentView();
                     break;
                 }
-                //$FALL-THROUGH$
+                // $FALL-THROUGH$
             case GlobalConstants.AUDIO_CAPTURE:
             case GlobalConstants.VIDEO_CAPTURE:
                 Uri um = intent.getData();
@@ -270,6 +268,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
          * Since we're not using managed dialogs, go back to the last actual
          * question if it's a repeat dialog.
          */
+        // TODO: carlhartung. Desired functionality would be to display the same
+        // dialog again
+        // not the last question.
         if (p.getType() == PromptElement.TYPE_REPEAT_DIALOG) {
             p = mFormHandler.prevPrompt();
         }
@@ -280,7 +281,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
+        // TODO: carlhartung. This contains remains from when we changed the
+        // menu options based on
+        // question type. we now just enable and disable functionality so we
+        // should
+        // not add/remove each time.
         menu.removeItem(MENU_CLEAR);
         menu.removeItem(MENU_DELETE_REPEAT);
         menu.removeItem(MENU_LANGUAGES);
@@ -292,7 +297,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         android.R.drawable.ic_menu_save);
         sm.add(0, MENU_SAVE, 0, getString(R.string.save_for_later));
         sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
-
 
         PromptElement pe = null;
         if (currentPromptIsQuestion()) {
@@ -312,7 +316,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormHandler.getLanguages() == null ? false : true);
 
         return true;
-
     }
 
 
@@ -357,7 +360,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     private boolean saveCurrentAnswer(boolean evaluateConstraints) {
-
         PromptElement pe = mFormHandler.currentPrompt();
 
         // If the question is readonly there's nothing to save.
@@ -389,11 +391,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
+        // if a form is loading, pass the loader task
         if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
             return mFormLoaderTask;
 
+        // otherwise pass the loaded formhandler
         if (mFormHandler != null && currentPromptIsQuestion()) {
-            saveCurrentAnswer(true);
+            saveCurrentAnswer(false);
         }
         return null;
     }
@@ -564,7 +568,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * model without checking constraints.
      */
     private void showPreviousView() {
-        // The answer is saved on a 'back', but question constraints are
+        // The answer is saved on a back swipe, but question constraints are
         // ignored.
         if (currentPromptIsQuestion()) {
             saveCurrentAnswer(false);
@@ -649,24 +653,22 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     public void createLocationDialog() {
-            
         mProgressDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i("yaw","inside form entry cancel button");
+                        Log.i("yaw", "inside form entry cancel button");
                     }
                 };
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setTitle(getString(R.string.getting_location));
-                mProgressDialog.setMessage(getString(R.string.please_wait));
-                mProgressDialog.setButton(getString(R.string.cancel),
-                        geopointButtonListener);
-                mProgressDialog.show();
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setTitle(getString(R.string.getting_location));
+        mProgressDialog.setMessage(getString(R.string.please_wait));
+        mProgressDialog.setButton(getString(R.string.cancel), geopointButtonListener);
+        mProgressDialog.show();
     }
-    
-    
+
+
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
@@ -691,7 +693,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     private void showCustomToast(String message) {
-
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -851,7 +852,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (saveStatus && saveDataToDisk(markCompleted)) {
             finish();
         }
-
     }
 
 
@@ -988,17 +988,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
+    /**
+     * Dismiss any showing dialogs
+     */
     private void dismissDialogs() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
         }
     }
-
-
-    private void setFormHandler(FormHandler formHandler) {
-        mFormHandler = formHandler;
-    }
-
 
 
     /*
@@ -1108,7 +1105,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             createErrorDialog(getString(R.string.load_error, mFormPath.substring(mFormPath
                     .lastIndexOf('/') + 1)), true);
         } else {
-            setFormHandler(formHandler);
+            mFormHandler = formHandler;
 
             // Set saved answer path
             if (mInstancePath == null) {
@@ -1124,8 +1121,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 if (FileUtils.createFolder(path)) {
                     mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }
-
-
             }
 
             refreshCurrentView();

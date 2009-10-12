@@ -72,7 +72,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     private void initialize(String type, String instancePath) {
-
         mType = type;
         mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
 
@@ -103,7 +102,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     private void deleteMedia() {
-
         // get the file path and delete the file
         File f = new File(mInstanceFolder + "/" + mBinaryName);
         if (!f.delete()) {
@@ -112,12 +110,10 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // clean up variables
         mBinaryName = null;
-
     }
 
 
     public void clearAnswer() {
-
         // remove the file
         deleteMedia();
 
@@ -138,8 +134,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void buildView(PromptElement prompt) {
-
-        this.setOrientation(LinearLayout.VERTICAL);
+        setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button
         mCaptureButton = new Button(getContext());
@@ -186,7 +181,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // retrieve answer from data model and update ui
         mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5,0,0,0);
+        mDisplayText.setPadding(5, 0, 0, 0);
 
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
@@ -199,15 +194,13 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         }
 
         // finish complex layout
-        this.addView(mCaptureButton);
+        addView(mCaptureButton);
         // this.addView(mDisplayText);
-        this.addView(mPlayButton);
-
+        addView(mPlayButton);
     }
 
 
     private Uri getUriFromPath(String path) {
-
         // find entry in content provider
         Cursor c =
                 getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
@@ -218,12 +211,10 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
         c.close();
         return Uri.parse(newPath);
-
     }
 
 
     private String getPathFromUri(Uri uri) {
-
         // find entry in content provider
         Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
         c.moveToFirst();
@@ -237,7 +228,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     public void setBinaryData(Object binaryuri) {
-
         // you are replacing an answer. remove the media.
         if (mBinaryName != null) {
             deleteMedia();
@@ -251,14 +241,9 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
             Log.i(t, "Failed to rename " + f.getAbsolutePath());
         }
 
-
-
         // remove the database entry and update the name
         getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
         mBinaryName = s.substring(s.lastIndexOf('/') + 1);
-
-
-
     }
 
 

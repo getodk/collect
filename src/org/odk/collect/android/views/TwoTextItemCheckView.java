@@ -10,33 +10,36 @@ import android.widget.RelativeLayout;
 
 public class TwoTextItemCheckView extends RelativeLayout implements Checkable {
 
-	public TwoTextItemCheckView(Context context, AttributeSet attrs,
-			int defStyle) {
-		super(context, attrs, defStyle);
-	}
+    public TwoTextItemCheckView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-	public TwoTextItemCheckView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
 
-	public TwoTextItemCheckView(Context context) {
-		super(context);
-	}
+    public TwoTextItemCheckView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public boolean isChecked() {
-		CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
-		return c.isChecked();
-	}
 
-	public void setChecked(boolean checked) {
-		CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
-		c.setChecked(checked);
-	}
+    public TwoTextItemCheckView(Context context) {
+        super(context);
+    }
 
-	public void toggle() {
-		CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
-		c.setChecked(!c.isChecked());
 
-	}
+    public boolean isChecked() {
+        CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
+        return c.isChecked();
+    }
+
+
+    public void setChecked(boolean checked) {
+        CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
+        c.setChecked(checked);
+    }
+
+
+    public void toggle() {
+        CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
+        c.setChecked(!c.isChecked());
+    }
 
 }

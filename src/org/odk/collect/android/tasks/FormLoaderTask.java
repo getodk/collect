@@ -53,7 +53,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
      */
     @Override
     protected FormHandler doInBackground(String... path) {
-
         FormHandler fh = null;
         FormDef fd = null;
         FileInputStream fis = null;
@@ -142,7 +141,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
             e.printStackTrace();
         }
 
-
         return fd;
     }
 
@@ -153,7 +151,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
      * @param filepath path to the form file
      */
     public void serializeFormDef(FormDef fd, String filepath) {
-
         // if cache folder is missing, create it.
         if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
 

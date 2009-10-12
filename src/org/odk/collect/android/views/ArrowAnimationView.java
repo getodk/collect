@@ -42,9 +42,10 @@ public class ArrowAnimationView extends View {
 
     private int mImgXOffset;
 
+
     public ArrowAnimationView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Log.i(t,"called constructor");
+        Log.i(t, "called constructor");
         init();
     }
 

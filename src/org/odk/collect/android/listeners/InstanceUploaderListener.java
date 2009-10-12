@@ -24,7 +24,5 @@ import java.util.ArrayList;
 // TODO: more useful errors in results
 public interface InstanceUploaderListener {
     void uploadingComplete(ArrayList<String> result);
-
-
     void progressUpdate(int progress, int total);
 }

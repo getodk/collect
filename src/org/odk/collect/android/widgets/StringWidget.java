@@ -38,7 +38,6 @@ import org.odk.collect.android.logic.PromptElement;
  */
 public class StringWidget extends EditText implements IQuestionWidget {
 
-
     public StringWidget(Context context) {
         this(context, null);
     }
@@ -70,7 +69,6 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
 
     public void buildView(PromptElement prompt) {
-
         // font size
         setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
 
@@ -90,13 +88,12 @@ public class StringWidget extends EditText implements IQuestionWidget {
             setFocusable(false);
             setClickable(false);
         }
-
-
     }
 
 
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
+        // Put focus on text input field and display soft keyboard if
+        // appropriate.
         this.requestFocus();
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

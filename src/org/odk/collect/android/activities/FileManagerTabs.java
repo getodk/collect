@@ -35,8 +35,10 @@ import org.odk.collect.android.logic.GlobalConstants;
  */
 public class FileManagerTabs extends TabActivity {
 
-    private static TextView tvlf;
-    private static TextView tvrf;
+    private static TextView mTVLF;
+    private static TextView mTVRF;
+    private static final String LOCAL_TAB = "local_tab";
+    private static final String REMOTE_TAB = "remote_tab";
 
 
     @Override
@@ -50,11 +52,11 @@ public class FileManagerTabs extends TabActivity {
         tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
 
         Intent local = new Intent(this, LocalFileManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.local_files))
+        tabHost.addTab(tabHost.newTabSpec(LOCAL_TAB).setIndicator(getString(R.string.local_files))
                 .setContent(local));
 
         Intent remote = new Intent(this, RemoteFileManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.remote_files))
+        tabHost.addTab(tabHost.newTabSpec(REMOTE_TAB).setIndicator(getString(R.string.remote_files))
                 .setContent(remote));
 
         // hack to set font size
@@ -62,27 +64,23 @@ public class FileManagerTabs extends TabActivity {
         TabWidget tw = (TabWidget) ll.getChildAt(0);
 
         RelativeLayout rllf = (RelativeLayout) tw.getChildAt(0);
-        tvlf = (TextView) rllf.getChildAt(1);
-        tvlf.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
-        tvlf.setPadding(0, 0, 0, 6);
-        
-        RelativeLayout rlrf = (RelativeLayout) tw.getChildAt(1);
-        tvrf = (TextView) rlrf.getChildAt(1);
-        tvrf.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
-        tvrf.setPadding(0, 0, 0, 6);
+        mTVLF = (TextView) rllf.getChildAt(1);
+        mTVLF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
+        mTVLF.setPadding(0, 0, 0, 6);
 
+        RelativeLayout rlrf = (RelativeLayout) tw.getChildAt(1);
+        mTVRF = (TextView) rlrf.getChildAt(1);
+        mTVRF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
+        mTVRF.setPadding(0, 0, 0, 6);
     }
 
 
     public static void setTabHeader(String string, String tab) {
-        if (tab.equals("tab1")) {
-            tvlf.setText(string);
-        } else if (tab.equals("tab2")) {
-            tvrf.setText(string);
+        if (tab.equals(LOCAL_TAB)) {
+            mTVLF.setText(string);
+        } else if (tab.equals(REMOTE_TAB)) {
+            mTVRF.setText(string);
         }
-
     }
-
-
 
 }

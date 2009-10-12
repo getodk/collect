@@ -65,7 +65,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);
         setFilters(fa);
-        
+
         // in case xforms calcuate returns a double, convert to integer
         Double d = (Double) prompt.getAnswerObject();
         NumberFormat nf = NumberFormat.getNumberInstance();
@@ -82,7 +82,6 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
             setFocusable(false);
             setClickable(false);
         }
-
     }
 
 
@@ -98,7 +97,6 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
                 return null;
             }
         }
-
     }
 
 }

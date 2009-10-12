@@ -67,7 +67,6 @@ public class FileDbAdapter {
     // status for forms
     public static final String STATUS_AVAILABLE = "available";
 
-
     private static final String added = "Added";
     private static final String saved = "Saved";
     private static final String submitted = "Submitted";
@@ -76,8 +75,9 @@ public class FileDbAdapter {
     private SQLiteDatabase mDb;
 
     private static final String DATABASE_CREATE =
-            "create table files (_id integer primary key autoincrement, "
-                    + "path text not null, hash text not null, type text not null, status text not null, display text not null, meta text not null);";
+            "create table files (_id integer primary key autoincrement, " + "path text not null, "
+                    + "hash text not null, " + "type text not null, " + "status text not null, "
+                    + "display text not null, " + "meta text not null);";
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
@@ -104,7 +104,6 @@ public class FileDbAdapter {
             db.execSQL("DROP TABLE IF EXISTS data");
             onCreate(db);
         }
-
     }
 
 
@@ -114,7 +113,6 @@ public class FileDbAdapter {
 
 
     public FileDbAdapter open() throws SQLException {
-
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
         cleanFiles();
@@ -154,7 +152,6 @@ public class FileDbAdapter {
      * @return name of the file formatted as human readable string
      */
     private String generateDisplay(String path, String type) {
-
         String filename = path.substring(path.lastIndexOf("/") + 1);
 
         if (type.equals(TYPE_INSTANCE)) {
@@ -174,7 +171,6 @@ public class FileDbAdapter {
         } else {
             return filename;
         }
-
     }
 
 
@@ -187,7 +183,6 @@ public class FileDbAdapter {
      * @return id of the new file
      */
     public long createFile(String path, String type, String status) {
-
         File f = new File(path);
         ContentValues cv = new ContentValues();
 
@@ -208,6 +203,7 @@ public class FileDbAdapter {
         try {
             id = mDb.insert(DATABASE_TABLE, null, cv);
         } catch (SQLiteConstraintException e) {
+            Log.e(t, "Caught SQLiteConstraitException: " + e);
         }
 
         return id;
@@ -221,9 +217,7 @@ public class FileDbAdapter {
      * @return number of affected rows
      */
     public boolean deleteFile(long id) {
-
         return mDb.delete(DATABASE_TABLE, KEY_ID + "='" + id + "'", null) > 0;
-
     }
 
 
@@ -279,12 +273,10 @@ public class FileDbAdapter {
             c.moveToFirst();
         }
         return c;
-
     }
 
 
     public Cursor fetchFile(long id) throws SQLException {
-
         Cursor c =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
                         KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_ID + "='" + id + "'",
@@ -294,7 +286,6 @@ public class FileDbAdapter {
             c.moveToFirst();
         }
         return c;
-
     }
 
 
@@ -352,7 +343,6 @@ public class FileDbAdapter {
             c.moveToFirst();
         }
         return c;
-
     }
 
 
@@ -364,7 +354,6 @@ public class FileDbAdapter {
      * @return number of affected rows
      */
     public boolean updateFile(String path, String status) {
-
         File f = new File(path);
         ContentValues cv = new ContentValues();
 
@@ -387,8 +376,8 @@ public class FileDbAdapter {
         if (c != null) {
             while (c.moveToNext()) {
                 String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
-                String hash = c.getString(c.getColumnIndex(KEY_HASH));
-                String type = c.getString(c.getColumnIndex(KEY_TYPE));
+                // String hash = c.getString(c.getColumnIndex(KEY_HASH));
+                // String type = c.getString(c.getColumnIndex(KEY_TYPE));
 
                 File f = new File(path);
                 if (!f.exists()) {
@@ -403,7 +392,6 @@ public class FileDbAdapter {
 
 
     public void removeOrphanFormDefs() {
-
         if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
             ArrayList<String> cachedForms =
                     FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
@@ -429,7 +417,6 @@ public class FileDbAdapter {
                 c.close();
             }
         }
-
     }
 
 
@@ -437,7 +424,6 @@ public class FileDbAdapter {
      * Stores new forms in the database
      */
     public void addOrphanForms() {
-
         // create forms and cache path folder
         if (FileUtils.createFolder(GlobalConstants.FORMS_PATH)) {
 
@@ -486,13 +472,11 @@ public class FileDbAdapter {
             if (c != null) {
                 c.close();
             }
-
         }
     }
 
 
     public void removeOrphanForms() {
-
         if (FileUtils.createFolder(GlobalConstants.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
@@ -500,7 +484,7 @@ public class FileDbAdapter {
                     FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
 
             String hash = null;
-            String path = null;
+            // String path = null;
             Cursor c = null;
 
             // loop through forms on sdcard.
@@ -527,11 +511,9 @@ public class FileDbAdapter {
 
 
     public void removeOrphanInstances() {
-
         if (FileUtils.createFolder(GlobalConstants.INSTANCES_PATH)) {
 
             File fo = null;
-            File fi = null;
             String[] fis = null;
             Cursor c = null;
             ArrayList<String> storedInstances =
