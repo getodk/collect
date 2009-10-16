@@ -1121,6 +1121,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 if (FileUtils.createFolder(path)) {
                     mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }
+            } else {
+                // we've just loaded a saved form, so start in the hierarchy view
+                Intent i = new Intent(this, FormHierarchyActivity.class);
+                startActivity(i);
+                return;  // so we don't show the intro screen before jumping to the hierarchy
             }
 
             refreshCurrentView();
