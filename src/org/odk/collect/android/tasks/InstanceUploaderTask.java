@@ -15,8 +15,9 @@
  */
 package org.odk.collect.android.tasks;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -25,6 +26,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -32,9 +34,8 @@ import org.apache.http.params.HttpParams;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import android.os.AsyncTask;
+import android.util.Log;
 
 
 /**
@@ -89,6 +90,8 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 File f = files[j];
                 if (f.getName().endsWith(".xml")) {
                     // uploading xml file
+                    // TODO: change the mime type to text/xml for dimagi (need to test with appengine first)
+                    //entity.addPart("xml_submission_file", new FileBody(f, "text/xml"));
                     entity.addPart("xml_submission_file", new FileBody(f));
                     Log.i(t, "added xml file " + f.getName());
                 } else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {

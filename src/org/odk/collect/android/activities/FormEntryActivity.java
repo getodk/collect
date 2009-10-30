@@ -16,6 +16,31 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
+
+import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.services.IService;
+import org.javarosa.model.xform.XFormsModule;
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FormHandler;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
+import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.GestureDetector;
+import org.odk.collect.android.utilities.ImageUtils;
+import org.odk.collect.android.views.QuestionView;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -47,29 +72,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.services.IService;
-import org.javarosa.model.xform.XFormsModule;
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.logic.FormHandler;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.GestureDetector;
-import org.odk.collect.android.utilities.ImageUtils;
-import org.odk.collect.android.views.QuestionView;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Vector;
-
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -77,7 +79,7 @@ import java.util.Vector;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener {
+public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener, FormSavedListener {
     private final String t = "FormEntryActivity";
 
     private static final String FORMPATH = "formpath";
@@ -93,6 +95,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final int MENU_COMPLETE = Menu.FIRST + 6;
 
     private static final int PROGRESS_DIALOG = 1;
+    private static final int SAVING_DIALOG = 2;
 
     // uncomment when ProgressBar slowdown is fixed.
     // private ProgressBar mProgressBar;
@@ -115,6 +118,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private boolean mBeenSwiped;
 
     private FormLoaderTask mFormLoaderTask;
+    private SaveToDiskTask mSaveToDiskTask;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -165,6 +169,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         Object data = getLastNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             mFormLoaderTask = (FormLoaderTask) data;
+        } else if (data instanceof SaveToDiskTask) {
+            mSaveToDiskTask = (SaveToDiskTask) data;
         } else if (data == null) {
             if (!newForm) {
                 refreshCurrentView();
@@ -395,7 +401,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mFormLoaderTask != null && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED)
             return mFormLoaderTask;
 
-        // otherwise pass the loaded formhandler
+        // if a form is writing to disk, pass the save to disk task
+        if (mSaveToDiskTask != null && mSaveToDiskTask.getStatus() != AsyncTask.Status.FINISHED)
+            return mSaveToDiskTask;
+
+        // mFormHandler is static so we don't need to pass it.
         if (mFormHandler != null && currentPromptIsQuestion()) {
             saveCurrentAnswer(false);
         }
@@ -456,7 +466,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'done' here.
-                                if (saveDataToDisk(true)) finish();
+                                saveDataToDisk(true);
                             }
                         });
                 // Create 'save for later' button
@@ -464,7 +474,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         .setOnClickListener(new OnClickListener() {
                             public void onClick(View v) {
                                 // Form is markd as 'saved' here.
-                                if (saveDataToDisk(false)) finish();
+                                saveDataToDisk(false);
                             }
                         });
 
@@ -798,20 +808,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /*
      * Called during a 'save and exit' command. The form is not 'done' here.
      */
-    private boolean saveDataToDisk(boolean markCompleted) {
+    private void saveDataToDisk(boolean markCompleted) {
         if (!validateAnswers(markCompleted)) {
-            return false;
+            return;
         }
         mFormHandler.postProcessForm();
-        if (mFormHandler.exportData(mInstancePath, getApplicationContext(), markCompleted)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
-                    Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
-                    Toast.LENGTH_LONG).show();
-            return false;
-        }
+        
+        mSaveToDiskTask = new SaveToDiskTask();
+        mSaveToDiskTask.setFormSavedListener(this);
+        mSaveToDiskTask.setExportVars(mInstancePath, getApplicationContext(), markCompleted);
+        mSaveToDiskTask.execute(mFormHandler);
+        showDialog(SAVING_DIALOG);
     }
 
 
@@ -849,8 +856,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             saveStatus = saveCurrentAnswer(true);
         }
 
-        if (saveStatus && saveDataToDisk(markCompleted)) {
-            finish();
+        if (saveStatus){
+            saveDataToDisk(markCompleted);
         }
     }
 
@@ -983,6 +990,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
+            case SAVING_DIALOG:
+                mProgressDialog = new ProgressDialog(this);
+                DialogInterface.OnClickListener savingButtonListener =
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mSaveToDiskTask.setFormSavedListener(null);
+                                mSaveToDiskTask.cancel(true);
+                            }
+                        };
+                mProgressDialog.setTitle(getString(R.string.saving_form));
+                mProgressDialog.setMessage(getString(R.string.please_wait));
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setButton(getString(R.string.cancel), savingButtonListener);
+                return mProgressDialog;
+                
         }
         return null;
     }
@@ -1026,6 +1050,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 refreshCurrentView();
             }
         }
+        if (mSaveToDiskTask != null) {
+            mSaveToDiskTask.setFormSavedListener(this);
+        }
         super.onResume();
     }
 
@@ -1055,6 +1082,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     protected void onDestroy() {
         if (mFormLoaderTask != null) mFormLoaderTask.setFormLoaderListener(null);
+        if (mSaveToDiskTask != null) mSaveToDiskTask.setFormSavedListener(null);
         super.onDestroy();
     }
 
@@ -1122,13 +1150,28 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }
             } else {
-                // we've just loaded a saved form, so start in the hierarchy view
+                // we've just loaded a saved form, so start in the hierarchy
+                // view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivity(i);
-                return;  // so we don't show the intro screen before jumping to the hierarchy
+                return; // so we don't show the intro screen before jumping to
+                // the hierarchy
             }
 
             refreshCurrentView();
+        }
+    }
+
+
+    public void savingComplete(Boolean saved) {
+        dismissDialog(SAVING_DIALOG);
+        if (saved) {
+            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
