@@ -17,13 +17,15 @@
 package org.odk.collect.android.tasks;
 
 import org.javarosa.core.model.FormDef;
-import org.odk.collect.android.R;
+import org.javarosa.core.model.FormIndex;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormHandler;
+import org.odk.collect.android.logic.GlobalConstants;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
  * Background task for loading a form.
@@ -31,11 +33,18 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SaveToDiskTask extends AsyncTask<FormHandler, String, Boolean> {
-    FormSavedListener mSavedListener;
-    String mInstancePath;
-    Context mContext;
-    Boolean mMarkCompleted;
+public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
+
+    private FormSavedListener mSavedListener;
+    private String mInstancePath;
+    private Context mContext;
+    private Boolean mMarkCompleted;
+    private FormHandler mFormHandler = FormEntryActivity.mFormHandler;
+
+    public static final int SAVED = 500;
+    public static final int SAVE_ERROR = 501;
+    public static final int VALIDATE_ERROR = 502;
+    public static final int VALIDATED = 503;
 
 
     /**
@@ -43,16 +52,22 @@ public class SaveToDiskTask extends AsyncTask<FormHandler, String, Boolean> {
      * XML. If given an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
-    protected Boolean doInBackground(FormHandler... formhandler) {    
-        FormHandler fh = formhandler[0];
-        if (fh.exportData(mInstancePath, mContext, mMarkCompleted)) {
-            return true;
+    protected Integer doInBackground(Void... nothing) {
+        int validateStatus = validateAnswers(mMarkCompleted);
+        if (validateStatus != VALIDATED) {
+            return validateStatus;
         }
-        return false;
+
+        mFormHandler.postProcessForm();
+        if (mFormHandler.exportData(mInstancePath, mContext, mMarkCompleted)) {
+            return SAVED;
+        }
+        return SAVE_ERROR;
     }
 
+
     @Override
-    protected void onPostExecute(Boolean result) {
+    protected void onPostExecute(Integer result) {
         synchronized (this) {
             if (mSavedListener != null) mSavedListener.savingComplete(result);
         }
@@ -64,10 +79,30 @@ public class SaveToDiskTask extends AsyncTask<FormHandler, String, Boolean> {
             mSavedListener = fsl;
         }
     }
-    
+
+
     public void setExportVars(String instancePath, Context context, Boolean completed) {
         mInstancePath = instancePath;
         mContext = context;
         mMarkCompleted = completed;
+    }
+
+
+    // make sure this validates for all on done
+    private int validateAnswers(boolean markCompleted) {
+        mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
+        mFormHandler.nextQuestionPrompt();
+        while (!mFormHandler.isEnd()) {
+            int saveStatus =
+                    mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler
+                            .currentPrompt().getAnswerValue(), true);
+            if (saveStatus == GlobalConstants.ANSWER_CONSTRAINT_VIOLATED
+                    || (markCompleted && saveStatus != GlobalConstants.ANSWER_OK)) {
+                return saveStatus;
+            }
+            mFormHandler.nextQuestionPrompt();
+        }
+
+        return VALIDATED;
     }
 }

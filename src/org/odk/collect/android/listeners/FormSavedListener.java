@@ -21,5 +21,5 @@ package org.odk.collect.android.listeners;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormSavedListener {
-    void savingComplete(Boolean saved);
+    void savingComplete(int saveStatus);
 }

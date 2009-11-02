@@ -79,7 +79,8 @@ import android.widget.Toast;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener, FormSavedListener {
+public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener,
+        FormSavedListener {
     private final String t = "FormEntryActivity";
 
     private static final String FORMPATH = "formpath";
@@ -809,39 +810,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Called during a 'save and exit' command. The form is not 'done' here.
      */
     private void saveDataToDisk(boolean markCompleted) {
-        if (!validateAnswers(markCompleted)) {
-            return;
-        }
-        mFormHandler.postProcessForm();
-        
         mSaveToDiskTask = new SaveToDiskTask();
         mSaveToDiskTask.setFormSavedListener(this);
         mSaveToDiskTask.setExportVars(mInstancePath, getApplicationContext(), markCompleted);
-        mSaveToDiskTask.execute(mFormHandler);
+        mSaveToDiskTask.execute();
         showDialog(SAVING_DIALOG);
     }
-
-
-    // make sure this validates for all on done
-    private boolean validateAnswers(boolean markCompleted) {
-        mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
-        mFormHandler.nextQuestionPrompt();
-        while (!mFormHandler.isEnd()) {
-            int saveStatus =
-                    mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler
-                            .currentPrompt().getAnswerValue(), true);
-            if (saveStatus == GlobalConstants.ANSWER_CONSTRAINT_VIOLATED
-                    || (markCompleted && saveStatus != GlobalConstants.ANSWER_OK)) {
-                refreshCurrentView();
-                createConstraintToast(mFormHandler.currentPrompt(), saveStatus);
-                return false;
-            }
-            mFormHandler.nextQuestionPrompt();
-        }
-
-        return true;
-    }
-
 
 
     /**
@@ -856,7 +830,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             saveStatus = saveCurrentAnswer(true);
         }
 
-        if (saveStatus){
+        if (saveStatus) {
             saveDataToDisk(markCompleted);
         }
     }
@@ -1006,7 +980,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), savingButtonListener);
                 return mProgressDialog;
-                
+
         }
         return null;
     }
@@ -1163,15 +1137,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    public void savingComplete(Boolean saved) {
+    public void savingComplete(int saveStatus) {
         dismissDialog(SAVING_DIALOG);
-        if (saved) {
-            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
-                    Toast.LENGTH_SHORT).show();
-            finish();
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
-                    Toast.LENGTH_LONG).show();
+        switch (saveStatus) {
+            case SaveToDiskTask.SAVED:
+                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
+                        Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+            case SaveToDiskTask.SAVE_ERROR:
+                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
+                        Toast.LENGTH_LONG).show();
+                break;
+            case GlobalConstants.ANSWER_CONSTRAINT_VIOLATED:
+            case GlobalConstants.ANSWER_REQUIRED_BUT_EMPTY:
+                refreshCurrentView();
+                createConstraintToast(mFormHandler.currentPrompt(), saveStatus);
+                break;
         }
     }
 
