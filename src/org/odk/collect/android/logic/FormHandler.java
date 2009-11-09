@@ -515,8 +515,9 @@ public class FormHandler {
             DataModelTree.populateNode(templateRoot, savedRoot, tr, mForm);
 
             // populated model to current form
-            mForm.setDataModel(new DataModelTree(templateRoot));
-
+            // mForm.setDataModel(new DataModelTree(templateRoot));
+            mForm.getDataModel().setRoot(templateRoot);
+            
             // fix any language issues
             // TODO: http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
             if (getLanguages() != null) {

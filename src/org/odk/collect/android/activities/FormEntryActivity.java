@@ -320,7 +320,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 R.drawable.ic_menu_start_conversation).setEnabled(
-                mFormHandler.getLanguages() == null ? false : true);
+                (mFormHandler.getLanguages() == null || mFormHandler.getLanguages().length == 1) ? false : true);
 
         return true;
     }
