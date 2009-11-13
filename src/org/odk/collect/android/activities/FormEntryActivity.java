@@ -16,31 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Vector;
-
-import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.services.IService;
-import org.javarosa.model.xform.XFormsModule;
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.logic.FormHandler;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.GestureDetector;
-import org.odk.collect.android.utilities.ImageUtils;
-import org.odk.collect.android.views.QuestionView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -71,6 +46,30 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.javarosa.core.JavaRosaServiceProvider;
+import org.javarosa.core.services.IService;
+import org.javarosa.model.xform.XFormsModule;
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FormHandler;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
+import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.GestureDetector;
+import org.odk.collect.android.utilities.ImageUtils;
+import org.odk.collect.android.views.QuestionView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
 
 
 /**

@@ -16,16 +16,15 @@
 
 package org.odk.collect.android.tasks;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.GlobalConstants;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * Background task for loading a form.
