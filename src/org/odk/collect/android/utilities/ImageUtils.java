@@ -1,18 +1,22 @@
 package org.odk.collect.android.utilities;
 
+import java.util.ArrayList;
+
 public class ImageUtils {
 
     // http://code.google.com/p/android/issues/detail?id=1480
     public static boolean hasImageCaptureBug() {
 
-        String brand = android.os.Build.BRAND.toLowerCase();
-        String device = android.os.Build.DEVICE.toLowerCase();
-        String board = android.os.Build.BOARD.toLowerCase();
+        // list of known devices that have the bug
+        ArrayList<String> devices = new ArrayList<String>();
+        devices.add("android-devphone1/dream_devphone/dream");
+        devices.add("generic/sdk/generic");
+        devices.add("vodafone/vfpioneer/sapphire");
+        devices.add("tmobile/kila/dream");
 
-        if ((brand.contains("google") || brand.contains("android"))
-                || (brand.equals("generic") && device.equals("generic") && board.equals("unknown"))) {
-            return true;
-        }
-        return false;
+        return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
+                + android.os.Build.DEVICE);
+
+
     }
 }
