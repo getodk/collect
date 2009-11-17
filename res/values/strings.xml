@@ -70,7 +70,7 @@ the License.
   <string name="local_files">Local</string>
   <string name="main_menu">Main Menu</string>
   <string name="main_menu_details">Making data collection a little easier.</string>
-  <string name="main_menu_message">ODK Collect v1.1</string>
+  <string name="main_menu_message">ODK Collect v1.1.1</string>
   <string name="manage_files">Manage Files</string>
   <string name="no">No</string>
   <string name="noselect_error">Sorry, you have not selected any items!</string>
