@@ -18,9 +18,9 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
-import org.javarosa.core.JavaRosaServiceProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.util.externalizable.DeserializationException;
 import org.javarosa.core.util.externalizable.ExtUtil;
 import org.javarosa.xform.util.XFormUtils;
@@ -120,7 +120,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormHandler> {
         // TODO: any way to remove reliance on jrsp?
 
         // need a list of classes that formdef uses
-        JavaRosaServiceProvider.instance().registerPrototypes(GlobalConstants.SERIALIABLE_CLASSES);
+        PrototypeManager.registerPrototypes(GlobalConstants.SERIALIABLE_CLASSES);
         FileInputStream fis = null;
         FormDef fd = null;
         try {

@@ -47,8 +47,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.services.IService;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -69,7 +67,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Vector;
 
 
 /**
@@ -144,13 +141,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         // Load JavaRosa modules.
         // needed to restore forms.
-        new XFormsModule().registerModule(null);
+        new XFormsModule().registerModule();
 
-        // load JavaRosa services
-        // needed to overwrite rms property manager
-        Vector<IService> v = new Vector<IService>();
-        v.add(new PropertyManager(getApplicationContext()));
-        JavaRosaServiceProvider.instance().initialize(v);
+        // needed to override rms property manager
+        org.javarosa.core.services.PropertyManager.setPropertyManager(new PropertyManager(
+                getApplicationContext()));
 
         Boolean newForm = true;
         if (savedInstanceState != null) {
@@ -319,7 +314,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 R.drawable.ic_menu_start_conversation).setEnabled(
-                (mFormHandler.getLanguages() == null || mFormHandler.getLanguages().length == 1) ? false : true);
+                (mFormHandler.getLanguages() == null || mFormHandler.getLanguages().length == 1)
+                        ? false : true);
 
         return true;
     }

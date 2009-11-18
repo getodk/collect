@@ -21,7 +21,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
-import org.javarosa.core.services.IService;
 import org.javarosa.core.services.properties.IPropertyRules;
 
 import java.util.HashMap;
@@ -34,7 +33,7 @@ import java.util.Vector;
  * 
  */
 
-public class PropertyManager implements IService, IPropertyManager {
+public class PropertyManager implements IPropertyManager {
 
     private String t = "PropertyManager";
 
