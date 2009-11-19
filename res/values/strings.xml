@@ -70,7 +70,7 @@ the License.
   <string name="local_files">Local</string>
   <string name="main_menu">Main Menu</string>
   <string name="main_menu_details">Making data collection a little easier.</string>
-  <string name="main_menu_message">ODK Collect v1.1.1</string>
+  <string name="main_menu_message">ODK Collect v1.1.2</string>
   <string name="manage_files">Manage Files</string>
   <string name="no">No</string>
   <string name="noselect_error">Sorry, you have not selected any items!</string>
@@ -110,6 +110,7 @@ the License.
   <string name="uploading_data">Sending Data...</string>
   <string name="upload_all_successful">%s item(s) sent successfully.</string>
   <string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
+  <string name="url_error">Sorry, invalid URL!</string>
   <string name="username">Username</string>
   <string name="view_hierarchy">Jump to Question</string>
   <string name="yes">Yes</string>

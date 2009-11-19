@@ -21,6 +21,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 
@@ -73,10 +74,14 @@ public class ServerPreferences extends PreferenceActivity implements
         EditTextPreference etp =
                 (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
         String s = etp.getText();
-        if (s.endsWith("/")) {
-            s = s.substring(0, s.lastIndexOf("/"));
+        if (s.startsWith("http://") || s.startsWith("https://")) {
+            etp.setSummary(s);
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.url_error),
+                    Toast.LENGTH_SHORT).show();
         }
-        etp.setSummary(s);
+
     }
 
 
