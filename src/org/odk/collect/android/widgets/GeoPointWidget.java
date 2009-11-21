@@ -56,7 +56,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     public void clearAnswer() {
         mStringAnswer.setText(null);
         mAnswerDisplay.setText(null);
-    }
+        }
 
 
     public IAnswerData getAnswer() {
@@ -67,9 +67,12 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
             try {
                 // segment lat and lon
                 String[] sa = s.split(" ");
-                double gp[] = new double[2];
+                double gp[] = new double[4];
                 gp[0] = Double.valueOf(sa[0]).doubleValue();
                 gp[1] = Double.valueOf(sa[1]).doubleValue();
+                gp[2] = Double.valueOf(sa[2]).doubleValue();
+                gp[3] = Double.valueOf(sa[3]).doubleValue();
+
                 return new GeoPointData(gp);
             } catch (Exception NumberFormatException) {
                 return null;
@@ -157,7 +160,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mStringAnswer.setText(s);
 
         String[] sa = s.split(" ");
-        mAnswerDisplay.setText("Lat: " + formatGps(Double.parseDouble(sa[0]), "lat") + "\nLon: "
-                + formatGps(Double.parseDouble(sa[1]), "lon"));
+        mAnswerDisplay.setText(formatGps(Double.parseDouble(sa[0]), "lat") + ", "
+                + formatGps(Double.parseDouble(sa[1]), "lon")+ " at "+sa[2]+ "m\nAccuracy: "+sa[3] + "m");
     }
 }
