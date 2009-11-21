@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -46,7 +47,6 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     private Button mActionButton;
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
-
 
     public GeoPointWidget(Context context) {
         super(context);
@@ -87,7 +87,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mActionButton.setText(getContext().getString(R.string.get_location));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadOnly());
-
+        
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());

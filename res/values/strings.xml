@@ -55,7 +55,7 @@ the License.
   <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
   <string name="finalize_for_send">Save as Complete</string>
   <string name="form">Form</string>
-  <string name="getting_location">Loading GPS...</string>
+  <string name="getting_location">Loading Location...</string>
   <string name="get_barcode">Capture Barcode</string>
   <string name="get_location">Capture Location</string>
   <string name="go_back">Previous Level</string>
@@ -68,6 +68,7 @@ the License.
   <string name="load_error">Sorry, unable to load form %s</string>
   <string name="load_remote_form_error">Sorry, unable to load remote form list!</string>
   <string name="local_files">Local</string>
+  <string name="location_accuracy">Accuracy is %s meters.</string>
   <string name="main_menu">Main Menu</string>
   <string name="main_menu_details">Making data collection a little easier.</string>
   <string name="main_menu_message">ODK Collect v1.1.2</string>
