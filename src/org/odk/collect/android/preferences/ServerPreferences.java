@@ -21,9 +21,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.UrlUtils;
 
 public class ServerPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
@@ -74,14 +76,15 @@ public class ServerPreferences extends PreferenceActivity implements
         EditTextPreference etp =
                 (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
         String s = etp.getText();
-        if (s.startsWith("http://") || s.startsWith("https://")) {
+        if (UrlUtils.isValidUrl(s)) {
+            etp.setText(s);
             etp.setSummary(s);
         } else {
+            etp.setText((String) etp.getSummary());
             Toast.makeText(getApplicationContext(),
                     getString(R.string.url_error),
                     Toast.LENGTH_SHORT).show();
         }
-
     }
 
 
