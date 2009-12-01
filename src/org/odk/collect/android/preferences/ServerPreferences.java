@@ -21,7 +21,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
@@ -33,7 +32,6 @@ public class ServerPreferences extends PreferenceActivity implements
     public static String KEY_SERVER = "server";
     public static String KEY_USERNAME = "username";
     public static String KEY_PASSWORD = "password";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -32,8 +32,8 @@ the License.
     <activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
     <activity android:name=".preferences.ServerPreferences" android:label="@string/app_name"/>
-  <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
-          <activity android:name=".activities.GeoPointActivity" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
+    <activity android:name=".activities.GeoPointActivity" android:label="@string/app_name"/>
   
   </application>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
