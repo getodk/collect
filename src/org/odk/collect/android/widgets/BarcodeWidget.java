@@ -73,7 +73,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         // set button formatting
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -94,7 +94,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         // set text formatting
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

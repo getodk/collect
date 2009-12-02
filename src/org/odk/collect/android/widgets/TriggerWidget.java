@@ -74,7 +74,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mActionButton.setText(getContext().getString(R.string.ack));
         mActionButton.setTextOff(getContext().getString(R.string.ack));
         mActionButton.setTextOn(getContext().getString(R.string.acked));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -89,7 +89,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         });
 
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         mDisplayText = new TextView(getContext());

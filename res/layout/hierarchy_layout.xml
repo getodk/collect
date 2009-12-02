@@ -33,7 +33,7 @@ the License.
       android:layout_height="wrap_content"
       android:text="@string/go_back"
            android:padding="15px"
-     android:textSize="8pt" 
+     android:textSize="19px" 
       android:layout_weight="1" />
       
           <Button
@@ -42,7 +42,7 @@ the License.
       android:layout_height="wrap_content"
       android:text="@string/jump_to"
            android:padding="15px"
-     android:textSize="8pt" 
+     android:textSize="19px" 
       android:layout_weight="1" />
    <!--    
       		<Button
@@ -50,7 +50,7 @@ the License.
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			     android:padding="15px"
-     android:textSize="8pt" 
+     android:textSize="19px" 
 			android:text="@string/go_start"
 			android:layout_weight="1" />
 
@@ -60,7 +60,7 @@ the License.
 			android:layout_height="wrap_content"
 			android:text="@string/go_end"
 			     android:padding="15px"
-     android:textSize="8pt" 
+     android:textSize="19px" 
 			android:layout_weight="1" /> -->
 
 	</LinearLayout>
@@ -81,7 +81,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display"
-		android:textSize="7pt"
+		android:textSize="16px"
 		android:padding="20px"
 		android:gravity="center"
 		android:background="@drawable/white"/>

@@ -87,13 +87,13 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mActionButton = new Button(getContext());
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadOnly());
         
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_PT,
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 GlobalConstants.APPLICATION_FONTSIZE - 1);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 

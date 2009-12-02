@@ -95,7 +95,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
                 RadioButton r = new RadioButton(getContext());
                 r.setText(k);
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
                 r.setId(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());

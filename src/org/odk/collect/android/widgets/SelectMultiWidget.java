@@ -134,7 +134,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(k);
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key

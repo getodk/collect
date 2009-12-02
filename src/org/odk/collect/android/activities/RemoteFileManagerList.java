@@ -61,6 +61,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
+//TODO localize strings
+
 public class RemoteFileManagerList extends ListActivity implements FormDownloaderListener {
 
     private static final int PROGRESS_DIALOG = 1;
@@ -334,7 +336,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
 
     public void progressUpdate(int progress, int total) {
-        mProgressDialog.setMessage("Fetching " + progress + " of " + total + " item(s)");
+        mProgressDialog.setMessage("Fetching " + progress + " of " + total + " item(s)...");
     }
 
 

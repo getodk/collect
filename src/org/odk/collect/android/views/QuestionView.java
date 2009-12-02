@@ -49,7 +49,7 @@ public class QuestionView extends ScrollView {
     private IQuestionWidget mQuestionWidget;
     private LinearLayout mView;
     private String mInstancePath;
-    private final static int TEXTSIZE = 10;
+    private final static int TEXTSIZE = 21;
 
 
     public QuestionView(Context context, PromptElement prompt, String instancePath) {
@@ -125,7 +125,7 @@ public class QuestionView extends ScrollView {
         if (s.length() > 0) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 4);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE - 7);
             tv.setPadding(0, 0, 0, 5);
             mView.addView(tv);
         }
@@ -138,7 +138,7 @@ public class QuestionView extends ScrollView {
     private void AddQuestionText(PromptElement p) {
         TextView tv = new TextView(getContext());
         tv.setText(p.getQuestionText());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
         tv.setTypeface(null, Typeface.BOLD);
 
         tv.setPadding(0, 0, 0, 5);
@@ -157,7 +157,7 @@ public class QuestionView extends ScrollView {
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PT, TEXTSIZE - 3);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE - 5);
             tv.setPadding(0, 0, 0, 7);
             // wrap to the widget of view
             tv.setHorizontallyScrolling(false);

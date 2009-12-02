@@ -113,7 +113,7 @@ public class GlobalConstants {
     /**
      * Default font size in entire application
      */
-    public final static int APPLICATION_FONTSIZE = 10;
+    public final static int APPLICATION_FONTSIZE = 23;
 
     /**
      * Classes needed to serialize objects

@@ -48,7 +48,7 @@ public class IntegerWidget extends StringWidget {
     @Override
     public void buildView(PromptElement prompt) {
         // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll

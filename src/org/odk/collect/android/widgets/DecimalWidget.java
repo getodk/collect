@@ -51,7 +51,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
     public void buildView(PromptElement prompt) {
 
         // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // needed to make long readonly text scroll
