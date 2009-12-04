@@ -84,12 +84,12 @@ public class InstanceChooserTabs extends TabActivity {
 
         RelativeLayout rls = (RelativeLayout) tw.getChildAt(0);
         TextView tvs = (TextView) rls.getChildAt(1);
-        tvs.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
+        tvs.setTextSize(GlobalConstants.APPLICATION_FONTSIZE - 2);
         tvs.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlc = (RelativeLayout) tw.getChildAt(1);
         TextView tvc = (TextView) rlc.getChildAt(1);
-        tvc.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
+        tvc.setTextSize(GlobalConstants.APPLICATION_FONTSIZE - 2);
         tvc.setPadding(0, 0, 0, 6);
 
         if (mSavedCount >= mCompletedCount) {

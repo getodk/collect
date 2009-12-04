@@ -65,12 +65,12 @@ public class FileManagerTabs extends TabActivity {
 
         RelativeLayout rllf = (RelativeLayout) tw.getChildAt(0);
         mTVLF = (TextView) rllf.getChildAt(1);
-        mTVLF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
+        mTVLF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE - 2);
         mTVLF.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlrf = (RelativeLayout) tw.getChildAt(1);
         mTVRF = (TextView) rlrf.getChildAt(1);
-        mTVRF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE + 9);
+        mTVRF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE - 2);
         mTVRF.setPadding(0, 0, 0, 6);
     }
 
