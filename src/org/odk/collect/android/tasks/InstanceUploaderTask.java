@@ -89,17 +89,16 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             for (int j = 0; j < files.length; j++) {
                 File f = files[j];
                 if (f.getName().endsWith(".xml")) {
-                    // uploading xml file
-                    // TODO: change the mime type to text/xml for dimagi (need to test with appengine first)
-                    //entity.addPart("xml_submission_file", new FileBody(f, "text/xml"));
-                    entity.addPart("xml_submission_file", new FileBody(f));
+                    entity.addPart("xml_submission_file", new FileBody(f, "text/xml"));
                     Log.i(t, "added xml file " + f.getName());
-                } else if (f.getName().endsWith(".png") || f.getName().endsWith(".jpg")) {
-                    // upload image file
-                    entity.addPart(f.getName(), new FileBody(f));
+                } else if (f.getName().endsWith(".png")) {
+                    entity.addPart(f.getName(), new FileBody(f, "image/png"));
+                    Log.i(t, "added image file" + f.getName());
+                } else if (f.getName().endsWith(".jpg")) {
+                    entity.addPart(f.getName(), new FileBody(f, "image/jpeg"));
                     Log.i(t, "added image file" + f.getName());
                 } else {
-                    Log.e(t, "unsupported file type, not adding file: " + f.getName());
+                    Log.w(t, "unsupported file type, not adding file: " + f.getName());
                 }
             }
             httppost.setEntity(entity);
