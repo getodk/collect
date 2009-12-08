@@ -30,6 +30,7 @@ public class ImageUtils {
         devices.add("vodafone/vfpioneer/sapphire");
         devices.add("tmobile/kila/dream");
         devices.add("verizon/voles/sholes");
+        devices.add("google_ion/google_ion/sapphire");
         
         return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
                 + android.os.Build.DEVICE);
