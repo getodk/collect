@@ -101,7 +101,7 @@ public class FileDbAdapter {
         @Override
         // upgrading will destroy all old data
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS data");
+            db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
             onCreate(db);
         }
     }
