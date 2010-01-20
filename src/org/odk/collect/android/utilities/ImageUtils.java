@@ -31,9 +31,11 @@ public class ImageUtils {
         devices.add("tmobile/kila/dream");
         devices.add("verizon/voles/sholes");
         devices.add("google_ion/google_ion/sapphire");
+        devices.add("htc/opal/sapphire");
+        devices.add("google/passion/passion");
         
-        return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
-                + android.os.Build.DEVICE);
+        return devices.contains((android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
+                + android.os.Build.DEVICE).toLowerCase());
 
 
     }

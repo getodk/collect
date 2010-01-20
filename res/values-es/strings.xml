@@ -57,7 +57,7 @@
 <string name="location_accuracy">La precisión es de %s metros</string>
 <string name="main_menu">Menu principal</string>
 <string name="main_menu_details">Haciendo la recolección de datos más facil</string>
-<string name="main_menu_message">ODK Collect v1.1.2</string>
+<string name="main_menu_message">ODK Collect v1.1.3</string>
 <string name="manage_files">Gestionar ficheros</string>
 <string name="no">No</string>
 <string name="noselect_error">No ha seleccionado ningun elemento</string>
@@ -83,7 +83,9 @@
 <string name="review_data_description">%s has sido seleccionado para revisión</string>
 <string name="saved_data">Incompleto (%s)</string>
 <string name="save_data_message">Elija uno para guardar resultados</string>
+<string name="save_enter_data_description"></string>
 <string name="save_for_later">Guardar incompleto</string>
+<string name="save_review_data_description"></string>
 <string name="saving_form">Guardando formulario</string>
 <string name="send">Enviar</string>
 <string name="send_data">Enviar datos completados</string>
@@ -91,6 +93,7 @@
 <string name="send_selected_data">Enviar fichero seleccionado</string>
 <string name="server">Servidor</string>
 <string name="server_preferences">Configuración del servidor</string>
+<string name="toggle_selected"></string>
 <string name="uploading_data">Enviando información</string>
 <string name="upload_all_successful">%s elementos enviados con exito</string>
 <string name="upload_some_failed">%s elementos no se enviaron</string>
