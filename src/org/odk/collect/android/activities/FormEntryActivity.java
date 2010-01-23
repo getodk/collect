@@ -725,8 +725,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private void createRepeatDialog(PromptElement p) {
         mAlertDialog = new AlertDialog.Builder(this).create();
         if (p.getLastRepeatCount() > 0) {
+            mAlertDialog.setTitle(getString(R.string.leaving_repeat));
             mAlertDialog.setMessage(getString(R.string.add_another_repeat, p.getLastGroupText()));
         } else {
+            mAlertDialog.setTitle(getString(R.string.entering_repeat));
             mAlertDialog.setMessage(getString(R.string.add_repeat, p.getLastGroupText()));
         }
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
@@ -783,6 +785,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (repeatcount != -1) {
             name += " (" + (repeatcount + 1) + ")";
         }
+        mAlertDialog.setTitle(getString(R.string.delete_repeat));
         mAlertDialog.setMessage(getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
@@ -838,6 +841,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createQuitDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setTitle(getString(R.string.quit_application));
         mAlertDialog.setMessage(getString(R.string.entry_exit_confirm));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
@@ -880,6 +884,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createClearDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setTitle(getString(R.string.clear_answer));
         mAlertDialog.setMessage(getString(R.string.clearanswer_confirm));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 

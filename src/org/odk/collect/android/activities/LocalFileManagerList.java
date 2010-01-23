@@ -98,7 +98,7 @@ public class LocalFileManagerList extends ListActivity {
      */
     private void createDeleteDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-
+        mAlertDialog.setTitle(getString(R.string.delete_file));
         mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
