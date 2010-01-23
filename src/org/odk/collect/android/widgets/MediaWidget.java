@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -151,8 +152,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
                 if (mType.equals("image") && ImageUtils.hasImageCaptureBug()) {
                     // TODO only way to get large image from android
                     // http://code.google.com/p/android/issues/detail?id=1480
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-                            GlobalConstants.IMAGE_PATH)));
+                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(GlobalConstants.TMPFILE_PATH)));
                 } else {
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 }

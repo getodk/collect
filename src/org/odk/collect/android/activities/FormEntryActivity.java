@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -63,6 +64,7 @@ import org.odk.collect.android.utilities.GestureDetector;
 import org.odk.collect.android.utilities.ImageUtils;
 import org.odk.collect.android.views.QuestionView;
 
+import java.io.Externalizable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
@@ -224,7 +226,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
             case GlobalConstants.IMAGE_CAPTURE:
                 if (ImageUtils.hasImageCaptureBug()) {
-                    File fi = new File(GlobalConstants.IMAGE_PATH);
+                    File fi = new File(GlobalConstants.TMPFILE_PATH);
                     try {
                         Uri ui =
                                 Uri.parse(android.provider.MediaStore.Images.Media.insertImage(

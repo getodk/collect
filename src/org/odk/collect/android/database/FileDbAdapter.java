@@ -101,7 +101,7 @@ public class FileDbAdapter {
         @Override
         // upgrading will destroy all old data
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
             onCreate(db);
         }
     }
@@ -400,16 +400,22 @@ public class FileDbAdapter {
             // remove orphaned form defs
             if (cachedForms != null) {
                 for (String cachePath : cachedForms) {
-                    String hash =
-                            cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
-                                    .lastIndexOf("."));
 
-                    // if hash is not in db, delete
-                    c = fetchFilesByPath(null, hash);
-                    if (c.getCount() == 0 && !(new File(cachePath)).delete()) {
-                        Log.i(t, "Failed to delete " + cachePath);
+                    try {
+                        String hash =
+                                cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
+                                        .lastIndexOf("."));
+
+                        // if hash is not in db, delete
+                        c = fetchFilesByPath(null, hash);
+                        if (c.getCount() == 0 && !(new File(cachePath)).delete()) {
+                            Log.i(t, "Failed to delete " + cachePath);
+                        }
+                        c.close();
+                    } catch (StringIndexOutOfBoundsException e) {
+                        Log.i(t, "no cached files found");
                     }
-                    c.close();
+
                 }
             }
             // clean up adapter
