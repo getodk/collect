@@ -42,7 +42,7 @@ the License.
 <string name="delete_file">Delete Selected File(s)</string>
 <string name="delete_repeat">Delete Section</string>
 <string name="delete_repeat_confirm">Are you sure you want to delete section \"%s\" and all of its sub-sections?</string>
-<string name="downloading_data">Fetching Data</string>
+<string name="downloading_data">Fetching List</string>
 <string name="download_all_successful">%s item(s) fetched successfully.</string>
 <string name="download_some_failed">Sorry, %s item(s) not fetched!</string>
 <string name="enter">enter</string>
@@ -88,7 +88,7 @@ the License.
 <string name="play_image">View Image</string>
 <string name="play_video">Play Video</string>
 <string name="please_wait">Please wait a few moments.</string>
-<string name="quit_application">Exit Application</string>
+<string name="quit_application">Exiting Entry</string>
 <string name="quit_entry">Save and Exit</string>
 <string name="remote_files">Remote</string>
 <string name="replace_audio">Replace Audio</string>
