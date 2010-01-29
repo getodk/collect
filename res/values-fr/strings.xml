@@ -57,7 +57,7 @@
 <string name="location_accuracy">Précision de %s mètres</string>
 <string name="main_menu">Menu principal</string>
 <string name="main_menu_details">Faciliter la collecte de données</string>
-<string name="main_menu_message">ODK Collect v1.1.3</string>
+<string name="main_menu_message">ODK Collect v1.1.4</string>
 <string name="manage_files">Gérer les fichiers</string>
 <string name="no">Non</string>
 <string name="noselect_error">Désolé, aucun élément sélectionné!</string>

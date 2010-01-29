@@ -57,7 +57,7 @@
 <string name="location_accuracy">位置精確度為 %s 公尺</string>
 <string name="main_menu">主選單</string>
 <string name="main_menu_details">讓收集資料便得更為簡單</string>
-<string name="main_menu_message">ODK Collect v1.1.3</string>
+<string name="main_menu_message">ODK Collect v1.1.4</string>
 <string name="manage_files">管理檔案</string>
 <string name="no">不</string>
 <string name="noselect_error">抱歉，你尚未選擇任何項目！</string>

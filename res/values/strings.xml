@@ -74,7 +74,7 @@ the License.
 <string name="location_accuracy">Accuracy is %s meters.</string>
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Making data collection a little easier.</string>
-<string name="main_menu_message">ODK Collect v1.1.3</string>
+<string name="main_menu_message">ODK Collect v1.1.4</string>
 <string name="manage_files">Manage Files</string>
 <string name="no">No</string>
 <string name="noselect_error">Sorry, you have not selected any items!</string>

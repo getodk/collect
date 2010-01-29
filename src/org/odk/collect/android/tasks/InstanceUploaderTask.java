@@ -47,9 +47,9 @@ import android.util.Log;
 public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
     private static String t = "InstanceUploaderTask";
+    private static long MAX_BYTES = 1048576-1024; // 1MB less 1KB overhead
     InstanceUploaderListener mStateListener;
     String mUrl;
-
 
     public void setUploadServer(String newServer) {
         mUrl = newServer;
@@ -88,15 +88,39 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             MultipartEntity entity = new MultipartEntity();
             for (int j = 0; j < files.length; j++) {
                 File f = files[j];
+                FileBody fb;
                 if (f.getName().endsWith(".xml")) {
-                    entity.addPart("xml_submission_file", new FileBody(f, "text/xml"));
-                    Log.i(t, "added xml file " + f.getName());
-                } else if (f.getName().endsWith(".png")) {
-                    entity.addPart(f.getName(), new FileBody(f, "image/png"));
-                    Log.i(t, "added image file" + f.getName());
+                    fb = new FileBody(f, "text/xml");
+                    if (fb.getContentLength() <= MAX_BYTES) {
+                        entity.addPart("xml_submission_file", fb);
+                        Log.i(t, "added xml file " + f.getName());
+                    } else {
+                        Log.i(t, "file " + f.getName() + " is too big");
+                    }
                 } else if (f.getName().endsWith(".jpg")) {
-                    entity.addPart(f.getName(), new FileBody(f, "image/jpeg"));
-                    Log.i(t, "added image file" + f.getName());
+                    fb = new FileBody(f, "image/jpeg");
+                    if (fb.getContentLength() <= MAX_BYTES) {
+                        entity.addPart(f.getName(), fb);
+                        Log.i(t, "added image file " + f.getName());
+                    } else {
+                        Log.i(t, "file " + f.getName() + " is too big");
+                    }
+                } else if (f.getName().endsWith(".3gpp")) {
+                    fb = new FileBody(f, "audio/3gpp");
+                    if (fb.getContentLength() <= MAX_BYTES) {
+                        entity.addPart(f.getName(), fb);
+                        Log.i(t, "added audio file " + f.getName());
+                    } else {
+                        Log.i(t, "file " + f.getName() + " is too big");
+                    }
+                } else if (f.getName().endsWith(".3gp")) {
+                    fb = new FileBody(f, "video/3gpp");
+                    if (fb.getContentLength() <= MAX_BYTES) {
+                        entity.addPart(f.getName(), fb);
+                        Log.i(t, "added video file " + f.getName());
+                    } else {
+                        Log.i(t, "file " + f.getName() + " is too big");
+                    }
                 } else {
                     Log.w(t, "unsupported file type, not adding file: " + f.getName());
                 }
