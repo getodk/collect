@@ -16,12 +16,19 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -30,23 +37,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-import org.odk.collect.android.utilities.ImageUtils;
-
-import java.io.File;
-
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
  * 
+ * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
+public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
 
     private final static String t = "MediaWidget";
 
@@ -58,7 +57,6 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
     private Uri mExternalUri;
     private String mCaptureIntent;
-    private String mType;
     private String mInstanceFolder;
     private int mRequestCode;
     private int mCaptureText;
@@ -66,39 +64,21 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
     private int mPlayText;
 
 
-    public MediaWidget(Context context, String type, String instancePath) {
+    public AudioWidget(Context context, String instancePath) {
         super(context);
-        initialize(type, instancePath);
+        initialize(instancePath);
     }
 
 
-    private void initialize(String type, String instancePath) {
-        mType = type;
+    private void initialize(String instancePath) {
         mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
 
-        // initialize based on type
-        if (mType.equals("image")) {
-            mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
-            mRequestCode = GlobalConstants.IMAGE_CAPTURE;
-            mCaptureText = R.string.capture_image;
-            mReplaceText = R.string.replace_image;
-            mPlayText = R.string.play_image;
-        } else if (mType.equals("audio")) {
-            mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
-            mRequestCode = GlobalConstants.AUDIO_CAPTURE;
-            mCaptureText = R.string.capture_audio;
-            mReplaceText = R.string.replace_audio;
-            mPlayText = R.string.play_audio;
-        } else if (mType.equals("video")) {
-            mExternalUri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
-            mRequestCode = GlobalConstants.VIDEO_CAPTURE;
-            mCaptureText = R.string.capture_video;
-            mReplaceText = R.string.replace_video;
-            mPlayText = R.string.play_video;
-        }
+        mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
+        mRequestCode = GlobalConstants.AUDIO_CAPTURE;
+        mCaptureText = R.string.capture_audio;
+        mReplaceText = R.string.replace_audio;
+        mPlayText = R.string.play_audio;
     }
 
 
@@ -149,13 +129,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
-                if (mType.equals("image") && ImageUtils.hasImageCaptureBug()) {
-                    // TODO only way to get large image from android
-                    // http://code.google.com/p/android/issues/detail?id=1480
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(GlobalConstants.TMPFILE_PATH)));
-                } else {
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
-                }
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
 
 
@@ -173,7 +147,7 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + "/" + mBinaryName);
-                i.setDataAndType(Uri.fromFile(f), mType + "/*");
+                i.setDataAndType(Uri.fromFile(f), "audio/*");
                 ((Activity) getContext()).startActivity(i);
 
             }
@@ -195,8 +169,8 @@ public class MediaWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // finish complex layout
         addView(mCaptureButton);
-        // this.addView(mDisplayText);
         addView(mPlayButton);
+
     }
 
 

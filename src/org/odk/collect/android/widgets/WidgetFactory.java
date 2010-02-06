@@ -62,13 +62,13 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new MediaWidget(context, "image", instancePath);
+                questionWidget = new ImageWidget(context, instancePath);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new MediaWidget(context, "audio", instancePath);
+                questionWidget = new AudioWidget(context, instancePath);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new MediaWidget(context, "video", instancePath);
+                questionWidget = new VideoWidget(context, instancePath);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(context);

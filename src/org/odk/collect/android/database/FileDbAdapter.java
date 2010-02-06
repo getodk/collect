@@ -23,6 +23,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.provider.MediaStore.Images;
 import android.util.Log;
 
 import org.odk.collect.android.R;
@@ -542,6 +544,32 @@ public class FileDbAdapter {
                     fis = fo.list(ff);
                     if (fis != null) {
                         c = fetchFilesByPath(instancePath + "/" + fo.list(ff)[0], null);
+                        
+                            File dir = new File(instancePath);
+                            if (dir.exists() && dir.isDirectory()) {
+                                File[] files = dir.listFiles();
+                                for (File file : files) {
+                                    if (file.getName().endsWith(".jpg")) {
+                                       String[] projection = {Images.ImageColumns._ID};
+                                       Cursor cd = mCtx.getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI,
+                                               projection,
+                                               "_data='" + instancePath + "/" + file.getName() + "'", null, null);
+                                       if (cd.getCount() > 0) {
+                                           cd.moveToFirst();
+                                           String id = cd.getString(cd.getColumnIndex(Images.ImageColumns._ID));
+
+                                           Log.e(t, "attempting to delete: " + Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id));
+                                           int del =
+                                                   mCtx.getContentResolver().delete(
+                                                           Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id), null, null);
+                                       Log.e(t, "deleted " + del + " image files");
+                                       }
+                                       c.close();
+                                       
+                                    }
+                                }
+                            }
+                        
                         if (c.getCount() == 0 && !FileUtils.deleteFolder(instancePath)) {
                             Log.i(t, "Failed to delete " + instancePath);
                         }

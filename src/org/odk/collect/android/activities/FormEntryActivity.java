@@ -16,10 +16,30 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import org.javarosa.model.xform.XFormsModule;
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FormHandler;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
+import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.GestureDetector;
+import org.odk.collect.android.views.QuestionView;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +47,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -47,28 +67,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.javarosa.model.xform.XFormsModule;
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.logic.FormHandler;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.GestureDetector;
-import org.odk.collect.android.utilities.ImageUtils;
-import org.odk.collect.android.views.QuestionView;
-
-import java.io.Externalizable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 
 /**
@@ -225,25 +223,38 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveCurrentAnswer(false);
                 break;
             case GlobalConstants.IMAGE_CAPTURE:
-                if (ImageUtils.hasImageCaptureBug()) {
-                    File fi = new File(GlobalConstants.TMPFILE_PATH);
-                    try {
-                        Uri ui =
-                                Uri.parse(android.provider.MediaStore.Images.Media.insertImage(
-                                        getContentResolver(), fi.getAbsolutePath(), null, null));
-                        if (!fi.delete()) {
-                            Log.i(t, "Failed to delete " + fi);
-                        }
-                        ((QuestionView) mCurrentView).setBinaryData(ui);
-                        saveCurrentAnswer(false);
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    refreshCurrentView();
-                    break;
+                // We saved the image to the tempfile_path, but we really want it to be in:
+                // /sdcard/odk/instances/[current instnace]/something.jpg
+                // so we move it here before inserting it into the content provider.
+                File fi = new File(GlobalConstants.TMPFILE_PATH);
+                
+                String mInstanceFolder = mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                String s = mInstanceFolder + "/" + System.currentTimeMillis() + ".jpg";
+
+                File nf = new File(s);
+                if (!fi.renameTo(nf)) {
+                    Log.i(t, "Failed to rename " + fi.getAbsolutePath());
+                } else {
+                    Log.i(t, "renamed " + fi.getAbsolutePath() + " to " + nf.getAbsolutePath());
                 }
-                // $FALL-THROUGH$
+                
+                // Add the new image to the Media content provider so that the viewing is fast in
+                // 2.0+
+                ContentValues values = new ContentValues(6);
+                values.put(Images.Media.TITLE, nf.getName());
+                values.put(Images.Media.DISPLAY_NAME, nf.getName());
+                values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
+                values.put(Images.Media.MIME_TYPE, "image/jpeg");
+                values.put(Images.Media.DATA, nf.getAbsolutePath());
+
+                Uri imageuri =
+                        getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+                Log.i(t, "Inserting image returned uri = " + imageuri.toString());
+
+                ((QuestionView) mCurrentView).setBinaryData(imageuri);
+                saveCurrentAnswer(false);
+                refreshCurrentView();
+                break;
             case GlobalConstants.AUDIO_CAPTURE:
             case GlobalConstants.VIDEO_CAPTURE:
                 Uri um = intent.getData();
@@ -272,8 +283,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
          * question if it's a repeat dialog.
          */
         // TODO: carlhartung. Desired functionality would be to display the same
-        // dialog again
-        // not the last question.
+        // dialog again not the last question.
         if (p.getType() == PromptElement.TYPE_REPEAT_DIALOG) {
             p = mFormHandler.prevPrompt();
         }
@@ -284,11 +294,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // TODO: carlhartung. This contains remains from when we changed the
-        // menu options based on
-        // question type. we now just enable and disable functionality so we
-        // should
-        // not add/remove each time.
         menu.removeItem(MENU_CLEAR);
         menu.removeItem(MENU_DELETE_REPEAT);
         menu.removeItem(MENU_LANGUAGES);
@@ -857,6 +862,24 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             // not previously saved, cleaning up
                             String instanceFolder =
                                     mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                            
+                            String[] projection = {Images.ImageColumns._ID};
+                            Cursor ci = getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI, projection, 
+                                    "_data like '%" + instanceFolder + "%'", null, null);
+                            int del = 0;
+                            if (ci.getCount() > 0) {
+                                while (ci.moveToNext()) {
+                                String id = ci.getString(ci.getColumnIndex(Images.ImageColumns._ID));
+                                
+                                Log.i(t, "attempting to delete unused image: " + Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id));
+                                del += getContentResolver().delete(Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id), 
+                                        null, null);
+                                }
+                            }
+                            c.close();
+                            ci.close();
+                            
+                            Log.i(t, "Deleted " + del + " images from content provider");
                             FileUtils.deleteFolder(instanceFolder);
                         }
                         // clean up cursor

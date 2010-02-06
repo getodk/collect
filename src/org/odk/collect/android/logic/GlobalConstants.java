@@ -103,7 +103,7 @@ public class GlobalConstants {
     /**
      * Temporary file
      */
-    public static final String TMPFILE_PATH = CACHE_PATH + "tmp.tmp";
+    public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
     /**
      * Theme used in entire application
