@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
@@ -189,7 +190,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         // You get an OutOfMemoryError if the file size is > ~900k.
         // We're doing 500k just to be safe.
         if (testsize.length() > 500000)
-            options.inSampleSize = 8;
+            options.inSampleSize = 4;
         else
             options = null;
 

@@ -54,6 +54,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
     public void clearAnswer() {
         mStringAnswer.setText(null);
+        mActionButton.setText(getContext().getString(R.string.get_barcode));
+
     }
 
 
@@ -99,9 +101,9 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         String s = prompt.getAnswerText();
         if (s != null) {
+            mActionButton.setText(getContext().getString(R.string.replace_barcode));
             mStringAnswer.setText(s);
         }
-
         // finish complex layout
         addView(mActionButton);
         addView(mStringAnswer);

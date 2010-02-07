@@ -55,6 +55,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     public void clearAnswer() {
         mStringAnswer.setText(null);
         mAnswerDisplay.setText(null);
+        mActionButton.setText(getContext().getString(R.string.get_location));
+
         }
 
 
@@ -99,9 +101,10 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
+            mActionButton.setText(getContext().getString(R.string.replace_location));
             setBinaryData(s);
         }
-
+        
         // when you press the button
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

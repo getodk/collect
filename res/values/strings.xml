@@ -94,6 +94,8 @@ the License.
 <string name="replace_audio">Replace Audio</string>
 <string name="replace_image">Replace Image</string>
 <string name="replace_video">Replace Video</string>
+<string name="replace_barcode">Replace Barcode</string>
+<string name="replace_location">Replace Location</string>
 <string name="required_answer_error">Sorry, this answer is required!</string>
 <string name="review">review</string>
 <string name="review_data">Review Saved Data</string>
