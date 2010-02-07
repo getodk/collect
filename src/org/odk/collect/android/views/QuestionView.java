@@ -48,6 +48,7 @@ public class QuestionView extends ScrollView {
 
     private IQuestionWidget mQuestionWidget;
     private LinearLayout mView;
+    private LinearLayout.LayoutParams mLayout;
     private String mInstancePath;
     private final static int TEXTSIZE = 21;
 
@@ -63,10 +64,17 @@ public class QuestionView extends ScrollView {
      * Create the appropriate view given your prompt.
      */
     public void buildView(PromptElement p) {
+
+
         mView = new LinearLayout(getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
-        mView.setGravity(Gravity.LEFT);
-        setPadding(10, 10, 10, 10);
+        mView.setGravity(Gravity.TOP);
+        mView.setPadding(0, 7, 0, 0);
+
+        mLayout =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLayout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
         AddGroupText(p);
@@ -76,7 +84,7 @@ public class QuestionView extends ScrollView {
         // if question or answer type is not supported, use text widget
         mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
 
-        mView.addView((View) mQuestionWidget);
+        mView.addView((View) mQuestionWidget, mLayout);
         addView(mView);
     }
 
@@ -127,7 +135,7 @@ public class QuestionView extends ScrollView {
             tv.setText(s.substring(0, s.length() - 3));
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE - 7);
             tv.setPadding(0, 0, 0, 5);
-            mView.addView(tv);
+            mView.addView(tv, mLayout);
         }
     }
 
@@ -140,12 +148,11 @@ public class QuestionView extends ScrollView {
         tv.setText(p.getQuestionText());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
         tv.setTypeface(null, Typeface.BOLD);
-
-        tv.setPadding(0, 0, 0, 5);
+        tv.setPadding(0, 0, 0, 7);
 
         // wrap to the widget of view
         tv.setHorizontallyScrolling(false);
-        mView.addView(tv);
+        mView.addView(tv, mLayout);
     }
 
 
@@ -158,13 +165,13 @@ public class QuestionView extends ScrollView {
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE - 5);
-            tv.setPadding(0, 0, 0, 7);
+            tv.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             tv.setHorizontallyScrolling(false);
             tv.setText(s);
             tv.setTypeface(null, Typeface.ITALIC);
 
-            mView.addView(tv);
+            mView.addView(tv, mLayout);
         }
     }
 

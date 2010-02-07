@@ -16,21 +16,12 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
@@ -41,6 +32,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.PromptElement;
+
+import java.io.File;
 
 
 /**
@@ -189,13 +188,16 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         File testsize = new File(mInstanceFolder + "/" + mBinaryName);
         // You get an OutOfMemoryError if the file size is > ~900k.
         // We're doing 500k just to be safe.
-        if (testsize.length() > 500000)
-            options.inSampleSize = 4;
-        else
-            options = null;
+        if (testsize.length() > 500000) {
+            options.inSampleSize = 8;
+        } else {
+            options = null;            
+        }
 
         Bitmap bmp = BitmapFactory.decodeFile(mInstanceFolder + "/" + mBinaryName, options);
         mImageView.setImageBitmap(bmp);
+        mImageView.setPadding(10,10,10,10);
+        mImageView.setAdjustViewBounds(true);
         mImageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
@@ -217,20 +219,6 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
             }
         });
         addView(mImageView);
-    }
-
-
-    private Uri getUriFromPath(String path) {
-        // find entry in content provider
-        Cursor c =
-                getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
-                        null, null);
-        c.moveToFirst();
-
-        // create uri from path
-        String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
-        c.close();
-        return Uri.parse(newPath);
     }
 
 

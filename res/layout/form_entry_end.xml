@@ -13,19 +13,13 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" 
-	android:orientation="vertical" 
-	android:gravity="center" 
-	android:padding="5px" >
-	
+
 <LinearLayout 
+  xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" 
 	android:orientation="vertical" 
-	android:gravity="center" 
-	android:padding="5px" >
+	android:padding="10px" android:gravity="center" >
 	
   <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
@@ -34,7 +28,7 @@ the License.
     android:text="description"
     android:textSize="23px" 
     android:paddingTop="2px"
-    android:paddingBottom="60px" 
+    android:paddingBottom="20px" 
      />
      
 	<TextView 
@@ -60,7 +54,5 @@ the License.
      android:layout_height="wrap_content"
      android:padding="20px"
      android:textSize="23px" />
-     
     
 </LinearLayout>
-</ScrollView>

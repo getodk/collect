@@ -19,7 +19,7 @@ the License.
 	android:layout_height="fill_parent" 
 	android:orientation="vertical"
 	android:gravity="center"
-	android:padding="5px">
+	android:padding="10px">
     
   <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
@@ -28,7 +28,7 @@ the License.
     android:text="description"
     android:textSize="23px" 
     android:paddingTop="2px"
-    android:paddingBottom="60px" 
+    android:paddingBottom="20px" 
      />
     
 	<TextView android:layout_width="fill_parent"

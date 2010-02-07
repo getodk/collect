@@ -50,7 +50,7 @@ the License.
 <string name="enter_data">Enter New Data</string>
 <string name="enter_data_button">Enter New Data (%s)</string>
 <string name="enter_data_description">%s has been selected for entry.</string>
-<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press Menu for more choices.</string>
+<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="entry_exit_confirm">Going back will delete any unsaved data. Are you sure?</string>
 <string name="expanded_group">Expanded Group</string>
 <string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
