@@ -5,7 +5,6 @@
 <string name="add_another_repeat">Ajouter un autre \"%s\"?</string>
 <string name="add_file">Ajouter le(s) fichier(s) sélectionné(s)</string>
 <string name="add_repeat">Ajouter un \"%s\"?</string>
-<string name="app_name">ODK Collect</string>
 <string name="barcode_scanner_error">Désolé, le lecteur de code-barre n’est pas installé!</string>
 <string name="cancel">Annuler</string>
 <string name="capture_audio">Capture Audio</string>
@@ -57,7 +56,6 @@
 <string name="location_accuracy">Précision de %s mètres</string>
 <string name="main_menu">Menu principal</string>
 <string name="main_menu_details">Faciliter la collecte de données</string>
-<string name="main_menu_message">ODK Collect v1.1.4</string>
 <string name="manage_files">Gérer les fichiers</string>
 <string name="no">Non</string>
 <string name="noselect_error">Désolé, aucun élément sélectionné!</string>
