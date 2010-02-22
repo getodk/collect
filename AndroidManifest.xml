@@ -34,11 +34,11 @@ the License.
     <activity android:name=".preferences.ServerPreferences" android:label="@string/app_name"/>
     <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
     <activity android:name=".activities.GeoPointActivity" android:label="@string/app_name"/>
-  
   </application>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_SURFACE_FLINGER"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-sdk android:minSdkVersion="3"></uses-sdk>
 </manifest>
