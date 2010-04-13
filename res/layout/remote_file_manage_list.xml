@@ -25,17 +25,17 @@ the License.
     android:layout_alignParentBottom="true"
     android:id="@+id/buttonholder">
         
-        <!-- 
+    
     <ToggleButton 
      android:id="@+id/toggle_button"
      android:textOn="@string/toggle_selected"
      android:textOff="@string/toggle_selected"
-    android:layout_width="wrap_content"
+     android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:padding="15px"
      android:textSize="19px" 
-android:layout_weight="1" 
-     /> -->
+	 android:layout_weight="1" 
+     />
      
     <Button 
     android:id="@+id/add_button"

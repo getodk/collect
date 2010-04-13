@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
@@ -73,6 +74,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private Button mActionButton;
 
     private FormDownloaderTask mFormDownloadTask;
+    private ToggleButton mToggleButton;
 
     private boolean mLoadingList;
 
@@ -94,9 +96,28 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
             public void onClick(View arg0) {
                 downloadSelectedFiles();
+                mToggleButton.setChecked(false);
             }
         });
-
+        
+        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        
+        mToggleButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	ListView ls = getListView();
+            	// Check all items
+                if (mToggleButton.isChecked()) {
+        			for(int pos = 0; pos < ls.getCount(); pos++) {
+        				if(!ls.isItemChecked(pos))
+        					ls.setItemChecked(pos, true);
+        			}
+                // cancel checking all items
+                } else { 
+        			ls.clearChoices();
+                }
+            }
+        });
+        
         setupView();
     }
 

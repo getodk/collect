@@ -16,6 +16,13 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,13 +35,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-
-import java.util.ArrayList;
+import android.widget.ToggleButton;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -51,9 +52,11 @@ public class InstanceUploaderList extends ListActivity {
     private static final int INSTANCE_UPLOADER = 0;
 
     private Button mActionButton;
+    private ToggleButton mToggleButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
+    private boolean mRestored = false;
 
 
     @Override
@@ -69,6 +72,7 @@ public class InstanceUploaderList extends ListActivity {
                     // items selected
                     uploadSelectedFiles();
                     refreshData();
+                    mToggleButton.setChecked(false);
                 } else {
                     // no items selected
                     Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
@@ -77,6 +81,27 @@ public class InstanceUploaderList extends ListActivity {
             }
 
         });
+        
+        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        mToggleButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	ListView ls = getListView();
+            	// Check all items
+                if (mToggleButton.isChecked()) {
+        			for(int pos = 0; pos < ls.getCount(); pos++) {
+        				if(!ls.isItemChecked(pos)) {
+        					ls.setItemChecked(pos, true);
+        					mSelected.add(ls.getItemIdAtPosition(pos));
+        				}
+        			}
+                // cancel checking all items
+                } else { 
+        			ls.clearChoices();
+        			mSelected.clear();
+                }
+            }
+        });
+        
     }
 
 
@@ -107,6 +132,22 @@ public class InstanceUploaderList extends ListActivity {
 
         // cleanup
         fda.close();
+        
+        // if current activity is being reinitialized due to changing orientation
+        // restore all check marks for ones selected
+        if(mRestored) {
+        	ListView ls = getListView();
+			for(long id : mSelected) {
+				for(int pos = 0; pos < ls.getCount(); pos++) { 
+					if(id == ls.getItemIdAtPosition(pos)) {
+						ls.setItemChecked(pos, true);
+						break;
+					}
+				}
+        		
+			}
+        	mRestored = false;
+        }
     }
 
 
@@ -138,7 +179,9 @@ public class InstanceUploaderList extends ListActivity {
         if (mInstances != null) {
             mInstances.getCursor().requery();
         }
-        mSelected.clear();
+        if(!mRestored) {
+        	mSelected.clear();
+        }
         refreshView();
     }
 
@@ -190,7 +233,24 @@ public class InstanceUploaderList extends ListActivity {
         refreshData();
         super.onResume();
     }
-
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    	super.onRestoreInstanceState(savedInstanceState);
+    	long[] selectedArray = savedInstanceState.getLongArray("selected");
+    	for(int i = 0; i < selectedArray.length; i++)
+    		mSelected.add(selectedArray[i]);
+    	mRestored = true;
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		long[] selectedArray = new long[mSelected.size()];
+		for(int i = 0; i < mSelected.size(); i++)
+			selectedArray[i] = mSelected.get(i);
+		outState.putLongArray("selected", selectedArray);
+	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
