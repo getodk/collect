@@ -43,9 +43,6 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
     String mUrl;
     ArrayList<String> mDownloadedForms = new ArrayList<String>();
 
-    public String formList = "formlist.xml";
-
-
     public void setDownloadServer(String newServer) {
         mUrl = newServer;
     }
@@ -55,7 +52,7 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
     @Override
     protected ArrayList<String> doInBackground(String... values) {
         if (mUrl != null && mUrl.endsWith("formList")) {
-            if (downloadFile(mUrl, formList)) {
+            if (downloadFile(mUrl, GlobalConstants.CACHE_LIST)) {
                 return mDownloadedForms;
             } else {
                 return null;
@@ -94,7 +91,7 @@ public class FormDownloaderTask extends AsyncTask<String, Integer, ArrayList<Str
 
             // if file exists, append a number
             File f;
-            if (name.equals(formList)) {
+            if (name.equals(GlobalConstants.CACHE_LIST)) {
                 f = new File(GlobalConstants.CACHE_PATH + name);
             } else {
                 String path = GlobalConstants.FORMS_PATH + name;

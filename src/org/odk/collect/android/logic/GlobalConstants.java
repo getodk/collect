@@ -145,5 +145,7 @@ public class GlobalConstants {
                     "org.javarosa.xpath.expr.XPathStringLiteral",
                     "org.javarosa.xpath.expr.XPathUnionExpr",
                     "org.javarosa.xpath.expr.XPathVariableReference"};
+    
+    public final static String CACHE_LIST = "formlist.xml";
 
 }

@@ -50,6 +50,7 @@ import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,6 +70,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private static final int PROGRESS_DIALOG = 1;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
+    private static final String BUNDLE_DOWNLOADED_KEY = "downloaded_key";
+    
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private Button mActionButton;
@@ -77,6 +80,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private ToggleButton mToggleButton;
 
     private boolean mLoadingList;
+    private boolean mDownloaded;
 
     private ArrayList<String> mFormName = new ArrayList<String>();
     private ArrayList<String> mFormUrl = new ArrayList<String>();
@@ -117,15 +121,18 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 }
             }
         });
+        if (savedInstanceState != null)
+        	mDownloaded = savedInstanceState.getBoolean(BUNDLE_DOWNLOADED_KEY);
         
-        setupView();
+        if (mDownloaded)
+        	buildView();
+        else
+        	setupView();
+
     }
 
 
     private void setupView() {
-        // TODO: this will actually re-download the list every time the view
-        // flips. Probably not desired behavior.
-
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);
 
@@ -158,9 +165,16 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     }
 
 
-    private void buildView() {
+    @Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean(BUNDLE_DOWNLOADED_KEY, mDownloaded);
+	}
+
+
+	private void buildView() {
         // create xml document
-        File file = new File(GlobalConstants.CACHE_PATH + mFormDownloadTask.formList);
+        File file = new File(GlobalConstants.CACHE_PATH + GlobalConstants.CACHE_LIST);
         if (file.exists()) {
 
             Document doc = null;
@@ -319,6 +333,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     public void downloadingComplete(ArrayList<String> result) {
         int resultSize = 0;
         dismissDialog(PROGRESS_DIALOG);
+        mDownloaded = true;
 
         if (result == null) {
             Toast.makeText(this, getString(R.string.load_remote_form_error), Toast.LENGTH_LONG)
