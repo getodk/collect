@@ -28,9 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.logic.HierarchyElement;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -105,10 +103,8 @@ public class FormHierarchyActivity extends ListActivity {
                 mFormEntryController.jumpToIndex(index);
             } else {
                 // We were at a question, so stepping back brought us to either:
-                // The beginning. or
-                // The start of a repeat. So we need to step out again to go
-                // passed
-                // the repeat.
+                // The beginning. or The start of a repeat. So we need to step
+                // out again to go passed the repeat.
                 index = stepIndexOut(index);
                 if (index == null) {
                     mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
@@ -142,8 +138,7 @@ public class FormHierarchyActivity extends ListActivity {
         FormIndex currentIndex = mFormEntryModel.getFormIndex();
 
         // If we're not at the first level, we're inside a repeated group so we
-        // want to
-        // only display everything enclosed within that group.
+        // want to only display everything enclosed within that group.
         String enclosingGroupName = "";
         formList = new ArrayList<HierarchyElement>();
 
@@ -154,8 +149,8 @@ public class FormHierarchyActivity extends ListActivity {
             mFormEntryController.stepToNextEvent();
         } else {
             // Otherwise, check to see if the question is at the first level of
-            // the hierarchy
-            // If it is, display the root level from the beginning.
+            // the hierarchy. If it is, display the root level from the
+            // beginning.
             FormIndex startTest = stepIndexOut(currentIndex);
             if (startTest == null) {
                 // We were at the root
@@ -192,83 +187,80 @@ public class FormHierarchyActivity extends ListActivity {
         event = mFormEntryModel.getEvent();
 
         // There may be repeating Groups at this level of the hierarchy, we use
-        // this variable
-        // to keep track of them.
+        // this variable to keep track of them.
         String repeatedGroupName = "";
-        while (event != FormEntryController.EVENT_END_OF_FORM) {
+
+        event_search: while (event != FormEntryController.EVENT_END_OF_FORM) {
             FormEntryPrompt fp = null;
             FormEntryCaption fc = null;
-            if (event == FormEntryController.EVENT_QUESTION) {
-                if (!repeatedGroupName.equalsIgnoreCase("")) {
-                    // We're in a repeating group, so skip this question and
-                    // move to the next index.
-                    event = mFormEntryController.stepToNextEvent();
-                    continue;
-                }
 
-                fp = mFormEntryModel.getQuestionPrompt();
-                formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
-                        Color.WHITE, QUESTION, fp.getIndex()));
-            } else if (event == FormEntryController.EVENT_GROUP) {
-                if (!repeatedGroupName.equalsIgnoreCase("")) {
-                    // We're in a repeating group, so skip this question and
-                    // move to the next index.
-                    event = mFormEntryController.stepToNextEvent();
-                    continue;
-                }
-                // ignore group events
-            } else if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                fc = mFormEntryModel.getCaptionPrompt();
-                if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
-                    // We were displaying a set of questions inside of a
-                    // repeated group.
-                    // This is the end of that group.
+            switch (event) {
+                case FormEntryController.EVENT_QUESTION:
+                    if (!repeatedGroupName.equalsIgnoreCase("")) {
+                        // We're in a repeating group, so skip this question and
+                        // move to the next index.
+                        event = mFormEntryController.stepToNextEvent();
+                        continue;
+                    }
+
+                    fp = mFormEntryModel.getQuestionPrompt();
+                    formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
+                            Color.WHITE, QUESTION, fp.getIndex()));
                     break;
-                }
-
-                if (repeatedGroupName.compareTo(fc.getLongText()) != 0) {
-                    // We're in a repeating group, so skip this repeat prompt
-                    // and
-                    // move to the next event.
-                    event = mFormEntryController.stepToNextEvent();
-                    continue;
-                }
-
-                if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
-                    // This is the end of the current repeating group, so we
-                    // reset the repeatedGroupName variable
-                    repeatedGroupName = "";
-                }
-            } else if (event == FormEntryController.EVENT_REPEAT) {
-                fc = mFormEntryModel.getCaptionPrompt();
-                if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
-                    // We were displaying a set of questions inside a repeated
-                    // group
-                    // This is the end of that group.
+                case FormEntryController.EVENT_GROUP:
+                    // ignore group events
                     break;
-                }
-                if (repeatedGroupName.equalsIgnoreCase("") && fc.getMultiplicity() == 0) {
-                    // This is the start of a repeating group. We only want to
-                    // display "Group #", so we mark this as the beginning and
-                    // skip all of its children
-                    HierarchyElement group =
-                            new HierarchyElement(fc.getLongText(),
-                                    getString(R.string.collapsed_group), getResources()
-                                            .getDrawable(R.drawable.expander_ic_minimized),
-                                    Color.WHITE, COLLAPSED, fc.getIndex());
-                    repeatedGroupName = fc.getLongText();
-                    formList.add(group);
-                }
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                    fc = mFormEntryModel.getCaptionPrompt();
+                    if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
+                        // We were displaying a set of questions inside of a
+                        // repeated group. This is the end of that group.
+                        break event_search;
+                    }
 
-                if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
-                    // Add this group name to the drop down list for this
-                    // repeating group.
-                    HierarchyElement h = formList.get(formList.size() - 1);
-                    h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                            + fc.getMultiplicity(), mIndent + "Select to see repeated element: "
-                            + fc.getLongText() + " " + fc.getMultiplicity(), null, Color.WHITE,
-                            CHILD, fc.getIndex()));
-                }
+                    if (repeatedGroupName.compareTo(fc.getLongText()) != 0) {
+                        // We're in a repeating group, so skip this repeat
+                        // prompt and move to the next event.
+                        event = mFormEntryController.stepToNextEvent();
+                        continue;
+                    }
+
+                    if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
+                        // This is the end of the current repeating group, so we
+                        // reset the repeatedGroupName variable
+                        repeatedGroupName = "";
+                    }
+                    break;
+                case FormEntryController.EVENT_REPEAT:
+                    fc = mFormEntryModel.getCaptionPrompt();
+                    if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
+                        // We were displaying a set of questions inside a
+                        // repeated group. This is the end of that group.
+                        break event_search;
+                    }
+                    if (repeatedGroupName.equalsIgnoreCase("") && fc.getMultiplicity() == 0) {
+                        // This is the start of a repeating group. We only want
+                        // to display "Group #", so we mark this as the
+                        // beginning and skip all of its children
+                        HierarchyElement group =
+                                new HierarchyElement(fc.getLongText(),
+                                        getString(R.string.collapsed_group), getResources()
+                                                .getDrawable(R.drawable.expander_ic_minimized),
+                                        Color.WHITE, COLLAPSED, fc.getIndex());
+                        repeatedGroupName = fc.getLongText();
+                        formList.add(group);
+                    }
+
+                    if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
+                        // Add this group name to the drop down list for this
+                        // repeating group.
+                        HierarchyElement h = formList.get(formList.size() - 1);
+                        h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
+                                + fc.getMultiplicity(), mIndent
+                                + "Select to see repeated element: " + fc.getLongText() + " "
+                                + fc.getMultiplicity(), null, Color.WHITE, CHILD, fc.getIndex()));
+                    }
+                    break;
             }
             event = mFormEntryController.stepToNextEvent();
         }

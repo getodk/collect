@@ -104,8 +104,10 @@ public class GlobalConstants {
      * Classes needed to serialize objects
      */
     public final static String[] SERIALIABLE_CLASSES =
-            {"org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
-                    "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
+            {"org.javarosa.core.model.FormDef", 
+            "org.javarosa.core.model.GroupDef",
+                    "org.javarosa.core.model.QuestionDef", 
+                    "org.javarosa.core.model.data.DateData",
                     "org.javarosa.core.model.data.DateTimeData",
                     "org.javarosa.core.model.data.DecimalData",
                     "org.javarosa.core.model.data.GeoPointData",
@@ -120,7 +122,8 @@ public class GlobalConstants {
                     "org.javarosa.core.services.locale.TableLocaleSource",
                     "org.javarosa.xpath.expr.XPathArithExpr",
                     "org.javarosa.xpath.expr.XPathBoolExpr",
-                    "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
+                    "org.javarosa.xpath.expr.XPathCmpExpr", 
+                    "org.javarosa.xpath.expr.XPathEqExpr",
                     "org.javarosa.xpath.expr.XPathFilterExpr",
                     "org.javarosa.xpath.expr.XPathFuncExpr",
                     "org.javarosa.xpath.expr.XPathNumericLiteral",
