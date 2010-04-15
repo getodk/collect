@@ -16,6 +16,10 @@
 
 package org.odk.collect.android.activities;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,10 +27,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores

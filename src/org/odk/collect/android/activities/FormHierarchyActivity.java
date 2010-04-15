@@ -16,6 +16,18 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.HierarchyListAdapter;
+import org.odk.collect.android.logic.HierarchyElement;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -26,42 +38,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.GroupDef;
-import org.javarosa.core.model.IFormElement;
-import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.formmanager.view.FormElementBinding;
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.HierarchyListAdapter;
-import org.odk.collect.android.logic.FormHandler;
-import org.odk.collect.android.logic.HierarchyElement;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
-
-/**
- * 
- * TODO: WARNING, this file is by no means complete, or correct for that matter.
- * It is hacky attempt #1 to make a hierarchy viewer by stealing a bunch of
- * things from formHandler. JavaRosa should give us better methods to accomplish
- * this (and will in the future...fingers crossed) But until then, we're
- * trying...
- * 
- */
 public class FormHierarchyActivity extends ListActivity {
 
     private static final String t = "FormHierarchyActivity";
-    FormDef mForm;
+    private FormEntryController mFormEntryController;
+    private FormEntryModel mFormEntryModel;
     int state;
 
     private static final int CHILD = 1;
@@ -71,10 +55,9 @@ public class FormHierarchyActivity extends ListActivity {
 
     private final String mIndent = "     ";
 
-    private Button mBackButton;
-
-    private FormIndex mCurrentIndex;
     List<HierarchyElement> formList;
+
+    TextView mPath;
 
 
     @Override
@@ -82,298 +65,253 @@ public class FormHierarchyActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
 
-        // We'll use formhandler to set the CurrentIndex before returning to
-        // FormEntryActivity
-        FormHandler mFormHandler = FormEntryActivity.mFormHandler;
-        mForm = mFormHandler.getForm();
+        // We use a static FormEntryController to make jumping faster.
+        mFormEntryController = FormEntryActivity.mFormEntryController;
+        mFormEntryModel = mFormEntryController.getModel();
 
-        setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
+        setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
 
-        mCurrentIndex = mFormHandler.getIndex();
-        if (mCurrentIndex.isBeginningOfFormIndex()) {
-            // we always have to start on a valid formIndex
-            mCurrentIndex = mForm.incrementIndex(mCurrentIndex);
-        }
+        mPath = (TextView) findViewById(R.id.pathtext);
 
-        mBackButton = (Button) findViewById(R.id.backbutton);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
+        jumpBeginningButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                mCurrentIndex = stepIndexOut(mCurrentIndex);
-                if (mCurrentIndex == null || indexIsBeginning(mCurrentIndex)) {
-                    mCurrentIndex = FormIndex.createBeginningOfFormIndex();
-                    mCurrentIndex = mForm.incrementIndex(mCurrentIndex);
-                } else {
-
-                    FormIndex levelTest = mCurrentIndex;
-                    int level = 0;
-                    while (levelTest.getNextLevel() != null) {
-                        level++;
-                        levelTest = levelTest.getNextLevel();
-                    }
-
-                    FormIndex tempIndex;
-                    boolean done = false;
-                    while (!done) {
-                        tempIndex = mCurrentIndex;
-                        int i = 0;
-                        while (tempIndex.getNextLevel() != null && i < level) {
-                            tempIndex = tempIndex.getNextLevel();
-                            i++;
-                        }
-                        if (tempIndex.getLocalIndex() == 0) {
-                            done = true;
-                        } else {
-                            mCurrentIndex = prevIndex(mCurrentIndex);
-                        }
-
-                    }
-                }
-                refreshView();
-
-                // we've already stepped back...
-                // now we just have to refresh, I think
+                mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                finish();
             }
         });
 
-        Button jumpButton = (Button) findViewById(R.id.jumpbutton);
-        jumpButton.setOnClickListener(new OnClickListener() {
+        Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
+        jumpEndButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                createJumpDialog();
+                mFormEntryController.jumpToIndex(FormIndex.createEndOfFormIndex());
+                finish();
             }
         });
         refreshView();
     }
 
 
-    private void createJumpDialog() {
-        final String[] items = {getString(R.string.jump_to_start), getString(R.string.jump_to_end)};
-        AlertDialog mJumpDialog =
-                new AlertDialog.Builder(this).setTitle(R.string.jump_to).setItems(items,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (items[which].equals(getString(R.string.jump_to_start))) {
-                                    mCurrentIndex = FormIndex.createBeginningOfFormIndex();
-                                    FormEntryActivity.mFormHandler.setFormIndex(mCurrentIndex);
-                                    finish();
-                                } else {
-                                    mCurrentIndex = FormIndex.createEndOfFormIndex();
-                                    FormEntryActivity.mFormHandler.setFormIndex(mCurrentIndex);
-                                    finish();
-                                }
-                            }
-                        }).create();
-        mJumpDialog.show();
+    private void goUpLevel() {
+        FormIndex index = stepIndexOut(mFormEntryModel.getFormIndex());
+        int currentEvent = mFormEntryModel.getEvent();
+
+        if (index == null) {
+            mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        } else {
+            if (currentEvent == FormEntryController.EVENT_REPEAT) {
+                // We were at a repeat, so stepping back brought us to the
+                // previous level
+                mFormEntryController.jumpToIndex(index);
+            } else {
+                // We were at a question, so stepping back brought us to either:
+                // The beginning. or
+                // The start of a repeat. So we need to step out again to go
+                // passed
+                // the repeat.
+                index = stepIndexOut(index);
+                if (index == null) {
+                    mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                } else {
+                    mFormEntryController.jumpToIndex(index);
+                }
+            }
+        }
+
+        refreshView();
     }
 
 
-    /*
-     * This is a very not ideal way to do this, but JR needs to have some
-     * mechanism detect the 'level' of an index and it doesn't right now. This
-     * basically turns a formindex to a string and checks to see if it contains
-     * two commas and an underscore. If there's no underscore you're at the root
-     * level of a form (ie 8, 0, 0, 0). If there is, you're probably in an
-     * instance of a repeated group (ie 3, 2_0, 0).
-     */
-    private boolean indexIsBeginning(FormIndex fi) {
-        String startTest = fi.toString();
-        int firstComma = startTest.indexOf(",");
-        int secondComma = startTest.indexOf(",", firstComma + 1);
-        int underscore = startTest.indexOf("_");
-        boolean beginning = (secondComma == -1 || underscore == -1);
-        return beginning;
+    private String getCurrentPath() {
+        FormIndex index = stepIndexOut(mFormEntryModel.getFormIndex());
+
+        String path = "";
+        while (index != null) {
+            path = mFormEntryModel.getCaptionPrompt(index).getLongText() + "/" + path;
+            index = stepIndexOut(index);
+        }
+
+        return path;
     }
 
 
     public void refreshView() {
+
+        // Record the current index so we can return to the same place if the
+        // user hits 'back'.
+        FormIndex currentIndex = mFormEntryModel.getFormIndex();
+
+        // If we're not at the first level, we're inside a repeated group so we
+        // want to
+        // only display everything enclosed within that group.
+        String enclosingGroupName = "";
         formList = new ArrayList<HierarchyElement>();
 
-        FormIndex currentIndex = mCurrentIndex;
-
-        // would like to use this, but it's broken and changes the currentIndex
-        // TODO: fix in javarosa.
-        /*
-         * FormIndex startTest = stepIndexOut(currentIndex); Log.e("carl",
-         * "starttest = " + startTest); boolean beginning = (startTest == null);
-         */
-
-        // begin hack around:
-        boolean beginning = indexIsBeginning(currentIndex);
-        // end hack around
-
-        String displayGroup = "";
-        int level = 0;
-        String repeatGroup = "-1";
-
-        if (!beginning) {
-            FormIndex levelTest = currentIndex;
-            while (levelTest.getNextLevel() != null) {
-                level++;
-                levelTest = levelTest.getNextLevel();
-            }
-
-            boolean found = false;
-            while (!found) {
-                FormIndex localTest = currentIndex;
-                for (int i = 0; i < level; i++) {
-                    localTest = localTest.getNextLevel();
-                }
-                if (localTest.getLocalIndex() == 0)
-                    found = true;
-                else
-                    currentIndex = prevIndex(currentIndex);
-            }
-
-            // we're displaying only things only within a given group
-            FormIndex prevIndex = prevIndex(currentIndex);
-
-            displayGroup = mForm.getChildInstanceRef(prevIndex).toString(false);
-
-            mBackButton.setEnabled(true);
+        // If we're currently at a repeat node, record the name of the node and
+        // step to the next node to display.
+        if (mFormEntryModel.getEvent() == FormEntryController.EVENT_REPEAT) {
+            enclosingGroupName = mFormEntryModel.getCaptionPrompt().getLongText();
+            mFormEntryController.stepToNextEvent();
         } else {
-            currentIndex = FormIndex.createBeginningOfFormIndex();
-            currentIndex = nextRelevantIndex(currentIndex);
-            mBackButton.setEnabled(false);
+            // Otherwise, check to see if the question is at the first level of
+            // the hierarchy
+            // If it is, display the root level from the beginning.
+            FormIndex startTest = stepIndexOut(currentIndex);
+            if (startTest == null) {
+                // We were at the root
+                mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+            } else {
+                Log.e("carl", "not at root, what does this mean?");
+                // We weren't at the root, so after stepIndexOut we're
+
+                mFormEntryController.jumpToIndex(startTest);
+            }
+
+            // now test again for repeat
+            if (mFormEntryModel.getEvent() == FormEntryController.EVENT_REPEAT) {
+                enclosingGroupName = mFormEntryModel.getCaptionPrompt().getLongText();
+                mFormEntryController.stepToNextEvent();
+            }
         }
 
-        int repeatIndex = -1;
-        int groupCount = 1;
+
+
+        int event = mFormEntryModel.getEvent();
+        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+            // The beginning of form has no valid prompt to display.
+            mFormEntryController.stepToNextEvent();
+            mPath.setText("Form Path: /");
+        } else {
+            // Create a ".." entry so user can go back.
+            formList.add(new HierarchyElement("..", "Go to previous level", null, Color.WHITE,
+                    QUESTION, null));
+            mPath.setText("Form Path: /" + getCurrentPath());
+        }
+
+        // Refresh the current event in case we did step forward.
+        event = mFormEntryModel.getEvent();
+
+        // There may be repeating Groups at this level of the hierarchy, we use
+        // this variable
+        // to keep track of them.
         String repeatedGroupName = "";
-        while (!isEnd(currentIndex)) {
-            FormIndex normalizedLevel = currentIndex;
-            for (int i = 0; i < level; i++) {
-                normalizedLevel = normalizedLevel.getNextLevel();
-            }
-
-            IFormElement e = mForm.getChild(currentIndex);
-            String currentGroupName = mForm.getChildInstanceRef(currentIndex).toString(false);
-
-            // we're displaying only a particular group, and we've reached the
-            // end of that group
-            if (displayGroup.equalsIgnoreCase(currentGroupName)) {
-                break;
-            }
-
-            // Here we're adding new child elements to a group, or skipping over
-            // elements in the index
-            // that are just members of the current group.
-            if (currentGroupName.startsWith(repeatGroup)) {
-                // the last repeated group doesn't exist, so make sure the next
-                // item is still in the group.
-                FormIndex nextIndex = nextRelevantIndex(currentIndex);
-                if (nextIndex.isEndOfFormIndex()) break;
-                String nextIndexName = mForm.getChildInstanceRef(nextIndex).toString(false);
-                if (repeatIndex != normalizedLevel.getInstanceIndex()
-                        && nextIndexName.startsWith(repeatGroup)) {
-
-                    repeatIndex = normalizedLevel.getInstanceIndex();
-
-                    HierarchyElement h = formList.get(formList.size() - 1);
-                    h.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                            + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
-                }
-
-                // if it's not a new repeat, we skip it because it's in the
-                // group anyway
-                currentIndex = nextRelevantIndex(currentIndex);
-                continue;
-            }
-
-            if (e instanceof GroupDef) {
-                GroupDef g = (GroupDef) e;
-                // h += "\t" + g.getLongText() + "\t" + g.getRepeat();
-
-                if (g.getRepeat() && !currentGroupName.startsWith(repeatGroup)) {
-
-                    // we have a new repeated group that we haven't seen
-                    // before
-                    repeatGroup = currentGroupName;
-                    repeatIndex = normalizedLevel.getInstanceIndex();
-                    FormIndex nextIndex = nextRelevantIndex(currentIndex);
-                    if (nextIndex.isEndOfFormIndex()) break;
-                    String nextIndexName = mForm.getChildInstanceRef(nextIndex).toString(false);
-                    // Make sure the next element is in this group, else no
-                    // reason to add it
-                    if (nextIndexName.startsWith(repeatGroup)) {
-                        groupCount = 1;
-                        // add the group, but this index is also the first
-                        // instance of a
-                        // repeat, so add it as a child of the group
-                        repeatedGroupName = g.getLongText();
-                        HierarchyElement group =
-                                new HierarchyElement(repeatedGroupName,
-                                        getString(R.string.collapsed_group), getResources()
-                                                .getDrawable(R.drawable.expander_ic_minimized),
-                                        Color.WHITE, COLLAPSED, currentIndex);
-                        group.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
-                                + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
-                        formList.add(group);
-                    } else {
-                        Log.e(t, "no children, so skipping");
-                    }
-                    currentIndex = nextRelevantIndex(currentIndex);
+        while (event != FormEntryController.EVENT_END_OF_FORM) {
+            FormEntryPrompt fp = null;
+            FormEntryCaption fc = null;
+            if (event == FormEntryController.EVENT_QUESTION) {
+                if (!repeatedGroupName.equalsIgnoreCase("")) {
+                    // We're in a repeating group, so skip this question and
+                    // move to the next index.
+                    event = mFormEntryController.stepToNextEvent();
                     continue;
                 }
-            } else if (e instanceof QuestionDef) {
-                QuestionDef q = (QuestionDef) e;
-                // h += "\t" + q.getLongText();
-                // Log.e("FHV", h);
-                String answer = "";
-                FormElementBinding feb = new FormElementBinding(null, currentIndex, mForm);
-                IAnswerData a = feb.getValue();
-                if (a != null) {
-                    if (feb.instanceNode.dataType == Constants.DATATYPE_DATE) {
-                        answer =
-                                new SimpleDateFormat("MMM dd, yyyy").format((Date) ((DateData) a)
-                                        .getValue());
-                    } else {
-                        answer = a.getDisplayText();
-                    }
+
+                fp = mFormEntryModel.getQuestionPrompt();
+                formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
+                        Color.WHITE, QUESTION, fp.getIndex()));
+            } else if (event == FormEntryController.EVENT_GROUP) {
+                if (!repeatedGroupName.equalsIgnoreCase("")) {
+                    // We're in a repeating group, so skip this question and
+                    // move to the next index.
+                    event = mFormEntryController.stepToNextEvent();
+                    continue;
+                }
+                // ignore group events
+            } else if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                fc = mFormEntryModel.getCaptionPrompt();
+                if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
+                    // We were displaying a set of questions inside of a
+                    // repeated group.
+                    // This is the end of that group.
+                    break;
                 }
 
-                String questionText = feb.form.fillTemplateString(q.getLongText(), feb.instanceRef);
+                if (repeatedGroupName.compareTo(fc.getLongText()) != 0) {
+                    // We're in a repeating group, so skip this repeat prompt
+                    // and
+                    // move to the next event.
+                    event = mFormEntryController.stepToNextEvent();
+                    continue;
+                }
 
-                formList.add(new HierarchyElement(questionText, answer, null, Color.WHITE,
-                        QUESTION, currentIndex));
-            } else {
-                Log.e(t, "we shouldn't get here");
+                if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
+                    // This is the end of the current repeating group, so we
+                    // reset the repeatedGroupName variable
+                    repeatedGroupName = "";
+                }
+            } else if (event == FormEntryController.EVENT_REPEAT) {
+                fc = mFormEntryModel.getCaptionPrompt();
+                if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
+                    // We were displaying a set of questions inside a repeated
+                    // group
+                    // This is the end of that group.
+                    break;
+                }
+                if (repeatedGroupName.equalsIgnoreCase("") && fc.getMultiplicity() == 0) {
+                    // This is the start of a repeating group. We only want to
+                    // display "Group #", so we mark this as the beginning and
+                    // skip all of its children
+                    HierarchyElement group =
+                            new HierarchyElement(fc.getLongText(),
+                                    getString(R.string.collapsed_group), getResources()
+                                            .getDrawable(R.drawable.expander_ic_minimized),
+                                    Color.WHITE, COLLAPSED, fc.getIndex());
+                    repeatedGroupName = fc.getLongText();
+                    formList.add(group);
+                }
+
+                if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
+                    // Add this group name to the drop down list for this
+                    // repeating group.
+                    HierarchyElement h = formList.get(formList.size() - 1);
+                    h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
+                            + fc.getMultiplicity(), mIndent + "Select to see repeated element: "
+                            + fc.getLongText() + " " + fc.getMultiplicity(), null, Color.WHITE,
+                            CHILD, fc.getIndex()));
+                }
             }
-
-            currentIndex = nextRelevantIndex(currentIndex);
+            event = mFormEntryController.stepToNextEvent();
         }
+
 
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         itla.setListItems(formList);
         setListAdapter(itla);
+
+        // set the controller back to the current index in case the user hits
+        // 'back'
+        mFormEntryController.jumpToIndex(currentIndex);
     }
 
 
-    // used to go 'back', the only problem is this changes whatever it's
-    // referencing
+    /**
+     * used to go up one level in the formIndex. That is, if you're at 5_0, 1
+     * (the second question in a repeating group), this method will return a
+     * FormInex of 5_0 (the start of the repeating group). If your at index 16
+     * or 5_0, this will return null;
+     * 
+     * @param index
+     * @return
+     */
     public FormIndex stepIndexOut(FormIndex index) {
         if (index.isTerminal()) {
             return null;
         } else {
-            index.setNextLevel(stepIndexOut(index.getNextLevel()));
-            return index;
+            return new FormIndex(stepIndexOut(index.getNextLevel()), index);
         }
-    }
-
-
-    private FormIndex prevIndex(FormIndex index) {
-        do {
-            index = mForm.decrementIndex(index);
-        } while (index.isInForm() && !isRelevant(index));
-        return index;
     }
 
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         HierarchyElement h = (HierarchyElement) l.getItemAtPosition(position);
+        if (h.getFormIndex() == null) {
+            goUpLevel();
+            return;
+        }
 
         switch (h.getType()) {
             case EXPANDED:
-                Log.i(t, "is expanded group, collapsing");
                 h.setType(COLLAPSED);
                 ArrayList<HierarchyElement> children = h.getChildren();
                 for (int i = 0; i < children.size(); i++) {
@@ -384,7 +322,6 @@ public class FormHierarchyActivity extends ListActivity {
                 h.setColor(Color.WHITE);
                 break;
             case COLLAPSED:
-                Log.i(t, "is collapsed group, expanding");
                 h.setType(EXPANDED);
                 ArrayList<HierarchyElement> children1 = h.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
@@ -397,14 +334,11 @@ public class FormHierarchyActivity extends ListActivity {
                 h.setColor(Color.LTGRAY);
                 break;
             case QUESTION:
-                // Toast.makeText(this, "Question", Toast.LENGTH_SHORT).show();
-                FormEntryActivity.mFormHandler.setFormIndex(h.getFormIndex());
+                mFormEntryController.jumpToIndex(h.getFormIndex());
                 finish();
                 return;
             case CHILD:
-                // Toast.makeText(this, "CHILD", Toast.LENGTH_SHORT).show();
-                mCurrentIndex = h.getFormIndex();
-                mCurrentIndex = nextRelevantIndex(mCurrentIndex);
+                mFormEntryController.jumpToIndex(h.getFormIndex());
                 refreshView();
                 return;
         }
@@ -417,77 +351,21 @@ public class FormHierarchyActivity extends ListActivity {
     }
 
 
-    private FormIndex nextRelevantIndex(FormIndex index) {
-        do {
-            index = mForm.incrementIndex(index);
-        } while (index.isInForm() && !isRelevant(index));
-        return index;
-    }
+    /* helper test method. Okay to delete this. */
+    private void printAllIndexes() {
+        FormIndex current = mFormEntryModel.getFormIndex();
+        mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
-
-    private boolean isRelevant(FormIndex questionIndex) {
-        TreeReference ref = mForm.getChildInstanceRef(questionIndex);
-        boolean isAskNewRepeat = false;
-
-        Vector<IFormElement> defs = getIndexVector(questionIndex);
-        IFormElement last = (defs.size() == 0 ? null : (IFormElement) defs.lastElement());
-        if (last instanceof GroupDef
-                && ((GroupDef) last).getRepeat()
-                && mForm.getDataModel().resolveReference(mForm.getChildInstanceRef(questionIndex)) == null) {
-            isAskNewRepeat = true;
+        mFormEntryController.stepToNextEvent();
+        while (mFormEntryModel.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
+            FormIndex fi = mFormEntryModel.getFormIndex();
+            Log.e("carl", "current index = " + fi.toString());
+            mFormEntryController.stepToNextEvent();
         }
 
-        boolean relevant;
-        if (isAskNewRepeat) {
-            relevant = mForm.canCreateRepeat(ref);
-        } else {
-            TreeElement node = mForm.getDataModel().resolveReference(ref);
-            relevant = node.isRelevant(); // check instance flag first
-        }
-
-        if (relevant) {
-            /*
-             * if instance flag/condition says relevant, we still have check the
-             * <group>/<repeat> hierarchy
-             */
-            FormIndex ancestorIndex = null;
-            FormIndex cur = null;
-            FormIndex qcur = questionIndex;
-            for (int i = 0; i < defs.size() - 1; i++) {
-                FormIndex next = new FormIndex(qcur.getLocalIndex(), qcur.getInstanceIndex());
-                if (ancestorIndex == null) {
-                    ancestorIndex = next;
-                    cur = next;
-                } else {
-                    cur.setNextLevel(next);
-                    cur = next;
-                }
-                qcur = qcur.getNextLevel();
-
-                TreeElement ancestorNode =
-                        mForm.getDataModel().resolveReference(
-                                mForm.getChildInstanceRef(ancestorIndex));
-                if (!ancestorNode.isRelevant()) {
-                    relevant = false;
-                    break;
-                }
-            }
-        }
-        return relevant;
+        mFormEntryController.jumpToIndex(current);
     }
 
 
-    @SuppressWarnings("unchecked")
-    public Vector<IFormElement> getIndexVector(FormIndex index) {
-        return mForm.explodeIndex(index);
-    }
-
-
-    public boolean isEnd(FormIndex mCurrentIndex) {
-        if (mCurrentIndex.isEndOfFormIndex())
-            return true;
-        else
-            return false;
-    }
 
 }

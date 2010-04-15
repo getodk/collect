@@ -1,125 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not
-use this file except in compliance with the License. You may obtain a copy of
-the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-License for the specific language governing permissions and limitations under
-the License.
--->
+	<!--
+		Copyright (C) 2009 University of Washington Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of
+		the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+	-->
 <resources>
 
-<string name="ack">Acknowledge</string>
-<string name="acked">Acknowledged</string>
-<string name="add_another_repeat">Add another \"%s\" section?</string>
-<string name="add_file">Add Selected File(s)</string>
-<string name="add_repeat">Add a \"%s\" section?</string>
-<string name="app_name">ODK Collect</string>
-<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
-<string name="cancel">Cancel</string>
-<string name="capture_audio">Capture Audio</string>
-<string name="capture_image">Capture Image</string>
-<string name="capture_video">Capture Video</string>
-<string name="change_language">Change Language</string>
-<string name="change_password">Change Password</string>
-<string name="change_server">Change Server</string>
-<string name="change_user">Change Username</string>
-<string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
-<string name="clear_answer">Clear Answer</string>
-<string name="collapsed_group">Collapsed Group</string>
-<string name="completed_data">Complete (%s)</string>
-<string name="data">Data</string>
-<string name="data_saved_error">Sorry, data save failed!</string>
-<string name="data_saved_ok">Data successfully saved!</string>
-<string name="default_server">http://open-data-kit.appspot.com</string>
-<string name="delete_confirm">Are you sure you want to delete %s item(s)?</string>
-<string name="delete_file">Delete Selected File(s)</string>
-<string name="delete_repeat">Delete Section</string>
-<string name="delete_repeat_confirm">Are you sure you want to delete section \"%s\" and all of its sub-sections?</string>
-<string name="downloading_data">Fetching List</string>
-<string name="download_all_successful">%s item(s) fetched successfully.</string>
-<string name="download_some_failed">Sorry, %s item(s) not fetched!</string>
-<string name="enter">enter</string>
-<string name="entering_repeat">Add Section</string>
-<string name="enter_data">Enter New Data</string>
-<string name="enter_data_button">Enter New Data (%s)</string>
-<string name="enter_data_description">%s has been selected for entry.</string>
-<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
-<string name="entry_exit_confirm">Going back will delete any unsaved data. Are you sure?</string>
-<string name="expanded_group">Expanded Group</string>
-<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
-<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
-<string name="finalize_for_send">Save as Complete</string>
-<string name="form">Form</string>
-<string name="getting_location">Loading Location</string>
-<string name="get_barcode">Capture Barcode</string>
-<string name="get_location">Capture Location</string>
-<string name="go_back">Previous Level</string>
-<string name="gps_disabled_error">Sorry, GPS is disabled!</string>
-<string name="invalid_answer_error">Sorry, this answer is invalid!</string>
-<string name="jump_to">Jump to</string>
-<string name="jump_to_end">End of Form</string>
-<string name="jump_to_start">Beginning of Form</string>
-<string name="leaving_repeat">Add Another Section</string>
-<string name="loading_form">Loading Form</string>
-<string name="load_error">Sorry, unable to load form %s</string>
-<string name="load_remote_form_error">Sorry, unable to load remote form list!</string>
-<string name="local_files">Local</string>
-<string name="location_accuracy">Accuracy is %s meters.</string>
-<string name="main_menu">Main Menu</string>
-<string name="main_menu_details">Making data collection a little easier.</string>
-<string name="main_menu_message">ODK Collect v1.1.4</string>
-<string name="manage_files">Manage Files</string>
-<string name="no">No</string>
-<string name="noselect_error">Sorry, you have not selected any items!</string>
-<string name="no_capture">Nothing captured yet.</string>
-<string name="no_items_display">Nothing available to display.</string>
-<string name="no_items_error">Nothing available to %s!</string>
-<string name="ok">OK</string>
-<string name="one_capture">Multimedia captured.</string>
-<string name="password">Password</string>
-<string name="play_audio">Play Audio</string>
-<string name="play_image">View Image</string>
-<string name="play_video">Play Video</string>
-<string name="please_wait">Please wait a few moments.</string>
-<string name="quit_application">Exiting Entry</string>
-<string name="quit_entry">Save and Exit</string>
-<string name="remote_files">Remote</string>
-<string name="replace_audio">Replace Audio</string>
-<string name="replace_image">Replace Image</string>
-<string name="replace_video">Replace Video</string>
-<string name="replace_barcode">Replace Barcode</string>
-<string name="replace_location">Replace Location</string>
-<string name="required_answer_error">Sorry, this answer is required!</string>
-<string name="review">review</string>
-<string name="review_data">Review Saved Data</string>
-<string name="review_data_button">Review Saved Data (%s)</string>
-<string name="review_data_description">%s has been selected for review.</string>
-<string name="saved_data">Incomplete (%s)</string>
-<string name="save_data_message">Please choose one to save results.</string>
-<string name="save_enter_data_description">%s entry has ended.</string>
-<string name="save_for_later">Save as Incomplete </string>
-<string name="save_review_data_description">%s review has ended.</string>
-<string name="saving_form">Saving Form</string>
-<string name="send">send</string>
-<string name="send_data">Send Completed Data</string>
-<string name="send_data_button">Send Completed Data (%s)</string>
-<string name="send_selected_data">Send Selected File(s)</string>
-<string name="server">Server</string>
-<string name="server_preferences">Server Preferences</string>
-<string name="toggle_selected">ALL</string>
-<string name="uploading_data">Sending Data</string>
-<string name="upload_all_successful">%s item(s) sent successfully.</string>
-<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
-<string name="url_error">Sorry, invalid URL!</string>
-<string name="username">Username</string>
-<string name="view_hierarchy">Jump to Question</string>
-<string name="yes">Yes</string>
+	<string name="ack">Acknowledge</string>
+	<string name="acked">Acknowledged</string>
+	<string name="add_another_repeat">Add another \"%s\" section?</string>
+	<string name="add_file">Add Selected File(s)</string>
+	<string name="add_repeat">Add a \"%s\" section?</string>
+	<string name="app_name">ODK Collect</string>
+	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
+	<string name="cancel">Cancel</string>
+	<string name="capture_audio">Capture Audio</string>
+	<string name="capture_image">Capture Image</string>
+	<string name="capture_video">Capture Video</string>
+	<string name="change_language">Change Language</string>
+	<string name="change_password">Change Password</string>
+	<string name="change_server">Change Server</string>
+	<string name="change_user">Change Username</string>
+	<string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
+	<string name="clear_answer">Clear Answer</string>
+	<string name="collapsed_group">Collapsed Group</string>
+	<string name="completed_data">Complete (%s)</string>
+	<string name="continue_form">Continue Form</string>
+	<string name="data">Data</string>
+	<string name="data_saved_error">Sorry, data save failed!</string>
+	<string name="data_saved_ok">Data successfully saved!</string>
+	<string name="default_server">http://open-data-kit.appspot.com</string>
+	<string name="delete_and_exit">Delete and Exit</string>
+	<string name="delete_confirm">Are you sure you want to delete %s item(s)?</string>
+	<string name="delete_file">Delete Selected File(s)</string>
+	<string name="delete_repeat">Delete Section</string>
+	<string name="delete_repeat_confirm">Are you sure you want to delete section \"%s\" and all of its sub-sections?</string>
+	<string name="downloading_data">Fetching List</string>
+	<string name="download_all_successful">%s item(s) fetched successfully.</string>
+	<string name="download_some_failed">Sorry, %s item(s) not fetched!</string>
+	<string name="enter">enter</string>
+	<string name="entering_repeat">Add Section</string>
+	<string name="enter_data">Enter New Data</string>
+	<string name="enter_data_button">Enter New Data (%s)</string>
+	<string name="enter_data_description">%s has been selected for entry.</string>
+	<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
+	<string name="entry_exit_confirm">Exiting will delete any unsaved data!</string>
+	<string name="expanded_group">Expanded Group</string>
+	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
+	<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
+	<string name="finalize_for_send">Save as Complete</string>
+	<string name="form">Form</string>
+	<string name="getting_location">Loading Location</string>
+	<string name="get_barcode">Capture Barcode</string>
+	<string name="get_location">Capture Location</string>
+	<string name="go_back">Previous Level</string>
+	<string name="gps_disabled_error">Sorry, GPS is disabled!</string>
+	<string name="invalid_answer_error">Sorry, this answer is invalid!</string>
+	<string name="jump_to_beginning">Jump to Beginning</string>
+	<string name="jump_to_end">Jump to End</string>
+	<string name="leaving_repeat">Add Another Section</string>
+	<string name="loading_form">Loading Form</string>
+	<string name="load_error">Sorry, unable to load form %s</string>
+	<string name="load_remote_form_error">Sorry, unable to load remote form list!</string>
+	<string name="local_files">Local</string>
+	<string name="location_accuracy">Accuracy is %s meters.</string>
+	<string name="main_menu">Main Menu</string>
+	<string name="main_menu_details">Making data collection a little easier.</string>
+	<string name="main_menu_message">ODK Collect v1.1.4</string>
+	<string name="manage_files">Manage Files</string>
+	<string name="no">No</string>
+	<string name="noselect_error">Sorry, you have not selected any items!</string>
+	<string name="no_capture">Nothing captured yet.</string>
+	<string name="no_items_display">Nothing available to display.</string>
+	<string name="no_items_error">Nothing available to %s!</string>
+	<string name="ok">OK</string>
+	<string name="one_capture">Multimedia captured.</string>
+	<string name="password">Password</string>
+	<string name="play_audio">Play Audio</string>
+	<string name="play_image">View Image</string>
+	<string name="play_video">Play Video</string>
+	<string name="please_wait">Please wait a few moments.</string>
+	<string name="quit_application">Exiting Entry</string>
+	<string name="quit_entry">Save and Exit</string>
+	<string name="remote_files">Remote</string>
+	<string name="replace_audio">Replace Audio</string>
+	<string name="replace_image">Replace Image</string>
+	<string name="replace_video">Replace Video</string>
+	<string name="replace_barcode">Replace Barcode</string>
+	<string name="replace_location">Replace Location</string>
+	<string name="required_answer_error">Sorry, this answer is required!</string>
+	<string name="review">review</string>
+	<string name="review_data">Review Saved Data</string>
+	<string name="review_data_button">Review Saved Data (%s)</string>
+	<string name="review_data_description">%s has been selected for review.</string>
+	<string name="saved_data">Incomplete (%s)</string>
+	<string name="save_data_message">Please choose one to save results.</string>
+	<string name="save_enter_data_description">%s entry has ended.</string>
+	<string name="save_for_later">Save as Incomplete </string>
+	<string name="save_review_data_description">%s review has ended.</string>
+	<string name="saving_form">Saving Form</string>
+	<string name="send">send</string>
+	<string name="send_data">Send Completed Data</string>
+	<string name="send_data_button">Send Completed Data (%s)</string>
+	<string name="send_selected_data">Send Selected File(s)</string>
+	<string name="server">Server</string>
+	<string name="server_preferences">Server Preferences</string>
+	<string name="toggle_selected"></string>
+	<string name="uploading_data">Sending Data</string>
+	<string name="upload_all_successful">%s item(s) sent successfully.</string>
+	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
+	<string name="url_error">Sorry, invalid URL!</string>
+	<string name="username">Username</string>
+	<string name="view_hierarchy">Jump to Question</string>
+	<string name="yes">Yes</string>
 
 </resources>

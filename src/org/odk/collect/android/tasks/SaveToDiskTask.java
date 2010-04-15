@@ -16,15 +16,25 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.Context;
-import android.os.AsyncTask;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.logic.FormHandler;
-import org.odk.collect.android.logic.GlobalConstants;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Background task for loading a form.
@@ -38,7 +48,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private String mInstancePath;
     private Context mContext;
     private Boolean mMarkCompleted;
-    private FormHandler mFormHandler = FormEntryActivity.mFormHandler;
+    private FormEntryController mFormEntryController = FormEntryActivity.mFormEntryController;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -47,7 +57,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
 
     /**
-     * Initialize {@link FormHandler} with {@link FormDef} from binary or from
+     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from
      * XML. If given an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
@@ -57,11 +67,99 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return validateStatus;
         }
 
-        mFormHandler.postProcessForm();
-        if (mFormHandler.exportData(mInstancePath, mContext, mMarkCompleted)) {
+        mFormEntryController.getModel().getForm().postProcessInstance();
+        if (exportData(mInstancePath, mContext, mMarkCompleted)) {
             return SAVED;
         }
         return SAVE_ERROR;
+    }
+    
+    public boolean exportData(String instancePath, Context context, boolean markCompleted) {
+
+        ByteArrayPayload payload;
+        try {
+
+            // assume no binary data inside the model.
+            FormInstance datamodel = mFormEntryController.getModel().getForm().getInstance();
+            XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+            payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
+
+            // write out xml
+            exportXmlFile(payload, instancePath);
+
+        } catch (IOException e) {
+            Log.e("savetodisk", "Error creating serialized payload");
+            e.printStackTrace();
+            return false;
+        }
+
+        FileDbAdapter fda = new FileDbAdapter(context);
+        fda.open();
+        File f = new File(instancePath);
+        Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
+        if (!markCompleted) {
+            if (c != null && c.getCount() == 0) {
+                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                        FileDbAdapter.STATUS_INCOMPLETE);
+            } else {
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);
+            }
+        } else {
+            if (c != null && c.getCount() == 0) {
+                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                        FileDbAdapter.STATUS_COMPLETE);
+
+            } else {
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
+            }
+        }
+        // clean up cursor
+        if (c != null) {
+            c.close();
+        }
+
+        fda.close();
+        return true;
+
+
+    }
+    
+    
+    private boolean exportXmlFile(ByteArrayPayload payload, String path) {
+
+        // create data stream
+        InputStream is = payload.getPayloadStream();
+        int len = (int) payload.getLength();
+
+        // read from data stream
+        byte[] data = new byte[len];
+        try {
+            int read = is.read(data, 0, len);
+            if (read > 0) {
+                // write xml file
+                try {
+                    // String filename = path + "/" +
+                    // path.substring(path.lastIndexOf('/') + 1) + ".xml";
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    bw.write(new String(data, "UTF-8"));
+                    bw.flush();
+                    bw.close();
+                    return true;
+
+                } catch (IOException e) {
+                    Log.e("savetodisk", "Error writing XML file");
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        } catch (IOException e) {
+            Log.e("savetodisk", "Error reading from payload data stream");
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+
     }
 
 
@@ -89,7 +187,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
     // make sure this validates for all on done
     private int validateAnswers(boolean markCompleted) {
-        mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
+   /*     mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
         mFormHandler.nextQuestionPrompt();
         while (!mFormHandler.isEnd()) {
             int saveStatus =
@@ -101,7 +199,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             }
             mFormHandler.nextQuestionPrompt();
         }
-
+*/
         return VALIDATED;
     }
 }

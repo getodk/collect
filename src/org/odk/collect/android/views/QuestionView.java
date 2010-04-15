@@ -16,6 +16,13 @@
 
 package org.odk.collect.android.views;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.IQuestionWidget;
+import org.odk.collect.android.widgets.WidgetFactory;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -26,16 +33,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.GroupElement;
-import org.odk.collect.android.logic.PromptElement;
-import org.odk.collect.android.widgets.IBinaryWidget;
-import org.odk.collect.android.widgets.IQuestionWidget;
-import org.odk.collect.android.widgets.WidgetFactory;
-
 
 /**
- * Responsible for using a {@link PromptElement} and based on the question type
+ * Responsible for using a {@link FormEntryQuestion} and based on the question type
  * and answer type, displaying the appropriate widget. The class also sets (but
  * does not save) and gets the answers to questions.
  * 
@@ -53,7 +53,7 @@ public class QuestionView extends ScrollView {
     private final static int TEXTSIZE = 21;
 
 
-    public QuestionView(Context context, PromptElement prompt, String instancePath) {
+    public QuestionView(Context context, String instancePath) {
         super(context);
 
         this.mInstancePath = instancePath;
@@ -63,9 +63,9 @@ public class QuestionView extends ScrollView {
     /**
      * Create the appropriate view given your prompt.
      */
-    public void buildView(PromptElement p) {
+    public void buildView(FormEntryPrompt p, FormEntryCaption[] groups) {
 
-
+Log.e("carl", "current entry prompt is null? " + (p == null));
         mView = new LinearLayout(getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
         mView.setGravity(Gravity.TOP);
@@ -77,7 +77,7 @@ public class QuestionView extends ScrollView {
         mLayout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
-        AddGroupText(p);
+        AddGroupText(groups);
         AddQuestionText(p);
         AddHelpText(p);
 
@@ -111,18 +111,18 @@ public class QuestionView extends ScrollView {
      * Add a TextView containing the hierarchy of groups to which the question
      * belongs.
      */
-    private void AddGroupText(PromptElement p) {
+    private void AddGroupText(FormEntryCaption[] groups) {
         StringBuffer s = new StringBuffer("");
         String t = "";
         int i;
 
         // list all groups in one string
-        for (GroupElement g : p.getGroups()) {
-            i = g.getRepeatCount() + 1;
-            t = g.getGroupText();
+        for (FormEntryCaption g : groups) {
+            i = g.getMultiplicity() + 1;
+            t = g.getLongText();
             if (t != null) {
                 s.append(t);
-                if (g.isRepeat() && i > 0) {
+                if (g.repeats() && i > 0) {
                     s.append(" (" + i + ")");
                 }
                 s.append(" > ");
@@ -143,9 +143,9 @@ public class QuestionView extends ScrollView {
     /**
      * Add a TextView containing the question text.
      */
-    private void AddQuestionText(PromptElement p) {
+    private void AddQuestionText(FormEntryPrompt p) {
         TextView tv = new TextView(getContext());
-        tv.setText(p.getQuestionText());
+        tv.setText(p.getLongText());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
         tv.setTypeface(null, Typeface.BOLD);
         tv.setPadding(0, 0, 0, 7);
@@ -159,7 +159,7 @@ public class QuestionView extends ScrollView {
     /**
      * Add a TextView containing the help text.
      */
-    private void AddHelpText(PromptElement p) {
+    private void AddHelpText(FormEntryPrompt p) {
         String s = p.getHelpText();
 
         if (s != null && !s.equals("")) {
@@ -179,4 +179,6 @@ public class QuestionView extends ScrollView {
     public void setFocus(Context context) {
         mQuestionWidget.setFocus(context);
     }
+    
+  
 }

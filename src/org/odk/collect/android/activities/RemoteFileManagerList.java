@@ -16,6 +16,22 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.tasks.FormDownloaderTask;
+import org.odk.collect.android.utilities.FileUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -38,22 +54,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-import org.odk.collect.android.tasks.FormDownloaderTask;
-import org.odk.collect.android.utilities.FileUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the

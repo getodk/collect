@@ -20,9 +20,9 @@ import java.io.File;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 
 import android.app.Activity;
 import android.content.Context;
@@ -114,7 +114,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void buildView(PromptElement prompt) {
+    public void buildView(FormEntryPrompt prompt) {
         setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button

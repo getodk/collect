@@ -16,6 +16,10 @@
 
 package org.odk.collect.android.activities;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,10 +30,6 @@ import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
 
 /**
  * A host activity for {@link InstanceChooserList}.

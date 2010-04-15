@@ -16,6 +16,17 @@
 
 package org.odk.collect.android.database;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.regex.Pattern;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.utilities.FileUtils;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,17 +37,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.utilities.FileUtils;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.regex.Pattern;
 
 /**
  * Manages the files the application uses.

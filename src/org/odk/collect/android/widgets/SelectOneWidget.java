@@ -16,20 +16,20 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Vector;
+
+import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.SelectOneData;
+import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.SelectOneData;
-import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.core.util.OrderedHashtable;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-
-import java.util.Enumeration;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -40,7 +40,7 @@ import java.util.Enumeration;
 public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
     private int mRadioChecked = -1;
-    OrderedHashtable mItems;
+    Vector<SelectChoice> mItems;
 
 
     public SelectOneWidget(Context context) {
@@ -58,15 +58,15 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
         if (i == -1) {
             return null;
         } else {
-            String s = (String) mItems.elementAt(i - 1);
+            String s = mItems.elementAt(i).getValue();
             return new SelectOneData(new Selection(s));
         }
     }
 
 
     @SuppressWarnings("unchecked")
-    public void buildView(final PromptElement prompt) {
-        mItems = prompt.getSelectItems();
+    public void buildView(final FormEntryPrompt prompt) {
+        mItems = prompt.getSelectChoices();
 
         setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -78,10 +78,28 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerObject()).getValue();
+            s = ((Selection)prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (prompt.getSelectItems() != null) {
+        if (prompt.getSelectChoices() != null) {
+            for (int i = 0; i < mItems.size(); i++) {
+                RadioButton r = new RadioButton(getContext());
+                r.setText(mItems.get(i).getCaption());
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+                r.setId(i);
+                r.setEnabled(!prompt.isReadOnly());
+                r.setFocusable(!prompt.isReadOnly());
+                addView(r);
+
+                if (mItems.get(i).getValue().equals(s)) {
+                    r.setChecked(true);
+                    mRadioChecked = i;
+                }
+
+            }
+        }
+            
+            /*
             OrderedHashtable h = prompt.getSelectItems();
             Enumeration e = h.keys();
             String k = null;
@@ -109,6 +127,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget {
                 i++;
             }
         }
+        */
     }
 
 

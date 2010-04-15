@@ -16,15 +16,15 @@
 
 package org.odk.collect.android.preferences;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.UrlUtils;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.UrlUtils;
 
 public class ServerPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {

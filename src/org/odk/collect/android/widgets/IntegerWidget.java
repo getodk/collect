@@ -16,17 +16,17 @@
 
 package org.odk.collect.android.widgets;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.IntegerData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.IntegerData;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 
 /**
  * Widget that restricts values to integers.
@@ -46,7 +46,7 @@ public class IntegerWidget extends StringWidget {
 
 
     @Override
-    public void buildView(PromptElement prompt) {
+    public void buildView(FormEntryPrompt prompt) {
         // formatting
         setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -69,7 +69,10 @@ public class IntegerWidget extends StringWidget {
             setClickable(false);
         }
 
-        Integer i = (Integer) prompt.getAnswerObject();
+        Integer i = null;
+        if (prompt.getAnswerValue() != null)
+            i = (Integer) prompt.getAnswerValue().getValue();
+
         if (i != null) {
             setText(i.toString());
         }

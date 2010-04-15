@@ -16,19 +16,19 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import org.javarosa.core.model.data.DateData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
+
 import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.PromptElement;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not
@@ -74,7 +74,7 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     /**
      * Build view for date answer. Includes retrieving existing answer.
      */
-    public void buildView(final PromptElement prompt) {
+    public void buildView(final FormEntryPrompt prompt) {
         final Calendar c = new GregorianCalendar();
 
         mDatePicker = new DatePicker(getContext());
@@ -87,7 +87,7 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
                 if (prompt.isReadOnly()) {
                     if (prompt.getAnswerValue() != null) {
-                        Date d = (Date) prompt.getAnswerObject();
+                        Date d = (Date) prompt.getAnswerValue().getValue();
                         view.updateDate(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate());
                     } else {
                         view.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
@@ -109,7 +109,7 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
         };
 
         if (prompt.getAnswerValue() != null) {
-            Date d = (Date) prompt.getAnswerObject();
+            Date d = (Date) prompt.getAnswerValue().getValue();
             mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
         } else {
             // create date widget with now

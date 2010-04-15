@@ -16,6 +16,14 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.utilities.FileUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,14 +34,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-import org.odk.collect.android.utilities.FileUtils;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches

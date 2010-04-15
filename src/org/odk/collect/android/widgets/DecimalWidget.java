@@ -16,19 +16,19 @@
 
 package org.odk.collect.android.widgets;
 
+import java.text.NumberFormat;
+
+import org.javarosa.core.model.data.DecimalData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-
-import org.javarosa.core.model.data.DecimalData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
-
-import java.text.NumberFormat;
 
 /**
  * A widget that restricts values to floating point numbers.
@@ -48,7 +48,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
 
 
     @Override
-    public void buildView(PromptElement prompt) {
+    public void buildView(FormEntryPrompt prompt) {
 
         // formatting
         setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
@@ -67,7 +67,10 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
         setFilters(fa);
 
         // in case xforms calcuate returns a double, convert to integer
-        Double d = (Double) prompt.getAnswerObject();
+        Double d = null;
+        if (prompt.getAnswerValue() != null)
+            d = (Double) prompt.getAnswerValue().getValue();
+
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(15);
         nf.setMaximumIntegerDigits(15);

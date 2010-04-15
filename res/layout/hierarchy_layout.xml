@@ -16,6 +16,13 @@ the License.
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+	
+	<TextView
+		android:id="@+id/pathtext"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		/>
 
 	<!--
 		would prefer not to use an extra LinearLayout here, but weights don't
@@ -28,53 +35,31 @@ the License.
 		android:layout_alignParentBottom="true"
 		android:id="@+id/buttonholder">
     <Button
-      android:id="@+id/backbutton"
+      android:id="@+id/jumpBeginningButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/go_back"
+      android:text="@string/jump_to_beginning"
            android:padding="15px"
      android:textSize="19px" 
       android:layout_weight="1" />
       
           <Button
-      android:id="@+id/jumpbutton"
+      android:id="@+id/jumpEndButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/jump_to"
+      android:text="@string/jump_to_end"
            android:padding="15px"
      android:textSize="19px" 
       android:layout_weight="1" />
-   <!--    
-      		<Button
-			android:id="@+id/startbutton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			     android:padding="15px"
-     android:textSize="19px" 
-			android:text="@string/go_start"
-			android:layout_weight="1" />
-
-		<Button
-			android:id="@+id/endbutton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/go_end"
-			     android:padding="15px"
-     android:textSize="19px" 
-			android:layout_weight="1" /> -->
 
 	</LinearLayout>
-
-<!-- <TextView
-		android:id="@+id/stacklist"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />  -->  
 
 	<ListView
 		android:id="@android:id/list"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_above="@id/buttonholder" />
+		android:layout_above="@id/buttonholder" 
+		android:layout_below="@id/pathtext"/>
 
 	<TextView
 		android:id="@android:id/empty"
@@ -85,6 +70,8 @@ the License.
 		android:padding="20px"
 		android:gravity="center"
 		android:background="@drawable/white"/>
+		
+	
 
 
 

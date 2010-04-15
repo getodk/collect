@@ -16,6 +16,13 @@
 
 package org.odk.collect.android.widgets;
 
+import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.GeoPointActivity;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +33,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 
 
 /**
@@ -82,7 +82,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     }
 
 
-    public void buildView(PromptElement prompt) {
+    public void buildView(FormEntryPrompt prompt) {
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -101,7 +101,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            mActionButton.setText(getContext().getString(R.string.replace_location));
+            //mActionButton.setText(getContext().getString(R.string.replace_location));
+            mActionButton.setText("placeholder");
             setBinaryData(s);
         }
         

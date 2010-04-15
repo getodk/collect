@@ -16,9 +16,9 @@
 
 package org.odk.collect.android.utilities;
 
-import android.view.MotionEvent;
-
 import org.odk.collect.android.utilities.GestureDirection.UserGesture;
+
+import android.view.MotionEvent;
 
 /**
  * Detects when a gesture/fling has occurred and in what direction.

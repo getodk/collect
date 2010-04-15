@@ -16,10 +16,10 @@
 
 package org.odk.collect.android.widgets;
 
-import android.content.Context;
-
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.PromptElement;
+import org.javarosa.form.api.FormEntryPrompt;
+
+import android.content.Context;
 
 /**
  * QuestionWidgets are the main elements in QuestionView. QuestionView is a
@@ -32,6 +32,6 @@ import org.odk.collect.android.logic.PromptElement;
 public interface IQuestionWidget {
     public IAnswerData getAnswer();
     public void clearAnswer();
-    public void buildView(PromptElement prompt);
+    public void buildView(FormEntryPrompt prompt);
     public void setFocus(Context context);
 }

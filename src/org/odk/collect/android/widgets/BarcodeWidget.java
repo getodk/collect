@@ -16,6 +16,12 @@
 
 package org.odk.collect.android.widgets;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -28,12 +34,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 
 
 /**
@@ -54,7 +54,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
     public void clearAnswer() {
         mStringAnswer.setText(null);
-        mActionButton.setText(getContext().getString(R.string.get_barcode));
+        //mActionButton.setText(getContext().getString(R.string.get_barcode));
+        mActionButton.setText("placeholder");
 
     }
 
@@ -69,7 +70,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     }
 
 
-    public void buildView(PromptElement prompt) {
+    public void buildView(FormEntryPrompt prompt) {
         setOrientation(LinearLayout.VERTICAL);
 
         // set button formatting
@@ -101,7 +102,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mActionButton.setText(getContext().getString(R.string.replace_barcode));
+            //mActionButton.setText(getContext().getString(R.string.replace_barcode));
+            mActionButton.setText("placeholder");
             mStringAnswer.setText(s);
         }
         // finish complex layout

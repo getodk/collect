@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.activities;
 
+import org.odk.collect.android.R;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,8 +29,6 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
 
 public class GeoPointActivity extends Activity implements LocationListener {
 
@@ -47,7 +47,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_location));
@@ -64,7 +64,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
     protected void onPause() {
-        
+
         super.onPause();
 
         // stops the GPS. Note that this will turn off the GPS if the screen
@@ -130,7 +130,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private void returnLocation() {
         if (mLocation != null) {
             Intent i = new Intent();
-            i.putExtra("LOCATION_RESULT", mLocation.getLatitude() + " " + mLocation.getLongitude() +  " " + mLocation.getAltitude() + " " + mLocation.getAccuracy());
+            i.putExtra("LOCATION_RESULT", mLocation.getLatitude() + " " + mLocation.getLongitude()
+                    + " " + mLocation.getAltitude() + " " + mLocation.getAccuracy());
             setResult(RESULT_OK, i);
         }
         finish();
@@ -189,7 +190,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
         switch (status) {
             case LocationProvider.AVAILABLE:
-                mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getAccuracy()));
+                mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation
+                        .getAccuracy()));
                 break;
             case LocationProvider.OUT_OF_SERVICE:
                 break;

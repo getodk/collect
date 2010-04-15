@@ -16,6 +16,15 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -25,15 +34,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
-
-import java.util.ArrayList;
 
 /**
  * Activity to upload completed forms.
@@ -65,7 +65,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             return;
         }
 
-        // get the task if we've changed orientations.  If it's null it's a new upload.
+        // get the task if we've changed orientations. If it's null it's a new
+        // upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mInstanceUploaderTask == null) {
             // setup dialog and upload task

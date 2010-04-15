@@ -16,11 +16,11 @@
 
 package org.odk.collect.android.logic;
 
-import android.graphics.drawable.Drawable;
+import java.util.ArrayList;
 
 import org.javarosa.core.model.FormIndex;
 
-import java.util.ArrayList;
+import android.graphics.drawable.Drawable;
 
 public class HierarchyElement {
     private String mPrimaryText = "";

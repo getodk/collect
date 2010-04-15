@@ -16,10 +16,10 @@
 
 package org.odk.collect.android.widgets;
 
-import android.content.Context;
-
 import org.javarosa.core.model.Constants;
-import org.odk.collect.android.logic.PromptElement;
+import org.javarosa.form.api.FormEntryPrompt;
+
+import android.content.Context;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -29,18 +29,18 @@ import org.odk.collect.android.logic.PromptElement;
 public class WidgetFactory {
 
     /**
-     * Returns the appropriate QuestionWidget for the given PromptElement.
+     * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
      * 
      * @param pe prompt element to be rendered
      * @param context Android context
      * @param instancePath path to the instance file
      */
-    static public IQuestionWidget createWidgetFromPrompt(PromptElement pe, Context context,
+    static public IQuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
             String instancePath) {
         IQuestionWidget questionWidget = null;
-        switch (pe.getQuestionType()) {
+        switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
-                switch (pe.getAnswerType()) {
+                switch (fep.getDataType()) {
                     case Constants.DATATYPE_DATE:
                         questionWidget = new DateWidget(context);
                         break;
@@ -83,7 +83,7 @@ public class WidgetFactory {
                 questionWidget = new StringWidget(context);
                 break;
         }
-        questionWidget.buildView(pe);
+        questionWidget.buildView(fep);
         return questionWidget;
     }
 

@@ -20,14 +20,17 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
@@ -96,11 +99,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     // uncomment when ProgressBar slowdown is fixed.
     // private ProgressBar mProgressBar;
+
     private String mFormPath;
     private String mInstancePath;
 
     private GestureDetector mGestureDetector;
-    public static FormHandler mFormHandler;
+
+    public static FormEntryController mFormEntryController;
+    public FormEntryModel mFormEntryModel;
 
     private Animation mInAnimation;
     private Animation mOutAnimation;
@@ -139,8 +145,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mOutAnimation = null;
         mGestureDetector = new GestureDetector();
 
-        // Load JavaRosa modules.
-        // needed to restore forms.
+        // Load JavaRosa modules. needed to restore forms.
         new XFormsModule().registerModule();
 
         // needed to override rms property manager
@@ -173,7 +178,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
 
             // Not a restart from a screen orientation change (or other).
-            mFormHandler = null;
+            mFormEntryController = null;
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -223,12 +228,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveCurrentAnswer(false);
                 break;
             case GlobalConstants.IMAGE_CAPTURE:
-                // We saved the image to the tempfile_path, but we really want it to be in:
+                // We saved the image to the tempfile_path, but we really want
+                // it to be in:
                 // /sdcard/odk/instances/[current instnace]/something.jpg
-                // so we move it here before inserting it into the content provider.
+                // so we move it here before inserting it into the content
+                // provider.
                 File fi = new File(GlobalConstants.TMPFILE_PATH);
-                
-                String mInstanceFolder = mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+
+                String mInstanceFolder =
+                        mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
                 String s = mInstanceFolder + "/" + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
@@ -237,9 +245,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 } else {
                     Log.i(t, "renamed " + fi.getAbsolutePath() + " to " + nf.getAbsolutePath());
                 }
-                
-                // Add the new image to the Media content provider so that the viewing is fast in
-                // 2.0+
+
+                // Add the new image to the Media content provider so that the
+                // viewing is fast in Android 2.0+
                 ContentValues values = new ContentValues(6);
                 values.put(Images.Media.TITLE, nf.getName());
                 values.put(Images.Media.DISPLAY_NAME, nf.getName());
@@ -277,17 +285,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * changes, so they're resynchronized here.
      */
     public void refreshCurrentView() {
-        PromptElement p = mFormHandler.currentPrompt();
-        /*
-         * Since we're not using managed dialogs, go back to the last actual
-         * question if it's a repeat dialog.
-         */
-        // TODO: carlhartung. Desired functionality would be to display the same
-        // dialog again not the last question.
-        if (p.getType() == PromptElement.TYPE_REPEAT_DIALOG) {
-            p = mFormHandler.prevPrompt();
+        int event = mFormEntryModel.getEvent();
+
+        // TODO: Can we display prompts appropriately now?
+        while (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                || event == FormEntryController.EVENT_GROUP
+                || event == FormEntryController.EVENT_REPEAT) {
+            event = mFormEntryController.stepToPreviousEvent();
         }
-        View current = createView(p);
+        Log.e(t, "refreshing view for event: " + event);
+
+        View current = createView(event);
         showView(current, AnimationType.FADE);
     }
 
@@ -306,24 +314,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         sm.add(0, MENU_SAVE, 0, getString(R.string.save_for_later));
         sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
 
-        PromptElement pe = null;
-        if (currentPromptIsQuestion()) {
-            pe = mFormHandler.currentPrompt();
-        }
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel).setEnabled(
-                pe != null && !pe.isReadOnly() ? true : false);
+                !mFormEntryModel.isIndexReadonly() ? true : false);
         menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
                 R.drawable.ic_menu_clear_playlist).setEnabled(
-                pe != null && pe.isInRepeatableGroup() ? true : false);
+                doesIndexContainRepeatableGroup(mFormEntryModel.getFormIndex()) ? true : false);
         menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
                 R.drawable.ic_menu_goto);
-
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
                 R.drawable.ic_menu_start_conversation).setEnabled(
-                (mFormHandler.getLanguages() == null || mFormHandler.getLanguages().length == 1)
-                        ? false : true);
-
+                (mFormEntryModel.getLanguages() == null || mFormEntryController.getModel()
+                        .getLanguages().length == 1) ? false : true);
         return true;
     }
 
@@ -364,21 +366,24 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * @return true if the current View represents a question in the form
      */
     private boolean currentPromptIsQuestion() {
-        return (mFormHandler.currentPrompt().getType() == PromptElement.TYPE_QUESTION);
+        return (mFormEntryModel.getEvent() == FormEntryController.EVENT_QUESTION);
     }
 
 
+    /**
+     * Attempt to save the answer to the current prompt into the data model.
+     * 
+     * @param evaluateConstraints
+     * @return true on success, false otherwise
+     */
     private boolean saveCurrentAnswer(boolean evaluateConstraints) {
-        PromptElement pe = mFormHandler.currentPrompt();
-
-        // If the question is readonly there's nothing to save.
-        if (!pe.isReadOnly()) {
-
+        if (!mFormEntryModel.isIndexReadonly()
+                && mFormEntryModel.getEvent() == FormEntryController.EVENT_QUESTION) {
             int saveStatus =
-                    mFormHandler.saveAnswer(pe, ((QuestionView) mCurrentView).getAnswer(),
-                            evaluateConstraints);
-            if (evaluateConstraints && saveStatus != GlobalConstants.ANSWER_OK) {
-                createConstraintToast(pe, saveStatus);
+                    saveAnswer(((QuestionView) mCurrentView).getAnswer(), evaluateConstraints);
+            if (evaluateConstraints && saveStatus != FormEntryController.ANSWER_OK) {
+                createConstraintToast(mFormEntryModel.getQuestionPrompt().getConstraintText(),
+                        saveStatus);
                 return false;
             }
         }
@@ -386,9 +391,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
+    /**
+     * Clears the answer on the screen.
+     */
     private void clearCurrentAnswer() {
-        if (!mFormHandler.currentPrompt().isReadOnly())
-            ((QuestionView) mCurrentView).clearAnswer();
+        if (!mFormEntryModel.isIndexReadonly()) ((QuestionView) mCurrentView).clearAnswer();
     }
 
 
@@ -409,7 +416,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return mSaveToDiskTask;
 
         // mFormHandler is static so we don't need to pass it.
-        if (mFormHandler != null && currentPromptIsQuestion()) {
+        if (mFormEntryController != null && currentPromptIsQuestion()) {
             saveCurrentAnswer(false);
         }
         return null;
@@ -422,17 +429,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * @param prompt
      * @return newly created View
      */
-    private View createView(PromptElement prompt) {
-        setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
+    private View createView(int event) {
+        setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
         FileDbAdapter fda = null;
         Cursor c = null;
 
-        switch (prompt.getType()) {
-            case PromptElement.TYPE_START:
+        switch (event) {
+            case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 View startView = View.inflate(this, R.layout.form_entry_start, null);
-                setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
+                setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
 
-                fda = new FileDbAdapter(FormEntryActivity.this);
+                // TODO: What?
+                fda = new FileDbAdapter(this);
                 fda.open();
                 c = fda.fetchFilesByPath(mInstancePath, null);
                 if (c != null && c.getCount() > 0) {
@@ -441,7 +449,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
                 } else {
                     ((TextView) startView.findViewById(R.id.description)).setText(getString(
-                            R.string.enter_data_description, mFormHandler.getFormTitle()));
+                            R.string.enter_data_description, mFormEntryModel.getFormTitle()));
                 }
 
                 // clean up cursor
@@ -451,7 +459,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 fda.close();
                 return startView;
-            case PromptElement.TYPE_END:
+            case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 fda = new FileDbAdapter(FormEntryActivity.this);
                 fda.open();
@@ -462,7 +470,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
                 } else {
                     ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                            R.string.save_enter_data_description, mFormHandler.getFormTitle()));
+                            R.string.save_enter_data_description, mFormEntryModel.getFormTitle()));
                 }
                 // Create 'save complete' button.
                 ((Button) endView.findViewById(R.id.complete_exit_button))
@@ -488,11 +496,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 fda.close();
                 return endView;
-            case PromptElement.TYPE_QUESTION:
-            default:
-                QuestionView qv = new QuestionView(this, prompt, mInstancePath);
-                qv.buildView(prompt);
+            case FormEntryController.EVENT_QUESTION:
+                QuestionView qv = new QuestionView(this, mInstancePath);
+                qv.buildView(mFormEntryModel.getQuestionPrompt(), getGroupsForCurrentIndex());
                 return qv;
+            default:
+                Log.e(t, "Attempted to create a view that does not exist.");
+                return null;
         }
     }
 
@@ -555,18 +565,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
 
-        if (!mFormHandler.isEnd()) {
-            PromptElement p = mFormHandler.nextPrompt();
-            View next;
+        if (mFormEntryModel.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
+            int event = getNextNotGroupEvent();
 
-            switch (p.getType()) {
-                case PromptElement.TYPE_QUESTION:
-                case PromptElement.TYPE_END:
-                    next = createView(p);
+            switch (event) {
+                case FormEntryController.EVENT_QUESTION:
+                case FormEntryController.EVENT_END_OF_FORM:
+                    View next = createView(event);
                     showView(next, AnimationType.RIGHT);
                     break;
-                case PromptElement.TYPE_REPEAT_DIALOG:
-                    createRepeatDialog(p);
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                    createRepeatDialog();
                     break;
             }
         } else {
@@ -587,9 +596,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             saveCurrentAnswer(false);
         }
 
-        if (!mFormHandler.isBeginning()) {
-            PromptElement p = mFormHandler.prevPrompt();
-            View next = createView(p);
+        if (mFormEntryModel.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+            int event = mFormEntryController.stepToPreviousEvent();
+
+            while (event != FormEntryController.EVENT_BEGINNING_OF_FORM
+                    && event != FormEntryController.EVENT_QUESTION) {
+                event = mFormEntryController.stepToPreviousEvent();
+            }
+
+            View next = createView(event);
             showView(next, AnimationType.LEFT);
         } else {
             mBeenSwiped = false;
@@ -685,17 +700,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
-    private void createConstraintToast(PromptElement p, int saveStatus) {
-        String constraintText = null;
+    private void createConstraintToast(String constraintText, int saveStatus) {
         switch (saveStatus) {
-            case GlobalConstants.ANSWER_CONSTRAINT_VIOLATED:
-                if (p.getConstraintText() != null) {
-                    constraintText = p.getConstraintText();
-                } else {
+            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
+                if (constraintText == null) {
                     constraintText = getString(R.string.invalid_answer_error);
                 }
                 break;
-            case GlobalConstants.ANSWER_REQUIRED_BUT_EMPTY:
+            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 constraintText = getString(R.string.required_answer_error);
                 break;
         }
@@ -727,20 +739,22 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Creates and displays a dialog asking the user if they'd like to create a
      * repeat of the current group.
      */
-    private void createRepeatDialog(PromptElement p) {
+    private void createRepeatDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        if (p.getLastRepeatCount() > 0) {
+        if (getLastRepeatCount(getGroupsForCurrentIndex()) > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat));
-            mAlertDialog.setMessage(getString(R.string.add_another_repeat, p.getLastGroupText()));
+            mAlertDialog.setMessage(getString(R.string.add_another_repeat,
+                    getLastGroupText(getGroupsForCurrentIndex())));
         } else {
             mAlertDialog.setTitle(getString(R.string.entering_repeat));
-            mAlertDialog.setMessage(getString(R.string.add_repeat, p.getLastGroupText()));
+            mAlertDialog.setMessage(getString(R.string.add_repeat,
+                    getLastGroupText(getGroupsForCurrentIndex())));
         }
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes, repeat
-                        mFormHandler.newRepeat();
+                        mFormEntryController.newRepeat();
                         showNextView();
                         break;
                     case DialogInterface.BUTTON2: // no, no repeat
@@ -785,8 +799,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        String name = mFormHandler.currentPrompt().getLastRepeatedGroupName();
-        int repeatcount = mFormHandler.currentPrompt().getLastRepeatedGroupRepeatCount();
+
+        String name = getLastRepeatedGroupName(getGroupsForCurrentIndex());
+        int repeatcount = getLastRepeatedGroupRepeatCount(getGroupsForCurrentIndex());
         if (repeatcount != -1) {
             name += " (" + (repeatcount + 1) + ")";
         }
@@ -796,7 +811,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        mFormHandler.deleteCurrentRepeat();
+                        FormIndex validIndex = mFormEntryController.deleteRepeat();
+                        mFormEntryModel.setQuestionIndex(validIndex);
+                        // TODO: I think this can be a non-question. ??
                         showPreviousView();
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -811,7 +828,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
+    /**
      * Called during a 'save and exit' command. The form is not 'done' here.
      */
     private void saveDataToDisk(boolean markCompleted) {
@@ -827,11 +844,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Confirm save and quit dialog
      */
     private void createSaveExitDialog(boolean markCompleted) {
-
-        int promptType = mFormHandler.currentPrompt().getType();
         boolean saveStatus = true;
 
-        if (promptType != PromptElement.TYPE_START && promptType != PromptElement.TYPE_END) {
+        if (mFormEntryModel.getEvent() == FormEntryController.EVENT_QUESTION) {
             saveStatus = saveCurrentAnswer(true);
         }
 
@@ -841,6 +856,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
+    // TODO: Clean up this method.
     /**
      * Confirm quit dialog
      */
@@ -862,23 +878,33 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             // not previously saved, cleaning up
                             String instanceFolder =
                                     mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
-                            
+
                             String[] projection = {Images.ImageColumns._ID};
-                            Cursor ci = getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI, projection, 
-                                    "_data like '%" + instanceFolder + "%'", null, null);
+                            Cursor ci =
+                                    getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI,
+                                            projection, "_data like '%" + instanceFolder + "%'",
+                                            null, null);
                             int del = 0;
                             if (ci.getCount() > 0) {
                                 while (ci.moveToNext()) {
-                                String id = ci.getString(ci.getColumnIndex(Images.ImageColumns._ID));
-                                
-                                Log.i(t, "attempting to delete unused image: " + Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id));
-                                del += getContentResolver().delete(Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id), 
-                                        null, null);
+                                    String id =
+                                            ci
+                                                    .getString(ci
+                                                            .getColumnIndex(Images.ImageColumns._ID));
+
+                                    Log.i(t, "attempting to delete unused image: "
+                                            + Uri.withAppendedPath(
+                                                    Images.Media.EXTERNAL_CONTENT_URI, id));
+                                    del +=
+                                            getContentResolver().delete(
+                                                    Uri.withAppendedPath(
+                                                            Images.Media.EXTERNAL_CONTENT_URI, id),
+                                                    null, null);
                                 }
                             }
                             c.close();
                             ci.close();
-                            
+
                             Log.i(t, "Deleted " + del + " images from content provider");
                             FileUtils.deleteFolder(instanceFolder);
                         }
@@ -896,8 +922,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), quitListener);
-        mAlertDialog.setButton2(getString(R.string.no), quitListener);
+        mAlertDialog.setButton(getString(R.string.delete_and_exit), quitListener);
+        mAlertDialog.setButton2(getString(R.string.continue_form), quitListener);
         mAlertDialog.show();
     }
 
@@ -934,10 +960,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * the form.
      */
     private void createLanguageDialog() {
-        final String[] languages = mFormHandler.getLanguages();
+        final String[] languages = mFormEntryModel.getLanguages();
         int selected = -1;
         if (languages != null) {
-            String language = mFormHandler.getCurrentLanguage();
+            String language = mFormEntryModel.getLanguage();
             for (int i = 0; i < languages.length; i++) {
                 if (language.equals(languages[i])) {
                     selected = i;
@@ -948,7 +974,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 new AlertDialog.Builder(this).setSingleChoiceItems(languages, selected,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                mFormHandler.setLanguage(languages[whichButton]);
+                                mFormEntryController.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
                                 if (currentPromptIsQuestion()) {
                                     saveCurrentAnswer(false);
@@ -1068,6 +1094,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case KeyEvent.KEYCODE_BACK:
                 createQuitDialog();
                 return true;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                if (event.isAltPressed() && !mBeenSwiped) {
+                    mBeenSwiped = true;
+                    showNextView();
+                    return true;
+                }
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                if (event.isAltPressed() && !mBeenSwiped) {
+                    mBeenSwiped = true;
+                    showPreviousView();
+                    return true;
+                }
+                break;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -1126,13 +1166,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * loadingComplete() is called by FormLoaderTask once it has finished
      * loading a form.
      */
-    public void loadingComplete(FormHandler formHandler) {
+    public void loadingComplete(FormEntryController fec) {
         dismissDialog(PROGRESS_DIALOG);
-        if (formHandler == null) {
+        if (fec == null) {
             createErrorDialog(getString(R.string.load_error, mFormPath.substring(mFormPath
                     .lastIndexOf('/') + 1)), true);
         } else {
-            mFormHandler = formHandler;
+            mFormEntryController = fec;
+            mFormEntryModel = fec.getModel();
 
             // Set saved answer path
             if (mInstancePath == null) {
@@ -1174,12 +1215,137 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
                         Toast.LENGTH_LONG).show();
                 break;
-            case GlobalConstants.ANSWER_CONSTRAINT_VIOLATED:
-            case GlobalConstants.ANSWER_REQUIRED_BUT_EMPTY:
+            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
+            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 refreshCurrentView();
-                createConstraintToast(mFormHandler.currentPrompt(), saveStatus);
+                createConstraintToast(mFormEntryModel.getQuestionPrompt().getConstraintText(),
+                        saveStatus);
                 break;
         }
+    }
+
+
+    public int saveAnswer(IAnswerData answer, boolean evaluateConstraints) {
+        if (evaluateConstraints) {
+            return mFormEntryController.answerQuestion(answer);
+        } else {
+            mFormEntryController.saveAnswer(mFormEntryModel.getFormIndex(), answer);
+            return FormEntryController.ANSWER_OK;
+        }
+    }
+
+
+    private FormEntryCaption[] getGroupsForCurrentIndex() {
+        if (!(mFormEntryModel.getEvent() == FormEntryController.EVENT_QUESTION || mFormEntryModel
+                .getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT)) return null;
+
+        int lastquestion = 1;
+        if (mFormEntryModel.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT)
+            lastquestion = 0;
+        FormEntryCaption[] v = mFormEntryModel.getCaptionHierarchy();
+        FormEntryCaption[] groups = new FormEntryCaption[v.length - lastquestion];
+        for (int i = 0; i < v.length - lastquestion; i++) {
+            groups[i] = v[i];
+        }
+        return groups;
+    }
+
+
+    /**
+     * Loops through the FormEntryController until a non-group event is found.
+     * 
+     * @return The event found
+     */
+    private int getNextNotGroupEvent() {
+        int event = mFormEntryController.stepToNextEvent();
+
+        while (event == FormEntryController.EVENT_GROUP
+                || event == FormEntryController.EVENT_REPEAT) {
+            event = mFormEntryController.stepToNextEvent();
+        }
+        return event;
+    }
+
+
+    /**
+     * The repeat count of closest group the prompt belongs to.
+     */
+    private int getLastRepeatCount(FormEntryCaption[] groups) {
+        // no change
+        if (getLastGroup(groups) != null) {
+            return getLastGroup(groups).getMultiplicity();
+        }
+        return -1;
+
+    }
+
+
+    /**
+     * The text of closest group the prompt belongs to.
+     */
+    private String getLastGroupText(FormEntryCaption[] groups) {
+        // no change
+        if (getLastGroup(groups) != null) {
+            return getLastGroup(groups).getLongText();
+        }
+        return null;
+    }
+
+
+    /**
+     * The closest group the prompt belongs to.
+     * 
+     * @return GroupElement
+     */
+    private FormEntryCaption getLastGroup(FormEntryCaption[] groups) {
+        if (groups == null || groups.length == 0)
+            return null;
+        else
+            return groups[groups.length - 1];
+    }
+
+
+    /**
+     * The name of the closest group that repeats or null.
+     */
+    private String getLastRepeatedGroupName(FormEntryCaption[] groups) {
+        // no change
+        if (groups.length > 0) {
+            for (int i = groups.length - 1; i > -1; i--) {
+                if (groups[i].repeats()) {
+                    return groups[i].getLongText();
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * The count of the closest group that repeats or -1.
+     */
+    private int getLastRepeatedGroupRepeatCount(FormEntryCaption[] groups) {
+        if (groups.length > 0) {
+            for (int i = groups.length - 1; i > -1; i--) {
+                if (groups[i].repeats()) {
+                    return groups[i].getMultiplicity();
+
+                }
+            }
+        }
+        return -1;
+    }
+
+
+    private boolean doesIndexContainRepeatableGroup(FormIndex index) {
+        FormEntryCaption[] groups = mFormEntryModel.getCaptionHierarchy();
+        if (groups.length == 0) {
+            return false;
+        }
+        for (int i = 0; i < groups.length; i++) {
+            if (groups[i].repeats()) return true;
+        }
+        return false;
     }
 
 }

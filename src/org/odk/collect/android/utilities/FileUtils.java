@@ -16,9 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.os.Environment;
-import android.util.Log;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,6 +25,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import android.os.Environment;
+import android.util.Log;
 
 /**
  * Static methods used for common file operations.

@@ -16,11 +16,11 @@
 
 package org.odk.collect.android.listeners;
 
-import org.odk.collect.android.logic.FormHandler;
+import org.javarosa.form.api.FormEntryController;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener {
-    void loadingComplete(FormHandler formHandler);
+    void loadingComplete(FormEntryController fec);
 }

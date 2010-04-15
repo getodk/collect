@@ -16,6 +16,12 @@
 
 package org.odk.collect.android.widgets;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -24,12 +30,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 
 
 /**
@@ -67,7 +67,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-    public void buildView(PromptElement prompt) {
+    public void buildView(FormEntryPrompt prompt) {
         this.setOrientation(LinearLayout.VERTICAL);
 
         mActionButton = new ToggleButton(getContext());

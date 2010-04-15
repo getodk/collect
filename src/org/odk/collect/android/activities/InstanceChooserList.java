@@ -16,6 +16,13 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.util.regex.Pattern;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,13 +30,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-
-import java.io.File;
-import java.util.regex.Pattern;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.

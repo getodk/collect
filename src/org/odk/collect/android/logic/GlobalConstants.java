@@ -51,21 +51,6 @@ public class GlobalConstants {
     public static final int LOCATION_CAPTURE = 5;
 
     /**
-     * Answer saved with no errors.
-     */
-    public static final int ANSWER_OK = 0;
-
-    /**
-     * Answer required, but was empty or null.
-     */
-    public static final int ANSWER_REQUIRED_BUT_EMPTY = 1;
-
-    /**
-     * Answer constraint was violated.
-     */
-    public static final int ANSWER_CONSTRAINT_VIOLATED = 2;
-
-    /**
      * Used to validate and display valid form names.
      */
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
@@ -132,7 +117,6 @@ public class GlobalConstants {
                     "org.javarosa.core.model.data.SelectOneData",
                     "org.javarosa.core.model.data.StringData",
                     "org.javarosa.core.model.data.TimeData",
-                    "org.javarosa.core.model.instance.DataModelTree",
                     "org.javarosa.core.services.locale.TableLocaleSource",
                     "org.javarosa.xpath.expr.XPathArithExpr",
                     "org.javarosa.xpath.expr.XPathBoolExpr",

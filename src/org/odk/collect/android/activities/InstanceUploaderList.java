@@ -81,27 +81,27 @@ public class InstanceUploaderList extends ListActivity {
             }
 
         });
-        
+
         mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-            	ListView ls = getListView();
-            	// Check all items
+                ListView ls = getListView();
+                // Check all items
                 if (mToggleButton.isChecked()) {
-        			for(int pos = 0; pos < ls.getCount(); pos++) {
-        				if(!ls.isItemChecked(pos)) {
-        					ls.setItemChecked(pos, true);
-        					mSelected.add(ls.getItemIdAtPosition(pos));
-        				}
-        			}
-                // cancel checking all items
-                } else { 
-        			ls.clearChoices();
-        			mSelected.clear();
+                    for (int pos = 0; pos < ls.getCount(); pos++) {
+                        if (!ls.isItemChecked(pos)) {
+                            ls.setItemChecked(pos, true);
+                            mSelected.add(ls.getItemIdAtPosition(pos));
+                        }
+                    }
+                    // cancel checking all items
+                } else {
+                    ls.clearChoices();
+                    mSelected.clear();
                 }
             }
         });
-        
+
     }
 
 
@@ -132,21 +132,22 @@ public class InstanceUploaderList extends ListActivity {
 
         // cleanup
         fda.close();
-        
-        // if current activity is being reinitialized due to changing orientation
+
+        // if current activity is being reinitialized due to changing
+        // orientation
         // restore all check marks for ones selected
-        if(mRestored) {
-        	ListView ls = getListView();
-			for(long id : mSelected) {
-				for(int pos = 0; pos < ls.getCount(); pos++) { 
-					if(id == ls.getItemIdAtPosition(pos)) {
-						ls.setItemChecked(pos, true);
-						break;
-					}
-				}
-        		
-			}
-        	mRestored = false;
+        if (mRestored) {
+            ListView ls = getListView();
+            for (long id : mSelected) {
+                for (int pos = 0; pos < ls.getCount(); pos++) {
+                    if (id == ls.getItemIdAtPosition(pos)) {
+                        ls.setItemChecked(pos, true);
+                        break;
+                    }
+                }
+
+            }
+            mRestored = false;
         }
     }
 
@@ -179,8 +180,8 @@ public class InstanceUploaderList extends ListActivity {
         if (mInstances != null) {
             mInstances.getCursor().requery();
         }
-        if(!mRestored) {
-        	mSelected.clear();
+        if (!mRestored) {
+            mSelected.clear();
         }
         refreshView();
     }
@@ -233,24 +234,27 @@ public class InstanceUploaderList extends ListActivity {
         refreshData();
         super.onResume();
     }
-    
+
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	super.onRestoreInstanceState(savedInstanceState);
-    	long[] selectedArray = savedInstanceState.getLongArray("selected");
-    	for(int i = 0; i < selectedArray.length; i++)
-    		mSelected.add(selectedArray[i]);
-    	mRestored = true;
+        super.onRestoreInstanceState(savedInstanceState);
+        long[] selectedArray = savedInstanceState.getLongArray("selected");
+        for (int i = 0; i < selectedArray.length; i++)
+            mSelected.add(selectedArray[i]);
+        mRestored = true;
     }
-    
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		long[] selectedArray = new long[mSelected.size()];
-		for(int i = 0; i < mSelected.size(); i++)
-			selectedArray[i] = mSelected.get(i);
-		outState.putLongArray("selected", selectedArray);
-	}
+        super.onSaveInstanceState(outState);
+        long[] selectedArray = new long[mSelected.size()];
+        for (int i = 0; i < mSelected.size(); i++)
+            selectedArray[i] = mSelected.get(i);
+        outState.putLongArray("selected", selectedArray);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
