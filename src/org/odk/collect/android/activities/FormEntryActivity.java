@@ -1,16 +1,14 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
@@ -73,8 +71,8 @@ import android.widget.Toast;
 
 
 /**
- * FormEntryActivity is responsible for displaying questions, animating
- * transitions between questions, and allowing the user to enter data.
+ * FormEntryActivity is responsible for displaying questions, animating transitions between
+ * questions, and allowing the user to enter data.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
@@ -209,8 +207,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /*
      * (non-Javadoc)
      * 
-     * @see android.app.Activity#onActivityResult(int, int,
-     * android.content.Intent)
+     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -280,14 +277,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Refreshes the current view. mFormHandler and the displayed view can get
-     * out of sync due to dialogs and restarts caused by screen orientation
-     * changes, so they're resynchronized here.
+     * Refreshes the current view. the controller and the displayed view can get out of sync due to
+     * dialogs and restarts caused by screen orientation changes, so they're resynchronized here.
      */
     public void refreshCurrentView() {
         int event = mFormEntryModel.getEvent();
 
-        // TODO: Can we display prompts appropriately now?
+        // When we refresh, if we're at a repeat prompt then step back to the
+        // last question.
         while (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
                 || event == FormEntryController.EVENT_GROUP
                 || event == FormEntryController.EVENT_REPEAT) {
@@ -402,8 +399,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /*
      * (non-Javadoc)
      * 
-     * @see android.app.Activity#onRetainNonConfigurationInstance() If we're
-     * loading, then we pass the loading thread to our next instance.
+     * @see android.app.Activity#onRetainNonConfigurationInstance() If we're loading, then we pass
+     * the loading thread to our next instance.
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
@@ -431,47 +428,19 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private View createView(int event) {
         setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
-        FileDbAdapter fda = null;
-        Cursor c = null;
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 View startView = View.inflate(this, R.layout.form_entry_start, null);
                 setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
-
-                // TODO: What?
-                fda = new FileDbAdapter(this);
-                fda.open();
-                c = fda.fetchFilesByPath(mInstancePath, null);
-                if (c != null && c.getCount() > 0) {
-                    ((TextView) startView.findViewById(R.id.description)).setText(getString(
-                            R.string.review_data_description, c.getString(c
-                                    .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
-                } else {
-                    ((TextView) startView.findViewById(R.id.description)).setText(getString(
-                            R.string.enter_data_description, mFormEntryModel.getFormTitle()));
-                }
-
-                // clean up cursor
-                if (c != null) {
-                    c.close();
-                }
-
-                fda.close();
+                ((TextView) startView.findViewById(R.id.description)).setText(getString(
+                        R.string.enter_data_description, mFormEntryModel.getFormTitle()));
                 return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
-                fda = new FileDbAdapter(FormEntryActivity.this);
-                fda.open();
-                c = fda.fetchFilesByPath(mInstancePath, null);
-                if (c != null && c.getCount() > 0) {
-                    ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                            R.string.save_review_data_description, c.getString(c
-                                    .getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
-                } else {
-                    ((TextView) endView.findViewById(R.id.description)).setText(getString(
-                            R.string.save_enter_data_description, mFormEntryModel.getFormTitle()));
-                }
+                ((TextView) endView.findViewById(R.id.description)).setText(getString(
+                        R.string.save_enter_data_description, mFormEntryModel.getFormTitle()));
+
                 // Create 'save complete' button.
                 ((Button) endView.findViewById(R.id.complete_exit_button))
                         .setOnClickListener(new OnClickListener() {
@@ -480,6 +449,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 saveDataToDisk(true);
                             }
                         });
+
                 // Create 'save for later' button
                 ((Button) endView.findViewById(R.id.save_exit_button))
                         .setOnClickListener(new OnClickListener() {
@@ -488,13 +458,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 saveDataToDisk(false);
                             }
                         });
-
-                // clean up cursor
-                if (c != null) {
-                    c.close();
-                }
-
-                fda.close();
                 return endView;
             case FormEntryController.EVENT_QUESTION:
                 QuestionView qv = new QuestionView(this, mInstancePath);
@@ -530,8 +493,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         /*
-         * constrain the user to only be able to swipe (that causes a view
-         * transition) once per screen with the mBeenSwiped variable.
+         * constrain the user to only be able to swipe (that causes a view transition) once per
+         * screen with the mBeenSwiped variable.
          */
         boolean handled = false;
         if (!mBeenSwiped) {
@@ -553,9 +516,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Determines what should be displayed on the screen. Possible options are:
-     * a question, an ask repeat dialog, or the submit screen. Also saves
-     * answers to the data model after checking constraints.
+     * Determines what should be displayed on the screen. Possible options are: a question, an ask
+     * repeat dialog, or the submit screen. Also saves answers to the data model after checking
+     * constraints.
      */
     private void showNextView() {
         if (currentPromptIsQuestion()) {
@@ -585,9 +548,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Determines what should be displayed between a question, or the start
-     * screen and displays the appropriate view. Also saves answers to the data
-     * model without checking constraints.
+     * Determines what should be displayed between a question, or the start screen and displays the
+     * appropriate view. Also saves answers to the data model without checking constraints.
      */
     private void showPreviousView() {
         // The answer is saved on a back swipe, but question constraints are
@@ -613,9 +575,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Displays the View specified by the parameter 'next', animating both the
-     * current view and next appropriately given the AnimationType. Also updates
-     * the progress bar.
+     * Displays the View specified by the parameter 'next', animating both the current view and next
+     * appropriately given the AnimationType. Also updates the progress bar.
      */
     public void showView(View next, AnimationType from) {
         switch (from) {
@@ -645,7 +606,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         // UnComment to make progress bar work.
         // WARNING: will currently slow large forms considerably
-        // TODO: make the progress bar fast.
+        // TODO: make the progress bar fast. Must be done in javarosa.
         // mProgressBar.setMax(mFormHandler.getQuestionCount());
         // mProgressBar.setProgress(mFormHandler.getQuestionNumber());
 
@@ -669,14 +630,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     // TODO: use managed dialogs when the bugs are fixed
     /*
-     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
-     * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
-     * (cupcake). We do use managed dialogs for our static loading
-     * ProgressDialog.
+     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog() and
+     * onPrepareDialog(), but dialogs with dynamic content are broken in 1.5 (cupcake). We do use
+     * managed dialogs for our static loading ProgressDialog.
      * 
-     * The main issue we noticed and are waiting to see fixed is:
-     * onPrepareDialog() is not called after a screen orientation change.
-     * http://code.google.com/p/android/issues/detail?id=1639
+     * The main issue we noticed and are waiting to see fixed is: onPrepareDialog() is not called
+     * after a screen orientation change. http://code.google.com/p/android/issues/detail?id=1639
      */
 
 
@@ -736,8 +695,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Creates and displays a dialog asking the user if they'd like to create a
-     * repeat of the current group.
+     * Creates and displays a dialog asking the user if they'd like to create a repeat of the
+     * current group.
      */
     private void createRepeatDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
@@ -812,8 +771,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
                         FormIndex validIndex = mFormEntryController.deleteRepeat();
-                        mFormEntryModel.setQuestionIndex(validIndex);
-                        // TODO: I think this can be a non-question. ??
+                        mFormEntryController.jumpToIndex(validIndex);
                         showPreviousView();
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -856,7 +814,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    // TODO: Clean up this method.
+
     /**
      * Confirm quit dialog
      */
@@ -956,8 +914,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Creates and displays a dialog allowing the user to set the language for
-     * the form.
+     * Creates and displays a dialog allowing the user to set the language for the form.
      */
     private void createLanguageDialog() {
         final String[] languages = mFormEntryModel.getLanguages();
@@ -1129,8 +1086,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * android.view.animation.Animation.AnimationListener#onAnimationEnd(android
+     * @see android.view.animation.Animation.AnimationListener#onAnimationEnd(android
      * .view.animation.Animation)
      */
     public void onAnimationEnd(Animation arg0) {
@@ -1141,8 +1097,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * android.view.animation.Animation.AnimationListener#onAnimationRepeat(
+     * @see android.view.animation.Animation.AnimationListener#onAnimationRepeat(
      * android.view.animation.Animation)
      */
     public void onAnimationRepeat(Animation animation) {
@@ -1153,8 +1108,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * android.view.animation.Animation.AnimationListener#onAnimationStart(android
+     * @see android.view.animation.Animation.AnimationListener#onAnimationStart(android
      * .view.animation.Animation)
      */
     public void onAnimationStart(Animation animation) {
@@ -1163,8 +1117,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * loadingComplete() is called by FormLoaderTask once it has finished
-     * loading a form.
+     * loadingComplete() is called by FormLoaderTask once it has finished loading a form.
      */
     public void loadingComplete(FormEntryController fec) {
         dismissDialog(PROGRESS_DIALOG);

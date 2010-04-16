@@ -42,7 +42,7 @@
 	<string name="entering_repeat">Add Section</string>
 	<string name="enter_data">Enter New Data</string>
 	<string name="enter_data_button">Enter New Data (%s)</string>
-	<string name="enter_data_description">%s has been selected for entry.</string>
+	<string name="enter_data_description">%s has been selected.</string>
 	<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 	<string name="entry_exit_confirm">Exiting will delete any unsaved data!</string>
 	<string name="expanded_group">Expanded Group</string>
@@ -95,9 +95,8 @@
 	<string name="review_data_description">%s has been selected for review.</string>
 	<string name="saved_data">Incomplete (%s)</string>
 	<string name="save_data_message">Please choose one to save results.</string>
-	<string name="save_enter_data_description">%s entry has ended.</string>
+	<string name="save_enter_data_description">You have reached the end of %s.</string>
 	<string name="save_for_later">Save as Incomplete </string>
-	<string name="save_review_data_description">%s review has ended.</string>
 	<string name="saving_form">Saving Form</string>
 	<string name="send">send</string>
 	<string name="send_data">Send Completed Data</string>
