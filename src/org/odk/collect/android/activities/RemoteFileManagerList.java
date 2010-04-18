@@ -52,7 +52,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 
 /**
@@ -71,13 +70,14 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_DOWNLOADED_KEY = "downloaded_key";
+    private static final String BUNDLE_TOGGLED_KEY = "toggled";
     
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private Button mActionButton;
 
     private FormDownloaderTask mFormDownloadTask;
-    private ToggleButton mToggleButton;
+    private Button mToggleButton;
 
     private boolean mLoadingList;
     private boolean mDownloaded;
@@ -85,6 +85,8 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     private ArrayList<String> mFormName = new ArrayList<String>();
     private ArrayList<String> mFormUrl = new ArrayList<String>();
     private ArrayAdapter<String> mFileAdapter;
+    
+    private boolean mToggled = false;
 
     private int totalCount;
 
@@ -100,27 +102,23 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
 
             public void onClick(View arg0) {
                 downloadSelectedFiles();
-                mToggleButton.setChecked(false);
+                mToggled = false;
             }
         });
         
-        mToggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        mToggleButton = (Button) findViewById(R.id.toggle_button);
         
         mToggleButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-            	ListView ls = getListView();
-            	// Check all items
-                if (mToggleButton.isChecked()) {
-        			for(int pos = 0; pos < ls.getCount(); pos++) {
-        				if(!ls.isItemChecked(pos))
-        					ls.setItemChecked(pos, true);
-        			}
-                // cancel checking all items
-                } else { 
-        			ls.clearChoices();
-                }
+            	// toggle selections of items to all or none
+                ListView ls = getListView();
+                mToggled = !mToggled;
+               
+                for (int pos = 0; pos < ls.getCount(); pos++)
+                	ls.setItemChecked(pos, mToggled);
             }
         });
+        
         if (savedInstanceState != null)
         	mDownloaded = savedInstanceState.getBoolean(BUNDLE_DOWNLOADED_KEY);
         
@@ -164,13 +162,18 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         mFormDownloadTask.execute();
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
+    }
 
     @Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(BUNDLE_DOWNLOADED_KEY, mDownloaded);
+		outState.putBoolean(BUNDLE_TOGGLED_KEY, mToggled);
 	}
-
 
 	private void buildView() {
         // create xml document
