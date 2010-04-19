@@ -1,16 +1,14 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
@@ -23,9 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -57,8 +57,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
 
     /**
-     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from
-     * XML. If given an instance, it will be used to fill the {@link FormDef}.
+     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
+     * an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
     protected Integer doInBackground(Void... nothing) {
@@ -73,7 +73,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         }
         return SAVE_ERROR;
     }
-    
+
+
     public boolean exportData(String instancePath, Context context, boolean markCompleted) {
 
         ByteArrayPayload payload;
@@ -123,8 +124,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
 
     }
-    
-    
+
+
     private boolean exportXmlFile(ByteArrayPayload payload, String path) {
 
         // create data stream
@@ -185,21 +186,33 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    // make sure this validates for all on done
+    /**
+     * Goes through the entire form to make sure all entered answers comply with their constraints.
+     * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
+     * allow saving to disk, though, until all answers conform to their constraints/requirements.
+     * 
+     * @param markCompleted
+     * @return
+     */
+
     private int validateAnswers(boolean markCompleted) {
-   /*     mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
-        mFormHandler.nextQuestionPrompt();
-        while (!mFormHandler.isEnd()) {
-            int saveStatus =
-                    mFormHandler.saveAnswer(mFormHandler.currentPrompt(), mFormHandler
-                            .currentPrompt().getAnswerValue(), true);
-            if (saveStatus == GlobalConstants.ANSWER_CONSTRAINT_VIOLATED
-                    || (markCompleted && saveStatus != GlobalConstants.ANSWER_OK)) {
-                return saveStatus;
+        mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        FormEntryModel fem = mFormEntryController.getModel();
+
+        int event;
+        while ((event = mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
+            if (event != FormEntryController.EVENT_QUESTION) {
+                continue;
+            } else {
+                int saveStatus =
+                        mFormEntryController.answerQuestion(fem.getQuestionPrompt()
+                                .getAnswerValue());
+                if (saveStatus == FormEntryController.ANSWER_CONSTRAINT_VIOLATED
+                        || (markCompleted && saveStatus != FormEntryController.ANSWER_OK)) {
+                    return saveStatus;
+                }
             }
-            mFormHandler.nextQuestionPrompt();
         }
-*/
         return VALIDATED;
     }
 }

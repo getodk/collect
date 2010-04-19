@@ -351,6 +351,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 createSaveExitDialog(true);
                 return true;
             case MENU_HIERARCHY_VIEW:
+                if (currentPromptIsQuestion()) {
+                    saveCurrentAnswer(false);
+                }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivity(i);
         }
@@ -805,7 +808,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         boolean saveStatus = true;
 
         if (mFormEntryModel.getEvent() == FormEntryController.EVENT_QUESTION) {
-            saveStatus = saveCurrentAnswer(true);
+            saveStatus = saveCurrentAnswer(false);
         }
 
         if (saveStatus) {
