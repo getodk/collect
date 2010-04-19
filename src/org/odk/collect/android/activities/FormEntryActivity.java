@@ -1251,7 +1251,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /**
      * The closest group the prompt belongs to.
      * 
-     * @return GroupElement
+     * @return FormEntryCaption
      */
     private FormEntryCaption getLastGroup(FormEntryCaption[] groups) {
         if (groups == null || groups.length == 0)
