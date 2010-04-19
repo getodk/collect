@@ -415,7 +415,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mSaveToDiskTask != null && mSaveToDiskTask.getStatus() != AsyncTask.Status.FINISHED)
             return mSaveToDiskTask;
 
-        // mFormHandler is static so we don't need to pass it.
+        // mFormEntryController is static so we don't need to pass it.
         if (mFormEntryController != null && currentPromptIsQuestion()) {
             saveCurrentAnswer(false);
         }
@@ -610,8 +610,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // UnComment to make progress bar work.
         // WARNING: will currently slow large forms considerably
         // TODO: make the progress bar fast. Must be done in javarosa.
-        // mProgressBar.setMax(mFormHandler.getQuestionCount());
-        // mProgressBar.setProgress(mFormHandler.getQuestionNumber());
+        // mProgressBar.setMax(mFormEntryModel.getTotalRelevantQuestionCount());
+        // mProgressBar.setProgress(mFormEntryModel.getCompletedRelevantQuestionCount());
 
         RelativeLayout.LayoutParams lp =
                 new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
