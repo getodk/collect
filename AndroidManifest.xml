@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2009 University of Washington
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="7" android:versionName="1.1.4">
+  <application android:icon="@drawable/notes" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
+  <activity android:label="@string/app_name" android:name=".activities.MainMenuActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".activities.FormEntryActivity" android:label="@string/app_name" />    
+    <activity android:name=".activities.InstanceChooserList" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormChooserList" android:label="@string/app_name"/>
+    <activity android:name=".activities.LocalFileManagerList" android:label="@string/app_name"/>
+    <activity android:name=".activities.RemoteFileManagerList" android:label="@string/app_name"/>
+    <activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
+    <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
+    <activity android:name=".preferences.ServerPreferences" android:label="@string/app_name"/>
+    <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
+    <activity android:name=".activities.GeoPointActivity" android:label="@string/app_name"/>
+  </application>
+  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
+  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>
+  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_SURFACE_FLINGER"/>
+  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-sdk android:minSdkVersion="3"></uses-sdk>
+</manifest>
