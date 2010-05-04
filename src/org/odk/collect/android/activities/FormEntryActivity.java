@@ -171,6 +171,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             mSaveToDiskTask = (SaveToDiskTask) data;
         } else if (data == null) {
             if (!newForm) {
+                mFormEntryModel = mFormEntryController.getModel();
                 refreshCurrentView();
                 return;
             }
