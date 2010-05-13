@@ -166,7 +166,7 @@ public class MainMenuActivity extends Activity {
             // returns with a form path, start entry
             case FORM_CHOOSER:
                 formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
-                i = new Intent("org.odk.collect.android.action.LOADFORM");
+                i = new Intent("org.odk.collect.android.action.FormEntry");
                 i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
                 startActivity(i);
                 break;
@@ -174,7 +174,7 @@ public class MainMenuActivity extends Activity {
             case INSTANCE_CHOOSER_TABS:
                 formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
                 String instancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
-                i = new Intent("org.odk.collect.android.action.LOADFORM");
+                i = new Intent("org.odk.collect.android.action.FormEntry");
                 i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
                 i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);

@@ -542,7 +542,7 @@ public class FileDbAdapter {
                     }
                     // find xml file in folder and delete folder
                     fis = fo.list(ff);
-                    if (fis != null) {
+                    if (fis != null && fis.length > 0) {
                         c = fetchFilesByPath(instancePath + "/" + fo.list(ff)[0], null);
                         
                             File dir = new File(instancePath);
