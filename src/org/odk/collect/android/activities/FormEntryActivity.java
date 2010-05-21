@@ -20,6 +20,8 @@ import java.util.Calendar;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
@@ -28,6 +30,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -149,6 +152,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // needed to override rms property manager
         org.javarosa.core.services.PropertyManager.setPropertyManager(new PropertyManager(
                 getApplicationContext()));
+        
+        //This is a singleton, how do we ensure that we're not doing this multiple times?
+        if(ReferenceManager._().getFactories().length == 0) {
+        	ReferenceManager._().addReferenceFactory(new FileReferenceFactory("sdcard/odk"));
+        	ReferenceManager._().addRootTranslator(new RootTranslator("jr://images/", "jr://file/media/"));
+        	ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/media/"));
+        }
 
         Boolean newForm = true;
         if (savedInstanceState != null) {

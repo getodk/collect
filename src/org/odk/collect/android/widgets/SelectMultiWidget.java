@@ -16,21 +16,35 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.reference.InvalidReferenceException;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.views.AudioButton;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup.LayoutParams;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -80,29 +94,6 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
             return new SelectMultiData(vc);
         }
         
-        /*
-        Vector<Selection> ve = new Vector<Selection>();
-        Enumeration en = mItems.keys();
-        String k = null;
-        String v = null;
-
-        // counter for offset
-        int i = 0;
-        while (en.hasMoreElements()) {
-            k = (String) en.nextElement();
-            v = (String) mItems.get(k);
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
-            if (c.isChecked()) {
-                ve.add(new Selection(v));
-            }
-            i++;
-        }
-
-        if (ve.size() == 0) {
-            return null;
-        } else {
-            return new SelectMultiData(ve);
-        }*/
     }
 
 
@@ -137,7 +128,25 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
                 });
                 
                 c.setId(CHECKBOX_ID + i);
-                c.setText(mItems.get(i).getCaption());
+                
+                String imageURI = prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                if(imageURI != null) {
+                	try {
+						Bitmap b = BitmapFactory.decodeStream(ReferenceManager._().DeriveReference(imageURI).getStream());
+						BitmapDrawable bd = new BitmapDrawable(b);
+						DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
+						bd.setBounds(new Rect(0,0,b.getScaledWidth(dm),b.getScaledHeight(dm)));
+						c.setCompoundDrawables(bd,null,null,null);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvalidReferenceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+                
+                c.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 c.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
 
                 for (int vi = 0; vi < ve.size(); vi++) {
@@ -148,60 +157,30 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
                     }
                     
                 }
-
+                
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
-                addView(c);
-            }
-            /*
-            OrderedHashtable h = prompt.getSelectItems();
-            Enumeration en = h.keys();
-            String k = null;
-            String v = null;
-
-            // counter for offset
-            int i = 0;
-
-            while (en.hasMoreElements()) {
-
-                k = (String) en.nextElement();
-                v = (String) h.get(k);
-
-                // no checkbox group so id by answer + offset
-                CheckBox c = new CheckBox(getContext());
-
-                // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && prompt.isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                            } else {
-                                buttonView.setChecked(true);
-                            }
-                        }
-                    }
-                });
-
-                c.setId(CHECKBOX_ID + i);
-                c.setText(k);
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
-
-                for (int vi = 0; vi < ve.size(); vi++) {
-                    // match based on value, not key
-                    if (v.equals(((Selection) ve.elementAt(vi)).getValue())) {
-                        c.setChecked(true);
-                        break;
-                    }
-                    
+                
+                
+                if(prompt.getSelectTextForms(mItems.get(i)).contains(FormEntryCaption.TEXT_FORM_AUDIO)) {
+                    String audioUri = prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
+					AudioButton audioButton = new AudioButton(getContext(), audioUri);
+					
+					LinearLayout rl = (LinearLayout)View.inflate(this.getContext(),R.layout.radiobutton_linearlayout, null);
+					View template = rl.findViewById(R.id.radiobuttontemplate);
+					
+					LinearLayout holder = new LinearLayout(this.getContext());
+					holder.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+					
+					c.setLayoutParams(template.getLayoutParams());
+					
+					holder.addView(c,template.getLayoutParams());
+					holder.addView(audioButton);
+					addView(holder);
+                } else {
+                    addView(c);
                 }
-
-                c.setFocusable(!prompt.isReadOnly());
-                c.setEnabled(!prompt.isReadOnly());
-                addView(c);
-                i++;
-                */
-            
+            }
         }
 
         mCheckboxInit = false;

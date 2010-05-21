@@ -16,7 +16,11 @@
 
 package org.odk.collect.android.views;
 
+import java.io.IOException;
+
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.reference.InvalidReferenceException;
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.widgets.IBinaryWidget;
@@ -24,14 +28,17 @@ import org.odk.collect.android.widgets.IQuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 
 /**
@@ -144,6 +151,17 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
      * Add a TextView containing the question text.
      */
     private void AddQuestionText(FormEntryPrompt p) {
+    	
+    	String audioURI = p.getAudioText();
+        if(audioURI != null) {
+			AudioButton audioButton = new AudioButton(getContext(), audioURI);
+			
+	        LinearLayout wrapper = new LinearLayout(getContext());
+	        wrapper.setGravity(Gravity.RIGHT);
+	        wrapper.addView(audioButton);
+			mView.addView(wrapper, LayoutParams.FILL_PARENT);
+        }
+    	
         TextView tv = new TextView(getContext());
         tv.setText(p.getLongText());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
@@ -152,7 +170,26 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
 
         // wrap to the widget of view
         tv.setHorizontallyScrolling(false);
-        mView.addView(tv, mLayout);
+    	mView.addView(tv, mLayout);
+    	
+    	String imageURI = p.getImageText();
+    	if(imageURI != null) {
+    		ImageView iv = new ImageView(getContext());
+    		iv.setPadding(0, 0, 0, 7);
+    		iv.setScaleType(ScaleType.FIT_XY);
+    		try {
+				iv.setImageBitmap(BitmapFactory.decodeStream(ReferenceManager._().DeriveReference(imageURI).getStream()));
+				mView.addView(iv, mLayout);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException("Couldn't load image!");
+			} catch (InvalidReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException("Bad Reference! r:" + imageURI);
+			}
+    	}
     }
 
 
