@@ -29,6 +29,7 @@ import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.tasks.FormDownloaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -196,8 +197,13 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 formCount = formElements.getLength();
                 for (int i = 0; i < formCount; i++) {
                     Node n = formElements.item(i);
-                    mFormName.add(n.getChildNodes().item(0).getNodeValue() + ".xml");
-                    mFormUrl.add(n.getAttributes().item(0).getNodeValue());
+                    
+                    NodeList childList = n.getChildNodes();
+                    NamedNodeMap attrMap = n.getAttributes();
+                    if (childList.getLength() > 0 && attrMap.getLength() > 0) {
+	                    mFormName.add(childList.item(0).getNodeValue() + ".xml");
+	                    mFormUrl.add(attrMap.item(0).getNodeValue());
+                    }
                 }
             }
             // create file adapter and create view
