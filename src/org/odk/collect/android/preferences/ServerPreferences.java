@@ -74,6 +74,11 @@ public class ServerPreferences extends PreferenceActivity implements
         EditTextPreference etp =
                 (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
         String s = etp.getText();
+        // Remove last space character
+        if (s.endsWith(" ")) {
+        	s = s.substring(0, s.length() - 1);
+        }
+        
         if (UrlUtils.isValidUrl(s)) {
             etp.setText(s);
             etp.setSummary(s);
