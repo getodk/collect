@@ -44,7 +44,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup.LayoutParams;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -77,7 +76,6 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-    @SuppressWarnings("unchecked")
     public IAnswerData getAnswer() {
         Vector<Selection> vc = new Vector<Selection>();
         for (int i = 0; i < mItems.size(); i++) {

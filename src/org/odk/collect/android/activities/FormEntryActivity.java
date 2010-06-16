@@ -92,8 +92,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final int MENU_LANGUAGES = Menu.FIRST + 2;
     private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 3;
     private static final int MENU_SUBMENU = Menu.FIRST + 4;
-    private static final int MENU_SAVE = Menu.FIRST + 5;
-    private static final int MENU_COMPLETE = Menu.FIRST + 6;
+    private static final int MENU_SAVE_INCOMPLETE = Menu.FIRST + 5;
+    private static final int MENU_SAVE_COMPLETE = Menu.FIRST + 6;
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
@@ -315,13 +315,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         menu.removeItem(MENU_LANGUAGES);
         menu.removeItem(MENU_HIERARCHY_VIEW);
         menu.removeItem(MENU_SUBMENU);
+        menu.removeItem(MENU_SAVE_COMPLETE);
+        menu.removeItem(MENU_SAVE_INCOMPLETE);
 
         SubMenu sm =
-                menu.addSubMenu(0, MENU_SUBMENU, 0, R.string.quit_entry).setIcon(
+                menu.addSubMenu(0, MENU_SUBMENU, 0, R.string.save_all_answers).setIcon(
                         android.R.drawable.ic_menu_save);
-        sm.add(0, MENU_SAVE, 0, getString(R.string.save_for_later));
-        sm.add(0, MENU_COMPLETE, 0, getString(R.string.finalize_for_send));
+        sm.add(0, MENU_SAVE_INCOMPLETE, 0, getString(R.string.save_for_later));
+        sm.add(0, MENU_SAVE_COMPLETE, 0, getString(R.string.finalize_for_send));
 
+       // menu.add(0, MENU_SAVE_INCOMPLETE, 0, R.string.save_all_answers).setIcon(android.R.drawable.ic_menu_save);
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer)).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel).setEnabled(
                 !mFormEntryModel.isIndexReadonly() ? true : false);
@@ -355,11 +358,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
                 return true;
-            case MENU_SAVE:
-                createSaveExitDialog(false);
+            case MENU_SAVE_INCOMPLETE:
+            	saveFormEntrySession(false);
                 return true;
-            case MENU_COMPLETE:
-                createSaveExitDialog(true);
+            case MENU_SAVE_COMPLETE:
+            	saveFormEntrySession(true);
                 return true;
             case MENU_HIERARCHY_VIEW:
                 if (currentPromptIsQuestion()) {
@@ -655,6 +658,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     public void createLocationDialog() {
         mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
         DialogInterface.OnClickListener geopointButtonListener =
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -665,7 +669,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setTitle(getString(R.string.getting_location));
         mProgressDialog.setMessage(getString(R.string.please_wait));
-        mProgressDialog.setButton(getString(R.string.cancel), geopointButtonListener);
+        mProgressDialog.setButton(getString(R.string.cancel_location), geopointButtonListener);
+        mProgressDialog.setButton2(getString(R.string.accept_location), geopointButtonListener);
         mProgressDialog.show();
     }
 
@@ -714,15 +719,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createRepeatDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        if (getLastRepeatCount(getGroupsForCurrentIndex()) > 0) {
-            mAlertDialog.setTitle(getString(R.string.leaving_repeat));
-            mAlertDialog.setMessage(getString(R.string.add_another_repeat,
-                    getLastGroupText(getGroupsForCurrentIndex())));
-        } else {
-            mAlertDialog.setTitle(getString(R.string.entering_repeat));
-            mAlertDialog.setMessage(getString(R.string.add_repeat,
-                    getLastGroupText(getGroupsForCurrentIndex())));
-        }
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
@@ -736,9 +733,21 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 }
             }
         };
+        if (getLastRepeatCount(getGroupsForCurrentIndex()) > 0) {
+            mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
+            mAlertDialog.setMessage(getString(R.string.add_another_repeat,
+                    getLastGroupText(getGroupsForCurrentIndex())));
+            mAlertDialog.setButton(getString(R.string.add_another), repeatListener);
+            mAlertDialog.setButton2(getString(R.string.leave_repeat_yes), repeatListener);
+
+        } else {
+            mAlertDialog.setTitle(getString(R.string.entering_repeat_ask));
+            mAlertDialog.setMessage(getString(R.string.add_repeat,
+                    getLastGroupText(getGroupsForCurrentIndex())));
+            mAlertDialog.setButton(getString(R.string.entering_repeat), repeatListener);
+            mAlertDialog.setButton2(getString(R.string.add_repeat_no), repeatListener);
+        }
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), repeatListener);
-        mAlertDialog.setButton2(getString(R.string.no), repeatListener);
         mAlertDialog.show();
         mBeenSwiped = false;
     }
@@ -749,6 +758,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
@@ -772,13 +782,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
         String name = getLastRepeatedGroupName(getGroupsForCurrentIndex());
         int repeatcount = getLastRepeatedGroupRepeatCount(getGroupsForCurrentIndex());
         if (repeatcount != -1) {
             name += " (" + (repeatcount + 1) + ")";
         }
-        mAlertDialog.setTitle(getString(R.string.delete_repeat));
+        mAlertDialog.setTitle(getString(R.string.delete_repeat_ask));
         mAlertDialog.setMessage(getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int i) {
@@ -794,8 +804,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), quitListener);
-        mAlertDialog.setButton2(getString(R.string.no), quitListener);
+        mAlertDialog.setButton(getString(R.string.discard_group), quitListener);
+        mAlertDialog.setButton2(getString(R.string.delete_repeat_no), quitListener);
         mAlertDialog.show();
     }
 
@@ -815,7 +825,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /**
      * Confirm save and quit dialog
      */
-    private void createSaveExitDialog(boolean markCompleted) {
+    private void saveFormEntrySession(boolean markCompleted) {
         boolean saveStatus = true;
 
         if (mFormEntryModel.getEvent() == FormEntryController.EVENT_QUESTION) {
@@ -828,12 +838,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-
     /**
      * Confirm quit dialog
      */
     private void createQuitDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
         mAlertDialog.setTitle(getString(R.string.quit_application));
         mAlertDialog.setMessage(getString(R.string.entry_exit_confirm));
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
@@ -905,8 +915,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createClearDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.clear_answer));
-        mAlertDialog.setMessage(getString(R.string.clearanswer_confirm));
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+
+
+        mAlertDialog.setTitle(getString(R.string.clear_answer_ask));
+
+        String question = mFormEntryModel.getQuestionPrompt().getLongText();
+        if (question.length() > 50) {
+        	question = question.substring(0, 50) + "...";
+        }
+
+        mAlertDialog.setMessage(getString(R.string.clearanswer_confirm,question));
+
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int i) {
@@ -921,8 +941,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), quitListener);
-        mAlertDialog.setButton2(getString(R.string.no), quitListener);
+        mAlertDialog.setButton(getString(R.string.discard_answer), quitListener);
+        mAlertDialog.setButton2(getString(R.string.clear_answer_no), quitListener);
         mAlertDialog.show();
     }
 
@@ -980,11 +1000,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 finish();
                             }
                         };
+                mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 mProgressDialog.setTitle(getString(R.string.loading_form));
                 mProgressDialog.setMessage(getString(R.string.please_wait));
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                mProgressDialog.setButton(getString(R.string.cancel_loading_form), loadingButtonListener);
                 return mProgressDialog;
             case SAVING_DIALOG:
                 mProgressDialog = new ProgressDialog(this);
@@ -996,11 +1017,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 mSaveToDiskTask.cancel(true);
                             }
                         };
+                mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 mProgressDialog.setTitle(getString(R.string.saving_form));
                 mProgressDialog.setMessage(getString(R.string.please_wait));
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), savingButtonListener);
+                mProgressDialog.setButton(getString(R.string.cancel_saving_form), savingButtonListener);
                 return mProgressDialog;
 
         }
@@ -1176,7 +1199,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case SaveToDiskTask.SAVED:
                 Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
                         Toast.LENGTH_SHORT).show();
-                finish();
+                //finish();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),

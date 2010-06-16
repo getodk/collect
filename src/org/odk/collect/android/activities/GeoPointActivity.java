@@ -118,11 +118,12 @@ public class GeoPointActivity extends Activity implements LocationListener {
         // back button doesn't cancel
         mLocationDialog.setCancelable(false);
         mLocationDialog.setIndeterminate(true);
+        mLocationDialog.setIcon(android.R.drawable.ic_dialog_info);
         mLocationDialog.setTitle(getString(R.string.getting_location));
         mLocationDialog.setMessage(getString(R.string.please_wait));
-        mLocationDialog.setButton(DialogInterface.BUTTON1, getString(R.string.ok),
+        mLocationDialog.setButton(DialogInterface.BUTTON1, getString(R.string.accept_location),
                 geopointButtonListener);
-        mLocationDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel),
+        mLocationDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel_location),
                 geopointButtonListener);
     }
 
