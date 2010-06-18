@@ -88,6 +88,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                if (fd == null) {
+                    return null;
+                }
             }
         }
 

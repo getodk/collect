@@ -83,15 +83,20 @@ public class StringWidget extends EditText implements IQuestionWidget {
         
         Log.e("carl", "is prompt null here? " + (prompt == null));
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            setText(s);
+        if (prompt != null) {
+        	String s = prompt.getAnswerText();
+            if (s != null) {
+                setText(s);
+            }
+            
+            if (prompt.isReadOnly()) {
+                setBackgroundDrawable(null);
+                setFocusable(false);
+                setClickable(false);
+            }
         }
-        if (prompt.isReadOnly()) {
-            setBackgroundDrawable(null);
-            setFocusable(false);
-            setClickable(false);
-        }
+        
+       
     }
 
 
