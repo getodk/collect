@@ -55,7 +55,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  */
 public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCheckedChangeListener {
 
-    int mRadioChecked = -1;
+ //   int mRadioChecked = -1;
     Vector<SelectChoice> mItems;
     
     Vector<RadioButton> buttons;
@@ -143,7 +143,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
                 if (mItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
-                    mRadioChecked = i;
+                    //mRadioChecked = i;
                 }
 
             }

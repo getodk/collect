@@ -85,13 +85,15 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
 
         // display which group you are in as well as the question
         AddGroupText(groups);
-        AddQuestionText(p);
-        AddHelpText(p);
+        if (p != null) {
+        	AddQuestionText(p);
+        	AddHelpText(p);
+        	
+            // if question or answer type is not supported, use text widget
+            mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
+            mView.addView((View) mQuestionWidget, mLayout);
+        }
 
-        // if question or answer type is not supported, use text widget
-        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
-
-        mView.addView((View) mQuestionWidget, mLayout);
         addView(mView);
     }
 
@@ -197,7 +199,8 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
      * Add a TextView containing the help text.
      */
     private void AddHelpText(FormEntryPrompt p) {
-        String s = p.getHelpText();
+
+    	String s = p.getHelpText();
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());

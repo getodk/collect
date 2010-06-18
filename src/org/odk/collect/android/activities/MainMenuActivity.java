@@ -46,7 +46,7 @@ public class MainMenuActivity extends Activity {
 
     // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
-    private static final int INSTANCE_CHOOSER_TABS = 1;
+    private static final int INSTANCE_CHOOSER = 1;
     private static final int INSTANCE_UPLOADER = 2;
 
     // menu options
@@ -104,8 +104,9 @@ public class MainMenuActivity extends Activity {
                             getString(R.string.no_items_error, getString(R.string.review)),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserTabs.class);
-                    startActivityForResult(i, INSTANCE_CHOOSER_TABS);
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
+                    startActivityForResult(i, INSTANCE_CHOOSER);
                 }
 
             }
@@ -171,7 +172,7 @@ public class MainMenuActivity extends Activity {
                 startActivity(i);
                 break;
             // returns with an instance path, start entry
-            case INSTANCE_CHOOSER_TABS:
+            case INSTANCE_CHOOSER:
                 formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
                 String instancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
                 i = new Intent("org.odk.collect.android.action.FormEntry");

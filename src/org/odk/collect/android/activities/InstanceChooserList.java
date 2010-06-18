@@ -43,6 +43,7 @@ public class InstanceChooserList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         refreshView();
     }
 
@@ -68,7 +69,8 @@ public class InstanceChooserList extends ListActivity {
         i.putExtra(GlobalConstants.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
 
         // return the result to the parent class
-        getParent().setResult(RESULT_OK, i);
+        // getParent().setResult(RESULT_OK, i);
+        setResult(RESULT_OK, i);
 
         // don't close cursor or tab host delays closing
         finish();

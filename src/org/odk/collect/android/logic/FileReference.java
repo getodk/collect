@@ -51,6 +51,7 @@ public class FileReference implements Reference {
 	}
 
 	public void remove() throws IOException {
+		// TODO bad practice to ignore return values
 		new File(getInternalURI()).delete();
 	}
 

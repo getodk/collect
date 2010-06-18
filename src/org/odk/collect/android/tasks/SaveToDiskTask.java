@@ -47,14 +47,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private FormSavedListener mSavedListener;
     private String mInstancePath;
     private Context mContext;
-    private Boolean mMarkCompleted;
+    private Boolean mSave;
     private FormEntryController mFormEntryController = FormEntryActivity.mFormEntryController;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
     public static final int VALIDATE_ERROR = 502;
     public static final int VALIDATED = 503;
-
+    public static final int SAVED_AND_EXIT = 504;
 
     /**
      * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
@@ -62,20 +62,27 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      */
     @Override
     protected Integer doInBackground(Void... nothing) {
-        int validateStatus = validateAnswers(mMarkCompleted);
-        if (validateStatus != VALIDATED) {
+
+    	// validation failed, pass specific failure
+    	int validateStatus = validateAnswers();
+        if (validateStatus != FormEntryController.ANSWER_OK) {
             return validateStatus;
         }
 
         mFormEntryController.getModel().getForm().postProcessInstance();
-        if (exportData(mInstancePath, mContext, mMarkCompleted)) {
-            return SAVED;
+        
+        if (mSave && exportData(mInstancePath, mContext)) {
+            return SAVED_AND_EXIT;
+        } else if (exportData(mInstancePath, mContext)) {
+        	return SAVED;
         }
+        
         return SAVE_ERROR;
+
     }
-
-
-    public boolean exportData(String instancePath, Context context, boolean markCompleted) {
+    
+    
+    public boolean exportData(String instancePath, Context context) {
 
         ByteArrayPayload payload;
         try {
@@ -98,14 +105,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         fda.open();
         File f = new File(instancePath);
         Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
-        if (!markCompleted) {
-            if (c != null && c.getCount() == 0) {
-                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_INCOMPLETE);
-            } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);
-            }
-        } else {
+        
             if (c != null && c.getCount() == 0) {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
                         FileDbAdapter.STATUS_COMPLETE);
@@ -113,7 +113,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             } else {
                 fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
             }
-        }
         // clean up cursor
         if (c != null) {
             c.close();
@@ -179,10 +178,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public void setExportVars(String instancePath, Context context, Boolean completed) {
+    public void setExportVars(String instancePath, Context context, Boolean saveAndExit) {
         mInstancePath = instancePath;
         mContext = context;
-        mMarkCompleted = completed;
+        mSave = saveAndExit;
     }
 
 
@@ -195,10 +194,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * @return
      */
 
-    private int validateAnswers(boolean markCompleted) {
-        mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-        FormEntryModel fem = mFormEntryController.getModel();
-
+    private int validateAnswers() {
+    	
+    	FormEntryModel fem = mFormEntryController.getModel();
+    	FormIndex i = fem.getFormIndex();
+    	
+    	mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        
         int event;
         while ((event = mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
             if (event != FormEntryController.EVENT_QUESTION) {
@@ -207,12 +209,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 int saveStatus =
                         mFormEntryController.answerQuestion(fem.getQuestionPrompt()
                                 .getAnswerValue());
-                if (saveStatus == FormEntryController.ANSWER_CONSTRAINT_VIOLATED
-                        || (markCompleted && saveStatus != FormEntryController.ANSWER_OK)) {
+                if (saveStatus != FormEntryController.ANSWER_OK) {
                     return saveStatus;
                 }
             }
         }
+        
+        mFormEntryController.jumpToIndex(i);
         return VALIDATED;
     }
 }
