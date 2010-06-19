@@ -809,7 +809,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     	 if (!saveCurrentAnswer(true)) {
              Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
                      Toast.LENGTH_SHORT).show();
-             return false;
+         	return false;
          }
     	
         mSaveToDiskTask = new SaveToDiskTask();

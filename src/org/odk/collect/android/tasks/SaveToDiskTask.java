@@ -44,178 +44,177 @@ import android.util.Log;
  */
 public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
-    private FormSavedListener mSavedListener;
-    private String mInstancePath;
-    private Context mContext;
-    private Boolean mSave;
-    private FormEntryController mFormEntryController = FormEntryActivity.mFormEntryController;
+	private FormSavedListener mSavedListener;
+	private String mInstancePath;
+	private Context mContext;
+	private Boolean mSave;
+	private FormEntryController mFormEntryController = FormEntryActivity.mFormEntryController;
 
-    public static final int SAVED = 500;
-    public static final int SAVE_ERROR = 501;
-    public static final int VALIDATE_ERROR = 502;
-    public static final int VALIDATED = 503;
-    public static final int SAVED_AND_EXIT = 504;
+	public static final int SAVED = 500;
+	public static final int SAVE_ERROR = 501;
+	public static final int VALIDATE_ERROR = 502;
+	public static final int VALIDATED = 503;
+	public static final int SAVED_AND_EXIT = 504;
 
-    /**
-     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
-     * an instance, it will be used to fill the {@link FormDef}.
-     */
-    @Override
-    protected Integer doInBackground(Void... nothing) {
+	/**
+	 * Initialize {@link FormEntryController} with {@link FormDef} from binary
+	 * or from XML. If given an instance, it will be used to fill the
+	 * {@link FormDef}.
+	 */
+	@Override
+	protected Integer doInBackground(Void... nothing) {
 
-    	// validation failed, pass specific failure
-    	int validateStatus = validateAnswers();
-        if (validateStatus != FormEntryController.ANSWER_OK) {
-            return validateStatus;
-        }
+		// validation failed, pass specific failure
+		int validateStatus = validateAnswers();
+		if (validateStatus != VALIDATED) {
+			return validateStatus;
+		}
 
-        mFormEntryController.getModel().getForm().postProcessInstance();
-        
-        if (mSave && exportData(mInstancePath, mContext)) {
-            return SAVED_AND_EXIT;
-        } else if (exportData(mInstancePath, mContext)) {
-        	return SAVED;
-        }
-        
-        return SAVE_ERROR;
+		mFormEntryController.getModel().getForm().postProcessInstance();
 
-    }
-    
-    
-    public boolean exportData(String instancePath, Context context) {
+		if (mSave && exportData(mInstancePath, mContext)) {
+			return SAVED_AND_EXIT;
+		} else if (exportData(mInstancePath, mContext)) {
+			return SAVED;
+		}
+		
+		return SAVE_ERROR;
 
-        ByteArrayPayload payload;
-        try {
+	}
 
-            // assume no binary data inside the model.
-            FormInstance datamodel = mFormEntryController.getModel().getForm().getInstance();
-            XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-            payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
+	public boolean exportData(String instancePath, Context context) {
 
-            // write out xml
-            exportXmlFile(payload, instancePath);
+		ByteArrayPayload payload;
+		try {
 
-        } catch (IOException e) {
-            Log.e("savetodisk", "Error creating serialized payload");
-            e.printStackTrace();
-            return false;
-        }
+			// assume no binary data inside the model.
+			FormInstance datamodel = mFormEntryController.getModel().getForm()
+					.getInstance();
+			XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+			payload = (ByteArrayPayload) serializer
+					.createSerializedPayload(datamodel);
 
-        FileDbAdapter fda = new FileDbAdapter(context);
-        fda.open();
-        File f = new File(instancePath);
-        Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
-        
-            if (c != null && c.getCount() == 0) {
-                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_COMPLETE);
+			// write out xml
+			exportXmlFile(payload, instancePath);
 
-            } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
-            }
-        // clean up cursor
-        if (c != null) {
-            c.close();
-        }
+		} catch (IOException e) {
+			Log.e("savetodisk", "Error creating serialized payload");
+			e.printStackTrace();
+			return false;
+		}
 
-        fda.close();
-        return true;
+		FileDbAdapter fda = new FileDbAdapter(context);
+		fda.open();
+		File f = new File(instancePath);
+		Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
 
+		if (c != null && c.getCount() == 0) {
+			fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+					FileDbAdapter.STATUS_COMPLETE);
 
-    }
+		} else {
+			fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
+		}
+		// clean up cursor
+		if (c != null) {
+			c.close();
+		}
 
+		fda.close();
+		return true;
 
-    private boolean exportXmlFile(ByteArrayPayload payload, String path) {
+	}
 
-        // create data stream
-        InputStream is = payload.getPayloadStream();
-        int len = (int) payload.getLength();
+	private boolean exportXmlFile(ByteArrayPayload payload, String path) {
 
-        // read from data stream
-        byte[] data = new byte[len];
-        try {
-            int read = is.read(data, 0, len);
-            if (read > 0) {
-                // write xml file
-                try {
-                    // String filename = path + "/" +
-                    // path.substring(path.lastIndexOf('/') + 1) + ".xml";
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    bw.write(new String(data, "UTF-8"));
-                    bw.flush();
-                    bw.close();
-                    return true;
+		// create data stream
+		InputStream is = payload.getPayloadStream();
+		int len = (int) payload.getLength();
 
-                } catch (IOException e) {
-                    Log.e("savetodisk", "Error writing XML file");
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-        } catch (IOException e) {
-            Log.e("savetodisk", "Error reading from payload data stream");
-            e.printStackTrace();
-            return false;
-        }
+		// read from data stream
+		byte[] data = new byte[len];
+		try {
+			int read = is.read(data, 0, len);
+			if (read > 0) {
+				// write xml file
+				try {
+					// String filename = path + "/" +
+					// path.substring(path.lastIndexOf('/') + 1) + ".xml";
+					BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+					bw.write(new String(data, "UTF-8"));
+					bw.flush();
+					bw.close();
+					return true;
 
-        return false;
+				} catch (IOException e) {
+					Log.e("savetodisk", "Error writing XML file");
+					e.printStackTrace();
+					return false;
+				}
+			}
+		} catch (IOException e) {
+			Log.e("savetodisk", "Error reading from payload data stream");
+			e.printStackTrace();
+			return false;
+		}
 
-    }
+		return false;
 
+	}
 
-    @Override
-    protected void onPostExecute(Integer result) {
-        synchronized (this) {
-            if (mSavedListener != null) mSavedListener.savingComplete(result);
-        }
-    }
+	@Override
+	protected void onPostExecute(Integer result) {
+		synchronized (this) {
+			if (mSavedListener != null)
+				mSavedListener.savingComplete(result);
+		}
+	}
 
+	public void setFormSavedListener(FormSavedListener fsl) {
+		synchronized (this) {
+			mSavedListener = fsl;
+		}
+	}
 
-    public void setFormSavedListener(FormSavedListener fsl) {
-        synchronized (this) {
-            mSavedListener = fsl;
-        }
-    }
+	public void setExportVars(String instancePath, Context context,
+			Boolean saveAndExit) {
+		mInstancePath = instancePath;
+		mContext = context;
+		mSave = saveAndExit;
+	}
 
+	/**
+	 * Goes through the entire form to make sure all entered answers comply with
+	 * their constraints. Constraints are ignored on 'jump to', so answers can
+	 * be outside of constraints. We don't allow saving to disk, though, until
+	 * all answers conform to their constraints/requirements.
+	 * 
+	 * @param markCompleted
+	 * @return
+	 */
 
-    public void setExportVars(String instancePath, Context context, Boolean saveAndExit) {
-        mInstancePath = instancePath;
-        mContext = context;
-        mSave = saveAndExit;
-    }
+	private int validateAnswers() {
 
+		FormEntryModel fem = mFormEntryController.getModel();
+		FormIndex i = fem.getFormIndex();
 
-    /**
-     * Goes through the entire form to make sure all entered answers comply with their constraints.
-     * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
-     * allow saving to disk, though, until all answers conform to their constraints/requirements.
-     * 
-     * @param markCompleted
-     * @return
-     */
+		mFormEntryController
+				.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
-    private int validateAnswers() {
-    	
-    	FormEntryModel fem = mFormEntryController.getModel();
-    	FormIndex i = fem.getFormIndex();
-    	
-    	mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-        
-        int event;
-        while ((event = mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
-            if (event != FormEntryController.EVENT_QUESTION) {
-                continue;
-            } else {
-                int saveStatus =
-                        mFormEntryController.answerQuestion(fem.getQuestionPrompt()
-                                .getAnswerValue());
-                if (saveStatus != FormEntryController.ANSWER_OK) {
-                    return saveStatus;
-                }
-            }
-        }
-        
-        mFormEntryController.jumpToIndex(i);
-        return VALIDATED;
-    }
+		int event;
+		while ((event = mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
+			if (event != FormEntryController.EVENT_QUESTION) {
+				continue;
+			} else {
+				int saveStatus = mFormEntryController.answerQuestion(fem
+						.getQuestionPrompt().getAnswerValue());
+				if (saveStatus != FormEntryController.ANSWER_OK) {
+					return saveStatus;
+				}
+			}
+		}
+
+		mFormEntryController.jumpToIndex(i);
+		return VALIDATED;
+	}
 }
