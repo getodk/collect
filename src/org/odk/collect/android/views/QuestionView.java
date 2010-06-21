@@ -200,7 +200,10 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
      */
     private void AddHelpText(FormEntryPrompt p) {
 
-    	String s = p.getHelpText();
+    	String s = null;
+    	if (p.getAnswerText() != null) {
+        	s = p.getHelpText();
+    	}
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());

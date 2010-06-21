@@ -14,7 +14,7 @@
 	<string name="add_repeat">Add a new \"%s\" group?</string>
 	<string name="add_repeat_no">Do Not Add</string>
 	<string name="app_name">ODK Collect</string>
-	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not instal`led!</string>
+	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
 	<string name="cancel">Cancel</string>
 	<string name="cancel_loading_form">Stop Loading</string>
 	<string name="cancel_location">Do Not Record</string>
@@ -81,7 +81,7 @@
 	<string name="location_accuracy">Accuracy is %s meters.</string>
 	<string name="main_menu">Main Menu</string>
 	<string name="main_menu_details">Magnifying human resources with technology.</string>
-	<string name="main_menu_message">ODK Collect v1.1.4</string>
+	<string name="main_menu_message">ODK Collect v1.1.5</string>
 	<string name="manage_files">Manage Forms And Data</string>
 	<string name="no">No</string>
 	<string name="noselect_error">Sorry, you have not selected any items!</string>
