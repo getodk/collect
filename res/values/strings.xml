@@ -26,7 +26,6 @@
 	<string name="collapsed_group">Collapsed Group</string>
 	<string name="completed_data">Complete (%s)</string>
 	<string name="continue_form">Continue Form</string>
-	<string name="data">Data</string>
 	<string name="data_saved_error">Sorry, data save failed!</string>
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="default_server">http://open-data-kit.appspot.com</string>
@@ -49,7 +48,6 @@
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 	<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 	<string name="finalize_for_send">Save as Complete</string>
-	<string name="form">Form</string>
 	<string name="getting_location">Loading Location</string>
 	<string name="get_barcode">Capture Barcode</string>
 	<string name="get_location">Capture Location</string>
