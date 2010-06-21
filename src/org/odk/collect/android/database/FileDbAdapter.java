@@ -1,16 +1,14 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -33,7 +30,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
@@ -84,13 +80,19 @@ public class FileDbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
     private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_PATH = "/sdcard/odk/metadata";
 
     private final Context mCtx;
 
-    private static class DatabaseHelper extends SQLiteOpenHelper {
 
-        DatabaseHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+
+        DatabaseHelper() {
+            super(DATABASE_PATH, DATABASE_NAME, null, DATABASE_VERSION);
+
+            // Create database storage directory if it doesn't not already exist.
+            File f = new File(DATABASE_PATH);
+            f.mkdirs();
         }
 
 
@@ -114,10 +116,16 @@ public class FileDbAdapter {
     }
 
 
+    public FileDbAdapter() {
+        mCtx = null;
+    }
+
+
     public FileDbAdapter open() throws SQLException {
-        mDbHelper = new DatabaseHelper(mCtx);
+        mDbHelper = new DatabaseHelper();
         mDb = mDbHelper.getWritableDatabase();
         cleanFiles();
+
         return this;
     }
 
@@ -160,12 +168,11 @@ public class FileDbAdapter {
             // remove time stamp from instance
             String r = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
             Pattern p = Pattern.compile(r);
-            return p.split(filename)[0] + " " + mCtx.getString(R.string.data);
+            return p.split(filename)[0] + " " + "Data";
         } else if (type.equals(TYPE_FORM)) {
             // remove extension from form
             try {
-                return filename.substring(0, filename.lastIndexOf(".")) + " "
-                        + mCtx.getString(R.string.form);
+                return filename.substring(0, filename.lastIndexOf(".")) + " " + "Form";
 
             } catch (StringIndexOutOfBoundsException e) {
                 return path;
@@ -544,32 +551,41 @@ public class FileDbAdapter {
                     fis = fo.list(ff);
                     if (fis != null && fis.length > 0) {
                         c = fetchFilesByPath(instancePath + "/" + fo.list(ff)[0], null);
-                        
-                            File dir = new File(instancePath);
-                            if (dir.exists() && dir.isDirectory()) {
-                                File[] files = dir.listFiles();
-                                for (File file : files) {
-                                    if (file.getName().endsWith(".jpg")) {
-                                       String[] projection = {Images.ImageColumns._ID};
-                                       Cursor cd = mCtx.getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI,
-                                               projection,
-                                               "_data='" + instancePath + "/" + file.getName() + "'", null, null);
-                                       if (cd.getCount() > 0) {
-                                           cd.moveToFirst();
-                                           String id = cd.getString(cd.getColumnIndex(Images.ImageColumns._ID));
 
-                                           Log.e(t, "attempting to delete: " + Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id));
-                                           int del =
-                                                   mCtx.getContentResolver().delete(
-                                                           Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, id), null, null);
-                                       Log.e(t, "deleted " + del + " image files");
-                                       }
-                                       c.close();
-                                       
+                        File dir = new File(instancePath);
+                        if (dir.exists() && dir.isDirectory()) {
+                            File[] files = dir.listFiles();
+                            for (File file : files) {
+                                if (file.getName().endsWith(".jpg")) {
+                                    String[] projection = {Images.ImageColumns._ID};
+                                    Cursor cd =
+                                            mCtx.getContentResolver().query(
+                                                    Images.Media.EXTERNAL_CONTENT_URI,
+                                                    projection,
+                                                    "_data='" + instancePath + "/" + file.getName()
+                                                            + "'", null, null);
+                                    if (cd.getCount() > 0) {
+                                        cd.moveToFirst();
+                                        String id =
+                                                cd.getString(cd
+                                                        .getColumnIndex(Images.ImageColumns._ID));
+
+                                        Log.e(t, "attempting to delete: "
+                                                + Uri.withAppendedPath(
+                                                        Images.Media.EXTERNAL_CONTENT_URI, id));
+                                        int del =
+                                                mCtx.getContentResolver().delete(
+                                                        Uri.withAppendedPath(
+                                                                Images.Media.EXTERNAL_CONTENT_URI,
+                                                                id), null, null);
+                                        Log.e(t, "deleted " + del + " image files");
                                     }
+                                    c.close();
+
                                 }
                             }
-                        
+                        }
+
                         if (c.getCount() == 0 && !FileUtils.deleteFolder(instancePath)) {
                             Log.i(t, "Failed to delete " + instancePath);
                         }

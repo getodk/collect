@@ -153,6 +153,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         org.javarosa.core.services.PropertyManager.setPropertyManager(new PropertyManager(
                 getApplicationContext()));
         
+        //TODO: move this into the task so we can use the folder:
+        // /sdcard/odk/forms/formfilename-media/
         //This is a singleton, how do we ensure that we're not doing this multiple times?
         if(ReferenceManager._().getFactories().length == 0) {
         	ReferenceManager._().addReferenceFactory(new FileReferenceFactory("sdcard/odk"));

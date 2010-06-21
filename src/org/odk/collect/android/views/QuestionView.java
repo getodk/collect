@@ -1,26 +1,20 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.views;
 
-import java.io.IOException;
-
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.widgets.IBinaryWidget;
@@ -28,23 +22,20 @@ import org.odk.collect.android.widgets.IQuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
 
 
 /**
- * Responsible for using a {@link FormEntryQuestion} and based on the question type
- * and answer type, displaying the appropriate widget. The class also sets (but
- * does not save) and gets the answers to questions.
+ * Responsible for using a {@link FormEntryQuestion} and based on the question type and answer type,
+ * displaying the appropriate widget. The class also sets (but does not save) and gets the answers
+ * to questions.
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
@@ -72,7 +63,7 @@ public class QuestionView extends ScrollView {
      */
     public void buildView(FormEntryPrompt p, FormEntryCaption[] groups) {
 
-Log.e("carl", "current entry prompt is null? " + (p == null));
+        Log.e("carl", "current entry prompt is null? " + (p == null));
         mView = new LinearLayout(getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
         mView.setGravity(Gravity.TOP);
@@ -115,8 +106,7 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
 
 
     /**
-     * Add a TextView containing the hierarchy of groups to which the question
-     * belongs.
+     * Add a TextView containing the hierarchy of groups to which the question belongs.
      */
     private void AddGroupText(FormEntryCaption[] groups) {
         StringBuffer s = new StringBuffer("");
@@ -148,48 +138,30 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
 
 
     /**
-     * Add a TextView containing the question text.
+     * Add a Views containing the question text, audio (if applicable), and image (if applicable).
+     * To satisfy the RelativeLayout constraints, we add the audio first if it exists, then the
+     * TextView to fit the rest of the space, then the image if applicable.
      */
     private void AddQuestionText(FormEntryPrompt p) {
-    	
-    	String audioURI = p.getAudioText();
-        if(audioURI != null) {
-			AudioButton audioButton = new AudioButton(getContext(), audioURI);
-			
-	        LinearLayout wrapper = new LinearLayout(getContext());
-	        wrapper.setGravity(Gravity.RIGHT);
-	        wrapper.addView(audioButton);
-			mView.addView(wrapper, LayoutParams.FILL_PARENT);
-        }
-    	
-        TextView tv = new TextView(getContext());
-        tv.setText(p.getLongText());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
-        tv.setTypeface(null, Typeface.BOLD);
-        tv.setPadding(0, 0, 0, 7);
+        String imageURI = p.getImageText();
+        String audioUri = p.getAudioText();
 
-        // wrap to the widget of view
-        tv.setHorizontallyScrolling(false);
-    	mView.addView(tv, mLayout);
-    	
-    	String imageURI = p.getImageText();
-    	if(imageURI != null) {
-    		ImageView iv = new ImageView(getContext());
-    		iv.setPadding(0, 0, 0, 7);
-    		iv.setScaleType(ScaleType.FIT_XY);
-    		try {
-				iv.setImageBitmap(BitmapFactory.decodeStream(ReferenceManager._().DeriveReference(imageURI).getStream()));
-				mView.addView(iv, mLayout);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new RuntimeException("Couldn't load image!");
-			} catch (InvalidReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new RuntimeException("Bad Reference! r:" + imageURI);
-			}
-    	}
+        // Add the text view. Textview always exists, regardless of whether there's text.
+        TextView questionText = new TextView(getContext());
+        questionText.setText(p.getLongText());
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
+        questionText.setTypeface(null, Typeface.BOLD);
+        questionText.setPadding(0, 0, 0, 7);
+        questionText.setId(38475483); // assign random id
+
+        // Wrap to the size of the parent view
+        questionText.setHorizontallyScrolling(false);
+
+        // Create the layout for audio, image, text
+        AVTLayout mediaLayout = new AVTLayout(getContext());
+        mediaLayout.setAVT(questionText, audioUri, imageURI);
+
+        mView.addView(mediaLayout, mLayout);
     }
 
 
@@ -216,6 +188,6 @@ Log.e("carl", "current entry prompt is null? " + (p == null));
     public void setFocus(Context context) {
         mQuestionWidget.setFocus(context);
     }
-    
-  
+
+
 }

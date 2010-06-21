@@ -9,7 +9,7 @@
 	<string name="ack">Acknowledge</string>
 	<string name="acked">Acknowledged</string>
 	<string name="add_another_repeat">Add another \"%s\" section?</string>
-	<string name="add_file">Add Selected File(s)</string>
+	<string name="add_file">Get Selected</string>
 	<string name="add_repeat">Add a \"%s\" section?</string>
 	<string name="app_name">ODK Collect</string>
 	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>

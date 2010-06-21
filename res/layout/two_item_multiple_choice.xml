@@ -34,7 +34,7 @@ the License.
 		android:focusable="false"
 		android:clickable="false"
 		android:layout_marginTop="5dip"
-		android:layout_alignParentRight="true" />
+		android:layout_alignParentRight="true"/>
 
 	<TextView
 		android:id="@+id/text1"
