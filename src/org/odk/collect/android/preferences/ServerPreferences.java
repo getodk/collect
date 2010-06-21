@@ -73,7 +73,8 @@ public class ServerPreferences extends PreferenceActivity implements
     private void updateServer() {
         EditTextPreference etp =
                 (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
-        String s = etp.getText();
+        String s = etp.getText().trim();
+        
         if (UrlUtils.isValidUrl(s)) {
             etp.setText(s);
             etp.setSummary(s);

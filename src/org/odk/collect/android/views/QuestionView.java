@@ -76,13 +76,15 @@ public class QuestionView extends ScrollView {
 
         // display which group you are in as well as the question
         AddGroupText(groups);
-        AddQuestionText(p);
-        AddHelpText(p);
+        if (p != null) {
+        	AddQuestionText(p);
+        	AddHelpText(p);
+        	
+            // if question or answer type is not supported, use text widget
+            mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
+            mView.addView((View) mQuestionWidget, mLayout);
+        }
 
-        // if question or answer type is not supported, use text widget
-        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
-
-        mView.addView((View) mQuestionWidget, mLayout);
         addView(mView);
     }
 
@@ -169,7 +171,11 @@ public class QuestionView extends ScrollView {
      * Add a TextView containing the help text.
      */
     private void AddHelpText(FormEntryPrompt p) {
-        String s = p.getHelpText();
+
+    	String s = null;
+    	if (p.getAnswerText() != null) {
+        	s = p.getHelpText();
+    	}
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());

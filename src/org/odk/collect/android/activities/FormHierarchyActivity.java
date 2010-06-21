@@ -342,22 +342,4 @@ public class FormHierarchyActivity extends ListActivity {
         this.getListView().setSelection(position);
     }
 
-
-    /* helper test method. Okay to delete this. */
-    private void printAllIndexes() {
-        FormIndex current = mFormEntryModel.getFormIndex();
-        mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-
-        mFormEntryController.stepToNextEvent();
-        while (mFormEntryModel.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
-            FormIndex fi = mFormEntryModel.getFormIndex();
-            Log.e("carl", "current index = " + fi.toString());
-            mFormEntryController.stepToNextEvent();
-        }
-
-        mFormEntryController.jumpToIndex(current);
-    }
-
-
-
 }

@@ -55,7 +55,6 @@ public class FileUtils {
             File[] children = root.listFiles();
             for (File child : children) {
                 boolean directory = child.isDirectory();
-                String filename = child.getName();
                 if (directory) {
                     mFolderList.add(child.getAbsolutePath());
                 }
