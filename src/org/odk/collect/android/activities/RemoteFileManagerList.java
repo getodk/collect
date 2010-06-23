@@ -148,7 +148,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         }
 
         if (mAlertShowing) {
-            this.createAlertDialog(mAlertTitle, mAlertMsg);
+            createAlertDialog(mAlertTitle, mAlertMsg);
         }
 
         mDownloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
@@ -391,7 +391,6 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         mAlertDialog.setTitle(title);
         mAlertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok

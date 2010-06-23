@@ -39,16 +39,10 @@ public class FileUtils {
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
-    // Forms storage path
+    // Storage paths
     public static final String FORMS_PATH = "/sdcard/odk/forms/";
-
-    // Instances storage path
     public static final String INSTANCES_PATH = "/sdcard/odk/instances/";
-
-    // Cache path
     public static final String CACHE_PATH = "/sdcard/odk/.cache/";
- 
-     // Temporary file
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
 

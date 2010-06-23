@@ -161,8 +161,11 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mStringAnswer.setText(s);
 
         String[] sa = s.split(" ");
-        mAnswerDisplay.setText("Latitude: " + formatGps(Double.parseDouble(sa[0]), "lat")
-                + "\nLongitude: " + formatGps(Double.parseDouble(sa[1]), "lon") + "\nAltitude: "
-                + sa[2] + "m\nAccuracy: " + sa[3] + "m");
+        mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
+                + formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
+                + getContext().getString(R.string.longitude) + ": "
+                + formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
+                + getContext().getString(R.string.altitude) + ": " + sa[2] + "\n"
+                + getContext().getString(R.string.accuracy) + ": " + sa[3] + "m");
     }
 }

@@ -43,7 +43,8 @@ import java.io.InputStream;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
-
+    private final static String t = "SaveToDiskTask";
+    
     private FormSavedListener mSavedListener;
     private String mInstancePath;
     private Context mContext;
@@ -97,7 +98,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             exportXmlFile(payload, instancePath);
 
         } catch (IOException e) {
-            Log.e("savetodisk", "Error creating serialized payload");
+            Log.e(t, "Error creating serialized payload");
             e.printStackTrace();
             return false;
         }
@@ -148,13 +149,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                     return true;
 
                 } catch (IOException e) {
-                    Log.e("savetodisk", "Error writing XML file");
+                    Log.e(t, "Error writing XML file");
                     e.printStackTrace();
                     return false;
                 }
             }
         } catch (IOException e) {
-            Log.e("savetodisk", "Error reading from payload data stream");
+            Log.e(t, "Error reading from payload data stream");
             e.printStackTrace();
             return false;
         }

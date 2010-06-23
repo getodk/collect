@@ -33,11 +33,9 @@ import android.widget.TextView;
 public class FileManagerTabs extends TabActivity {
 
     private static TextView mTVLF;
-
     private static TextView mTVRF;
 
     private static final String LOCAL_TAB = "local_tab";
-
     private static final String REMOTE_TAB = "remote_tab";
     private static final int FONT_SIZE = 21;
 

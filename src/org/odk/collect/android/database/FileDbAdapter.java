@@ -509,7 +509,6 @@ public class FileDbAdapter {
 
     public void removeOrphanInstances(Context ctx) {
         if (FileUtils.createFolder(FileUtils.INSTANCES_PATH)) {
-
             File fo = null;
             String[] fis = null;
             Cursor c = null;

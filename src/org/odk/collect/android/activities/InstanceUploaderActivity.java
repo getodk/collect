@@ -61,8 +61,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             return;
         }
 
-        // get the task if we've changed orientations. If it's null it's a new
-        // upload.
+        // get the task if we've changed orientations. If it's null it's a new upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mInstanceUploaderTask == null) {
             // setup dialog and upload task

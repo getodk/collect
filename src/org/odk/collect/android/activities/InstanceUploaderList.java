@@ -134,9 +134,8 @@ public class InstanceUploaderList extends ListActivity {
         // cleanup
         fda.close();
 
-        // if current activity is being reinitialized due to changing
-        // orientation
-        // restore all check marks for ones selected
+        // if current activity is being reinitialized due to changing orientation restore all check
+        // marks for ones selected
         if (mRestored) {
             ListView ls = getListView();
             for (long id : mSelected) {

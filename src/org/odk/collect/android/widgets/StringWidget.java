@@ -79,8 +79,6 @@ public class StringWidget extends EditText implements IQuestionWidget {
         setHorizontallyScrolling(false);
         setSingleLine(false);
 
-        Log.e("carl", "is prompt null here? " + (prompt == null));
-
         if (prompt != null) {
             String s = prompt.getAnswerText();
             if (s != null) {
@@ -98,8 +96,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
 
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if
-        // appropriate.
+        // Put focus on text input field and display soft keyboard if appropriate.
         this.requestFocus();
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -110,7 +107,6 @@ public class StringWidget extends EditText implements IQuestionWidget {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.isAltPressed() == true) {
-            Log.e("Carl", "alt is pressed in string view");
             return false;
         }
         return super.onKeyDown(keyCode, event);

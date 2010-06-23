@@ -95,8 +95,7 @@ public class FormHierarchyActivity extends ListActivity {
             mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
             if (currentEvent == FormEntryController.EVENT_REPEAT) {
-                // We were at a repeat, so stepping back brought us to the
-                // previous level
+                // We were at a repeat, so stepping back brought us to then previous level
                 mFormEntryController.jumpToIndex(index);
             } else {
                 // We were at a question, so stepping back brought us to either:
@@ -129,33 +128,27 @@ public class FormHierarchyActivity extends ListActivity {
 
 
     public void refreshView() {
-
-        // Record the current index so we can return to the same place if the
-        // user hits 'back'.
+        // Record the current index so we can return to the same place if the user hits 'back'.
         FormIndex currentIndex = mFormEntryModel.getFormIndex();
 
-        // If we're not at the first level, we're inside a repeated group so we
-        // want to only display everything enclosed within that group.
+        // If we're not at the first level, we're inside a repeated group so we want to only display
+        // everything enclosed within that group.
         String enclosingGroupName = "";
         formList = new ArrayList<HierarchyElement>();
 
-        // If we're currently at a repeat node, record the name of the node and
-        // step to the next node to display.
+        // If we're currently at a repeat node, record the name of the node and step to the next
+        // node to display.
         if (mFormEntryModel.getEvent() == FormEntryController.EVENT_REPEAT) {
             enclosingGroupName = mFormEntryModel.getCaptionPrompt().getLongText();
             mFormEntryController.stepToNextEvent();
         } else {
-            // Otherwise, check to see if the question is at the first level of
-            // the hierarchy. If it is, display the root level from the
-            // beginning.
+            // Otherwise, check to see if the question is at the first level of the hierarchy. If it
+            // is, display the root level from the beginning.
             FormIndex startTest = stepIndexOut(currentIndex);
             if (startTest == null) {
                 // We were at the root
                 mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
             } else {
-                Log.e("carl", "not at root, what does this mean?");
-                // We weren't at the root, so after stepIndexOut we're
-
                 mFormEntryController.jumpToIndex(startTest);
             }
 
@@ -181,8 +174,8 @@ public class FormHierarchyActivity extends ListActivity {
         // Refresh the current event in case we did step forward.
         event = mFormEntryModel.getEvent();
 
-        // There may be repeating Groups at this level of the hierarchy, we use
-        // this variable to keep track of them.
+        // There may be repeating Groups at this level of the hierarchy, we use this variable to
+        // keep track of them.
         String repeatedGroupName = "";
 
         event_search: while (event != FormEntryController.EVENT_END_OF_FORM) {
@@ -192,8 +185,8 @@ public class FormHierarchyActivity extends ListActivity {
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
                     if (!repeatedGroupName.equalsIgnoreCase("")) {
-                        // We're in a repeating group, so skip this question and
-                        // move to the next index.
+                        // We're in a repeating group, so skip this question and move to the next
+                        // index.
                         event = mFormEntryController.stepToNextEvent();
                         continue;
                     }
@@ -208,35 +201,34 @@ public class FormHierarchyActivity extends ListActivity {
                 case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                     fc = mFormEntryModel.getCaptionPrompt();
                     if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
-                        // We were displaying a set of questions inside of a
-                        // repeated group. This is the end of that group.
+                        // We were displaying a set of questions inside of a repeated group. This is
+                        // the end of that group.
                         break event_search;
                     }
 
                     if (repeatedGroupName.compareTo(fc.getLongText()) != 0) {
-                        // We're in a repeating group, so skip this repeat
-                        // prompt and move to the next event.
+                        // We're in a repeating group, so skip this repeat prompt and move to the
+                        // next event.
                         event = mFormEntryController.stepToNextEvent();
                         continue;
                     }
 
                     if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
-                        // This is the end of the current repeating group, so we
-                        // reset the repeatedGroupName variable
+                        // This is the end of the current repeating group, so we reset the
+                        // repeatedGroupName variable
                         repeatedGroupName = "";
                     }
                     break;
                 case FormEntryController.EVENT_REPEAT:
                     fc = mFormEntryModel.getCaptionPrompt();
                     if (enclosingGroupName.compareTo(fc.getLongText()) == 0) {
-                        // We were displaying a set of questions inside a
-                        // repeated group. This is the end of that group.
+                        // We were displaying a set of questions inside a repeated group. This is
+                        // the end of that group.
                         break event_search;
                     }
                     if (repeatedGroupName.equalsIgnoreCase("") && fc.getMultiplicity() == 0) {
-                        // This is the start of a repeating group. We only want
-                        // to display "Group #", so we mark this as the
-                        // beginning and skip all of its children
+                        // This is the start of a repeating group. We only want to display
+                        // "Group #", so we mark this as the beginning and skip all of its children
                         HierarchyElement group =
                             new HierarchyElement(fc.getLongText(),
                                     getString(R.string.collapsed_group), getResources()
@@ -247,8 +239,7 @@ public class FormHierarchyActivity extends ListActivity {
                     }
 
                     if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
-                        // Add this group name to the drop down list for this
-                        // repeating group.
+                        // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
                                 + fc.getMultiplicity(), mIndent + getString(R.string.select_repeat)
@@ -264,8 +255,7 @@ public class FormHierarchyActivity extends ListActivity {
         itla.setListItems(formList);
         setListAdapter(itla);
 
-        // set the controller back to the current index in case the user hits
-        // 'back'
+        // set the controller back to the current index in case the user hits 'back'
         mFormEntryController.jumpToIndex(currentIndex);
     }
 

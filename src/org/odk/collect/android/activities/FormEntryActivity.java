@@ -87,14 +87,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int VIDEO_CAPTURE = 4;
     public static final int LOCATION_CAPTURE = 5;
 
+    public static final String LOCATION_RESULT = "LOCATION_RESULT";
+
     // Identifies the location of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
 
-    private static final String FORMPATH = "formpath";
-    private static final String INSTANCEPATH = "instancepath";
+    // Identifies whether this is a new form, or reloading a form after a screen rotation (or
+    // similar)
     private static final String NEWFORM = "newform";
 
     private static final int MENU_CLEAR = Menu.FIRST;
@@ -177,11 +179,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         Boolean newForm = true;
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(FORMPATH)) {
-                mFormPath = savedInstanceState.getString(FORMPATH);
+            if (savedInstanceState.containsKey(KEY_FORMPATH)) {
+                mFormPath = savedInstanceState.getString(KEY_FORMPATH);
             }
-            if (savedInstanceState.containsKey(INSTANCEPATH)) {
-                mInstancePath = savedInstanceState.getString(INSTANCEPATH);
+            if (savedInstanceState.containsKey(KEY_INSTANCEPATH)) {
+                mInstancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
             }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
@@ -224,8 +226,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(FORMPATH, mFormPath);
-        outState.putString(INSTANCEPATH, mInstancePath);
+        outState.putString(KEY_FORMPATH, mFormPath);
+        outState.putString(KEY_INSTANCEPATH, mInstancePath);
         outState.putBoolean(NEWFORM, false);
     }
 
@@ -254,7 +256,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 // We saved the image to the tempfile_path, but we really want
                 // it to be in:
                 // /sdcard/odk/instances/[current instnace]/something.jpg
-                // so we move it here before inserting it into the content
+                // so we move it there before inserting it into the content
                 // provider.
                 File fi = new File(FileUtils.TMPFILE_PATH);
 
@@ -294,7 +296,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 refreshCurrentView();
                 break;
             case LOCATION_CAPTURE:
-                String sl = intent.getStringExtra("LOCATION_RESULT");
+                String sl = intent.getStringExtra(LOCATION_RESULT);
                 ((QuestionView) mCurrentView).setBinaryData(sl);
                 saveCurrentAnswer(false);
                 break;
@@ -349,7 +351,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             !mFormEntryModel.isIndexReadonly() ? true : false);
         menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat)).setIcon(
             R.drawable.ic_menu_clear_playlist).setEnabled(
-            doesIndexContainRepeatableGroup(mFormEntryModel.getFormIndex()) ? true : false);
+            indexContainsRepeatableGroup(mFormEntryModel.getFormIndex()) ? true : false);
         menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
             R.drawable.ic_menu_goto);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language)).setIcon(
@@ -670,6 +672,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         DialogInterface.OnClickListener geopointButtonListener =
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    // TODO: what?
                     Log.i("yaw", "inside form entry cancel button");
                 }
             };
@@ -822,7 +825,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Called during a 'save and exit' command. The form is not 'done' here.
      */
     private boolean saveDataToDisk(boolean exit) {
-
         // save current answer
         if (!saveCurrentAnswer(true)) {
             Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
@@ -858,21 +860,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: // discard
-                                // changes
-                                // and
-                                // exit
+                            case 0: // discard changes and exit
                                 FileDbAdapter fda = new FileDbAdapter();
                                 fda.open();
                                 Cursor c = fda.fetchFilesByPath(mInstancePath, null);
                                 if (c != null && c.getCount() > 0) {
                                     Log.i(t, "prevously saved");
                                 } else {
-                                    // not
-                                    // previously
-                                    // saved,
-                                    // cleaning
-                                    // up
+                                    // not previously saved, cleaning up
                                     String instanceFolder =
                                         mInstancePath.substring(0,
                                             mInstancePath.lastIndexOf("/") + 1);
@@ -909,9 +904,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     Log.i(t, "Deleted " + del + " images from content provider");
                                     FileUtils.deleteFolder(instanceFolder);
                                 }
-                                // clean
-                                // up
-                                // cursor
+                                // clean up cursor
                                 if (c != null) {
                                     c.close();
                                 }
@@ -920,14 +913,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 finish();
                                 break;
 
-                            case 1: // save
-                                // and
-                                // exit
+                            case 1: // save and exit
                                 saveDataToDisk(true);
                                 break;
 
-                            case 2:// do
-                                // nothing
+                            case 2:// do nothing
                                 break;
 
                         }
@@ -1140,7 +1130,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Dismiss any showing dialogs
+     * Dismiss any showing dialogs that we manage.
      */
     private void dismissDialogs() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
@@ -1156,7 +1146,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     @Override
     protected void onPause() {
-        Log.d(t, "onPause");
         dismissDialogs();
         super.onPause();
     }
@@ -1169,7 +1158,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     @Override
     protected void onResume() {
-        Log.d(t, "onResume");
         if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(this);
             if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -1288,12 +1276,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }
             } else {
-                // we've just loaded a saved form, so start in the hierarchy
-                // view
+                // we've just loaded a saved form, so start in the hierarchy view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivity(i);
-                return; // so we don't show the intro screen before jumping to
-                // the hierarchy
+                return; // so we don't show the intro screen before jumping to the hierarchy
             }
 
             refreshCurrentView();
@@ -1442,7 +1428,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    private boolean doesIndexContainRepeatableGroup(FormIndex index) {
+    private boolean indexContainsRepeatableGroup(FormIndex index) {
         FormEntryCaption[] groups = mFormEntryModel.getCaptionHierarchy();
         if (groups.length == 0) {
             return false;

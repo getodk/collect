@@ -56,7 +56,7 @@ public class DownloadFormsTask extends
     public static final String DL_FORMS = "dlforms"; // used to indicate that we tried to download
     // forms. If it's not included we tried to
     // download a form list.
-    
+
     private static final int CONNECTION_TIMEOUT = 30000;
 
     private FormDownloaderListener mStateListener;

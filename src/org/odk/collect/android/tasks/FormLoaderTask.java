@@ -46,6 +46,7 @@ import java.io.IOException;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormEntryController> {
+    private final static String t = "FormLoaderTask";
     /**
      * Classes needed to serialize objects
      */
@@ -145,28 +146,24 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
 
     public boolean importData(String filePath, FormEntryController fec) {
-
         // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(new File(filePath));
 
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
-        // TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
         TreeElement templateRoot = fec.getModel().getForm().getInstance().getRoot().deepCopy(true);
 
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
-            Log.e("asdf", "Saved form instance does not match template form definition");
+            Log.e(t, "Saved form instance does not match template form definition");
             return false;
         } else {
             // populate the data model
             TreeReference tr = TreeReference.rootRef();
             tr.add(templateRoot.getName(), TreeReference.INDEX_UNBOUND);
-            // DataModelTree.populateNode(templateRoot, savedRoot, tr, fec.getModel().getForm());
             templateRoot.populate(savedRoot, fec.getModel().getForm());
 
             // populated model to current form
-            // mForm.setDataModel(new DataModelTree(templateRoot));
             fec.getModel().getForm().getInstance().setRoot(templateRoot);
 
             // fix any language issues

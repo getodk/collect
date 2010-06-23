@@ -45,7 +45,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_location));
@@ -62,15 +61,13 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
     protected void onPause() {
-
         super.onPause();
 
-        // stops the GPS. Note that this will turn off the GPS if the screen
-        // goes to sleep.
+        // stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
         mLocationManager.removeUpdates(this);
 
-        // We're not using managed dialogs, so we have to dismiss the dialog to
-        // prevent it from leaking memory.
+        // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
+        // leaking memory.
         if (mLocationDialog != null && mLocationDialog.isShowing())
             mLocationDialog.dismiss();
     }
@@ -83,7 +80,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
     protected void onResume() {
-
         super.onResume();
 
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -109,6 +105,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
                             finish();
                             break;
                     }
+                    // TODO: does this stop gps?
                     // on cancel, stop gps
                 }
             };
@@ -129,8 +126,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private void returnLocation() {
         if (mLocation != null) {
             Intent i = new Intent();
-            i.putExtra("LOCATION_RESULT", mLocation.getLatitude() + " " + mLocation.getLongitude()
-                    + " " + mLocation.getAltitude() + " " + mLocation.getAccuracy());
+            i.putExtra(FormEntryActivity.LOCATION_RESULT, mLocation.getLatitude() + " "
+                    + mLocation.getLongitude() + " " + mLocation.getAltitude() + " "
+                    + mLocation.getAccuracy());
             setResult(RESULT_OK, i);
         }
         finish();
@@ -143,7 +141,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * @see android.location.LocationListener#onLocationChanged(android.location. Location)
      */
     public void onLocationChanged(Location location) {
-
         mLocation = location;
         mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getAccuracy()));
         if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
@@ -182,7 +179,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * android.os.Bundle)
      */
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
         switch (status) {
             case LocationProvider.AVAILABLE:
                 mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation

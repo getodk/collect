@@ -39,8 +39,6 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
     private ToggleButton mActionButton;
     private TextView mStringAnswer;
     private TextView mDisplayText;
-    private String yes = "yes";
-    private String no = "no";
 
 
     public TriggerWidget(Context context) {
@@ -78,9 +76,9 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (TriggerWidget.this.mActionButton.isChecked()) {
-                    TriggerWidget.this.mStringAnswer.setText(yes);
+                    TriggerWidget.this.mStringAnswer.setText(R.string.yes);
                 } else {
-                    TriggerWidget.this.mStringAnswer.setText(no);
+                    TriggerWidget.this.mStringAnswer.setText(R.string.no);
                 }
             }
         });
@@ -94,7 +92,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            if (s.equals(yes)) {
+            if (s.equals(getContext().getString(R.string.yes))) {
                 mActionButton.setChecked(true);
             } else {
                 mActionButton.setChecked(false);
