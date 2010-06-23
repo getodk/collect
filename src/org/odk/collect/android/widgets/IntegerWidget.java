@@ -17,7 +17,7 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
 import android.text.InputFilter;
@@ -46,7 +46,7 @@ public class IntegerWidget extends StringWidget {
     @Override
     public void buildView(FormEntryPrompt prompt) {
         // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll

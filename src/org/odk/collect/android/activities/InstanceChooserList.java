@@ -16,7 +16,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -63,8 +63,8 @@ public class InstanceChooserList extends ListActivity {
 
         // create intent for return and store path
         Intent i = new Intent();
-        i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
-        i.putExtra(GlobalConstants.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
+        i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+        i.putExtra(FormEntryActivity.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
 
         // return the result to the parent class
         // getParent().setResult(RESULT_OK, i);
@@ -120,8 +120,8 @@ public class InstanceChooserList extends ListActivity {
         String formName = pattern.split(instancePath)[0];
         formName = formName.substring(formName.lastIndexOf("/") + 1);
 
-        File xmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName + ".xml");
-        File xhtmlFile = new File(GlobalConstants.FORMS_PATH + "/" + formName + ".xhtml");
+        File xmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xml");
+        File xhtmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xhtml");
 
         // form is either xml or xhtml file. find the appropriate one.
         if (xmlFile.exists()) {

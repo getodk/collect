@@ -27,7 +27,6 @@ import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
@@ -80,6 +79,19 @@ import java.util.Calendar;
 public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener,
         FormSavedListener {
     private static final String t = "FormEntryActivity";
+
+    // Request codes for returning data from specified intent.
+    public static final int IMAGE_CAPTURE = 1;
+    public static final int BARCODE_CAPTURE = 2;
+    public static final int AUDIO_CAPTURE = 3;
+    public static final int VIDEO_CAPTURE = 4;
+    public static final int LOCATION_CAPTURE = 5;
+
+    // Identifies the location of the form used to launch form entry
+    public static final String KEY_FORMPATH = "formpath";
+    public static final String KEY_INSTANCEPATH = "instancepath";
+    public static final String KEY_INSTANCES = "instances";
+    public static final String KEY_SUCCESS = "success";
 
     private static final String FORMPATH = "formpath";
     private static final String INSTANCEPATH = "instancepath";
@@ -194,8 +206,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
             Intent intent = getIntent();
             if (intent != null) {
-                mFormPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
-                mInstancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
+                mFormPath = intent.getStringExtra(KEY_FORMPATH);
+                mInstancePath = intent.getStringExtra(KEY_INSTANCEPATH);
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath, mInstancePath);
                 showDialog(PROGRESS_DIALOG);
@@ -233,18 +245,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         switch (requestCode) {
-            case GlobalConstants.BARCODE_CAPTURE:
+            case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
                 ((QuestionView) mCurrentView).setBinaryData(sb);
                 saveCurrentAnswer(false);
                 break;
-            case GlobalConstants.IMAGE_CAPTURE:
+            case IMAGE_CAPTURE:
                 // We saved the image to the tempfile_path, but we really want
                 // it to be in:
                 // /sdcard/odk/instances/[current instnace]/something.jpg
                 // so we move it here before inserting it into the content
                 // provider.
-                File fi = new File(GlobalConstants.TMPFILE_PATH);
+                File fi = new File(FileUtils.TMPFILE_PATH);
 
                 String mInstanceFolder =
                     mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
@@ -274,14 +286,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveCurrentAnswer(false);
                 refreshCurrentView();
                 break;
-            case GlobalConstants.AUDIO_CAPTURE:
-            case GlobalConstants.VIDEO_CAPTURE:
+            case AUDIO_CAPTURE:
+            case VIDEO_CAPTURE:
                 Uri um = intent.getData();
                 ((QuestionView) mCurrentView).setBinaryData(um);
                 saveCurrentAnswer(false);
                 refreshCurrentView();
                 break;
-            case GlobalConstants.LOCATION_CAPTURE:
+            case LOCATION_CAPTURE:
                 String sl = intent.getStringExtra("LOCATION_RESULT");
                 ((QuestionView) mCurrentView).setBinaryData(sl);
                 saveCurrentAnswer(false);
@@ -1271,7 +1283,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             .getTime());
                 String file =
                     mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
-                String path = GlobalConstants.INSTANCES_PATH + file + "_" + time;
+                String path = FileUtils.INSTANCES_PATH + file + "_" + time;
                 if (FileUtils.createFolder(path)) {
                     mInstancePath = path + "/" + file + "_" + time + ".xml";
                 }

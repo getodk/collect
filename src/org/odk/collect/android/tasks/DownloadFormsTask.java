@@ -17,7 +17,6 @@ package org.odk.collect.android.tasks;
 import org.odk.collect.android.activities.RemoteFileManagerList;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -57,6 +56,8 @@ public class DownloadFormsTask extends
     public static final String DL_FORMS = "dlforms"; // used to indicate that we tried to download
     // forms. If it's not included we tried to
     // download a form list.
+    
+    private static final int CONNECTION_TIMEOUT = 30000;
 
     private FormDownloaderListener mStateListener;
 
@@ -78,8 +79,8 @@ public class DownloadFormsTask extends
             try {
                 // prevent deadlock when connection is invalid
                 URLConnection c = u.openConnection();
-                c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
-                c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+                c.setConnectTimeout(CONNECTION_TIMEOUT);
+                c.setReadTimeout(CONNECTION_TIMEOUT);
 
                 // write connection to file
                 InputStream is = c.getInputStream();
@@ -182,13 +183,13 @@ public class DownloadFormsTask extends
         try {
             // prevent deadlock when connection is invalid
             URLConnection c = u.openConnection();
-            c.setConnectTimeout(GlobalConstants.CONNECTION_TIMEOUT);
-            c.setReadTimeout(GlobalConstants.CONNECTION_TIMEOUT);
+            c.setConnectTimeout(CONNECTION_TIMEOUT);
+            c.setReadTimeout(CONNECTION_TIMEOUT);
 
             // write connection to file
             InputStream is = c.getInputStream();
 
-            String path = GlobalConstants.FORMS_PATH + name;
+            String path = FileUtils.FORMS_PATH + name;
             int i = 2;
             int slash = path.lastIndexOf("/") + 1;
             int period = path.lastIndexOf(".") + 1;

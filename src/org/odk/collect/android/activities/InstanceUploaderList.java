@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.preferences.ServerPreferences;
 
 import android.app.ListActivity;
@@ -172,7 +171,7 @@ public class InstanceUploaderList extends ListActivity {
 
         // bundle intent with upload files
         Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(GlobalConstants.KEY_INSTANCES, selectedInstances);
+        i.putExtra(FormEntryActivity.KEY_INSTANCES, selectedInstances);
         startActivityForResult(i, INSTANCE_UPLOADER);
         fda.close();
     }
@@ -268,7 +267,7 @@ public class InstanceUploaderList extends ListActivity {
         switch (requestCode) {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
-                if (intent.getBooleanExtra(GlobalConstants.KEY_SUCCESS, false)) {
+                if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
                     refreshData();
                     if (mInstances.isEmpty()) {
                         finish();

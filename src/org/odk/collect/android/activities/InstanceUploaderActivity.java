@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 
@@ -56,7 +55,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // get instances to upload
         Intent i = getIntent();
-        ArrayList<String> instances = i.getStringArrayListExtra(GlobalConstants.KEY_INSTANCES);
+        ArrayList<String> instances = i.getStringArrayListExtra(FormEntryActivity.KEY_INSTANCES);
         if (instances == null) {
             // nothing to upload
             return;
@@ -103,7 +102,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
 
         Intent in = new Intent();
-        in.putExtra(GlobalConstants.KEY_SUCCESS, success);
+        in.putExtra(FormEntryActivity.KEY_SUCCESS, success);
         setResult(RESULT_OK, in);
 
         // for each path, update the status

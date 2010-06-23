@@ -18,7 +18,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.views.QuestionView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -72,7 +73,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         mExternalUri = Video.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
-        mRequestCode = GlobalConstants.VIDEO_CAPTURE;
+        mRequestCode = FormEntryActivity.VIDEO_CAPTURE;
         mCaptureText = R.string.capture_video;
         mReplaceText = R.string.replace_video;
         mPlayText = R.string.play_video;
@@ -119,7 +120,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -136,7 +137,7 @@ public class VideoWidget extends LinearLayout implements IQuestionWidget, IBinar
         // setup play button
         mPlayButton = new Button(getContext());
         mPlayButton.setText(getContext().getString(mPlayText));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
         // on play, launch the appropriate viewer

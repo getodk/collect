@@ -17,7 +17,7 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
 import android.text.InputFilter;
@@ -49,7 +49,7 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
     public void buildView(FormEntryPrompt prompt) {
 
         // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // needed to make long readonly text scroll

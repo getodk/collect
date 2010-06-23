@@ -48,6 +48,8 @@ public class QuestionView extends ScrollView {
     private LinearLayout.LayoutParams mLayout;
     private String mInstancePath;
     private final static int TEXTSIZE = 21;
+    
+    public final static int APPLICATION_FONTSIZE = 23;
 
 
     public QuestionView(Context context, String instancePath) {

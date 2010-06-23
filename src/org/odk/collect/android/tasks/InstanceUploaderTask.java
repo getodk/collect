@@ -26,7 +26,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -46,6 +45,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
     private static long MAX_BYTES = 1048576 - 1024; // 1MB less 1KB overhead
     InstanceUploaderListener mStateListener;
     String mUrl;
+    private static final int CONNECTION_TIMEOUT = 30000;
 
 
     public void setUploadServer(String newServer) {
@@ -63,8 +63,8 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
 
             // configure connection
             HttpParams params = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
+            HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(params, CONNECTION_TIMEOUT);
             HttpClientParams.setRedirecting(params, false);
 
             // setup client

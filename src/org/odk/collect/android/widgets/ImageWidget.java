@@ -18,7 +18,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.views.QuestionView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -73,7 +75,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
         mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
-        mRequestCode = GlobalConstants.IMAGE_CAPTURE;
+        mRequestCode = FormEntryActivity.IMAGE_CAPTURE;
         mCaptureText = R.string.capture_image;
         mReplaceText = R.string.replace_image;
     }
@@ -136,7 +138,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -155,7 +157,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-                        GlobalConstants.TMPFILE_PATH)));
+                        FileUtils.TMPFILE_PATH)));
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
 
             }

@@ -18,8 +18,9 @@ import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.views.QuestionView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -87,14 +88,14 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mActionButton = new Button(getContext());
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
         mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-            GlobalConstants.APPLICATION_FONTSIZE - 1);
+            QuestionView.APPLICATION_FONTSIZE - 1);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
@@ -108,7 +109,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), GeoPointActivity.class);
                 ((Activity) getContext()).startActivityForResult(i,
-                    GlobalConstants.LOCATION_CAPTURE);
+                    FormEntryActivity.LOCATION_CAPTURE);
 
             }
         });

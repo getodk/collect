@@ -18,7 +18,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.views.QuestionView;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -71,7 +72,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         // set button formatting
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -81,7 +82,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
                     ((Activity) getContext()).startActivityForResult(i,
-                        GlobalConstants.BARCODE_CAPTURE);
+                        FormEntryActivity.BARCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
@@ -92,7 +93,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         // set text formatting
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

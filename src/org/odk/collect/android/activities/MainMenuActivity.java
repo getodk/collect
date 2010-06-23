@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -74,7 +73,7 @@ public class MainMenuActivity extends Activity {
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // make sure we haven't added forms
-                ArrayList<String> forms = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+                ArrayList<String> forms = FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
                 if (forms != null) {
                     mFormsCount = forms.size();
                 } else {
@@ -164,18 +163,18 @@ public class MainMenuActivity extends Activity {
         switch (requestCode) {
             // returns with a form path, start entry
             case FORM_CHOOSER:
-                formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
+                formPath = intent.getStringExtra(FormEntryActivity.KEY_FORMPATH);
                 i = new Intent("org.odk.collect.android.action.FormEntry");
-                i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
+                i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
                 startActivity(i);
                 break;
             // returns with an instance path, start entry
             case INSTANCE_CHOOSER:
-                formPath = intent.getStringExtra(GlobalConstants.KEY_FORMPATH);
-                String instancePath = intent.getStringExtra(GlobalConstants.KEY_INSTANCEPATH);
+                formPath = intent.getStringExtra(FormEntryActivity.KEY_FORMPATH);
+                String instancePath = intent.getStringExtra(FormEntryActivity.KEY_INSTANCEPATH);
                 i = new Intent("org.odk.collect.android.action.FormEntry");
-                i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
-                i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
+                i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
+                i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);
                 break;
             default:
@@ -205,7 +204,7 @@ public class MainMenuActivity extends Activity {
         c.close();
 
         // count for downloaded forms
-        ArrayList<String> forms = FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+        ArrayList<String> forms = FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
         if (forms != null) {
             mFormsCount = forms.size();
         } else {

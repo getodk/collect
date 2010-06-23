@@ -20,8 +20,8 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.views.IAVTLayout;
+import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -115,7 +115,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {

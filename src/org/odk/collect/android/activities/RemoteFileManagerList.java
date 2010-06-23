@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.FileUtils;
@@ -175,7 +174,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
         }
         showDialog(PROGRESS_DIALOG);
 
-        FileUtils.createFolder(GlobalConstants.CACHE_PATH);
+        FileUtils.createFolder(FileUtils.CACHE_PATH);
         mDownloadFormsTask = new DownloadFormsTask();
         mDownloadFormsTask.setDownloaderListener(this);
 
@@ -289,7 +288,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
             // show dialog box
             showDialog(PROGRESS_DIALOG);
 
-            FileUtils.createFolder(GlobalConstants.FORMS_PATH);
+            FileUtils.createFolder(FileUtils.FORMS_PATH);
             mDownloadFormsTask = new DownloadFormsTask();
             mDownloadFormsTask.setDownloaderListener(this);
             mDownloadFormsTask.execute(filesToDownload);

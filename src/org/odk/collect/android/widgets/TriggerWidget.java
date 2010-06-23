@@ -18,7 +18,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -71,7 +71,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mActionButton.setText(getContext().getString(R.string.ack));
         mActionButton.setTextOff(getContext().getString(R.string.ack));
         mActionButton.setTextOn(getContext().getString(R.string.acked));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -86,7 +86,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         });
 
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         mDisplayText = new TextView(getContext());

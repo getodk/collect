@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -40,6 +39,7 @@ public class FileManagerTabs extends TabActivity {
     private static final String LOCAL_TAB = "local_tab";
 
     private static final String REMOTE_TAB = "remote_tab";
+    private static final int FONT_SIZE = 21;
 
 
     @Override
@@ -66,12 +66,12 @@ public class FileManagerTabs extends TabActivity {
 
         RelativeLayout rllf = (RelativeLayout) tw.getChildAt(0);
         mTVLF = (TextView) rllf.getChildAt(1);
-        mTVLF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE - 2);
+        mTVLF.setTextSize(FONT_SIZE);
         mTVLF.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlrf = (RelativeLayout) tw.getChildAt(1);
         mTVRF = (TextView) rlrf.getChildAt(1);
-        mTVRF.setTextSize(GlobalConstants.APPLICATION_FONTSIZE - 2);
+        mTVRF.setTextSize(FONT_SIZE);
         mTVRF.setPadding(0, 0, 0, 6);
     }
 

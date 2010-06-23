@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.database;
 
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.ContentValues;
@@ -384,9 +383,9 @@ public class FileDbAdapter {
 
 
     public void removeOrphanFormDefs() {
-        if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
+        if (FileUtils.createFolder(FileUtils.CACHE_PATH)) {
             ArrayList<String> cachedForms =
-                FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
+                FileUtils.getFilesAsArrayList(FileUtils.CACHE_PATH);
 
             Cursor c = null;
             // remove orphaned form defs
@@ -423,11 +422,11 @@ public class FileDbAdapter {
      */
     public void addOrphanForms() {
         // create forms and cache path folder
-        if (FileUtils.createFolder(GlobalConstants.FORMS_PATH)) {
+        if (FileUtils.createFolder(FileUtils.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
             ArrayList<String> storedForms =
-                FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+                FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
 
             String hash = null;
             String path = null;
@@ -475,11 +474,11 @@ public class FileDbAdapter {
 
 
     public void removeOrphanForms() {
-        if (FileUtils.createFolder(GlobalConstants.FORMS_PATH)) {
+        if (FileUtils.createFolder(FileUtils.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
             ArrayList<String> storedForms =
-                FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+                FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
 
             String hash = null;
             // String path = null;
@@ -509,13 +508,13 @@ public class FileDbAdapter {
 
 
     public void removeOrphanInstances(Context ctx) {
-        if (FileUtils.createFolder(GlobalConstants.INSTANCES_PATH)) {
+        if (FileUtils.createFolder(FileUtils.INSTANCES_PATH)) {
 
             File fo = null;
             String[] fis = null;
             Cursor c = null;
             ArrayList<String> storedInstances =
-                FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
+                FileUtils.getFoldersAsArrayList(FileUtils.INSTANCES_PATH);
 
             FilenameFilter ff = new FilenameFilter() {
                 public boolean accept(File dir, String filename) {

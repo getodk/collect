@@ -20,8 +20,8 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.views.IAVTLayout;
+import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -82,7 +82,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
                 RadioButton r = new RadioButton(getContext());
                 r.setOnCheckedChangeListener(this);
                 r.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
                 r.setId(i + RANDOM_BUTTON_ID);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());

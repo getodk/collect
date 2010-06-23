@@ -18,7 +18,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.views.QuestionView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -71,7 +72,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
-        mRequestCode = GlobalConstants.AUDIO_CAPTURE;
+        mRequestCode = FormEntryActivity.AUDIO_CAPTURE;
         mCaptureText = R.string.capture_audio;
         mReplaceText = R.string.replace_audio;
         mPlayText = R.string.play_audio;
@@ -117,7 +118,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -134,7 +135,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         // setup play button
         mPlayButton = new Button(getContext());
         mPlayButton.setText(getContext().getString(mPlayText));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
         // on play, launch the appropriate viewer

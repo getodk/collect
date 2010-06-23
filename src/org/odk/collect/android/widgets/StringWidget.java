@@ -17,7 +17,7 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.views.QuestionView;
 
 import android.R;
 import android.content.Context;
@@ -70,7 +70,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
 
     public void buildView(FormEntryPrompt prompt) {
         // font size
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
 
         // capitalize the first letter of the sentence
         setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));

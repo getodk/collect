@@ -26,7 +26,6 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.os.AsyncTask;
@@ -47,6 +46,35 @@ import java.io.IOException;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormEntryController> {
+    /**
+     * Classes needed to serialize objects
+     */
+    public final static String[] SERIALIABLE_CLASSES =
+        {
+                "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
+                "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
+                "org.javarosa.core.model.data.DateTimeData",
+                "org.javarosa.core.model.data.DecimalData",
+                "org.javarosa.core.model.data.GeoPointData",
+                "org.javarosa.core.model.data.helper.BasicDataPointer",
+                "org.javarosa.core.model.data.IntegerData",
+                "org.javarosa.core.model.data.MultiPointerAnswerData",
+                "org.javarosa.core.model.data.PointerAnswerData",
+                "org.javarosa.core.model.data.SelectMultiData",
+                "org.javarosa.core.model.data.SelectOneData",
+                "org.javarosa.core.model.data.StringData", "org.javarosa.core.model.data.TimeData",
+                "org.javarosa.core.services.locale.TableLocaleSource",
+                "org.javarosa.xpath.expr.XPathArithExpr", "org.javarosa.xpath.expr.XPathBoolExpr",
+                "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
+                "org.javarosa.xpath.expr.XPathFilterExpr", "org.javarosa.xpath.expr.XPathFuncExpr",
+                "org.javarosa.xpath.expr.XPathNumericLiteral",
+                "org.javarosa.xpath.expr.XPathNumNegExpr", "org.javarosa.xpath.expr.XPathPathExpr",
+                "org.javarosa.xpath.expr.XPathStringLiteral",
+                "org.javarosa.xpath.expr.XPathUnionExpr",
+                "org.javarosa.xpath.expr.XPathVariableReference"
+        };
+    
+    
     FormLoaderListener mStateListener;
 
 
@@ -65,7 +93,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
         File formXml = new File(formPath);
         File formBin =
-            new File(GlobalConstants.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
+            new File(FileUtils.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -165,7 +193,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
         // TODO: any way to remove reliance on jrsp?
 
         // need a list of classes that formdef uses
-        PrototypeManager.registerPrototypes(GlobalConstants.SERIALIABLE_CLASSES);
+        PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
         FileInputStream fis = null;
         FormDef fd = null;
         try {
@@ -197,11 +225,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
      */
     public void serializeFormDef(FormDef fd, String filepath) {
         // if cache folder is missing, create it.
-        if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
+        if (FileUtils.createFolder(FileUtils.CACHE_PATH)) {
 
             // calculate unique md5 identifier
             String hash = FileUtils.getMd5Hash(new File(filepath));
-            File formDef = new File(GlobalConstants.CACHE_PATH + hash + ".formdef");
+            File formDef = new File(FileUtils.CACHE_PATH + hash + ".formdef");
 
             // formdef does not exist, create one.
             if (!formDef.exists()) {

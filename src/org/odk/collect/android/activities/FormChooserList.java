@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -82,7 +81,7 @@ public class FormChooserList extends ListActivity {
 
         // create intent for return and store path
         Intent i = new Intent();
-        i.putExtra(GlobalConstants.KEY_FORMPATH, formPath);
+        i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
         setResult(RESULT_OK, i);
 
         finish();
