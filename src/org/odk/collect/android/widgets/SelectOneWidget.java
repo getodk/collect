@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Vector;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -23,7 +21,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.views.AVTLayout;
+import org.odk.collect.android.views.IAVTLayout;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -33,6 +31,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+
+import java.util.Vector;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -92,25 +92,29 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
                     r.setChecked(true);
                 }
 
-                String audioUri = null;
+                String audioURI = null;
                 if (prompt.getSelectTextForms(mItems.get(i)).contains(
-                        FormEntryCaption.TEXT_FORM_AUDIO)) {
-                    audioUri =
-                            prompt.getSelectChoiceText(mItems.get(i),
-                                    FormEntryCaption.TEXT_FORM_AUDIO);
+                    FormEntryCaption.TEXT_FORM_AUDIO)) {
+                    audioURI =
+                        prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
                 }
 
                 String imageURI = null;
                 if (prompt.getSelectTextForms(mItems.get(i)).contains(
-                        FormEntryCaption.TEXT_FORM_IMAGE)) {
+                    FormEntryCaption.TEXT_FORM_IMAGE)) {
                     imageURI =
-                            prompt.getSelectChoiceText(mItems.get(i),
-                                    FormEntryCaption.TEXT_FORM_IMAGE);
+                        prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
-                // This is what it should be...
-                AVTLayout mediaLayout = new AVTLayout(getContext());
-                mediaLayout.setAVT(r, audioUri, imageURI);
+                String videoURI = null; // TODO: uncomment when video ready
+                /*
+                 * if (prompt.getSelectTextForms(mItems.get(i)).contains(
+                 * FormEntryCaption.TEXT_FORM_IMAGE)) { imageURI =
+                 * prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE); }
+                 */
+
+                IAVTLayout mediaLayout = new IAVTLayout(getContext());
+                mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
                 addView(mediaLayout);
 
                 // Last, add the dividing line (except for the last element)
@@ -127,7 +131,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 

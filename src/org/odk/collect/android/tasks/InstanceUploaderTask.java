@@ -1,24 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.tasks;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -37,19 +31,22 @@ import org.odk.collect.android.logic.GlobalConstants;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Background task for uploading completed forms.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
- * 
  */
 public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
     private static String t = "InstanceUploaderTask";
-    private static long MAX_BYTES = 1048576-1024; // 1MB less 1KB overhead
+    private static long MAX_BYTES = 1048576 - 1024; // 1MB less 1KB overhead
     InstanceUploaderListener mStateListener;
     String mUrl;
+
 
     public void setUploadServer(String newServer) {
         mUrl = newServer;
@@ -154,7 +151,6 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             }
             int responseCode = response.getStatusLine().getStatusCode();
             Log.e(t, "Response code:" + responseCode);
-
 
             // verify that your response came from a known server
             if (serverLocation != null && mUrl.contains(serverLocation) && responseCode == 201) {

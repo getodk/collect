@@ -1,22 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.widgets;
-
-import java.io.File;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -37,10 +33,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
 
 /**
- * Widget that allows user to take pictures, sounds or video and add them to the
- * form.
+ * Widget that allows user to take pictures, sounds or video and add them to the form.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -132,7 +128,6 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
 
-
             }
         });
 
@@ -177,8 +172,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     private Uri getUriFromPath(String path) {
         // find entry in content provider
         Cursor c =
-                getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
-                        null, null);
+            getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
+                null, null);
         c.moveToFirst();
 
         // create uri from path
@@ -198,7 +193,6 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         c.close();
         return colString;
     }
-
 
 
     public void setBinaryData(Object binaryuri) {
@@ -224,7 +218,7 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 

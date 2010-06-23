@@ -1,22 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.activities;
-
-import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -35,9 +31,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
- * Responsible for displaying buttons to launch the major activities. Launches
- * some activities based on returns of others.
+ * Responsible for displaying buttons to launch the major activities. Launches some activities based
+ * on returns of others.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -85,8 +83,8 @@ public class MainMenuActivity extends Activity {
 
                 if (mFormsCount == 0 && mAvailableCount == 0) {
                     Toast.makeText(getApplicationContext(),
-                            getString(R.string.no_items_error, getString(R.string.enter)),
-                            Toast.LENGTH_SHORT).show();
+                        getString(R.string.no_items_error, getString(R.string.enter)),
+                        Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(getApplicationContext(), FormChooserList.class);
                     startActivityForResult(i, FORM_CHOOSER);
@@ -101,8 +99,8 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 if ((mSavedCount + mCompletedCount) == 0) {
                     Toast.makeText(getApplicationContext(),
-                            getString(R.string.no_items_error, getString(R.string.review)),
-                            Toast.LENGTH_SHORT).show();
+                        getString(R.string.no_items_error, getString(R.string.review)),
+                        Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                     i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
@@ -118,8 +116,8 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 if (mCompletedCount == 0) {
                     Toast.makeText(getApplicationContext(),
-                            getString(R.string.no_items_error, getString(R.string.send)),
-                            Toast.LENGTH_SHORT).show();
+                        getString(R.string.no_items_error, getString(R.string.send)),
+                        Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
                     startActivityForResult(i, INSTANCE_UPLOADER);
@@ -151,14 +149,13 @@ public class MainMenuActivity extends Activity {
     }
 
 
-
     /**
      * Upon return, check intent for data needed to launch other activities.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_CANCELED) {
-            return; 
+            return;
         }
 
         String formPath = null;
@@ -190,7 +187,7 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        FileDbAdapter fda = new FileDbAdapter(this);
+        FileDbAdapter fda = new FileDbAdapter();
         fda.open();
         fda.removeOrphanFormDefs();
         fda.close();
@@ -207,12 +204,12 @@ public class MainMenuActivity extends Activity {
      */
     private void updateButtonCount() {
         // create adapter
-        FileDbAdapter fda = new FileDbAdapter(this);
+        FileDbAdapter fda = new FileDbAdapter();
         fda.open();
 
         // count for saved instances
         Cursor c =
-                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
+            fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
         mSavedCount = c.getCount();
         c.close();
 
@@ -259,7 +256,7 @@ public class MainMenuActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
-                android.R.drawable.ic_menu_preferences);
+            android.R.drawable.ic_menu_preferences);
         return true;
     }
 
@@ -273,6 +270,5 @@ public class MainMenuActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

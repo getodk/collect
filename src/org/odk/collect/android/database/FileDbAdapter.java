@@ -14,13 +14,6 @@
 
 package org.odk.collect.android.database;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.regex.Pattern;
-
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -33,6 +26,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Manages the files the application uses.
@@ -73,17 +73,14 @@ public class FileDbAdapter {
     private SQLiteDatabase mDb;
 
     private static final String DATABASE_CREATE =
-            "create table files (_id integer primary key autoincrement, " + "path text not null, "
-                    + "hash text not null, " + "type text not null, " + "status text not null, "
-                    + "display text not null, " + "meta text not null);";
+        "create table files (_id integer primary key autoincrement, " + "path text not null, "
+                + "hash text not null, " + "type text not null, " + "status text not null, "
+                + "display text not null, " + "meta text not null);";
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_PATH = "/sdcard/odk/metadata";
-
-    private final Context mCtx;
-
 
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
@@ -111,13 +108,7 @@ public class FileDbAdapter {
     }
 
 
-    public FileDbAdapter(Context ctx) {
-        this.mCtx = ctx;
-    }
-
-
     public FileDbAdapter() {
-        mCtx = null;
     }
 
 
@@ -149,7 +140,7 @@ public class FileDbAdapter {
             tag = saved;
         }
         String ts =
-                new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(new Date(timestamp));
+            new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(new Date(timestamp));
         return tag + " on " + ts;
     }
 
@@ -260,23 +251,21 @@ public class FileDbAdapter {
         Cursor c = null;
         if (path == null) {
             // no path given, search using hash
-            c =
-                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_HASH + "='" + hash
-                            + "'", null, null, null, null, null);
+            c = mDb.query(true, DATABASE_TABLE, new String[] {
+                    KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+            }, KEY_HASH + "='" + hash + "'", null, null, null, null, null);
         } else if (hash == null) {
             // no hash given, search using path
-            c =
-                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_FILEPATH + "='"
-                            + path + "'", null, null, null, null, null);
+            c = mDb.query(true, DATABASE_TABLE, new String[] {
+                    KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+            }, KEY_FILEPATH + "='" + path + "'", null, null, null, null, null);
         } else {
             // search using path and hash
             c =
-                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_FILEPATH + "='"
-                            + path + "' and " + KEY_HASH + "='" + hash + "'", null, null, null,
-                            null, null);
+                mDb.query(true, DATABASE_TABLE, new String[] {
+                        KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+                }, KEY_FILEPATH + "='" + path + "' and " + KEY_HASH + "='" + hash + "'", null,
+                    null, null, null, null);
         }
         if (c != null) {
             c.moveToFirst();
@@ -286,17 +275,15 @@ public class FileDbAdapter {
 
 
     public Cursor fetchFile(long id) throws SQLException {
-        Cursor c =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                        KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_ID + "='" + id + "'",
-                        null, null, null, null, null);
+        Cursor c = mDb.query(true, DATABASE_TABLE, new String[] {
+                KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+        }, KEY_ID + "='" + id + "'", null, null, null, null, null);
 
         if (c != null) {
             c.moveToFirst();
         }
         return c;
     }
-
 
 
     /**
@@ -313,23 +300,21 @@ public class FileDbAdapter {
         Cursor c = null;
         if (type == null) {
             // no type given, search using status
-            c =
-                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_STATUS + "='"
-                            + status + "'", null, null, null, null, null);
+            c = mDb.query(true, DATABASE_TABLE, new String[] {
+                    KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+            }, KEY_STATUS + "='" + status + "'", null, null, null, null, null);
         } else if (status == null) {
             // no status given, search using type
-            c =
-                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_TYPE + "='" + type
-                            + "'", null, null, null, null, null);
+            c = mDb.query(true, DATABASE_TABLE, new String[] {
+                    KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+            }, KEY_TYPE + "='" + type + "'", null, null, null, null, null);
         } else {
             // search using type and status
             c =
-                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_TYPE + "='" + type
-                            + "' and " + KEY_STATUS + "='" + status + "'", null, null, null, null,
-                            null);
+                mDb.query(true, DATABASE_TABLE, new String[] {
+                        KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+                }, KEY_TYPE + "='" + type + "' and " + KEY_STATUS + "='" + status + "'", null,
+                    null, null, null, null);
         }
 
         if (c != null) {
@@ -343,10 +328,9 @@ public class FileDbAdapter {
     public Cursor fetchAllFiles() throws SQLException {
         // cleanFiles();
         Cursor c = null;
-        c =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
-                        KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, null, null, null, null, null,
-                        null);
+        c = mDb.query(true, DATABASE_TABLE, new String[] {
+                KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META
+        }, null, null, null, null, null, null);
 
         if (c != null) {
             c.moveToFirst();
@@ -379,9 +363,9 @@ public class FileDbAdapter {
      * Find orphaned files on the file system
      */
     public void cleanFiles() {
-        Cursor c =
-                mDb.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE,
-                        KEY_STATUS}, null, null, null, null, null);
+        Cursor c = mDb.query(DATABASE_TABLE, new String[] {
+                KEY_ID, KEY_FILEPATH, KEY_HASH, KEY_TYPE, KEY_STATUS
+        }, null, null, null, null, null);
         if (c != null) {
             while (c.moveToNext()) {
                 String path = c.getString(c.getColumnIndex(KEY_FILEPATH));
@@ -399,11 +383,10 @@ public class FileDbAdapter {
     }
 
 
-
     public void removeOrphanFormDefs() {
         if (FileUtils.createFolder(GlobalConstants.CACHE_PATH)) {
             ArrayList<String> cachedForms =
-                    FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
+                FileUtils.getFilesAsArrayList(GlobalConstants.CACHE_PATH);
 
             Cursor c = null;
             // remove orphaned form defs
@@ -412,8 +395,8 @@ public class FileDbAdapter {
 
                     try {
                         String hash =
-                                cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
-                                        .lastIndexOf("."));
+                            cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
+                                    .lastIndexOf("."));
 
                         // if hash is not in db, delete
                         c = fetchFilesByPath(null, hash);
@@ -444,7 +427,7 @@ public class FileDbAdapter {
 
             // full path to the raw xml forms stored on sd card
             ArrayList<String> storedForms =
-                    FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+                FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
 
             String hash = null;
             String path = null;
@@ -477,7 +460,7 @@ public class FileDbAdapter {
 
                         // add this raw form
                         createFile(formPath, FileDbAdapter.TYPE_FORM,
-                                FileDbAdapter.STATUS_AVAILABLE);
+                            FileDbAdapter.STATUS_AVAILABLE);
 
                     }
                 }
@@ -496,7 +479,7 @@ public class FileDbAdapter {
 
             // full path to the raw xml forms stored on sd card
             ArrayList<String> storedForms =
-                    FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
+                FileUtils.getFilesAsArrayList(GlobalConstants.FORMS_PATH);
 
             String hash = null;
             // String path = null;
@@ -525,14 +508,14 @@ public class FileDbAdapter {
     }
 
 
-    public void removeOrphanInstances() {
+    public void removeOrphanInstances(Context ctx) {
         if (FileUtils.createFolder(GlobalConstants.INSTANCES_PATH)) {
 
             File fo = null;
             String[] fis = null;
             Cursor c = null;
             ArrayList<String> storedInstances =
-                    FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
+                FileUtils.getFoldersAsArrayList(GlobalConstants.INSTANCES_PATH);
 
             FilenameFilter ff = new FilenameFilter() {
                 public boolean accept(File dir, String filename) {
@@ -557,27 +540,29 @@ public class FileDbAdapter {
                             File[] files = dir.listFiles();
                             for (File file : files) {
                                 if (file.getName().endsWith(".jpg")) {
-                                    String[] projection = {Images.ImageColumns._ID};
+                                    String[] projection = {
+                                        Images.ImageColumns._ID
+                                    };
                                     Cursor cd =
-                                            mCtx.getContentResolver().query(
-                                                    Images.Media.EXTERNAL_CONTENT_URI,
-                                                    projection,
-                                                    "_data='" + instancePath + "/" + file.getName()
-                                                            + "'", null, null);
+                                        ctx.getContentResolver().query(
+                                            Images.Media.EXTERNAL_CONTENT_URI, projection,
+                                            "_data='" + instancePath + "/" + file.getName() + "'",
+                                            null, null);
                                     if (cd.getCount() > 0) {
                                         cd.moveToFirst();
                                         String id =
-                                                cd.getString(cd
-                                                        .getColumnIndex(Images.ImageColumns._ID));
+                                            cd
+                                                    .getString(cd
+                                                            .getColumnIndex(Images.ImageColumns._ID));
 
                                         Log.e(t, "attempting to delete: "
                                                 + Uri.withAppendedPath(
-                                                        Images.Media.EXTERNAL_CONTENT_URI, id));
+                                                    Images.Media.EXTERNAL_CONTENT_URI, id));
                                         int del =
-                                                mCtx.getContentResolver().delete(
-                                                        Uri.withAppendedPath(
-                                                                Images.Media.EXTERNAL_CONTENT_URI,
-                                                                id), null, null);
+                                            ctx.getContentResolver().delete(
+                                                Uri.withAppendedPath(
+                                                    Images.Media.EXTERNAL_CONTENT_URI, id), null,
+                                                null);
                                         Log.e(t, "deleted " + del + " image files");
                                     }
                                     c.close();
@@ -601,6 +586,5 @@ public class FileDbAdapter {
             }
         }
     }
-
 
 }

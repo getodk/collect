@@ -1,16 +1,14 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
@@ -35,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  * 
@@ -54,9 +51,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
     public void clearAnswer() {
         mStringAnswer.setText(null);
-        //mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setText("placeholder");
-
+        mActionButton.setText(getContext().getString(R.string.get_barcode));
     }
 
 
@@ -86,11 +81,11 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
                     ((Activity) getContext()).startActivityForResult(i,
-                            GlobalConstants.BARCODE_CAPTURE);
+                        GlobalConstants.BARCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
-                            getContext().getString(R.string.barcode_scanner_error),
-                            Toast.LENGTH_SHORT).show();
+                        getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
         });
@@ -102,8 +97,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            //mActionButton.setText(getContext().getString(R.string.replace_barcode));
-            mActionButton.setText("placeholder");
+            mActionButton.setText(getContext().getString(R.string.replace_barcode));
             mStringAnswer.setText(s);
         }
         // finish complex layout
@@ -123,7 +117,7 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 

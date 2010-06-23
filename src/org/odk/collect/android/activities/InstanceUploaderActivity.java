@@ -1,22 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.activities;
-
-import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -35,11 +31,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Activity to upload completed forms.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
- * 
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
 
@@ -74,11 +71,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             mInstanceUploaderTask = new InstanceUploaderTask();
 
             SharedPreferences settings =
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
-                    settings.getString(ServerPreferences.KEY_SERVER,
-                            getString(R.string.default_server))
-                            + "/submission";
+                settings
+                        .getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
+                        + "/submission";
             mInstanceUploaderTask.setUploadServer(url);
             totalCount = instances.size();
 
@@ -96,7 +93,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         boolean success = false;
         if (resultSize == totalCount) {
             Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
-                    Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT).show();
 
             success = true;
         } else {
@@ -110,7 +107,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         setResult(RESULT_OK, in);
 
         // for each path, update the status
-        FileDbAdapter fda = new FileDbAdapter(this);
+        FileDbAdapter fda = new FileDbAdapter();
         fda.open();
         for (int i = 0; i < resultSize; i++) {
             fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
@@ -121,7 +118,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     public void progressUpdate(int progress, int total) {
-        mProgressDialog.setMessage("Sending " + progress + " of " + total + " item(s)");
+        mProgressDialog.setMessage(getString(R.string.sending_items, progress, total));
     }
 
 
@@ -131,13 +128,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             case PROGRESS_DIALOG:
                 mProgressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                mInstanceUploaderTask.setUploaderListener(null);
-                                finish();
-                            }
-                        };
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            mInstanceUploaderTask.setUploaderListener(null);
+                            finish();
+                        }
+                    };
                 mProgressDialog.setTitle(getString(R.string.uploading_data));
                 mProgressDialog.setMessage(getString(R.string.please_wait));
                 mProgressDialog.setIndeterminate(true);

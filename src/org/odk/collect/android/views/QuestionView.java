@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-
 /**
  * Responsible for using a {@link FormEntryQuestion} and based on the question type and answer type,
  * displaying the appropriate widget. The class also sets (but does not save) and gets the answers
@@ -62,28 +61,24 @@ public class QuestionView extends ScrollView {
      * Create the appropriate view given your prompt.
      */
     public void buildView(FormEntryPrompt p, FormEntryCaption[] groups) {
-
-        Log.e("carl", "current entry prompt is null? " + (p == null));
         mView = new LinearLayout(getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
         mView.setGravity(Gravity.TOP);
         mView.setPadding(0, 7, 0, 0);
 
         mLayout =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
         AddGroupText(groups);
-        if (p != null) {
-        	AddQuestionText(p);
-        	AddHelpText(p);
-        	
-            // if question or answer type is not supported, use text widget
-            mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
-            mView.addView((View) mQuestionWidget, mLayout);
-        }
+        AddQuestionText(p);
+        AddHelpText(p);
+
+        // if question or answer type is not supported, use text widget
+        mQuestionWidget = WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
+        mView.addView((View) mQuestionWidget, mLayout);
 
         addView(mView);
     }
@@ -146,7 +141,8 @@ public class QuestionView extends ScrollView {
      */
     private void AddQuestionText(FormEntryPrompt p) {
         String imageURI = p.getImageText();
-        String audioUri = p.getAudioText();
+        String audioURI = p.getAudioText();
+        String videoURI = null; // TODO: make this a value.
 
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -160,8 +156,8 @@ public class QuestionView extends ScrollView {
         questionText.setHorizontallyScrolling(false);
 
         // Create the layout for audio, image, text
-        AVTLayout mediaLayout = new AVTLayout(getContext());
-        mediaLayout.setAVT(questionText, audioUri, imageURI);
+        IAVTLayout mediaLayout = new IAVTLayout(getContext());
+        mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI);
 
         mView.addView(mediaLayout, mLayout);
     }
@@ -172,10 +168,7 @@ public class QuestionView extends ScrollView {
      */
     private void AddHelpText(FormEntryPrompt p) {
 
-    	String s = null;
-    	if (p.getAnswerText() != null) {
-        	s = p.getHelpText();
-    	}
+        String s = p.getHelpText();
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());
@@ -194,6 +187,5 @@ public class QuestionView extends ScrollView {
     public void setFocus(Context context) {
         mQuestionWidget.setFocus(context);
     }
-
 
 }

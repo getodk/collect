@@ -1,16 +1,14 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
@@ -34,7 +32,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
  * 
@@ -47,6 +44,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
 
+
     public GeoPointWidget(Context context) {
         super(context);
     }
@@ -57,7 +55,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mAnswerDisplay.setText(null);
         mActionButton.setText(getContext().getString(R.string.get_location));
 
-        }
+    }
 
 
     public IAnswerData getAnswer() {
@@ -91,27 +89,26 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mActionButton.setText(getContext().getString(R.string.get_location));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, GlobalConstants.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadOnly());
-        
+
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
         mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                GlobalConstants.APPLICATION_FONTSIZE - 1);
+            GlobalConstants.APPLICATION_FONTSIZE - 1);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            //mActionButton.setText(getContext().getString(R.string.replace_location));
-            mActionButton.setText("placeholder");
+            mActionButton.setText(getContext().getString(R.string.replace_location));
             setBinaryData(s);
         }
-        
+
         // when you press the button
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), GeoPointActivity.class);
                 ((Activity) getContext()).startActivityForResult(i,
-                        GlobalConstants.LOCATION_CAPTURE);
+                    GlobalConstants.LOCATION_CAPTURE);
 
             }
         });
@@ -153,7 +150,7 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
@@ -163,7 +160,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
         mStringAnswer.setText(s);
 
         String[] sa = s.split(" ");
-        mAnswerDisplay.setText("Latitude: "+ formatGps(Double.parseDouble(sa[0]), "lat") + "\nLongitude: "
-                + formatGps(Double.parseDouble(sa[1]), "lon")+ "\nAltitude: "+sa[2]+ "m\nAccuracy: "+sa[3] + "m");
+        mAnswerDisplay.setText("Latitude: " + formatGps(Double.parseDouble(sa[0]), "lat")
+                + "\nLongitude: " + formatGps(Double.parseDouble(sa[1]), "lon") + "\nAltitude: "
+                + sa[2] + "m\nAccuracy: " + sa[3] + "m");
     }
 }

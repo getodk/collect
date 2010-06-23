@@ -14,22 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.odk.collect.android.activities.RemoteFileManagerList;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormDownloaderListener;
@@ -41,7 +25,20 @@ import org.w3c.dom.NodeList;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task a
@@ -50,13 +47,18 @@ import android.util.Log;
  * containing form/url pairs is passed, we download those forms.
  * 
  * @author carlhartung
- * 
  */
 public class DownloadFormsTask extends
         AsyncTask<HashMap<String, String>, String, HashMap<String, String>> {
 
-    FormDownloaderListener mStateListener;
-    ArrayList<String> mDownloadedForms = new ArrayList<String>();
+    public static final String DL_FORM = "dlform"; // used to store form name if one errors
+    public static final String DL_ERROR_MSG = "dlerrormessage"; // used to store error message if
+    // one occurs
+    public static final String DL_FORMS = "dlforms"; // used to indicate that we tried to download
+    // forms. If it's not included we tried to
+    // download a form list.
+
+    private FormDownloaderListener mStateListener;
 
 
     @Override
@@ -69,7 +71,7 @@ public class DownloadFormsTask extends
             try {
                 u = new URL((String) values[0].get(RemoteFileManagerList.LIST_URL));
             } catch (MalformedURLException e) {
-                formList.put(RemoteFileManagerList.DL_ERROR, e.getLocalizedMessage());
+                formList.put(DL_ERROR_MSG, e.getLocalizedMessage());
                 e.printStackTrace();
             }
 
@@ -88,7 +90,7 @@ public class DownloadFormsTask extends
                     DocumentBuilder db = dbf.newDocumentBuilder();
                     doc = db.parse(is);
                 } catch (Exception e) {
-                    formList.put(RemoteFileManagerList.DL_ERROR, "DocumentBuilderFactory error: "
+                    formList.put(DL_ERROR_MSG, "DocumentBuilderFactory error: "
                             + e.getLocalizedMessage());
                     e.printStackTrace();
                 }
@@ -105,77 +107,54 @@ public class DownloadFormsTask extends
                     }
                 }
             } catch (IOException e) {
-                formList.put(RemoteFileManagerList.DL_ERROR, e.getLocalizedMessage());
+                formList.put(DL_ERROR_MSG, e.getLocalizedMessage());
                 e.printStackTrace();
             }
             return formList;
 
-
         } else {
             // This downloads the selected forms.
             HashMap<String, String> toDownload = values[0];
-            String title = null;
-            String message = null;
-            HashMap<String, String> renamedForms = new HashMap<String, String>();
-            boolean error = false;
-
             HashMap<String, String> result = new HashMap<String, String>();
+            result.put(DL_FORMS, DL_FORMS); // indicate that we're trying to download forms.
             ArrayList<String> formNames = new ArrayList<String>(toDownload.keySet());
-          
+
+            // boolean error = false;
             int total = formNames.size();
             int count = 1;
             fda = new FileDbAdapter();
             fda.open();
-            
+
             for (int i = 0; i < total; i++) {
                 String form = formNames.get(i);
                 publishProgress(form, new Integer(count).toString(), new Integer(total).toString());
                 try {
                     File dl = downloadFile(form, toDownload.get(form));
-                    // hash of raw form
-                    String hasha = FileUtils.getMd5Hash(dl);
-                    Log.e("carl", "file = " + dl.getName() + " and hasha = " + hasha);
-                    
+
                     // if the file already existed, the name will be changed to formname_#
                     if (form.compareTo(dl.getName()) != 0) {
                         // hash of raw form
                         String hash = FileUtils.getMd5Hash(dl);
-                        Log.e("carl", "form = " + dl.getName() + " and hash = " + hash);
 
                         Cursor c = fda.fetchFilesByPath(null, hash);
                         if (c.getCount() > 0) {
-                            // db has the hash and this is a duplicate.  the dupliate will be discarded.
+                            // db has the hash and this is a duplicate. the dupliate will be
+                            // discarded.
                         } else {
                             // the form is new, but the file name was the same.
                             // tell the user we renamed the form.
-                            Log.e("carl", "adding " + form + " as " + dl.getName());
-                            renamedForms.put(form, dl.getName());
+                            result.put(form, dl.getName());
                         }
-
                         c.close();
                     }
                 } catch (IOException e) {
-                    message = "File " + form + " failed with error: " + e.getMessage();
-                    title = "Error Downloading";
                     e.printStackTrace();
-                    error = true;
+                    result.put(DL_FORM, form);
+                    result.put(DL_ERROR_MSG, e.getMessage());
                     break;
                 }
 
                 count++;
-            }
-
-            if (!error) {
-                // download was complete, add the names of forms that were renamed
-                title = "Download complete";
-                message = "All downloads completed successfully.";
-                Set<String> keys = renamedForms.keySet();
-                Iterator<String> i = keys.iterator();
-                while (i.hasNext()) {
-                    String form = i.next();
-                    message += " " + form + " was renamed " + renamedForms.get(form) + ".";
-                }
-
             }
 
             if (fda != null) {
@@ -184,9 +163,6 @@ public class DownloadFormsTask extends
                 fda.close();
             }
 
-            result.put(RemoteFileManagerList.DIALOG_TITLE, title);
-            result.put(RemoteFileManagerList.DIALOG_MSG, message);
-            result.put(RemoteFileManagerList.FILES_DOWNLOADED, "null");
             return result;
         }
     }
@@ -260,7 +236,7 @@ public class DownloadFormsTask extends
             if (mStateListener != null) {
                 // update progress and total
                 mStateListener.progressUpdate(values[0], new Integer(values[1]).intValue(),
-                        new Integer(values[2]).intValue());
+                    new Integer(values[2]).intValue());
             }
         }
 

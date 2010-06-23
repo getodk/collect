@@ -1,28 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.tasks;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -42,6 +32,14 @@ import org.odk.collect.android.utilities.FileUtils;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  * Background task for loading a form.
  * 
@@ -53,8 +51,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
 
     /**
-     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from
-     * XML. If given an instance, it will be used to fill the {@link FormDef}.
+     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
+     * an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
     protected FormEntryController doInBackground(String... path) {
@@ -67,7 +65,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
         File formXml = new File(formPath);
         File formBin =
-                new File(GlobalConstants.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
+            new File(GlobalConstants.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -116,7 +114,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
         return fec;
     }
-    
+
+
     public boolean importData(String filePath, FormEntryController fec) {
 
         // convert files into a byte array
@@ -124,7 +123,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
-//        TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
+        // TreeElement templateRoot = mForm.getDataModel().getRoot().deepCopy(true);
         TreeElement templateRoot = fec.getModel().getForm().getInstance().getRoot().deepCopy(true);
 
         // weak check for matching forms
@@ -135,18 +134,18 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
             // populate the data model
             TreeReference tr = TreeReference.rootRef();
             tr.add(templateRoot.getName(), TreeReference.INDEX_UNBOUND);
-            //DataModelTree.populateNode(templateRoot, savedRoot, tr, fec.getModel().getForm());
+            // DataModelTree.populateNode(templateRoot, savedRoot, tr, fec.getModel().getForm());
             templateRoot.populate(savedRoot, fec.getModel().getForm());
 
             // populated model to current form
             // mForm.setDataModel(new DataModelTree(templateRoot));
             fec.getModel().getForm().getInstance().setRoot(templateRoot);
-            
+
             // fix any language issues
             // : http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
             if (fec.getModel().getLanguages() != null) {
-                fec.getModel().getForm().localeChanged(fec.getModel().getLanguage(), 
-                        fec.getModel().getForm().getLocalizer());                
+                fec.getModel().getForm().localeChanged(fec.getModel().getLanguage(),
+                    fec.getModel().getForm().getLocalizer());
             }
 
             return true;
@@ -226,7 +225,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
     @Override
     protected void onPostExecute(FormEntryController fec) {
         synchronized (this) {
-            if (mStateListener != null) mStateListener.loadingComplete(fec);
+            if (mStateListener != null)
+                mStateListener.loadingComplete(fec);
         }
     }
 

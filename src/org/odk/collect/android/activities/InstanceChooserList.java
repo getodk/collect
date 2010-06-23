@@ -1,23 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.activities;
-
-import java.io.File;
-import java.util.regex.Pattern;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
@@ -30,6 +25,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -78,8 +76,7 @@ public class InstanceChooserList extends ListActivity {
 
 
     /**
-     * Retrieves instance information from {@link FileDbAdapter}, composes and
-     * displays each row.
+     * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
      */
     private void refreshView() {
         // retrieve status information from instance. needed for tabs.
@@ -87,18 +84,22 @@ public class InstanceChooserList extends ListActivity {
         String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
 
         // get all instances that match the status.
-        FileDbAdapter fda = new FileDbAdapter(this);
+        FileDbAdapter fda = new FileDbAdapter();
         fda.open();
         Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, status);
         startManagingCursor(c);
 
         // create data and views for cursor adapter
-        String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
-        int[] view = new int[] {android.R.id.text1, android.R.id.text2};
+        String[] data = new String[] {
+                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+        };
+        int[] view = new int[] {
+                android.R.id.text1, android.R.id.text2
+        };
 
         // render total instance view
         SimpleCursorAdapter instances =
-                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
 
         // cleanup

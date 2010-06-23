@@ -1,23 +1,18 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
 package org.odk.collect.android.activities;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
@@ -38,6 +33,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormHierarchyActivity extends ListActivity {
 
@@ -169,8 +166,6 @@ public class FormHierarchyActivity extends ListActivity {
             }
         }
 
-
-
         int event = mFormEntryModel.getEvent();
         if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
             // The beginning of form has no valid prompt to display.
@@ -178,9 +173,9 @@ public class FormHierarchyActivity extends ListActivity {
             mPath.setText("Form Path: /");
         } else {
             // Create a ".." entry so user can go back.
-            formList.add(new HierarchyElement("..", "Go to previous level", null, Color.WHITE,
-                    QUESTION, null));
-            mPath.setText("Form Path: /" + getCurrentPath());
+            formList.add(new HierarchyElement("..", getString(R.string.goto_previous_level), null,
+                    Color.WHITE, QUESTION, null));
+            mPath.setText(getString(R.string.form_path) + getCurrentPath());
         }
 
         // Refresh the current event in case we did step forward.
@@ -243,10 +238,10 @@ public class FormHierarchyActivity extends ListActivity {
                         // to display "Group #", so we mark this as the
                         // beginning and skip all of its children
                         HierarchyElement group =
-                                new HierarchyElement(fc.getLongText(),
-                                        getString(R.string.collapsed_group), getResources()
-                                                .getDrawable(R.drawable.expander_ic_minimized),
-                                        Color.WHITE, COLLAPSED, fc.getIndex());
+                            new HierarchyElement(fc.getLongText(),
+                                    getString(R.string.collapsed_group), getResources()
+                                            .getDrawable(R.drawable.expander_ic_minimized),
+                                    Color.WHITE, COLLAPSED, fc.getIndex());
                         repeatedGroupName = fc.getLongText();
                         formList.add(group);
                     }
@@ -256,15 +251,14 @@ public class FormHierarchyActivity extends ListActivity {
                         // repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + fc.getMultiplicity(), mIndent
-                                + "Select to see repeated element: " + fc.getLongText() + " "
-                                + fc.getMultiplicity(), null, Color.WHITE, CHILD, fc.getIndex()));
+                                + fc.getMultiplicity(), mIndent + getString(R.string.select_repeat)
+                                + fc.getLongText() + " " + fc.getMultiplicity(), null, Color.WHITE,
+                                CHILD, fc.getIndex()));
                     }
                     break;
             }
             event = mFormEntryController.stepToNextEvent();
         }
-
 
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         itla.setListItems(formList);
@@ -277,10 +271,9 @@ public class FormHierarchyActivity extends ListActivity {
 
 
     /**
-     * used to go up one level in the formIndex. That is, if you're at 5_0, 1
-     * (the second question in a repeating group), this method will return a
-     * FormInex of 5_0 (the start of the repeating group). If your at index 16
-     * or 5_0, this will return null;
+     * used to go up one level in the formIndex. That is, if you're at 5_0, 1 (the second question
+     * in a repeating group), this method will return a FormInex of 5_0 (the start of the repeating
+     * group). If your at index 16 or 5_0, this will return null;
      * 
      * @param index
      * @return

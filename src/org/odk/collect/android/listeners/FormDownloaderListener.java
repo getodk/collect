@@ -16,8 +16,6 @@ package org.odk.collect.android.listeners;
 
 import java.util.HashMap;
 
-
-
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */

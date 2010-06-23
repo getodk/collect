@@ -1,16 +1,14 @@
 /*
  * Copyright (C) 2009 University of Washington
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
@@ -73,7 +71,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
         // We're not using managed dialogs, so we have to dismiss the dialog to
         // prevent it from leaking memory.
-        if (mLocationDialog != null && mLocationDialog.isShowing()) mLocationDialog.dismiss();
+        if (mLocationDialog != null && mLocationDialog.isShowing())
+            mLocationDialog.dismiss();
     }
 
 
@@ -93,27 +92,26 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
 
     /**
-     * Sets up the look and actions for the progress dialog while the GPS is
-     * searching.
+     * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
     private void setupLocationDialog() {
         // dialog displayed while fetching gps location
         mLocationDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON1:
-                                returnLocation();
-                                break;
-                            case DialogInterface.BUTTON2:
-                                mLocation = null;
-                                finish();
-                                break;
-                        }
-                        // on cancel, stop gps
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON1:
+                            returnLocation();
+                            break;
+                        case DialogInterface.BUTTON2:
+                            mLocation = null;
+                            finish();
+                            break;
                     }
-                };
+                    // on cancel, stop gps
+                }
+            };
 
         // back button doesn't cancel
         mLocationDialog.setCancelable(false);
@@ -122,9 +120,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
         mLocationDialog.setTitle(getString(R.string.getting_location));
         mLocationDialog.setMessage(getString(R.string.please_wait));
         mLocationDialog.setButton(DialogInterface.BUTTON1, getString(R.string.accept_location),
-                geopointButtonListener);
+            geopointButtonListener);
         mLocationDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel_location),
-                geopointButtonListener);
+            geopointButtonListener);
     }
 
 
@@ -142,9 +140,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * android.location.LocationListener#onLocationChanged(android.location.
-     * Location)
+     * @see android.location.LocationListener#onLocationChanged(android.location. Location)
      */
     public void onLocationChanged(Location location) {
 
@@ -159,13 +155,12 @@ public class GeoPointActivity extends Activity implements LocationListener {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * android.location.LocationListener#onProviderDisabled(java.lang.String)
+     * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
      */
     public void onProviderDisabled(String provider) {
         Toast
                 .makeText(getBaseContext(), getString(R.string.gps_disabled_error),
-                        Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -173,8 +168,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * android.location.LocationListener#onProviderEnabled(java.lang.String)
+     * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
      */
     public void onProviderEnabled(String provider) {
 
@@ -184,8 +178,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
     /*
      * (non-Javadoc)
      * 
-     * @see android.location.LocationListener#onStatusChanged(java.lang.String,
-     * int, android.os.Bundle)
+     * @see android.location.LocationListener#onStatusChanged(java.lang.String, int,
+     * android.os.Bundle)
      */
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
@@ -200,7 +194,5 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 break;
         }
     }
-
-
 
 }
