@@ -16,12 +16,12 @@ the License.
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	
+
 	<TextView
 		android:id="@+id/pathtext"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
+		android:layout_margin="4px"
 		/>
 
 	<!--
@@ -34,23 +34,36 @@ the License.
 		android:orientation="horizontal"
 		android:layout_alignParentBottom="true"
 		android:id="@+id/buttonholder">
+			
+	          <Button
+      android:id="@+id/jumpPreviousButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/jump_to_previous"
+      android:padding="12px"
+     android:textSize="16px"
+     android:layout_weight="1"/>
+            
+	
+	
     <Button
       android:id="@+id/jumpBeginningButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/jump_to_beginning"
-           android:padding="15px"
-     android:textSize="19px" 
+           android:padding="12px"
+     android:textSize="16px" 
       android:layout_weight="1" />
-      
+
           <Button
       android:id="@+id/jumpEndButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/jump_to_end"
-           android:padding="15px"
-     android:textSize="19px" 
+           android:padding="12px"
+     android:textSize="16px" 
       android:layout_weight="1" />
+            
 
 	</LinearLayout>
 
@@ -66,7 +79,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display"
-		android:textSize="16px"
+		android:textSize="19px"
 		android:padding="20px"
 		android:gravity="center"
 		android:background="@drawable/white"/>

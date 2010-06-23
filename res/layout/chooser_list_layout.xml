@@ -29,7 +29,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display"
-		android:textSize="16px"
+		android:textSize="19px"
 		android:paddingLeft="20px"
 		android:paddingRight="20px"
 		android:gravity="center"

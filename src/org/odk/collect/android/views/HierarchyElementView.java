@@ -40,14 +40,13 @@ public class HierarchyElementView extends RelativeLayout {
         mIcon = new ImageView(context);
         mIcon.setImageDrawable(it.getIcon());
         mIcon.setId(1);
-        mIcon.setPadding(0, 15, 5, 0);
+        mIcon.setPadding(0, 1, 2, 0);
         addView(mIcon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
         mPrimaryTextView = new TextView(context);
         mPrimaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
         mPrimaryTextView.setText(it.getPrimaryText());
-        mPrimaryTextView.setPadding(0, 7, 0, 0);
         mPrimaryTextView.setId(2);
         LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -57,7 +56,7 @@ public class HierarchyElementView extends RelativeLayout {
 
         mSecondaryTextView = new TextView(context);
         mSecondaryTextView.setText(it.getSecondaryText());
-        mSecondaryTextView.setPadding(0, 0, 0, 7);
+        mSecondaryTextView.setPadding(7, 0, 7, 0);
         mSecondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
         LayoutParams lp =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -65,6 +64,10 @@ public class HierarchyElementView extends RelativeLayout {
         lp.addRule(RelativeLayout.BELOW, mPrimaryTextView.getId());
         lp.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
         addView(mSecondaryTextView, lp);
+        
+        setPadding(0, 2, 0, 4);
+
+        
     }
 
 
@@ -87,5 +90,12 @@ public class HierarchyElementView extends RelativeLayout {
         this.setBackgroundColor(color);
     }
 
+    public void showSecondary(boolean bool) {
+        if (bool) {
+            mSecondaryTextView.setVisibility(VISIBLE);
+        } else {
+            mSecondaryTextView.setVisibility(GONE);
+        }
+    }
 
 }
