@@ -128,6 +128,7 @@ public class MainMenuActivity extends Activity {
 
         // manage forms button. no result expected.
         mManageFilesButton = (Button) findViewById(R.id.manage_forms);
+        mManageFilesButton.setText(getString(R.string.manage_files));
         mManageFilesButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
@@ -145,7 +146,7 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        refreshView();
+        updateButtons();
     }
 
 
@@ -184,25 +185,10 @@ public class MainMenuActivity extends Activity {
     }
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        fda.removeOrphanFormDefs();
-        fda.close();
-    }
-
-
-    private void refreshView() {
-        updateButtonCount();
-    }
-
-
     /**
      * Updates the button count and sets the text in the buttons.
      */
-    private void updateButtonCount() {
+    private void updateButtons() {
         // create adapter
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
@@ -225,21 +211,9 @@ public class MainMenuActivity extends Activity {
         } else {
             mFormsCount = 0;
         }
-
-        // count for available forms
-        c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, FileDbAdapter.STATUS_AVAILABLE);
-        mAvailableCount = c.getCount();
-        c.close();
         fda.close();
 
-        // update button text
-        if (mAvailableCount == mFormsCount) {
-            mEnterDataButton.setText(getString(R.string.enter_data_button, mAvailableCount));
-        } else {
-            mEnterDataButton.setText(getString(R.string.enter_data));
-        }
-
-        mManageFilesButton.setText(getString(R.string.manage_files));
+        mEnterDataButton.setText(getString(R.string.enter_data_button, mFormsCount));
         mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
         mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
                 + mCompletedCount));
