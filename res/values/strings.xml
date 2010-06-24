@@ -45,7 +45,7 @@
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="default_server">http://open-data-kit.appspot.com</string>
 	<string name="delete_confirm">Delete %s item(s)?</string>
-	<string name="delete_file">Delete Selected File(s)</string>
+	<string name="delete_file">Delete Selected</string>
 	<string name="delete_repeat">Remove Group</string>
 	<string name="delete_repeat_ask">Remove This Group?</string>
 	<string name="delete_repeat_confirm">Remove group \"%s\" and all of its sub-groups?
@@ -127,7 +127,7 @@
 	<string name="send">send</string>
 	<string name="send_data">Send Saved Data</string>
 	<string name="send_data_button">Send Saved Data (%s)</string>
-	<string name="send_selected_data">Send Selected Data</string>
+	<string name="send_selected_data">Send Selected</string>
 	<string name="server">Server</string>
 	<string name="server_preferences">Server Preferences</string>
 	<string name="toggle_selected">Toggle</string>
@@ -138,4 +138,6 @@
 	<string name="username">Username</string>
 	<string name="view_hierarchy">Go To Prompt</string>
 	<string name="yes">Yes</string>
+	<string name="forms">Forms</string>
+	<string name="get_forms">Fetch New Forms</string>
 </resources>

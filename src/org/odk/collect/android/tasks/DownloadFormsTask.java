@@ -30,7 +30,7 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.odk.collect.android.activities.RemoteFileManagerList;
+import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
@@ -62,14 +62,14 @@ public class DownloadFormsTask extends
     @Override
     protected HashMap<String, String> doInBackground(HashMap<String, String>... values) {
         FileDbAdapter fda = null;
-        if (values != null && values[0].containsKey(RemoteFileManagerList.LIST_URL)) {
+        if (values != null && values[0].containsKey(FormDownloadList.LIST_URL)) {
             // This gets a list of available forms from the specified server.
             HashMap<String, String> formList = new HashMap<String, String>();
             URL u = null;
             try {
-                u = new URL((String) values[0].get(RemoteFileManagerList.LIST_URL));
+                u = new URL((String) values[0].get(FormDownloadList.LIST_URL));
             } catch (MalformedURLException e) {
-                formList.put(RemoteFileManagerList.DL_ERROR, e.getLocalizedMessage());
+                formList.put(FormDownloadList.DL_ERROR, e.getLocalizedMessage());
                 e.printStackTrace();
             }
 
@@ -88,7 +88,7 @@ public class DownloadFormsTask extends
                     DocumentBuilder db = dbf.newDocumentBuilder();
                     doc = db.parse(is);
                 } catch (Exception e) {
-                    formList.put(RemoteFileManagerList.DL_ERROR, "DocumentBuilderFactory error: "
+                    formList.put(FormDownloadList.DL_ERROR, "DocumentBuilderFactory error: "
                             + e.getLocalizedMessage());
                     e.printStackTrace();
                 }
@@ -105,7 +105,7 @@ public class DownloadFormsTask extends
                     }
                 }
             } catch (IOException e) {
-                formList.put(RemoteFileManagerList.DL_ERROR, e.getLocalizedMessage());
+                formList.put(FormDownloadList.DL_ERROR, e.getLocalizedMessage());
                 e.printStackTrace();
             }
             return formList;
@@ -184,9 +184,9 @@ public class DownloadFormsTask extends
                 fda.close();
             }
 
-            result.put(RemoteFileManagerList.DIALOG_TITLE, title);
-            result.put(RemoteFileManagerList.DIALOG_MSG, message);
-            result.put(RemoteFileManagerList.FILES_DOWNLOADED, "null");
+            result.put(FormDownloadList.DIALOG_TITLE, title);
+            result.put(FormDownloadList.DIALOG_MSG, message);
+            result.put(FormDownloadList.FILES_DOWNLOADED, "null");
             return result;
         }
     }

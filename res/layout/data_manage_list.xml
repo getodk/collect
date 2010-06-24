@@ -36,7 +36,8 @@ the License.
      android:textSize="16px" 
 	 android:layout_weight="1" 
      />-->
-     
+
+	      
     <Button 
      android:id="@+id/delete_button"
      android:text="@string/delete_file"
