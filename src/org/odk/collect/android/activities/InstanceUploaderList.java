@@ -226,7 +226,7 @@ public class InstanceUploaderList extends ListActivity {
             mSelected.remove(k);
         else
             mSelected.add(k);
-        
+
         mActionButton.setEnabled(!(mSelected.size() == 0));
 
     }

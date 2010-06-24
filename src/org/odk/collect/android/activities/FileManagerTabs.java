@@ -37,7 +37,7 @@ public class FileManagerTabs extends TabActivity {
 
     private static final String FORMS_TAB = "forms_tab";
     private static final String DATA_TAB = "data_tab";
-        private static final int FONT_SIZE = 21;
+    private static final int FONT_SIZE = 21;
 
 
     @Override

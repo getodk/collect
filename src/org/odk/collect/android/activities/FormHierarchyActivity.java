@@ -27,6 +27,7 @@ import android.app.ListActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -52,8 +53,9 @@ public class FormHierarchyActivity extends ListActivity {
     private Button jumpPreviousButton;
 
     List<HierarchyElement> formList;
-
     TextView mPath;
+
+    FormIndex mStartIndex;
 
 
     @Override
@@ -64,6 +66,7 @@ public class FormHierarchyActivity extends ListActivity {
         // We use a static FormEntryController to make jumping faster.
         mFormEntryController = FormEntryActivity.mFormEntryController;
         mFormEntryModel = mFormEntryController.getModel();
+        mStartIndex = mFormEntryModel.getFormIndex();
 
         setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
 
@@ -305,8 +308,6 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.remove(position + 1);
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
-                //TODO: remove this?
-                h.setSecondaryText(getString(R.string.collapsed_group));
                 h.setColor(Color.WHITE);
                 break;
             case COLLAPSED:
@@ -318,10 +319,7 @@ public class FormHierarchyActivity extends ListActivity {
 
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
-               
-               	//TODO:  replace with h.setColor(Color.WHITE); //?
-                h.setSecondaryText(getString(R.string.expanded_group));
-                h.setColor(Color.LTGRAY);
+                h.setColor(Color.WHITE);
                 break;
             case QUESTION:
                 mFormEntryController.jumpToIndex(h.getFormIndex());
@@ -338,6 +336,21 @@ public class FormHierarchyActivity extends ListActivity {
         itla.setListItems(formList);
         setListAdapter(itla);
         this.getListView().setSelection(position);
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                mFormEntryController.jumpToIndex(mStartIndex);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

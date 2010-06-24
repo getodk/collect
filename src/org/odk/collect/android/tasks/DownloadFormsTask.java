@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
-import org.odk.collect.android.activities.RemoteFileManagerList;
+import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -50,12 +50,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class DownloadFormsTask extends
         AsyncTask<HashMap<String, String>, String, HashMap<String, String>> {
 
-    public static final String DL_FORM = "dlform"; // used to store form name if one errors
-    public static final String DL_ERROR_MSG = "dlerrormessage"; // used to store error message if
-    // one occurs
-    public static final String DL_FORMS = "dlforms"; // used to indicate that we tried to download
-    // forms. If it's not included we tried to
-    // download a form list.
+    // used to store form name if one errors
+    public static final String DL_FORM = "dlform";
+
+    // used to store error message if one occurs
+    public static final String DL_ERROR_MSG = "dlerrormessage";
+
+    // used to indicate that we tried to download forms. If it's not included we tried to download a
+    // form list.
+    public static final String DL_FORMS = "dlforms";
 
     private static final int CONNECTION_TIMEOUT = 30000;
 
@@ -65,12 +68,12 @@ public class DownloadFormsTask extends
     @Override
     protected HashMap<String, String> doInBackground(HashMap<String, String>... values) {
         FileDbAdapter fda = null;
-        if (values != null && values[0].containsKey(RemoteFileManagerList.LIST_URL)) {
+        if (values != null && values[0].containsKey(FormDownloadList.LIST_URL)) {
             // This gets a list of available forms from the specified server.
             HashMap<String, String> formList = new HashMap<String, String>();
             URL u = null;
             try {
-                u = new URL((String) values[0].get(RemoteFileManagerList.LIST_URL));
+                u = new URL((String) values[0].get(FormDownloadList.LIST_URL));
             } catch (MalformedURLException e) {
                 formList.put(DL_ERROR_MSG, e.getLocalizedMessage());
                 e.printStackTrace();

@@ -209,7 +209,6 @@ public class FormManagerList extends ListActivity {
         mActionButton.setEnabled(!(mSelected.size() == 0));
 
     }
-    
 
 
     @Override

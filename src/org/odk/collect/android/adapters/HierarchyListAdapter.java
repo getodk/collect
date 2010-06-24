@@ -82,8 +82,9 @@ public class HierarchyListAdapter extends BaseAdapter {
             hev.setIcon(mItems.get(position).getIcon());
             hev.setColor(mItems.get(position).getColor());
         }
-        
-        if (mItems.get(position).getSecondaryText() == null || mItems.get(position).getSecondaryText().equals("")) {
+
+        if (mItems.get(position).getSecondaryText() == null
+                || mItems.get(position).getSecondaryText().equals("")) {
             hev.showSecondary(false);
         } else {
             hev.showSecondary(true);
