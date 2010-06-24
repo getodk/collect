@@ -130,7 +130,7 @@
 	<string name="send_selected_data">Send Selected Data</string>
 	<string name="server">Server</string>
 	<string name="server_preferences">Server Preferences</string>
-	<string name="toggle_selected">Toggle All</string>
+	<string name="toggle_selected">Toggle</string>
 	<string name="uploading_data">Sending Data</string>
 	<string name="upload_all_successful">%s item(s) sent successfully.</string>
 	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>

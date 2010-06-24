@@ -326,7 +326,7 @@ public class FormHierarchyActivity extends ListActivity {
 
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
-                h.setColor(Color.LTGRAY);
+                h.setColor(Color.WHITE);
                 break;
             case QUESTION:
                 mFormEntryController.jumpToIndex(h.getFormIndex());

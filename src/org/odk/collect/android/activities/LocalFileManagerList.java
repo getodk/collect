@@ -87,7 +87,7 @@ public class LocalFileManagerList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mActionButton.setEnabled(!(mInstances.getCount() == 0));
+        mActionButton.setEnabled(!(mSelected.size() == 0));
 
         // cleanup
         fda.close();
@@ -203,7 +203,11 @@ public class LocalFileManagerList extends ListActivity {
             mSelected.remove(k);
         else
             mSelected.add(k);
+
+        mActionButton.setEnabled(!(mSelected.size() == 0));
+
     }
+    
 
 
     @Override
