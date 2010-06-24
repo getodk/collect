@@ -52,7 +52,7 @@ import java.util.Set;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class RemoteFileManagerList extends ListActivity implements FormDownloaderListener {
+public class FormDownloadList extends ListActivity implements FormDownloaderListener {
     private static final String t = "RemoveFileManageList";
 
     private static final int PROGRESS_DIALOG = 1;

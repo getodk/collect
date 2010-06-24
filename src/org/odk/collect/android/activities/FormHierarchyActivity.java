@@ -49,6 +49,7 @@ public class FormHierarchyActivity extends ListActivity {
     private static final int QUESTION = 4;
 
     private final String mIndent = "     ";
+    private Button jumpPreviousButton;
 
     List<HierarchyElement> formList;
 
@@ -67,6 +68,13 @@ public class FormHierarchyActivity extends ListActivity {
         setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
 
         mPath = (TextView) findViewById(R.id.pathtext);
+
+        jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
+        jumpPreviousButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                goUpLevel();
+            }
+        });
 
         Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
@@ -119,11 +127,16 @@ public class FormHierarchyActivity extends ListActivity {
 
         String path = "";
         while (index != null) {
-            path = mFormEntryModel.getCaptionPrompt(index).getLongText() + "/" + path;
+
+            path =
+                mFormEntryModel.getCaptionPrompt(index).getLongText() + " ("
+                        + (mFormEntryModel.getCaptionPrompt(index).getMultiplicity() + 1) + ") > "
+                        + path;
+
             index = stepIndexOut(index);
         }
-
-        return path;
+        // return path?
+        return path.substring(0, path.length() - 2);
     }
 
 
@@ -163,12 +176,12 @@ public class FormHierarchyActivity extends ListActivity {
         if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
             // The beginning of form has no valid prompt to display.
             mFormEntryController.stepToNextEvent();
-            mPath.setText("Form Path: /");
+            mPath.setVisibility(View.GONE);
+            jumpPreviousButton.setEnabled(false);
         } else {
-            // Create a ".." entry so user can go back.
-            formList.add(new HierarchyElement("..", getString(R.string.goto_previous_level), null,
-                    Color.WHITE, QUESTION, null));
-            mPath.setText(getString(R.string.form_path) + getCurrentPath());
+            mPath.setVisibility(View.VISIBLE);
+            mPath.setText(getCurrentPath());
+            jumpPreviousButton.setEnabled(true);
         }
 
         // Refresh the current event in case we did step forward.
@@ -230,10 +243,10 @@ public class FormHierarchyActivity extends ListActivity {
                         // This is the start of a repeating group. We only want to display
                         // "Group #", so we mark this as the beginning and skip all of its children
                         HierarchyElement group =
-                            new HierarchyElement(fc.getLongText(),
-                                    getString(R.string.collapsed_group), getResources()
-                                            .getDrawable(R.drawable.expander_ic_minimized),
-                                    Color.WHITE, COLLAPSED, fc.getIndex());
+                        // TODO : update gropu count
+                            new HierarchyElement(fc.getLongText(), null, getResources()
+                                    .getDrawable(R.drawable.expander_ic_minimized), Color.WHITE,
+                                    COLLAPSED, fc.getIndex());
                         repeatedGroupName = fc.getLongText();
                         formList.add(group);
                     }
@@ -242,9 +255,8 @@ public class FormHierarchyActivity extends ListActivity {
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + fc.getMultiplicity(), mIndent + getString(R.string.select_repeat)
-                                + fc.getLongText() + " " + fc.getMultiplicity(), null, Color.WHITE,
-                                CHILD, fc.getIndex()));
+                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
+                                .getIndex()));
                     }
                     break;
             }
@@ -293,6 +305,7 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.remove(position + 1);
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
+                //TODO: remove this?
                 h.setSecondaryText(getString(R.string.collapsed_group));
                 h.setColor(Color.WHITE);
                 break;
@@ -305,6 +318,8 @@ public class FormHierarchyActivity extends ListActivity {
 
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
+               
+               	//TODO:  replace with h.setColor(Color.WHITE); //?
                 h.setSecondaryText(getString(R.string.expanded_group));
                 h.setColor(Color.LTGRAY);
                 break;

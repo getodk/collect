@@ -32,18 +32,19 @@ the License.
      android:textOff="@string/toggle_selected"
    	 android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:padding="15px"
-     android:textSize="19px" 
+     android:padding="12px"
+     android:textSize="16px" 
 	 android:layout_weight="1" 
      />-->
-     
+
+	      
     <Button 
      android:id="@+id/delete_button"
      android:text="@string/delete_file"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:padding="15px"
-     android:textSize="19px" 
+     android:padding="12px"
+     android:textSize="16px" 
 	 android:layout_weight="1"      />
     
   </LinearLayout>
@@ -61,7 +62,7 @@ the License.
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:text="@string/no_items_display"
-      android:textSize="16px" 
+      android:textSize="19px" 
       android:gravity="center"/>
       
 </RelativeLayout>

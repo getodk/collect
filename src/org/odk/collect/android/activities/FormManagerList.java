@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class LocalFileManagerList extends ListActivity {
+public class FormManagerList extends ListActivity {
 
     private AlertDialog mAlertDialog;
     private Button mActionButton;
@@ -51,8 +51,9 @@ public class LocalFileManagerList extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.local_file_manage_list);
+        setContentView(R.layout.form_manage_list);
         mActionButton = (Button) findViewById(R.id.delete_button);
+        mActionButton.setText(getString(R.string.delete_file));
         mActionButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
@@ -73,7 +74,7 @@ public class LocalFileManagerList extends ListActivity {
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
         fda.addOrphanForms();
-        Cursor c = fda.fetchAllFiles();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
         startManagingCursor(c);
 
         String[] data = new String[] {
@@ -89,7 +90,7 @@ public class LocalFileManagerList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mActionButton.setEnabled(!(mInstances.getCount() == 0));
+        mActionButton.setEnabled(!(mSelected.size() == 0));
 
         // cleanup
         fda.close();
@@ -204,7 +205,11 @@ public class LocalFileManagerList extends ListActivity {
             mSelected.remove(k);
         else
             mSelected.add(k);
+
+        mActionButton.setEnabled(!(mSelected.size() == 0));
+
     }
+    
 
 
     @Override

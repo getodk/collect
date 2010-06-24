@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!--
-		Copyright (C) 2009 University of Washington Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of
-		the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
-		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+		Copyright (C) 2009 University of Washington Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
 	-->
 <resources>
 	<string name="accept_location">Record Location</string>
@@ -36,6 +42,7 @@
 	<string name="clear_answer_ask">Remove This Response?</string>
 	<string name="clear_answer_no">Do Not Remove</string>
 	<string name="collapsed_group">Collapsed Group</string>
+	<string name="group_contains">Contains %s items</string>
 	<string name="completed_data">Complete (%s)</string>
 	<string name="continue_form">Do Not Exit</string>
 	<string name="data">Data</string>
@@ -43,10 +50,11 @@
 	<string name="data_saved_ok">Data successfully saved!</string>
 	<string name="default_server">http://open-data-kit.appspot.com</string>
 	<string name="delete_confirm">Delete %s item(s)?</string>
-	<string name="delete_file">Delete Selected File(s)</string>
+	<string name="delete_file">Delete Selected</string>
 	<string name="delete_repeat">Remove Group</string>
 	<string name="delete_repeat_ask">Remove This Group?</string>
-	<string name="delete_repeat_confirm">Remove group \"%s\" and all of its sub-groups?</string>
+	<string name="delete_repeat_confirm">Remove group \"%s\" and all of its sub-groups?
+	</string>
 	<string name="delete_repeat_no">Do Not Remove</string>
 	<string name="discard_answer">Remove Response</string>
 	<string name="discard_group">Remove Group</string>
@@ -64,7 +72,9 @@
 	<string name="enter_data">Start New Form</string>
 	<string name="enter_data_button">Start New Form (%s)</string>
 	<string name="enter_data_description">%s has been selected.</string>
-	<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
+	<string name="enter_data_message">To navigate, swipe your finger horizontally on the
+		screen as if turning pages in a book. Press the Menu button for more
+		choices.</string>
 	<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
 	<string name="error_downloading">Error Downloading</string>
 	<string name="expanded_group">Expanded Group</string>
@@ -85,9 +95,10 @@
 	<string name="image_file_missing">Image File: %s is missing.</string>
 	<string name="image_file_invalid">File: %s is not a valid image file.</string>
 	<string name="invalid_answer_error">Sorry, this response is invalid!</string>
-	<string name="jump_to_beginning">Jump To Beginning</string>
-	<string name="jump_to_end">Jump To End</string>
 	<string name="latitude">Latitude</string>
+	<string name="jump_to_beginning">Go To Start</string>
+	<string name="jump_to_previous">Go Up</string>
+	<string name="jump_to_end">Go To End</string>
 	<string name="leave_repeat_yes">Do Not Add</string>
 	<string name="leaving_repeat">Add Group</string>
 	<string name="leaving_repeat_ask">And One More Group?</string>
@@ -98,7 +109,8 @@
 	<string name="location_accuracy">Accuracy is %s meters.</string>
 	<string name="longitude">Longitude</string>
 	<string name="main_menu">Main Menu</string>
-	<string name="main_menu_details">Magnifying human resources with technology.</string>
+	<string name="main_menu_details">Magnifying human resources with technology
+	</string>
 	<string name="main_menu_message">ODK Collect v1.1.5</string>
 	<string name="manage_files">Manage Forms And Data</string>
 	<string name="no">No</string>
@@ -122,8 +134,8 @@
 	<string name="replace_video">Replace Video</string>
 	<string name="required_answer_error">Sorry, this response is required!</string>
 	<string name="review">review</string>
-	<string name="review_data">Continue Saved Data</string>
-	<string name="review_data_button">Continue Saved Data (%s)</string>
+	<string name="review_data">Continue Saved Form</string>
+	<string name="review_data_button">Continue Saved Form (%s)</string>
 	<string name="saved_data">Incomplete (%s)</string>
 	<string name="save_all_answers">Save Data</string>
 	<string name="save_data_message">Please save data to keep your responses.</string>
@@ -134,8 +146,8 @@
 	<string name="send">send</string>
 	<string name="send_data">Send Saved Data</string>
 	<string name="send_data_button">Send Saved Data (%s)</string>
-	<string name="send_selected_data">Send Selected File(s)</string>
 	<string name="sending_items">Sending %s of %s item(s)"</string>
+	<string name="send_selected_data">Send Selected</string>
 	<string name="server">Server</string>
 	<string name="server_preferences">Server Preferences</string>
 	<string name="toggle_selected">Select All</string>
@@ -144,6 +156,8 @@
 	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
 	<string name="url_error">Sorry, invalid URL!</string>
 	<string name="username">Username</string>
-	<string name="view_hierarchy">Jump To Prompt</string>
+	<string name="view_hierarchy">Go To Prompt</string>
 	<string name="yes">Yes</string>
+	<string name="forms">Forms</string>
+	<string name="get_forms">Fetch New Forms</string>
 </resources>

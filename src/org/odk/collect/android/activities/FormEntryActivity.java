@@ -146,7 +146,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_entry);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.loading_form));
 
         // mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
