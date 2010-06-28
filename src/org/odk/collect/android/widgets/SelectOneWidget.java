@@ -86,7 +86,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
                 r.setId(i + RANDOM_BUTTON_ID);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
-                this.buttons.add(r);
+                buttons.add(r);
 
                 if (mItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
