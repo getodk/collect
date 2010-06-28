@@ -18,6 +18,8 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.util.externalizable.DeserializationException;
 import org.javarosa.core.util.externalizable.ExtUtil;
@@ -26,6 +28,7 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.os.AsyncTask;
@@ -131,6 +134,19 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
             importData(instancePath, fec);
         } else {
             fd.initialize(true);
+        }
+        
+
+        // set paths to /sdcard/odk/forms/formfilename-media/
+        // This is a singleton, how do we ensure that we're not doing this
+        // multiple times?
+        String mediaPath = formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media";
+        if (ReferenceManager._().getFactories().length == 0) {
+            ReferenceManager._().addReferenceFactory(new FileReferenceFactory("sdcard/odk/forms/" + mediaPath));
+            ReferenceManager._().addRootTranslator(
+                new RootTranslator("jr://images/", "jr://file/"));
+            ReferenceManager._().addRootTranslator(
+                new RootTranslator("jr://audio/", "jr://file/"));
         }
 
         // clean up vars
