@@ -110,7 +110,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
                 if (fd == null) {
                     return null;
                 }
-                fd.setEvaluationContext(new EvaluationContext());
                 serializeFormDef(fd, formPath);
 
             } catch (FileNotFoundException e) {
@@ -121,6 +120,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
             }
         }
 
+        // new evaluation context for function handlers
+        EvaluationContext ec = new EvaluationContext();
+        fd.setEvaluationContext(ec);
+        
         // create FormEntryController from formdef
         FormEntryModel fem = new FormEntryModel(fd);
         fec = new FormEntryController(fem);
