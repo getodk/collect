@@ -335,7 +335,7 @@ public class FormHierarchyActivity extends ListActivity {
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         itla.setListItems(formList);
         setListAdapter(itla);
-        this.getListView().setSelection(position);
+        getListView().setSelection(position);
     }
 
 

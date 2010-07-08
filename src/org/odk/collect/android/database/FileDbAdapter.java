@@ -433,6 +433,9 @@ public class FileDbAdapter {
             // loop through forms on sdcard.
             if (storedForms != null) {
                 for (String formPath : storedForms) {
+                    // only add forms
+                    if (!(formPath.endsWith(".xml") || formPath.endsWith(".xhtml")))
+                        continue;
 
                     // hash of raw form
                     hash = FileUtils.getMd5Hash(new File(formPath));

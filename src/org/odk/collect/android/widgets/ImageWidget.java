@@ -207,10 +207,10 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
                     c.moveToFirst();
                     String id = c.getString(c.getColumnIndex("_id"));
 
-                    Log.e(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
+                    Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
 
                     i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
-                    ((Activity) getContext()).startActivity(i);
+                    getContext().startActivity(i);
 
                 }
                 c.close();

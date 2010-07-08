@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public class FileUtils {
     private final static String t = "FileUtils";
 
-    
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
@@ -241,8 +240,38 @@ public class FileUtils {
 
     public static String getMd5Hash(File file) {
         try {
+            // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(getFileAsBytes(file));
+            int chunkSize = 256;
+
+            byte[] chunk = new byte[chunkSize];
+
+            // Get the size of the file
+            long lLength = file.length();
+
+            if (lLength > Integer.MAX_VALUE) {
+                Log.e(t, "File " + file.getName() + "is too large");
+                return null;
+            }
+
+            int length = (int) lLength;
+
+            InputStream is = null;
+            is = new FileInputStream(file);
+
+            int l = 0;
+            for (l = 0; l + chunkSize < length; l += chunkSize) {
+                is.read(chunk, 0, chunkSize);
+                md.update(chunk, 0, chunkSize);
+            }
+
+            int remaining = length - l;
+            if (remaining > 0) {
+                is.read(chunk, 0, remaining);
+                md.update(chunk, 0, remaining);
+            }
+            byte[] messageDigest = md.digest();
+
             BigInteger number = new BigInteger(1, messageDigest);
             String md5 = number.toString(16);
             while (md5.length() < 32)
@@ -253,7 +282,14 @@ public class FileUtils {
             Log.e("MD5", e.getMessage());
             return null;
 
+        } catch (FileNotFoundException e) {
+            Log.e("No Cache File", e.getMessage());
+            return null;
+        } catch (IOException e) {
+            Log.e("Problem reading from file", e.getMessage());
+            return null;
         }
+
     }
 
 }

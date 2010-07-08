@@ -5,9 +5,13 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -19,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This layout is used anywhere we can have text/audio/video. TODO: It would probably be nice to put
+ * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice to put
  * this in a layout.xml file of some sort at some point.
  * 
  * @author carlhartung
@@ -108,7 +112,7 @@ public class IAVTLayout extends RelativeLayout {
             addView(mVideoButton, videoParams);
         }
         textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        this.addView(text, textParams);
+        addView(text, textParams);
 
         // TODO: Make it so clicking on the image brings up an imageviewer.
         // Now set up the image view
@@ -116,7 +120,7 @@ public class IAVTLayout extends RelativeLayout {
         if (imageURI != null) {
             try {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
-                File imageFile = new File(imageFilename);
+                final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     Bitmap b =
                         BitmapFactory.decodeStream(ReferenceManager._().DeriveReference(imageURI)
@@ -132,7 +136,16 @@ public class IAVTLayout extends RelativeLayout {
                             imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
                         if (mVideoButton != null)
                             imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
-                        this.addView(mImageView, imageParams);
+                        mImageView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent("android.intent.action.VIEW");
+                                i.setDataAndType(Uri.fromFile(imageFile), "image/*");
+                                getContext().startActivity(i);
+                            }
+                            
+                        });
+                        addView(mImageView, imageParams);
                     } else {
                         // Loading the image failed, so it's likely a bad file.
                         errorMsg = getContext().getString(R.string.image_file_invalid, imageFile);
@@ -155,7 +168,7 @@ public class IAVTLayout extends RelativeLayout {
                         imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
                     mMissingImage.setPadding(10, 10, 10, 10);
                     mMissingImage.setId(234873453);
-                    this.addView(mMissingImage, imageParams);
+                    addView(mMissingImage, imageParams);
                 }
             } catch (IOException e) {
                 Log.e(t, "Image io exception");
