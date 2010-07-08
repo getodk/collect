@@ -48,7 +48,7 @@ import java.io.IOException;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormLoaderTask extends AsyncTask<String, String, FormEntryController> {
+public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private final static String t = "FormLoaderTask";
     /**
      * Classes needed to serialize objects
@@ -77,9 +77,29 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
                 "org.javarosa.xpath.expr.XPathUnionExpr",
                 "org.javarosa.xpath.expr.XPathVariableReference"
         };
-    
-    
+
     FormLoaderListener mStateListener;
+
+    protected class FECWrapper {
+        FormEntryController controller;
+
+
+        protected FECWrapper(FormEntryController controller) {
+            this.controller = controller;
+        }
+
+
+        protected FormEntryController getController() {
+            return controller;
+        }
+
+
+        protected void free() {
+            controller = null;
+        }
+    }
+
+    FECWrapper data;
 
 
     /**
@@ -87,7 +107,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
      * an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
-    protected FormEntryController doInBackground(String... path) {
+    protected FECWrapper doInBackground(String... path) {
         FormEntryController fec = null;
         FormDef fd = null;
         FileInputStream fis = null;
@@ -96,8 +116,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
         String instancePath = path[1];
 
         File formXml = new File(formPath);
-        File formBin =
-            new File(FileUtils.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
+        File formBin = new File(FileUtils.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -135,18 +154,18 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
         } else {
             fd.initialize(true);
         }
-        
 
         // set paths to /sdcard/odk/forms/formfilename-media/
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
-        String mediaPath = formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media";
+        String mediaPath =
+            formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media";
         if (ReferenceManager._().getFactories().length == 0) {
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory("sdcard/odk/forms/" + mediaPath));
-            ReferenceManager._().addRootTranslator(
-                new RootTranslator("jr://images/", "jr://file/"));
-            ReferenceManager._().addRootTranslator(
-                new RootTranslator("jr://audio/", "jr://file/"));
+            ReferenceManager._().addReferenceFactory(
+                new FileReferenceFactory("sdcard/odk/forms/" + mediaPath));
+            ReferenceManager._()
+                    .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
+            ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
         }
 
         // clean up vars
@@ -157,7 +176,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
         formPath = null;
         instancePath = null;
 
-        return fec;
+        data = new FECWrapper(fec);
+        return data;
+
     }
 
 
@@ -264,10 +285,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
 
 
     @Override
-    protected void onPostExecute(FormEntryController fec) {
+    protected void onPostExecute(FECWrapper wrapper) {
         synchronized (this) {
             if (mStateListener != null)
-                mStateListener.loadingComplete(fec);
+                mStateListener.loadingComplete(wrapper.getController());
         }
     }
 
@@ -277,4 +298,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormEntryControlle
             mStateListener = sl;
         }
     }
+
+
+    public void destroy() {
+        data.free();
+        data = null;
+    }
+
 }

@@ -635,7 +635,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mRelativeLayout.addView(mCurrentView, lp);
 
         mCurrentView.startAnimation(mInAnimation);
-        if (mCurrentView instanceof QuestionView)
+        if (mCurrentView instanceof QuestionView
+                && !mFormEntryModel.getQuestionPrompt().isReadOnly())
             ((QuestionView) mCurrentView).setFocus(this);
         else {
             InputMethodManager inputManager =
@@ -1197,11 +1198,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     @Override
     protected void onDestroy() {
-        if (mFormLoaderTask != null)
+        Log.e("carl", "on destroy");
+        if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(null);
-        if (mSaveToDiskTask != null)
+            // We have to call cancel to terminate the thread, otherwise it lives on and retains the
+            // FEC in memory.
+            mFormLoaderTask.cancel(true);
+            mFormLoaderTask.destroy();
+        }
+        if (mSaveToDiskTask != null) {
+            // We have to call cancel to terminate the thread, otherwise it lives on and retains the
+            // FEC in memory.
+            mSaveToDiskTask.cancel(false);
             mSaveToDiskTask.setFormSavedListener(null);
+        }
+        
         super.onDestroy();
+
     }
 
 

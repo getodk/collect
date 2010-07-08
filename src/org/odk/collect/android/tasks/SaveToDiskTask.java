@@ -44,12 +44,11 @@ import java.io.InputStream;
  */
 public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private final static String t = "SaveToDiskTask";
-    
+
     private FormSavedListener mSavedListener;
     private String mInstancePath;
     private Context mContext;
     private Boolean mSave;
-    private FormEntryController mFormEntryController = FormEntryActivity.mFormEntryController;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -71,7 +70,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return validateStatus;
         }
 
-        mFormEntryController.getModel().getForm().postProcessInstance();
+        FormEntryActivity.mFormEntryController.getModel().getForm().postProcessInstance();
 
         if (mSave && exportData(mInstancePath, mContext)) {
             return SAVED_AND_EXIT;
@@ -90,7 +89,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         try {
 
             // assume no binary data inside the model.
-            FormInstance datamodel = mFormEntryController.getModel().getForm().getInstance();
+            FormInstance datamodel = FormEntryActivity.mFormEntryController.getModel().getForm().getInstance();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
@@ -199,25 +198,27 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
     private int validateAnswers() {
 
-        FormEntryModel fem = mFormEntryController.getModel();
+        FormEntryModel fem = FormEntryActivity.mFormEntryController.getModel();
         FormIndex i = fem.getFormIndex();
 
-        mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        FormEntryActivity.mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
         int event;
-        while ((event = mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
+        while ((event = FormEntryActivity.mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
             if (event != FormEntryController.EVENT_QUESTION) {
                 continue;
             } else {
                 int saveStatus =
-                    mFormEntryController.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
+                    FormEntryActivity.mFormEntryController.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
                 if (saveStatus != FormEntryController.ANSWER_OK) {
                     return saveStatus;
                 }
             }
         }
 
-        mFormEntryController.jumpToIndex(i);
+        FormEntryActivity.mFormEntryController.jumpToIndex(i);
         return VALIDATED;
     }
+
+
 }
