@@ -59,8 +59,7 @@ public class DataManagerList extends ListActivity {
         mSendButton.setText(getString(R.string.send_data));
         mSendButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceUploaderActivity.class);
-                i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
+                Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
                 startActivity(i);
             }
         });
