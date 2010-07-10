@@ -62,7 +62,8 @@
 	<string name="downloading_data">Connecting to Server</string>
 	<string name="download_all_successful">All forms downloaded successfully.</string>
 	<string name="download_some_failed">Sorry, %s form(s) not downloaded!</string>
-	<string name="download_failed_with_error">Form \"%s\" failed with error: %s</string>
+	<string name="download_failed_with_error">Form \"%s\" failed. %s.</string>
+	<string name="list_failed_with_error">Form listing failed. %s.</string>
 	<string name="do_not_change">Do Not Change</string>
 	<string name="do_not_exit">Do Not Exit</string>
 	<string name="do_not_save">Discard Changes And Exit</string>
@@ -78,10 +79,10 @@
 	<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
 	<string name="error_downloading">Error Getting Form</string>
 	<string name="expanded_group">Expanded Group</string>
-	<string name="fetching_file">"Getting \"%s\".\nForm %s of %s form(s)..."</string>
+	<string name="fetching_file">"Getting \"%s\".\n\nForm %s of %s form(s)..."</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 	<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
-	<string name="file_download_error">File %s failed with error: %s</string>
+	<string name="file_download_error">File %s failed. %s</string>
 	<string name="finalize_for_send">Save As Complete</string>
 	<string name="form">Form</string>
 	<string name="form_path">Form Path: /</string>
@@ -150,7 +151,7 @@
 	<string name="send_selected_data">Send Selected</string>
 	<string name="server">Server</string>
 	<string name="server_preferences">Server Preferences</string>
-	<string name="toggle_selected">Select All</string>
+	<string name="toggle_selected">Toggle All</string>
 	<string name="uploading_data">Sending Data</string>
 	<string name="upload_all_successful">%s item(s) sent successfully.</string>
 	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>

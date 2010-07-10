@@ -122,6 +122,7 @@ public class FileDbAdapter {
 
     public void close() {
         mDbHelper.close();
+        mDb.close();
     }
 
 
@@ -267,6 +268,8 @@ public class FileDbAdapter {
                     null, null, null, null);
         }
         if (c != null) {
+            // deactivate cursor before finalizing
+            c.deactivate();
             c.moveToFirst();
         }
         return c;

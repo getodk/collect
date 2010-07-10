@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -151,13 +153,18 @@ public class DownloadFormsTask extends
                         }
                         c.close();
                     }
-                } catch (IOException e) {
+ 
+                } catch (SocketTimeoutException se) {
+                    se.printStackTrace();
+                    result.put(DL_FORM, form);
+                    result.put(DL_ERROR_MSG, "Unknown timeout exception");
+                    break;
+                } catch (Exception e) {
                     e.printStackTrace();
                     result.put(DL_FORM, form);
-                    result.put(DL_ERROR_MSG, e.getMessage());
+                    result.put(DL_ERROR_MSG, e.getLocalizedMessage());
                     break;
                 }
-
                 count++;
             }
 
@@ -165,7 +172,6 @@ public class DownloadFormsTask extends
                 // addOrphanForms will remove duplicates, and add new forms to the database
                 fda.addOrphanForms();
                 fda.close();
-                fda = null;
             }
 
             return result;

@@ -59,6 +59,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_TOGGLED_KEY = "toggled";
+    private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_LIST = "formlist";
     private static final String DIALOG_TITLE = "dialogtitle";
     private static final String DIALOG_MSG = "dialogmsg";
@@ -68,6 +69,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
     private String mAlertMsg;
     private boolean mAlertShowing = false;
+    private boolean mSuccess = false;
     private String mAlertTitle;
 
     private AlertDialog mAlertDialog;
@@ -82,6 +84,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     private ArrayAdapter<String> mFileAdapter;
 
     private boolean mToggled = false;
+    private int mSelectedCount = 0;
 
     private int totalCount;
 
@@ -108,12 +111,16 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
 
                 for (int pos = 0; pos < ls.getCount(); pos++)
                     ls.setItemChecked(pos, mToggled);
+
+                mActionButton.setEnabled(!(selectedItemCount() == 0));
+
             }
         });
 
@@ -136,6 +143,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
             }
 
+            // how many items we've selected
+            if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
+                mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
+                mActionButton.setEnabled(!(mSelectedCount == 0));
+
+            }
+
             // to restore alert dialog.
             if (savedInstanceState.containsKey(DIALOG_TITLE)) {
                 mAlertTitle = savedInstanceState.getString(DIALOG_TITLE);
@@ -146,6 +160,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             if (savedInstanceState.containsKey(DIALOG_SHOWING)) {
                 mAlertShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
             }
+
         }
 
         if (mAlertShowing) {
@@ -163,6 +178,14 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             }
             buildView();
         }
+
+    }
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        mActionButton.setEnabled(!(selectedItemCount() == 0));
     }
 
 
@@ -195,10 +218,23 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(BUNDLE_TOGGLED_KEY, mToggled);
+        outState.putInt(BUNDLE_SELECTED_COUNT, selectedItemCount());
         outState.putSerializable(BUNDLE_FORM_LIST, mFormNamesAndURLs);
         outState.putString(DIALOG_TITLE, mAlertTitle);
         outState.putString(DIALOG_MSG, mAlertMsg);
         outState.putBoolean(DIALOG_SHOWING, mAlertShowing);
+    }
+
+
+    private int selectedItemCount() {
+        int count = 0;
+        SparseBooleanArray sba = getListView().getCheckedItemPositions();
+        for (int i = 0; i < getListView().getCount(); i++) {
+            if (sba.get(i, false)) {
+                count++;
+            }
+        }
+        return count;
     }
 
 
@@ -211,12 +247,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         setListAdapter(mFileAdapter);
         getListView().setItemsCanFocus(false);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        if (mFileAdapter.getCount() == 0) {
-            mActionButton.setEnabled(false);
-        } else {
-            mActionButton.setEnabled(true);
-
-        }
     }
 
 
@@ -259,6 +289,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                     };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
                 mProgressDialog.setMessage(getString(R.string.please_wait));
+                mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
@@ -358,6 +389,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                                 " " + getString(R.string.form_renamed, form, result.get(form));
                         }
                     }
+                    mSuccess = true;
                 } else {
                     // Download of at least one form had an error
                     String formName = result.get(DownloadFormsTask.DL_FORM);
@@ -366,6 +398,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                     dialogMessage =
                         getString(R.string.download_failed_with_error, formName, errorMsg);
                     dialogTitle = getString(R.string.error_downloading);
+                    mSuccess = false;
                 }
                 createAlertDialog(dialogTitle, dialogMessage);
             } else {
@@ -373,10 +406,16 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 if (!result.containsKey(DownloadFormsTask.DL_ERROR_MSG)) {
                     // Download succeeded
                     mFormNamesAndURLs = result;
+                    mSuccess = true;
                 } else {
                     // Download failed
-                    createAlertDialog(getString(R.string.load_remote_form_error), (String) result
-                            .get(DownloadFormsTask.DL_ERROR_MSG));
+                    dialogMessage =
+                        getString(R.string.list_failed_with_error, result
+                                .get(DownloadFormsTask.DL_ERROR_MSG));
+                    dialogTitle = getString(R.string.load_remote_form_error);
+                    createAlertDialog(dialogTitle, dialogMessage);
+
+                    mSuccess = false;
                 }
 
             }
@@ -397,12 +436,22 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                     case DialogInterface.BUTTON1: // ok
                         // just close the dialog
                         mAlertShowing = false;
+                        // successful download, so quit
+                        if (mSuccess) {
+                            finish();
+                        }
+
                         break;
                 }
             }
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), quitListener);
+        if (mSuccess) {
+            mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        } else {
+            mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
         mAlertShowing = true;
         mAlertMsg = message;
         mAlertTitle = title;

@@ -96,6 +96,7 @@ public class InstanceUploaderList extends ListActivity {
                     if (mToggled)
                         mSelected.add(ls.getItemIdAtPosition(pos));
                 }
+                mActionButton.setEnabled(!(mSelected.size() == 0));
 
             }
         });
