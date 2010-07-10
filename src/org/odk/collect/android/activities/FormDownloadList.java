@@ -91,6 +91,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_forms));
 
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);

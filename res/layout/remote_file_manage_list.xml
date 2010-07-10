@@ -38,7 +38,7 @@ the License.
      
       <Button 
     android:id="@+id/refresh_button"
-    android:text="Refresh"
+    android:text="@string/refresh"
       android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:padding="12px"
@@ -47,7 +47,7 @@ android:layout_weight="1"      />
      
     <Button 
     android:id="@+id/add_button"
-    android:text="Download"
+    android:text="@string/download"
       android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:padding="12px"

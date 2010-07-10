@@ -20,6 +20,7 @@ import org.odk.collect.android.database.FileDbAdapter;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +42,8 @@ public class DataManagerList extends ListActivity {
 
     private AlertDialog mAlertDialog;
     private Button mActionButton;
+    private Button mSendButton;
+
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -51,6 +54,17 @@ public class DataManagerList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_manage_list);
+        
+        mSendButton = (Button) findViewById(R.id.send_button);
+        mSendButton.setText(getString(R.string.send_data));
+        mSendButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), InstanceUploaderActivity.class);
+                i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
+                startActivity(i);
+            }
+        });
+        
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setText(getString(R.string.delete_file));
         mActionButton.setOnClickListener(new OnClickListener() {
@@ -135,8 +149,8 @@ public class DataManagerList extends ListActivity {
 
             };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.no), dialogYesNoListener);
+        mAlertDialog.setButton(getString(R.string.delete_yes), dialogYesNoListener);
+        mAlertDialog.setButton2(getString(R.string.delete_no), dialogYesNoListener);
         mAlertDialog.show();
     }
 

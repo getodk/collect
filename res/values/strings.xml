@@ -58,11 +58,11 @@
 	<string name="delete_repeat_no">Do Not Remove</string>
 	<string name="discard_answer">Remove Response</string>
 	<string name="discard_group">Remove Group</string>
-	<string name="download_complete">Download Complete</string>
-	<string name="downloading_data">Fetching List</string>
-	<string name="download_all_successful">All downloads completed successfully.</string>
-	<string name="download_some_failed">Sorry, %s item(s) not fetched!</string>
-	<string name="download_failed_with_error">File %s failed with error: %s</string>
+	<string name="download_complete">Form Get Complete</string>
+	<string name="downloading_data">Connecting to Server</string>
+	<string name="download_all_successful">All forms downloaded successfully.</string>
+	<string name="download_some_failed">Sorry, %s form(s) not downloaded!</string>
+	<string name="download_failed_with_error">Form \"%s\" failed with error: %s</string>
 	<string name="do_not_change">Do Not Change</string>
 	<string name="do_not_exit">Do Not Exit</string>
 	<string name="do_not_save">Discard Changes And Exit</string>
@@ -76,9 +76,9 @@
 		screen as if turning pages in a book. Press the Menu button for more
 		choices.</string>
 	<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
-	<string name="error_downloading">Error Downloading</string>
+	<string name="error_downloading">Error Getting Form</string>
 	<string name="expanded_group">Expanded Group</string>
-	<string name="fetching_file">"Fetching %s.\nFile %s of %s item(s)..."</string>
+	<string name="fetching_file">"Getting \"%s\".\nForm %s of %s form(s)..."</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 	<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 	<string name="file_download_error">File %s failed with error: %s</string>
@@ -104,7 +104,7 @@
 	<string name="leaving_repeat_ask">And One More Group?</string>
 	<string name="loading_form">Loading Form...</string>
 	<string name="load_error">Sorry, unable to load form %s</string>
-	<string name="load_remote_form_error">Sorry, unable to load remote form list!</string>
+	<string name="load_remote_form_error">Error Getting Form List</string>
 	<string name="local_files">Local</string>
 	<string name="location_accuracy">Accuracy is %s meters.</string>
 	<string name="longitude">Longitude</string>
@@ -159,5 +159,9 @@
 	<string name="view_hierarchy">Go To Prompt</string>
 	<string name="yes">Yes</string>
 	<string name="forms">Forms</string>
-	<string name="get_forms">Fetch New Forms</string>
+	<string name="get_forms">Get New Forms</string>
+	<string name="refresh">Refresh</string>
+	<string name="download">Get Selected</string>
+	<string name="delete_yes">Delete Items</string>
+	<string name="delete_no">Do Not Delete</string>
 </resources>

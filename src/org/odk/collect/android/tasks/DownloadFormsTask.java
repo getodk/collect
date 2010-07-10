@@ -165,6 +165,7 @@ public class DownloadFormsTask extends
                 // addOrphanForms will remove duplicates, and add new forms to the database
                 fda.addOrphanForms();
                 fda.close();
+                fda = null;
             }
 
             return result;
