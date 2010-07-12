@@ -30,4 +30,16 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>javarosa</name>
+			<type>2</type>
+			<location>/Users/carlhartung/Documents/workspace-android/javarosa/core/src/org</location>
+		</link>
+		<link>
+			<name>javarosa-core</name>
+			<type>2</type>
+			<location>/Users/carlhartung/Documents/workspace-android/javarosa/core/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
