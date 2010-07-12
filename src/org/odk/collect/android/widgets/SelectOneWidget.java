@@ -24,6 +24,7 @@ import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -40,6 +41,10 @@ import java.util.Vector;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+/*
+ * TODO: We're not actually using the RadioGroup anymore, so this should probably be changed to a
+ * LinearLayout
+ */
 public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCheckedChangeListener {
     private final int RANDOM_BUTTON_ID = 4853487;
     Vector<SelectChoice> mItems;
@@ -53,7 +58,12 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
 
     public void clearAnswer() {
-        clearCheck();
+        for (RadioButton button : this.buttons) {
+            if (button.isChecked()) {
+                button.setChecked(false);
+                return;
+            }
+        }
     }
 
 
