@@ -22,13 +22,21 @@ import org.odk.collect.android.utilities.FileUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
+import android.widget.TableLayout.LayoutParams;
 
 import java.util.ArrayList;
 
@@ -48,6 +56,9 @@ public class MainMenuActivity extends Activity {
 
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
+    
+    // whether or not to show splash display
+    private static boolean mShowSplash = true;
 
     // buttons
     private Button mEnterDataButton;
@@ -60,14 +71,15 @@ public class MainMenuActivity extends Activity {
     private static int mCompletedCount;
     private static int mAvailableCount;
     private static int mFormsCount;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        displaySplash();
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
 
+        
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
@@ -136,6 +148,68 @@ public class MainMenuActivity extends Activity {
         });
     }
 
+    
+    /**
+     * displaySplash
+     * 
+     * Shows the splash screen if the mShowSplash member variable is true.
+     * Otherwise a no-op.
+     */
+    void displaySplash() {
+    	if ( ! mShowSplash ) return; 
+    	
+    	// create ImageView to hold bitmap and load bitmap into it...
+    	ImageView v = new ImageView(getApplicationContext());
+        Drawable image = null;
+        try {
+        	String path = FileUtils.CONFIG_PATH;
+    		// try to find a splash screen...
+    		path = FileUtils.SPLASH_SCREEN_FILE_PATH;
+    		BitmapDrawable bitImage = new BitmapDrawable( getResources(), path );
+    		if ( bitImage.getBitmap() != null &&
+    			 bitImage.getIntrinsicHeight() > 0 &&
+    			 bitImage.getIntrinsicWidth() > 0 ) {
+    			image = bitImage;
+    		}
+        }
+        catch (Exception e) {
+        	// TODO: log exception for debugging?
+        }
+        finally {
+        	if ( image == null ) {
+        		// fall-back to our resource if no file or SD card not accessible
+        		image = getResources().getDrawable(R.drawable.opendatakit);
+        	}
+        	// Finally, load bitmap into the ImageView
+        	v.setImageDrawable(image);
+        }
+
+        // set the layout values for the ImageView...
+    	int width = getWindowManager().getDefaultDisplay().getWidth();
+    	int height = getWindowManager().getDefaultDisplay().getHeight();
+    	LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams( width, height, 0 );
+    	v.setLayoutParams(vlp);
+    	v.setScaleType(ScaleType.CENTER);
+    	v.setBackgroundColor(Color.WHITE);
+
+    	// and wrap the image view in a linear layout...
+    	// If we don't, the ImageView gets clipped to the actual image size.
+       	LinearLayout ll = new LinearLayout(getApplicationContext());
+       	{
+        	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+           	ll.setLayoutParams(lp);
+        	ll.setBackgroundColor(Color.TRANSPARENT);
+        	int border = 0;
+        	ll.setPadding(border,border,border,border);
+       	}
+    	ll.addView(v);
+
+    	// Create the toast and set the view to be that of the LinearLayout
+    	Toast t = Toast.makeText(getApplicationContext(), "splash screen", Toast.LENGTH_SHORT);
+    	t.setView(ll);
+    	t.setGravity(Gravity.CENTER, 0, 0);
+    	t.show();
+    }
 
     /*
      * (non-Javadoc)
@@ -148,6 +222,15 @@ public class MainMenuActivity extends Activity {
         updateButtons();
     }
 
+    /**
+     * onStop
+     * Re-enable the splash screen.
+     */
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	mShowSplash = true;
+    }
 
     /**
      * Upon return, check intent for data needed to launch other activities.
@@ -223,8 +306,7 @@ public class MainMenuActivity extends Activity {
         Intent i = new Intent(this, ServerPreferences.class);
         startActivity(i);
     }
-
-
+ 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
