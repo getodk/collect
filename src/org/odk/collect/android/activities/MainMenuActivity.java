@@ -32,11 +32,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
-import android.widget.TableLayout.LayoutParams;
 
 import java.util.ArrayList;
 
@@ -57,7 +56,7 @@ public class MainMenuActivity extends Activity {
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
     
-    // whether or not to show splash display
+    // true if splash screen should be shown during onCreate
     private static boolean mShowSplash = true;
 
     // buttons
@@ -158,14 +157,12 @@ public class MainMenuActivity extends Activity {
     void displaySplash() {
     	if ( ! mShowSplash ) return; 
     	
-    	// create ImageView to hold bitmap and load bitmap into it...
-    	ImageView v = new ImageView(getApplicationContext());
+    	// fetch the splash screen Drawable
         Drawable image = null;
         try {
-        	String path = FileUtils.CONFIG_PATH;
-    		// try to find a splash screen...
-    		path = FileUtils.SPLASH_SCREEN_FILE_PATH;
-    		BitmapDrawable bitImage = new BitmapDrawable( getResources(), path );
+        	// attempt to load the configured default splash screen
+    		BitmapDrawable bitImage = new BitmapDrawable( getResources(), 
+    										FileUtils.SPLASH_SCREEN_FILE_PATH );
     		if ( bitImage.getBitmap() != null &&
     			 bitImage.getIntrinsicHeight() > 0 &&
     			 bitImage.getIntrinsicWidth() > 0 ) {
@@ -180,33 +177,27 @@ public class MainMenuActivity extends Activity {
         		// fall-back to our resource if no file or SD card not accessible
         		image = getResources().getDrawable(R.drawable.opendatakit);
         	}
-        	// Finally, load bitmap into the ImageView
-        	v.setImageDrawable(image);
         }
 
-        // set the layout values for the ImageView...
+        // create ImageView to hold the Drawable...
+    	ImageView view = new ImageView(getApplicationContext());
+    	// initialize it with Drawable and full-screen layout parameters
+    	view.setImageDrawable(image);
     	int width = getWindowManager().getDefaultDisplay().getWidth();
     	int height = getWindowManager().getDefaultDisplay().getHeight();
-    	LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams( width, height, 0 );
-    	v.setLayoutParams(vlp);
-    	v.setScaleType(ScaleType.CENTER);
-    	v.setBackgroundColor(Color.WHITE);
+    	FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams( width, height, 0 );
+    	view.setLayoutParams(lp);
+    	view.setScaleType(ScaleType.CENTER);
+    	view.setBackgroundColor(Color.WHITE);
 
-    	// and wrap the image view in a linear layout...
-    	// If we don't, the ImageView gets clipped to the actual image size.
-       	LinearLayout ll = new LinearLayout(getApplicationContext());
-       	{
-        	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-           	ll.setLayoutParams(lp);
-        	ll.setBackgroundColor(Color.TRANSPARENT);
-        	int border = 0;
-        	ll.setPadding(border,border,border,border);
-       	}
-    	ll.addView(v);
+    	// and wrap the image view in a frame layout so that the 
+    	// full-screen layout parameters are honored...
+    	FrameLayout layout = new FrameLayout(getApplicationContext());
+    	layout.addView(view);
 
-    	// Create the toast and set the view to be that of the LinearLayout
+    	// Create the toast and set the view to be that of the FrameLayout
     	Toast t = Toast.makeText(getApplicationContext(), "splash screen", Toast.LENGTH_SHORT);
-    	t.setView(ll);
+    	t.setView(layout);
     	t.setGravity(Gravity.CENTER, 0, 0);
     	t.show();
     }
