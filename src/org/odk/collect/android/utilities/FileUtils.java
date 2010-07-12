@@ -41,6 +41,8 @@ public class FileUtils {
     // Storage paths
     public static final String FORMS_PATH = Environment.getExternalStorageDirectory() + "/odk/forms/";
     public static final String INSTANCES_PATH = Environment.getExternalStorageDirectory() + "/odk/instances/";
+    public static final String CONFIG_PATH = Environment.getExternalStorageDirectory() + "/odk/config/";
+    public static final String SPLASH_SCREEN_FILE_PATH = CONFIG_PATH + "default/splash.png";
     public static final String CACHE_PATH = Environment.getExternalStorageDirectory() + "/odk/.cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 

@@ -29,5 +29,10 @@ the License.
     android:minHeight="20dip" 
     android:maxHeight="20dip"
     android:layout_alignParentBottom="true" /> 
-    
+<ImageView
+    android:src="@+drawable/poweredby"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true" />
 </RelativeLayout>
