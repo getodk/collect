@@ -19,12 +19,12 @@ import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -106,10 +106,17 @@ public class DownloadFormsTask extends
                 if (doc != null) {
                     NodeList formElements = doc.getElementsByTagName("form");
                     formCount = formElements.getLength();
+                    Node n;
+                    NodeList childList;
+                    NamedNodeMap attrMap;
                     for (int i = 0; i < formCount; i++) {
-                        Node n = formElements.item(i);
-                        formList.put(n.getChildNodes().item(0).getNodeValue() + ".xml", n
-                                .getAttributes().item(0).getNodeValue());
+                        n = formElements.item(i);
+                        childList = n.getChildNodes();
+                        attrMap = n.getAttributes();
+                        if (childList.getLength() > 0 && attrMap.getLength() > 0) {
+                            formList.put(childList.item(0).getNodeValue() + ".xml", attrMap.item(0).getNodeValue());
+                        }
+                        
                     }
                 }
             } catch (IOException e) {
