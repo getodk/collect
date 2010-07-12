@@ -23,6 +23,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 
@@ -79,7 +80,8 @@ public class FileDbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_PATH = "/sdcard/odk/metadata";
+    private static final String DATABASE_PATH =
+        Environment.getExternalStorageDirectory() + "/odk/metadata";
 
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 

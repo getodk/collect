@@ -39,9 +39,9 @@ public class FileUtils {
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
     // Storage paths
-    public static final String FORMS_PATH = "/sdcard/odk/forms/";
-    public static final String INSTANCES_PATH = "/sdcard/odk/instances/";
-    public static final String CACHE_PATH = "/sdcard/odk/.cache/";
+    public static final String FORMS_PATH = Environment.getExternalStorageDirectory() + "/odk/forms/";
+    public static final String INSTANCES_PATH = Environment.getExternalStorageDirectory() + "/odk/instances/";
+    public static final String CACHE_PATH = Environment.getExternalStorageDirectory() + "/odk/.cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
 
@@ -70,6 +70,11 @@ public class FileUtils {
     }
 
 
+    /**
+     * 
+     * @param path
+     * @return list of files that are not hidden and not directories.
+     */
     public static ArrayList<String> getFilesAsArrayList(String path) {
         ArrayList<String> mFileList = new ArrayList<String>();
         File root = new File(path);
@@ -87,7 +92,7 @@ public class FileUtils {
             for (File child : children) {
                 String filename = child.getName();
                 // no hidden files
-                if (!filename.startsWith(".")) {
+                if (!(filename.startsWith(".") || child.isDirectory())) {
                     mFileList.add(child.getAbsolutePath());
                 }
             }
@@ -100,6 +105,8 @@ public class FileUtils {
         }
         return mFileList;
     }
+    
+    
 
 
     public static ArrayList<String> getFilesAsArrayListRecursive(String path) {

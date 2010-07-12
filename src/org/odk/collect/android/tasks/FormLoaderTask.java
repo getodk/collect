@@ -32,6 +32,7 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.DataInputStream;
@@ -145,7 +146,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // new evaluation context for function handlers
         EvaluationContext ec = new EvaluationContext();
         fd.setEvaluationContext(ec);
-        
+
         // create FormEntryController from formdef
         FormEntryModel fem = new FormEntryModel(fd);
         fec = new FormEntryController(fem);
@@ -165,7 +166,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media";
         if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
-                new FileReferenceFactory("sdcard/odk/forms/" + mediaPath));
+                new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"
+                        + mediaPath));
             ReferenceManager._()
                     .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
             ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
