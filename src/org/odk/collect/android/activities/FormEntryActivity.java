@@ -626,7 +626,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         RelativeLayout.LayoutParams lp =
             new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
+        // lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
 
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, lp);
