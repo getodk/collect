@@ -22,15 +22,24 @@ import org.odk.collect.android.utilities.FileUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -49,6 +58,9 @@ public class MainMenuActivity extends Activity {
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
+    // true if splash screen should be shown during onCreate
+    private static boolean mShowSplash = true;
+
     // buttons
     private Button mEnterDataButton;
     private Button mManageFilesButton;
@@ -60,14 +72,15 @@ public class MainMenuActivity extends Activity {
     private static int mCompletedCount;
     private static int mAvailableCount;
     private static int mFormsCount;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
+        displaySplash();
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
 
+        
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
@@ -136,6 +149,59 @@ public class MainMenuActivity extends Activity {
         });
     }
 
+    
+    /**
+     * displaySplash
+     * 
+     * Shows the splash screen if the mShowSplash member variable is true.
+     * Otherwise a no-op.
+     */
+    void displaySplash() {
+    	if ( ! mShowSplash ) return;
+    	
+    	// fetch the splash screen Drawable
+        Drawable image = null;
+        try {
+        	// attempt to load the configured default splash screen
+    		BitmapDrawable bitImage = new BitmapDrawable( getResources(), 
+    										FileUtils.SPLASH_SCREEN_FILE_PATH );
+    		if ( bitImage.getBitmap() != null &&
+    			 bitImage.getIntrinsicHeight() > 0 &&
+    			 bitImage.getIntrinsicWidth() > 0 ) {
+    			image = bitImage;
+    		}
+        }
+        catch (Exception e) {
+        	// TODO: log exception for debugging?
+        }
+        
+        if ( image == null ) {
+        	// no splash provided, so do nothing...
+        	return;
+        }
+
+        // create ImageView to hold the Drawable...
+    	ImageView view = new ImageView(getApplicationContext());
+    	// initialize it with Drawable and full-screen layout parameters
+    	view.setImageDrawable(image);
+    	int width = getWindowManager().getDefaultDisplay().getWidth();
+    	int height = getWindowManager().getDefaultDisplay().getHeight();
+    	FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams( width, height, 0 );
+    	view.setLayoutParams(lp);
+    	view.setScaleType(ScaleType.CENTER);
+    	view.setBackgroundColor(Color.WHITE);
+
+    	// and wrap the image view in a frame layout so that the 
+    	// full-screen layout parameters are honored...
+    	FrameLayout layout = new FrameLayout(getApplicationContext());
+    	layout.addView(view);
+
+    	// Create the toast and set the view to be that of the FrameLayout
+    	Toast t = Toast.makeText(getApplicationContext(), "splash screen", Toast.LENGTH_SHORT);
+    	t.setView(layout);
+    	t.setGravity(Gravity.CENTER, 0, 0);
+    	t.show();
+    }
 
     /*
      * (non-Javadoc)
@@ -148,6 +214,15 @@ public class MainMenuActivity extends Activity {
         updateButtons();
     }
 
+    /**
+     * onStop
+     * Re-enable the splash screen.
+     */
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	mShowSplash = true;
+    }
 
     /**
      * Upon return, check intent for data needed to launch other activities.
@@ -223,8 +298,7 @@ public class MainMenuActivity extends Activity {
         Intent i = new Intent(this, ServerPreferences.class);
         startActivity(i);
     }
-
-
+ 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
