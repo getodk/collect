@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -55,7 +57,7 @@ public class MainMenuActivity extends Activity {
 
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
-    
+
     // true if splash screen should be shown during onCreate
     private static boolean mShowSplash = true;
 
@@ -73,7 +75,7 @@ public class MainMenuActivity extends Activity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
         displaySplash();
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
@@ -155,7 +157,7 @@ public class MainMenuActivity extends Activity {
      * Otherwise a no-op.
      */
     void displaySplash() {
-    	if ( ! mShowSplash ) return; 
+    	if ( ! mShowSplash ) return;
     	
     	// fetch the splash screen Drawable
         Drawable image = null;
@@ -172,11 +174,10 @@ public class MainMenuActivity extends Activity {
         catch (Exception e) {
         	// TODO: log exception for debugging?
         }
-        finally {
-        	if ( image == null ) {
-        		// fall-back to our resource if no file or SD card not accessible
-        		image = getResources().getDrawable(R.drawable.opendatakit);
-        	}
+        
+        if ( image == null ) {
+        	// no splash provided, so do nothing...
+        	return;
         }
 
         // create ImageView to hold the Drawable...

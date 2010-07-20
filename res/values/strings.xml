@@ -20,12 +20,14 @@
 	<string name="add_file">Add Selected File(s)</string>
 	<string name="add_repeat">Add a new \"%s\" group?</string>
 	<string name="add_repeat_no">Do Not Add</string>
+	<string name="advance">advance to next question</string>
 	<string name="altitude">Altitude</string>
 	<string name="app_name">ODK Collect</string>
 	<string name="audio_file_error">No audio file was specified.</string>
 	<string name="audio_file_missing">Audio File: %s is missing.</string>
 	<string name="audio_file_invalid">File: %s is not a valid audio file.</string>
 	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
+	<string name="backup">return to previous question</string>
 	<string name="cancel">Cancel</string>
 	<string name="cancel_loading_form">Stop Loading</string>
 	<string name="cancel_location">Do Not Record</string>
@@ -72,10 +74,6 @@
 	<string name="entering_repeat_ask">Add New Group?</string>
 	<string name="enter_data">Start New Form</string>
 	<string name="enter_data_button">Start New Form (%s)</string>
-	<string name="enter_data_description">%s has been selected.</string>
-	<string name="enter_data_message">To navigate, swipe your finger horizontally on the
-		screen as if turning pages in a book. Press the Menu button for more
-		choices.</string>
 	<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
 	<string name="error_downloading">Error Getting Form</string>
 	<string name="expanded_group">Expanded Group</string>

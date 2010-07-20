@@ -43,6 +43,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +64,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -457,11 +460,32 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                View startView = View.inflate(this, R.layout.form_entry_start, null);
-                setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
-                ((TextView) startView.findViewById(R.id.description)).setText(getString(
-                    R.string.enter_data_description, mFormEntryModel.getFormTitle()));
-                return startView;
+            	View startView;
+			    startView = View.inflate(this, R.layout.form_entry_start, null);
+			    setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
+			    ((TextView) startView.findViewById(R.id.form_full_title)).setText(mFormEntryModel.getFormTitle());
+			    Drawable image = null;
+			    try {
+			    	// attempt to load the configured default splash screen
+					BitmapDrawable bitImage = new BitmapDrawable( getResources(), 
+													FileUtils.FORM_LOGO_FILE_PATH );
+					if ( bitImage.getBitmap() != null &&
+						 bitImage.getIntrinsicHeight() > 0 &&
+						 bitImage.getIntrinsicWidth() > 0 ) {
+						image = bitImage;
+					}
+			    }
+			    catch (Exception e) {
+			    	// TODO: log exception for debugging?
+			    }
+			    
+			    if ( image == null ) {
+			    	// no splash provided, so do nothing...
+			    	image = getResources().getDrawable(R.drawable.opendatakit_zig);
+			    }
+
+			    ((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
+			    return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 ((TextView) endView.findViewById(R.id.description)).setText(getString(
@@ -618,6 +642,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         mInAnimation.setAnimationListener(this);
 
+        RelativeLayout.LayoutParams lp =
+            new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+
         // We must call setMax() first because it doesn't redraw the progress
         // bar.
 
@@ -626,10 +653,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // TODO: make the progress bar fast. Must be done in javarosa.
         // mProgressBar.setMax(mFormEntryModel.getTotalRelevantQuestionCount());
         // mProgressBar.setProgress(mFormEntryModel.getCompletedRelevantQuestionCount());
-
-        RelativeLayout.LayoutParams lp =
-            new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
+        // lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
 
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, lp);
