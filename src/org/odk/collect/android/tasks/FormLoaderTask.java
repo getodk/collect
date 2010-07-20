@@ -164,6 +164,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // multiple times?
         String mediaPath =
             formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media";
+       
         if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
                 new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"
@@ -306,8 +307,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
 
     public void destroy() {
-        data.free();
-        data = null;
+        if (data != null) {
+            data.free();
+            data = null;
+        }
     }
 
 }

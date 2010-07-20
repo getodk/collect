@@ -102,6 +102,12 @@ public class FormHierarchyActivity extends ListActivity {
         FormIndex index = stepIndexOut(mFormEntryModel.getFormIndex());
         int currentEvent = mFormEntryModel.getEvent();
 
+        // Step out of any group indexes that are present.
+        while (index != null
+                && mFormEntryModel.getEvent(index) == FormEntryController.EVENT_GROUP) {
+            index = stepIndexOut(index);
+        }
+        
         if (index == null) {
             mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
@@ -158,17 +164,24 @@ public class FormHierarchyActivity extends ListActivity {
             enclosingGroupName = mFormEntryModel.getCaptionPrompt().getLongText();
             mFormEntryController.stepToNextEvent();
         } else {
-            // Otherwise, check to see if the question is at the first level of the hierarchy. If it
-            // is, display the root level from the beginning.
             FormIndex startTest = stepIndexOut(currentIndex);
+            // If we have a 'group' tag, we want to step back until we hit a repeat or the
+            // beginning.
+            while (startTest != null
+                    && mFormEntryModel.getEvent(startTest) == FormEntryController.EVENT_GROUP) {
+                startTest = stepIndexOut(startTest);
+            }
             if (startTest == null) {
-                // We were at the root
+                // check to see if the question is at the first level of the hierarchy. If it is,
+                // display the root level from the beginning.
                 mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
             } else {
+                // otherwise we're at a repeated group
                 mFormEntryController.jumpToIndex(startTest);
             }
 
-            // now test again for repeat
+            // now test again for repeat. This should be true at this point or we're at the
+            // beginning
             if (mFormEntryModel.getEvent() == FormEntryController.EVENT_REPEAT) {
                 enclosingGroupName = mFormEntryModel.getCaptionPrompt().getLongText();
                 mFormEntryController.stepToNextEvent();
