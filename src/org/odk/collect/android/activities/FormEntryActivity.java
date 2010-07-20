@@ -116,7 +116,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     // uncomment when ProgressBar slowdown is fixed.
     // private ProgressBar mProgressBar;
-
+    
     private String mFormPath;
     private String mInstancePath;
     private GestureDetector mGestureDetector;
