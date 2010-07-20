@@ -480,7 +480,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 			    }
 			    
 			    if ( image == null ) {
-			    	// no splash provided, so do nothing...
+			    	// show the opendatakit zig...
 			    	image = getResources().getDrawable(R.drawable.opendatakit_zig);
 			    }
 
