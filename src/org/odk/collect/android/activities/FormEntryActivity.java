@@ -1222,6 +1222,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     @Override
     protected void onDestroy() {
+        Log.e("carl", "on destroy");
         if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it lives on and retains the
