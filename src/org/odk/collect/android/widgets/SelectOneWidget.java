@@ -24,7 +24,6 @@ import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;

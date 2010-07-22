@@ -44,6 +44,26 @@ public class FileUtils {
     public static final String CACHE_PATH = Environment.getExternalStorageDirectory() + "/odk/.cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
+    
+    public static ArrayList<String> getValidFormsAsArrayList(String path) {
+        ArrayList<String> dirs = getFoldersAsArrayList(path);
+        ArrayList<String> formPaths = new ArrayList<String>();
+        for (int i = 0; i < dirs.size(); i++) {
+            String formName = new File(dirs.get(i)).getName();
+
+            // TODO:  I feel there has to be a better way to do this...
+            File f = null;
+            f = new File (FORMS_PATH + formName + "/" + formName + ".xml");
+            if (!f.exists())
+                f = new File (FORMS_PATH + formName + "/" + formName + ".xhtml");
+            if (f.exists()) {
+                formPaths.add(f.getAbsolutePath());
+            } else {
+                Log.w(t, "Form: " + f.getAbsolutePath() + " does not exist!");
+            }
+        }
+        return formPaths;
+    }
 
     public static ArrayList<String> getFoldersAsArrayList(String path) {
         ArrayList<String> mFolderList = new ArrayList<String>();
@@ -67,65 +87,6 @@ public class FileUtils {
             }
         }
         return mFolderList;
-    }
-
-
-    /**
-     * 
-     * @param path
-     * @return list of files that are not hidden and not directories.
-     */
-    public static ArrayList<String> getFilesAsArrayList(String path) {
-        ArrayList<String> mFileList = new ArrayList<String>();
-        File root = new File(path);
-
-        if (!storageReady()) {
-            return null;
-        }
-        if (!root.exists()) {
-            if (!createFolder(path)) {
-                return null;
-            }
-        }
-        if (root.isDirectory()) {
-            File[] children = root.listFiles();
-            for (File child : children) {
-                String filename = child.getName();
-                // no hidden files
-                if (!(filename.startsWith(".") || child.isDirectory())) {
-                    mFileList.add(child.getAbsolutePath());
-                }
-            }
-        } else {
-            String filename = root.getName();
-            // no hidden files
-            if (!filename.startsWith(".")) {
-                mFileList.add(root.getAbsolutePath());
-            }
-        }
-        return mFileList;
-    }
-    
-    
-
-
-    public static ArrayList<String> getFilesAsArrayListRecursive(String path) {
-        ArrayList<String> mFileList = new ArrayList<String>();
-        File root = new File(path);
-        getFilesAsArrayListRecursiveHelper(root, mFileList);
-        return mFileList;
-    }
-
-
-    private static void getFilesAsArrayListRecursiveHelper(File f, ArrayList<String> filelist) {
-        if (f.isDirectory()) {
-            File[] childs = f.listFiles();
-            for (File child : childs) {
-                getFilesAsArrayListRecursiveHelper(child, filelist);
-            }
-            return;
-        }
-        filelist.add(f.getAbsolutePath());
     }
 
 
