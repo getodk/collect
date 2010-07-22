@@ -38,7 +38,7 @@ the License.
      />-->
 
 	      
-	<Button 
+	<!--<Button 
      android:id="@+id/send_button"
      android:text="@string/send_data"
      android:layout_width="wrap_content"
@@ -47,7 +47,7 @@ the License.
      android:textSize="16px" 
 	 android:layout_weight="1"      />
 	 
-    <Button 
+    --><Button 
      android:id="@+id/delete_button"
      android:text="@string/delete_file"
      android:layout_width="wrap_content"
