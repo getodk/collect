@@ -26,7 +26,7 @@ import java.io.IOException;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends ImageButton implements OnClickListener, OnCompletionListener {
+public class AudioButton extends ImageButton implements OnClickListener {
     private final static String t = "AudioButton";
     private String URI;
     private MediaPlayer player;
@@ -41,7 +41,7 @@ public class AudioButton extends ImageButton implements OnClickListener, OnCompl
                 android.R.drawable.ic_lock_silent_mode_off);
         this.setImageBitmap(b);
         this.setMinimumWidth(b.getScaledWidth(context.getResources().getDisplayMetrics()));
-        player = new MediaPlayer();
+        player = null;
     }
 
 
@@ -71,37 +71,34 @@ public class AudioButton extends ImageButton implements OnClickListener, OnCompl
             return;
         }
 
+        // In case we're currently playing sounds.
+        stopPlaying();
+
+        player = new MediaPlayer();
         try {
-            synchronized (player) {
-                initPlayer();
-                player.setDataSource(audioFilename);
-                player.prepare();
-                player.setOnCompletionListener(this);
-                player.start();
-            }
+            player.setDataSource(audioFilename);
+            player.prepare();
+            player.start();
+            player.setOnCompletionListener(new OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    mediaPlayer.release();
+                }
+
+            });
         } catch (IOException e) {
             String errorMsg = getContext().getString(R.string.audio_file_invalid);
             Log.e(t, errorMsg);
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
     }
 
 
-    private void initPlayer() {
-        if (player.isPlaying()) {
-            player.stop();
+    public void stopPlaying() {
+        if (player != null) {
             player.release();
-            player = new MediaPlayer();
         }
     }
-
-
-    public void onCompletion(MediaPlayer mp) {
-        synchronized (mp) {
-            mp.release();
-            player = new MediaPlayer();
-        }
-    }
-
 }

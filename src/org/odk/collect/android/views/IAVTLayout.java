@@ -21,8 +21,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice to put
- * this in a layout.xml file of some sort at some point.
+ * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
+ * to put this in a layout.xml file of some sort at some point.
  * 
  * @author carlhartung
  */
@@ -141,7 +141,7 @@ public class IAVTLayout extends RelativeLayout {
                                 i.setDataAndType(Uri.fromFile(imageFile), "image/*");
                                 getContext().startActivity(i);
                             }
-                            
+
                         });
                         addView(mImageView, imageParams);
                     } else {
@@ -205,6 +205,17 @@ public class IAVTLayout extends RelativeLayout {
             return;
         }
         addView(v, dividerParams);
+    }
+
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if (visibility != View.VISIBLE) {
+            if (mAudioButton != null) {
+                mAudioButton.stopPlaying();
+            }
+        }
     }
 
 }
