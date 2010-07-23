@@ -244,6 +244,7 @@ public class FileUtils {
             String md5 = number.toString(16);
             while (md5.length() < 32)
                 md5 = "0" + md5;
+            is.close();
             return md5;
 
         } catch (NoSuchAlgorithmException e) {
@@ -256,7 +257,8 @@ public class FileUtils {
         } catch (IOException e) {
             Log.e("Problem reading from file", e.getMessage());
             return null;
-        }
+        } 
+        
 
     }
 

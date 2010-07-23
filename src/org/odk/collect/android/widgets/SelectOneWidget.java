@@ -45,7 +45,7 @@ import java.util.Vector;
  * LinearLayout
  */
 public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCheckedChangeListener {
-    private final int RANDOM_BUTTON_ID = 4853487;
+    private static final int RANDOM_BUTTON_ID = 4853487;
     Vector<SelectChoice> mItems;
 
     Vector<RadioButton> buttons;

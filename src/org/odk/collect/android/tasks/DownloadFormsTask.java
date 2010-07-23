@@ -140,7 +140,7 @@ public class DownloadFormsTask extends
 
             for (int i = 0; i < total; i++) {
                 String form = formNames.get(i);
-                publishProgress(form, new Integer(count).toString(), new Integer(total).toString());
+                publishProgress(form, Integer.valueOf(count).toString(), Integer.valueOf(total).toString());
                 try {
                     File dl = downloadFile(form, toDownload.get(form));
 

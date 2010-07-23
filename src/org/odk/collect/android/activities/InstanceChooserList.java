@@ -79,11 +79,8 @@ public class InstanceChooserList extends ListActivity {
      * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
      */
     private void refreshView() {
-        // retrieve status information from instance. needed for tabs.
-        Intent i = getIntent();
-        String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
 
-        // get all instances
+    	// get all instances
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
         Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);

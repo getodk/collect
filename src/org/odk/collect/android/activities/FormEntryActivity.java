@@ -1469,8 +1469,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						.getColumnIndex(FileDbAdapter.KEY_STATUS)))) {
 			complete = true;
 		}
-		c.close();
-		fda.close();
+		if (c != null) {
+			c.close();
+			fda.close();
+		}
 
 		return complete;
 	}

@@ -44,8 +44,6 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     private final static int CHECKBOX_ID = 100;
     private boolean mCheckboxInit = true;
     Vector<SelectChoice> mItems;
-    Drawable mDivider;
-
 
     public SelectMultiWidget(Context context) {
         super(context);
