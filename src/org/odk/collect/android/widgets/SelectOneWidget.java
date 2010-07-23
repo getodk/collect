@@ -56,7 +56,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         for (RadioButton button : this.buttons) {
             if (button.isChecked()) {
                 button.setChecked(false);
@@ -66,7 +67,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         int i = getCheckedId();
         if (i == -1) {
             return null;
@@ -77,7 +79,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
     }
 
 
-    public void buildView(final FormEntryPrompt prompt) {
+    @Override
+	public void buildView(final FormEntryPrompt prompt) {
         mItems = prompt.getSelectChoices();
         buttons = new Vector<RadioButton>();
 
@@ -137,7 +140,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -155,7 +159,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
     }
 
 
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    @Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked) {
             // If it got unchecked, we don't care.
             return;

@@ -95,7 +95,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
         mLocationDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
             new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
+                @Override
+				public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case DialogInterface.BUTTON1:
                             returnLocation();
@@ -140,7 +141,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * 
      * @see android.location.LocationListener#onLocationChanged(android.location. Location)
      */
-    public void onLocationChanged(Location location) {
+    @Override
+	public void onLocationChanged(Location location) {
         mLocation = location;
         mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getAccuracy()));
         if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
@@ -154,7 +156,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * 
      * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
      */
-    public void onProviderDisabled(String provider) {
+    @Override
+	public void onProviderDisabled(String provider) {
         Toast
                 .makeText(getBaseContext(), getString(R.string.gps_disabled_error),
                     Toast.LENGTH_SHORT).show();
@@ -167,7 +170,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * 
      * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
      */
-    public void onProviderEnabled(String provider) {
+    @Override
+	public void onProviderEnabled(String provider) {
 
     }
 
@@ -178,7 +182,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * @see android.location.LocationListener#onStatusChanged(java.lang.String, int,
      * android.os.Bundle)
      */
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    @Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
             case LocationProvider.AVAILABLE:
                 mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation

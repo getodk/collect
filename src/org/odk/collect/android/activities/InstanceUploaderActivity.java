@@ -86,7 +86,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     // TODO: if uploadingComplete() when activity backgrounded, won't work.
     // just check task status in onResume
-    public void uploadingComplete(ArrayList<String> result) {
+    @Override
+	public void uploadingComplete(ArrayList<String> result) {
         int resultSize = result.size();
         boolean success = false;
         if (resultSize == totalCount) {
@@ -115,7 +116,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
 
-    public void progressUpdate(int progress, int total) {
+    @Override
+	public void progressUpdate(int progress, int total) {
         mProgressDialog.setMessage(getString(R.string.sending_items, progress, total));
     }
 
@@ -127,7 +129,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                        @Override
+						public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             mInstanceUploaderTask.setUploaderListener(null);
                             finish();

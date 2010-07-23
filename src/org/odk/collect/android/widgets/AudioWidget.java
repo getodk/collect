@@ -91,7 +91,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         // remove the file
         deleteMedia();
 
@@ -102,7 +103,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         if (mBinaryName != null) {
             return new StringData(mBinaryName.toString());
         } else {
@@ -111,7 +113,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void buildView(FormEntryPrompt prompt) {
+    @Override
+	public void buildView(FormEntryPrompt prompt) {
         setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button
@@ -124,7 +127,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // launch capture intent on click
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
@@ -140,7 +144,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // on play, launch the appropriate viewer
         mPlayButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + "/" + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
@@ -196,7 +201,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void setBinaryData(Object binaryuri) {
+    @Override
+	public void setBinaryData(Object binaryuri) {
         // you are replacing an answer. remove the media.
         if (mBinaryName != null) {
             deleteMedia();
@@ -216,7 +222,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

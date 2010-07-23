@@ -52,7 +52,8 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         int j = mItems.size();
         for (int i = 0; i < j; i++) {
 
@@ -65,7 +66,8 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         Vector<Selection> vc = new Vector<Selection>();
         for (int i = 0; i < mItems.size(); i++) {
             CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
@@ -85,14 +87,15 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
 
     @SuppressWarnings("unchecked")
+	@Override
     public void buildView(final FormEntryPrompt prompt) {
         mItems = prompt.getSelectChoices();
 
         setOrientation(LinearLayout.VERTICAL);
 
-        Vector ve = new Vector();
+        Vector<Selection> ve = new Vector<Selection>();
         if (prompt.getAnswerValue() != null) {
-            ve = (Vector) prompt.getAnswerValue().getValue();
+            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
         }
 
         if (prompt.getSelectChoices() != null) {
@@ -102,7 +105,8 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
                 // when clicked, check for readonly before toggling
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    @Override
+					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (!mCheckboxInit && prompt.isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
@@ -120,7 +124,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
-                    if (mItems.get(i).getValue().equals(((Selection) ve.elementAt(vi)).getValue())) {
+                    if (mItems.get(i).getValue().equals(ve.elementAt(vi).getValue())) {
                         c.setChecked(true);
                         break;
                     }
@@ -166,7 +170,8 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

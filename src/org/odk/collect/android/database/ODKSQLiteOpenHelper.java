@@ -53,7 +53,7 @@ public abstract class ODKSQLiteOpenHelper {
      * actually created or opened until one of {@link #getWritableDatabase} or
      * {@link #getReadableDatabase} is called.
      * 
-     * @param context to use to open or create the database
+     * @param path to the file
      * @param name of the database file, or null for an in-memory database
      * @param factory to use for creating cursor objects, or null for the default
      * @param version number of the database (starting at 1); if the database is older,

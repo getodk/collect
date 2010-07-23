@@ -90,7 +90,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @SuppressWarnings("unchecked")
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
@@ -102,7 +102,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mActionButton = (Button) findViewById(R.id.add_button);
         mActionButton.setEnabled(false);
         mActionButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 downloadSelectedFiles();
                 mToggled = false;
             }
@@ -110,7 +111,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
 
                 // toggle selections of items to all or none
                 ListView ls = getListView();
@@ -126,7 +128,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
         mRefreshButton = (Button) findViewById(R.id.refresh_button);
         mRefreshButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 mToggled = false;
                 downloadFormList();
             }
@@ -190,7 +193,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @SuppressWarnings("unchecked")
-    private void downloadFormList() {
+	private void downloadFormList() {
         mFormNamesAndURLs = new HashMap<String, String>();
         if (mProgressDialog != null) {
             // This is needed because onPrepareDialog() is broken in 1.6.
@@ -282,7 +285,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 mProgressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                        @Override
+						public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             mDownloadFormsTask.setDownloaderListener(null);
                         }
@@ -303,7 +307,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
      * Adds the selected form
      */
     @SuppressWarnings("unchecked")
-    private void downloadSelectedFiles() {
+	private void downloadSelectedFiles() {
         totalCount = 0;
         HashMap<String, String> filesToDownload = new HashMap<String, String>();
 
@@ -364,7 +368,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     }
 
 
-    public void formDownloadingComplete(HashMap<String, String> result) {
+    @Override
+	public void formDownloadingComplete(HashMap<String, String> result) {
         dismissDialog(PROGRESS_DIALOG);
         String dialogMessage = null;
         String dialogTitle = null;
@@ -431,7 +436,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mAlertDialog.setTitle(title);
         mAlertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
+            @Override
+			public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
                         // just close the dialog
@@ -459,7 +465,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     }
 
 
-    public void progressUpdate(String currentFile, int progress, int total) {
+    @Override
+	public void progressUpdate(String currentFile, int progress, int total) {
         mProgressDialog.setMessage(getString(R.string.fetching_file, currentFile, progress, total));
     }
 

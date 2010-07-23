@@ -52,14 +52,16 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     /**
      * Resets date to today.
      */
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         final Calendar c = new GregorianCalendar();
         mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
             mDateListener);
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         // clear focus first so the datewidget gets the value in the text box
         mDatePicker.clearFocus();
         Date d =
@@ -72,7 +74,8 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     /**
      * Build view for date answer. Includes retrieving existing answer.
      */
-    public void buildView(final FormEntryPrompt prompt) {
+    @Override
+	public void buildView(final FormEntryPrompt prompt) {
         final Calendar c = new GregorianCalendar();
 
         mDatePicker = new DatePicker(getContext());
@@ -82,7 +85,8 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
         }
 
         mDateListener = new DatePicker.OnDateChangedListener() {
-            public void onDateChanged(DatePicker view, int year, int month, int day) {
+            @Override
+			public void onDateChanged(DatePicker view, int year, int month, int day) {
                 if (prompt.isReadOnly()) {
                     if (prompt.getAnswerValue() != null) {
                         Date d = (Date) prompt.getAnswerValue().getValue();
@@ -119,7 +123,8 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

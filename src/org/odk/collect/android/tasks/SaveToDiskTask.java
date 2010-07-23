@@ -201,7 +201,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
      * allow saving to disk, though, until all answers conform to their constraints/requirements.
      * @param markCompleted
-     * @return
+     * @return validatedStatus
      */
 
     private int validateAnswers(Boolean markCompleted) {

@@ -56,7 +56,8 @@ public class DataManagerList extends ListActivity {
         mDeleteButton = (Button) findViewById(R.id.delete_button);
         mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
                     createDeleteDialog();
@@ -124,7 +125,8 @@ public class DataManagerList extends ListActivity {
         mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
         DialogInterface.OnClickListener dialogYesNoListener =
             new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int i) {
+                @Override
+				public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();

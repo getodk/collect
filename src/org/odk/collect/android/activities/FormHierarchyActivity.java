@@ -74,14 +74,16 @@ public class FormHierarchyActivity extends ListActivity {
 
         jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 goUpLevel();
             }
         });
 
         Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
                 finish();
             }
@@ -89,7 +91,8 @@ public class FormHierarchyActivity extends ListActivity {
 
         Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
         jumpEndButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 mFormEntryController.jumpToIndex(FormIndex.createEndOfFormIndex());
                 finish();
             }
@@ -294,7 +297,7 @@ public class FormHierarchyActivity extends ListActivity {
      * group). If your at index 16 or 5_0, this will return null;
      * 
      * @param index
-     * @return
+     * @return index
      */
     public FormIndex stepIndexOut(FormIndex index) {
         if (index.isTerminal()) {

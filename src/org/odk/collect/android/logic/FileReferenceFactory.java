@@ -29,7 +29,8 @@ public class FileReferenceFactory extends PrefixedRootFactory {
      * @see org.javarosa.core.reference.PrefixedRootFactory#factory(java.lang.String,
      * java.lang.String)
      */
-    protected Reference factory(String terminal, String URI) {
+    @Override
+	protected Reference factory(String terminal, String URI) {
         return new FileReference(localRoot, terminal);
     }
 

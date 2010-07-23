@@ -29,7 +29,7 @@ public class WidgetFactory {
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
      * 
-     * @param pe prompt element to be rendered
+     * @param fep prompt element to be rendered
      * @param context Android context
      * @param instancePath path to the instance file
      */

@@ -453,9 +453,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	}
 
 	/**
-	 * Creates a view given the View type and a prompt
+	 * Creates a view given the View type and an event
 	 * 
-	 * @param prompt
+	 * @param event
 	 * @return newly created View
 	 */
 	private View createView(int event) {
@@ -486,6 +486,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			// Create 'save for later' button
 			((Button) endView.findViewById(R.id.save_exit_button))
 					.setOnClickListener(new OnClickListener() {
+						@Override
 						public void onClick(View v) {
 							// Form is marked as 'saved' here.
 							saveDataToDisk(true, mInstanceComplete.isChecked());
@@ -718,6 +719,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog = new AlertDialog.Builder(this).create();
 		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 		DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
 				case DialogInterface.BUTTON1: // yes, repeat
@@ -761,6 +763,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 		mAlertDialog.setMessage(errorMsg);
 		DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
 				case DialogInterface.BUTTON1:
@@ -791,6 +794,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog
 				.setMessage(getString(R.string.delete_repeat_confirm, name));
 		DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
 				case DialogInterface.BUTTON1: // yes
@@ -845,6 +849,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(getString(R.string.quit_application))
 				.setItems(items, new DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
 						case 0: // discard changes and exit
@@ -1014,6 +1019,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 		DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
 
+			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
 				case DialogInterface.BUTTON1: // yes
@@ -1051,6 +1057,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog = new AlertDialog.Builder(this)
 				.setSingleChoiceItems(languages, selected,
 						new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 								mFormEntryController
@@ -1065,6 +1072,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				.setTitle(getString(R.string.change_language))
 				.setNegativeButton(getString(R.string.do_not_change),
 						new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 							}
@@ -1083,6 +1091,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case PROGRESS_DIALOG:
 			mProgressDialog = new ProgressDialog(this);
 			DialogInterface.OnClickListener loadingButtonListener = new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 					mFormLoaderTask.setFormLoaderListener(null);
@@ -1101,6 +1110,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case SAVING_DIALOG:
 			mProgressDialog = new ProgressDialog(this);
 			DialogInterface.OnClickListener savingButtonListener = new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 					mSaveToDiskTask.setFormSavedListener(null);
@@ -1225,6 +1235,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * android.view.animation.Animation.AnimationListener#onAnimationEnd(android
 	 * .view.animation.Animation)
 	 */
+	@Override
 	public void onAnimationEnd(Animation arg0) {
 		mBeenSwiped = false;
 	}
@@ -1236,6 +1247,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * android.view.animation.Animation.AnimationListener#onAnimationRepeat(
 	 * android.view.animation.Animation)
 	 */
+	@Override
 	public void onAnimationRepeat(Animation animation) {
 		// Added by AnimationListener interface.
 	}
@@ -1247,6 +1259,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * android.view.animation.Animation.AnimationListener#onAnimationStart(android
 	 * .view.animation.Animation)
 	 */
+	@Override
 	public void onAnimationStart(Animation animation) {
 		// Added by AnimationListener interface.
 	}
@@ -1255,6 +1268,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * loadingComplete() is called by FormLoaderTask once it has finished
 	 * loading a form.
 	 */
+	@Override
 	public void loadingComplete(FormEntryController fec) {
 		dismissDialog(PROGRESS_DIALOG);
 		if (fec == null) {
@@ -1292,6 +1306,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 	}
 
+	@Override
 	public void savingComplete(int saveStatus) {
 		dismissDialog(SAVING_DIALOG);
 		switch (saveStatus) {

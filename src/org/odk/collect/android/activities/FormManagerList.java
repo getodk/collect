@@ -57,7 +57,8 @@ public class FormManagerList extends ListActivity {
         mGetButton = (Button) findViewById(R.id.get_button);
         mGetButton.setText(getString(R.string.get_forms));
         mGetButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormDownloadList.class);
                 startActivity(i);
             }
@@ -66,7 +67,8 @@ public class FormManagerList extends ListActivity {
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setText(getString(R.string.delete_file));
         mActionButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
                     createDeleteDialog();
@@ -134,7 +136,8 @@ public class FormManagerList extends ListActivity {
         mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
         DialogInterface.OnClickListener dialogYesNoListener =
             new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int i) {
+                @Override
+				public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();

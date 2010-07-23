@@ -75,7 +75,7 @@ public class DownloadFormsTask extends
             HashMap<String, String> formList = new HashMap<String, String>();
             URL u = null;
             try {
-                u = new URL((String) values[0].get(FormDownloadList.LIST_URL));
+                u = new URL(values[0].get(FormDownloadList.LIST_URL));
             } catch (MalformedURLException e) {
                 formList.put(DL_ERROR_MSG, e.getLocalizedMessage());
                 e.printStackTrace();

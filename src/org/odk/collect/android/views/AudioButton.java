@@ -45,7 +45,8 @@ public class AudioButton extends ImageButton implements OnClickListener {
     }
 
 
-    public void onClick(View v) {
+    @Override
+	public void onClick(View v) {
         if (URI == null) {
             // No audio file specified
             Log.e(t, "No audio file was specified");

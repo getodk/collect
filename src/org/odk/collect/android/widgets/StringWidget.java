@@ -52,12 +52,14 @@ public class StringWidget extends EditText implements IQuestionWidget {
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         setText(null);
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         String s = getText().toString();
         if (s == null || s.equals("")) {
             return null;
@@ -67,7 +69,8 @@ public class StringWidget extends EditText implements IQuestionWidget {
     }
 
 
-    public void buildView(FormEntryPrompt prompt) {
+    @Override
+	public void buildView(FormEntryPrompt prompt) {
         // font size
         setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
 
@@ -94,7 +97,8 @@ public class StringWidget extends EditText implements IQuestionWidget {
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
         this.requestFocus();
         InputMethodManager inputManager =

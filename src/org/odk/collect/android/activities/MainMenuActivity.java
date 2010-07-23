@@ -79,7 +79,8 @@ public class MainMenuActivity extends Activity {
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 // make sure we haven't added forms
                 ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
                 if (forms != null) {
@@ -103,7 +104,8 @@ public class MainMenuActivity extends Activity {
         // review data button. expects a result.
         mReviewDataButton = (Button) findViewById(R.id.review_data);
         mReviewDataButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 if ((mSavedCount + mCompletedCount) == 0) {
                     Toast.makeText(getApplicationContext(),
                         getString(R.string.no_items_error, getString(R.string.review)),
@@ -120,7 +122,8 @@ public class MainMenuActivity extends Activity {
         // send data button. expects a result.
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 if (mCompletedCount == 0) {
                     Toast.makeText(getApplicationContext(),
                         getString(R.string.no_items_error, getString(R.string.send)),
@@ -137,7 +140,8 @@ public class MainMenuActivity extends Activity {
         mManageFilesButton = (Button) findViewById(R.id.manage_forms);
         mManageFilesButton.setText(getString(R.string.manage_files));
         mManageFilesButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
                 startActivity(i);
             }

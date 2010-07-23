@@ -65,34 +65,37 @@ public class PropertyManager implements IPropertyManager {
     }
 
 
-    @SuppressWarnings("unchecked")
-    public Vector getProperty(String propertyName) {
+    @Override
+    public Vector<String> getProperty(String propertyName) {
         return null;
     }
 
 
-    public String getSingularProperty(String propertyName) {
+    @Override
+	public String getSingularProperty(String propertyName) {
         return mProperties.get(propertyName.toLowerCase());
     }
 
 
-    public void setProperty(String propertyName, String propertyValue) {
+    @Override
+	public void setProperty(String propertyName, String propertyValue) {
     }
 
 
-    @SuppressWarnings("unchecked")
-    public void setProperty(String propertyName, Vector propertyValue) {
-
-    }
-
-
-    public void addRules(IPropertyRules rules) {
+    @Override
+    public void setProperty(String propertyName, @SuppressWarnings("rawtypes") Vector propertyValue) {
 
     }
 
 
-    @SuppressWarnings("unchecked")
-    public Vector getRules() {
+    @Override
+	public void addRules(IPropertyRules rules) {
+
+    }
+
+
+    @Override
+    public Vector<IPropertyRules> getRules() {
         return null;
     }
 

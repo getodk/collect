@@ -111,7 +111,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         // remove the file
         deleteMedia();
         mImageView.setImageBitmap(null);
@@ -122,7 +123,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         if (mBinaryName != null) {
             return new StringData(mBinaryName.toString());
         } else {
@@ -131,7 +133,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void buildView(FormEntryPrompt prompt) {
+    @Override
+	public void buildView(FormEntryPrompt prompt) {
         setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button
@@ -144,7 +147,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
         // launch capture intent on click
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
                 // We give the camera an absolute filename/path where to put the
                 // picture because of bug:
@@ -195,7 +199,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         mImageView.setPadding(10, 10, 10, 10);
         mImageView.setAdjustViewBounds(true);
         mImageView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
                 String[] projection = {
                     "_id"
@@ -232,7 +237,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void setBinaryData(Object binaryuri) {
+    @Override
+	public void setBinaryData(Object binaryuri) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (mBinaryName != null) {
@@ -245,7 +251,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

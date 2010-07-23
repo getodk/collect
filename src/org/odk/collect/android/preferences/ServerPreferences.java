@@ -58,7 +58,8 @@ public class ServerPreferences extends PreferenceActivity implements
     }
 
 
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    @Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(KEY_SERVER)) {
             updateServer();
         } else if (key.equals(KEY_USERNAME)) {

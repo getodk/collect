@@ -524,7 +524,8 @@ public class FileDbAdapter {
                 FileUtils.getFoldersAsArrayList(FileUtils.INSTANCES_PATH);
 
             FilenameFilter ff = new FilenameFilter() {
-                public boolean accept(File dir, String filename) {
+                @Override
+				public boolean accept(File dir, String filename) {
                     return filename.endsWith("xml");
                 }
             };

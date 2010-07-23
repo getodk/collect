@@ -32,38 +32,45 @@ public class FileReference implements Reference {
     }
 
 
-    public boolean doesBinaryExist() throws IOException {
+    @Override
+	public boolean doesBinaryExist() {
         return new File(getInternalURI()).exists();
     }
 
 
-    public InputStream getStream() throws IOException {
+    @Override
+	public InputStream getStream() throws IOException {
         return new FileInputStream(getInternalURI());
     }
 
 
-    public String getURI() {
+    @Override
+	public String getURI() {
         return "jr://file" + referencePart;
     }
 
 
-    public boolean isReadOnly() {
+    @Override
+	public boolean isReadOnly() {
         return false;
     }
 
 
-    public OutputStream getOutputStream() throws IOException {
+    @Override
+	public OutputStream getOutputStream() throws IOException {
         return new FileOutputStream(getInternalURI());
     }
 
 
-    public void remove() throws IOException {
+    @Override
+	public void remove() {
         // TODO bad practice to ignore return values
         new File(getInternalURI()).delete();
     }
 
 
-    public String getLocalURI() {
+    @Override
+	public String getLocalURI() {
         return getInternalURI();
     }
 

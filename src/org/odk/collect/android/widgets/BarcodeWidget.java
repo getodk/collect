@@ -50,13 +50,15 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         mStringAnswer.setText(null);
         mActionButton.setText(getContext().getString(R.string.get_barcode));
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
@@ -66,7 +68,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     }
 
 
-    public void buildView(FormEntryPrompt prompt) {
+    @Override
+	public void buildView(FormEntryPrompt prompt) {
         setOrientation(LinearLayout.VERTICAL);
 
         // set button formatting
@@ -78,7 +81,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         // launch barcode capture intent on click
         mActionButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
                     ((Activity) getContext()).startActivityForResult(i,
@@ -110,12 +114,14 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     /**
      * Allows answer to be set externally in {@Link FormEntryActivity}.
      */
-    public void setBinaryData(Object answer) {
+    @Override
+	public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

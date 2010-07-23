@@ -51,7 +51,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     }
 
 
-    public void clearAnswer() {
+    @Override
+	public void clearAnswer() {
         mStringAnswer.setText(null);
         mAnswerDisplay.setText(null);
         mActionButton.setText(getContext().getString(R.string.get_location));
@@ -59,7 +60,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     }
 
 
-    public IAnswerData getAnswer() {
+    @Override
+	public IAnswerData getAnswer() {
         String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
@@ -81,7 +83,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     }
 
 
-    public void buildView(FormEntryPrompt prompt) {
+    @Override
+	public void buildView(FormEntryPrompt prompt) {
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -106,7 +109,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
 
         // when you press the button
         mActionButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
                 Intent i = new Intent(getContext(), GeoPointActivity.class);
                 ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.LOCATION_CAPTURE);
@@ -148,7 +152,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     }
 
 
-    public void setFocus(Context context) {
+    @Override
+	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -156,7 +161,8 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget, IBi
     }
 
 
-    public void setBinaryData(Object answer) {
+    @Override
+	public void setBinaryData(Object answer) {
         String s = (String) answer;
         mStringAnswer.setText(s);
 
