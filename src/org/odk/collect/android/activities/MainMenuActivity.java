@@ -73,7 +73,7 @@ public class MainMenuActivity extends Activity {
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // make sure we haven't added forms
-                ArrayList<String> forms = FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
+                ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
                 if (forms != null) {
                     mFormsCount = forms.size();
                 } else {
@@ -204,7 +204,7 @@ public class MainMenuActivity extends Activity {
         c.close();
 
         // count for downloaded forms
-        ArrayList<String> forms = FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
+        ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
         if (forms != null) {
             mFormsCount = forms.size();
         } else {

@@ -20,7 +20,6 @@ import org.odk.collect.android.database.FileDbAdapter;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -41,8 +40,7 @@ import java.util.ArrayList;
 public class DataManagerList extends ListActivity {
 
     private AlertDialog mAlertDialog;
-    private Button mActionButton;
-    private Button mSendButton;
+    private Button mDeleteButton;
 
 
     private SimpleCursorAdapter mInstances;
@@ -55,18 +53,9 @@ public class DataManagerList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_manage_list);
         
-        mSendButton = (Button) findViewById(R.id.send_button);
-        mSendButton.setText(getString(R.string.send_data));
-        mSendButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
-                startActivity(i);
-            }
-        });
-        
-        mActionButton = (Button) findViewById(R.id.delete_button);
-        mActionButton.setText(getString(R.string.delete_file));
-        mActionButton.setOnClickListener(new OnClickListener() {
+        mDeleteButton = (Button) findViewById(R.id.delete_button);
+        mDeleteButton.setText(getString(R.string.delete_file));
+        mDeleteButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
@@ -102,7 +91,7 @@ public class DataManagerList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mActionButton.setEnabled(!(mSelected.size() == 0));
+        mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
         // cleanup
         fda.close();
@@ -218,7 +207,7 @@ public class DataManagerList extends ListActivity {
         else
             mSelected.add(k);
 
-        mActionButton.setEnabled(!(mSelected.size() == 0));
+        mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
     }
 

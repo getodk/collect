@@ -118,10 +118,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         File formXml = new File(formPath);
         File formBin = new File(FileUtils.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
-        Log.e("carl", "formbin = " + formBin);
 
         if (formBin.exists()) {
-            Log.e("carl", "and formbin exists!");
             // if we have binary, deserialize binary
             fd = deserializeFormDef(formBin);
             if (fd == null) {
@@ -165,7 +163,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
         String mediaPath =
-            formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media";
+            formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
+       
         if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
                 new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"

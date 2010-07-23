@@ -392,7 +392,7 @@ public class FileDbAdapter {
 
     public void removeOrphanFormDefs() {
         if (FileUtils.createFolder(FileUtils.CACHE_PATH)) {
-            ArrayList<String> cachedForms = FileUtils.getFilesAsArrayList(FileUtils.CACHE_PATH);
+            ArrayList<String> cachedForms = FileUtils.getValidFormsAsArrayList(FileUtils.CACHE_PATH);
 
             Cursor c = null;
             // remove orphaned form defs
@@ -432,7 +432,7 @@ public class FileDbAdapter {
         if (FileUtils.createFolder(FileUtils.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
-            ArrayList<String> storedForms = FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
+            ArrayList<String> storedForms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
 
             String hash = null;
             String path = null;
@@ -440,7 +440,7 @@ public class FileDbAdapter {
 
             // loop through forms on sdcard.
             if (storedForms != null) {
-                for (String formPath : storedForms) {
+                for (String formPath : storedForms) {                   
                     // only add forms
                     if (!(formPath.endsWith(".xml") || formPath.endsWith(".xhtml")))
                         continue;
@@ -486,7 +486,7 @@ public class FileDbAdapter {
         if (FileUtils.createFolder(FileUtils.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
-            ArrayList<String> storedForms = FileUtils.getFilesAsArrayList(FileUtils.FORMS_PATH);
+            ArrayList<String> storedForms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
 
             String hash = null;
             // String path = null;

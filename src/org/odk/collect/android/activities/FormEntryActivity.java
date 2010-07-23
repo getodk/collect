@@ -64,8 +64,6 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,9 +131,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	// used to limit forward/backward swipes to one per question
 	private boolean mBeenSwiped;
-	
+
 	private CheckBox mInstanceComplete;
-	
+
 	private FormLoaderTask mFormLoaderTask;
 	private SaveToDiskTask mSaveToDiskTask;
 
@@ -481,9 +479,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							mFormEntryModel.getFormTitle()));
 
 			// checkbox for if finished or ready to send
-			mInstanceComplete = ((CheckBox) endView.findViewById(R.id.mark_finished));
+			mInstanceComplete = ((CheckBox) endView
+					.findViewById(R.id.mark_finished));
 			mInstanceComplete.setChecked(isInstanceComplete());
-			
+
 			// Create 'save for later' button
 			((Button) endView.findViewById(R.id.save_exit_button))
 					.setOnClickListener(new OnClickListener() {
@@ -649,7 +648,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
+		// lp.addRule(RelativeLayout.ABOVE, R.id.progressbar);
 
 		mCurrentView = next;
 		mRelativeLayout.addView(mCurrentView, lp);
@@ -675,7 +674,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * http://code.google.com/p/android/issues/detail?id=1639
 	 */
 
-//	
+	//
 	/**
 	 * Creates and displays a dialog displaying the violated constraint.
 	 */
@@ -1199,7 +1198,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 */
 	@Override
 	protected void onDestroy() {
-		Log.e("carl", "on destroy");
 		if (mFormLoaderTask != null) {
 			mFormLoaderTask.setFormLoaderListener(null);
 			// We have to call cancel to terminate the thread, otherwise it
@@ -1445,7 +1443,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	}
 
 	private boolean isInstanceComplete() {
-		
+
 		boolean complete = false;
 		FileDbAdapter fda = new FileDbAdapter();
 		fda.open();
@@ -1458,8 +1456,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		c.close();
 		fda.close();
-		
+
 		return complete;
 	}
-	
+
 }

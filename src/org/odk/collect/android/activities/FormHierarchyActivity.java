@@ -102,6 +102,12 @@ public class FormHierarchyActivity extends ListActivity {
         FormIndex index = stepIndexOut(mFormEntryModel.getFormIndex());
         int currentEvent = mFormEntryModel.getEvent();
 
+        // Step out of any group indexes that are present.
+        while (index != null
+                && mFormEntryModel.getEvent(index) == FormEntryController.EVENT_GROUP) {
+            index = stepIndexOut(index);
+        }
+        
         if (index == null) {
             mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
