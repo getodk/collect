@@ -83,10 +83,10 @@ public class InstanceChooserList extends ListActivity {
         Intent i = getIntent();
         String status = i.getStringExtra(FileDbAdapter.KEY_STATUS);
 
-        // get all instances that match the status.
+        // get all instances
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, status);
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
         startManagingCursor(c);
 
         // create data and views for cursor adapter

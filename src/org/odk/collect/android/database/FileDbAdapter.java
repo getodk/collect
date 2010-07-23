@@ -67,6 +67,7 @@ public class FileDbAdapter {
 
     private static final String added = "Added";
     private static final String saved = "Saved";
+    private static final String finished = "Finished";
     private static final String submitted = "Submitted";
 
     private DatabaseHelper mDbHelper;
@@ -138,8 +139,10 @@ public class FileDbAdapter {
         String tag = added;
         if (status.equals(STATUS_SUBMITTED)) {
             tag = submitted;
-        } else if (status.equals(STATUS_COMPLETE) || status.equals(STATUS_INCOMPLETE)) {
+        } else if (status.equals(STATUS_INCOMPLETE)) {
             tag = saved;
+        } else if (status.equals(STATUS_COMPLETE)) {
+        	tag = finished;
         }
         String ts =
             new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(new Date(timestamp));
