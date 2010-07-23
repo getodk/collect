@@ -14,12 +14,16 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,8 +33,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -61,12 +63,18 @@ public class MainMenuActivity extends Activity {
     private static int mAvailableCount;
     private static int mFormsCount;
 
+	private AlertDialog mAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
+        
+        // if sd card error, quit
+        if (!FileUtils.storageReady()) {
+        	createErrorDialog(getString(R.string.no_sd_error),true);
+        }
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
@@ -136,7 +144,17 @@ public class MainMenuActivity extends Activity {
         });
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+    	dismissDialogs();
+        super.onPause();
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -244,4 +262,35 @@ public class MainMenuActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    
+    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+		mAlertDialog = new AlertDialog.Builder(this).create();
+		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+		mAlertDialog.setMessage(errorMsg);
+		DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+				case DialogInterface.BUTTON1:
+					if (shouldExit) {
+						finish();
+					}
+					break;
+				}
+			}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.ok), errorListener);
+		mAlertDialog.show();
+	}
+    
+    
+    /**
+	 * Dismiss any showing dialogs that we manage.
+	 */
+	private void dismissDialogs() {
+		if (mAlertDialog != null && mAlertDialog.isShowing()) {
+			mAlertDialog.dismiss();
+		}
+	}
 }

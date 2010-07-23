@@ -15,7 +15,7 @@ the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="8" android:versionName="1.1.4">
   <application android:icon="@drawable/notes" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
-  <activity android:label="@string/app_name" android:name=".activities.MainMenuActivity">
+  <activity android:label="@string/app_name" android:configChanges="orientation" android:name=".activities.MainMenuActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.DEFAULT"/>

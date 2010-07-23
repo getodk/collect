@@ -193,7 +193,7 @@ public class FileUtils {
     }
 
 
-    private static boolean storageReady() {
+    public static boolean storageReady() {
         String cardstatus = Environment.getExternalStorageState();
         if (cardstatus.equals(Environment.MEDIA_REMOVED)
                 || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
