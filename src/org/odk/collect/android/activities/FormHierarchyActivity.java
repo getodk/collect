@@ -273,7 +273,7 @@ public class FormHierarchyActivity extends ListActivity {
                     if (repeatedGroupName.compareTo(fc.getLongText()) == 0) {
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
-                        h.AddChild(new HierarchyElement(mIndent + fc.getLongText() + " "
+                        h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
                                 + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
                                 .getIndex()));
                     }

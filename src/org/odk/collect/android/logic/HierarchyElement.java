@@ -92,7 +92,7 @@ public class HierarchyElement {
     }
 
 
-    public void AddChild(HierarchyElement h) {
+    public void addChild(HierarchyElement h) {
         mChildren.add(h);
     }
 

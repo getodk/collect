@@ -125,7 +125,7 @@ public class DownloadFormsTask extends
             }
             return formList;
 
-        } else {
+        } else if (values != null) {
             // This downloads the selected forms.
             HashMap<String, String> toDownload = values[0];
             HashMap<String, String> result = new HashMap<String, String>();
@@ -183,6 +183,8 @@ public class DownloadFormsTask extends
 
             return result;
         }
+        
+		return null;
     }
 
 
