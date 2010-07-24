@@ -36,6 +36,8 @@ import android.widget.EditText;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class StringWidget extends EditText implements IQuestionWidget {
+    
+    boolean mReadOnly = false;
 
     public StringWidget(Context context) {
         this(context, null);
@@ -82,12 +84,13 @@ public class StringWidget extends EditText implements IQuestionWidget {
         setSingleLine(false);
 
         if (prompt != null) {
+            mReadOnly = prompt.isReadOnly();
             String s = prompt.getAnswerText();
             if (s != null) {
                 setText(s);
             }
 
-            if (prompt.isReadOnly()) {
+            if (mReadOnly) {
                 setBackgroundDrawable(null);
                 setFocusable(false);
                 setClickable(false);
@@ -103,7 +106,12 @@ public class StringWidget extends EditText implements IQuestionWidget {
         this.requestFocus();
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(this, 0);
+        if (!mReadOnly) {
+            inputManager.showSoftInput(this, 0);
+        }
+        else {
+            inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+        }
     }
 
 
