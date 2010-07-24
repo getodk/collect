@@ -153,8 +153,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         // import existing data into formdef
         if (instancePath != null) {
-            fd.initialize(false);
+            // This order is important.  Import data, then initialize.
             importData(instancePath, fec);
+            fd.initialize(false);
         } else {
             fd.initialize(true);
         }
