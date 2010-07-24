@@ -13,8 +13,7 @@
 <resources>
 	<string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
-<string name="ack">Acknowledge</string>
-<string name="acked">Acknowledged</string>
+<string name="trigger">OK. Please continue.</string>
 <string name="add_another">Add Group</string>
 <string name="add_another_repeat">Add another \"%s\" group?</string>
 <string name="add_file">Add Selected File(s)</string>

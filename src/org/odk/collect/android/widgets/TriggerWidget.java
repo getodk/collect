@@ -25,6 +25,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -36,10 +37,9 @@ import android.widget.ToggleButton;
  */
 public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 
-    private ToggleButton mActionButton;
+    private CheckBox mActionButton;
     private TextView mStringAnswer;
-    private TextView mDisplayText;
-
+    private static String mOK = "OK";
 
     public TriggerWidget(Context context) {
         super(context);
@@ -68,21 +68,19 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 	public void buildView(FormEntryPrompt prompt) {
         this.setOrientation(LinearLayout.VERTICAL);
 
-        mActionButton = new ToggleButton(getContext());
-        mActionButton.setText(getContext().getString(R.string.ack));
-        mActionButton.setTextOff(getContext().getString(R.string.ack));
-        mActionButton.setTextOn(getContext().getString(R.string.acked));
+        mActionButton = new CheckBox(getContext());
+        mActionButton.setText(getContext().getString(R.string.trigger));
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
-        mActionButton.setPadding(20, 20, 20, 20);
+        //mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
-                if (TriggerWidget.this.mActionButton.isChecked()) {
-                    TriggerWidget.this.mStringAnswer.setText(R.string.yes);
+                if (mActionButton.isChecked()) {
+                    mStringAnswer.setText(mOK);
                 } else {
-                    TriggerWidget.this.mStringAnswer.setText(R.string.no);
+                    mStringAnswer.setText(null);
                 }
             }
         });
@@ -91,12 +89,9 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
-        mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5, 0, 0, 0);
-
         String s = prompt.getAnswerText();
         if (s != null) {
-            if (s.equals(getContext().getString(R.string.yes))) {
+            if (s.equals(mOK)) {
                 mActionButton.setChecked(true);
             } else {
                 mActionButton.setChecked(false);
@@ -107,6 +102,7 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
 
         // finish complex layout
         this.addView(mActionButton);
+       // this.addView(mStringAnswer);
     }
 
 
