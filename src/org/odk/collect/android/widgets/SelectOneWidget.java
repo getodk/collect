@@ -105,25 +105,19 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
                 }
 
                 String audioURI = null;
-                if (prompt.getSelectTextForms(mItems.get(i)).contains(
-                    FormEntryCaption.TEXT_FORM_AUDIO)) {
-                    audioURI =
-                        prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
-                }
+                audioURI =
+                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
+
 
                 String imageURI = null;
-                if (prompt.getSelectTextForms(mItems.get(i)).contains(
-                    FormEntryCaption.TEXT_FORM_IMAGE)) {
-                    imageURI =
-                        prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
-                }
+                imageURI =
+                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                
 
                 String videoURI = null; // TODO: uncomment when video ready
-                /*
-                 * if (prompt.getSelectTextForms(mItems.get(i)).contains(
-                 * FormEntryCaption.TEXT_FORM_IMAGE)) { imageURI =
-                 * prompt.getSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE); }
-                 */
+                videoURI =
+                		prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
+                 
 
                 IAVTLayout mediaLayout = new IAVTLayout(getContext());
                 mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
