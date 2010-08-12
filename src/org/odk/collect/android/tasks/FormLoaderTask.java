@@ -165,11 +165,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // multiple times?
         String mediaPath =
             formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
+        
+        Log.e("Carl", "mediaPath = " + mediaPath);
        
         if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
                 new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"
-                        + mediaPath));
+                        + mediaPath + "-media"));
             ReferenceManager._()
                     .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
             ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));

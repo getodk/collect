@@ -117,8 +117,8 @@ public class InstanceChooserList extends ListActivity {
         String formName = pattern.split(instancePath)[0];
         formName = formName.substring(formName.lastIndexOf("/") + 1);
 
-        File xmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + "/" + formName + ".xml");
-        File xhtmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + formName + ".xhtml");
+        File xmlFile = new File(FileUtils.FORMS_PATH + "/"  + formName + ".xml");
+        File xhtmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xhtml");
 
         // form is either xml or xhtml file. find the appropriate one.
         if (xmlFile.exists()) {

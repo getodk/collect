@@ -46,21 +46,20 @@ public class FileUtils {
 
     
     public static ArrayList<String> getValidFormsAsArrayList(String path) {
-        ArrayList<String> dirs = getFoldersAsArrayList(path);
+       // ArrayList<String> dirs = getFoldersAsArrayList(path);
         ArrayList<String> formPaths = new ArrayList<String>();
-        for (int i = 0; i < dirs.size(); i++) {
-            String formName = new File(dirs.get(i)).getName();
+        File dir = new File(path);
+        File[] dirs = dir.listFiles();
+        for (int i = 0; i < dirs.length; i++) {
+        	// skip all the -media directories
+        	if (dirs[i].isDirectory())
+        		continue;
+        	
+            String formName = dirs[i].getName();
+        	Log.e("Carl", "trying formname: " + formName);
 
-            // TODO:  I feel there has to be a better way to do this...
-            File f = null;
-            f = new File (FORMS_PATH + formName + "/" + formName + ".xml");
-            if (!f.exists())
-                f = new File (FORMS_PATH + formName + "/" + formName + ".xhtml");
-            if (f.exists()) {
-                formPaths.add(f.getAbsolutePath());
-            } else {
-                Log.w(t, "Form: " + f.getAbsolutePath() + " does not exist!");
-            }
+        	formPaths.add(dirs[i].getAbsolutePath());
+           
         }
         return formPaths;
     }

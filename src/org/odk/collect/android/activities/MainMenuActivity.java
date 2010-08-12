@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -195,6 +196,7 @@ public class MainMenuActivity extends Activity {
                 formPath = intent.getStringExtra(FormEntryActivity.KEY_FORMPATH);
                 String instancePath = intent.getStringExtra(FormEntryActivity.KEY_INSTANCEPATH);
                 i = new Intent("org.odk.collect.android.action.FormEntry");
+                Log.e("Carl***", "loading formpath: " + formPath + " and instance path= " + instancePath);
                 i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
                 i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);
