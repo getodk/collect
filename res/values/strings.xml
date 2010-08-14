@@ -23,7 +23,6 @@
 <string name="app_name">ODK Collect</string>
 <string name="audio_file_error">No audio file was specified.</string>
 <string name="audio_file_invalid">File: %s is not a valid audio file.</string>
-<string name="audio_file_missing">Audio File: %s is missing.</string>
 <string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
 <string name="cancel">Cancel</string>
 <string name="cancel_loading_form">Stop Loading</string>
@@ -80,6 +79,7 @@
 <string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 <string name="file_download_error">File %s failed. %s</string>
+<string name="file_missing">File: %s is missing.</string>
 <string name="finalize_for_send">Save As Complete</string>
 <string name="form">Form</string>
 <string name="forms">Forms</string>

@@ -5,6 +5,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +48,7 @@ public class IAVTLayout extends RelativeLayout {
     }
 
 
-    public void setAVT(View text, String audioURI, String imageURI, String videoURI) {
+    public void setAVT(View text, String audioURI, String imageURI, final String videoURI) {
         mView_Text = text;
 
         // Layout configurations for our elements in the relative layout
@@ -76,13 +78,27 @@ public class IAVTLayout extends RelativeLayout {
             mVideoButton.setOnClickListener(new OnClickListener() {
 
                 @Override
-                public void onClick(View arg0) {
-                    // TODO: do this
-                    // Play the video here.
-                    // Probably with an intent.
-                    // oh, and do the standard checks..
-                    // file exists...
-                    // file is a video file...
+                public void onClick(View v) {
+                    String videoFilename = "";
+                    try {
+                    	videoFilename = ReferenceManager._().DeriveReference(videoURI).getLocalURI();
+                    } catch (InvalidReferenceException e) {
+                        Log.e(t, "Invalid reference exception");
+                        e.printStackTrace();
+                    }
+
+                    File videoFile = new File(videoFilename);
+                    if (!videoFile.exists()) {
+                        // We should have a video clip, but the file doesn't exist.
+                        String errorMsg = getContext().getString(R.string.file_missing, videoFilename);
+                        Log.e(t, errorMsg);
+                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    
+                    Intent i = new Intent("android.intent.action.VIEW");
+                    i.setDataAndType(Uri.fromFile(videoFile), "video/*");
+                    ((Activity) getContext()).startActivity(i);
                 }
 
             });
@@ -112,7 +128,6 @@ public class IAVTLayout extends RelativeLayout {
         textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         addView(text, textParams);
 
-        // TODO: Make it so clicking on the image brings up an imageviewer.
         // Now set up the image view
         String errorMsg = null;
         if (imageURI != null) {

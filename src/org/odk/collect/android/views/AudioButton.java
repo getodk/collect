@@ -66,7 +66,7 @@ public class AudioButton extends ImageButton implements OnClickListener {
         File audioFile = new File(audioFilename);
         if (!audioFile.exists()) {
             // We should have an audio clip, but the file doesn't exist.
-            String errorMsg = getContext().getString(R.string.audio_file_missing, audioFile);
+            String errorMsg = getContext().getString(R.string.file_missing, audioFile);
             Log.e(t, errorMsg);
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
             return;
