@@ -207,14 +207,8 @@ public class DownloadFormsTask extends
 
             // write connection to file
             InputStream is = c.getInputStream();
-            
-            // Create /sdcard/odk/forms/formname if it doesn't exist.
-            String dirName = name.substring(0, name.lastIndexOf("."));
-            File newDir = new File(FileUtils.FORMS_PATH + dirName);
-            if (!newDir.exists())
-                newDir.mkdirs();
-            
-            String path = FileUtils.FORMS_PATH + dirName + "/" + name;
+
+            String path = FileUtils.FORMS_PATH + name;
             int i = 2;
             int slash = path.lastIndexOf("/") + 1;
             int period = path.lastIndexOf(".") + 1;
