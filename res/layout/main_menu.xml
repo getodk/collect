@@ -13,48 +13,53 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<LinearLayout
+<RelativeLayout 
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/rl"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
-  android:padding="0px" 
+  android:layout_height="fill_parent" >  
+
+  <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="0px" 
     android:layout_marginLeft="0px"
     android:layout_marginRight="0px"
     android:layout_marginTop="0px"
     android:layout_marginBottom="0px">
   
-  <TextView
-    android:gravity="center"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="6px"
-    android:paddingBottom="1px"
-    android:textSize="21px"
-    android:textStyle="bold"
-    android:text="@string/main_menu_message" />
+    <TextView
+      android:gravity="center"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="6px"
+      android:paddingBottom="1px"
+      android:textSize="21px"
+      android:textStyle="bold"
+      android:text="@string/main_menu_message" />
   
-  <TextView
-    android:gravity="center"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="1px"
-    android:paddingBottom="10px"
-    android:text="@string/main_menu_details" />
+    <TextView
+      android:gravity="center"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="1px"
+      android:paddingBottom="10px"
+      android:text="@string/main_menu_details" />
 
-  <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:orientation="vertical"  
-    android:layout_height="fill_parent" >  
-  
-    <LinearLayout
+    <ScrollView
       xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:orientation="vertical"  android:paddingLeft="10px" android:paddingRight="10px"
-     >
+      android:orientation="vertical"  
+      android:layout_height="fill_parent" >  
+  
+      <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"  android:paddingLeft="10px" android:paddingRight="10px"
+       >
       
           <TextView
           android:layout_width="fill_parent"
@@ -104,8 +109,16 @@ the License.
           android:layout_height="wrap_content" 
           android:padding="20px" />
        
-    </LinearLayout>
+      </LinearLayout>
         
-  </ScrollView>  
+    </ScrollView>  
     
-</LinearLayout>
+  </LinearLayout>
+  <ImageView
+    android:src="@drawable/poweredby"
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+  	android:layout_alignParentBottom="true"
+  	android:layout_alignParentRight="true" />
+
+</RelativeLayout>
