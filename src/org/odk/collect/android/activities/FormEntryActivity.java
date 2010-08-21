@@ -44,6 +44,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,6 +66,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -335,8 +338,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// sm.add(0, MENU_SAVE_COMPLETE, 0,
 		// getString(R.string.finalize_for_send));
 
-		menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
-				android.R.drawable.ic_menu_save);
+		menu.add(0, MENU_SAVE, 0, getString(R.string.save_all_answers))
+				.setIcon(android.R.drawable.ic_menu_save);
 		menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer))
 				.setIcon(android.R.drawable.ic_menu_close_clear_cancel)
 				.setEnabled(!mFormEntryModel.isIndexReadonly() ? true : false);
@@ -464,13 +467,31 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 		switch (event) {
 		case FormEntryController.EVENT_BEGINNING_OF_FORM:
-			View startView = View
-					.inflate(this, R.layout.form_entry_start, null);
-			setTitle(getString(R.string.app_name) + " > "
-					+ mFormEntryModel.getFormTitle());
-			((TextView) startView.findViewById(R.id.description))
-					.setText(getString(R.string.enter_data_description,
-							mFormEntryModel.getFormTitle()));
+        	View startView;
+		    startView = View.inflate(this, R.layout.form_entry_start, null);
+		    setTitle(getString(R.string.app_name) + " > " + mFormEntryModel.getFormTitle());
+		    ((TextView) startView.findViewById(R.id.form_full_title)).setText(mFormEntryModel.getFormTitle());
+		    Drawable image = null;
+		    try {
+		    	// attempt to load the configured default splash screen
+				BitmapDrawable bitImage = new BitmapDrawable( getResources(), 
+												FileUtils.FORM_LOGO_FILE_PATH );
+				if ( bitImage.getBitmap() != null &&
+					 bitImage.getIntrinsicHeight() > 0 &&
+					 bitImage.getIntrinsicWidth() > 0 ) {
+					image = bitImage;
+				}
+		    }
+		    catch (Exception e) {
+		    	// TODO: log exception for debugging?
+		    }
+		    
+		    if ( image == null ) {
+		    	// show the opendatakit zig...
+		    	image = getResources().getDrawable(R.drawable.opendatakit_zig);
+		    }
+
+		    ((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
 			return startView;
 		case FormEntryController.EVENT_END_OF_FORM:
 			View endView = View.inflate(this, R.layout.form_entry_end, null);
