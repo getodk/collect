@@ -46,9 +46,16 @@ public class FileUtils {
 
     
     public static ArrayList<String> getValidFormsAsArrayList(String path) {
-       // ArrayList<String> dirs = getFoldersAsArrayList(path);
         ArrayList<String> formPaths = new ArrayList<String>();
+        
         File dir = new File(path);
+    	// ensure that directory exists 
+        if (!dir.exists()) {
+            if (!createFolder(path)) {
+                return null;
+            }
+        }
+
         File[] dirs = dir.listFiles();
         for (int i = 0; i < dirs.length; i++) {
         	// skip all the -media directories
@@ -59,7 +66,6 @@ public class FileUtils {
         	Log.e("Carl", "trying formname: " + formName);
 
         	formPaths.add(dirs[i].getAbsolutePath());
-           
         }
         return formPaths;
     }
