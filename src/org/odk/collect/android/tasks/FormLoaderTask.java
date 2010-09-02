@@ -119,16 +119,32 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         File formXml = new File(formPath);
         File formBin = new File(FileUtils.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
 
+        if ( formXml.exists() && formBin.exists() &&
+        	 formBin.lastModified() < formXml.lastModified() ) {
+        	// the cache is stale w.r.t. the xml -- delete cache.
+        	// Mainly useful for development.  Could be more 
+        	// important going forward if users are updating 
+        	// or adding IAV features to existing forms.
+        	Log.i(t,"Stale .cache file -- deleting!");
+        	formBin.delete();
+        }
+            
         if (formBin.exists()) {
-            // if we have binary, deserialize binary
-            fd = deserializeFormDef(formBin);
-            if (fd == null) {
-                return null;
-            }
-        } else {
-            // no binary, read from xml
+        	// if we have binary, deserialize binary
+        	try {
+        		fd = deserializeFormDef(formBin);
+        	} catch ( Exception e ) {
+        		// didn't load -- delete the cache and try plain xml
+        		formBin.delete();
+        	}
+        }
+        
+        if ( fd == null ) {
+            // no binary, or didn't load -- read from xml
             try {
-                fis = new FileInputStream(formXml);
+            	Log.i(t,"Attempting read of " + formXml.getAbsolutePath());
+
+            	fis = new FileInputStream(formXml);
                 fd = XFormUtils.getFormFromInputStream(fis);
                 if (fd == null) {
                     return null;
@@ -234,28 +250,41 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     public FormDef deserializeFormDef(File formDef) {
 
         // TODO: any way to remove reliance on jrsp?
+    	Log.i(t,"Attempting read of " + formDef.getAbsolutePath());
 
         // need a list of classes that formdef uses
         PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
         FileInputStream fis = null;
         FormDef fd = null;
+        DataInputStream dis = null;
         try {
             // create new form def
             fd = new FormDef();
             fis = new FileInputStream(formDef);
-            DataInputStream dis = new DataInputStream(fis);
+            dis = new DataInputStream(fis);
 
             // read serialized formdef into new formdef
             fd.readExternal(dis, ExtUtil.defaultPrototypes());
-            dis.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            fd = null;
         } catch (IOException e) {
             e.printStackTrace();
+            fd = null;
         } catch (DeserializationException e) {
             e.printStackTrace();
+            fd = null;
+        } finally {
+        	if ( dis != null ) {
+        		try {
+        			dis.close();
+        		} catch ( IOException e ) {
+        			// ignore...
+        		}
+        	}
         }
+        
 
         return fd;
     }
