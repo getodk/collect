@@ -17,14 +17,11 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.method.DigitsKeyListener;
-import android.util.AttributeSet;
-import android.util.TypedValue;
 
 import java.text.NumberFormat;
 
@@ -33,38 +30,19 @@ import java.text.NumberFormat;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class DecimalWidget extends StringWidget implements IQuestionWidget {
+public class DecimalWidget extends StringWidget {
 
-    public DecimalWidget(Context context) {
-        super(context);
+    public DecimalWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
     }
 
-
-    public DecimalWidget(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-
-    @Override
-    public void buildView(FormEntryPrompt prompt) {
-
-        // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
-        setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // needed to make long readonly text scroll
-        setHorizontallyScrolling(false);
-        setSingleLine(false);
-
-        // only numbers are allowed
-        setKeyListener(new DigitsKeyListener(true, true));
-
-        // only 15 characters allowed
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(15);
-        setFilters(fa);
-
-        // in case xforms calcuate returns a double, convert to integer
+    /**
+     * Override this as needed for derived classes
+     * 
+     * @return the prompt's Answer value as a string
+     */
+    protected String accessPromptAnswerAsString() {
+        String value = null;
         Double d = null;
         if (prompt.getAnswerValue() != null)
             d = (Double) prompt.getAnswerValue().getValue();
@@ -74,21 +52,29 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
         if (d != null) {
-            setText(nf.format(d));
+        	value = nf.format(d);
         }
 
-        // disable if read only
-        if (prompt.isReadOnly()) {
-            setBackgroundDrawable(null);
-            setFocusable(false);
-            setClickable(false);
-        }
+        return value;
+    }
+
+    @Override
+    protected void buildViewBodyImpl() {
+
+        // only 15 characters allowed
+        InputFilter[] fa = new InputFilter[1];
+        fa[0] = new InputFilter.LengthFilter(15);
+
+    	// restrict field to only numbers...
+        commonBuildView(InputType.TYPE_CLASS_NUMBER | 
+   			 InputType.TYPE_NUMBER_FLAG_SIGNED | 
+			 InputType.TYPE_NUMBER_FLAG_DECIMAL, fa);
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getText().toString();
+        String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -99,5 +85,4 @@ public class DecimalWidget extends StringWidget implements IQuestionWidget {
             }
         }
     }
-
 }

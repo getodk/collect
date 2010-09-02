@@ -19,18 +19,18 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.views.QuestionView;
+import org.odk.collect.android.views.AbstractFolioView;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,23 +39,15 @@ import android.widget.Toast;
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
+public class BarcodeWidget extends AbstractQuestionWidget implements IBinaryWidget {
 
     private Button mActionButton;
     private TextView mStringAnswer;
 
 
-    public BarcodeWidget(Context context) {
-        super(context);
+    public BarcodeWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
     }
-
-
-    @Override
-	public void clearAnswer() {
-        mStringAnswer.setText(null);
-        mActionButton.setText(getContext().getString(R.string.get_barcode));
-    }
-
 
     @Override
 	public IAnswerData getAnswer() {
@@ -67,15 +59,13 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         }
     }
 
-
     @Override
-	public void buildView(FormEntryPrompt prompt) {
-        setOrientation(LinearLayout.VERTICAL);
+    protected void buildViewBodyImpl() {
 
-        // set button formatting
+    	// set button formatting
         mActionButton = new Button(getContext());
         mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -83,6 +73,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
+            	// onFocusChange for buttons is not fired while in touch mode
+            	signalDescendant(true);
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
                     ((Activity) getContext()).startActivityForResult(i,
@@ -97,19 +89,24 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
 
         // set text formatting
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            mActionButton.setText(getContext().getString(R.string.replace_barcode));
-            mStringAnswer.setText(s);
-        }
         // finish complex layout
         addView(mActionButton);
         addView(mStringAnswer);
     }
 
+    protected void updateViewAfterAnswer() {
+        String s = prompt.getAnswerText();
+        if (s == null || s.equals("") ) {
+        	mActionButton.setText(getContext().getString(R.string.get_barcode));
+	        mStringAnswer.setText(null);
+        } else {
+            mActionButton.setText(getContext().getString(R.string.replace_barcode));
+            mStringAnswer.setText(s);
+        }
+    }
 
     /**
      * Allows answer to be set externally in {@Link FormEntryActivity}.
@@ -117,8 +114,8 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
     @Override
 	public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);
+        saveAnswer(true); // and evaluate constraints and trigger UI update...
     }
-
 
     @Override
 	public void setFocus(Context context) {
@@ -128,4 +125,9 @@ public class BarcodeWidget extends LinearLayout implements IQuestionWidget, IBin
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
+    @Override
+    public void setEnabled(boolean isEnabled) {
+    	mStringAnswer.setEnabled(isEnabled);
+        mActionButton.setEnabled(isEnabled && !prompt.isReadOnly());
+    }
 }

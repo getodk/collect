@@ -21,6 +21,7 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.HierarchyElement;
 
 import android.app.ListActivity;
@@ -64,7 +65,7 @@ public class FormHierarchyActivity extends ListActivity {
         setContentView(R.layout.hierarchy_layout);
 
         // We use a static FormEntryController to make jumping faster.
-        mFormEntryController = FormEntryActivity.mFormEntryController;
+        mFormEntryController = Collect.getInstance().getFormEntryController();
         mFormEntryModel = mFormEntryController.getModel();
         mStartIndex = mFormEntryModel.getFormIndex();
 

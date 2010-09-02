@@ -18,6 +18,7 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
+import android.os.Handler;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -33,55 +34,54 @@ public class WidgetFactory {
      * @param context Android context
      * @param instancePath path to the instance file
      */
-    static public IQuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
+    static public AbstractQuestionWidget createWidgetFromPrompt(Handler handler, FormEntryPrompt fep, Context context,
             String instancePath) {
-        IQuestionWidget questionWidget = null;
+    	AbstractQuestionWidget questionWidget = null;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(context);
+                        questionWidget = new DateWidget(handler, context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        questionWidget = new DecimalWidget(context);
+                        questionWidget = new DecimalWidget(handler, context, fep);
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        questionWidget = new IntegerWidget(context);
+                        questionWidget = new IntegerWidget(handler, context, fep);
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        questionWidget = new GeoPointWidget(context);
+                        questionWidget = new GeoPointWidget(handler, context, fep);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(context);
+                        questionWidget = new BarcodeWidget(handler, context, fep);
                         break;
                     default:
-                        questionWidget = new StringWidget(context);
+                        questionWidget = new StringWidget(handler, context, fep);
                         break;
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new ImageWidget(context, instancePath);
+                questionWidget = new ImageWidget(handler, context, fep, instancePath);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, instancePath);
+                questionWidget = new AudioWidget(handler, context, fep, instancePath);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(context, instancePath);
+                questionWidget = new VideoWidget(handler, context, fep, instancePath);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                questionWidget = new SelectOneWidget(context);
+                questionWidget = new SelectOneWidget(handler, context, fep);
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                questionWidget = new SelectMultiWidget(context);
+                questionWidget = new SelectMultiWidget(handler, context, fep);
                 break;
             case Constants.CONTROL_TRIGGER:
-                questionWidget = new TriggerWidget(context);
+                questionWidget = new TriggerWidget(handler, context, fep);
                 break;
             default:
-                questionWidget = new StringWidget(context);
+                questionWidget = new StringWidget(handler, context, fep);
                 break;
         }
-        questionWidget.buildView(fep);
         return questionWidget;
     }
 

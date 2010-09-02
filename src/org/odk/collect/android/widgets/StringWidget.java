@@ -17,13 +17,13 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.views.QuestionView;
+import org.odk.collect.android.views.AbstractFolioView;
 
 import android.R;
 import android.content.Context;
-import android.text.method.TextKeyListener;
-import android.text.method.TextKeyListener.Capitalize;
-import android.util.AttributeSet;
+import android.os.Handler;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -35,34 +35,26 @@ import android.widget.EditText;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class StringWidget extends EditText implements IQuestionWidget {
+public class StringWidget extends AbstractQuestionWidget {
     
-    boolean mReadOnly = false;
+    protected EditText mStringAnswer;
 
-    public StringWidget(Context context) {
-        this(context, null);
+    protected StringWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
     }
 
-
-    public StringWidget(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.editTextStyle);
+    /**
+     * Override this as needed for derived classes
+     * 
+     * @return the prompt's Answer value as a string
+     */
+    protected String accessPromptAnswerAsString() {
+    	return prompt.getAnswerText();
     }
-
-
-    public StringWidget(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-
-    @Override
-	public void clearAnswer() {
-        setText(null);
-    }
-
 
     @Override
 	public IAnswerData getAnswer() {
-        String s = getText().toString();
+        String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -70,50 +62,64 @@ public class StringWidget extends EditText implements IQuestionWidget {
         }
     }
 
+	/**
+     * Common widget-building code.  This is pulled out because some variables, 
+     * such as mReadOnly, are initialized here.  Derived classes must call this
+     * from within their buildView(...) method.
+     * 
+     * @param listener
+     * @param initialValue
+     */
+    protected void commonBuildView(int inputType, InputFilter[] filters) {
 
-    @Override
-	public void buildView(FormEntryPrompt prompt) {
+    	mStringAnswer = new EditText(getContext(), null, R.attr.editTextStyle);
+    	// monitor focus change events...
+    	mStringAnswer.setOnFocusChangeListener(this);
         // font size
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
-
-        // capitalize the first letter of the sentence
-        setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
+    	mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
 
         // needed to make long read only text scroll
-        setHorizontallyScrolling(false);
-        setSingleLine(false);
+    	mStringAnswer.setHorizontallyScrolling(false);
+    	mStringAnswer.setSingleLine(false);
 
-        if (prompt != null) {
-            mReadOnly = prompt.isReadOnly();
-            String s = prompt.getAnswerText();
-            if (s != null) {
-                setText(s);
-            }
-
-            if (mReadOnly) {
-                setBackgroundDrawable(null);
-                setFocusable(false);
-                setClickable(false);
-            }
-        }
-
+    	mStringAnswer.setInputType(inputType);
+    	if ( filters != null ) {
+    		mStringAnswer.setFilters(filters);
+    	}
+    	
+    	addView(mStringAnswer);
     }
 
+    @Override
+    protected void buildViewBodyImpl() {
+
+    	// restrict field to text with sentence capitalization...
+    	commonBuildView(InputType.TYPE_CLASS_TEXT |
+	 			   InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, null);
+    }
+
+    protected void updateViewAfterAnswer() {
+		String s = accessPromptAnswerAsString();
+		mStringAnswer.setText(s);
+    }
 
     @Override
 	public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        this.requestFocus();
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (!mReadOnly) {
-            inputManager.showSoftInput(this, 0);
+        // Put focus on text input field and display soft keyboard if appropriate.
+        if (!prompt.isReadOnly()) {
+        	mStringAnswer.requestFocus();
+            inputManager.showSoftInput(mStringAnswer, 0);
         }
         else {
             inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
         }
     }
 
+    public void setEnabled(boolean isEnabled) {
+    	mStringAnswer.setEnabled(isEnabled && !prompt.isReadOnly());
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -122,5 +128,4 @@ public class StringWidget extends EditText implements IQuestionWidget {
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

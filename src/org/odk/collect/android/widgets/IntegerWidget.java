@@ -17,14 +17,11 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.method.DigitsKeyListener;
-import android.util.AttributeSet;
-import android.util.TypedValue;
 
 /**
  * Widget that restricts values to integers.
@@ -33,53 +30,35 @@ import android.util.TypedValue;
  */
 public class IntegerWidget extends StringWidget {
 
-    public IntegerWidget(Context context) {
-        super(context);
+    public IntegerWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
     }
-
-
-    public IntegerWidget(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
 
     @Override
-    public void buildView(FormEntryPrompt prompt) {
-        // formatting
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
-        setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+    protected String accessPromptAnswerAsString() {
+        String value = null;
+        if (prompt.getAnswerValue() != null) {
+        	value = ((Integer) prompt.getAnswerValue().getValue()).toString();
+        }
+        return value;
+    }
 
-        // needed to make long readonly text scroll
-        setHorizontallyScrolling(false);
-        setSingleLine(false);
-
-        // only allows numbers and no periods
-        setKeyListener(new DigitsKeyListener(true, false));
+    @Override
+    protected void buildViewBodyImpl() {
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
-        setFilters(fa);
-
-        if (prompt.isReadOnly()) {
-            setBackgroundDrawable(null);
-            setFocusable(false);
-            setClickable(false);
-        }
-
-        Integer i = null;
-        if (prompt.getAnswerValue() != null)
-            i = (Integer) prompt.getAnswerValue().getValue();
-
-        if (i != null) {
-            setText(i.toString());
-        }
+    	
+    	// restrict field to only numbers...
+    	commonBuildView(InputType.TYPE_CLASS_NUMBER | 
+			 		 InputType.TYPE_NUMBER_FLAG_SIGNED, fa);
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getText().toString();
+        String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

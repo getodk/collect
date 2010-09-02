@@ -22,16 +22,19 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.views.AbstractFolioView;
 import org.odk.collect.android.views.IAVTLayout;
-import org.odk.collect.android.views.QuestionView;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -39,39 +42,39 @@ import android.widget.LinearLayout;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
-    private final static int CHECKBOX_ID = 100;
-    private boolean mCheckboxInit = true;
-    Vector<SelectChoice> mItems;
+public class SelectMultiWidget extends AbstractQuestionWidget implements IMultipartSelectWidget, 
+	OnCheckedChangeListener {
+    
+    private boolean insideUpdate = false;
 
-    public SelectMultiWidget(Context context) {
-        super(context);
-    }
+    /**
+     * The buttons ordering is the same as the prompt's Vector<SelectChoice>
+     */
+    final CheckBox[] buttons;
 
-
-    @Override
-	public void clearAnswer() {
-        int j = mItems.size();
-        for (int i = 0; i < j; i++) {
-
-            // no checkbox group so find by id + offset
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
-            if (c.isChecked()) {
-                c.setChecked(false);
-            }
+    public SelectMultiWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
+        int dim = 0;
+        if ( prompt.getSelectChoices() != null ) {
+        	dim = prompt.getSelectChoices().size();
+        }
+        if ( dim == 0 ) {
+        	buttons = null;
+        } else {
+        	buttons = new CheckBox[dim];
         }
     }
-
-
+    
     @Override
 	public IAnswerData getAnswer() {
         Vector<Selection> vc = new Vector<Selection>();
-        for (int i = 0; i < mItems.size(); i++) {
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
+        for (int i = 0; i < prompt.getSelectChoices().size(); i++) {
+            CheckBox c = buttons[i];
             if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i).getValue()));
+            	String value = prompt.getSelectChoices().get(i).getValue();
+    			Log.i(SelectMultiWidget.class.getName(), "getAnswer checked: " + value);
+                vc.add(new Selection(value));
             }
-
         }
 
         if (vc.size() == 0) {
@@ -82,90 +85,123 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
     }
 
-
-    @SuppressWarnings("unchecked")
-	@Override
-    public void buildView(final FormEntryPrompt prompt) {
-        mItems = prompt.getSelectChoices();
-
-        setOrientation(LinearLayout.VERTICAL);
-
-        Vector<Selection> ve = new Vector<Selection>();
-        if (prompt.getAnswerValue() != null) {
-            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
-        }
-
-        if (prompt.getSelectChoices() != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                // no checkbox group so id by answer + offset
-                CheckBox c = new CheckBox(getContext());
-
-                // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && prompt.isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                            } else {
-                                buttonView.setChecked(true);
-                            }
-                        }
-                    }
-                });
-
-                c.setId(CHECKBOX_ID + i);
-                c.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
-                c.setFocusable(!prompt.isReadOnly());
-                c.setEnabled(!prompt.isReadOnly());
-                for (int vi = 0; vi < ve.size(); vi++) {
-                    // match based on value, not key
-                    if (mItems.get(i).getValue().equals(ve.elementAt(vi).getValue())) {
-                        c.setChecked(true);
-                        break;
-                    }
-
-                }
-
-                String audioURI = null;
-                audioURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
-                
-
-                String imageURI = null;
-                imageURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
-
-                String videoURI = null; // TODO: uncomment when video ready
-                videoURI =
-                		prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
-                 
-
-                IAVTLayout mediaLayout = new IAVTLayout(getContext());
-                mediaLayout.setAVT(c, audioURI, imageURI, videoURI);
-                addView(mediaLayout);
-
-                // Last, add the dividing line between elements (except for the last element)
-                ImageView divider = new ImageView(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-                if (i != mItems.size() - 1) {
-                    addView(divider);
-                }
-
-            }
-        }
-
-        mCheckboxInit = false;
+    @Override
+    protected void buildViewBodyImpl() {
+    	// buildStart
+		Vector<SelectChoice> items = prompt.getSelectChoices();
+		if ( items != null ) {
+	    	for ( SelectChoice c : items ) {
+	    		buildSelectElement(c);
+	    	}
+		}
     }
 
+	@Override
+	public ViewGroup buildSelectElement(SelectChoice sc) {
+		Vector<SelectChoice> items = prompt.getSelectChoices();
+		if ( items == null ) {
+			// should never get here...
+			throw new IllegalStateException("no selection choices!");
+		}
+
+		int i;
+		for ( i = 0 ; i < items.size() ; ++i ) {
+			if ( items.get(i).equals(sc) ) break;
+		}
+		
+		if ( i == items.size() ) {
+			throw new IllegalArgumentException("selection choice not found!");
+		}
+
+		if ( i < 0 ) {
+	        // Add a dividing line above this element
+	        ImageView divider = new ImageView(getContext());
+	        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+            addView(divider);
+		}
+		
+        // no checkbox group so id by answer + offset
+        CheckBox c = new CheckBox(getContext());
+        buttons[i] = c;
+
+        c.setText(prompt.getSelectChoiceText(sc));
+        c.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        c.setEnabled(!prompt.isReadOnly());
+        
+        // when clicked, check for readonly before toggling
+        c.setOnCheckedChangeListener(this);
+
+        String audioURI =
+                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
+        
+        String imageURI =
+                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
+
+        String videoURI =
+        		prompt.getSpecialFormSelectChoiceText(sc, "video");
+         
+        IAVTLayout mediaLayout = new IAVTLayout(getContext());
+        mediaLayout.setAVT(c, audioURI, imageURI, videoURI);
+        
+        addView(mediaLayout);
+        return this;
+	}
+
+	@SuppressWarnings(value = { "unchecked" })
+    protected void updateViewAfterAnswer() {
+    	try {
+    		insideUpdate = true;
+	    	IAnswerData answer = prompt.getAnswerValue();
+	    	Vector<Selection> ve;
+	    	if ( (answer == null) || (answer.getValue() == null) ) {
+	    		ve = new Vector<Selection>();
+	    	} else {
+	    		ve = (Vector<Selection>) answer.getValue();
+	    	}
+	
+	    	if ( buttons != null ) {
+		    	for ( int i = 0 ; i < buttons.length; ++i ) {
+		            CheckBox c = buttons[i];
+		            
+		            String value = prompt.getSelectChoices().get(i).getValue();
+		            boolean found = false;
+		            for (Selection s : ve) {
+		            	if ( value.equals(s.getValue())) {
+		            		found = true;
+		            		break;
+		            	}
+		            }
+		            
+					Log.i(SelectMultiWidget.class.getName(), 
+							"updateViewAfterAnswer: " + value + " isChecked: " + Boolean.toString(found) );
+		            c.setChecked(found);
+		    	}
+	    	}
+    	} finally {
+    		insideUpdate = false;
+    	}
+    }
 
     @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void setEnabled(boolean isEnabled) {
+    	if ( buttons != null ) {
+	    	for ( View v : buttons) {
+	    		v.setEnabled(isEnabled && !prompt.isReadOnly());
+	    	}
+    	}
     }
 
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    	Log.i(SelectMultiWidget.class.getName(), 
+    			"onCheckedChanged isChecked:" + Boolean.toString(isChecked));
+    	// no-op if read-only
+    	// no-op if insideUpdate
+        if (!prompt.isReadOnly() && !insideUpdate) {
+            // report that we have lost and gained focus
+            // this forces an update of the UI against the model...
+        	signalDescendant(false);
+        	signalDescendant(true);
+        }
+	}
 }

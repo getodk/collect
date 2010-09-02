@@ -21,15 +21,17 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.views.IAVTLayout;
-import org.odk.collect.android.views.QuestionView;
+import org.odk.collect.android.views.AbstractFolioView;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import java.util.Vector;
@@ -40,131 +42,159 @@ import java.util.Vector;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-/*
- * TODO: We're not actually using the RadioGroup anymore, so this should probably be changed to a
- * LinearLayout
- */
-public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCheckedChangeListener {
-    private static final int RANDOM_BUTTON_ID = 4853487;
-    Vector<SelectChoice> mItems;
+public class SelectOneWidget extends AbstractQuestionWidget implements OnCheckedChangeListener, IMultipartSelectWidget {
+    
+    private boolean insideUpdate = false;
 
-    Vector<RadioButton> buttons;
-
-
-    public SelectOneWidget(Context context) {
-        super(context);
-    }
+    /**
+     * The buttons ordering is the same as the prompt's Vector<SelectChoice>
+     */
+    final RadioButton[] buttons;
 
 
-    @Override
-	public void clearAnswer() {
-        for (RadioButton button : this.buttons) {
-            if (button.isChecked()) {
-                button.setChecked(false);
-                return;
-            }
+    public SelectOneWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
+        int dim = 0;
+        if ( prompt.getSelectChoices() != null ) {
+        	dim = prompt.getSelectChoices().size();
+        }
+        if ( dim == 0 ) {
+        	buttons = null; 
+        } else {
+        	buttons = new RadioButton[dim];
         }
     }
-
-
+    
     @Override
 	public IAnswerData getAnswer() {
-        int i = getCheckedId();
-        if (i == -1) {
-            return null;
-        } else {
-            String s = mItems.elementAt(i - RANDOM_BUTTON_ID).getValue();
-            return new SelectOneData(new Selection(s));
-        }
-    }
 
+    	if ( buttons != null ) {
+    		for ( int i = 0 ; i < buttons.length ; ++i ) {
+	    		RadioButton b = buttons[i];
+	    		if ( b.isChecked() ) {
+	                String s = prompt.getSelectChoices().elementAt(i).getValue();
+	                return new SelectOneData(new Selection(s));
+	    		}
+	    	}
+    	}
+    	return null;
+    }
 
     @Override
-	public void buildView(final FormEntryPrompt prompt) {
-        mItems = prompt.getSelectChoices();
-        buttons = new Vector<RadioButton>();
-
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
-        }
-
-        if (prompt.getSelectChoices() != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
-                r.setOnCheckedChangeListener(this);
-                r.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                r.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
-                r.setId(i + RANDOM_BUTTON_ID);
-                r.setEnabled(!prompt.isReadOnly());
-                r.setFocusable(!prompt.isReadOnly());
-                buttons.add(r);
-
-                if (mItems.get(i).getValue().equals(s)) {
-                    r.setChecked(true);
-                }
-
-                String audioURI = null;
-                audioURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
-
-
-                String imageURI = null;
-                imageURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
-                
-
-                String videoURI = null; // TODO: uncomment when video ready
-                videoURI =
-                		prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
-                 
-
-                IAVTLayout mediaLayout = new IAVTLayout(getContext());
-                mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
-                addView(mediaLayout);
-
-                // Last, add the dividing line (except for the last element)
-                ImageView divider = new ImageView(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-                if (i != mItems.size() - 1) {
-                    mediaLayout.addDivider(divider);
-                }
-            }
-        }
+    protected void buildViewBodyImpl() {
+		Vector<SelectChoice> items = prompt.getSelectChoices();
+		if ( items != null ) {
+	    	for ( SelectChoice c : items ) {
+	    		buildSelectElement(c);
+	    	}
+		}
     }
 
+	@Override
+	public ViewGroup buildSelectElement(SelectChoice sc) {
+		Vector<SelectChoice> items = prompt.getSelectChoices();
+		if ( items == null ) {
+			// should never get here...
+			throw new IllegalStateException("no selection choices!");
+		}
+
+		int i;
+		for ( i = 0 ; i < items.size() ; ++i ) {
+			if ( items.get(i).equals(sc) ) break;
+		}
+		
+		if ( i == items.size() ) {
+			throw new IllegalArgumentException("selection choice not found!");
+		}
+
+		if ( i > 0 ) {
+	        // Add a dividing line before all but the first element
+	        ImageView divider = new ImageView(getContext());
+	        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+            addView(divider);
+        }
+		
+        RadioButton r = new RadioButton(getContext());
+        buttons[i] = r;
+
+        r.setText(prompt.getSelectChoiceText(sc));
+        r.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        r.setEnabled(!prompt.isReadOnly());
+
+        r.setOnCheckedChangeListener(this);
+
+        String audioURI =
+                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
+
+
+        String imageURI =
+                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
+        
+
+        String videoURI =
+        		prompt.getSpecialFormSelectChoiceText(sc, "video");
+         
+
+        IAVTLayout mediaLayout = new IAVTLayout(getContext());
+        mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
+        
+        addView(mediaLayout);
+        return this;
+	}
+
+    protected void updateViewAfterAnswer() {
+    	try {
+    		insideUpdate = true;
+	        String s = null;
+	        if (prompt.getAnswerValue() != null) {
+	            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+	        }
+	        
+	        Vector<SelectChoice> items = prompt.getSelectChoices();
+	        if ( items != null ) {
+	        	for ( int i = 0 ; i < items.size(); ++i ) {
+	        		String sMatch = items.get(i).getValue();
+	                RadioButton r = buttons[i];
+	        		r.setChecked(sMatch.equals(s));
+	        	}
+	        }
+    	} finally {
+    		insideUpdate = false;
+    	}
+    }
 
     @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void setEnabled(boolean isEnabled) {
+    	if ( buttons != null ) {
+	    	for ( View v : buttons) {
+	    		v.setEnabled(isEnabled && !prompt.isReadOnly());
+	    	}
+    	}
     }
-
-
-    public int getCheckedId() {
-        for (RadioButton button : this.buttons) {
-            if (button.isChecked()) {
-                return button.getId();
-            }
-        }
-        return -1;
-    }
-
 
     @Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (!isChecked) {
-            // If it got unchecked, we don't care.
-            return;
-        }
+    	Log.i(SelectOneWidget.class.getName(), 
+    			"onCheckedChanged isChecked: " + Boolean.toString(isChecked));
 
-        for (RadioButton button : this.buttons) {
-            if (button.isChecked() && !(buttonView == button)) {
-                button.setChecked(false);
-            }
-        }
+    	// no-op if read-only
+    	// no-op if insideUpdate
+    	// no-op if not checked (i.e., we are unchecking a button)
+    	if (!prompt.isReadOnly() && !insideUpdate && isChecked) {
+		    
+    		// make sure all others are unchecked...
+	        if ( buttons != null ) {
+		        for (RadioButton button : buttons) {
+		            if (button.isChecked() && (buttonView != button)) {
+		                button.setChecked(false);
+		            }
+		        }
+	        }
+	
+        	// report that we have lost and gained focus.
+        	// this forces an update of the UI against the model...
+        	signalDescendant(false);
+        	signalDescendant(true);
+    	}
     }
-
 }

@@ -19,19 +19,18 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.views.QuestionView;
+import org.odk.collect.android.views.AbstractFolioView;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -42,9 +41,9 @@ import java.io.File;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
+public class AudioWidget extends AbstractQuestionWidget implements IBinaryWidget {
 
-    private final static String t = "MediaWidget";
+    private final static String t = "AudioWidget";
 
     private Button mCaptureButton;
     private Button mPlayButton;
@@ -61,11 +60,10 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
     private int mPlayText;
 
 
-    public AudioWidget(Context context, String instancePath) {
-        super(context);
+    public AudioWidget(Handler handler, Context context, FormEntryPrompt prompt, String instancePath) {
+        super(handler, context, prompt);
         initialize(instancePath);
     }
-
 
     private void initialize(String instancePath) {
         mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
@@ -78,31 +76,6 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mPlayText = R.string.play_audio;
     }
 
-
-    private void deleteMedia() {
-        // get the file path and delete the file
-        File f = new File(mInstanceFolder + "/" + mBinaryName);
-        if (!f.delete()) {
-            Log.i(t, "Failed to delete " + f);
-        }
-
-        // clean up variables
-        mBinaryName = null;
-    }
-
-
-    @Override
-	public void clearAnswer() {
-        // remove the file
-        deleteMedia();
-
-        // reset buttons
-        mPlayButton.setEnabled(false);
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mDisplayText.setText(getContext().getString(R.string.no_capture));
-    }
-
-
     @Override
 	public IAnswerData getAnswer() {
         if (mBinaryName != null) {
@@ -112,16 +85,13 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         }
     }
 
-
     @Override
-	public void buildView(FormEntryPrompt prompt) {
-        setOrientation(LinearLayout.VERTICAL);
-
+	protected void buildViewBodyImpl() {
         // setup capture button
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -129,6 +99,8 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
+            	// focus change for buttons is not fired in touch mode
+            	signalDescendant(true);
                 Intent i = new Intent(mCaptureIntent);
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
@@ -139,13 +111,15 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         // setup play button
         mPlayButton = new Button(getContext());
         mPlayButton.setText(getContext().getString(mPlayText));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
         // on play, launch the appropriate viewer
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
+            	// focus change for buttons is not fired in touch mode
+            	signalDescendant(true);
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + "/" + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
@@ -158,22 +132,43 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         mDisplayText = new TextView(getContext());
         mDisplayText.setPadding(5, 0, 0, 0);
 
-        mBinaryName = prompt.getAnswerText();
+        // finish complex layout
+        addView(mCaptureButton);
+        addView(mPlayButton);
+    }
+
+    private void deleteMedia() {
+    	// done?
+    	if ( mBinaryName == null ) return;
+    	
+        // get the file path and delete the file
+        File f = new File(mInstanceFolder + "/" + mBinaryName);
+        if (!f.delete()) {
+            Log.i(t, "Failed to delete " + f);
+        }
+
+        // clean up variables
+        mBinaryName = null;
+    }
+
+    protected void updateViewAfterAnswer() {
+    	
+    	String newAnswer = prompt.getAnswerText();
+    	if ( mBinaryName != null && !mBinaryName.equals(newAnswer) ) {
+    		deleteMedia();
+    	}
+        mBinaryName = newAnswer;
+        
         if (mBinaryName != null) {
             mPlayButton.setEnabled(true);
             mCaptureButton.setText(getContext().getString(mReplaceText));
             mDisplayText.setText(getContext().getString(R.string.one_capture));
         } else {
             mPlayButton.setEnabled(false);
+            mCaptureButton.setText(getContext().getString(mCaptureText));
             mDisplayText.setText(getContext().getString(R.string.no_capture));
         }
-
-        // finish complex layout
-        addView(mCaptureButton);
-        addView(mPlayButton);
-
     }
-
 
     private Uri getUriFromPath(String path) {
         // find entry in content provider
@@ -219,15 +214,17 @@ public class AudioWidget extends LinearLayout implements IQuestionWidget, IBinar
         // remove the database entry and update the name
         getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
         mBinaryName = s.substring(s.lastIndexOf('/') + 1);
+        saveAnswer(true); // and evaluate constraints and trigger UI update...
     }
-
 
     @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void setEnabled(boolean isEnabled) {
+        if (mBinaryName != null) {
+            mPlayButton.setEnabled(isEnabled);
+            mCaptureButton.setEnabled(isEnabled && !prompt.isReadOnly());
+        } else {
+            mPlayButton.setEnabled(false);
+            mCaptureButton.setEnabled(isEnabled && !prompt.isReadOnly());
+        }
     }
-
 }

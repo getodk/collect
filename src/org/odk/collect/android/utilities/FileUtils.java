@@ -50,6 +50,7 @@ public class FileUtils {
     
     public static ArrayList<String> getValidFormsAsArrayList(String path) {
         ArrayList<String> formPaths = new ArrayList<String>();
+
         File dir = new File(path);
 
         if (!storageReady()) {
@@ -67,6 +68,7 @@ public class FileUtils {
         		continue;
         	
             String formName = dirs[i].getName();
+        	Log.i(t, "Found formname: " + formName);
 
         	formPaths.add(dirs[i].getAbsolutePath());
         }

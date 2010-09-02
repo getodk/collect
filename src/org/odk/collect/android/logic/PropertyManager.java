@@ -83,8 +83,8 @@ public class PropertyManager implements IPropertyManager {
 
 
     @Override
-    public void setProperty(String propertyName, @SuppressWarnings("rawtypes") Vector propertyValue) {
-
+    public void setProperty(String propertyName, @SuppressWarnings("unchecked")
+    	    Vector propertyValue) {
     }
 
 

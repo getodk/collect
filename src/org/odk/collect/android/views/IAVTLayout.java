@@ -170,7 +170,7 @@ public class IAVTLayout extends RelativeLayout {
                 }
 
                 if (errorMsg != null) {
-                    // errorMsg is only set when an error has occured
+                    // errorMsg is only set when an error has occurred
                     Log.e(t, errorMsg);
                     mMissingImage = new TextView(getContext());
                     mMissingImage.setText(errorMsg);

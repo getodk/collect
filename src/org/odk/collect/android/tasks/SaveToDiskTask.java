@@ -21,7 +21,7 @@ import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XFormSerializingVisitor;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormSavedListener;
 
@@ -71,7 +71,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return validateStatus;
         }
 
-        FormEntryActivity.mFormEntryController.getModel().getForm().postProcessInstance();
+        Collect.getInstance().getFormEntryController().getModel().getForm().postProcessInstance();
 
         if (mSave && exportData(mInstancePath, mContext,mMarkCompleted)) {
             return SAVED_AND_EXIT;
@@ -90,7 +90,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         try {
 
             // assume no binary data inside the model.
-            FormInstance datamodel = FormEntryActivity.mFormEntryController.getModel().getForm().getInstance();
+            FormInstance datamodel = Collect.getInstance().getFormEntryController().getModel().getForm().getInstance();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
@@ -205,26 +205,29 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      */
 
     private int validateAnswers(Boolean markCompleted) {
-
-        FormEntryModel fem = FormEntryActivity.mFormEntryController.getModel();
+    	FormEntryController fec = Collect.getInstance().getFormEntryController();
+        FormEntryModel fem = fec.getModel();
         FormIndex i = fem.getFormIndex();
 
-        FormEntryActivity.mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        fec.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
         int event;
-        while ((event = FormEntryActivity.mFormEntryController.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
+        while ((event = fec.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
             if (event != FormEntryController.EVENT_QUESTION) {
                 continue;
             } else {
                 int saveStatus =
-                    FormEntryActivity.mFormEntryController.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
+                	fec.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
                 if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) { 
-                    return saveStatus;
+                	Collect.getInstance().createConstraintToast(
+        					fem.getQuestionPrompt()
+        					.getConstraintText(), saveStatus);
+        			return saveStatus;
                 }
             }
         }
 
-        FormEntryActivity.mFormEntryController.jumpToIndex(i);
+        fec.jumpToIndex(i);
         return VALIDATED;
     }
 

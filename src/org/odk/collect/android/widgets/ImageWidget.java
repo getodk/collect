@@ -20,7 +20,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.views.QuestionView;
+import org.odk.collect.android.views.AbstractFolioView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,14 +29,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -47,7 +46,7 @@ import java.io.File;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinaryWidget {
+public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget {
 
     private final static String t = "MediaWidget";
 
@@ -65,8 +64,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
     private int mReplaceText;
 
 
-    public ImageWidget(Context context, String instancePath) {
-        super(context);
+    public ImageWidget(Handler handler, Context context, FormEntryPrompt prompt, String instancePath) {
+        super(handler, context, prompt);
         initialize(instancePath);
     }
 
@@ -82,8 +81,15 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     private void deleteMedia() {
-        // get the file path and delete the file
+    	// non-existent?
+    	if ( mBinaryName == null ) return;
 
+    	Log.i(t, "Deleting current answer: " + mBinaryName);
+    	
+    	// release image...
+    	mImageView.setImageBitmap(null);
+        // get the file path and delete the file
+    	//
         // There's only 1 in this case, but android 1.6 doesn't implement delete on
         // android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI only on
         // android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI + a #
@@ -110,19 +116,6 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         Log.i(t, "Deleted " + del + " rows from media content provider");
     }
 
-
-    @Override
-	public void clearAnswer() {
-        // remove the file
-        deleteMedia();
-        mImageView.setImageBitmap(null);
-
-        // reset buttons
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mDisplayText.setText(getContext().getString(R.string.no_capture));
-    }
-
-
     @Override
 	public IAnswerData getAnswer() {
         if (mBinaryName != null) {
@@ -132,16 +125,14 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         }
     }
 
-
     @Override
-	public void buildView(FormEntryPrompt prompt) {
-        setOrientation(LinearLayout.VERTICAL);
-
+    protected void buildViewBodyImpl() {
+        
         // setup capture button
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -149,6 +140,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
+            	signalDescendant(true);
                 Intent i = new Intent(mCaptureIntent);
                 // We give the camera an absolute filename/path where to put the
                 // picture because of bug:
@@ -167,40 +159,22 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
             }
         });
 
-        // retrieve answer from data model and update ui
-        mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5, 0, 0, 0);
-
-        mBinaryName = prompt.getAnswerText();
-        if (mBinaryName != null) {
-            mCaptureButton.setText(getContext().getString(mReplaceText));
-            mDisplayText.setText(getContext().getString(R.string.one_capture));
-        } else {
-            mDisplayText.setText(getContext().getString(R.string.no_capture));
-        }
-
         // finish complex layout
         addView(mCaptureButton);
 
+        mDisplayText = new TextView(getContext());
+        mDisplayText.setPadding(5, 0, 0, 0);
+
         mImageView = new ImageView(getContext());
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        File testsize = new File(mInstanceFolder + "/" + mBinaryName);
-        // You get an OutOfMemoryError if the file size is > ~900k.
-        // We're doing 500k just to be safe.
-        if (testsize.length() > 500000) {
-            options.inSampleSize = 8;
-        } else {
-            options = null;
-        }
-
-        Bitmap bmp = BitmapFactory.decodeFile(mInstanceFolder + "/" + mBinaryName, options);
-        mImageView.setImageBitmap(bmp);
         mImageView.setPadding(10, 10, 10, 10);
         mImageView.setAdjustViewBounds(true);
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
+            	signalDescendant(true);
+            	// do nothing if there is no image...
+            	if ( mBinaryName == null ) return;
+
                 Intent i = new Intent("android.intent.action.VIEW");
                 String[] projection = {
                     "_id"
@@ -224,6 +198,37 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         addView(mImageView);
     }
 
+    protected void updateViewAfterAnswer() {
+    	
+    	String newAnswer = prompt.getAnswerText();
+    	if ( mBinaryName != null && !mBinaryName.equals(newAnswer)) {
+    		deleteMedia();
+    	}
+    	mBinaryName = newAnswer;
+    	
+        if (mBinaryName != null) {
+            mCaptureButton.setText(getContext().getString(mReplaceText));
+            mDisplayText.setText(getContext().getString(R.string.one_capture));
+            
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            File testsize = new File(mInstanceFolder + "/" + mBinaryName);
+            // You get an OutOfMemoryError if the file size is > ~900k.
+            // We're doing 500k just to be safe.
+            if (testsize.length() > 500000) {
+                options.inSampleSize = 8;
+            } else {
+                options = null;
+            }
+
+            Bitmap bmp = BitmapFactory.decodeFile(mInstanceFolder + "/" + mBinaryName, options);
+            mImageView.setImageBitmap(bmp);
+        } else {
+            mCaptureButton.setText(getContext().getString(mCaptureText));
+            mDisplayText.setText(getContext().getString(R.string.no_capture));
+            
+            mImageView.setImageBitmap(null);
+        }
+    }
 
     private String getPathFromUri(Uri uri) {
         // find entry in content provider
@@ -247,16 +252,18 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         String binarypath = getPathFromUri((Uri) binaryuri);
         File f = new File(binarypath);
         mBinaryName = f.getName();
-        Log.i(t, "Setting current answer to " + f.getName());
+        Log.i(t, "Setting current answer to " + mBinaryName);
+        saveAnswer(true); // and evaluate constraints and trigger UI update...
     }
-
 
     @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void setEnabled(boolean isEnabled) {
+        if (mBinaryName != null) {
+        	mImageView.setEnabled(isEnabled);
+            mCaptureButton.setEnabled(isEnabled && !prompt.isReadOnly());
+        } else {
+        	mImageView.setEnabled(false);
+            mCaptureButton.setEnabled(isEnabled && !prompt.isReadOnly());
+        }
     }
-
 }

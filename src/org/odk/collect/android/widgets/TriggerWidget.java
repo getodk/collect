@@ -18,40 +18,30 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.views.QuestionView;
+import org.odk.collect.android.views.AbstractFolioView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class TriggerWidget extends LinearLayout implements IQuestionWidget {
+public class TriggerWidget extends AbstractQuestionWidget {
 
     private CheckBox mActionButton;
     private TextView mStringAnswer;
     private static String mOK = "OK";
 
-    public TriggerWidget(Context context) {
-        super(context);
+    public TriggerWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
     }
-
-
-    @Override
-	public void clearAnswer() {
-        mStringAnswer.setText(null);
-        mActionButton.setChecked(false);
-    }
-
 
     @Override
 	public IAnswerData getAnswer() {
@@ -63,14 +53,12 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
         }
     }
 
-
     @Override
-	public void buildView(FormEntryPrompt prompt) {
-        this.setOrientation(LinearLayout.VERTICAL);
-
+    protected void buildViewBodyImpl() {
+        
         mActionButton = new CheckBox(getContext());
         mActionButton.setText(getContext().getString(R.string.trigger));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         //mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -82,35 +70,34 @@ public class TriggerWidget extends LinearLayout implements IQuestionWidget {
                 } else {
                     mStringAnswer.setText(null);
                 }
+                signalDescendant(true);
             }
         });
 
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
+        // finish complex layout
+        addView(mActionButton);
+    }
+
+    protected void updateViewAfterAnswer() {
+		String s = prompt.getAnswerText();
+		mStringAnswer.setText(s);
+    	if ( s != null ) {
             if (s.equals(mOK)) {
                 mActionButton.setChecked(true);
             } else {
                 mActionButton.setChecked(false);
             }
-            mStringAnswer.setText(s);
-
+        } else {
+        	mActionButton.setChecked(false);
         }
-
-        // finish complex layout
-        this.addView(mActionButton);
-       // this.addView(mStringAnswer);
     }
 
-
     @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void setEnabled(boolean isEnabled) {
+    	mActionButton.setEnabled(isEnabled && !prompt.isReadOnly());
     }
 }

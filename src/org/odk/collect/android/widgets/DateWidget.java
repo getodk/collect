@@ -19,10 +19,10 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -35,8 +35,8 @@ import java.util.GregorianCalendar;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DateWidget extends LinearLayout implements IQuestionWidget {
-
+public class DateWidget extends AbstractQuestionWidget {
+    
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
 
@@ -44,21 +44,9 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
     private final static int YEARSHIFT = 1900;
 
 
-    public DateWidget(Context context) {
-        super(context);
+    public DateWidget(Handler handler, Context context, FormEntryPrompt prompt) {
+        super(handler, context, prompt);
     }
-
-
-    /**
-     * Resets date to today.
-     */
-    @Override
-	public void clearAnswer() {
-        final Calendar c = new GregorianCalendar();
-        mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
-            mDateListener);
-    }
-
 
     @Override
 	public IAnswerData getAnswer() {
@@ -70,32 +58,24 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
         return new DateData(d);
     }
 
-
     /**
      * Build view for date answer. Includes retrieving existing answer.
      */
     @Override
-	public void buildView(final FormEntryPrompt prompt) {
+    protected void buildViewBodyImpl() {
         final Calendar c = new GregorianCalendar();
-
+        
         mDatePicker = new DatePicker(getContext());
-        if (!prompt.isReadOnly()) {
-            mDatePicker.setFocusable(true);
-            mDatePicker.setEnabled(true);
-        }
+        mDatePicker.setFocusable(!prompt.isReadOnly());
+        mDatePicker.setEnabled(!prompt.isReadOnly());
 
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
 			public void onDateChanged(DatePicker view, int year, int month, int day) {
-                if (prompt.isReadOnly()) {
-                    if (prompt.getAnswerValue() != null) {
-                        Date d = (Date) prompt.getAnswerValue().getValue();
-                        view.updateDate(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate());
-                    } else {
-                        view.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
-                                .get(Calendar.DAY_OF_MONTH));
-                    }
-                } else {
+            	// TODO: MES -- is this broken if calculated date?
+            	// TODO: MES -- Or if calculated readonly() field?
+            	signalDescendant(true);
+                if (!prompt.isReadOnly()) {
                     // handle leap years and number of days in month
                     // TODO
                     // http://code.google.com/p/android/issues/detail?id=2081
@@ -110,19 +90,22 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
             }
         };
 
-        if (prompt.getAnswerValue() != null) {
-            Date d = (Date) prompt.getAnswerValue().getValue();
-            mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
-        } else {
-            // create date widget with now
-            clearAnswer();
-        }
-
         setGravity(Gravity.LEFT);
         addView(mDatePicker);
     }
 
-
+    protected void updateViewAfterAnswer() {
+    	IAnswerData answer = prompt.getAnswerValue();
+    	if ( answer == null ) {
+            final Calendar c = new GregorianCalendar();
+            mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
+                mDateListener);
+    	} else {
+            Date d = (Date) prompt.getAnswerValue().getValue();
+            mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
+    	}
+    }
+    
     @Override
 	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
@@ -131,4 +114,8 @@ public class DateWidget extends LinearLayout implements IQuestionWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
+    @Override
+    public void setEnabled(boolean isEnabled) {
+    	mDatePicker.setEnabled(isEnabled && !prompt.isReadOnly());
+    }
 }
