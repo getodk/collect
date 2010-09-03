@@ -255,7 +255,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case IMAGE_CAPTURE:
 			// We saved the image to the tempfile_path, but we really want
 			// it to be in:
-			// /sdcard/odk/instances/[current instnace]/something.jpg
+			// INSTANCES_PATH + [current instance]/something.jpg
 			// so we move it there before inserting it into the content
 			// provider.
 			File fi = new File(FileUtils.TMPFILE_PATH);

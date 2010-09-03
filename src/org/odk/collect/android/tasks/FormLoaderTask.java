@@ -27,6 +27,8 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.utilities.FileUtils;
@@ -34,6 +36,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -167,27 +170,35 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FormEntryModel fem = new FormEntryModel(fd);
         fec = new FormEntryController(fem);
 
-        // import existing data into formdef
-        if (instancePath != null) {
-            // This order is important.  Import data, then initialize.
-            importData(instancePath, fec);
-            fd.initialize(false);
-        } else {
-            fd.initialize(true);
+        try {
+	        // import existing data into formdef
+	        if (instancePath != null) {
+	            // This order is important.  Import data, then initialize.
+	            importData(instancePath, fec);
+	            fd.initialize(false);
+	        } else {
+	            fd.initialize(true);
+	        }
+        } catch ( Exception e ) {
+        	e.printStackTrace();
+            Toast.makeText(Collect.getInstance().getApplicationContext(), 
+                    Collect.getInstance().getString(R.string.load_error,
+                    		formXml.getName()) + " : " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        	return null;
         }
 
-        // set paths to /sdcard/odk/forms/formfilename-media/
+        // set paths to FORMS_PATH + formfilename-media/
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
-        String mediaPath =
-            formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
+        String mediaPath = FileUtils.FORMS_PATH +
+            formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media/";
         
-        Log.e("Carl", "mediaPath = " + mediaPath);
+        Log.i(t, "mediaPath = " + mediaPath);
        
         if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
-                new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"
-                        + mediaPath + "-media"));
+                new FileReferenceFactory(mediaPath));
             ReferenceManager._()
                     .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
             ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));

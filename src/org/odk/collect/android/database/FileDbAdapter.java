@@ -81,17 +81,11 @@ public class FileDbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_PATH =
-        Environment.getExternalStorageDirectory() + "/odk/metadata";
 
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
         DatabaseHelper() {
-            super(DATABASE_PATH, DATABASE_NAME, null, DATABASE_VERSION);
-
-            // Create database storage directory if it doesn't not already exist.
-            File f = new File(DATABASE_PATH);
-            f.mkdirs();
+            super(FileUtils.getDatabasePath(), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
 

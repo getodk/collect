@@ -79,14 +79,15 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        displaySplash();
-        setContentView(R.layout.main_menu);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-        
+
         // if sd card error, quit
         if (!FileUtils.storageReady()) {
         	createErrorDialog(getString(R.string.no_sd_error),true);
         }
+
+        displaySplash();
+        setContentView(R.layout.main_menu);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
