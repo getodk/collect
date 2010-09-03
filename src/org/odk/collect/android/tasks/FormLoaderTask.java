@@ -34,7 +34,6 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -191,11 +190,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // set paths to FORMS_PATH + formfilename-media/
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
-        String mediaPath = FileUtils.FORMS_PATH +
-            formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) + "-media/";
+        String mediaPath = FileUtils.getFormMediaPath(formXml);
         
-        Log.i(t, "mediaPath = " + mediaPath);
-       
         if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
                 new FileReferenceFactory(mediaPath));

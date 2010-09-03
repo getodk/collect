@@ -42,7 +42,8 @@ public final class FileUtils {
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory() + "/odk/";
     public static final String FORMS_PATH = ODK_ROOT + "forms/";
     public static final String INSTANCES_PATH = ODK_ROOT + "instances/";
-    public static final String DATABASE_PATH = ODK_ROOT + "/metadata/";
+    public static final String FORMS_X_MEDIA_DIRECTORY_SUFFIX = "-media/";
+    public static final String DATABASE_PATH = ODK_ROOT + "metadata/";
 
     public static final String CONFIG_PATH = ODK_ROOT + "config/";
     public static final String SPLASH_SCREEN_FILE_PATH = CONFIG_PATH + "default/splash.png";
@@ -64,6 +65,15 @@ public final class FileUtils {
             }
         }
         return DATABASE_PATH;
+    }
+    
+    public static final String getFormMediaPath(File formXml) {
+    	 String mediaPath = FileUtils.FORMS_PATH +
+         		formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) +
+         		FileUtils.FORMS_X_MEDIA_DIRECTORY_SUFFIX;
+     
+    	 Log.i(t, "formXml: " + formXml.getAbsolutePath() + " mediaPath: " + mediaPath);
+    	 return mediaPath;
     }
     
     public static final ArrayList<String> getValidFormsAsArrayList(String path) {
