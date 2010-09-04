@@ -1552,7 +1552,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	}
 
 	private boolean indexContainsRepeatableGroup(FormIndex index) {
-		FormEntryCaption[] groups = mFormEntryModel.getCaptionHierarchy();
+		FormEntryCaption[] groups = mFormEntryModel.getCaptionHierarchy(index);
 		if (groups.length == 0) {
 			return false;
 		}
