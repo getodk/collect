@@ -198,6 +198,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             ReferenceManager._()
                     .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
             ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
+            ReferenceManager._().addRootTranslator(new RootTranslator("jr://video/", "jr://file/"));
         }
 
         // clean up vars
