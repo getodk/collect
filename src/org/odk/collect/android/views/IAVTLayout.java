@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -50,14 +51,15 @@ public class IAVTLayout extends RelativeLayout {
 
     public void setAVT(View text, String audioURI, String imageURI, final String videoURI) {
         mView_Text = text;
+        mView_Text.setId(47865402);
 
         // Layout configurations for our elements in the relative layout
         RelativeLayout.LayoutParams textParams =
-            new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams audioParams =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams imageParams =
-            new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams videoParams =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -72,7 +74,7 @@ public class IAVTLayout extends RelativeLayout {
 
         // Then set up the video button
         if (videoURI != null) {
-            // An audio file is specified
+            // An video file is specified
             mVideoButton = new ImageButton(getContext());
             mVideoButton.setImageResource(android.R.drawable.ic_media_play);
             mVideoButton.setOnClickListener(new OnClickListener() {
@@ -107,29 +109,9 @@ public class IAVTLayout extends RelativeLayout {
             // No video file specified, so ignore.
         }
 
-        // Add the audioButton and videoButton (if applicable) and view (containing text) to the
-        // relative layout.
-        if (mAudioButton != null && mVideoButton == null) {
-            audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-            addView(mAudioButton, audioParams);
-        } else if (mAudioButton == null && mVideoButton != null) {
-            videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
-            addView(mVideoButton, videoParams);
-        } else if (mAudioButton != null && mVideoButton != null) {
-            audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-            videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-            addView(mAudioButton, audioParams);
-            addView(mVideoButton, videoParams);
-        }
-        textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        addView(text, textParams);
-
         // Now set up the image view
         String errorMsg = null;
+        final int imageId = 23423534;
         if (imageURI != null) {
             try {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
@@ -140,15 +122,12 @@ public class IAVTLayout extends RelativeLayout {
                                 .getStream());
                     if (b != null) {
                         mImageView = new ImageView(getContext());
-                        mImageView.setPadding(10, 10, 10, 10);
+                        mImageView.setPadding(2, 2, 2, 2);
+                        mImageView.setBackgroundColor(Color.GRAY);
                         mImageView.setAdjustViewBounds(true);
                         mImageView.setImageBitmap(b);
-                        mImageView.setId(23423534);
-                        imageParams.addRule(RelativeLayout.BELOW, text.getId());
-                        if (mAudioButton != null)
-                            imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-                        if (mVideoButton != null)
-                            imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
+                        mImageView.setId(imageId);
+
                         mImageView.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -156,13 +135,10 @@ public class IAVTLayout extends RelativeLayout {
                                 i.setDataAndType(Uri.fromFile(imageFile), "image/*");
                                 getContext().startActivity(i);
                             }
-
                         });
-                        addView(mImageView, imageParams);
                     } else {
                         // Loading the image failed, so it's likely a bad file.
                         errorMsg = getContext().getString(R.string.image_file_invalid, imageFile);
-
                     }
                 } else {
                     // We should have an image, but the file doesn't exist.
@@ -174,14 +150,8 @@ public class IAVTLayout extends RelativeLayout {
                     Log.e(t, errorMsg);
                     mMissingImage = new TextView(getContext());
                     mMissingImage.setText(errorMsg);
-                    imageParams.addRule(RelativeLayout.BELOW, text.getId());
-                    if (mAudioButton != null)
-                        imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-                    if (mVideoButton != null)
-                        imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
                     mMissingImage.setPadding(10, 10, 10, 10);
-                    mMissingImage.setId(234873453);
-                    addView(mMissingImage, imageParams);
+                    mMissingImage.setId(imageId);
                 }
             } catch (IOException e) {
                 Log.e(t, "Image io exception");
@@ -193,6 +163,45 @@ public class IAVTLayout extends RelativeLayout {
         } else {
             // There's no imageURI listed, so just ignore it.
         }
+
+        // Determine the layout constraints...
+        // Assumes LTR, TTB reading bias!
+        // Text upper left; audio upper right; video below audio on right.
+        // image below text, audio and video buttons; left-aligned with text.
+        textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        if (mAudioButton != null && mVideoButton == null) {
+            audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+        } else if (mAudioButton == null && mVideoButton != null) {
+            videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
+        } else if (mAudioButton != null && mVideoButton != null) {
+            audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+            videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+        } else {
+        	textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        }
+        
+        if ( mImageView != null || mMissingImage != null ) {
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            imageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            imageParams.addRule(RelativeLayout.BELOW, mView_Text.getId());
+	        if (mAudioButton != null)
+	            imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+	        if (mVideoButton != null)
+	            imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
+        } else {
+        	textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        }
+
+        addView(mView_Text, textParams);
+        if ( mAudioButton != null ) addView(mAudioButton, audioParams);
+        if ( mVideoButton != null ) addView(mVideoButton, videoParams);
+        if ( mImageView != null ) addView(mImageView, imageParams);
+        else if ( mMissingImage != null ) addView(mMissingImage, imageParams );
     }
 
 
