@@ -110,6 +110,8 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
 		if ( i > 0 ) {
 	        // Add a dividing line before all but the first element
 	        ImageView divider = new ImageView(getContext());
+	        
+	        divider.setId(AbstractQuestionWidget.newUniqueId());
 	        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
             addView(divider);
         }
@@ -117,6 +119,7 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
         RadioButton r = new RadioButton(getContext());
         buttons[i] = r;
 
+        r.setId(AbstractQuestionWidget.newUniqueId());
         r.setText(prompt.getSelectChoiceText(sc));
         r.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         r.setEnabled(!prompt.isReadOnly());
@@ -136,6 +139,7 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
          
 
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
+        mediaLayout.setId(AbstractQuestionWidget.newUniqueId());
         mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
         
         addView(mediaLayout);

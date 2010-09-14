@@ -4,6 +4,7 @@ package org.odk.collect.android.views;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.widgets.AbstractQuestionWidget;
 
 import android.app.Activity;
 import android.content.Context;
@@ -51,7 +52,7 @@ public class IAVTLayout extends RelativeLayout {
 
     public void setAVT(View text, String audioURI, String imageURI, final String videoURI) {
         mView_Text = text;
-        mView_Text.setId(47865402);
+        mView_Text.setId(AbstractQuestionWidget.newUniqueId());
 
         // Layout configurations for our elements in the relative layout
         RelativeLayout.LayoutParams textParams =
@@ -67,7 +68,7 @@ public class IAVTLayout extends RelativeLayout {
         if (audioURI != null) {
             // An audio file is specified
             mAudioButton = new AudioButton(getContext(), audioURI);
-            mAudioButton.setId(3245345); // random ID to be used by the relative layout.
+            mAudioButton.setId(AbstractQuestionWidget.newUniqueId()); // random ID to be used by the relative layout.
         } else {
             // No audio file specified, so ignore.
         }
@@ -104,14 +105,14 @@ public class IAVTLayout extends RelativeLayout {
                 }
 
             });
-            mVideoButton.setId(234982340);
+            mVideoButton.setId(AbstractQuestionWidget.newUniqueId());
         } else {
             // No video file specified, so ignore.
         }
 
         // Now set up the image view
         String errorMsg = null;
-        final int imageId = 23423534;
+        final int imageId = AbstractQuestionWidget.newUniqueId();
         if (imageURI != null) {
             try {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();

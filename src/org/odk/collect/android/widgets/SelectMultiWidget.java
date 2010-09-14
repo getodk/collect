@@ -116,6 +116,8 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
 		if ( i < 0 ) {
 	        // Add a dividing line above this element
 	        ImageView divider = new ImageView(getContext());
+	        
+	        divider.setId(AbstractQuestionWidget.newUniqueId());
 	        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
             addView(divider);
 		}
@@ -124,6 +126,7 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
         CheckBox c = new CheckBox(getContext());
         buttons[i] = c;
 
+        c.setId(AbstractQuestionWidget.newUniqueId());
         c.setText(prompt.getSelectChoiceText(sc));
         c.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
         c.setEnabled(!prompt.isReadOnly());
@@ -141,6 +144,8 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
         		prompt.getSpecialFormSelectChoiceText(sc, "video");
          
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
+        
+        mediaLayout.setId(AbstractQuestionWidget.newUniqueId());
         mediaLayout.setAVT(c, audioURI, imageURI, videoURI);
         
         addView(mediaLayout);

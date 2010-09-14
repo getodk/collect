@@ -54,6 +54,18 @@ import android.widget.TextView;
 public abstract class AbstractQuestionWidget extends LinearLayout implements IBinaryWidget,
 		org.javarosa.formmanager.view.IQuestionWidget, OnFocusChangeListener {
 
+	private static int idGenerator = 1211322;
+	
+	/**
+	 * Generate a unique ID to keep Android UI happy when the screen orientation 
+	 * changes.
+	 * 
+	 * @return
+	 */
+	public static int newUniqueId() {
+		return ++idGenerator;		
+	}
+	
 	/**
 	 * Callback interface to notify interested parties that a focus change
 	 * event has occurred to a view within this entity.
@@ -193,7 +205,7 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(38475483); // assign random id
+        questionText.setId(AbstractQuestionWidget.newUniqueId()); // assign random id
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
