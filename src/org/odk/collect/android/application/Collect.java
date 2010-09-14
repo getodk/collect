@@ -1,7 +1,10 @@
 package org.odk.collect.android.application;
 
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
+import org.odk.collect.android.logic.FileReferenceFactory;
 
 import android.app.Application;
 import android.content.Context;
@@ -22,12 +25,14 @@ public class Collect extends Application {
 	
 	private FormEntryController formEntryController = null;
 
+    private FileReferenceFactory factory = null;
+    private boolean firstReferenceInitialization = true;
+
 	/* (non-Javadoc)
 	 * @see android.app.Application#onConfigurationChanged(android.content.res.Configuration)
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
 	}
 
@@ -53,7 +58,24 @@ public class Collect extends Application {
 	public FormEntryController getFormEntryController() {
 		return formEntryController;
 	}
-	
+
+
+	public void registerMediaPath(String mediaPath) {
+        if ( factory != null ) {
+    		ReferenceManager._().removeReferenceFactory(factory);
+        }
+    	factory = new FileReferenceFactory(mediaPath);
+        ReferenceManager._().addReferenceFactory(factory);
+        
+    	if (firstReferenceInitialization) {
+    		firstReferenceInitialization = false;
+            ReferenceManager._()
+                    .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
+            ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
+            ReferenceManager._().addRootTranslator(new RootTranslator("jr://video/", "jr://file/"));
+        }
+	}
+
 	/**
 	 * Creates and displays a dialog displaying the violated constraint.
 	 */

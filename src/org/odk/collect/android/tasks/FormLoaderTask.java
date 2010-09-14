@@ -80,7 +80,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 "org.javarosa.xpath.expr.XPathUnionExpr",
                 "org.javarosa.xpath.expr.XPathVariableReference"
         };
-
+    
     FormLoaderListener mStateListener;
 
     protected class FECWrapper {
@@ -192,14 +192,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // multiple times?
         String mediaPath = FileUtils.getFormMediaPath(formXml);
         
-        if (ReferenceManager._().getFactories().length == 0) {
-            ReferenceManager._().addReferenceFactory(
-                new FileReferenceFactory(mediaPath));
-            ReferenceManager._()
-                    .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
-            ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
-            ReferenceManager._().addRootTranslator(new RootTranslator("jr://video/", "jr://file/"));
-        }
+        Collect.getInstance().registerMediaPath(mediaPath);
 
         // clean up vars
         fis = null;
