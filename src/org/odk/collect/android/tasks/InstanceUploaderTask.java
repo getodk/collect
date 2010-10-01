@@ -88,36 +88,20 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 FileBody fb;
                 if (f.getName().endsWith(".xml")) {
                     fb = new FileBody(f, "text/xml");
-                    if (fb.getContentLength() <= MAX_BYTES) {
-                        entity.addPart("xml_submission_file", fb);
-                        Log.i(t, "added xml file " + f.getName());
-                    } else {
-                        Log.i(t, "file " + f.getName() + " is too big");
-                    }
+                    entity.addPart("xml_submission_file", fb);
+                    Log.i(t, "added xml file " + f.getName());
                 } else if (f.getName().endsWith(".jpg")) {
                     fb = new FileBody(f, "image/jpeg");
-                    if (fb.getContentLength() <= MAX_BYTES) {
-                        entity.addPart(f.getName(), fb);
-                        Log.i(t, "added image file " + f.getName());
-                    } else {
-                        Log.i(t, "file " + f.getName() + " is too big");
-                    }
+                    entity.addPart(f.getName(), fb);
+                    Log.i(t, "added image file " + f.getName());
                 } else if (f.getName().endsWith(".3gpp")) {
                     fb = new FileBody(f, "audio/3gpp");
-                    if (fb.getContentLength() <= MAX_BYTES) {
-                        entity.addPart(f.getName(), fb);
-                        Log.i(t, "added audio file " + f.getName());
-                    } else {
-                        Log.i(t, "file " + f.getName() + " is too big");
-                    }
+                    entity.addPart(f.getName(), fb);
+                    Log.i(t, "added audio file " + f.getName());
                 } else if (f.getName().endsWith(".3gp")) {
                     fb = new FileBody(f, "video/3gpp");
-                    if (fb.getContentLength() <= MAX_BYTES) {
-                        entity.addPart(f.getName(), fb);
-                        Log.i(t, "added video file " + f.getName());
-                    } else {
-                        Log.i(t, "file " + f.getName() + " is too big");
-                    }
+                    entity.addPart(f.getName(), fb);
+                    Log.i(t, "added video file " + f.getName());
                 } else {
                     Log.w(t, "unsupported file type, not adding file: " + f.getName());
                 }
