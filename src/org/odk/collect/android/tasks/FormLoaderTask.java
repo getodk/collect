@@ -52,32 +52,30 @@ import java.io.IOException;
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private final static String t = "FormLoaderTask";
     /**
-     * Classes needed to serialize objects
+     * Classes needed to serialize objects. Need to put anything from JR in here.
      */
-    public final static String[] SERIALIABLE_CLASSES =
-        {
-                "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
-                "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
-                "org.javarosa.core.model.data.DateTimeData",
-                "org.javarosa.core.model.data.DecimalData",
-                "org.javarosa.core.model.data.GeoPointData",
-                "org.javarosa.core.model.data.helper.BasicDataPointer",
-                "org.javarosa.core.model.data.IntegerData",
-                "org.javarosa.core.model.data.MultiPointerAnswerData",
-                "org.javarosa.core.model.data.PointerAnswerData",
-                "org.javarosa.core.model.data.SelectMultiData",
-                "org.javarosa.core.model.data.SelectOneData",
-                "org.javarosa.core.model.data.StringData", "org.javarosa.core.model.data.TimeData",
-                "org.javarosa.core.services.locale.TableLocaleSource",
-                "org.javarosa.xpath.expr.XPathArithExpr", "org.javarosa.xpath.expr.XPathBoolExpr",
-                "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
-                "org.javarosa.xpath.expr.XPathFilterExpr", "org.javarosa.xpath.expr.XPathFuncExpr",
-                "org.javarosa.xpath.expr.XPathNumericLiteral",
-                "org.javarosa.xpath.expr.XPathNumNegExpr", "org.javarosa.xpath.expr.XPathPathExpr",
-                "org.javarosa.xpath.expr.XPathStringLiteral",
-                "org.javarosa.xpath.expr.XPathUnionExpr",
-                "org.javarosa.xpath.expr.XPathVariableReference"
-        };
+    public final static String[] SERIALIABLE_CLASSES = {
+            "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
+            "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
+            "org.javarosa.core.model.data.DateTimeData",
+            "org.javarosa.core.model.data.DecimalData",
+            "org.javarosa.core.model.data.GeoPointData",
+            "org.javarosa.core.model.data.helper.BasicDataPointer",
+            "org.javarosa.core.model.data.IntegerData",
+            "org.javarosa.core.model.data.MultiPointerAnswerData",
+            "org.javarosa.core.model.data.PointerAnswerData",
+            "org.javarosa.core.model.data.SelectMultiData",
+            "org.javarosa.core.model.data.SelectOneData",
+            "org.javarosa.core.model.data.StringData", "org.javarosa.core.model.data.TimeData",
+            "org.javarosa.core.services.locale.TableLocaleSource",
+            "org.javarosa.xpath.expr.XPathArithExpr", "org.javarosa.xpath.expr.XPathBoolExpr",
+            "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
+            "org.javarosa.xpath.expr.XPathFilterExpr", "org.javarosa.xpath.expr.XPathFuncExpr",
+            "org.javarosa.xpath.expr.XPathNumericLiteral",
+            "org.javarosa.xpath.expr.XPathNumNegExpr", "org.javarosa.xpath.expr.XPathPathExpr",
+            "org.javarosa.xpath.expr.XPathStringLiteral", "org.javarosa.xpath.expr.XPathUnionExpr",
+            "org.javarosa.xpath.expr.XPathVariableReference"
+    };
 
     FormLoaderListener mStateListener;
 
@@ -153,7 +151,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         // import existing data into formdef
         if (instancePath != null) {
-            // This order is important.  Import data, then initialize.
+            // This order is important. Import data, then initialize.
             importData(instancePath, fec);
             fd.initialize(false);
         } else {
@@ -161,31 +159,25 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // set paths to /sdcard/odk/forms/formfilename-media/
-        // This is a singleton, how do we ensure that we're not doing this
-        // multiple times?
-        String formFileName =
-            formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-        
-        Log.e("Carl", "mediaPath = " + formFileName);
-        ReferenceManager._().clearSession();
-        
-        if (ReferenceManager._().getFactories().length == 0) {
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk"));
-        }
-        
-        ReferenceManager._().addSessionRootTranslator(new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
+        String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
 
-        
-        /*if (ReferenceManager._().getFactories().length == 0) {
+        // Remove previous forms
+        ReferenceManager._().clearSession();
+
+        // This should get moved to the Application Class
+        if (ReferenceManager._().getFactories().length == 0) {
+            // this is /sdcard/odk
             ReferenceManager._().addReferenceFactory(
-                new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"
-                        + mediaPath + "-media"));
-            ReferenceManager._()
-                    .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
-            ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
-        }*/
+                new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk"));
+        }
+
+        // Set jr://... to point to /sdcard/odk/forms/filename-media/
+        ReferenceManager._().addSessionRootTranslator(
+            new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager._().addSessionRootTranslator(
+            new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager._().addSessionRootTranslator(
+            new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
 
         // clean up vars
         fis = null;
@@ -225,8 +217,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             // fix any language issues
             // : http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
             if (fec.getModel().getLanguages() != null) {
-                fec.getModel().getForm().localeChanged(fec.getModel().getLanguage(),
-                    fec.getModel().getForm().getLocalizer());
+                fec.getModel()
+                        .getForm()
+                        .localeChanged(fec.getModel().getLanguage(),
+                            fec.getModel().getForm().getLocalizer());
             }
 
             return true;
