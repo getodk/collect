@@ -57,7 +57,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
 
     @Override
-	public void clearAnswer() {
+    public void clearAnswer() {
         for (RadioButton button : this.buttons) {
             if (button.isChecked()) {
                 button.setChecked(false);
@@ -68,7 +68,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
 
     @Override
-	public IAnswerData getAnswer() {
+    public IAnswerData getAnswer() {
         int i = getCheckedId();
         if (i == -1) {
             return null;
@@ -80,7 +80,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
 
     @Override
-	public void buildView(final FormEntryPrompt prompt) {
+    public void buildView(final FormEntryPrompt prompt) {
         mItems = prompt.getSelectChoices();
         buttons = new Vector<RadioButton>();
 
@@ -106,21 +106,22 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
                 String audioURI = null;
                 audioURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_AUDIO);
-
+                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        FormEntryCaption.TEXT_FORM_AUDIO);
 
                 String imageURI = null;
                 imageURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
-                
+                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        FormEntryCaption.TEXT_FORM_IMAGE);
 
-                String videoURI = null; // TODO: uncomment when video ready
-                videoURI =
-                		prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
-                 
+                String videoURI = null;
+                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
+
+                String bigImageURI = null;
+                bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 IAVTLayout mediaLayout = new IAVTLayout(getContext());
-                mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
+                mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
                 addView(mediaLayout);
 
                 // Last, add the dividing line (except for the last element)
@@ -135,7 +136,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
 
     @Override
-	public void setFocus(Context context) {
+    public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -154,7 +155,7 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
 
 
     @Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked) {
             // If it got unchecked, we don't care.
             return;

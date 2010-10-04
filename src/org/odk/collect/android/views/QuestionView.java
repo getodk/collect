@@ -48,7 +48,7 @@ public class QuestionView extends ScrollView {
     private LinearLayout.LayoutParams mLayout;
     private String mInstancePath;
     private final static int TEXTSIZE = 21;
-    
+
     public final static int APPLICATION_FONTSIZE = 23;
 
 
@@ -144,7 +144,10 @@ public class QuestionView extends ScrollView {
     private void AddQuestionText(FormEntryPrompt p) {
         String imageURI = p.getImageText();
         String audioURI = p.getAudioText();
-        String videoURI = p.getSpecialFormQuestionText("video"); // TODO: make this a value.
+        String videoURI = p.getSpecialFormQuestionText("video");
+
+        // shown when image is clicked
+        String bigImageURI = p.getSpecialFormQuestionText("big-image");
 
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -159,7 +162,7 @@ public class QuestionView extends ScrollView {
 
         // Create the layout for audio, image, text
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
-        mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI);
+        mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
 
         mView.addView(mediaLayout, mLayout);
     }

@@ -48,7 +48,8 @@ public class IAVTLayout extends RelativeLayout {
     }
 
 
-    public void setAVT(View text, String audioURI, String imageURI, final String videoURI) {
+    public void setAVT(View text, String audioURI, String imageURI, final String videoURI,
+            final String bigImageURI) {
         mView_Text = text;
 
         // Layout configurations for our elements in the relative layout
@@ -81,7 +82,8 @@ public class IAVTLayout extends RelativeLayout {
                 public void onClick(View v) {
                     String videoFilename = "";
                     try {
-                    	videoFilename = ReferenceManager._().DeriveReference(videoURI).getLocalURI();
+                        videoFilename =
+                            ReferenceManager._().DeriveReference(videoURI).getLocalURI();
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "Invalid reference exception");
                         e.printStackTrace();
@@ -90,12 +92,13 @@ public class IAVTLayout extends RelativeLayout {
                     File videoFile = new File(videoFilename);
                     if (!videoFile.exists()) {
                         // We should have a video clip, but the file doesn't exist.
-                        String errorMsg = getContext().getString(R.string.file_missing, videoFilename);
+                        String errorMsg =
+                            getContext().getString(R.string.file_missing, videoFilename);
                         Log.e(t, errorMsg);
                         Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
                         return;
                     }
-                    
+
                     Intent i = new Intent("android.intent.action.VIEW");
                     i.setDataAndType(Uri.fromFile(videoFile), "video/*");
                     ((Activity) getContext()).startActivity(i);
@@ -149,15 +152,19 @@ public class IAVTLayout extends RelativeLayout {
                             imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
                         if (mVideoButton != null)
                             imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
-                        mImageView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent("android.intent.action.VIEW");
-                                i.setDataAndType(Uri.fromFile(imageFile), "image/*");
-                                getContext().startActivity(i);
-                            }
-
-                        });
+                        if (bigImageURI != null) {
+                            mImageView.setOnClickListener(new OnClickListener() {
+                                String bigImageFilename = ReferenceManager._()
+                                        .DeriveReference(bigImageURI).getLocalURI();
+                                File bigImage = new File(bigImageFilename);
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i = new Intent("android.intent.action.VIEW");
+                                    i.setDataAndType(Uri.fromFile(bigImage), "image/*");
+                                    getContext().startActivity(i);
+                                }
+                            });
+                        }
                         addView(mImageView, imageParams);
                     } else {
                         // Loading the image failed, so it's likely a bad file.
