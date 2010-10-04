@@ -163,19 +163,29 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // set paths to /sdcard/odk/forms/formfilename-media/
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
-        String mediaPath =
+        String formFileName =
             formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
         
-        Log.e("Carl", "mediaPath = " + mediaPath);
-       
+        Log.e("Carl", "mediaPath = " + formFileName);
+        ReferenceManager._().clearSession();
+        
         if (ReferenceManager._().getFactories().length == 0) {
+            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk"));
+        }
+        
+        ReferenceManager._().addSessionRootTranslator(new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager._().addSessionRootTranslator(new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager._().addSessionRootTranslator(new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
+
+        
+        /*if (ReferenceManager._().getFactories().length == 0) {
             ReferenceManager._().addReferenceFactory(
                 new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk/forms/"
                         + mediaPath + "-media"));
             ReferenceManager._()
                     .addRootTranslator(new RootTranslator("jr://images/", "jr://file/"));
             ReferenceManager._().addRootTranslator(new RootTranslator("jr://audio/", "jr://file/"));
-        }
+        }*/
 
         // clean up vars
         fis = null;
