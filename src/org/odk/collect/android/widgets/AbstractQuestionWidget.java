@@ -18,8 +18,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,8 +29,10 @@ import android.widget.TextView;
  * Each of these objects is associated with a single formIndex.  Look at the GroupView if you need
  * to display and control elements associated with multiple formIndex values.
  * <p>
- * Widgets notify their FolioView parents when they gain or loose focus.  The parents are responsible
- * for the proper saving of answers (with or without constraint checking).  
+ * Widgets notify their FolioView parents when they gain focus, as indicated by the user taking an
+ * action that alters their UI values.  I.e., focus change is detected lazily after UI changes.
+ * Navigating (e.g., tabbing) through the UI does not report focus change events.  The parents are 
+ * responsible for the proper saving of answers (with or without constraint checking).  
  * <p>
  * Derived classes must implement @see {@link #buildViewBodyImpl()} to construct their UI elements.
  * The proper initialization of those elements with data values from the javarosa model should be deferred
@@ -52,7 +52,7 @@ import android.widget.TextView;
  * @author mitchellsundt@gmail.com
  */
 public abstract class AbstractQuestionWidget extends LinearLayout implements IBinaryWidget,
-		org.javarosa.formmanager.view.IQuestionWidget, OnFocusChangeListener {
+		org.javarosa.formmanager.view.IQuestionWidget {
 
 	private static int idGenerator = 1211322;
 	
@@ -319,7 +319,6 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
      * @param groups the nested hierarchy of enclosing groups
      */
     public final void buildViewStart(FormEntryCaption[] groups) {
-    	setOnFocusChangeListener(this);
     	buildViewBoilerplate(groups);
     }
     
@@ -476,18 +475,5 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 			return descendantRequestFocusChangeListener.onDescendantRequestFocusChange(this, prompt.getIndex(), focusState);
 		}
 		return true;
-	}
-	
-	/**
-	 * We handle this in the base class but required derived classes to register 
-	 * themselves to listen to their children's focus change events.  Standard
-	 * handling is to do nothing -- we only respond to on-change events.
-	 * 
-	 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
-	 */
-	@Override
-	public final void onFocusChange(View v, boolean hasFocus) {
-		Log.i(AbstractQuestionWidget.class.getName(), "onFocusChange: " + 
-				getFormIndex().toString() + " " + (hasFocus ? "GAINED" : "LOST") + " -- silent");
 	}
 }

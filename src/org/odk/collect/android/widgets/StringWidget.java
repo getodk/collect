@@ -81,7 +81,6 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
 
     	mStringAnswer = new EditText(getContext(), null, R.attr.editTextStyle);
     	// monitor focus change events...
-    	mStringAnswer.setOnFocusChangeListener(this);
     	mStringAnswer.addTextChangedListener(this);
         // font size
     	mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
@@ -107,10 +106,8 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
     }
 
     protected void updateViewAfterAnswer() {
-        String sWidget = mStringAnswer.getText().toString();
-        if ( sWidget == null ) sWidget = "<NULL>";
 		String s = accessPromptAnswerAsString();
-    	Log.i(StringWidget.class.getName(), "updateViewAfterAnswer Widget: " +  sWidget + " fromModel: " + s);
+		Log.i(StringWidget.class.getName(), "updateViewAfterAnswer: " +  getFormIndex().toString());
     	insideUpdate = true;
         InputMethodManager inputManager =
             (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -124,17 +121,13 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
 
     @Override
 	public void setFocus(Context context) {
-        String s = mStringAnswer.getText().toString();
-        if ( s == null ) s = "<NULL>";
         // if someone is setting focus to us, only gain focus
         // and display the keyboard if we are enabled.
         if (mStringAnswer.isEnabled()) {
-        	Log.i(StringWidget.class.getName(), "GAINED focus " +  s);
         	mStringAnswer.requestFocus();
         	Collect.getInstance().showSoftKeyboard(mStringAnswer);
         }
         else {
-			Log.i(StringWidget.class.getName(), "LOST focus " +  s);
         	Collect.getInstance().hideSoftKeyboard(mStringAnswer);
             mStringAnswer.clearFocus();
         }
@@ -160,7 +153,7 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
 	@Override
 	public void afterTextChanged(Editable s) {
 		if ( !insideUpdate ) {
-			Log.i(StringWidget.class.getName(), "afterTextChanged -- signalling GAINED " + getFormIndex().toString());
+			Log.i(StringWidget.class.getName(), "afterTextChanged -- signalling DIVERGE_VIEW_FROM_MODEL " + getFormIndex().toString());
 			signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL);
 		} else {
 			Log.i(StringWidget.class.getName(), "afterTextChanged -- silent " + getFormIndex().toString());
@@ -171,12 +164,10 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
 		// no-op
-		Log.i(StringWidget.class.getName(), "beforeTextChanged " + getFormIndex().toString());
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// no-op
-		Log.i(StringWidget.class.getName(), "onTextChanged " + getFormIndex().toString());
 	}
 }
