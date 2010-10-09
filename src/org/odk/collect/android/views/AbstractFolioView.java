@@ -6,7 +6,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantFocusChangeListener;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener;
 
 import android.content.Context;
 import android.os.Handler;
@@ -20,7 +20,7 @@ import android.widget.ScrollView;
  * @author mitchellsundt@gmail.com
  *
  */
-public abstract class AbstractFolioView extends ScrollView implements OnDescendantFocusChangeListener {
+public abstract class AbstractFolioView extends ScrollView implements OnDescendantRequestFocusChangeListener {
 
 	public final static int APPLICATION_FONTSIZE = 23;
 

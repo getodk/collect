@@ -85,38 +85,76 @@ public class GroupView extends AbstractFolioView {
         viewInFocus = lastViewInFocus;
 	}
 	
-	public void onDescendantFocusChange(AbstractQuestionWidget qv, FormIndex idx, boolean hasFocus) {
+	public boolean onDescendantRequestFocusChange(AbstractQuestionWidget qv, FormIndex idx, FocusChangeState focusState) {
 		Log.i(t,"onDescendantFocusChange: " + qv.getFormIndex().toString() +
 				"index: " + idx.toString() +
-				"hasFocus: " + Boolean.toString(hasFocus));
+				"hasFocus: " + focusState.toString());
 
-		if ( hasFocus ) {
-			if ( qv != viewInFocus && viewInFocus != null ) {
+		switch ( focusState ) {
+		case DIVERGE_VIEW_FROM_MODEL:
+			if ( viewInFocus != null && viewInFocus != qv) {
 				// there is a new focus -- save data in old focus
-				Log.i(t,"onDescendantFocusChange: invoking saveCurrentAnswer " + 
+				Log.i(t,"onDescendantFocusChange: focus GAINED -- invoking saveAnswer " + 
 						viewInFocus.getFormIndex().toString());
 				if ( !viewInFocus.saveAnswer(true) ) {
-					// data save failed -- change focus back!
+					Log.i(t,"onDescendantFocusChange: constraint failed -- RESTORING " + 
+							viewInFocus.getFormIndex().toString() + " was trying " +
+							qv.getFormIndex().toString() );
+					// we need to reset the gaining-focus view to what was in
+					// its answer (this might be a gaining-focus select statement).
+					qv.resetViewFromAnswer();					
+					// and return focus to the view that lost focus so that the
+					// user can correct the validation failure...
 					viewInFocus.setFocus(this.getContext());
-					return;
+					return false;
 				}
 				lastViewInFocus = viewInFocus;
 			}
 			viewInFocus = qv;
-		} else if ( !hasFocus && qv == viewInFocus ) {
-			if ( viewInFocus != null ) {
-				// we are loosing focus -- save data
-				Log.i(t,"onDescendantFocusChange: invoking saveCurrentAnswer " + 
+			break;
+		case FLUSH_CHANGE_TO_MODEL:
+			// there are two senses for this change
+			if ( viewInFocus != null) {
+				// there is a new focus -- save data in old focus
+				Log.i(t,
+				"onDescendantFocusChange: focus TOGGLED -- invoking saveAnswer on old focus " + 
 						viewInFocus.getFormIndex().toString());
 				if ( !viewInFocus.saveAnswer(true) ) {
-					// data save failed -- change focus back!
+					Log.i(t,"onDescendantFocusChange: old focus constraint failed -- RESTORING " + 
+							viewInFocus.getFormIndex().toString() + " was trying " +
+							qv.getFormIndex().toString() );
+					// we need to reset the gaining-focus view to what was in
+					// its answer (it is a gaining-focus select statement).
+					qv.resetViewFromAnswer();
+					// and return focus to the view that lost focus so that the
+					// user can correct the validation failure...
 					viewInFocus.setFocus(this.getContext());
-					return;
+					return false;
 				}
 				lastViewInFocus = viewInFocus;
 			}
-			viewInFocus = null;
+			if ( viewInFocus != qv ) {
+				// we had an old focus, and we saved that value, so now 
+				// we also need to record the changes to the qv checkbox
+				// or radio button.  Whether or not these succeed, the 
+				// qv is the one holding focus
+				viewInFocus = qv;
+				Log.i(t,
+				"onDescendantFocusChange: focus TOGGLED -- invoking saveAnswer on new focus " + 
+						qv.getFormIndex().toString());
+				if ( !qv.saveAnswer(true) ) {
+					Log.i(t,"onDescendantFocusChange: new focus constraint failed -- RESTORING " + 
+							qv.getFormIndex().toString() + " was trying " +
+							qv.getFormIndex().toString() );
+					// we need to reset the gaining-focus select to what was in
+					// its answer (this is a gaining-focus select statement).
+					qv.resetViewFromAnswer();
+					return false;
+				}
+			}
+			break;
 		}
+		return true;
 	}
 
 	/* (non-Javadoc)

@@ -529,10 +529,24 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		    ((TextView) startView.findViewById(R.id.form_full_title)).setText(mFormEntryModel.getFormTitle());
 		    Drawable image = null;
 		    try {
-		    	// attempt to load the configured default splash screen
-				BitmapDrawable bitImage = new BitmapDrawable( getResources(), 
-												FileUtils.FORM_LOGO_FILE_PATH );
-				if ( bitImage.getBitmap() != null &&
+		    	String formLogoPath = FileUtils.getFormMediaPath(mFormPath) + 
+		    							FileUtils.FORM_LOGO_FILE_NAME;
+		    	BitmapDrawable bitImage = null;
+		    	// attempt to load the form-specific logo...
+				bitImage = new BitmapDrawable( getResources(), 
+												formLogoPath );
+
+				if ( bitImage == null ||
+					 bitImage.getBitmap() == null ||
+					 bitImage.getIntrinsicHeight() == 0 ||
+					 bitImage.getIntrinsicWidth() == 0 ) {
+		    		// attempt to load the shared form logo...
+					bitImage = new BitmapDrawable( getResources(), 
+										FileUtils.FORM_LOGO_FILE_PATH );
+		    	}
+		    	
+				if ( bitImage != null &&
+					 bitImage.getBitmap() != null &&
 					 bitImage.getIntrinsicHeight() > 0 &&
 					 bitImage.getIntrinsicWidth() > 0 ) {
 					image = bitImage;
@@ -749,9 +763,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		if (mCurrentView instanceof AbstractFolioView )
 			((AbstractFolioView) mCurrentView).setFocus(this);
 		else {
-			InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(),
-					0);
+			Collect.getInstance().hideSoftKeyboard(mCurrentView);
 		}
 	}
 

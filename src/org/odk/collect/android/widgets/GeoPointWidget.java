@@ -21,6 +21,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.app.Activity;
 import android.content.Context;
@@ -92,11 +93,11 @@ public class GeoPointWidget extends AbstractQuestionWidget implements IBinaryWid
             @Override
 			public void onClick(View v) {
             	// touches are not focus change events 
-            	signalDescendant(true);
-                Intent i = new Intent(getContext(), GeoPointActivity.class);
-                ((Activity) getContext()).startActivityForResult(i,
-                    FormEntryActivity.LOCATION_CAPTURE);
-
+            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL)) {
+                    Intent i = new Intent(getContext(), GeoPointActivity.class);
+                    ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.LOCATION_CAPTURE);
+            	}
             }
         });
 

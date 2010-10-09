@@ -190,7 +190,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // set paths to FORMS_PATH + formfilename-media/
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
-        String mediaPath = FileUtils.getFormMediaPath(formXml);
+        String mediaPath = FileUtils.getFormMediaPath(formXml.getName());
         
         Collect.getInstance().registerMediaPath(mediaPath);
 

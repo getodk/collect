@@ -20,6 +20,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -29,7 +30,6 @@ import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,16 +74,17 @@ public class BarcodeWidget extends AbstractQuestionWidget implements IBinaryWidg
             @Override
 			public void onClick(View v) {
             	// onFocusChange for buttons is not fired while in touch mode
-            	signalDescendant(true);
-                Intent i = new Intent("com.google.zxing.client.android.SCAN");
-                try {
-                    ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.BARCODE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                        getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
-                            .show();
-                }
+            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
+	                Intent i = new Intent("com.google.zxing.client.android.SCAN");
+	                try {
+	                    ((Activity) getContext()).startActivityForResult(i,
+	                        FormEntryActivity.BARCODE_CAPTURE);
+	                } catch (ActivityNotFoundException e) {
+	                    Toast.makeText(getContext(),
+	                        getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
+	                            .show();
+	                }
+            	}
             }
         });
 
@@ -115,14 +116,6 @@ public class BarcodeWidget extends AbstractQuestionWidget implements IBinaryWidg
 	public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);
         saveAnswer(true); // and evaluate constraints and trigger UI update...
-    }
-
-    @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

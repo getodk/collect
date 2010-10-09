@@ -24,6 +24,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.views.AbstractFolioView;
 import org.odk.collect.android.views.IAVTLayout;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.content.Context;
 import android.os.Handler;
@@ -203,10 +204,9 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
     	// no-op if read-only
     	// no-op if insideUpdate
         if (!prompt.isReadOnly() && !insideUpdate) {
-            // report that we have lost and gained focus
-            // this forces an update of the UI against the model...
-        	signalDescendant(false);
-        	signalDescendant(true);
+        	// hide the soft keyboard if it is displayed for some other control...
+        	setFocus(getContext());
+	        signalDescendant(FocusChangeState.FLUSH_CHANGE_TO_MODEL);
         }
 	}
 }

@@ -45,9 +45,10 @@ public final class FileUtils {
     public static final String FORMS_X_MEDIA_DIRECTORY_SUFFIX = "-media/";
     public static final String DATABASE_PATH = ODK_ROOT + "metadata/";
 
+    public static final String FORM_LOGO_FILE_NAME = "form_logo.png";
     public static final String CONFIG_PATH = ODK_ROOT + "config/";
     public static final String SPLASH_SCREEN_FILE_PATH = CONFIG_PATH + "default/splash.png";
-    public static final String FORM_LOGO_FILE_PATH = CONFIG_PATH + "default/form_logo.png";
+    public static final String FORM_LOGO_FILE_PATH = CONFIG_PATH + "default/" + FORM_LOGO_FILE_NAME;
     public static final String XSL_EXTENSION_PATH = ODK_ROOT + "xsl/";
     public static final String CACHE_PATH = ODK_ROOT + ".cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
@@ -67,12 +68,13 @@ public final class FileUtils {
         return DATABASE_PATH;
     }
     
-    public static final String getFormMediaPath(File formXml) {
-    	 String mediaPath = FileUtils.FORMS_PATH +
-         		formXml.getName().substring(0, formXml.getName().lastIndexOf(".")) +
+    public static final String getFormMediaPath(String formXml) {
+    	int startIdx = formXml.lastIndexOf("/") + 1;
+    	String mediaPath = FileUtils.FORMS_PATH +
+         		formXml.substring(startIdx, formXml.lastIndexOf(".")) +
          		FileUtils.FORMS_X_MEDIA_DIRECTORY_SUFFIX;
      
-    	 Log.i(t, "formXml: " + formXml.getAbsolutePath() + " mediaPath: " + mediaPath);
+    	 Log.i(t, "formXml: " + formXml + " mediaPath: " + mediaPath);
     	 return mediaPath;
     }
     

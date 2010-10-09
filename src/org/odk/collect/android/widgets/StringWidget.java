@@ -17,13 +17,18 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.R;
 import android.content.Context;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -35,10 +40,12 @@ import android.widget.EditText;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class StringWidget extends AbstractQuestionWidget {
+public class StringWidget extends AbstractQuestionWidget implements TextWatcher {
     
     protected EditText mStringAnswer;
 
+    private boolean insideUpdate = false;
+    
     protected StringWidget(Handler handler, Context context, FormEntryPrompt prompt) {
         super(handler, context, prompt);
     }
@@ -75,6 +82,7 @@ public class StringWidget extends AbstractQuestionWidget {
     	mStringAnswer = new EditText(getContext(), null, R.attr.editTextStyle);
     	// monitor focus change events...
     	mStringAnswer.setOnFocusChangeListener(this);
+    	mStringAnswer.addTextChangedListener(this);
         // font size
     	mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
 
@@ -99,26 +107,46 @@ public class StringWidget extends AbstractQuestionWidget {
     }
 
     protected void updateViewAfterAnswer() {
+        String sWidget = mStringAnswer.getText().toString();
+        if ( sWidget == null ) sWidget = "<NULL>";
 		String s = accessPromptAnswerAsString();
+    	Log.i(StringWidget.class.getName(), "updateViewAfterAnswer Widget: " +  sWidget + " fromModel: " + s);
+    	insideUpdate = true;
+        InputMethodManager inputManager =
+            (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 		mStringAnswer.setText(s);
+		// and be sure to let the input manager know the new string value...
+		if ( inputManager.isActive(mStringAnswer)) {
+			inputManager.restartInput(mStringAnswer);
+		}
+		insideUpdate = false;
     }
 
     @Override
 	public void setFocus(Context context) {
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        // Put focus on text input field and display soft keyboard if appropriate.
-        if (!prompt.isReadOnly()) {
+        String s = mStringAnswer.getText().toString();
+        if ( s == null ) s = "<NULL>";
+        // if someone is setting focus to us, only gain focus
+        // and display the keyboard if we are enabled.
+        if (mStringAnswer.isEnabled()) {
+        	Log.i(StringWidget.class.getName(), "GAINED focus " +  s);
         	mStringAnswer.requestFocus();
-            inputManager.showSoftInput(mStringAnswer, 0);
+        	Collect.getInstance().showSoftKeyboard(mStringAnswer);
         }
         else {
-            inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+			Log.i(StringWidget.class.getName(), "LOST focus " +  s);
+        	Collect.getInstance().hideSoftKeyboard(mStringAnswer);
+            mStringAnswer.clearFocus();
         }
     }
 
     public void setEnabled(boolean isEnabled) {
-    	mStringAnswer.setEnabled(isEnabled && !prompt.isReadOnly());
+    	boolean enableState = isEnabled && !prompt.isReadOnly();
+    	mStringAnswer.setEnabled(enableState);
+    	// if we are no longer enabled, shift the focus away from us...
+    	if (!enableState ) {
+			mStringAnswer.clearFocus();
+    	}
     }
 
     @Override
@@ -128,4 +156,27 @@ public class StringWidget extends AbstractQuestionWidget {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		if ( !insideUpdate ) {
+			Log.i(StringWidget.class.getName(), "afterTextChanged -- signalling GAINED " + getFormIndex().toString());
+			signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL);
+		} else {
+			Log.i(StringWidget.class.getName(), "afterTextChanged -- silent " + getFormIndex().toString());
+		}
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// no-op
+		Log.i(StringWidget.class.getName(), "beforeTextChanged " + getFormIndex().toString());
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// no-op
+		Log.i(StringWidget.class.getName(), "onTextChanged " + getFormIndex().toString());
+	}
 }

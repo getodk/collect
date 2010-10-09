@@ -108,9 +108,10 @@ public class QuestionView extends AbstractFolioView {
     }
 
 	@Override
-	public void onDescendantFocusChange(AbstractQuestionWidget qv,
-			FormIndex fi, boolean hasFocus) {
-		// Since we only have the one widget, do nothing.
+	public boolean onDescendantRequestFocusChange(AbstractQuestionWidget qv,
+			FormIndex fi, FocusChangeState focusState) {
+		// Since we only have the one widget, allow anything.
 		// Navigations off the widget will trigger saves of this widget's value.
+		return true;
 	}
 }

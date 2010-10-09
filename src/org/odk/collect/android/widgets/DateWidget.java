@@ -17,11 +17,11 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
@@ -74,7 +74,6 @@ public class DateWidget extends AbstractQuestionWidget {
 			public void onDateChanged(DatePicker view, int year, int month, int day) {
             	// TODO: MES -- is this broken if calculated date?
             	// TODO: MES -- Or if calculated readonly() field?
-            	signalDescendant(true);
                 if (!prompt.isReadOnly()) {
                     // handle leap years and number of days in month
                     // TODO
@@ -87,6 +86,10 @@ public class DateWidget extends AbstractQuestionWidget {
                         view.updateDate(year, month, day);
                     }
                 }
+                // gain focus after change because we might have a 
+                // constraint violation somewhere else that will
+                // restore focus elsewhere
+            	signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL);
             }
         };
 
@@ -104,14 +107,6 @@ public class DateWidget extends AbstractQuestionWidget {
             Date d = (Date) prompt.getAnswerValue().getValue();
             mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
     	}
-    }
-    
-    @Override
-	public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

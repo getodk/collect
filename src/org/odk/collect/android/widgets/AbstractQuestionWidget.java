@@ -10,6 +10,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -19,7 +20,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -67,11 +67,55 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 	}
 	
 	/**
-	 * Callback interface to notify interested parties that a focus change
-	 * event has occurred to a view within this entity.
+	 * Callback interface to ask interested parties if the input focus
+	 * can change to the requested AbstractQuestionWidget.
 	 */
-	public static interface OnDescendantFocusChangeListener {
-		public abstract void onDescendantFocusChange(AbstractQuestionWidget qv, FormIndex fi, boolean hasFocus);
+	public static interface OnDescendantRequestFocusChangeListener {
+		enum FocusChangeState {
+			DIVERGE_VIEW_FROM_MODEL, // for data entry widgets
+			FLUSH_CHANGE_TO_MODEL // for selection widgets
+		}
+		/**
+		 * Ask the registered listener if it is OK to change focus to the given
+		 * AbstractQuestionWidget.  Because of the lazy focus setting during touch
+		 * mode operation, this callback is generally invoked after the view value
+		 * in the requesting widget (qv) has diverged from the model value.
+		 * <p>
+		 * The exception to that rule is for trigger, barcode, image, audio, video
+		 * and other launching commands, which should test for a true return value
+		 * before taking their action.
+		 * <p>
+		 * A true return value indicates that the focus and value change were allowed, 
+		 * while a false indicates that either the focus change or value change were 
+		 * not allowed.  In general, if a false is returned, no further actions should
+		 * be taken.
+		 * <p> 
+		 * If the FocusChangeState is DIVERGE_VIEW_FROM_MODEL, then when a focus 
+		 * change is denied (the callback returns false), the widget (qv) making this 
+		 * request will have had its view value reset to the associated model value 
+		 * and the focus will remain on the previous widget.  Otherwise, when a focus
+		 * change is allowed (the callback returns true), the view value that had been
+		 * altered prior to this call is allowed to remain divergent from the model 
+		 * value (it will not have been saved to the model).
+		 * <p>
+		 * If the FocusChangeState is FLUSH_CHANGE_TO_MODEL, then when the focus 
+		 * change is denied, (the callback returns false) the widget (qv) making this 
+		 * request will have had its view value reset to the associated model value and
+		 * the focus will remain on the previous widget.  If the focus change is 
+		 * allowed, the requesting widget (qv) value is then saved into the model.  If 
+		 * that save fails (the callback returns false), the widget (qv) making the 
+		 * request will have had its view value reset to the associated model value and 
+		 * the focus remains on the requesting widget (qv).   Otherwise, if the focus 
+		 * change and value change are allowed, the (the callback returns true), the 
+		 * requesting view (qv) will have focus and the view value will match the model
+		 * value.
+		 * 
+		 * @param qv  the requesting view
+		 * @param fi  the form index associated with that view
+		 * @param focusState	the state change requested
+		 * @return true if the change is OK (i.e., no constraint violated).
+		 */
+		public abstract boolean onDescendantRequestFocusChange(AbstractQuestionWidget qv, FormIndex fi, FocusChangeState focusState);
 	}
 
 	/** standard text size for widget text */
@@ -92,7 +136,7 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 	protected final FormEntryPrompt prompt;
 	
 	/** callback for focus change events */
-    protected OnDescendantFocusChangeListener descendantFocusChangeListener;
+    protected OnDescendantRequestFocusChangeListener descendantRequestFocusChangeListener;
 
     /**
      * Update the enable/disable state of the UI element.
@@ -330,14 +374,14 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 			
 			if (evaluateConstraints) {
 				int saveStatus = fec.answerQuestion(prompt.getIndex(), getAnswer());
-				updateViewAfterAnswer();
-
 				if ( saveStatus != FormEntryController.ANSWER_OK ) {
 					Collect.getInstance().createConstraintToast(
 							model.getQuestionPrompt(prompt.getIndex())
 							.getConstraintText(), saveStatus);
 					return false;
 				}
+				updateViewAfterAnswer();
+
 			} else {
 				fec.saveAnswer(prompt.getIndex(), getAnswer());
 				updateViewAfterAnswer();
@@ -346,6 +390,14 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
     	return true;
     }
 
+    /**
+     * Called within a group view if a UI change causes a constraint violation
+     * so that the constraint failure can be fixed before continuing.
+     */
+    public final void resetViewFromAnswer() {
+    	updateViewAfterAnswer();
+    }
+    
     /**
      * Detach the UI from the underlying Form data model.
 	 */
@@ -365,11 +417,9 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
      */
 	public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+		Collect.getInstance().hideSoftKeyboard(this);
     }
-
+	
     /**
      * This is called by the javarosa framework whenever the underlying 
      * data values have changed.  Since saving data is a background task,
@@ -402,16 +452,16 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 	/**
 	 * @return the descendantFocusChangeListener
 	 */
-	public final OnDescendantFocusChangeListener getOnDescendantFocusChangeListener() {
-		return descendantFocusChangeListener;
+	public final OnDescendantRequestFocusChangeListener getOnDescendantFocusChangeListener() {
+		return descendantRequestFocusChangeListener;
 	}
 
 	/**
 	 * @param descendantFocusChangeListener the descendantFocusChangeListener to set
 	 */
 	public final void setOnDescendantFocusChangeListener(
-			OnDescendantFocusChangeListener descendantFocusChangeListener) {
-		this.descendantFocusChangeListener = descendantFocusChangeListener;
+			OnDescendantRequestFocusChangeListener descendantFocusChangeListener) {
+		this.descendantRequestFocusChangeListener = descendantFocusChangeListener;
 	}
 
 	/**
@@ -419,21 +469,25 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 	 * 
 	 * @param hasFocus
 	 */
-	protected final void signalDescendant(boolean hasFocus) {
-		if ( descendantFocusChangeListener != null ) {
-			descendantFocusChangeListener.onDescendantFocusChange(this, prompt.getIndex(), hasFocus);
+	protected final boolean signalDescendant(FocusChangeState focusState) {
+		if ( descendantRequestFocusChangeListener != null ) {
+			Log.i(AbstractQuestionWidget.class.getName(), "signalDescendant: " + 
+					getFormIndex().toString() + " " + focusState.toString());
+			return descendantRequestFocusChangeListener.onDescendantRequestFocusChange(this, prompt.getIndex(), focusState);
 		}
+		return true;
 	}
 	
 	/**
 	 * We handle this in the base class but required derived classes to register 
 	 * themselves to listen to their children's focus change events.  Standard
-	 * handling is to signal our descendant of the change of focus.
+	 * handling is to do nothing -- we only respond to on-change events.
 	 * 
 	 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
 	 */
 	@Override
 	public final void onFocusChange(View v, boolean hasFocus) {
-		signalDescendant(hasFocus);
+		Log.i(AbstractQuestionWidget.class.getName(), "onFocusChange: " + 
+				getFormIndex().toString() + " " + (hasFocus ? "GAINED" : "LOST") + " -- silent");
 	}
 }

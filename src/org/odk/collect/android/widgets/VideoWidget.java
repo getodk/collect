@@ -20,6 +20,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.app.Activity;
 import android.content.Context;
@@ -102,11 +103,11 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
-            	signalDescendant(true);
-                Intent i = new Intent(mCaptureIntent);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
-                ((Activity) getContext()).startActivityForResult(i, mRequestCode);
-
+            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
+	                Intent i = new Intent(mCaptureIntent);
+	                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
+	                ((Activity) getContext()).startActivityForResult(i, mRequestCode);
+            	}
             }
         });
 
@@ -120,12 +121,12 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
-            	signalDescendant(true);
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(mInstanceFolder + "/" + mBinaryName);
-                i.setDataAndType(Uri.fromFile(f), "video/*");
-                ((Activity) getContext()).startActivity(i);
-
+            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
+	                Intent i = new Intent("android.intent.action.VIEW");
+	                File f = new File(mInstanceFolder + "/" + mBinaryName);
+	                i.setDataAndType(Uri.fromFile(f), "video/*");
+	                ((Activity) getContext()).startActivity(i);
+            	}
             }
         });
 
