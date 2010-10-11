@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Looper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,7 +70,12 @@ public class DownloadFormsTask extends
 
     @Override
     protected HashMap<String, String> doInBackground(HashMap<String, String>... values) {
-        FileDbAdapter fda = null;
+
+    	// we need to prepare this thread for message queue handling should a
+    	// toast be needed...
+    	Looper.prepare();
+
+    	FileDbAdapter fda = null;
         if (values != null && values[0].containsKey(FormDownloadList.LIST_URL)) {
             // This gets a list of available forms from the specified server.
             HashMap<String, String> formList = new HashMap<String, String>();

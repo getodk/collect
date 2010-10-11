@@ -28,6 +28,7 @@ import org.apache.http.params.HttpParams;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
 
 import java.io.File;
@@ -55,6 +56,11 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
 
     @Override
     protected ArrayList<String> doInBackground(String... values) {
+
+    	// we need to prepare this thread for message queue handling should a
+    	// toast be needed...
+    	Looper.prepare();
+
         ArrayList<String> uploadedIntances = new ArrayList<String>();
         int instanceCount = values.length;
 

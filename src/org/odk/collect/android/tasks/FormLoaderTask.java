@@ -34,6 +34,7 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -111,6 +112,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      */
     @Override
     protected FECWrapper doInBackground(String... path) {
+
+    	// we need to prepare this thread for message queue handling should a
+    	// toast be needed...
+    	Looper.prepare();
+
         FormEntryController fec = null;
         FormDef fd = null;
         FileInputStream fis = null;

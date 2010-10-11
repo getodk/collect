@@ -28,6 +28,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -65,6 +66,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     @Override
     protected Integer doInBackground(Void... nothing) {
 
+    	// we need to prepare this thread for message queue handling should a
+    	// toast be needed...
+    	Looper.prepare();
+    	
         // validation failed, pass specific failure
         int validateStatus = validateAnswers(mMarkCompleted);
         if (validateStatus != VALIDATED) {
