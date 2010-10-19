@@ -84,6 +84,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int AUDIO_CAPTURE = 3;
     public static final int VIDEO_CAPTURE = 4;
     public static final int LOCATION_CAPTURE = 5;
+    public static final int HIERARCHY_ACTIVITY = 6;
 
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
 
@@ -285,6 +286,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 ((QuestionView) mCurrentView).setBinaryData(sl);
                 saveCurrentAnswer(false);
                 break;
+            case HIERARCHY_ACTIVITY:
+                // We may have jumped to a new index in hierarchy activity, so refresh
+                refreshCurrentView();
+                break;
         }
     }
 
@@ -364,7 +369,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     saveCurrentAnswer(false);
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                startActivity(i);
+                startActivityForResult(i, HIERARCHY_ACTIVITY);
         }
         return super.onOptionsItemSelected(item);
     }

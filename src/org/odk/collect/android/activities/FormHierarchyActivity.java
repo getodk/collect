@@ -85,15 +85,17 @@ public class FormHierarchyActivity extends ListActivity {
             @Override
             public void onClick(View v) {
                 mFormEntryController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                setResult(RESULT_OK);
                 finish();
             }
         });
-
+        
         Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
         jumpEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFormEntryController.jumpToIndex(FormIndex.createEndOfFormIndex());
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -339,10 +341,12 @@ public class FormHierarchyActivity extends ListActivity {
                 break;
             case QUESTION:
                 mFormEntryController.jumpToIndex(h.getFormIndex());
+                setResult(RESULT_OK);
                 finish();
                 return;
             case CHILD:
                 mFormEntryController.jumpToIndex(h.getFormIndex());
+                setResult(RESULT_OK);
                 refreshView();
                 return;
         }
