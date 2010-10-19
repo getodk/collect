@@ -65,7 +65,7 @@
 <string name="do_not_change">Do Not Change</string>
 <string name="do_not_exit">Do Not Exit</string>
 <string name="do_not_save">Discard Changes And Exit</string>
-<string name="enter">enter</string>
+<string name="enter">start</string>
 <string name="entering_repeat">Add Group</string>
 <string name="entering_repeat_ask">Add New Group?</string>
 <string name="enter_data">Start New Form</string>
@@ -106,7 +106,9 @@
 <string name="list_failed_with_error">Form listing failed. %s.</string>
 <string name="loading_form">Loading Form...</string>
 <string name="load_error">Sorry, unable to load form %s</string>
+<string name="parse_error">Sorry, unable to parse form.</string>
 <string name="load_remote_form_error">Error Getting Form List</string>
+<string name="error_occured">Error Occurred</string>
 <string name="local_files">Local</string>
 <string name="location_accuracy">Accuracy is %s meters.</string>
 <string name="longitude">Longitude</string>
@@ -137,7 +139,7 @@
 <string name="replace_location">Replace Location</string>
 <string name="replace_video">Replace Video</string>
 <string name="required_answer_error">Sorry, this response is required!</string>
-<string name="review">review</string>
+<string name="review">continue</string>
 <string name="review_data">Continue Saved Form</string>
 <string name="review_data_button">Continue Saved Form (%s)</string>
 <string name="saved_data">Incomplete (%s)</string>

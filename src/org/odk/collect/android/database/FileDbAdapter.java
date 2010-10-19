@@ -274,7 +274,7 @@ public class FileDbAdapter {
         }
         if (c != null) {
             // deactivate cursor before finalizing
-            c.deactivate();
+            //c.deactivate();
             c.moveToFirst();
         }
         return c;
