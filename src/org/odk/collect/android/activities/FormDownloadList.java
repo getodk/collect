@@ -95,6 +95,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_forms));
+        mAlertMsg = getString(R.string.please_wait);
 
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);
@@ -288,7 +289,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                         }
                     };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
-                mProgressDialog.setMessage(getString(R.string.please_wait));
+                mProgressDialog.setMessage(mAlertMsg);
                 mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false);
@@ -462,7 +463,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        mProgressDialog.setMessage(getString(R.string.fetching_file, currentFile, progress, total));
+        mAlertMsg = getString(R.string.fetching_file, currentFile, progress, total);
+        mProgressDialog.setMessage(mAlertMsg);
     }
 
 }
