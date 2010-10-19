@@ -81,8 +81,8 @@ public class FileDbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "files";
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_PATH =
-        Environment.getExternalStorageDirectory() + "/odk/metadata";
+    private static final String DATABASE_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/metadata";
 
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
@@ -142,7 +142,7 @@ public class FileDbAdapter {
         } else if (status.equals(STATUS_INCOMPLETE)) {
             tag = saved;
         } else if (status.equals(STATUS_COMPLETE)) {
-        	tag = finished;
+            tag = finished;
         }
         String ts =
             new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(new Date(timestamp));
@@ -392,7 +392,8 @@ public class FileDbAdapter {
 
     public void removeOrphanFormDefs() {
         if (FileUtils.createFolder(FileUtils.CACHE_PATH)) {
-            ArrayList<String> cachedForms = FileUtils.getValidFormsAsArrayList(FileUtils.CACHE_PATH);
+            ArrayList<String> cachedForms =
+                FileUtils.getValidFormsAsArrayList(FileUtils.CACHE_PATH);
 
             Cursor c = null;
             // remove orphaned form defs
@@ -401,8 +402,8 @@ public class FileDbAdapter {
 
                     try {
                         String hash =
-                            cachePath.substring(cachePath.lastIndexOf("/") + 1, cachePath
-                                    .lastIndexOf("."));
+                            cachePath.substring(cachePath.lastIndexOf("/") + 1,
+                                cachePath.lastIndexOf("."));
 
                         // if hash is not in db, delete
                         c = fetchFilesByPath(null, hash);
@@ -432,7 +433,8 @@ public class FileDbAdapter {
         if (FileUtils.createFolder(FileUtils.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
-            ArrayList<String> storedForms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
+            ArrayList<String> storedForms =
+                FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
 
             String hash = null;
             String path = null;
@@ -440,7 +442,7 @@ public class FileDbAdapter {
 
             // loop through forms on sdcard.
             if (storedForms != null) {
-                for (String formPath : storedForms) {                   
+                for (String formPath : storedForms) {
                     // only add forms
                     if (!(formPath.endsWith(".xml") || formPath.endsWith(".xhtml")))
                         continue;
@@ -486,7 +488,8 @@ public class FileDbAdapter {
         if (FileUtils.createFolder(FileUtils.FORMS_PATH)) {
 
             // full path to the raw xml forms stored on sd card
-            ArrayList<String> storedForms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
+            ArrayList<String> storedForms =
+                FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
 
             String hash = null;
             // String path = null;
@@ -525,7 +528,7 @@ public class FileDbAdapter {
 
             FilenameFilter ff = new FilenameFilter() {
                 @Override
-				public boolean accept(File dir, String filename) {
+                public boolean accept(File dir, String filename) {
                     return filename.endsWith("xml");
                 }
             };
@@ -558,13 +561,13 @@ public class FileDbAdapter {
                                     if (cd.getCount() > 0) {
                                         cd.moveToFirst();
                                         String id =
-                                            cd
-                                                    .getString(cd
-                                                            .getColumnIndex(Images.ImageColumns._ID));
+                                            cd.getString(cd.getColumnIndex(Images.ImageColumns._ID));
 
-                                        Log.e(t, "attempting to delete: "
-                                                + Uri.withAppendedPath(
-                                                    Images.Media.EXTERNAL_CONTENT_URI, id));
+                                        Log.e(
+                                            t,
+                                            "attempting to delete: "
+                                                    + Uri.withAppendedPath(
+                                                        Images.Media.EXTERNAL_CONTENT_URI, id));
                                         int del =
                                             ctx.getContentResolver().delete(
                                                 Uri.withAppendedPath(

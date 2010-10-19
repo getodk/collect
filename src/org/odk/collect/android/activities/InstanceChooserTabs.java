@@ -66,14 +66,15 @@ public class InstanceChooserTabs extends TabActivity {
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
         saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_INCOMPLETE);
-        tabHost.addTab(tabHost.newTabSpec(SAVED_TAB).setIndicator(
-            getString(R.string.saved_data, mSavedCount)).setContent(saved));
+        tabHost.addTab(tabHost.newTabSpec(SAVED_TAB)
+                .setIndicator(getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
         completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
-        tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB).setIndicator(
-            getString(R.string.completed_data, mCompletedCount)).setContent(completed));
+        tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB)
+                .setIndicator(getString(R.string.completed_data, mCompletedCount))
+                .setContent(completed));
 
         // hack to set font size and padding in tab headers
         // arrived at these paths by using hierarchy viewer

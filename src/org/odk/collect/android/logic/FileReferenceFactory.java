@@ -30,7 +30,7 @@ public class FileReferenceFactory extends PrefixedRootFactory {
      * java.lang.String)
      */
     @Override
-	protected Reference factory(String terminal, String URI) {
+    protected Reference factory(String terminal, String URI) {
         return new FileReference(localRoot, terminal);
     }
 

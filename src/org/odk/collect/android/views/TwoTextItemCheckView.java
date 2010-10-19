@@ -40,21 +40,21 @@ public class TwoTextItemCheckView extends RelativeLayout implements Checkable {
 
 
     @Override
-	public boolean isChecked() {
+    public boolean isChecked() {
         CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
         return c.isChecked();
     }
 
 
     @Override
-	public void setChecked(boolean checked) {
+    public void setChecked(boolean checked) {
         CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
         c.setChecked(checked);
     }
 
 
     @Override
-	public void toggle() {
+    public void toggle() {
         CheckBox c = (CheckBox) findViewById(R.id.twolinecheckbox);
         c.setChecked(!c.isChecked());
     }

@@ -157,6 +157,8 @@ public class IAVTLayout extends RelativeLayout {
                                 String bigImageFilename = ReferenceManager._()
                                         .DeriveReference(bigImageURI).getLocalURI();
                                 File bigImage = new File(bigImageFilename);
+
+
                                 @Override
                                 public void onClick(View v) {
                                     Intent i = new Intent("android.intent.action.VIEW");

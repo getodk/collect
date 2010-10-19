@@ -72,13 +72,13 @@ public class PropertyManager implements IPropertyManager {
 
 
     @Override
-	public String getSingularProperty(String propertyName) {
+    public String getSingularProperty(String propertyName) {
         return mProperties.get(propertyName.toLowerCase());
     }
 
 
     @Override
-	public void setProperty(String propertyName, String propertyValue) {
+    public void setProperty(String propertyName, String propertyValue) {
     }
 
 
@@ -89,7 +89,7 @@ public class PropertyManager implements IPropertyManager {
 
 
     @Override
-	public void addRules(IPropertyRules rules) {
+    public void addRules(IPropertyRules rules) {
 
     }
 

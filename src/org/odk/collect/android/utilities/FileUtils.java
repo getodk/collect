@@ -39,26 +39,30 @@ public class FileUtils {
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
     // Storage paths
-    public static final String FORMS_PATH = Environment.getExternalStorageDirectory() + "/odk/forms/";
-    public static final String INSTANCES_PATH = Environment.getExternalStorageDirectory() + "/odk/instances/";
-    public static final String CACHE_PATH = Environment.getExternalStorageDirectory() + "/odk/.cache/";
+    public static final String FORMS_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/forms/";
+    public static final String INSTANCES_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/instances/";
+    public static final String CACHE_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/.cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
-    
+
     public static ArrayList<String> getValidFormsAsArrayList(String path) {
-       // ArrayList<String> dirs = getFoldersAsArrayList(path);
+        // ArrayList<String> dirs = getFoldersAsArrayList(path);
         ArrayList<String> formPaths = new ArrayList<String>();
         File dir = new File(path);
         File[] dirs = dir.listFiles();
         for (int i = 0; i < dirs.length; i++) {
-        	// skip all the -media directories and "invisible" files that start with "."
-        	if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
-        		continue;
-        	
-        	formPaths.add(dirs[i].getAbsolutePath());          
+            // skip all the -media directories and "invisible" files that start with "."
+            if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
+                continue;
+
+            formPaths.add(dirs[i].getAbsolutePath());
         }
         return formPaths;
     }
+
 
     public static ArrayList<String> getFoldersAsArrayList(String path) {
         ArrayList<String> mFolderList = new ArrayList<String>();
@@ -252,8 +256,7 @@ public class FileUtils {
         } catch (IOException e) {
             Log.e("Problem reading from file", e.getMessage());
             return null;
-        } 
-        
+        }
 
     }
 

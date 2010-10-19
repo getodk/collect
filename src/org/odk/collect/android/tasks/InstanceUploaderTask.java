@@ -42,7 +42,7 @@ import java.util.ArrayList;
 public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<String>> {
 
     private static String t = "InstanceUploaderTask";
-    private static long MAX_BYTES = 1048576 - 1024; // 1MB less 1KB overhead
+    //private static long MAX_BYTES = 1048576 - 1024; // 1MB less 1KB overhead
     InstanceUploaderListener mStateListener;
     String mUrl;
     private static final int CONNECTION_TIMEOUT = 30000;

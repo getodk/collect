@@ -64,24 +64,25 @@ public class MainMenuActivity extends Activity {
     private static int mAvailableCount;
     private static int mFormsCount;
 
-	private AlertDialog mAlertDialog;
+    private AlertDialog mAlertDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-        
+
         // if sd card error, quit
         if (!FileUtils.storageReady()) {
-        	createErrorDialog(getString(R.string.no_sd_error),true);
+            createErrorDialog(getString(R.string.no_sd_error), true);
         }
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 // make sure we haven't added forms
                 ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
                 if (forms != null) {
@@ -106,7 +107,7 @@ public class MainMenuActivity extends Activity {
         mReviewDataButton = (Button) findViewById(R.id.review_data);
         mReviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 if ((mSavedCount + mCompletedCount) == 0) {
                     Toast.makeText(getApplicationContext(),
                         getString(R.string.no_items_error, getString(R.string.review)),
@@ -124,7 +125,7 @@ public class MainMenuActivity extends Activity {
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 if (mCompletedCount == 0) {
                     Toast.makeText(getApplicationContext(),
                         getString(R.string.no_items_error, getString(R.string.send)),
@@ -142,12 +143,13 @@ public class MainMenuActivity extends Activity {
         mManageFilesButton.setText(getString(R.string.manage_files));
         mManageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
                 startActivity(i);
             }
         });
     }
+
 
     /*
      * (non-Javadoc)
@@ -156,10 +158,11 @@ public class MainMenuActivity extends Activity {
      */
     @Override
     protected void onPause() {
-    	dismissDialogs();
+        dismissDialogs();
         super.onPause();
     }
-    
+
+
     /*
      * (non-Javadoc)
      * 
@@ -196,7 +199,6 @@ public class MainMenuActivity extends Activity {
                 formPath = intent.getStringExtra(FormEntryActivity.KEY_FORMPATH);
                 String instancePath = intent.getStringExtra(FormEntryActivity.KEY_INSTANCEPATH);
                 i = new Intent("org.odk.collect.android.action.FormEntry");
-                Log.e("Carl***", "loading formpath: " + formPath + " and instance path= " + instancePath);
                 i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
                 i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);
@@ -268,35 +270,35 @@ public class MainMenuActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    
+
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-		mAlertDialog = new AlertDialog.Builder(this).create();
-		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-		mAlertDialog.setMessage(errorMsg);
-		DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int i) {
-				switch (i) {
-				case DialogInterface.BUTTON1:
-					if (shouldExit) {
-						finish();
-					}
-					break;
-				}
-			}
-		};
-		mAlertDialog.setCancelable(false);
-		mAlertDialog.setButton(getString(R.string.ok), errorListener);
-		mAlertDialog.show();
-	}
-    
-    
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        mAlertDialog.setMessage(errorMsg);
+        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON1:
+                        if (shouldExit) {
+                            finish();
+                        }
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.show();
+    }
+
+
     /**
-	 * Dismiss any showing dialogs that we manage.
-	 */
-	private void dismissDialogs() {
-		if (mAlertDialog != null && mAlertDialog.isShowing()) {
-			mAlertDialog.dismiss();
-		}
-	}
+     * Dismiss any showing dialogs that we manage.
+     */
+    private void dismissDialogs() {
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        }
+    }
 }

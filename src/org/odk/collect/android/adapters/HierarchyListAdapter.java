@@ -42,7 +42,7 @@ public class HierarchyListAdapter extends BaseAdapter {
      * @see android.widget.Adapter#getCount()
      */
     @Override
-	public int getCount() {
+    public int getCount() {
         return mItems.size();
     }
 
@@ -53,7 +53,7 @@ public class HierarchyListAdapter extends BaseAdapter {
      * @see android.widget.Adapter#getItem(int)
      */
     @Override
-	public Object getItem(int position) {
+    public Object getItem(int position) {
         return mItems.get(position);
     }
 
@@ -64,7 +64,7 @@ public class HierarchyListAdapter extends BaseAdapter {
      * @see android.widget.Adapter#getItemId(int)
      */
     @Override
-	public long getItemId(int position) {
+    public long getItemId(int position) {
         return position;
     }
 
@@ -75,7 +75,7 @@ public class HierarchyListAdapter extends BaseAdapter {
      * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
      */
     @Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         HierarchyElementView hev;
         if (convertView == null) {
             hev = new HierarchyElementView(mContext, mItems.get(position));

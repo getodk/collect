@@ -60,17 +60,17 @@ public class FormManagerList extends ListActivity {
         mGetButton.setText(getString(R.string.get_forms));
         mGetButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormDownloadList.class);
                 startActivity(i);
             }
         });
-        
+
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setText(getString(R.string.delete_file));
         mActionButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
                     createDeleteDialog();
@@ -139,7 +139,7 @@ public class FormManagerList extends ListActivity {
         DialogInterface.OnClickListener dialogYesNoListener =
             new DialogInterface.OnClickListener() {
                 @Override
-				public void onClick(DialogInterface dialog, int i) {
+                public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();
@@ -175,8 +175,8 @@ public class FormManagerList extends ListActivity {
     private void deleteSelectedFiles() {
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
-        
-        // delete removes the file from the database first 
+
+        // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
             Cursor c = fda.fetchFile(mSelected.get(i));
@@ -187,8 +187,8 @@ public class FormManagerList extends ListActivity {
                 Log.i(t, "Deleting file: " + filename);
                 File del = new File(filename);
                 del.delete();
-                
-                //also delete formdef.
+
+                // also delete formdef.
                 String hashname = "/sdcard/odk/.cache/" + hash + ".formdef";
                 File fd = new File(hashname);
                 fd.delete();

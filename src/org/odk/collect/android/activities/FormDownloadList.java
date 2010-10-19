@@ -90,7 +90,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
@@ -103,7 +103,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mActionButton.setEnabled(false);
         mActionButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 downloadSelectedFiles();
                 mToggled = false;
             }
@@ -112,8 +112,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
-
+            public void onClick(View v) {
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
@@ -122,14 +121,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                     ls.setItemChecked(pos, mToggled);
 
                 mActionButton.setEnabled(!(selectedItemCount() == 0));
-
             }
         });
 
         mRefreshButton = (Button) findViewById(R.id.refresh_button);
         mRefreshButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 mToggled = false;
                 downloadFormList();
             }
@@ -163,7 +161,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             if (savedInstanceState.containsKey(DIALOG_SHOWING)) {
                 mAlertShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
             }
-
         }
 
         if (mAlertShowing) {
@@ -181,7 +178,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             }
             buildView();
         }
-
     }
 
 
@@ -193,7 +189,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @SuppressWarnings("unchecked")
-	private void downloadFormList() {
+    private void downloadFormList() {
         mFormNamesAndURLs = new HashMap<String, String>();
         if (mProgressDialog != null) {
             // This is needed because onPrepareDialog() is broken in 1.6.
@@ -286,7 +282,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
                         @Override
-						public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             mDownloadFormsTask.setDownloaderListener(null);
                         }
@@ -307,7 +303,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
      * Adds the selected form
      */
     @SuppressWarnings("unchecked")
-	private void downloadSelectedFiles() {
+    private void downloadSelectedFiles() {
         totalCount = 0;
         HashMap<String, String> filesToDownload = new HashMap<String, String>();
 
@@ -369,7 +365,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @Override
-	public void formDownloadingComplete(HashMap<String, String> result) {
+    public void formDownloadingComplete(HashMap<String, String> result) {
         dismissDialog(PROGRESS_DIALOG);
         String dialogMessage = null;
         String dialogTitle = null;
@@ -415,14 +411,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 } else {
                     // Download failed
                     dialogMessage =
-                        getString(R.string.list_failed_with_error, result
-                                .get(DownloadFormsTask.DL_ERROR_MSG));
+                        getString(R.string.list_failed_with_error,
+                            result.get(DownloadFormsTask.DL_ERROR_MSG));
                     dialogTitle = getString(R.string.load_remote_form_error);
                     createAlertDialog(dialogTitle, dialogMessage);
 
                     mSuccess = false;
                 }
-
             }
         } else {
             Log.e(t, "result was null when downloading");
@@ -437,7 +432,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mAlertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
-			public void onClick(DialogInterface dialog, int i) {
+            public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
                         // just close the dialog
@@ -466,7 +461,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @Override
-	public void progressUpdate(String currentFile, int progress, int total) {
+    public void progressUpdate(String currentFile, int progress, int total) {
         mProgressDialog.setMessage(getString(R.string.fetching_file, currentFile, progress, total));
     }
 

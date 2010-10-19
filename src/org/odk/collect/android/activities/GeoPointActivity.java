@@ -96,7 +96,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
         DialogInterface.OnClickListener geopointButtonListener =
             new DialogInterface.OnClickListener() {
                 @Override
-				public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case DialogInterface.BUTTON1:
                             returnLocation();
@@ -127,9 +127,10 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private void returnLocation() {
         if (mLocation != null) {
             Intent i = new Intent();
-            i.putExtra(FormEntryActivity.LOCATION_RESULT, mLocation.getLatitude() + " "
-                    + mLocation.getLongitude() + " " + mLocation.getAltitude() + " "
-                    + mLocation.getAccuracy());
+            i.putExtra(
+                FormEntryActivity.LOCATION_RESULT,
+                mLocation.getLatitude() + " " + mLocation.getLongitude() + " "
+                        + mLocation.getAltitude() + " " + mLocation.getAccuracy());
             setResult(RESULT_OK, i);
         }
         finish();
@@ -142,7 +143,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * @see android.location.LocationListener#onLocationChanged(android.location. Location)
      */
     @Override
-	public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location location) {
         mLocation = location;
         mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getAccuracy()));
         if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
@@ -157,10 +158,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
      */
     @Override
-	public void onProviderDisabled(String provider) {
-        Toast
-                .makeText(getBaseContext(), getString(R.string.gps_disabled_error),
-                    Toast.LENGTH_SHORT).show();
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(getBaseContext(), getString(R.string.gps_disabled_error), Toast.LENGTH_SHORT)
+                .show();
         finish();
     }
 
@@ -171,7 +171,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
      */
     @Override
-	public void onProviderEnabled(String provider) {
+    public void onProviderEnabled(String provider) {
 
     }
 
@@ -183,11 +183,11 @@ public class GeoPointActivity extends Activity implements LocationListener {
      * android.os.Bundle)
      */
     @Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
             case LocationProvider.AVAILABLE:
-                mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation
-                        .getAccuracy()));
+                mLocationDialog.setMessage(getString(R.string.location_accuracy,
+                    mLocation.getAccuracy()));
                 break;
             case LocationProvider.OUT_OF_SERVICE:
                 break;

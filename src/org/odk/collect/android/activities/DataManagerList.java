@@ -44,7 +44,6 @@ public class DataManagerList extends ListActivity {
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
 
-
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
@@ -54,12 +53,12 @@ public class DataManagerList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_manage_list);
-        
+
         mDeleteButton = (Button) findViewById(R.id.delete_button);
         mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
                     createDeleteDialog();
@@ -69,7 +68,6 @@ public class DataManagerList extends ListActivity {
                 }
             }
         });
-        // buildView takes place in resume
     }
 
 
@@ -110,7 +108,6 @@ public class DataManagerList extends ListActivity {
                         break;
                     }
                 }
-
             }
             mRestored = false;
         }
@@ -127,7 +124,7 @@ public class DataManagerList extends ListActivity {
         DialogInterface.OnClickListener dialogYesNoListener =
             new DialogInterface.OnClickListener() {
                 @Override
-				public void onClick(DialogInterface dialog, int i) {
+                public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();
@@ -137,7 +134,6 @@ public class DataManagerList extends ListActivity {
                             break;
                     }
                 }
-
             };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.delete_yes), dialogYesNoListener);

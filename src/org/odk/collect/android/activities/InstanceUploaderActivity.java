@@ -71,8 +71,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
-                settings
-                        .getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
+                settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
                         + "/submission";
             mInstanceUploaderTask.setUploadServer(url);
             totalCount = instances.size();
@@ -87,7 +86,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     // TODO: if uploadingComplete() when activity backgrounded, won't work.
     // just check task status in onResume
     @Override
-	public void uploadingComplete(ArrayList<String> result) {
+    public void uploadingComplete(ArrayList<String> result) {
         int resultSize = result.size();
         boolean success = false;
         if (resultSize == totalCount) {
@@ -117,7 +116,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     @Override
-	public void progressUpdate(int progress, int total) {
+    public void progressUpdate(int progress, int total) {
         mProgressDialog.setMessage(getString(R.string.sending_items, progress, total));
     }
 
@@ -130,7 +129,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
                         @Override
-						public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             mInstanceUploaderTask.setUploaderListener(null);
                             finish();
