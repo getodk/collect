@@ -15,10 +15,12 @@
 package org.odk.collect.android.listeners;
 
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.xform.parse.XFormParseException;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener {
     void loadingComplete(FormEntryController fec);
+    void loadingError(String errorMsg);
 }

@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,6 +31,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -39,7 +41,7 @@ import java.util.ArrayList;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormManagerList extends ListActivity {
-
+    private static String t = "FormManagerList";
     private AlertDialog mAlertDialog;
     private Button mActionButton;
     private Button mGetButton;
@@ -173,18 +175,27 @@ public class FormManagerList extends ListActivity {
     private void deleteSelectedFiles() {
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
-
-        // delete removes the file from the database first
+        
+        // delete removes the file from the database first 
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
+            Cursor c = fda.fetchFile(mSelected.get(i));
+            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+            String hash = c.getString(c.getColumnIndex(FileDbAdapter.KEY_HASH));
             if (fda.deleteFile(mSelected.get(i))) {
                 deleted++;
+                Log.i(t, "Deleting file: " + filename);
+                File del = new File(filename);
+                del.delete();
+                
+                //also delete formdef.
+                String hashname = "/sdcard/odk/.cache/" + hash + ".formdef";
+                File fd = new File(hashname);
+                fd.delete();
+                Log.i(t, "Deleting cache: " + hashname);
             }
+            c.close();
         }
-
-        // remove the actual files and close db
-        fda.removeOrphanForms();
-        fda.removeOrphanInstances(this);
         fda.close();
 
         if (deleted > 0) {

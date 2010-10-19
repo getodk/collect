@@ -22,6 +22,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -38,7 +40,7 @@ import java.util.ArrayList;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DataManagerList extends ListActivity {
-
+    private static String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
 
@@ -75,7 +77,6 @@ public class DataManagerList extends ListActivity {
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
-        fda.addOrphanForms();
         Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
         startManagingCursor(c);
 
@@ -166,14 +167,16 @@ public class DataManagerList extends ListActivity {
         // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
+            Cursor c = fda.fetchFile(mSelected.get(i));
+            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
             if (fda.deleteFile(mSelected.get(i))) {
                 deleted++;
+                Log.i(t, "Deleting file: " + filename);
+                File del = new File(filename);
+                del.delete();
             }
+            c.close();
         }
-
-        // remove the actual files and close db
-        fda.removeOrphanForms();
-        fda.removeOrphanInstances(this);
         fda.close();
 
         if (deleted > 0) {
