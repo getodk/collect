@@ -93,6 +93,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
+    public static final String KEY_ERROR = "error";
 
     // Identifies whether this is a new form, or reloading a form after a screen
     // rotation (or similar)
@@ -125,6 +126,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
+    private String mErrorMessage;
 
     // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped;
@@ -155,7 +157,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mInAnimation = null;
         mOutAnimation = null;
         mGestureDetector = new GestureDetector();
-
+        
         // Load JavaRosa modules. needed to restore forms.
         new XFormsModule().registerModule();
 
@@ -174,6 +176,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
+            if (savedInstanceState.containsKey(KEY_ERROR)) {
+                mErrorMessage = savedInstanceState.getString(KEY_ERROR);
+            }
+        }
+        
+        // If a parse error message is showing then nothing else is loaded
+        // Dialogs mid form just disappear on rotation.
+        if (mErrorMessage != null) {
+            createErrorDialog(mErrorMessage, true);
+            return;
         }
 
         // Check to see if this is a screen flip or a new form load.
@@ -215,6 +227,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         outState.putString(KEY_FORMPATH, mFormPath);
         outState.putString(KEY_INSTANCEPATH, mInstancePath);
         outState.putBoolean(NEWFORM, false);
+        outState.putString(KEY_ERROR, mErrorMessage);
     }
 
 
@@ -1027,7 +1040,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mProgressDialog.setButton(getString(R.string.cancel_saving_form),
                     savingButtonListener);
                 return mProgressDialog;
-
         }
         return null;
     }
@@ -1205,12 +1217,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void loadingError(String errorMsg) {
         dismissDialog(PROGRESS_DIALOG);
+        mErrorMessage = errorMsg;
         if (errorMsg != null) {
             createErrorDialog(errorMsg, true);
         } else {
             createErrorDialog("Unhandled XForm Parsing error", true);
         }
-
     }
 
 

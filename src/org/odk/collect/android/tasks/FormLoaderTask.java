@@ -154,6 +154,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             } catch (XFormParseException e) {
                 mErrorMsg = e.getMessage();
                 e.printStackTrace();
+            } catch (Exception e) {
+                mErrorMsg = e.getMessage();
+                e.printStackTrace();
             } finally {
                 if (fd == null) {
                     // remove cache reference from file db if it exists
@@ -179,6 +182,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                         fda.createFile(formXml.getAbsolutePath(), FileDbAdapter.TYPE_FORM,
                             FileDbAdapter.STATUS_AVAILABLE);
                     }
+                    if (c != null)
+                        c.close();
                     fda.close();
                 }
             }

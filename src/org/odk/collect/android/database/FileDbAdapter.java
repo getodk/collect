@@ -273,9 +273,7 @@ public class FileDbAdapter {
                     null, null, null, null);
         }
         if (c != null) {
-            // deactivate cursor before finalizing
-            c.deactivate();
-            c.moveToFirst();
+            c.moveToFirst();   
         }
         return c;
     }
