@@ -94,6 +94,7 @@
 <string name="group_contains">Contains %s items</string>
 <string name="image_file_error">No image file was specified.</string>
 <string name="image_file_invalid">File: %s is not a valid image file.</string>
+<string name="file_invalid">File: %s is invalid.</string>
 <string name="image_file_missing">Image File: %s is missing.</string>
 <string name="invalid_answer_error">Sorry, this response is invalid!</string>
 <string name="jump_to_beginning">Go To Start</string>

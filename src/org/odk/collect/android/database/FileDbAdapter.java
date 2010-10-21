@@ -478,6 +478,7 @@ public class FileDbAdapter {
 
             // clean up adapter
             if (c != null) {
+                c.deactivate();
                 c.close();
             }
         }
