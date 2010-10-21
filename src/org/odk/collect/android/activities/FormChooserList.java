@@ -66,7 +66,10 @@ public class FormChooserList extends ListActivity {
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
-        fda.close();
+
+        if (fda != null) {
+            fda.close();
+        }
     }
 
 
@@ -84,7 +87,12 @@ public class FormChooserList extends ListActivity {
         i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
         setResult(RESULT_OK, i);
 
+        if (c != null) {
+            c.close();
+        }
+
         finish();
+
     }
 
 }
