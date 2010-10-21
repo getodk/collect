@@ -182,9 +182,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                         fda.createFile(formXml.getAbsolutePath(), FileDbAdapter.TYPE_FORM,
                             FileDbAdapter.STATUS_AVAILABLE);
                     }
-                    if (c != null) {
+   				 	if (c != null)
                         c.close();
-                    }
                     fda.close();
                 }
             }
