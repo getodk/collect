@@ -11,7 +11,7 @@
 		License.
 	-->
 <resources>
-	<string name="accept_location">Record Location</string>
+<string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="add_another">Add Group</string>
 <string name="add_another_repeat">Add another \"%s\" group?</string>
@@ -145,5 +145,4 @@
 <string name="url_error">Sorry, invalid URL!</string>
 <string name="username">Username</string>
 <string name="view_hierarchy">Go To Prompt</string>
-
 </resources>
