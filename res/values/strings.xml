@@ -13,10 +13,8 @@
 <resources>
 	<string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
-<string name="trigger">OK. Please continue.</string>
 <string name="add_another">Add Group</string>
 <string name="add_another_repeat">Add another \"%s\" group?</string>
-<string name="add_file">Add Selected File(s)</string>
 <string name="add_repeat">Add a new \"%s\" group?</string>
 <string name="add_repeat_no">Do Not Add</string>
 <string name="altitude">Altitude</string>
@@ -39,9 +37,7 @@
 <string name="clear_answer">Remove Response</string>
 <string name="clear_answer_ask">Remove This Response?</string>
 <string name="clear_answer_no">Do Not Remove</string>
-<string name="collapsed_group">Collapsed Group</string>
 <string name="completed_data">Complete (%s)</string>
-<string name="continue_form">Do Not Exit</string>
 <string name="data">Data</string>
 <string name="data_saved_error">Sorry, data save failed!</string>
 <string name="data_saved_ok">Data successfully saved!</string>
@@ -61,7 +57,6 @@
 <string name="download_all_successful">All forms downloaded successfully.</string>
 <string name="download_complete">Form Get Complete</string>
 <string name="download_failed_with_error">Form \"%s\" failed. %s.</string>
-<string name="download_some_failed">Sorry, %s form(s) not downloaded!</string>
 <string name="do_not_change">Do Not Change</string>
 <string name="do_not_exit">Do Not Exit</string>
 <string name="do_not_save">Discard Changes And Exit</string>
@@ -72,30 +67,21 @@
 <string name="enter_data_button">Start New Form (%s)</string>
 <string name="enter_data_description">%s has been selected.</string>
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
-<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
 <string name="error_downloading">Error Getting Form</string>
-<string name="expanded_group">Expanded Group</string>
+<string name="error_occured">Error Occurred</string>
 <string name="fetching_file">"Getting \"%s\".\n\nForm %s of %s form(s)..."</string>
 <string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
-<string name="file_download_error">File %s failed. %s</string>
+<string name="file_invalid">File: %s is invalid.</string>
 <string name="file_missing">File: %s is missing.</string>
-<string name="finalize_for_send">Save As Complete</string>
 <string name="form">Form</string>
 <string name="forms">Forms</string>
-<string name="form_path">Form Path: /</string>
 <string name="form_renamed">%s was renamed %s.</string>
 <string name="getting_location">Loading Location...</string>
 <string name="get_barcode">Get Barcode</string>
 <string name="get_forms">Get New Forms</string>
 <string name="get_location">Record Location</string>
-<string name="goto_previous_level">Go to previous level</string>
 <string name="gps_disabled_error">Sorry, GPS is disabled!</string>
-<string name="group_contains">Contains %s items</string>
-<string name="image_file_error">No image file was specified.</string>
-<string name="image_file_invalid">File: %s is not a valid image file.</string>
-<string name="file_invalid">File: %s is invalid.</string>
-<string name="image_file_missing">Image File: %s is missing.</string>
 <string name="invalid_answer_error">Sorry, this response is invalid!</string>
 <string name="jump_to_beginning">Go To Start</string>
 <string name="jump_to_end">Go To End</string>
@@ -106,11 +92,7 @@
 <string name="leaving_repeat_ask">And One More Group?</string>
 <string name="list_failed_with_error">Form listing failed. %s.</string>
 <string name="loading_form">Loading Form...</string>
-<string name="load_error">Sorry, unable to load form %s</string>
-<string name="parse_error">Sorry, unable to parse form.</string>
 <string name="load_remote_form_error">Error Getting Form List</string>
-<string name="error_occured">Error Occurred</string>
-<string name="local_files">Local</string>
 <string name="location_accuracy">Accuracy is %s meters.</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
@@ -123,9 +105,10 @@
 <string name="no_capture">Nothing recorded yet.</string>
 <string name="no_items_display">Nothing available to display.</string>
 <string name="no_items_error">Nothing available to %s!</string>
- <string name="no_sd_error">Sorry, your memory card is not working!</string>
+<string name="no_sd_error">Sorry, your memory card is not working!</string>
 <string name="ok">OK</string>
 <string name="one_capture">Multimedia recorded.</string>
+<string name="parse_error">Sorry, unable to parse form.</string>
 <string name="password">Password</string>
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
@@ -133,7 +116,6 @@
 <string name="quit_application">Exit Without Saving?</string>
 <string name="quit_entry">Save Data And Exit</string>
 <string name="refresh">Refresh</string>
-<string name="remote_files">Remote</string>
 <string name="replace_audio">Replace Sound</string>
 <string name="replace_barcode">Replace Barcode</string>
 <string name="replace_image">Replace Picture</string>
@@ -147,9 +129,7 @@
 <string name="save_all_answers">Save Data</string>
 <string name="save_data_message">Please save data to keep your responses.</string>
 <string name="save_enter_data_description">You have reached the end of %s.</string>
-<string name="save_for_later">Save As Incomplete </string>
 <string name="saving_form">Saving Form...</string>
-<string name="select_repeat">Select to see repeated element: </string>
 <string name="send">send</string>
 <string name="sending_items">Sending %s of %s item(s)"</string>
 <string name="send_data">Send Finished Data</string>
@@ -158,11 +138,12 @@
 <string name="server">Server</string>
 <string name="server_preferences">Server Preferences</string>
 <string name="toggle_selected">Toggle All</string>
+<string name="trigger">OK. Please continue.</string>
 <string name="uploading_data">Sending Data</string>
 <string name="upload_all_successful">%s item(s) sent successfully.</string>
 <string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
 <string name="url_error">Sorry, invalid URL!</string>
 <string name="username">Username</string>
 <string name="view_hierarchy">Go To Prompt</string>
-<string name="yes">Yes</string>
+
 </resources>
