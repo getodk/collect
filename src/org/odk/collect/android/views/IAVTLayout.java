@@ -170,12 +170,12 @@ public class IAVTLayout extends RelativeLayout {
                         addView(mImageView, imageParams);
                     } else {
                         // Loading the image failed, so it's likely a bad file.
-                        errorMsg = getContext().getString(R.string.image_file_invalid, imageFile);
+                        errorMsg = getContext().getString(R.string.file_invalid, imageFile);
 
                     }
                 } else {
                     // We should have an image, but the file doesn't exist.
-                    errorMsg = getContext().getString(R.string.image_file_missing, imageFile);
+                    errorMsg = getContext().getString(R.string.file_missing, imageFile);
                 }
 
                 if (errorMsg != null) {

@@ -273,7 +273,7 @@ public class FileDbAdapter {
                     null, null, null, null);
         }
         if (c != null) {
-            c.moveToFirst();   
+            c.moveToFirst();
         }
         return c;
     }
@@ -476,6 +476,7 @@ public class FileDbAdapter {
 
             // clean up adapter
             if (c != null) {
+                c.deactivate();
                 c.close();
             }
         }

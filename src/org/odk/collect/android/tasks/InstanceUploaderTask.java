@@ -102,7 +102,11 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                     fb = new FileBody(f, "video/3gpp");
                     entity.addPart(f.getName(), fb);
                     Log.i(t, "added video file " + f.getName());
-                } else {
+                } else if (f.getName().endsWith(".mp4")) {
+                    fb = new FileBody(f, "video/mp4");
+                    entity.addPart(f.getName(), fb);
+                    Log.i(t, "added video file " + f.getName());
+                 } else {
                     Log.w(t, "unsupported file type, not adding file: " + f.getName());
                 }
             }

@@ -53,12 +53,14 @@ public class FileUtils {
         ArrayList<String> formPaths = new ArrayList<String>();
         File dir = new File(path);
         File[] dirs = dir.listFiles();
-        for (int i = 0; i < dirs.length; i++) {
-            // skip all the -media directories and "invisible" files that start with "."
-            if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
-                continue;
+        if (dirs != null) {
+            for (int i = 0; i < dirs.length; i++) {
+                // skip all the -media directories and "invisible" files that start with "."
+                if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
+                    continue;
 
-            formPaths.add(dirs[i].getAbsolutePath());
+                formPaths.add(dirs[i].getAbsolutePath());
+            }
         }
         return formPaths;
     }
