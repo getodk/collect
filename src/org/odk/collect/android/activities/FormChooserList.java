@@ -81,15 +81,12 @@ public class FormChooserList extends ListActivity {
         // get full path to the form
         Cursor c = (Cursor) getListAdapter().getItem(position);
         String formPath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-
+        startManagingCursor(c);
+        
         // create intent for return and store path
         Intent i = new Intent();
         i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
         setResult(RESULT_OK, i);
-
-        if (c != null) {
-            c.close();
-        }
 
         finish();
 
