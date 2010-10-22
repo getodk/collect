@@ -129,7 +129,7 @@ public class QuestionView extends ScrollView {
         if (s.length() > 0) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE - 7);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 7);
             tv.setPadding(0, 0, 0, 5);
             mView.addView(tv, mLayout);
         }
@@ -152,7 +152,7 @@ public class QuestionView extends ScrollView {
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setId(38475483); // assign random id
@@ -177,7 +177,7 @@ public class QuestionView extends ScrollView {
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TEXTSIZE - 5);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 5);
             tv.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             tv.setHorizontallyScrolling(false);

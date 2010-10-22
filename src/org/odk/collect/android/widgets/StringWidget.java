@@ -74,7 +74,7 @@ public class StringWidget extends EditText implements IQuestionWidget {
     @Override
 	public void buildView(FormEntryPrompt prompt) {
         // font size
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionView.APPLICATION_FONTSIZE);
 
         // capitalize the first letter of the sentence
         setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));

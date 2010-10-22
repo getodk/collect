@@ -117,7 +117,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                c.setTextSize(TypedValue.COMPLEX_UNIT_PX, QuestionView.APPLICATION_FONTSIZE);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionView.APPLICATION_FONTSIZE);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {

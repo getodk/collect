@@ -19,28 +19,28 @@ the License.
 	android:layout_height="fill_parent" 
 	android:orientation="vertical"
 	android:gravity="center"
-	android:padding="10px">
+	android:padding="10dp">
     
   <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
     android:id="@+id/description"
     android:gravity="center" 
     android:text="description"
-    android:textSize="23px" 
-    android:paddingTop="2px"
-    android:paddingBottom="20px" 
+    android:textSize="23dp" 
+    android:paddingTop="2dp"
+    android:paddingBottom="20dp" 
      />
     
 	<TextView android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
 		android:text="@string/enter_data_message"
 		android:gravity="center" 
-		android:textSize="16px" 
-		android:paddingTop="2px"/>
+		android:textSize="16dp" 
+		android:paddingTop="2dp"/>
 <!-- 
   <org.odk.collect.android.ArrowAnimation
     android:layout_width="fill_parent" 
-    android:layout_height="65px"
+    android:layout_height="65dp"
      /> -->
     
  </LinearLayout>

@@ -29,9 +29,9 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display"
-		android:textSize="19px"
-		android:paddingLeft="20px"
-		android:paddingRight="20px"
+		android:textSize="19dp"
+		android:paddingLeft="20dp"
+		android:paddingRight="20dp"
 		android:gravity="center"
 		android:background="@drawable/white"
 		android:textColor="@drawable/black" />
