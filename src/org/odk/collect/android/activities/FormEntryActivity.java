@@ -45,7 +45,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -67,7 +66,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -1436,7 +1434,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		return groups;
 	}
 
-	private int stepToNextEvent() {
+	private int stepToNextPossiblyIrrelevantEvent() {
 		FormEntryController fec = Collect.getInstance().getFormEntryController();
 		if ( currentPromptIsGroupFolio() ) {
 			// advance to the group after this group...
@@ -1451,9 +1449,58 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 	}
 	
+	private boolean isCurrentIndexRelevant() {
+		FormIndex idx = mFormEntryModel.getFormIndex();
+		// Test whether the index is in the form first because 
+		// isIndexRelevant(idx) blows up if the index marks the 
+		// start or end of a form.  Return true to exit the loop
+		// within the callers of this routine.
+		if ( !idx.isInForm() ) return true;
+		
+		boolean outcome = mFormEntryModel.isIndexRelevant(idx);
+		if ( !outcome ) return outcome; // if it isn't then return now...
+		if ( currentPromptIsGroupFolio() ) {
+			// Relevance is not properly percolated up to the group level.
+			// We need to traverse all the fields within the group to see
+			// if any of the fields are relevant.  If none are, we should 
+			// skip the group...
+			
+			// NOTE: incrementIndex does not change the current index
+			// so nothing here alters where the form thinks it is.
+			
+			FormIndex idxEnd = mFormEntryModel.getForm().incrementIndex(idx, false);
+			
+			// NOTE: isIndexRelevant(idx) == true to get here, so we need to
+			// advance into the group and check all the fields within the group.
+			// i.e., we want to iterate over (idx..idxEnd)
+			
+			for (FormIndex idxQ = mFormEntryModel.getForm().incrementIndex(idx, true) ;
+					!idxQ.equals(idxEnd); 
+					idxQ = mFormEntryModel.getForm().incrementIndex(idxQ, true) ) {
+				if ( mFormEntryModel.isIndexRelevant(idxQ) ) return true;
+			}
+			return false;
+		}
+		return outcome;
+	}
+
+	private int stepToNextEvent() {
+		int outcome;
+		FormIndex idx;
+        do {
+        	outcome = stepToNextPossiblyIrrelevantEvent();
+			idx = mFormEntryModel.getFormIndex();
+        } while ( idx.isInForm() && !isCurrentIndexRelevant() );
+        return outcome;
+	}
+	
 	private int stepToPreviousEvent() {
 		FormEntryController fec = Collect.getInstance().getFormEntryController();
-		return fec.stepToPreviousEvent();
+		int event = fec.stepToPreviousEvent();
+		while ( !isCurrentIndexRelevant() ) {
+			event = fec.stepToPreviousEvent();
+		}
+		return event;
 	}
 
 	/**
