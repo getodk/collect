@@ -1313,16 +1313,19 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it
-            // lives on and retains the
-            // FEC in memory.
-            mFormLoaderTask.cancel(true);
-            mFormLoaderTask.destroy();
+            // lives on and retains the FEC in memory.
+            // but only if it's done, otherwise the thread never returns
+            if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
+                mFormLoaderTask.cancel(true);
+                mFormLoaderTask.destroy();
+            }
         }
         if (mSaveToDiskTask != null) {
             // We have to call cancel to terminate the thread, otherwise it
-            // lives on and retains the
-            // FEC in memory.
-            mSaveToDiskTask.cancel(false);
+            // lives on and retains the FEC in memory.
+            if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
+                mSaveToDiskTask.cancel(false);
+            }
             mSaveToDiskTask.setFormSavedListener(null);
         }
 
