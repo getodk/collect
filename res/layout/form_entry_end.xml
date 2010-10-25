@@ -19,34 +19,34 @@ the License.
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" 
 	android:orientation="vertical" 
-	android:padding="10px" android:gravity="center" >
+	android:padding="10dp" android:gravity="center" >
 	
   <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
     android:id="@+id/description"
     android:gravity="center" 
     android:text="description"
-    android:textSize="23px" 
-    android:paddingTop="2px"
-    android:paddingBottom="20px" 
+    android:textSize="23dp" 
+    android:paddingTop="2dp"
+    android:paddingBottom="20dp" 
      />
      	<!--  <TextView 
 	  android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
 		android:text="@string/save_data_message"
 		android:gravity="center" 
-    android:textSize="16px"
-		android:paddingBottom="6px" /> -->
+    android:textSize="16dp"
+		android:paddingBottom="6dp" /> -->
   <Button 
      android:id="@+id/save_exit_button"
      android:text="@string/quit_entry"
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
-     android:padding="20px"
-     android:textSize="23px" />
+     android:padding="20dp"
+     android:textSize="23dp" />
   <CheckBox android:text="@string/mark_finished" 
     android:id="@+id/mark_finished" 
-    android:textSize="17px"
+    android:textSize="17dp"
     android:layout_width="wrap_content" 
     android:layout_height="wrap_content"/>
 </LinearLayout>

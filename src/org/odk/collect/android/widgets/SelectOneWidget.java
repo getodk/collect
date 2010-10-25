@@ -122,7 +122,7 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
 
         r.setId(AbstractQuestionWidget.newUniqueId());
         r.setText(prompt.getSelectChoiceText(sc));
-        r.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
         r.setEnabled(!prompt.isReadOnly());
 
         r.setOnCheckedChangeListener(this);

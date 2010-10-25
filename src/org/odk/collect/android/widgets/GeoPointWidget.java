@@ -78,13 +78,13 @@ public class GeoPointWidget extends AbstractQuestionWidget implements IBinaryWid
         mActionButton = new Button(getContext());
         mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
             AbstractFolioView.APPLICATION_FONTSIZE - 1);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 

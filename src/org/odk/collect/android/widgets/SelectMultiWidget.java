@@ -129,7 +129,7 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
 
         c.setId(AbstractQuestionWidget.newUniqueId());
         c.setText(prompt.getSelectChoiceText(sc));
-        c.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
         c.setEnabled(!prompt.isReadOnly());
         
         // when clicked, check for readonly before toggling

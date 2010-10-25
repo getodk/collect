@@ -83,7 +83,7 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
     	// monitor focus change events...
     	mStringAnswer.addTextChangedListener(this);
         // font size
-    	mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+    	mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
 
         // needed to make long read only text scroll
     	mStringAnswer.setHorizontallyScrolling(false);

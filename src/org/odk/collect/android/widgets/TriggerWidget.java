@@ -59,7 +59,7 @@ public class TriggerWidget extends AbstractQuestionWidget {
         
         mActionButton = new CheckBox(getContext());
         mActionButton.setText(getContext().getString(R.string.trigger));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
         //mActionButton.setPadding(20, 20, 20, 20);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
@@ -77,7 +77,7 @@ public class TriggerWidget extends AbstractQuestionWidget {
         });
 
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         // finish complex layout

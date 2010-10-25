@@ -29,9 +29,9 @@ the License.
     android:id="@+id/form_full_title"
     android:gravity="center" 
     android:text="title"
-    android:textSize="23px" 
-    android:paddingTop="2px"
-    android:paddingBottom="20px" 
+    android:textSize="23dp" 
+    android:paddingTop="2dp"
+    android:paddingBottom="20dp" 
      />
     
 	<ImageView   android:layout_width="wrap_content"
@@ -47,7 +47,7 @@ the License.
 	android:paddingLeft="3dp"
 	android:paddingRight="3dp">
 	<LinearLayout
-	android:layout_width="0px"
+	android:layout_width="0dp"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
@@ -62,11 +62,11 @@ the License.
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:text="@+string/backup"
-	android:textSize="16px" 
+	android:textSize="16dp" 
 	android:gravity="left" />
 	</LinearLayout>
 	<LinearLayout
-	android:layout_width="0px"
+	android:layout_width="0dp"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
@@ -81,7 +81,7 @@ the License.
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:text="@+string/advance"
-	android:textSize="16px" 
+	android:textSize="16dp" 
 	android:gravity="right" />
 	</LinearLayout>
 	</LinearLayout>

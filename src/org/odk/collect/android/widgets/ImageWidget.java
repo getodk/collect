@@ -133,7 +133,7 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, AbstractFolioView.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
