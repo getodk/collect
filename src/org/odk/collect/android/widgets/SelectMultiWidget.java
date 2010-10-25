@@ -143,11 +143,14 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
 
         String videoURI =
         		prompt.getSpecialFormSelectChoiceText(sc, "video");
+        
+        String bigImageURI = null;
+        bigImageURI = prompt.getSpecialFormSelectChoiceText(sc, "big-image");
          
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
         
         mediaLayout.setId(AbstractQuestionWidget.newUniqueId());
-        mediaLayout.setAVT(c, audioURI, imageURI, videoURI);
+        mediaLayout.setAVT(c, audioURI, imageURI, videoURI, bigImageURI);
         
         addView(mediaLayout);
         return this;

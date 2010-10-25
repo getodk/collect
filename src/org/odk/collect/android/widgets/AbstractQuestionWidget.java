@@ -241,7 +241,10 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
     private final void AddQuestionText(FormEntryPrompt p) {
         String imageURI = p.getImageText();
         String audioURI = p.getAudioText();
-        String videoURI = p.getSpecialFormQuestionText("video"); // TODO: make this a value.
+        String videoURI = p.getSpecialFormQuestionText("video");
+    
+        // shown when image is clicked
+        String bigImageURI = p.getSpecialFormQuestionText("big-image");
 
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -256,7 +259,7 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
 
         // Create the layout for audio, image, text
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
-        mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI);
+        mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
 
         addView(mediaLayout, COMMON_LAYOUT);
     }

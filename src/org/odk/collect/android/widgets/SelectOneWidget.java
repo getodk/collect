@@ -137,11 +137,14 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
 
         String videoURI =
         		prompt.getSpecialFormSelectChoiceText(sc, "video");
+        
+        String bigImageURI = null;
+        bigImageURI = prompt.getSpecialFormSelectChoiceText(sc, "big-image");
          
 
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
         mediaLayout.setId(AbstractQuestionWidget.newUniqueId());
-        mediaLayout.setAVT(r, audioURI, imageURI, videoURI);
+        mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
         
         addView(mediaLayout);
         return this;
