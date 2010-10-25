@@ -1343,47 +1343,51 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// Added by AnimationListener interface.
 	}
 
-	/**
-	 * loadingComplete() is called by FormLoaderTask once it has finished
-	 * loading a form.
-	 */
-	@Override
-	public void loadingComplete(FormEntryController fec) {
-		dismissDialog(PROGRESS_DIALOG);
-		if (fec == null) {
-			createErrorDialog(
-					getString(R.string.load_error,
-							mFormPath.substring(mFormPath.lastIndexOf('/') + 1)),
-					true);
-		} else {
-			Collect.getInstance().setFormEntryController(fec);
-			mFormEntryModel = fec.getModel();
+	
+	 /**
+     * loadingComplete() is called by FormLoaderTask once it has finished loading a form.
+     */
+    @Override
+    public void loadingComplete(FormEntryController fec) {
+        dismissDialog(PROGRESS_DIALOG);
 
-			// Set saved answer path
-			if (mInstancePath == null) {
+        Collect.getInstance().setFormEntryController(fec);
+        mFormEntryModel = fec.getModel();
 
-				// Create new answer folder.
-				String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
-						.format(Calendar.getInstance().getTime());
-				String file = mFormPath.substring(
-						mFormPath.lastIndexOf('/') + 1,
-						mFormPath.lastIndexOf('.'));
-				String path = FileUtils.INSTANCES_PATH + file + "_" + time;
-				if (FileUtils.createFolder(path)) {
-					mInstancePath = path + "/" + file + "_" + time + ".xml";
-				}
-			} else {
-				// we've just loaded a saved form, so start in the hierarchy
-				// view
-				Intent i = new Intent(this, FormHierarchyActivity.class);
-				startActivity(i);
-				return; // so we don't show the intro screen before jumping to
-						// the hierarchy
-			}
+        // Set saved answer path
+        if (mInstancePath == null) {
 
-			refreshCurrentView();
-		}
-	}
+            // Create new answer folder.
+            String time =
+                new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                        .format(Calendar.getInstance().getTime());
+            String file =
+                mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
+            String path = FileUtils.INSTANCES_PATH + file + "_" + time;
+            if (FileUtils.createFolder(path)) {
+                mInstancePath = path + "/" + file + "_" + time + ".xml";
+            }
+        } else {
+            // we've just loaded a saved form, so start in the hierarchy view
+            Intent i = new Intent(this, FormHierarchyActivity.class);
+            startActivity(i);
+            return; // so we don't show the intro screen before jumping to the hierarchy
+        }
+
+        refreshCurrentView();
+    }
+
+
+    @Override
+    public void loadingError(String errorMsg) {
+        dismissDialog(PROGRESS_DIALOG);
+        if (errorMsg != null) {
+            createErrorDialog(errorMsg, true);
+        } else {
+            createErrorDialog("Unhandled XForm Parsing error", true);
+        }
+
+    }
 
 	@Override
 	public void savingComplete(int saveStatus) {

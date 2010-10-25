@@ -18,21 +18,21 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.util.externalizable.DeserializationException;
 import org.javarosa.core.util.externalizable.ExtUtil;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.utilities.FileUtils;
 
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
@@ -83,6 +83,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         };
     
     FormLoaderListener mStateListener;
+    String mErrorMsg;
 
     protected class FECWrapper {
         FormEntryController controller;
@@ -125,44 +126,67 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         String instancePath = path[1];
 
         File formXml = new File(formPath);
-        File formBin = new File(FileUtils.CACHE_PATH + FileUtils.getMd5Hash(formXml) + ".formdef");
+        String formHash = FileUtils.getMd5Hash(formXml);
+        File formBin = new File(FileUtils.CACHE_PATH + formHash + ".formdef");
 
-        if ( formXml.exists() && formBin.exists() &&
-        	 formBin.lastModified() < formXml.lastModified() ) {
-        	// the cache is stale w.r.t. the xml -- delete cache.
-        	// Mainly useful for development.  Could be more 
-        	// important going forward if users are updating 
-        	// or adding IAV features to existing forms.
-        	Log.i(t,"Stale .cache file -- deleting!");
-        	formBin.delete();
-        }
-            
         if (formBin.exists()) {
-        	// if we have binary, deserialize binary
-        	try {
-        		fd = deserializeFormDef(formBin);
-        	} catch ( Exception e ) {
-        		// didn't load -- delete the cache and try plain xml
-        		formBin.delete();
-        	}
+            // if we have binary, deserialize binary
+            Log.i(
+                t,
+                "Attempting to load " + formXml.getName() + " from cached file: "
+                        + formBin.getAbsolutePath());
+            fd = deserializeFormDef(formBin);
+            if (fd == null) {
+                // some error occured with deserialization. Remove the file, and make a new .formdef
+                // from xml
+                Log.w(t,
+                    "Deserialization FAILED!  Deleting cache file: " + formBin.getAbsolutePath());
+                formBin.delete();
+            }
         }
-        
-        if ( fd == null ) {
-            // no binary, or didn't load -- read from xml
+        if (fd == null) {
+            // no binary, read from xml
             try {
-            	Log.i(t,"Attempting read of " + formXml.getAbsolutePath());
-
-            	fis = new FileInputStream(formXml);
+                Log.i(t, "Attempting to load from: " + formXml.getAbsolutePath());
+                fis = new FileInputStream(formXml);
                 fd = XFormUtils.getFormFromInputStream(fis);
                 if (fd == null) {
-                    return null;
+                    mErrorMsg = "Error reading XForm file";
+                } else {
+                    serializeFormDef(fd, formPath);
                 }
-                serializeFormDef(fd, formPath);
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                mErrorMsg = e.getMessage();
+            } catch (XFormParseException e) {
+                mErrorMsg = e.getMessage();
+                e.printStackTrace();
+            } finally {
                 if (fd == null) {
+                    // remove cache reference from file db if it exists
+                    FileDbAdapter fda = new FileDbAdapter();
+                    fda.open();
+                    if (fda.deleteFile(null, formHash)) {
+                        Log.i(t, "Cached file: " + formBin.getAbsolutePath()
+                                + " removed from database");
+                    } else {
+                        Log.i(t, "Failed to remove cached file: " + formBin.getAbsolutePath()
+                                + " from database (might not have existed...)");
+                    }
+                    fda.close();
                     return null;
+                } else {
+                    // add to file db if it doesn't already exist.
+                    // MainMenu will add files that don't exist, but intents can load
+                    // FormEntryActivity directly.
+                    FileDbAdapter fda = new FileDbAdapter();
+                    fda.open();
+                    Cursor c = fda.fetchFilesByPath(null, formHash);
+                    if (c.getCount() == 0) {
+                        fda.createFile(formXml.getAbsolutePath(), FileDbAdapter.TYPE_FORM,
+                            FileDbAdapter.STATUS_AVAILABLE);
+                    }
+                    fda.close();
                 }
             }
         }
@@ -332,8 +356,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     @Override
     protected void onPostExecute(FECWrapper wrapper) {
         synchronized (this) {
-            if (mStateListener != null)
-                mStateListener.loadingComplete(wrapper.getController());
+            if (mStateListener != null) {
+                if (wrapper == null) {
+                    mStateListener.loadingError(mErrorMsg);
+                } else {
+                    mStateListener.loadingComplete(wrapper.getController());
+                }
+            }
         }
     }
 

@@ -21,4 +21,5 @@ import org.javarosa.form.api.FormEntryController;
  */
 public interface FormLoaderListener {
     void loadingComplete(FormEntryController fec);
+    void loadingError(String errorMsg);
 }
