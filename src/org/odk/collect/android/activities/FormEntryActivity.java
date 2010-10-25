@@ -886,10 +886,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                                         null, null);
                                             }
                                         }
-                                        if (c != null) {
-                                            c.close();
+                                        if (ci != null) {
+                                            ci.close();
                                         }
-                                        ci.close();
 
                                         Log.i(t, "Deleted " + del + " images from content provider");
                                         FileUtils.deleteFolder(instanceFolder);
