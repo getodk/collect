@@ -14,10 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -35,8 +31,8 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.GestureDetector;
-import org.odk.collect.android.views.GroupView;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.views.GroupView;
 import org.odk.collect.android.views.QuestionView;
 import org.odk.collect.android.views.layout.GroupLayoutFactory;
 
@@ -45,7 +41,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -67,13 +62,16 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -100,6 +98,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
+    public static final String KEY_ERROR = "error";
 
     // Identifies whether this is a new form, or reloading a form after a screen
     // rotation (or
@@ -136,6 +135,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
+    private String mErrorMessage;
 
     // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped;
@@ -188,6 +188,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
+            if (savedInstanceState.containsKey(KEY_ERROR)) {
+                mErrorMessage = savedInstanceState.getString(KEY_ERROR);
+            }
+        }
+
+        // If a parse error message is showing then nothing else is loaded
+        // Dialogs mid form just disappear on rotation.
+        if (mErrorMessage != null) {
+            createErrorDialog(mErrorMessage, true);
+            return;
         }
 
         // Check to see if this is a screen flip or a new form load.
@@ -230,6 +240,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         outState.putString(KEY_FORMPATH, mFormPath);
         outState.putString(KEY_INSTANCEPATH, mInstancePath);
         outState.putBoolean(NEWFORM, false);
+        outState.putString(KEY_ERROR, mErrorMessage);
     }
 
 
@@ -1393,6 +1404,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void loadingError(String errorMsg) {
         dismissDialog(PROGRESS_DIALOG);
+        mErrorMessage = errorMsg;
         if (errorMsg != null) {
             createErrorDialog(errorMsg, true);
         } else {

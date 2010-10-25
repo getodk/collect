@@ -57,31 +57,29 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     /**
      * Classes needed to serialize objects
      */
-    public final static String[] SERIALIABLE_CLASSES =
-        {
-                "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
-                "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
-                "org.javarosa.core.model.data.DateTimeData",
-                "org.javarosa.core.model.data.DecimalData",
-                "org.javarosa.core.model.data.GeoPointData",
-                "org.javarosa.core.model.data.helper.BasicDataPointer",
-                "org.javarosa.core.model.data.IntegerData",
-                "org.javarosa.core.model.data.MultiPointerAnswerData",
-                "org.javarosa.core.model.data.PointerAnswerData",
-                "org.javarosa.core.model.data.SelectMultiData",
-                "org.javarosa.core.model.data.SelectOneData",
-                "org.javarosa.core.model.data.StringData", "org.javarosa.core.model.data.TimeData",
-                "org.javarosa.core.services.locale.TableLocaleSource",
-                "org.javarosa.xpath.expr.XPathArithExpr", "org.javarosa.xpath.expr.XPathBoolExpr",
-                "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
-                "org.javarosa.xpath.expr.XPathFilterExpr", "org.javarosa.xpath.expr.XPathFuncExpr",
-                "org.javarosa.xpath.expr.XPathNumericLiteral",
-                "org.javarosa.xpath.expr.XPathNumNegExpr", "org.javarosa.xpath.expr.XPathPathExpr",
-                "org.javarosa.xpath.expr.XPathStringLiteral",
-                "org.javarosa.xpath.expr.XPathUnionExpr",
-                "org.javarosa.xpath.expr.XPathVariableReference"
-        };
-    
+    public final static String[] SERIALIABLE_CLASSES = {
+            "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
+            "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
+            "org.javarosa.core.model.data.DateTimeData",
+            "org.javarosa.core.model.data.DecimalData",
+            "org.javarosa.core.model.data.GeoPointData",
+            "org.javarosa.core.model.data.helper.BasicDataPointer",
+            "org.javarosa.core.model.data.IntegerData",
+            "org.javarosa.core.model.data.MultiPointerAnswerData",
+            "org.javarosa.core.model.data.PointerAnswerData",
+            "org.javarosa.core.model.data.SelectMultiData",
+            "org.javarosa.core.model.data.SelectOneData",
+            "org.javarosa.core.model.data.StringData", "org.javarosa.core.model.data.TimeData",
+            "org.javarosa.core.services.locale.TableLocaleSource",
+            "org.javarosa.xpath.expr.XPathArithExpr", "org.javarosa.xpath.expr.XPathBoolExpr",
+            "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
+            "org.javarosa.xpath.expr.XPathFilterExpr", "org.javarosa.xpath.expr.XPathFuncExpr",
+            "org.javarosa.xpath.expr.XPathNumericLiteral",
+            "org.javarosa.xpath.expr.XPathNumNegExpr", "org.javarosa.xpath.expr.XPathPathExpr",
+            "org.javarosa.xpath.expr.XPathStringLiteral", "org.javarosa.xpath.expr.XPathUnionExpr",
+            "org.javarosa.xpath.expr.XPathVariableReference"
+    };
+
     FormLoaderListener mStateListener;
     String mErrorMsg;
 
@@ -114,9 +112,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     @Override
     protected FECWrapper doInBackground(String... path) {
 
-    	// we need to prepare this thread for message queue handling should a
-    	// toast be needed...
-    	Looper.prepare();
+        // we need to prepare this thread for message queue handling should a
+        // toast be needed...
+        Looper.prepare();
 
         FormEntryController fec = null;
         FormDef fd = null;
@@ -161,6 +159,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             } catch (XFormParseException e) {
                 mErrorMsg = e.getMessage();
                 e.printStackTrace();
+            } catch (Exception e) {
+                mErrorMsg = e.getMessage();
+                e.printStackTrace();
             } finally {
                 if (fd == null) {
                     // remove cache reference from file db if it exists
@@ -186,6 +187,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                         fda.createFile(formXml.getAbsolutePath(), FileDbAdapter.TYPE_FORM,
                             FileDbAdapter.STATUS_AVAILABLE);
                     }
+                    if (c != null)
+                        c.close();
                     fda.close();
                 }
             }
@@ -200,28 +203,28 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         fec = new FormEntryController(fem);
 
         try {
-	        // import existing data into formdef
-	        if (instancePath != null) {
-	            // This order is important.  Import data, then initialize.
-	            importData(instancePath, fec);
-	            fd.initialize(false);
-	        } else {
-	            fd.initialize(true);
-	        }
-        } catch ( Exception e ) {
-        	e.printStackTrace();
-            Toast.makeText(Collect.getInstance().getApplicationContext(), 
-                    Collect.getInstance().getString(R.string.load_error,
-                    		formXml.getName()) + " : " + e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        	return null;
+            // import existing data into formdef
+            if (instancePath != null) {
+                // This order is important. Import data, then initialize.
+                importData(instancePath, fec);
+                fd.initialize(false);
+            } else {
+                fd.initialize(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(
+                Collect.getInstance().getApplicationContext(),
+                Collect.getInstance().getString(R.string.load_error, formXml.getName()) + " : "
+                        + e.getMessage(), Toast.LENGTH_LONG).show();
+            return null;
         }
 
         // set paths to FORMS_PATH + formfilename-media/
         // This is a singleton, how do we ensure that we're not doing this
         // multiple times?
         String mediaPath = FileUtils.getFormMediaPath(formXml.getName());
-        
+
         Collect.getInstance().registerMediaPath(mediaPath);
 
         // clean up vars
@@ -262,8 +265,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             // fix any language issues
             // : http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
             if (fec.getModel().getLanguages() != null) {
-                fec.getModel().getForm().localeChanged(fec.getModel().getLanguage(),
-                    fec.getModel().getForm().getLocalizer());
+                fec.getModel()
+                        .getForm()
+                        .localeChanged(fec.getModel().getLanguage(),
+                            fec.getModel().getForm().getLocalizer());
             }
 
             return true;
@@ -281,7 +286,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     public FormDef deserializeFormDef(File formDef) {
 
         // TODO: any way to remove reliance on jrsp?
-    	Log.i(t,"Attempting read of " + formDef.getAbsolutePath());
+        Log.i(t, "Attempting read of " + formDef.getAbsolutePath());
 
         // need a list of classes that formdef uses
         PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
@@ -307,15 +312,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             e.printStackTrace();
             fd = null;
         } finally {
-        	if ( dis != null ) {
-        		try {
-        			dis.close();
-        		} catch ( IOException e ) {
-        			// ignore...
-        		}
-        	}
+            if (dis != null) {
+                try {
+                    dis.close();
+                } catch (IOException e) {
+                    // ignore...
+                }
+            }
         }
-        
 
         return fd;
     }
