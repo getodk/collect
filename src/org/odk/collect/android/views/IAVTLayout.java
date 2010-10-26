@@ -31,7 +31,7 @@ import java.io.IOException;
 public class IAVTLayout extends RelativeLayout {
     private static final String t = "AVTLayout";
 
-    private View mView_Text;
+    private TextView mView_Text;
     private AudioButton mAudioButton;
     private ImageButton mVideoButton;
     private ImageView mImageView;
@@ -48,7 +48,7 @@ public class IAVTLayout extends RelativeLayout {
     }
 
 
-    public void setAVT(View text, String audioURI, String imageURI, final String videoURI,
+    public void setAVT(TextView text, String audioURI, String imageURI, final String videoURI,
             final String bigImageURI) {
         mView_Text = text;
 
@@ -128,8 +128,11 @@ public class IAVTLayout extends RelativeLayout {
             addView(mAudioButton, audioParams);
             addView(mVideoButton, videoParams);
         }
-        textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        addView(text, textParams);
+        boolean textVisible = (text.getVisibility() != GONE);
+        if (textVisible) {
+            textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            addView(text, textParams);
+        }
 
         // Now set up the image view
         String errorMsg = null;
@@ -148,10 +151,20 @@ public class IAVTLayout extends RelativeLayout {
                         mImageView.setImageBitmap(b);
                         mImageView.setId(23423534);
                         imageParams.addRule(RelativeLayout.BELOW, text.getId());
-                        if (mAudioButton != null)
-                            imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-                        if (mVideoButton != null)
-                            imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
+                        if (mAudioButton != null) {
+                            if (textVisible) {
+                                imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+                            } else {
+                                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                            }
+                        }
+                        if (mVideoButton != null) {
+                            if (textVisible) {
+                                imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
+                            } else {
+                                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                            }
+                        }
                         if (bigImageURI != null) {
                             mImageView.setOnClickListener(new OnClickListener() {
                                 String bigImageFilename = ReferenceManager._()

@@ -160,6 +160,10 @@ public class QuestionView extends ScrollView {
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
+        if (p.getLongText() == null) {
+            questionText.setVisibility(GONE);
+        }
+            
         // Create the layout for audio, image, text
         IAVTLayout mediaLayout = new IAVTLayout(getContext());
         mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
