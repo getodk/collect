@@ -4,15 +4,17 @@ package org.odk.collect.android.views;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
@@ -143,9 +144,10 @@ public class IAVTLayout extends RelativeLayout {
                 if (imageFile.exists()) {
                     Bitmap b = null;
                     try {
-                        b =
-                            BitmapFactory.decodeStream(ReferenceManager._()
-                                    .DeriveReference(imageURI).getStream());
+                        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
+                        int screenWidth = display.getWidth();
+                        int screenHeight = display.getHeight();
+                        b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                     } catch (OutOfMemoryError e) {
                         errorMsg = "ERROR: " + e.getMessage();
                     }
@@ -213,9 +215,6 @@ public class IAVTLayout extends RelativeLayout {
                     mMissingImage.setId(234873453);
                     addView(mMissingImage, imageParams);
                 }
-            } catch (IOException e) {
-                Log.e(t, "Image io exception");
-                e.printStackTrace();
             } catch (InvalidReferenceException e) {
                 Log.e(t, "image invalid reference exception");
                 e.printStackTrace();

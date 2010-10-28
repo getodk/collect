@@ -27,12 +27,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -112,7 +113,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     @Override
-	public void clearAnswer() {
+    public void clearAnswer() {
         // remove the file
         deleteMedia();
         mImageView.setImageBitmap(null);
@@ -124,7 +125,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     @Override
-	public IAnswerData getAnswer() {
+    public IAnswerData getAnswer() {
         if (mBinaryName != null) {
             return new StringData(mBinaryName.toString());
         } else {
@@ -134,21 +135,20 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     @Override
-	public void buildView(FormEntryPrompt prompt) {
+    public void buildView(FormEntryPrompt prompt) {
         setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(mCaptureText));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionView.APPLICATION_FONTSIZE);
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionView.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
         // launch capture intent on click
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 Intent i = new Intent(mCaptureIntent);
                 // We give the camera an absolute filename/path where to put the
                 // picture because of bug:
@@ -160,8 +160,8 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-                        FileUtils.TMPFILE_PATH)));
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(new File(FileUtils.TMPFILE_PATH)));
                 ((Activity) getContext()).startActivityForResult(i, mRequestCode);
 
             }
@@ -182,46 +182,42 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
         // finish complex layout
         addView(mCaptureButton);
 
-        mImageView = new ImageView(getContext());
+        // Only add the imageView if the user has taken a picture
+        if (mBinaryName != null) {
+            mImageView = new ImageView(getContext());
+            Display display =
+                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        File testsize = new File(mInstanceFolder + "/" + mBinaryName);
-        // You get an OutOfMemoryError if the file size is > ~900k.
-        // We're doing 500k just to be safe.
-        if (testsize.length() > 500000) {
-            options.inSampleSize = 8;
-        } else {
-            options = null;
-        }
+            File f = new File(mInstanceFolder + "/" + mBinaryName);
+            Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+            mImageView.setImageBitmap(bmp);
+            mImageView.setPadding(10, 10, 10, 10);
+            mImageView.setAdjustViewBounds(true);
+            mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent("android.intent.action.VIEW");
+                    String[] projection = {"_id"};
+                    Cursor c =
+                        getContext().getContentResolver().query(mExternalUri, projection,
+                            "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
+                    if (c.getCount() > 0) {
+                        c.moveToFirst();
+                        String id = c.getString(c.getColumnIndex("_id"));
 
-        Bitmap bmp = BitmapFactory.decodeFile(mInstanceFolder + "/" + mBinaryName, options);
-        mImageView.setImageBitmap(bmp);
-        mImageView.setPadding(10, 10, 10, 10);
-        mImageView.setAdjustViewBounds(true);
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-			public void onClick(View v) {
-                Intent i = new Intent("android.intent.action.VIEW");
-                String[] projection = {
-                    "_id"
-                };
-                Cursor c =
-                    getContext().getContentResolver().query(mExternalUri, projection,
-                        "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
-                if (c.getCount() > 0) {
-                    c.moveToFirst();
-                    String id = c.getString(c.getColumnIndex("_id"));
+                        Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
 
-                    Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
-
-                    i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
-                    getContext().startActivity(i);
-
+                        i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
+                        getContext().startActivity(i);
+                    }
+                    c.close();
                 }
-                c.close();
-            }
-        });
-        addView(mImageView);
+            });
+            addView(mImageView);
+        }
     }
 
 
@@ -238,7 +234,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     @Override
-	public void setBinaryData(Object binaryuri) {
+    public void setBinaryData(Object binaryuri) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (mBinaryName != null) {
@@ -252,7 +248,7 @@ public class ImageWidget extends LinearLayout implements IQuestionWidget, IBinar
 
 
     @Override
-	public void setFocus(Context context) {
+    public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
