@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.utilities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
@@ -53,13 +55,14 @@ public final class FileUtils {
     public static final String CACHE_PATH = ODK_ROOT + ".cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
+
     public static final String getDatabasePath() {
 
-    	File dir = new File(DATABASE_PATH);
+        File dir = new File(DATABASE_PATH);
         if (!storageReady()) {
             return null;
         }
-        
+
         if (!dir.exists()) {
             if (!createFolder(DATABASE_PATH)) {
                 return null;
@@ -67,17 +70,19 @@ public final class FileUtils {
         }
         return DATABASE_PATH;
     }
-    
+
+
     public static final String getFormMediaPath(String formXml) {
-    	int startIdx = formXml.lastIndexOf("/") + 1;
-    	String mediaPath = FileUtils.FORMS_PATH +
-         		formXml.substring(startIdx, formXml.lastIndexOf(".")) +
-         		FileUtils.FORMS_X_MEDIA_DIRECTORY_SUFFIX;
-     
-    	 Log.i(t, "formXml: " + formXml + " mediaPath: " + mediaPath);
-    	 return mediaPath;
+        int startIdx = formXml.lastIndexOf("/") + 1;
+        String mediaPath =
+            FileUtils.FORMS_PATH + formXml.substring(startIdx, formXml.lastIndexOf("."))
+                    + FileUtils.FORMS_X_MEDIA_DIRECTORY_SUFFIX;
+
+        Log.i(t, "formXml: " + formXml + " mediaPath: " + mediaPath);
+        return mediaPath;
     }
-    
+
+
     public static final ArrayList<String> getValidFormsAsArrayList(String path) {
         ArrayList<String> formPaths = new ArrayList<String>();
 
@@ -93,17 +98,18 @@ public final class FileUtils {
         }
         File[] dirs = dir.listFiles();
         for (int i = 0; i < dirs.length; i++) {
-        	// skip all the directories and invisible files
-        	if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
-        		continue;
-        	
-            String formName = dirs[i].getName();
-        	Log.i(t, "Found formname: " + formName);
+            // skip all the directories and invisible files
+            if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
+                continue;
 
-        	formPaths.add(dirs[i].getAbsolutePath());
+            String formName = dirs[i].getName();
+            Log.i(t, "Found formname: " + formName);
+
+            formPaths.add(dirs[i].getAbsolutePath());
         }
         return formPaths;
     }
+
 
     public static final ArrayList<String> getFoldersAsArrayList(String path) {
         ArrayList<String> mFolderList = new ArrayList<String>();
@@ -297,9 +303,33 @@ public final class FileUtils {
         } catch (IOException e) {
             Log.e("Problem reading from file", e.getMessage());
             return null;
-        } 
-        
+        }
 
+    }
+
+
+    public static Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
+        // Determine image size of f
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+
+        int heightScale = o.outHeight / screenHeight;
+        int widthScale = o.outWidth / screenWidth;
+
+        // Powers of 2 work faster, sometimes, according to the doc.
+        // We're just doing closest size that still fills the screen.
+        int scale = Math.max(widthScale, heightScale);
+
+        // get bitmap with scale ( < 1 is the same as 1)
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = scale;
+        Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        Log.i(t,
+            "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by "
+                    + scale + " to " + b.getHeight() + "x" + b.getWidth());
+
+        return b;
     }
 
 }

@@ -34,7 +34,9 @@ import android.os.Handler;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -166,38 +168,42 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         mDisplayText = new TextView(getContext());
         mDisplayText.setPadding(5, 0, 0, 0);
 
-        mImageView = new ImageView(getContext());
-        mImageView.setPadding(10, 10, 10, 10);
-        mImageView.setAdjustViewBounds(true);
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-			public void onClick(View v) {
-            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
-	            	// do nothing if there is no image...
-	            	if ( mBinaryName == null ) return;
-	
-	                Intent i = new Intent("android.intent.action.VIEW");
-	                String[] projection = {
-	                    "_id"
-	                };
-	                Cursor c =
-	                    getContext().getContentResolver().query(mExternalUri, projection,
-	                        "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
-	                if (c.getCount() > 0) {
-	                    c.moveToFirst();
-	                    String id = c.getString(c.getColumnIndex("_id"));
-	
-	                    Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
-	
-	                    i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
-	                    getContext().startActivity(i);
-	
-	                }
-	                c.close();
-            	}
-            }
-        });
-        addView(mImageView);
+        // Only add the imageView if the user has taken a picture
+        if (mBinaryName != null) {
+            mImageView = new ImageView(getContext());
+            Display display =
+                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
+
+            File f = new File(mInstanceFolder + "/" + mBinaryName);
+            Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+            mImageView.setImageBitmap(bmp);
+            mImageView.setPadding(10, 10, 10, 10);
+            mImageView.setAdjustViewBounds(true);
+            mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent("android.intent.action.VIEW");
+                    String[] projection = {"_id"};
+                    Cursor c =
+                        getContext().getContentResolver().query(mExternalUri, projection,
+                            "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
+                    if (c.getCount() > 0) {
+                        c.moveToFirst();
+                        String id = c.getString(c.getColumnIndex("_id"));
+
+                        Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
+
+                        i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
+                        getContext().startActivity(i);
+                    }
+                    c.close();
+                }
+            });
+            addView(mImageView);
+        }
     }
 
     protected void updateViewAfterAnswer() {
