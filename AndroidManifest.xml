@@ -57,5 +57,5 @@ the License.
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_SURFACE_FLINGER"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<uses-sdk android:minSdkVersion="4"></uses-sdk>
+<uses-sdk android:minSdkVersion="3"></uses-sdk>
 </manifest>
