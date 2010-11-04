@@ -40,7 +40,6 @@ public class AudioButton extends ImageButton implements OnClickListener {
             BitmapFactory.decodeResource(context.getResources(),
                 android.R.drawable.ic_lock_silent_mode_off);
         this.setImageBitmap(b);
-        this.setMinimumWidth(b.getScaledWidth(context.getResources().getDisplayMetrics()));
         player = null;
     }
 

@@ -555,14 +555,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         FileUtils.getFormMediaPath(mFormPath) + FileUtils.FORM_LOGO_FILE_NAME;
                     BitmapDrawable bitImage = null;
                     // attempt to load the form-specific logo...
-                    bitImage = new BitmapDrawable(getResources(), formLogoPath);
+                    bitImage = new BitmapDrawable(formLogoPath);
 
                     if (bitImage == null || bitImage.getBitmap() == null
                             || bitImage.getIntrinsicHeight() == 0
                             || bitImage.getIntrinsicWidth() == 0) {
                         // attempt to load the shared form logo...
                         bitImage =
-                            new BitmapDrawable(getResources(), FileUtils.FORM_LOGO_FILE_PATH);
+                            new BitmapDrawable(FileUtils.FORM_LOGO_FILE_PATH);
                     }
 
                     if (bitImage != null && bitImage.getBitmap() != null

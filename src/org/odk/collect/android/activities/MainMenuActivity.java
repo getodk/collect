@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.ServerPreferences;
@@ -38,8 +36,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -173,8 +173,8 @@ public class MainMenuActivity extends Activity {
         Drawable image = null;
         try {
         	// attempt to load the configured default splash screen
-    		BitmapDrawable bitImage = new BitmapDrawable( getResources(), 
-    										FileUtils.SPLASH_SCREEN_FILE_PATH );
+            BitmapDrawable bitImage = new BitmapDrawable(FileUtils.SPLASH_SCREEN_FILE_PATH);
+
     		if ( bitImage.getBitmap() != null &&
     			 bitImage.getIntrinsicHeight() > 0 &&
     			 bitImage.getIntrinsicWidth() > 0 ) {
