@@ -73,8 +73,8 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
     		for ( int i = 0 ; i < buttons.length ; ++i ) {
 	    		RadioButton b = buttons[i];
 	    		if ( b.isChecked() ) {
-	                String s = prompt.getSelectChoices().elementAt(i).getValue();
-	                return new SelectOneData(new Selection(s));
+	    			SelectChoice sc = prompt.getSelectChoices().elementAt(i);
+	                return new SelectOneData(new Selection(sc));
 	    		}
 	    	}
     	}

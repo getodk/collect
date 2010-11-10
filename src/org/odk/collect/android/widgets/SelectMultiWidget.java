@@ -72,9 +72,8 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
         for (int i = 0; i < prompt.getSelectChoices().size(); i++) {
             CheckBox c = buttons[i];
             if (c.isChecked()) {
-            	String value = prompt.getSelectChoices().get(i).getValue();
-    			Log.i(SelectMultiWidget.class.getName(), "getAnswer checked: " + value);
-                vc.add(new Selection(value));
+            	SelectChoice sc = prompt.getSelectChoices().get(i);
+                vc.add(new Selection(sc));
             }
         }
 
