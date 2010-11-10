@@ -73,8 +73,8 @@ public class SelectOneWidget extends RadioGroup implements IQuestionWidget, OnCh
         if (i == -1) {
             return null;
         } else {
-            String s = mItems.elementAt(i - RANDOM_BUTTON_ID).getValue();
-            return new SelectOneData(new Selection(s));
+            SelectChoice sc = mItems.elementAt(i - RANDOM_BUTTON_ID);
+            return new SelectOneData(new Selection(sc));
         }
     }
 

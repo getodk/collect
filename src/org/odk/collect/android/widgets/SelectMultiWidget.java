@@ -70,7 +70,7 @@ public class SelectMultiWidget extends LinearLayout implements IQuestionWidget {
         for (int i = 0; i < mItems.size(); i++) {
             CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
             if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i).getValue()));
+                vc.add(new Selection(mItems.get(i)));
             }
 
         }
