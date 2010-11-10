@@ -168,23 +168,15 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         mDisplayText = new TextView(getContext());
         mDisplayText.setPadding(5, 0, 0, 0);
 
-        // Only add the imageView if the user has taken a picture
-        if (mBinaryName != null) {
-            mImageView = new ImageView(getContext());
-            Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
-
-            File f = new File(mInstanceFolder + "/" + mBinaryName);
-            Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
-            mImageView.setImageBitmap(bmp);
-            mImageView.setPadding(10, 10, 10, 10);
-            mImageView.setAdjustViewBounds(true);
-            mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        mImageView = new ImageView(getContext());
+        mImageView.setPadding(10, 10, 10, 10);
+        mImageView.setAdjustViewBounds(true);
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL)) {
+            		// do nothing if no image
+            		if ( mBinaryName == null ) return;
                     Intent i = new Intent("android.intent.action.VIEW");
                     String[] projection = {"_id"};
                     Cursor c =
@@ -200,10 +192,10 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
                         getContext().startActivity(i);
                     }
                     c.close();
-                }
-            });
-            addView(mImageView);
-        }
+            	}
+            }
+        });
+        addView(mImageView);
     }
 
     protected void updateViewAfterAnswer() {
@@ -218,17 +210,14 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
             mCaptureButton.setText(getContext().getString(mReplaceText));
             mDisplayText.setText(getContext().getString(R.string.one_capture));
             
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            File testsize = new File(mInstanceFolder + "/" + mBinaryName);
-            // You get an OutOfMemoryError if the file size is > ~900k.
-            // We're doing 500k just to be safe.
-            if (testsize.length() > 500000) {
-                options.inSampleSize = 8;
-            } else {
-                options = null;
-            }
+            Display display =
+                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
 
-            Bitmap bmp = BitmapFactory.decodeFile(mInstanceFolder + "/" + mBinaryName, options);
+            File f = new File(mInstanceFolder + "/" + mBinaryName);
+            Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
             mImageView.setImageBitmap(bmp);
         } else {
             mCaptureButton.setText(getContext().getString(mCaptureText));

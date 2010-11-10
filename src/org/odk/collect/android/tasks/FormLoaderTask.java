@@ -129,12 +129,20 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
-            Log.i(
+        	try {
+        		Log.i(
                 t,
                 "Attempting to load " + formXml.getName() + " from cached file: "
                         + formBin.getAbsolutePath());
-            fd = deserializeFormDef(formBin);
-            if (fd == null) {
+        		fd = deserializeFormDef(formBin);
+        	} catch ( Exception e ) {
+        		// didn't load -- 
+        		// the common case here is that the javarosa library that 
+        		// serialized the binary is incompatible with the javarosa
+        		// library that is now attempting to deserialize it.
+        	}
+
+        	if (fd == null) {
                 // some error occured with deserialization. Remove the file, and make a new .formdef
                 // from xml
                 Log.w(t,
@@ -213,10 +221,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(
-                Collect.getInstance().getApplicationContext(),
-                Collect.getInstance().getString(R.string.load_error, formXml.getName()) + " : "
-                        + e.getMessage(), Toast.LENGTH_LONG).show();
+        	this.publishProgress(Collect.getInstance().getString(R.string.load_error,
+            		formXml.getName()) + " : " + e.getMessage());
             return null;
         }
 
@@ -356,6 +362,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
+    @Override
+	protected void onProgressUpdate(String... values) {
+		Toast.makeText(Collect.getInstance().getApplicationContext(), 
+            values[0], Toast.LENGTH_LONG).show();
+	}
 
     @Override
     protected void onPostExecute(FECWrapper wrapper) {

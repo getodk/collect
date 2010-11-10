@@ -65,10 +65,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      */
     @Override
     protected Integer doInBackground(Void... nothing) {
-
-    	// we need to prepare this thread for message queue handling should a
-    	// toast be needed...
-    	Looper.prepare();
     	
         // validation failed, pass specific failure
         int validateStatus = validateAnswers(mMarkCompleted);
@@ -224,9 +220,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 int saveStatus =
                 	fec.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
                 if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) { 
-                	Collect.getInstance().createConstraintToast(
-        					fem.getQuestionPrompt()
-        					.getConstraintText(), saveStatus);
+                	this.publishProgress(fem.getQuestionPrompt()
+        					.getConstraintText(), Integer.toString(saveStatus));
         			return saveStatus;
                 }
             }
@@ -236,5 +231,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         return VALIDATED;
     }
 
+    @Override
+	protected void onProgressUpdate(String... values) {
+    	Collect.getInstance().createConstraintToast(
+				values[0], Integer.valueOf(values[1]).intValue());
+	}
 
 }
