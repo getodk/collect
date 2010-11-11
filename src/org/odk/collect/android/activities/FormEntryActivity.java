@@ -867,7 +867,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                                         "_data like '%" + instanceFolder + "%'",
                                                         null, null);
                                         int del = 0;
-                                        if (ci.getCount() > 0) {
+                                        if (ci != null && ci.getCount() > 0) {
                                             while (ci.moveToNext()) {
                                                 String id =
                                                     ci.getString(ci
