@@ -63,10 +63,10 @@ public class GroupView extends AbstractFolioView {
         }
         
         List<FormIndex> indicies = new ArrayList<FormIndex>();
-        FormIndex idxChild = fd.incrementIndex(formIndex, true); // descend into group
+        FormIndex idxChild = model.incrementIndex(formIndex, true); // descend into group
         for (@SuppressWarnings("unused") Object child : gd.getChildren()) {
         	indicies.add(idxChild);
-        	idxChild = fd.incrementIndex(idxChild, false); // don't descend
+        	idxChild = model.incrementIndex(idxChild, false); // don't descend
         }
         return indicies;
 	}

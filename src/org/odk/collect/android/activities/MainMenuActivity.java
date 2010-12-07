@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.ServerPreferences;
@@ -36,10 +39,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
-
-import java.util.ArrayList;
+import android.widget.ImageView.ScaleType;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -186,8 +187,14 @@ public class MainMenuActivity extends Activity {
         }
         
         if ( image == null ) {
-        	// no splash provided, so do nothing...
-        	return;
+        	// no splash provided...
+            if ( FileUtils.storageReady() &&
+            		!((new File(FileUtils.DEFAULT_CONFIG_PATH)).exists())) {
+            	// Show the built-in splash image if the config directory 
+            	// does not exist. Otherwise, suppress the icon.
+            	image = getResources().getDrawable(R.drawable.odk_color);
+            }
+            if ( image == null ) return;
         }
 
         // create ImageView to hold the Drawable...

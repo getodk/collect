@@ -1468,7 +1468,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             // advance to the group after this group...
             FormIndex idx = mFormEntryModel.getFormIndex();
             // advance past this group...
-            FormIndex current = mFormEntryModel.getForm().incrementIndex(idx, false);
+            FormIndex current = mFormEntryModel.incrementIndex(idx, false);
             // and update the current formIndex...
             mFormEntryModel.setQuestionIndex(current);
             return mFormEntryModel.getEvent();
@@ -1496,15 +1496,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 			// NOTE: incrementIndex does not change the current index
 			// so nothing here alters where the form thinks it is.
 			
-			FormIndex idxEnd = mFormEntryModel.getForm().incrementIndex(idx, false);
+			FormIndex idxEnd = mFormEntryModel.incrementIndex(idx, false);
 			
 			// NOTE: isIndexRelevant(idx) == true to get here, so we need to
 			// advance into the group and check all the fields within the group.
 			// i.e., we want to iterate over (idx..idxEnd)
 			
-			for (FormIndex idxQ = mFormEntryModel.getForm().incrementIndex(idx, true) ;
+			for (FormIndex idxQ = mFormEntryModel.incrementIndex(idx, true) ;
 					!idxQ.equals(idxEnd); 
-					idxQ = mFormEntryModel.getForm().incrementIndex(idxQ, true) ) {
+					idxQ = mFormEntryModel.incrementIndex(idxQ, true) ) {
 				if ( mFormEntryModel.isIndexRelevant(idxQ) ) return true;
 			}
 			return false;
