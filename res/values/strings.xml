@@ -64,7 +64,7 @@
 	<string name="downloading_data">Connecting to Server</string>
 	<string name="download_all_successful">All forms downloaded successfully.</string>
 	<string name="download_complete">Form Get Complete</string>
-	<string name="download_failed_with_error">Form \"%s\" failed. %s.</string>
+  <string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
 	<string name="download_some_failed">Sorry, %s form(s) not downloaded!</string>
 	<string name="do_not_change">Do Not Change</string>
 	<string name="do_not_exit">Do Not Exit</string>
@@ -79,16 +79,16 @@
 	<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
 	<string name="error_downloading">Error Getting Form</string>
 	<string name="expanded_group">Expanded Group</string>
-	<string name="fetching_file">"Getting \"%s\".\n\nForm %s of %s form(s)..."</string>
+	<string name="fetching_file">"Getting \"%1$s\".\n\nForm %2$s of %3$s form(s)..."</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 	<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
-	<string name="file_download_error">File %s failed. %s</string>
+	<string name="file_download_error">File %1$s failed. %2$s</string>
 	<string name="file_missing">File: %s is missing.</string>
 	<string name="finalize_for_send">Save As Complete</string>
 	<string name="form">Form</string>
 	<string name="forms">Forms</string>
 	<string name="form_path">Form Path: /</string>
-	<string name="form_renamed">%s was renamed %s.</string>
+	<string name="form_renamed">%1$s was renamed %2$s.</string>
 	<string name="getting_location">Loading Location...</string>
 	<string name="get_barcode">Get Barcode</string>
 	<string name="get_forms">Get New Forms</string>
@@ -152,7 +152,7 @@
 	<string name="saving_form">Saving Form...</string>
 	<string name="select_repeat">Select to see repeated element: </string>
 	<string name="send">send</string>
-	<string name="sending_items">Sending %s of %s item(s)"</string>
+	<string name="sending_items">Sending %1$s of %2$s item(s)"</string>
 	<string name="send_data">Send Finished Data</string>
 	<string name="send_data_button">Send Finished Data (%s)</string>
 	<string name="send_selected_data">Send Selected</string>
