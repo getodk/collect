@@ -56,7 +56,7 @@
 <string name="downloading_data">Connecting to Server</string>
 <string name="download_all_successful">All forms downloaded successfully.</string>
 <string name="download_complete">Form Get Complete</string>
-<string name="download_failed_with_error">Form \"%s\" failed. %s.</string>
+<string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
 <string name="do_not_change">Do Not Change</string>
 <string name="do_not_exit">Do Not Exit</string>
 <string name="do_not_save">Discard Changes And Exit</string>
@@ -69,14 +69,14 @@
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="error_downloading">Error Getting Form</string>
 <string name="error_occured">Error Occurred</string>
-<string name="fetching_file">"Getting \"%s\".\n\nForm %s of %s form(s)..."</string>
+<string name="fetching_file">"Getting \"%1$s\".\n\nForm %2$s of %3$s form(s)..."</string>
 <string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 <string name="file_invalid">File: %s is invalid.</string>
 <string name="file_missing">File: %s is missing.</string>
 <string name="form">Form</string>
 <string name="forms">Forms</string>
-<string name="form_renamed">%s was renamed %s.</string>
+<string name="form_renamed">%1$s was renamed %2$s.</string>
 <string name="getting_location">Loading Location...</string>
 <string name="get_barcode">Get Barcode</string>
 <string name="get_forms">Get New Forms</string>
@@ -131,7 +131,7 @@
 <string name="save_enter_data_description">You have reached the end of %s.</string>
 <string name="saving_form">Saving Form...</string>
 <string name="send">send</string>
-<string name="sending_items">Sending %s of %s item(s)"</string>
+<string name="sending_items">Sending %1$s of %2$s item(s)"</string>
 <string name="send_data">Send Finished Data</string>
 <string name="send_data_button">Send Finished Data (%s)</string>
 <string name="send_selected_data">Send Selected</string>

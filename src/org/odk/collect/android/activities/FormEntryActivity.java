@@ -1139,7 +1139,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             mSaveToDiskTask.setFormSavedListener(null);
             // We have to call cancel to terminate the thread, otherwise it
             // lives on and retains the FEC in memory.
-            if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
+            if (mSaveToDiskTask.getStatus() == AsyncTask.Status.FINISHED) {
                 mSaveToDiskTask.cancel(false);
             }            
         }
