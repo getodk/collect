@@ -74,7 +74,16 @@ public class FileManagerTabs extends TabActivity {
     }
 
 
-    public static void setTabHeader(String string, String tab) {
+    @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+    	int count = 0;
+    	++count;
+		super.onResume();
+	}
+
+
+	public static void setTabHeader(String string, String tab) {
         if (tab.equals(FORMS_TAB)) {
             mTVFF.setText(string);
         } else if (tab.equals(DATA_TAB)) {

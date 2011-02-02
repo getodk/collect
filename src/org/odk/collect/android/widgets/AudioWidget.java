@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -33,8 +35,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.io.File;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.

@@ -99,15 +99,17 @@ public final class FileUtils {
             }
         }
         File[] dirs = dir.listFiles();
-        for (int i = 0; i < dirs.length; i++) {
-            // skip all the directories and invisible files
-            if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
-                continue;
-
-            String formName = dirs[i].getName();
-            Log.i(t, "Found formname: " + formName);
-
-            formPaths.add(dirs[i].getAbsolutePath());
+        if (dirs != null) {
+	        for (int i = 0; i < dirs.length; i++) {
+	            // skip all the directories and "invisible" files that start with "."
+	            if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
+	                continue;
+	
+	            String formName = dirs[i].getName();
+	            Log.i(t, "Found formname: " + formName);
+	
+	            formPaths.add(dirs[i].getAbsolutePath());
+	        }
         }
         return formPaths;
     }
@@ -310,7 +312,7 @@ public final class FileUtils {
     }
 
 
-    public static Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
+    public static final Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
@@ -327,9 +329,8 @@ public final class FileUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
-        Log.i(t,
-            "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by "
-                    + scale + " to " + b.getHeight() + "x" + b.getWidth());
+        Log.i(t, "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by " + scale
+        		+ " to " + b.getHeight() + "x" + b.getWidth());
 
         return b;
     }

@@ -14,6 +14,14 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.TreeElement;
@@ -34,17 +42,8 @@ import org.odk.collect.android.utilities.FileUtils;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Background task for loading a form.
@@ -55,7 +54,7 @@ import java.io.IOException;
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private final static String t = "FormLoaderTask";
     /**
-     * Classes needed to serialize objects
+     * Classes needed to serialize objects. Need to put anything from JR in here.
      */
     public final static String[] SERIALIABLE_CLASSES = {
             "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
@@ -111,7 +110,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      */
     @Override
     protected FECWrapper doInBackground(String... path) {
-
         FormEntryController fec = null;
         FormDef fd = null;
         FileInputStream fis = null;

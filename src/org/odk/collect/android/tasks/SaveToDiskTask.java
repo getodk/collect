@@ -14,6 +14,12 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.FormInstance;
@@ -28,14 +34,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.util.Log;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Background task for loading a form.
@@ -74,9 +73,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
         Collect.getInstance().getFormEntryController().getModel().getForm().postProcessInstance();
 
-        if (mSave && exportData(mInstancePath, mContext,mMarkCompleted)) {
+        if (mSave && exportData(mInstancePath, mContext, mMarkCompleted)) {
             return SAVED_AND_EXIT;
-        } else if (exportData(mInstancePath, mContext,mMarkCompleted)) {
+        } else if (exportData(mInstancePath, mContext, mMarkCompleted)) {
             return SAVED;
         }
 
@@ -91,7 +90,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         try {
 
             // assume no binary data inside the model.
-            FormInstance datamodel = Collect.getInstance().getFormEntryController().getModel().getForm().getInstance();
+            FormInstance datamodel = 
+            	Collect.getInstance().getFormEntryController().getModel().getForm().getInstance();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
@@ -116,14 +116,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);		
             }		
         } else {
-        if (c != null && c.getCount() == 0) {
-            fda
-                    .createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_COMPLETE);
-
-        } else {
-            fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
-        }}
+	        if (c != null && c.getCount() == 0) {
+	            fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+	                        FileDbAdapter.STATUS_COMPLETE);
+	
+	        } else {
+	            fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
+	        }
+        }
         // clean up cursor
         if (c != null) {
             c.close();
@@ -189,7 +189,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public void setExportVars(String instancePath, Context context, Boolean saveAndExit, Boolean markCompleted) {
+    public void setExportVars(String instancePath, Context context, Boolean saveAndExit,
+    		Boolean markCompleted) {
         mInstancePath = instancePath;
         mContext = context;
         mSave = saveAndExit;
@@ -201,6 +202,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * Goes through the entire form to make sure all entered answers comply with their constraints.
      * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
      * allow saving to disk, though, until all answers conform to their constraints/requirements.
+     * 
      * @param markCompleted
      * @return validatedStatus
      */

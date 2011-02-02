@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.ServerPreferences;
@@ -30,8 +32,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -53,6 +53,7 @@ public class InstanceUploaderList extends ListActivity {
     private Button mActionButton;
     private Button mToggleButton;
 
+    private FileDbAdapter mFda;
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
@@ -110,10 +111,14 @@ public class InstanceUploaderList extends ListActivity {
      * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
      */
     private void refreshView() {
+    	if ( mFda == null ) {
+        	FileDbAdapter t = new FileDbAdapter();
+            t.open();
+            mFda = t;
+    	}
+    	
         // get all mInstances that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
+        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
         startManagingCursor(c);
 
         String[] data = new String[] {
@@ -133,9 +138,6 @@ public class InstanceUploaderList extends ListActivity {
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
-
-        // cleanup
-        fda.close();
 
         // if current activity is being reinitialized due to changing orientation restore all check
         // marks for ones selected
@@ -158,14 +160,10 @@ public class InstanceUploaderList extends ListActivity {
     private void uploadSelectedFiles() {
         ArrayList<String> selectedInstances = new ArrayList<String>();
 
-        // get all checked items
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
         Cursor c = null;
 
         for (int i = 0; i < mSelected.size(); i++) {
-            c = fda.fetchFile(mSelected.get(i));
+            c = mFda.fetchFile(mSelected.get(i));
             startManagingCursor(c);
             String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
             selectedInstances.add(s);
@@ -175,14 +173,10 @@ public class InstanceUploaderList extends ListActivity {
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(FormEntryActivity.KEY_INSTANCES, selectedInstances);
         startActivityForResult(i, INSTANCE_UPLOADER);
-        fda.close();
     }
 
 
     private void refreshData() {
-        if (mInstances != null) {
-            mInstances.getCursor().requery();
-        }
         if (!mRestored) {
             mSelected.clear();
         }
@@ -234,8 +228,23 @@ public class InstanceUploaderList extends ListActivity {
 
     }
 
+	@Override
+	protected void onDestroy() {
+		try {
+			if ( mFda != null ) {
+				FileDbAdapter t = mFda;
+				mFda = null;
+				t.close();
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		} finally {
+			super.onDestroy();
+		}
+	}
 
-    @Override
+
+	@Override
     protected void onResume() {
         refreshData();
         super.onResume();

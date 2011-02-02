@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 
@@ -30,9 +33,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
-
 /**
  * Responsible for displaying and deleting all the valid forms in the forms directory.
  * 
@@ -44,7 +44,7 @@ public class DataManagerList extends ListActivity {
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
 
-
+    private FileDbAdapter mFda = null;
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
@@ -69,16 +69,18 @@ public class DataManagerList extends ListActivity {
                 }
             }
         });
-        // buildView takes place in resume
     }
 
 
     private void refreshView() {
+    	if ( mFda == null ) {
+        	FileDbAdapter t = new FileDbAdapter();
+            t.open();
+            mFda = t;
+    	}
+    	
         // get all mInstances that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
+        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
         startManagingCursor(c);
 
         String[] data = new String[] {
@@ -96,9 +98,6 @@ public class DataManagerList extends ListActivity {
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
-        // cleanup
-        fda.close();
-
         // if current activity is being reinitialized due to changing
         // orientation
         // restore all check marks for ones selected
@@ -111,7 +110,6 @@ public class DataManagerList extends ListActivity {
                         break;
                     }
                 }
-
             }
             mRestored = false;
         }
@@ -138,7 +136,6 @@ public class DataManagerList extends ListActivity {
                             break;
                     }
                 }
-
             };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.delete_yes), dialogYesNoListener);
@@ -148,9 +145,6 @@ public class DataManagerList extends ListActivity {
 
 
     private void refreshData() {
-        if (mInstances != null) {
-            mInstances.getCursor().requery();
-        }
         if (!mRestored) {
             mSelected.clear();
         }
@@ -162,29 +156,26 @@ public class DataManagerList extends ListActivity {
      * Deletes the selected files.First from the database then from the file system
      */
     private void deleteSelectedFiles() {
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
         // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-            Cursor c = fda.fetchFile(mSelected.get(i));
+            Cursor c = mFda.fetchFile(mSelected.get(i));
             String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            if (fda.deleteFile(mSelected.get(i))) {
+            if (mFda.deleteFile(mSelected.get(i))) {
                 deleted++;
                 Log.i(t, "Deleting file: " + filename);
                 File del = new File(filename);
                 del.delete();
             }
             if (c != null) {
+            	c.deactivate();
                 c.close();
             }
         }
 
         // remove the actual files and close db
-        fda.removeOrphanForms();
-        fda.removeOrphanInstances(this);
-        fda.close();
+        mFda.removeOrphanForms();
+        mFda.removeOrphanInstances(this);
 
         if (deleted > 0) {
             // all deletes were successful
@@ -232,6 +223,21 @@ public class DataManagerList extends ListActivity {
         super.onPause();
     }
 
+
+	@Override
+	protected void onDestroy() {
+		try {
+			if ( mFda != null ) {
+				FileDbAdapter t = mFda;
+				mFda = null;
+				t.close();
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		} finally {
+			super.onDestroy();
+		}
+	}
 
     @Override
     protected void onResume() {

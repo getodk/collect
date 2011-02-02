@@ -108,15 +108,35 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
     protected void updateViewAfterAnswer() {
 		String s = accessPromptAnswerAsString();
 		Log.i(StringWidget.class.getName(), "updateViewAfterAnswer: " +  getFormIndex().toString());
-    	insideUpdate = true;
-        InputMethodManager inputManager =
-            (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-		mStringAnswer.setText(s);
-		// and be sure to let the input manager know the new string value...
-		if ( inputManager.isActive(mStringAnswer)) {
-			inputManager.restartInput(mStringAnswer);
-		}
-		insideUpdate = false;
+    	try {
+    		insideUpdate = true;
+	    	InputMethodManager inputManager =
+	            (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+			mStringAnswer.setText(s);
+			
+	    	// and if we are read-only and empty, suppress the display 
+			boolean inputManagerShowable = true;
+	    	if ( prompt.isReadOnly() ) {
+        		inputManagerShowable = false;
+	    		if ( s == null || s.length() == 0 ) {
+	        		mStringAnswer.setVisibility(INVISIBLE);
+	    		} else {
+	        		mStringAnswer.setVisibility(VISIBLE);
+	    		}
+	    	}
+
+	    	if ( inputManagerShowable ) {
+				// and be sure to let the input manager know the new string value...
+				if ( inputManager.isActive(mStringAnswer)) {
+					inputManager.restartInput(mStringAnswer);
+				}
+	    	} else {
+	    		Collect.getInstance().hideSoftKeyboard(mStringAnswer);
+	    		mStringAnswer.clearFocus();
+	    	}
+    	} finally {
+    		insideUpdate = false;
+    	}
     }
 
     @Override

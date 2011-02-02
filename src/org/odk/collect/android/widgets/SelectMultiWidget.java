@@ -34,7 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
@@ -90,7 +89,17 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
     	// buildStart
 		Vector<SelectChoice> items = prompt.getSelectChoices();
 		if ( items != null ) {
+			boolean first = true;
 	    	for ( SelectChoice c : items ) {
+	    		if ( !first ) {
+    		        // Add a dividing line before all but the first element
+    		        View divider = new View(getContext());
+    		        
+    		        divider.setId(AbstractQuestionWidget.newUniqueId());
+    		        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+    	            addView(divider);
+	    		}
+	    		first = false;
 	    		buildSelectElement(c);
 	    	}
 		}
@@ -111,15 +120,6 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
 		
 		if ( i == items.size() ) {
 			throw new IllegalArgumentException("selection choice not found!");
-		}
-
-		if ( i < 0 ) {
-	        // Add a dividing line above this element
-	        ImageView divider = new ImageView(getContext());
-	        
-	        divider.setId(AbstractQuestionWidget.newUniqueId());
-	        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-            addView(divider);
 		}
 		
         // no checkbox group so id by answer + offset

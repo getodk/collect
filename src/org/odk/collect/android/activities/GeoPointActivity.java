@@ -127,9 +127,10 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private void returnLocation() {
         if (mLocation != null) {
             Intent i = new Intent();
-            i.putExtra(FormEntryActivity.LOCATION_RESULT, mLocation.getLatitude() + " "
-                    + mLocation.getLongitude() + " " + mLocation.getAltitude() + " "
-                    + mLocation.getAccuracy());
+            i.putExtra(
+        		FormEntryActivity.LOCATION_RESULT, 
+        		mLocation.getLatitude() + " " + mLocation.getLongitude() + " "
+        				+ mLocation.getAltitude() + " " + mLocation.getAccuracy());
             setResult(RESULT_OK, i);
         }
         finish();
@@ -158,9 +159,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
 	public void onProviderDisabled(String provider) {
-        Toast
-                .makeText(getBaseContext(), getString(R.string.gps_disabled_error),
-                    Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), getString(R.string.gps_disabled_error), Toast.LENGTH_SHORT)
+        		.show();
         finish();
     }
 
@@ -186,8 +186,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
             case LocationProvider.AVAILABLE:
-                mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation
-                        .getAccuracy()));
+                mLocationDialog.setMessage(getString(R.string.location_accuracy, 
+            		mLocation.getAccuracy()));
                 break;
             case LocationProvider.OUT_OF_SERVICE:
                 break;

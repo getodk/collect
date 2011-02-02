@@ -76,13 +76,14 @@ public class MainMenuActivity extends Activity {
 
 	private AlertDialog mAlertDialog;
 
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // if sd card error, quit
         if (!FileUtils.storageReady()) {
-        	createErrorDialog(getString(R.string.no_sd_error),true);
+        	createErrorDialog(getString(R.string.no_sd_error), true);
         }
 
         displaySplash();

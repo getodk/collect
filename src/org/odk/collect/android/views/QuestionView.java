@@ -24,6 +24,10 @@ import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Responsible for using a {@link FormEntryCaption} and based on the question type and answer type,
@@ -45,22 +49,55 @@ public class QuestionView extends AbstractFolioView {
         super(handler, formIndex, context);
     }
 
-	private void commonBuildView(String instancePath, FormEntryCaption[] groups) {
+	private LinearLayout commonBuildView(String instancePath, FormEntryCaption[] groups) {
 		FormEntryPrompt formEntryPrompt = Collect.getInstance().getFormEntryController().getModel().getQuestionPrompt(formIndex);
+
+		LinearLayout mView = new LinearLayout(getContext());
+        mView.setOrientation(LinearLayout.VERTICAL);
+        mView.setGravity(Gravity.TOP);
+        mView.setPadding(0, 7, 0, 0);
+
+        LinearLayout.LayoutParams mLayout =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLayout.setMargins(10, 0, 10, 0);
+
+        // put crumb trail on top...
+        String crumbTrail = GroupView.getGroupText(groups);
+        if (crumbTrail.length() > 0) {
+            TextView tv = new TextView(getContext());
+            tv.setText(crumbTrail.substring(0, crumbTrail.length() - 3));
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractQuestionWidget.TEXTSIZE - 7);
+            tv.setPadding(0, 0, 0, 5);
+            mView.addView(tv, AbstractQuestionWidget.COMMON_LAYOUT);
+        }
+
         // if question or answer type is not supported, use text widget
         mQuestionWidget = WidgetFactory.createWidgetFromPrompt(handler, formEntryPrompt, getContext(), instancePath);
+        
+        return mView;
 	}
 
     /* (non-Javadoc)
 	 * @see org.odk.collect.android.views.IFoliosView#buildView(org.javarosa.form.api.FormEntryCaption[])
 	 */
     public void buildView(String instancePath, FormEntryCaption[] groups) {
-    	commonBuildView(instancePath, groups);
+    	// build encapsulating layout
+    	LinearLayout mView = commonBuildView(instancePath, groups);
+
+        LinearLayout.LayoutParams mLayout =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLayout.setMargins(10, 0, 10, 0);
     	
     	// build actual widget...
-    	mQuestionWidget.buildView(this, groups);
+    	mQuestionWidget.buildView(this);
 
-        addView(mQuestionWidget);
+    	// add the widget to the encapsulating layout
+    	mView.addView(mQuestionWidget,mLayout);
+    	
+    	// set the scroll view's pane to the encapsulating layout
+        addView(mView);
     }
 
 	/* (non-Javadoc)

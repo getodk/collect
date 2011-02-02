@@ -64,12 +64,12 @@
 	<string name="downloading_data">Connecting to Server</string>
 	<string name="download_all_successful">All forms downloaded successfully.</string>
 	<string name="download_complete">Form Get Complete</string>
-  <string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
+    <string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
 	<string name="download_some_failed">Sorry, %s form(s) not downloaded!</string>
 	<string name="do_not_change">Do Not Change</string>
 	<string name="do_not_exit">Do Not Exit</string>
 	<string name="do_not_save">Discard Changes And Exit</string>
-	<string name="enter">enter</string>
+	<string name="enter">start</string>
 	<string name="entering_repeat">Add Group</string>
 	<string name="entering_repeat_ask">Add New Group?</string>
 	<string name="enter_data">Start New Form</string>
@@ -78,11 +78,13 @@
 	<string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 	<string name="entry_exit_confirm">Exiting now will discard unsaved changes.</string>
 	<string name="error_downloading">Error Getting Form</string>
+    <string name="error_occurred">Error Occurred</string>
 	<string name="expanded_group">Expanded Group</string>
 	<string name="fetching_file">"Getting \"%1$s\".\n\nForm %2$s of %3$s form(s)..."</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
 	<string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 	<string name="file_download_error">File %1$s failed. %2$s</string>
+    <string name="file_invalid">File: %s is invalid.</string>
 	<string name="file_missing">File: %s is missing.</string>
 	<string name="finalize_for_send">Save As Complete</string>
 	<string name="form">Form</string>
@@ -116,7 +118,7 @@
 	<string name="longitude">Longitude</string>
 	<string name="main_menu">Main Menu</string>
 	<string name="main_menu_details">Magnifying human resources with technology</string>
-	<string name="main_menu_message">ODK Collect v1.1.6</string>
+    <string name="main_menu_message">ODK Collect v1.1.6</string>
 	<string name="manage_files">Manage Forms And Data</string>
 	<string name="mark_finished">Mark Data as Finished</string>
 	<string name="no">No</string>
@@ -127,6 +129,7 @@
 	<string name="no_sd_error">Sorry, your memory card is not working!</string>
 	<string name="ok">OK</string>
 	<string name="one_capture">Multimedia recorded.</string>
+    <string name="parse_error">Sorry, unable to parse form.</string>
 	<string name="password">Password</string>
 	<string name="play_audio">Play Sound</string>
 	<string name="play_video">Play Video</string>
@@ -141,7 +144,7 @@
 	<string name="replace_location">Replace Location</string>
 	<string name="replace_video">Replace Video</string>
 	<string name="required_answer_error">Sorry, this response is required!</string>
-	<string name="review">review</string>
+    <string name="review">continue</string>
 	<string name="review_data">Continue Saved Form</string>
 	<string name="review_data_button">Continue Saved Form (%s)</string>
 	<string name="saved_data">Incomplete (%s)</string>
@@ -159,7 +162,7 @@
 	<string name="server">Server</string>
 	<string name="server_preferences">Server Preferences</string>
 	<string name="toggle_selected">Toggle All</string>
-	<string name="trigger">OK. Ready to Continue.</string>
+    <string name="trigger">OK. Please continue.</string>
 	<string name="uploading_data">Sending Data</string>
 	<string name="upload_all_successful">%s item(s) sent successfully.</string>
 	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>

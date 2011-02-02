@@ -118,4 +118,28 @@ public abstract class AbstractFolioView extends ScrollView implements OnDescenda
 		}
 		return true;
 	}
+
+    /**
+     * Construct crumb trail of the hierarchy of groups to which the question belongs.
+     */
+    public static final String getGroupText(FormEntryCaption[] groups) {
+        StringBuffer s = new StringBuffer("");
+        String t = "";
+        int i;
+
+        // list all groups in one string
+        for (FormEntryCaption g : groups) {
+            i = g.getMultiplicity() + 1;
+            t = g.getLongText();
+            if (t != null) {
+                s.append(t);
+                if (g.repeats() && i > 0) {
+                    s.append(" (" + i + ")");
+                }
+                s.append(" > ");
+            }
+        }
+
+        return s.toString();
+    }
 }

@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -34,9 +37,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FormHierarchyActivity extends ListActivity {
 
@@ -347,6 +347,7 @@ public class FormHierarchyActivity extends ListActivity {
                 return;
             case CHILD:
                 mFormEntryController.jumpToIndex(h.getFormIndex());
+                setResult(RESULT_OK);
                 refreshView();
                 return;
         }

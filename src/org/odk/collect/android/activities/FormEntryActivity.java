@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -60,18 +64,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -101,17 +101,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final String KEY_ERROR = "error";
 
     // Identifies whether this is a new form, or reloading a form after a screen
-    // rotation (or
-    // similar)
+    // rotation (or similar)
     private static final String NEWFORM = "newform";
 
     private static final int MENU_CLEAR = Menu.FIRST;
     private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
     private static final int MENU_LANGUAGES = Menu.FIRST + 2;
     private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 3;
-
-    // private static final int MENU_SUBMENU = Menu.FIRST + 4;
-    // private static final int MENU_SAVE_INCOMPLETE = Menu.FIRST + 5;
     private static final int MENU_SAVE = Menu.FIRST + 4;
 
     private static final int PROGRESS_DIALOG = 1;
@@ -354,18 +350,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         menu.removeItem(MENU_DELETE_REPEAT);
         menu.removeItem(MENU_LANGUAGES);
         menu.removeItem(MENU_HIERARCHY_VIEW);
-        // menu.removeItem(MENU_SUBMENU);
         menu.removeItem(MENU_SAVE);
-        // menu.removeItem(MENU_SAVE_INCOMPLETE);
-
-        // SubMenu sm =
-        // menu.addSubMenu(0, MENU_SUBMENU, 0,
-        // R.string.save_all_answers).setIcon(
-        // android.R.drawable.ic_menu_save);
-        // sm.add(0, MENU_SAVE_INCOMPLETE, 0,
-        // getString(R.string.save_for_later));
-        // sm.add(0, MENU_SAVE_COMPLETE, 0,
-        // getString(R.string.finalize_for_send));
 
         menu.add(0, MENU_SAVE, 0, getString(R.string.save_all_answers)).setIcon(
             android.R.drawable.ic_menu_save);
@@ -404,9 +389,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
                 return true;
-                // case MENU_SAVE_INCOMPLETE:
-                // saveFormEntrySession(false);
-                // return true;
             case MENU_SAVE:
                 // don't exit
                 saveDataToDisk(false, isInstanceComplete());
@@ -843,7 +825,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setTitle(getString(R.string.error_occurred));
         mAlertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
@@ -960,7 +943,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                                         "_data like '%" + instanceFolder + "%'",
                                                         null, null);
                                         int del = 0;
-                                        if (ci.getCount() > 0) {
+                                        if (ci != null && ci.getCount() > 0) {
                                             while (ci.moveToNext()) {
                                                 String id =
                                                     ci.getString(ci
@@ -1008,86 +991,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mAlertDialog.show();
     }
 
-
-    // /**
-    // * Confirm quit dialog
-    // */
-    // private void createQuitDialog() {
-    // mAlertDialog = new AlertDialog.Builder(this).create();
-    // mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
-    // mAlertDialog.setTitle(getString(R.string.quit_application));
-    // mAlertDialog.setMessage(getString(R.string.entry_exit_confirm));
-    // DialogInterface.OnClickListener quitListener = new
-    // DialogInterface.OnClickListener() {
-    //
-    // public void onClick(DialogInterface dialog, int i) {
-    // switch (i) {
-    //
-    // case DialogInterface.BUTTON1: // no
-    // saveDataToDisk();
-    // finish();
-    // break;
-    //
-    // case DialogInterface.BUTTON3: // yes
-    // FileDbAdapter fda = new FileDbAdapter(FormEntryActivity.this);
-    // fda.open();
-    // Cursor c = fda.fetchFilesByPath(mInstancePath, null);
-    // if (c != null && c.getCount() > 0) {
-    // Log.i(t, "prevously saved");
-    // } else {
-    // // not previously saved, cleaning up
-    // String instanceFolder =
-    // mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
-    //
-    // String[] projection = {Images.ImageColumns._ID};
-    // Cursor ci =
-    // getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI,
-    // projection, "_data like '%" + instanceFolder + "%'",
-    // null, null);
-    // int del = 0;
-    // if (ci.getCount() > 0) {
-    // while (ci.moveToNext()) {
-    // String id =
-    // ci
-    // .getString(ci
-    // .getColumnIndex(Images.ImageColumns._ID));
-    //
-    // Log.i(t, "attempting to delete unused image: "
-    // + Uri.withAppendedPath(
-    // Images.Media.EXTERNAL_CONTENT_URI, id));
-    // del +=
-    // getContentResolver().delete(
-    // Uri.withAppendedPath(
-    // Images.Media.EXTERNAL_CONTENT_URI, id),
-    // null, null);
-    // }
-    // }
-    // c.close();
-    // ci.close();
-    //
-    // Log.i(t, "Deleted " + del + " images from content provider");
-    // FileUtils.deleteFolder(instanceFolder);
-    // }
-    // // clean up cursor
-    // if (c != null) {
-    // c.close();
-    // }
-    //
-    // fda.close();
-    // finish();
-    // break;
-    // case DialogInterface.BUTTON2: // no
-    // break;
-    // }
-    // }
-    // };
-    // mAlertDialog.setCancelable(false);
-    // mAlertDialog.setButton(getString(R.string.save_exit), quitListener);
-    // mAlertDialog.setButton2(getString(R.string.continue_form), quitListener);
-    // mAlertDialog.setButton3(getString(R.string.do_not_save), quitListener);
-    //
-    // mAlertDialog.show();
-    // }
 
     /**
      * Confirm clear dialog
@@ -1215,7 +1118,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mProgressDialog.setButton(getString(R.string.cancel_saving_form),
                     savingButtonListener);
                 return mProgressDialog;
-
         }
         return null;
     }
@@ -1410,16 +1312,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (errorMsg != null) {
             createErrorDialog(errorMsg, true);
         } else {
-            createErrorDialog("Unhandled XForm Parsing error", true);
+            createErrorDialog(getString(R.string.parse_error), true);
         }
-
     }
 
 
     @Override
     public void savingComplete(int saveStatus) {
         dismissDialog(SAVING_DIALOG);
-
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
@@ -1661,7 +1561,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     private boolean isInstanceComplete() {
-
         boolean complete = false;
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();

@@ -1,6 +1,8 @@
 
 package org.odk.collect.android.views;
 
+import java.io.File;
+
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
@@ -19,13 +21,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
+import android.widget.ImageView.ScaleType;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice

@@ -69,7 +69,6 @@ public class DownloadFormsTask extends
 
     @Override
     protected HashMap<String, String> doInBackground(HashMap<String, String>... values) {
-
     	FileDbAdapter fda = null;
         if (values != null && values[0].containsKey(FormDownloadList.LIST_URL)) {
             // This gets a list of available forms from the specified server.
@@ -97,8 +96,8 @@ public class DownloadFormsTask extends
                     DocumentBuilder db = dbf.newDocumentBuilder();
                     doc = db.parse(is);
                 } catch (Exception e) {
-                    formList.put(DL_ERROR_MSG, "DocumentBuilderFactory error: "
-                            + e.getLocalizedMessage());
+                    formList.put(DL_ERROR_MSG, 
+                		"DocumentBuilderFactory error: " + e.getLocalizedMessage());
                     e.printStackTrace();
                 }
 
@@ -115,7 +114,8 @@ public class DownloadFormsTask extends
                         childList = n.getChildNodes();
                         attrMap = n.getAttributes();
                         if (childList.getLength() > 0 && attrMap.getLength() > 0) {
-                            formList.put(childList.item(0).getNodeValue() + ".xml", attrMap.item(0).getNodeValue());
+                            formList.put(childList.item(0).getNodeValue() + ".xml", attrMap.item(0)
+                            		.getNodeValue());
                         }
                         
                     }
@@ -141,7 +141,8 @@ public class DownloadFormsTask extends
 
             for (int i = 0; i < total; i++) {
                 String form = formNames.get(i);
-                publishProgress(form, Integer.valueOf(count).toString(), Integer.valueOf(total).toString());
+                publishProgress(form, Integer.valueOf(count).toString(), Integer.valueOf(total)
+                		.toString());
                 try {
                     File dl = downloadFile(form, toDownload.get(form));
 

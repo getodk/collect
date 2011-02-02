@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -23,10 +27,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
 import android.widget.DatePicker;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not

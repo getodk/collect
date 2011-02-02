@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.preferences.ServerPreferences;
@@ -41,11 +46,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory.
@@ -114,7 +114,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
 			public void onClick(View v) {
-
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
@@ -123,7 +122,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                     ls.setItemChecked(pos, mToggled);
 
                 mActionButton.setEnabled(!(selectedItemCount() == 0));
-
             }
         });
 
@@ -164,7 +162,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             if (savedInstanceState.containsKey(DIALOG_SHOWING)) {
                 mAlertShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
             }
-
         }
 
         if (mAlertShowing) {
@@ -182,7 +179,6 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             }
             buildView();
         }
-
     }
 
 
@@ -416,14 +412,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 } else {
                     // Download failed
                     dialogMessage =
-                        getString(R.string.list_failed_with_error, result
-                                .get(DownloadFormsTask.DL_ERROR_MSG));
+                        getString(R.string.list_failed_with_error, 
+                        		result.get(DownloadFormsTask.DL_ERROR_MSG));
                     dialogTitle = getString(R.string.load_remote_form_error);
                     createAlertDialog(dialogTitle, dialogMessage);
 
                     mSuccess = false;
                 }
-
             }
         } else {
             Log.e(t, "result was null when downloading");
@@ -473,3 +468,5 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     }
 
 }
+
+// TODO: make dialog persist through screen rotations.

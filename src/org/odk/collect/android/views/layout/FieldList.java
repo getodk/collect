@@ -11,9 +11,11 @@ import org.odk.collect.android.views.GroupView;
 import org.odk.collect.android.widgets.AbstractQuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class FieldList implements IGroupLayout {
 	
@@ -31,18 +33,41 @@ public class FieldList implements IGroupLayout {
         mView.setGravity(Gravity.TOP);
         mView.setPadding(0, 7, 0, 0);
 
+        // build view
+        
+        // put crumb trail on top...
+        String crumbTrail = GroupView.getGroupText(groups);
+        if (crumbTrail.length() > 0) {
+            TextView tv = new TextView(view.getContext());
+            tv.setText(crumbTrail.substring(0, crumbTrail.length() - 3));
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractQuestionWidget.TEXTSIZE - 7);
+            tv.setPadding(0, 0, 0, 5);
+            mView.addView(tv, AbstractQuestionWidget.COMMON_LAYOUT);
+        }
+
         LinearLayout.LayoutParams mLayout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
-		
+
+        boolean first = true;
         for ( FormIndex fi : indices) {
+        	if ( !first ) {
+                // Add a dividing line before all but the first element
+                View divider = new View(view.getContext());
+                
+                divider.setId(AbstractQuestionWidget.newUniqueId());
+                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setMinimumHeight(3);
+                mView.addView(divider);
+        	}
+        	first = false;
         	
     		FormEntryPrompt formEntryPrompt = Collect.getInstance().getFormEntryController().getModel().getQuestionPrompt(fi);
             // if question or answer type is not supported, use text widget
     		AbstractQuestionWidget mQuestionWidget = WidgetFactory.createWidgetFromPrompt(view.getHandler(), formEntryPrompt, view.getContext(), instancePath);
 
-    		mQuestionWidget.buildView(view, groups);
+    		mQuestionWidget.buildView(view);
             
             mView.addView((View) mQuestionWidget, mLayout);
             viewList.add(mQuestionWidget);

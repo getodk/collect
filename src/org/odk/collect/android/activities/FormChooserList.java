@@ -34,6 +34,8 @@ import android.widget.SimpleCursorAdapter;
  */
 public class FormChooserList extends ListActivity {
 
+	FileDbAdapter mFda = null;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,15 +45,26 @@ public class FormChooserList extends ListActivity {
     }
 
 
-    /**
+    @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+
+	/**
      * Get form list from database and insert into view.
      */
     private void refreshView() {
+    	if ( mFda == null ) {
+        	FileDbAdapter t = new FileDbAdapter();
+            t.open();
+            mFda = t;
+    	}
+    	
         // get all forms that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        fda.addOrphanForms();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
+        mFda.addOrphanForms();
+        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
         startManagingCursor(c);
 
         // create data and views for cursor adapter
@@ -66,8 +79,23 @@ public class FormChooserList extends ListActivity {
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
-        fda.close();
     }
+
+
+	@Override
+	protected void onDestroy() {
+		try {
+			if ( mFda != null ) {
+				FileDbAdapter t = mFda;
+				mFda = null;
+				t.close();
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		} finally {
+			super.onDestroy();
+		}
+	}
 
 
     /**
@@ -86,6 +114,7 @@ public class FormChooserList extends ListActivity {
         setResult(RESULT_OK, i);
 
         finish();
+        
     }
 
 }

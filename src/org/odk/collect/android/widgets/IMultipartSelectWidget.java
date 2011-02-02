@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import org.javarosa.core.model.SelectChoice;
+
 import android.view.ViewGroup;
 
 public interface IMultipartSelectWidget {

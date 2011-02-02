@@ -3,13 +3,12 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.FormElementStateListener;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.content.Context;
@@ -202,38 +201,6 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
     protected abstract void buildViewBodyImpl();
 
     /**
-     * Add a TextView containing the hierarchy of groups to which the question belongs.
-     */
-    private final void AddGroupText(FormEntryCaption[] groups) {
-        StringBuffer s = new StringBuffer("");
-        String t = "";
-        int i;
-
-        // list all groups in one string
-        for (FormEntryCaption g : groups) {
-            i = g.getMultiplicity() + 1;
-            t = g.getLongText();
-            if (t != null) {
-                s.append(t);
-                if (g.repeats() && i > 0) {
-                    s.append(" (" + i + ")");
-                }
-                s.append(" > ");
-            }
-        }
-
-        // build view
-        if (s.length() > 0) {
-            TextView tv = new TextView(getContext());
-            tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 7);
-            tv.setPadding(0, 0, 0, 5);
-            addView(tv, COMMON_LAYOUT);
-        }
-    }
-
-
-    /**
      * Add a Views containing the question text, audio (if applicable), and image (if applicable).
      * To satisfy the RelativeLayout constraints, we add the audio first if it exists, then the
      * TextView to fit the rest of the space, then the image if applicable.
@@ -290,13 +257,13 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
      * 
      * @param groups
      */
-    protected final void buildViewBoilerplate(FormEntryCaption[] groups) {
+    protected final void buildViewBoilerplate() {
         setOrientation(LinearLayout.VERTICAL);
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
+        // crumb trail is displayed by the FolioView layer, not the widget layer.
 
-        // display which group you are in as well as the question
-        AddGroupText(groups);
+        // display the question
         AddQuestionText(prompt);
         AddHelpText(prompt);
     }
@@ -309,8 +276,8 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
      * @param fv the view to receive descendant focus change events.
      * @param groups the nested hierarchy of enclosing groups
      */
-    public final void buildView(final AbstractFolioView fv, FormEntryCaption[] groups) {
-    	buildViewStart(groups);
+    public final void buildView(final AbstractFolioView fv) {
+    	buildViewStart();
         buildViewBodyImpl();
         buildViewEnd(fv);
     }
@@ -321,8 +288,8 @@ public abstract class AbstractQuestionWidget extends LinearLayout implements IBi
      * 
      * @param groups the nested hierarchy of enclosing groups
      */
-    public final void buildViewStart(FormEntryCaption[] groups) {
-    	buildViewBoilerplate(groups);
+    public final void buildViewStart() {
+    	buildViewBoilerplate();
     }
     
     /**

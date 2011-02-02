@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -29,8 +31,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Activity to upload completed forms.
@@ -71,8 +71,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
-                settings
-                        .getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
+                settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
                         + "/submission";
             mInstanceUploaderTask.setUploadServer(url);
             totalCount = instances.size();

@@ -14,14 +14,16 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.views.AbstractFolioView;
+import org.odk.collect.android.views.IAVTLayout;
 import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.content.Context;
@@ -31,11 +33,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-
-import java.util.Vector;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -85,7 +84,17 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
     protected void buildViewBodyImpl() {
 		Vector<SelectChoice> items = prompt.getSelectChoices();
 		if ( items != null ) {
+			boolean first = true;
 	    	for ( SelectChoice c : items ) {
+	    		if ( !first ) {
+    		        // Add a dividing line before all but the first element
+    		        View divider = new View(getContext());
+    		        
+    		        divider.setId(AbstractQuestionWidget.newUniqueId());
+    		        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+    	            addView(divider);
+	    		}
+	    		first = false;
 	    		buildSelectElement(c);
 	    	}
 		}
@@ -108,15 +117,6 @@ public class SelectOneWidget extends AbstractQuestionWidget implements OnChecked
 			throw new IllegalArgumentException("selection choice not found!");
 		}
 
-		if ( i > 0 ) {
-	        // Add a dividing line before all but the first element
-	        ImageView divider = new ImageView(getContext());
-	        
-	        divider.setId(AbstractQuestionWidget.newUniqueId());
-	        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-            addView(divider);
-        }
-		
         RadioButton r = new RadioButton(getContext());
         buttons[i] = r;
 

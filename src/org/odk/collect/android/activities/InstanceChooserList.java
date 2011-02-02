@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.util.regex.Pattern;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.utilities.FileUtils;
@@ -26,9 +29,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import java.io.File;
-import java.util.regex.Pattern;
-
 /**
  * Responsible for displaying all the valid instances in the instance directory.
  * 
@@ -37,6 +37,8 @@ import java.util.regex.Pattern;
  */
 public class InstanceChooserList extends ListActivity {
 
+	FileDbAdapter mFda = null;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,11 +81,14 @@ public class InstanceChooserList extends ListActivity {
      * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
      */
     private void refreshView() {
-
+    	if ( mFda == null ) {
+        	FileDbAdapter t = new FileDbAdapter();
+            t.open();
+            mFda = t;
+    	}
+    	
     	// get all instances
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
+        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
         startManagingCursor(c);
 
         // create data and views for cursor adapter
@@ -98,10 +103,23 @@ public class InstanceChooserList extends ListActivity {
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
-
-        // cleanup
-        fda.close();
     }
+
+
+	@Override
+	protected void onDestroy() {
+		try {
+			if ( mFda != null ) {
+				FileDbAdapter t = mFda;
+				mFda = null;
+				t.close();
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		} finally {
+			super.onDestroy();
+		}
+	}
 
 
     /**
@@ -117,7 +135,7 @@ public class InstanceChooserList extends ListActivity {
         String formName = pattern.split(instancePath)[0];
         formName = formName.substring(formName.lastIndexOf("/") + 1);
 
-        File xmlFile = new File(FileUtils.FORMS_PATH + "/"  + formName + ".xml");
+        File xmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xml");
         File xhtmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xhtml");
 
         // form is either xml or xhtml file. find the appropriate one.
