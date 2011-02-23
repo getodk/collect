@@ -1,62 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not
-use this file except in compliance with the License. You may obtain a copy of
-the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-License for the specific language governing permissions and limitations under
-the License.
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionName="1.1.5" android:versionCode="11">
-  <application android:icon="@drawable/notes" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
-  <activity android:label="@string/app_name" android:configChanges="orientation" android:name=".activities.MainMenuActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <activity android:name=".activities.FormEntryActivity" android:label="@string/app_name" android:configChanges="orientation"> 
-    <!-- the intent filter below is a bit of a hack until we create a content provider for forms -->
-    <intent-filter>
-    	<action android:name="org.odk.collect.android.action.FormEntry"/>
-		<category android:name="android.intent.category.DEFAULT"/>
-    </intent-filter>
-    <!-- this is what we should be doing once we have the content provider working -->
-    <intent-filter>
-    	<action android:name="android.intent.action.VIEW" />
-    	<action android:name="android.intent.action.EDIT" />
-    	<category android:name="android.intent.category.DEFAULT"/>
-    	<!-- need to add something like:
-    	 <data android:mimeType="vnd.android.cursor.item/vnd.google.note" />
-    	 here once we make a contentProvider for forms.
-    	 -->
-    </intent-filter>   
-    </activity>
-    <activity android:name=".activities.InstanceChooserList" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormChooserList" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormManagerList" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormDownloadList" android:label="@string/app_name"/> 
-    <activity android:name=".activities.DataManagerList" android:label="@string/app_name"/>
-    <activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
-    <activity android:name=".preferences.ServerPreferences" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
-    <activity android:name=".activities.GeoPointActivity" android:label="@string/app_name"/>
-  </application>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_SURFACE_FLINGER"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_FINE_LOCATION"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<uses-sdk android:minSdkVersion="3"></uses-sdk>
-<supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" />
+<!-- Copyright (C) 2009 University of Washington Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.odk.collect.android"
+	android:versionName="1.1.5"
+	android:versionCode="11">
+	<application
+		android:icon="@drawable/notes"
+		android:label="@string/app_name"
+		android:theme="@android:style/Theme.Light">
+		<activity
+			android:label="@string/app_name"
+			android:configChanges="orientation"
+			android:name=".activities.MainMenuActivity">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.MAIN" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+				<category
+					android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".activities.FormEntryActivity"
+			android:label="@string/app_name"
+			android:configChanges="orientation">
+			<!-- the intent filter below is a bit of a hack until we create a content 
+				provider for forms -->
+			<intent-filter>
+				<action
+					android:name="org.odk.collect.android.action.FormEntry" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			<!-- this is what we should be doing once we have the content provider 
+				working -->
+			<intent-filter>
+				<action
+					android:name="android.intent.action.VIEW" />
+				<action
+					android:name="android.intent.action.EDIT" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+				<!-- need to add something like: <data android:mimeType="vnd.android.cursor.item/vnd.google.note" 
+					/> here once we make a contentProvider for forms. -->
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".activities.InstanceChooserList"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.InstanceChooserTabs"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.FormChooserList"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.FormManagerList"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.FormDownloadList"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.DataManagerList"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.FileManagerTabs"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.InstanceUploaderList"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.InstanceUploaderActivity"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".preferences.ServerPreferences"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.FormHierarchyActivity"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.GeoPointActivity"
+			android:label="@string/app_name" />
+	</application>
+	<uses-permission
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:name="android.permission.INTERNET" />
+	<uses-permission
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+	<uses-permission
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-sdk
+		android:minSdkVersion="3"></uses-sdk>
+	<supports-screens
+		android:resizeable="true"
+		android:smallScreens="true"
+		android:normalScreens="true"
+		android:largeScreens="true"
+		android:xlargeScreens="true"
+		android:anyDensity="true" />
 </manifest>
