@@ -116,6 +116,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         String formPath = path[0];
         String instancePath = path[1];
+        if ( formPath == null && instancePath != null ) {
+        	String instanceName = (new File(instancePath)).getName();
+        	this.publishProgress(Collect.getInstance().getString(R.string.load_error_no_form,
+            		instanceName ));
+    		return null;
+        }
 
         File formXml = new File(formPath);
         String formHash = FileUtils.getMd5Hash(formXml);

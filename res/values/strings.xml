@@ -112,6 +112,7 @@
 	<string name="list_failed_with_error">Form listing failed. %s.</string>
 	<string name="loading_form">Loading Form...</string>
 	<string name="load_error">Sorry, unable to load form %s</string>
+    <string name="load_error_no_form">Sorry, definition missing for saved form %s</string>
 	<string name="load_remote_form_error">Error Getting Form List</string>
 	<string name="local_files">Local</string>
 	<string name="location_accuracy">Accuracy is %s meters.</string>
