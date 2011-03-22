@@ -43,6 +43,12 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DATE:
                         questionWidget = new DateWidget(handler, context, fep);
                         break;
+                    case Constants.DATATYPE_DATE_TIME:
+                        questionWidget = new DateTimeWidget(handler, context, fep);
+                        break;
+                    case Constants.DATATYPE_TIME:
+                        questionWidget = new TimeWidget(handler, context, fep);
+                        break;
                     case Constants.DATATYPE_DECIMAL:
                         questionWidget = new DecimalWidget(handler, context, fep);
                         break;

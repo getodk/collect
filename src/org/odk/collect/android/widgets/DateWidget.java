@@ -36,13 +36,12 @@ import android.widget.DatePicker;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DateWidget extends AbstractQuestionWidget {
+	// Holds the current date.  Used for determining if day of month is too big.
+	// Not in handler because constructor takes a while... 
+    private final Calendar currentDate = new GregorianCalendar(); // now...
     
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
-
-    // convert from j2me date to android date
-    private final static int YEARSHIFT = 1900;
-
 
     public DateWidget(Handler handler, Context context, FormEntryPrompt prompt) {
         super(handler, context, prompt);
@@ -52,9 +51,10 @@ public class DateWidget extends AbstractQuestionWidget {
 	public IAnswerData getAnswer() {
         // clear focus first so the datewidget gets the value in the text box
         mDatePicker.clearFocus();
-        Date d =
-            new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(), mDatePicker
-                    .getDayOfMonth());
+        GregorianCalendar c = new GregorianCalendar(mDatePicker.getYear(), 
+				mDatePicker.getMonth(), 
+				mDatePicker.getDayOfMonth());
+        Date d = c.getTime();
         return new DateData(d);
     }
 
@@ -63,8 +63,6 @@ public class DateWidget extends AbstractQuestionWidget {
      */
     @Override
     protected void buildViewBodyImpl() {
-        final Calendar c = new GregorianCalendar();
-        
         mDatePicker = new DatePicker(getContext());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
@@ -78,8 +76,8 @@ public class DateWidget extends AbstractQuestionWidget {
                     // handle leap years and number of days in month
                     // TODO
                     // http://code.google.com/p/android/issues/detail?id=2081
-                    c.set(year, month, 1);
-                    int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    currentDate.set(year, month, 1);
+                    int max = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (day > max) {
                         view.updateDate(year, month, max);
                     } else {
@@ -104,8 +102,10 @@ public class DateWidget extends AbstractQuestionWidget {
             mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
                 mDateListener);
     	} else {
-            Date d = (Date) prompt.getAnswerValue().getValue();
-            mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
+    		final Calendar c = new GregorianCalendar();
+    		c.setTime((Date) prompt.getAnswerValue().getValue());
+            mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), 
+        		mDateListener);
     	}
     }
 
