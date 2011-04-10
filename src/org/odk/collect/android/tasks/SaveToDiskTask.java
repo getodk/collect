@@ -28,9 +28,12 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.utilities.FilterUtils;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -104,32 +107,55 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
         File f = new File(instancePath);
-        Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
+        boolean exists = false;
+        long id = 0L;
+        Cursor c = null;
+        try {
+        	FilterUtils.FilterCriteria fd =
+        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, f.getAbsolutePath());
+
+        	c = Collect.getInstance().getContentResolver().query(
+        			SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+        			new String[] { SubmissionsStorage.KEY_ID },
+        			fd.selection, fd.selectionArgs, null );
+        	if ( c != null && c.moveToFirst() ) {
+        		exists = true;
+        		id = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
+        	}
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        		c = null;
+        	}
+        }
         if (!mMarkCompleted) {		
-            if (c != null && c.getCount() == 0) {		
-                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,		
-                        FileDbAdapter.STATUS_INCOMPLETE);		
-            } else {		
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);		
+            if (!exists) {
+            	ContentValues values = new ContentValues();
+            	values.put(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, instancePath);
+            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+            	Collect.getInstance().getContentResolver().insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
+            } else {	
+            	ContentValues values = new ContentValues();
+            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+            	Collect.getInstance().getContentResolver().update(
+            			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
+            			values, null, null);
             }		
         } else {
-	        if (c != null && c.getCount() == 0) {
-	            fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-	                        FileDbAdapter.STATUS_COMPLETE);
-	
+	        if (!exists) {
+            	ContentValues values = new ContentValues();
+            	values.put(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, instancePath);
+            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+            	Collect.getInstance().getContentResolver().insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
 	        } else {
-	            fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
+            	ContentValues values = new ContentValues();
+            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+            	Collect.getInstance().getContentResolver().update(
+            			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
+            			values, null, null);
 	        }
         }
-        // clean up cursor
-        if (c != null) {
-            c.close();
-        }
-
-        fda.close();
         return true;
 
     }

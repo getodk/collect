@@ -18,9 +18,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.provider.SubmissionsStorage;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FilterUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -126,7 +127,7 @@ public class MainMenuActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
+                    i.putExtra(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
                     startActivityForResult(i, INSTANCE_CHOOSER);
                 }
 
@@ -292,20 +293,39 @@ public class MainMenuActivity extends Activity {
      * Updates the button count and sets the text in the buttons.
      */
     private void updateButtons() {
-        // create adapter
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
 
-        // count for saved instances
-        Cursor c =
-            fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
-        mSavedCount = c.getCount();
-        c.close();
+    	Cursor c = null;
+    	try {
+	        // count for saved instances
+	    	FilterUtils.FilterCriteria fd =
+	    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+	
+	        c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
+	        		new String[]{SubmissionsStorage.KEY_ID}, 
+	        		fd.selection, fd.selectionArgs, null);
+	        mSavedCount = c.getCount();
+    	} finally {
+    		if ( c != null ) {
+    			c.close();
+    			c = null;
+    		}
+    	}
 
-        // count for completed instances
-        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
-        mCompletedCount = c.getCount();
-        c.close();
+    	try {
+        	// count for completed instances
+	    	FilterUtils.FilterCriteria fd =
+	    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+
+	        c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
+	        		new String[]{SubmissionsStorage.KEY_ID},
+	        		fd.selection, fd.selectionArgs, null);
+	        mCompletedCount = c.getCount();
+    	} finally {
+    		if ( c != null ) {
+    			c.close();
+    			c = null;
+    		}
+    	}
 
         // count for downloaded forms
         ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
@@ -314,7 +334,6 @@ public class MainMenuActivity extends Activity {
         } else {
             mFormsCount = 0;
         }
-        fda.close();
 
         mEnterDataButton.setText(getString(R.string.enter_data_button, mFormsCount));
         mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));

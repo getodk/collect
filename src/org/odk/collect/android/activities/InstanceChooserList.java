@@ -14,16 +14,15 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.util.regex.Pattern;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.provider.FormsStorage;
+import org.odk.collect.android.provider.SubmissionsStorage;
 
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -36,8 +35,6 @@ import android.widget.SimpleCursorAdapter;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceChooserList extends ListActivity {
-
-	FileDbAdapter mFda = null;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,12 +45,6 @@ public class InstanceChooserList extends ListActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
-
-
     /**
      * Stores the path of selected instance in the parent class and finishes.
      */
@@ -61,91 +52,89 @@ public class InstanceChooserList extends ListActivity {
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get full path to the instance
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        String instancePath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+        String instancePath = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_FILE_PATH));
 
-        // create intent for return and store path
-        Intent i = new Intent();
-        i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-        i.putExtra(FormEntryActivity.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
+        String formpath = null;
+        Cursor fp = null;
+        Cursor fi = null;
+        try {
+        	fp = getContentResolver().query(
+        			ContentUris.withAppendedId( SubmissionsStorage.CONTENT_URI_FORMS_INFO_URI_DATASET,
+        										c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID))),
+        		new String[] { SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_URI_FORMS_INFO },
+        		null, null, null );
+        
+        	String uri = null;
+        	if ( fp.moveToNext() ) {
+        		uri = fp.getString(fp.getColumnIndex(SubmissionsStorage.KEY_URI_FORMS_INFO));
+        	}
+        	if ( uri != null ) {
+        		Uri u = Uri.parse(uri);
+        		fi = getContentResolver().query(u,
+        				new String[] { FormsStorage.KEY_ID, FormsStorage.KEY_FORM_FILE_PATH },
+        				null, null, null );
+        		if ( fi.moveToNext() ) {
+        			formpath = fi.getString(fi.getColumnIndex(FormsStorage.KEY_FORM_FILE_PATH));
+        		}
+        	}
+        } finally {
+        	if ( fp != null ) {
+        		fp.close();
+        	}
+        	if ( fi != null ) {
+        		fi.close();
+        	}
+        }
 
-        // return the result to the parent class
-        // getParent().setResult(RESULT_OK, i);
-        setResult(RESULT_OK, i);
+        if ( formpath != null ) {
+            // create intent for return and store path
+            Intent i = new Intent();
+            i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+            i.putExtra(FormEntryActivity.KEY_FORMPATH, formpath);
 
+            // return the result to the parent class
+            // getParent().setResult(RESULT_OK, i);
+            setResult(RESULT_OK, i);
+        } else {
+        	// form defn not available...
+        	// TODO: communicate back the error?
+        }
+        
         // don't close cursor or tab host delays closing
         finish();
     }
 
 
     /**
-     * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
+     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each row.
      */
     private void refreshView() {
-    	if ( mFda == null ) {
-        	FileDbAdapter t = new FileDbAdapter();
-            t.open();
-            mFda = t;
-    	}
     	
-    	// get all instances
-        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
-        startManagingCursor(c);
+    	String[] projection = new String[] {
+    			SubmissionsStorage.KEY_ID, 
+    			SubmissionsStorage.KEY_DISPLAY_NAME,
+    			SubmissionsStorage.KEY_DISPLAY_SUBTEXT,
+    			SubmissionsStorage.KEY_INSTANCE_FILE_PATH
+    	};
 
-        // create data and views for cursor adapter
+    	// create data and views for cursor adapter
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+        		SubmissionsStorage.KEY_DISPLAY_NAME,
+        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 android.R.id.text1, android.R.id.text2
         };
-
+        String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC";
+        
+        Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+        		projection, null, null, sortOrder);
+        startManagingCursor(c);
+        
         // render total instance view
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
-    }
-
-
-	@Override
-	protected void onDestroy() {
-		try {
-			if ( mFda != null ) {
-				FileDbAdapter t = mFda;
-				mFda = null;
-				t.close();
-			}
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		} finally {
-			super.onDestroy();
-		}
-	}
-
-
-    /**
-     * Given an instance path, return the full path to the form
-     * 
-     * @param instancePath full path to the instance
-     * @return formPath full path to the form the instance was generated from
-     */
-    private String getFormPathFromInstancePath(String instancePath) {
-        // trim the timestamp
-        String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
-        Pattern pattern = Pattern.compile(regex);
-        String formName = pattern.split(instancePath)[0];
-        formName = formName.substring(formName.lastIndexOf("/") + 1);
-
-        File xmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xml");
-        File xhtmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xhtml");
-
-        // form is either xml or xhtml file. find the appropriate one.
-        if (xmlFile.exists()) {
-            return xmlFile.getAbsolutePath();
-        } else if (xhtmlFile.exists()) {
-            return xhtmlFile.getAbsolutePath();
-        } else {
-            return null;
-        }
     }
 
 }

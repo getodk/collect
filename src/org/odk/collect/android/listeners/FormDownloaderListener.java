@@ -20,6 +20,48 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormDownloaderListener {
-    void formDownloadingComplete(HashMap<String, String> result);
+
+	public static final class FormDetails {
+		public final String stringValue;
+		
+		public final String formName;
+		public final String formId;
+		public final Integer modelVersion;
+		public final Integer uiVersion;
+		public final String description;
+		public final String downloadUrl;
+		public final String manifestUrl;
+		
+		public FormDetails(String stringValue) {
+			this.stringValue = stringValue;
+			
+			formName = null;
+			formId = null;
+			modelVersion = null;
+			uiVersion = null;
+			description = null;
+			downloadUrl = null;
+			manifestUrl = null;
+		}
+		
+		public FormDetails(String formName,
+					String formId,
+					Integer modelVersion,
+					Integer uiVersion,
+					String description,
+					String downloadUrl,
+					String manifestUrl) {
+			this.stringValue = null;
+			this.formName = formName;
+			this.formId = formId;
+			this.modelVersion = modelVersion;
+			this.uiVersion = uiVersion;
+			this.description = description;
+			this.downloadUrl = downloadUrl;
+			this.manifestUrl = manifestUrl;
+		}
+	}
+
+    void formDownloadingComplete(HashMap<String, FormDetails> result);
     void progressUpdate(String currentFile, int progress, int total);
 }

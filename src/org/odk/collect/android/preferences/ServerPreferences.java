@@ -29,7 +29,6 @@ public class ServerPreferences extends PreferenceActivity implements
 
     public static String KEY_SERVER = "server";
     public static String KEY_USERNAME = "username";
-    public static String KEY_PASSWORD = "password";
 
 
     @Override
@@ -39,7 +38,6 @@ public class ServerPreferences extends PreferenceActivity implements
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.server_preferences));
         updateServer();
         updateUsername();
-        updatePassword();
     }
 
 
@@ -64,8 +62,6 @@ public class ServerPreferences extends PreferenceActivity implements
             updateServer();
         } else if (key.equals(KEY_USERNAME)) {
             updateUsername();
-        } else if (key.equals(KEY_PASSWORD)) {
-            updatePassword();
         }
     }
 
@@ -89,14 +85,10 @@ public class ServerPreferences extends PreferenceActivity implements
     private void updateUsername() {
         EditTextPreference etp =
             (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_USERNAME);
-        etp.setSummary(etp.getText());
-    }
+        String s = etp.getText().trim();
 
-
-    private void updatePassword() {
-        EditTextPreference etp =
-            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_PASSWORD);
-        etp.setSummary(etp.getText());
+        etp.setText(s);
+        etp.setSummary(s);
     }
 
 }

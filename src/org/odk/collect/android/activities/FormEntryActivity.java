@@ -27,13 +27,14 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.provider.SubmissionsStorage;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FilterUtils;
 import org.odk.collect.android.utilities.GestureDetector;
 import org.odk.collect.android.views.AbstractFolioView;
 import org.odk.collect.android.views.GroupView;
@@ -922,59 +923,66 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case 0: // discard changes and exit
-                                    FileDbAdapter fda = new FileDbAdapter();
-                                    fda.open();
-                                    Cursor c = fda.fetchFilesByPath(mInstancePath, null);
-                                    if (c != null && c.getCount() > 0) {
-                                        Log.i(t, "prevously saved");
-                                    } else {
-                                        // not previously saved, cleaning up
-                                        String instanceFolder =
-                                            mInstancePath.substring(0,
-                                                mInstancePath.lastIndexOf("/") + 1);
-
-                                        String[] projection = {
-                                            Images.ImageColumns._ID
-                                        };
-                                        Cursor ci =
-                                            getContentResolver()
-                                                    .query(Images.Media.EXTERNAL_CONTENT_URI,
-                                                        projection,
-                                                        "_data like '%" + instanceFolder + "%'",
-                                                        null, null);
-                                        int del = 0;
-                                        if (ci != null && ci.getCount() > 0) {
-                                            while (ci.moveToNext()) {
-                                                String id =
-                                                    ci.getString(ci
-                                                            .getColumnIndex(Images.ImageColumns._ID));
-
-                                                Log.i(
-                                                    t,
-                                                    "attempting to delete unused image: "
-                                                            + Uri.withAppendedPath(
-                                                                Images.Media.EXTERNAL_CONTENT_URI,
-                                                                id));
-                                                del +=
-                                                    getContentResolver().delete(
-                                                        Uri.withAppendedPath(
-                                                            Images.Media.EXTERNAL_CONTENT_URI, id),
-                                                        null, null);
-                                            }
-                                        }
-                                        if (ci != null) {
-                                            ci.close();
-                                        }
-
-                                        Log.i(t, "Deleted " + del + " images from content provider");
-                                        FileUtils.deleteFolder(instanceFolder);
+                                    Cursor cursor = null;
+                                    try {
+                                    	FilterUtils.FilterCriteria fd =
+                                    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, mInstancePath);
+                                    	cursor = getContentResolver().query(
+                                    		SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
+                                    		new String[] { SubmissionsStorage.KEY_ID }, 
+                                    		fd.selection, fd.selectionArgs, null);
+                                    	if ( cursor.moveToNext() ) {
+                                    		Log.i(t, "previously saved");
+                                    	} else {
+	                                        // not previously saved, cleaning up
+	                                        String instanceFolder =
+	                                            mInstancePath.substring(0,
+	                                                mInstancePath.lastIndexOf("/") + 1);
+	
+	                                        String[] projection = {
+	                                            Images.ImageColumns._ID
+	                                        };
+	                                        int del = 0;
+                                            Cursor ci = null;
+	                                        try {
+	                                        	ci = getContentResolver()
+	                                                    .query(Images.Media.EXTERNAL_CONTENT_URI,
+	                                                        projection,
+	                                                        "_data like ?",
+	                                                        new String[] {"'%" + instanceFolder + "%'"},
+	                                                        null);
+		                                        while (ci != null && ci.moveToNext()) {
+	                                                String id =
+	                                                    ci.getString(ci
+	                                                            .getColumnIndex(Images.ImageColumns._ID));
+	
+	                                                Log.i(
+	                                                    t,
+	                                                    "attempting to delete unused image: "
+	                                                            + Uri.withAppendedPath(
+	                                                                Images.Media.EXTERNAL_CONTENT_URI,
+	                                                                id));
+	                                                del +=
+	                                                    getContentResolver().delete(
+	                                                        Uri.withAppendedPath(
+	                                                            Images.Media.EXTERNAL_CONTENT_URI, id),
+	                                                        null, null);
+	                                            }
+	                                        } finally {
+	                                        	if (ci != null) {
+	                                        		ci.close();
+	                                        	}
+	                                        }
+	
+	                                        Log.i(t, "Deleted " + del + " images from content provider");
+	                                        FileUtils.deleteFolder(instanceFolder);
+	                                    }
+                                    } finally {
+	                                    // clean up cursor
+	                                    if (cursor != null) {
+	                                        cursor.close();
+	                                    }
                                     }
-                                    // clean up cursor
-                                    if (c != null) {
-                                        c.close();
-                                    }
-
-                                    fda.close();
                                     finish();
                                     break;
 
@@ -1562,20 +1570,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     private boolean isInstanceComplete() {
         boolean complete = false;
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByPath(mInstancePath, null);
-        if (c != null
-                && c.moveToFirst()
-                && FileDbAdapter.STATUS_COMPLETE.equals(c.getString(c
-                        .getColumnIndex(FileDbAdapter.KEY_STATUS)))) {
-            complete = true;
+        Cursor c = null;
+        try {
+        	FilterUtils.FilterCriteria fd =
+        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, mInstancePath);
+        	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,	
+        			new String[] { SubmissionsStorage.KEY_ID, 
+        						   SubmissionsStorage.KEY_STATUS },
+        						   fd.selection, fd.selectionArgs, null );
+        	if ( c != null && c.moveToFirst() ) {
+        		String status = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_STATUS));
+        		complete = SubmissionsStorage.STATUS_COMPLETE.equalsIgnoreCase(status);
+        	}
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
         }
-        if (c != null) {
-            c.close();
-            fda.close();
-        }
-
         return complete;
     }
 

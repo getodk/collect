@@ -26,6 +26,8 @@
 	<string name="audio_file_error">No audio file was specified.</string>
 	<string name="audio_file_invalid">File: %s is not a valid audio file.</string>
 	<string name="audio_file_missing">Audio File: %s is missing.</string>
+    <string name="authority_forms">org.opendatakit.storage.forms</string>
+    <string name="authority_submissions">org.opendatakit.storage.submissions</string>
 	<string name="backup">return to previous question</string>
 	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
 	<string name="cancel">Cancel</string>
@@ -122,6 +124,12 @@
     <string name="main_menu_message">ODK Collect v1.1.6</string>
 	<string name="manage_files">Manage Forms And Data</string>
 	<string name="mark_finished">Mark Data as Finished</string>
+    <string name="mime_type_forms_list">vnd.android.cursor.dir/vnd.org.opendatakit.storage.forms</string>
+    <string name="mime_type_forms_item">vnd.android.cursor.item/vnd.org.opendatakit.storage.forms</string>
+    <string name="mime_type_forms_file_xml">vnd.android.cursor.item/vnd.org.opendatakit.android.storage.forms.xml</string>
+    <string name="mime_type_forms_file_cache">vnd.android.cursor.item/vnd.org.opendatakit.android.storage.forms.jrcache</string>
+    <string name="mime_type_submissions_list">vnd.android.cursor.dir/vnd.org.opendatakit.storage.submissions</string>
+    <string name="mime_type_submissions_item">vnd.android.cursor.item/vnd.org.opendatakit.storage.submissions</string>
 	<string name="no">No</string>
 	<string name="noselect_error">Sorry, you have not selected any items!</string>
 	<string name="no_capture">Nothing recorded yet.</string>

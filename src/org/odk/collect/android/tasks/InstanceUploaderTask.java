@@ -14,25 +14,30 @@
 
 package org.odk.collect.android.tasks;
 
-import org.apache.http.Header;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.utilities.WebUtils;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Background task for uploading completed forms.
@@ -51,25 +56,53 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
     public void setUploadServer(String newServer) {
         mUrl = newServer;
     }
-
-
+    
+    /**
+     * The values are the names of the instances to upload -- i.e., the directory names.
+     * 
+     */
     @Override
     protected ArrayList<String> doInBackground(String... values) {
-        ArrayList<String> uploadedIntances = new ArrayList<String>();
+        ArrayList<String> uploadedInstances = new ArrayList<String>();
         int instanceCount = values.length;
+
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+        
+        URI u = null;
+        try {
+            URL url = new URL(mUrl);
+            u = url.toURI();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+    	HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+        
+        HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
+
+        // prepare response and return uploaded
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(httpHead,localContext);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if ( statusCode != 204 ) {
+            	Log.w(t, "Status code on Head request: " + statusCode );
+            }
+	    } catch (ClientProtocolException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    } catch (IllegalStateException e) {
+	        e.printStackTrace();
+	    }
 
         for (int i = 0; i < instanceCount; i++) {
             publishProgress(i + 1, instanceCount);
 
-            // configure connection
-            HttpParams params = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, CONNECTION_TIMEOUT);
-            HttpClientParams.setRedirecting(params, false);
-
-            // setup client
-            DefaultHttpClient httpclient = new DefaultHttpClient(params);
-            HttpPost httppost = new HttpPost(mUrl);
+            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
 
             // get instance file
             File file = new File(values[i]);
@@ -87,9 +120,15 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 File f = files[j];
                 FileBody fb;
                 if (f.getName().endsWith(".xml")) {
-                    fb = new FileBody(f, "text/xml");
-                    entity.addPart("xml_submission_file", fb);
-                    Log.i(t, "added xml file " + f.getName());
+                	if ( f.getName().equals(values[i])) {
+	                    fb = new FileBody(f, "text/xml");
+	                    entity.addPart("xml_submission_file", fb);
+	                    Log.i(t, "added xml_submission_file: " + f.getName());
+                	} else {
+	                    fb = new FileBody(f, "text/xml");
+	                    entity.addPart(f.getName(), fb);
+	                    Log.i(t, "added xml file " + f.getName());
+                	}
                 } else if (f.getName().endsWith(".jpg")) {
                     fb = new FileBody(f, "image/jpeg");
                     entity.addPart(f.getName(), fb);
@@ -113,41 +152,57 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             httppost.setEntity(entity);
 
             // prepare response and return uploaded
-            HttpResponse response = null;
+            response = null;
             try {
-                response = httpclient.execute(httppost);
+                response = httpclient.execute(httppost,localContext);
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
-                return uploadedIntances;
+                return uploadedInstances;
             } catch (IOException e) {
                 e.printStackTrace();
-                return uploadedIntances;
+                return uploadedInstances;
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                return uploadedIntances;
+                return uploadedInstances;
             }
 
-            // check response.
-            // TODO: This isn't handled correctly.
-            String serverLocation = null;
-            Header[] h = response.getHeaders("Location");
-            if (h != null && h.length > 0) {
-                serverLocation = h[0].getValue();
-            } else {
-                // something should be done here...
-                Log.e(t, "Location header was absent");
-            }
             int responseCode = response.getStatusLine().getStatusCode();
             Log.e(t, "Response code:" + responseCode);
+            // check response.
+			try {
+				BufferedReader r;
+				r = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+				String line;
+				while ( (line = r.readLine()) != null ) {
+					if ( responseCode == 201 || responseCode == 202) {
+						Log.i(t, line);
+					} else {
+						Log.e(t, line);
+					}
+				}
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					response.getEntity().getContent().close();
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 
-            // verify that your response came from a known server
-            if (serverLocation != null && mUrl.contains(serverLocation) && responseCode == 201) {
-                uploadedIntances.add(values[i]);
+            // verify that the response was a 201 or 202.  
+			// If it wasn't, the submission has failed.
+            if (responseCode == 201 || responseCode == 202) {
+                uploadedInstances.add(values[i]);
             }
 
         }
 
-        return uploadedIntances;
+        return uploadedInstances;
     }
 
 

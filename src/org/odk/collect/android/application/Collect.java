@@ -1,10 +1,21 @@
 package org.odk.collect.android.application;
 
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.SyncBasicHttpContext;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
+import org.odk.collect.android.database.StorageDatabase;
 import org.odk.collect.android.logic.FileReferenceFactory;
+import org.odk.collect.android.provider.FormsStorage;
+import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.utilities.AgingCredentialsProvider;
 
 import android.app.Application;
 import android.content.Context;
@@ -19,11 +30,18 @@ import android.widget.Toast;
 
 public class Collect extends Application {
 
+	public enum StorageType { FORMS, SUBMISSIONS };
+	
 	private static Collect singleton = null;
 	
 	public static Collect getInstance() {
 		return singleton;
 	}
+	
+	private StorageDatabase formsDatabase = null;
+	private StorageDatabase submissionsDatabase = null;
+
+	private HttpContext localContext = null;
 	
 	private FormEntryController formEntryController = null;
 
@@ -50,6 +68,39 @@ public class Collect extends Application {
 		singleton = this;
 	}
 
+	public synchronized HttpContext getHttpContext() {
+		if ( localContext == null ) {
+            // set up one context for all HTTP requests so that authentication
+			// and cookies can be retained.
+			localContext = new SyncBasicHttpContext(new BasicHttpContext());
+            
+            // establish a local cookie store for this attempt at downloading...
+            CookieStore cookieStore = new BasicCookieStore();
+            localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+            
+            // and establish a credentials provider...
+            CredentialsProvider credsProvider = new AgingCredentialsProvider(7*60*1000);
+            localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProvider);
+		}
+		return localContext;
+	}
+	
+	public synchronized StorageDatabase getStorageDb( StorageType type ) {
+		if ( StorageType.FORMS == type ) {
+			if ( formsDatabase == null ) {
+				formsDatabase = new StorageDatabase(FormsStorage.getOpenHelper("forms"));
+			}
+			return formsDatabase;
+		}
+		if ( StorageType.SUBMISSIONS == type ) {
+			if ( submissionsDatabase == null ) {
+				submissionsDatabase = new StorageDatabase(SubmissionsStorage.getOpenHelper("submissions"));
+			}
+			return submissionsDatabase;
+		}
+		throw new IllegalArgumentException("Unexpected storage type: " + type.toString());
+	}
+	
 	public void setFormEntryController( FormEntryController formEntryController) {
 		this.formEntryController = formEntryController;
 	}

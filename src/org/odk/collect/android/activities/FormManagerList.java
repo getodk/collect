@@ -14,19 +14,18 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.provider.FormsStorage;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,18 +34,16 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 /**
- * Responsible for displaying and deleting all the valid forms in the forms directory.
+ * Responsible for displaying and deleting all the valid XForms in the forms directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormManagerList extends ListActivity {
-    private static String t = "FormManagerList";
     private AlertDialog mAlertDialog;
     private Button mActionButton;
     private Button mGetButton;
 
-    private FileDbAdapter mFda = null;
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
@@ -86,24 +83,24 @@ public class FormManagerList extends ListActivity {
 
 
     private void refreshView() {
-    	if ( mFda == null ) {
-        	FileDbAdapter t = new FileDbAdapter();
-            t.open();
-            mFda = t;
-    	}
-    	
-        // get all mInstances that match the status.
-    	mFda.addOrphanForms();
-        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
-        startManagingCursor(c);
-
+        String[] projection = new String[] {
+        		FormsStorage.KEY_ID,
+                FormsStorage.KEY_DISPLAY_NAME, 
+                FormsStorage.KEY_DISPLAY_SUBTEXT
+        };
+        
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+                FormsStorage.KEY_DISPLAY_NAME, 
+                FormsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
-
+        String sortOrder = FormsStorage.KEY_DISPLAY_NAME + " ASC";
+        
+        Cursor c = getContentResolver().query(FormsStorage.CONTENT_URI_INFO_DATASET,
+        								projection,	null, null, sortOrder);
+        startManagingCursor(c);
         // render total instance view
         mInstances =
             new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
@@ -161,6 +158,9 @@ public class FormManagerList extends ListActivity {
 
 
     private void refreshData() {
+    	// trigger rescan of directory...
+    	getContentResolver().update(FormsStorage.CONTENT_URI_INFO_DATASET,
+    						null, null, null);
         if (!mRestored) {
             mSelected.clear();
         }
@@ -175,22 +175,11 @@ public class FormManagerList extends ListActivity {
         // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-            Cursor c = mFda.fetchFile(mSelected.get(i));
-            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            String hash = c.getString(c.getColumnIndex(FileDbAdapter.KEY_HASH));
-            if (mFda.deleteFile(mSelected.get(i))) {
-                deleted++;
-                Log.i(t, "Deleting file: " + filename);
-                File del = new File(filename);
-                del.delete();
-                
-                // also delete formdef.
-                String hashname = "/sdcard/odk/.cache/" + hash + ".formdef";
-                File fd = new File(hashname);
-                fd.delete();
-                Log.i(t, "Deleting cache: " + hashname);
-            }
-            c.close();
+        	deleted += getContentResolver().delete(
+        			Uri.withAppendedPath(FormsStorage.CONTENT_URI,
+        								 FormsStorage.INFO_DATASET),
+        					FormsStorage.KEY_ID + " = ?",
+        					new String[] { Long.toString(mSelected.get(i)) });
         }
 
         if (deleted > 0) {
@@ -218,7 +207,7 @@ public class FormManagerList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(FormsStorage.KEY_ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -238,22 +227,6 @@ public class FormManagerList extends ListActivity {
         }
         super.onPause();
     }
-
-
-	@Override
-	protected void onDestroy() {
-		try {
-			if ( mFda != null ) {
-				FileDbAdapter t = mFda;
-				mFda = null;
-				t.close();
-			}
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		} finally {
-			super.onDestroy();
-		}
-	}
 
 
     @Override

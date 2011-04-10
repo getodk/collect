@@ -17,10 +17,12 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.utilities.FilterUtils;
 
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -53,7 +55,6 @@ public class InstanceUploaderList extends ListActivity {
     private Button mActionButton;
     private Button mToggleButton;
 
-    private FileDbAdapter mFda;
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
@@ -108,25 +109,29 @@ public class InstanceUploaderList extends ListActivity {
 
 
     /**
-     * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
+     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each row.
      */
     private void refreshView() {
-    	if ( mFda == null ) {
-        	FileDbAdapter t = new FileDbAdapter();
-            t.open();
-            mFda = t;
-    	}
-    	
-        // get all mInstances that match the status.
-        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
-        startManagingCursor(c);
-
+    	String[] projection = new String[] {
+    			SubmissionsStorage.KEY_ID,
+    			SubmissionsStorage.KEY_DISPLAY_NAME,
+    			SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+    	};
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+        		SubmissionsStorage.KEY_DISPLAY_NAME,
+        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
+        String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC";
+
+        FilterUtils.FilterCriteria fd =
+    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+
+        Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
+        		projection, fd.selection, fd.selectionArgs, sortOrder );
+        startManagingCursor(c);
 
         // render total instance view
         mInstances =
@@ -160,13 +165,21 @@ public class InstanceUploaderList extends ListActivity {
     private void uploadSelectedFiles() {
         ArrayList<String> selectedInstances = new ArrayList<String>();
 
-        Cursor c = null;
-
         for (int i = 0; i < mSelected.size(); i++) {
-            c = mFda.fetchFile(mSelected.get(i));
-            startManagingCursor(c);
-            String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            selectedInstances.add(s);
+        	Cursor c = null;
+        	try {
+        		c = getContentResolver().query(
+        			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
+        				new String[] { SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_INSTANCE_FILE_PATH }, null, null, null);
+        		if ( c.moveToNext() ) {
+        			String s = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_FILE_PATH));
+        			selectedInstances.add(s);
+        		}
+        	} finally {
+        		if ( c != null ) {
+        			c.close();
+        		}
+        	}
         }
 
         // bundle intent with upload files
@@ -216,7 +229,7 @@ public class InstanceUploaderList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -227,21 +240,6 @@ public class InstanceUploaderList extends ListActivity {
         mActionButton.setEnabled(!(mSelected.size() == 0));
 
     }
-
-	@Override
-	protected void onDestroy() {
-		try {
-			if ( mFda != null ) {
-				FileDbAdapter t = mFda;
-				mFda = null;
-				t.close();
-			}
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		} finally {
-			super.onDestroy();
-		}
-	}
 
 
 	@Override

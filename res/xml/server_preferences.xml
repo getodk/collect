@@ -22,18 +22,11 @@ the License.
             android:title="@string/server"
             android:dialogTitle="@string/change_server" />
             
-                <EditTextPreference
-        android:id="@+id/username"
+    <EditTextPreference
+            android:id="@+id/username"
             android:key="username"
             android:defaultValue=""
             android:title="@string/username"
-            android:dialogTitle="@string/change_user" android:enabled="false"/>
-            
-                <EditTextPreference
-        android:id="@+id/password"
-            android:key="password"
-            android:defaultValue=""
-            android:title="@string/password"
-            android:dialogTitle="@string/change_password" android:enabled="false"/>
-                
+            android:dialogTitle="@string/change_user" />
+
 </PreferenceScreen>

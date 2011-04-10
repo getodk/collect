@@ -17,10 +17,10 @@ package org.odk.collect.android.tasks;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -36,11 +36,15 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.provider.FormsStorage;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FilterUtils;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -112,7 +116,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     protected FECWrapper doInBackground(String... path) {
         FormEntryController fec = null;
         FormDef fd = null;
-        FileInputStream fis = null;
 
         String formPath = path[0];
         String instancePath = path[1];
@@ -122,19 +125,76 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             		instanceName ));
     		return null;
         }
+        
+        Long keyId = null;
+        String formMediaPath = null;
+        String displayName = null;
+        {
+        	File form = new File(formPath);
+        	if ( !form.exists()) {
+	        	// specified form file does not exist... log error and return
+	    		Log.w(t, "Form file does not exist: " + form.getAbsolutePath());
+	    		return null;
+        	}
+        	String[] projection = new String[] { FormsStorage.KEY_ID, FormsStorage.KEY_FORM_MEDIA_PATH, FormsStorage.KEY_DISPLAY_NAME };
+        	
+        	FilterUtils.FilterCriteria fc =
+        		FilterUtils.buildSelectionClause(FormsStorage.KEY_FORM_FILE_PATH, form.getAbsolutePath());
+        	
+        	Cursor c = Collect.getInstance().getContentResolver().query(
+	        		FormsStorage.CONTENT_URI_INFO_DATASET, 
+	        		projection,
+	        		fc.selection, fc.selectionArgs, null );
+	        if ( c != null && c.moveToNext() ) {
+	        	// retrieve display name and keyId from FormsStorage provider...
+	        	keyId = c.getLong(c.getColumnIndex(FormsStorage.KEY_ID));
+	        	formMediaPath = c.getString(c.getColumnIndex(FormsStorage.KEY_FORM_MEDIA_PATH));
+	        	displayName = c.getString(c.getColumnIndex(FormsStorage.KEY_DISPLAY_NAME));
+	        } else {
+	        	// not in the FormsStorage provider -- add it...
+	        	ContentValues v = new ContentValues();
+	        	v.put(FormsStorage.KEY_FORM_FILE_PATH, form.getAbsolutePath());
+	        	Uri uri = Collect.getInstance().getContentResolver().insert(FormsStorage.CONTENT_URI_INFO_DATASET, v);
+	        	// and now fetch what we added...
+	        	c = Collect.getInstance().getContentResolver().query(uri,
+	        			projection,
+						null, null, null );
+		        if ( c != null && c.moveToNext() ) {
+		        	// we should have gotten something...
+		        	keyId = c.getLong(c.getColumnIndex(FormsStorage.KEY_ID));
+		        	formMediaPath = c.getString(c.getColumnIndex(FormsStorage.KEY_FORM_MEDIA_PATH));
+		        	displayName = c.getString(c.getColumnIndex(FormsStorage.KEY_DISPLAY_NAME));
+		        } else {
+		        	// very weird...
+		        	Log.e(t, "Form record could not be created: " + form.getAbsolutePath());
+		        	return null;
+		        }
+	        }
+        }
 
-        File formXml = new File(formPath);
-        String formHash = FileUtils.getMd5Hash(formXml);
-        File formBin = new File(FileUtils.CACHE_PATH + formHash + ".formdef");
+        // so, at this point, we have the form recorded in the FormsStorage
+        // provider.  It may or may not have a jrcache file and that file 
+        // may or may not be readable by our JR library.
+        
+        InputStream cacheStream; 
+        try {
+        	cacheStream = Collect.getInstance().getContentResolver().openInputStream(
+        			ContentUris.withAppendedId(FormsStorage.CONTENT_URI_JRCACHE_FILE_DATASET, keyId));
+        } catch ( FileNotFoundException e ) {
+        	cacheStream = null;
+        } catch ( Exception e ) {
+            mErrorMsg = "Failed to load JRCache file: " + e.getMessage();
+        	e.printStackTrace();
+        	return null;
+        }
 
-        if (formBin.exists()) {
+        if (cacheStream != null) {
             // if we have binary, deserialize binary
         	try {
         		Log.i(
                 t,
-                "Attempting to load " + formXml.getName() + " from cached file: "
-                        + formBin.getAbsolutePath());
-        		fd = deserializeFormDef(formBin);
+                "Attempting to load " + displayName + " from JRCache file");
+        		fd = deserializeFormDef(cacheStream);
         	} catch ( Exception e ) {
         		// didn't load -- 
         		// the common case here is that the javarosa library that 
@@ -146,24 +206,33 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // some error occured with deserialization. Remove the file, and make a new .formdef
                 // from xml
                 Log.w(t,
-                    "Deserialization FAILED!  Deleting cache file: " + formBin.getAbsolutePath());
-                formBin.delete();
+                    "Deserialization FAILED!  Deleting cache file for: " + displayName);
+            	deleteJRCacheFile( keyId, displayName );
             }
         }
+        
         if (fd == null) {
             // no binary, read from xml
+        	Log.i(t, "Attempting to load from xml file for: " + displayName);
+	        InputStream formStream; 
+	        try {
+	        	formStream = Collect.getInstance().getContentResolver().openInputStream(
+	        			ContentUris.withAppendedId(FormsStorage.CONTENT_URI_FORM_FILE_DATASET, keyId));
+	        } catch ( Exception e ) {
+	            mErrorMsg = "Failed to load xml file: " + e.getMessage();
+	        	e.printStackTrace();
+	        	return null;
+	        }
+
+	        // we have the file stream...
             try {
-                Log.i(t, "Attempting to load from: " + formXml.getAbsolutePath());
-                fis = new FileInputStream(formXml);
-                fd = XFormUtils.getFormFromInputStream(fis);
+                fd = XFormUtils.getFormFromInputStream(formStream);
                 if (fd == null) {
                     mErrorMsg = "Error reading XForm file";
                 } else {
+                	// todo -- update to write out JRCache file...
                     serializeFormDef(fd, formPath);
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                mErrorMsg = e.getMessage();
             } catch (XFormParseException e) {
                 mErrorMsg = e.getMessage();
                 e.printStackTrace();
@@ -172,32 +241,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 e.printStackTrace();
             } finally {
                 if (fd == null) {
+                	// couldn't load the form -- 
                     // remove cache reference from file db if it exists
-                    FileDbAdapter fda = new FileDbAdapter();
-                    fda.open();
-                    if (fda.deleteFile(null, formHash)) {
-                        Log.i(t, "Cached file: " + formBin.getAbsolutePath()
-                                + " removed from database");
-                    } else {
-                        Log.i(t, "Failed to remove cached file: " + formBin.getAbsolutePath()
-                                + " from database (might not have existed...)");
-                    }
-                    fda.close();
+                	deleteJRCacheFile( keyId, displayName );
                     return null;
-                } else {
-                    // add to file db if it doesn't already exist.
-                    // MainMenu will add files that don't exist, but intents can load
-                    // FormEntryActivity directly.
-                    FileDbAdapter fda = new FileDbAdapter();
-                    fda.open();
-                    Cursor c = fda.fetchFilesByPath(null, formHash);
-                    if (c.getCount() == 0) {
-                        fda.createFile(formXml.getAbsolutePath(), FileDbAdapter.TYPE_FORM,
-                            FileDbAdapter.STATUS_AVAILABLE);
-                    }
-                    if (c != null)
-                        c.close();
-                    fda.close();
                 }
             }
         }
@@ -222,22 +269,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         } catch (Exception e) {
             e.printStackTrace();
         	this.publishProgress(Collect.getInstance().getString(R.string.load_error,
-            		formXml.getName()) + " : " + e.getMessage());
+            		displayName) + " : " + e.getMessage());
             return null;
         }
 
-        // set paths to FORMS_PATH + formfilename-media/
-        // This is a singleton, how do we ensure that we're not doing this
-        // multiple times?
-        String mediaPath = FileUtils.getFormMediaPath(formXml.getName());
-
-        Collect.getInstance().registerMediaPath(mediaPath);
+        Collect.getInstance().registerMediaPath(formMediaPath);
 
         // clean up vars
-        fis = null;
         fd = null;
-        formBin = null;
-        formXml = null;
         formPath = null;
         instancePath = null;
 
@@ -246,6 +285,18 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     }
 
+    private void deleteJRCacheFile( Long keyId, String displayName ) {
+    	try {
+    		Collect.getInstance().getContentResolver()
+    			.delete(ContentUris.withAppendedId(
+    				FormsStorage.CONTENT_URI_JRCACHE_FILE_DATASET,keyId),
+    			null, null);
+            Log.i(t, "JRCache file for: " + displayName + " removed from database");
+    	} catch ( Exception e ) {
+            Log.i(t, "Failed to remove JRCache file for: " + displayName
+                    + " from database (might not have existed...)");
+    	}
+    }
 
     public boolean importData(String filePath, FormEntryController fec) {
         // convert files into a byte array
@@ -289,21 +340,16 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * @param formDef serialized FormDef file
      * @return {@link FormDef} object
      */
-    public FormDef deserializeFormDef(File formDef) {
-
-        // TODO: any way to remove reliance on jrsp?
-        Log.i(t, "Attempting read of " + formDef.getAbsolutePath());
+    public FormDef deserializeFormDef(InputStream jrcacheFileStream) {
 
         // need a list of classes that formdef uses
         PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
-        FileInputStream fis = null;
         FormDef fd = null;
         DataInputStream dis = null;
         try {
             // create new form def
             fd = new FormDef();
-            fis = new FileInputStream(formDef);
-            dis = new DataInputStream(fis);
+            dis = new DataInputStream(jrcacheFileStream);
 
             // read serialized formdef into new formdef
             fd.readExternal(dis, ExtUtil.defaultPrototypes());

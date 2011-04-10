@@ -15,7 +15,8 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.utilities.FilterUtils;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -65,13 +66,13 @@ public class InstanceChooserTabs extends TabActivity {
 
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
-        saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_INCOMPLETE);
+        saved.putExtra(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
         tabHost.addTab(tabHost.newTabSpec(SAVED_TAB)
     		.setIndicator(getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
-        completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
+        completed.putExtra(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
         tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB)
     		.setIndicator(getString(R.string.completed_data, mCompletedCount))
     		.setContent(completed));
@@ -103,23 +104,38 @@ public class InstanceChooserTabs extends TabActivity {
      * Update count of saved and completed instances for tab host header.
      */
     private void updateTabHostCount() {
-        // create file adapter
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
+        Cursor c = null;
         // get saved instances
-        Cursor c =
-            fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
-        mSavedCount = c.getCount();
-        c.close();
+        try {
+        	FilterUtils.FilterCriteria fd =
+        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+
+        	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+        						new String[] { SubmissionsStorage.KEY_ID },
+        						fd.selection, fd.selectionArgs, null );
+            mSavedCount = c.getCount();
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
+        	c = null;
+        }
 
         // get completed instances
-        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
-        mCompletedCount = c.getCount();
-        c.close();
+        try {
+        	FilterUtils.FilterCriteria fd =
+        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
 
-        // memory cleanup
-        fda.close();
+        	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+        						new String[] { SubmissionsStorage.KEY_ID },
+        						fd.selection, fd.selectionArgs, null );
+            mCompletedCount = c.getCount();
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
+        	c = null;
+        }
     }
 
 }

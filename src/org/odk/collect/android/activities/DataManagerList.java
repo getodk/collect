@@ -14,18 +14,17 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.provider.SubmissionsStorage;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,17 +33,15 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 /**
- * Responsible for displaying and deleting all the valid forms in the forms directory.
+ * Responsible for displaying and deleting all the valid submissions in the instances directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DataManagerList extends ListActivity {
-    private static String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
 
-    private FileDbAdapter mFda = null;
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
@@ -73,23 +70,22 @@ public class DataManagerList extends ListActivity {
 
 
     private void refreshView() {
-    	if ( mFda == null ) {
-        	FileDbAdapter t = new FileDbAdapter();
-            t.open();
-            mFda = t;
-    	}
-    	
-        // get all mInstances that match the status.
-        Cursor c = mFda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
-        startManagingCursor(c);
-
+        String[] projection = new String[] {
+        		SubmissionsStorage.KEY_ID,
+        		SubmissionsStorage.KEY_DISPLAY_NAME,
+        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+        };
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+        		SubmissionsStorage.KEY_DISPLAY_NAME, 
+        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
 
+        Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
+        		projection, null, null, null );
+        startManagingCursor(c);
         // render total instance view
         mInstances =
             new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
@@ -159,23 +155,10 @@ public class DataManagerList extends ListActivity {
         // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-            Cursor c = mFda.fetchFile(mSelected.get(i));
-            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            if (mFda.deleteFile(mSelected.get(i))) {
-                deleted++;
-                Log.i(t, "Deleting file: " + filename);
-                File del = new File(filename);
-                del.delete();
-            }
-            if (c != null) {
-            	c.deactivate();
-                c.close();
-            }
+        	deleted += getContentResolver().delete(
+        			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
+        			null, null);
         }
-
-        // remove the actual files and close db
-        mFda.removeOrphanForms();
-        mFda.removeOrphanInstances(this);
 
         if (deleted > 0) {
             // all deletes were successful
@@ -202,7 +185,7 @@ public class DataManagerList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -223,29 +206,12 @@ public class DataManagerList extends ListActivity {
         super.onPause();
     }
 
-
-	@Override
-	protected void onDestroy() {
-		try {
-			if ( mFda != null ) {
-				FileDbAdapter t = mFda;
-				mFda = null;
-				t.close();
-			}
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		} finally {
-			super.onDestroy();
-		}
-	}
-
     @Override
     protected void onResume() {
         // update the list (for returning from the remote manager)
         refreshData();
         super.onResume();
     }
-
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {

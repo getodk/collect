@@ -17,17 +17,22 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.provider.SubmissionsStorage;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.PasswordPromptDialogBuilder;
+import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.utilities.PasswordPromptDialogBuilder.OnOkListener;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -46,6 +51,10 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private InstanceUploaderTask mInstanceUploaderTask;
     private int totalCount = -1;
 
+    private static final class UploadArgs {
+    	String url;
+    	ArrayList<String> instances;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,24 +73,58 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         // get the task if we've changed orientations. If it's null it's a new upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mInstanceUploaderTask == null) {
-            // setup dialog and upload task
-            showDialog(PROGRESS_DIALOG);
-            mInstanceUploaderTask = new InstanceUploaderTask();
-
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
                 settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
                         + "/submission";
-            mInstanceUploaderTask.setUploadServer(url);
-            totalCount = instances.size();
+            
+            UploadArgs args = new UploadArgs();
+            args.instances = instances;
+            args.url = url;
+            boolean deferForPassword = false;
+            String username =
+            	settings.getString(ServerPreferences.KEY_USERNAME, null);
+            if (username != null && username.length() != 0 ) {
+            	Uri u = Uri.parse(url);
+            	if ( !WebUtils.hasCredentials(username, u.getHost()) ) {
+            		PasswordPromptDialogBuilder b = 
+            			new PasswordPromptDialogBuilder(this, 
+            											username, 
+            											u.getHost(),
+            											new OnOkListener() {
 
-            // convert array list to an array
-            String[] sa = instances.toArray(new String[totalCount]);
-            mInstanceUploaderTask.execute(sa);
+															@Override
+															public void onOk(
+																	Object okListenerContext) {
+																UploadArgs args = (UploadArgs) okListenerContext;
+																InstanceUploaderActivity.this.executeUpload(args);
+															}
+            				
+            			},
+            			args);
+            		deferForPassword = true;
+            		b.show();
+            	}
+            }
+            if ( !deferForPassword ) {
+            	executeUpload(args);
+            }
         }
     }
 
+    private void executeUpload(UploadArgs args) {
+        // setup dialog and upload task
+        showDialog(PROGRESS_DIALOG);
+        mInstanceUploaderTask = new InstanceUploaderTask();
+        
+        mInstanceUploaderTask.setUploadServer(args.url);
+        totalCount = args.instances.size();
+
+        // convert array list to an array
+        String[] sa = args.instances.toArray(new String[totalCount]);
+        mInstanceUploaderTask.execute(sa);
+    }
 
     // TODO: if uploadingComplete() when activity backgrounded, won't work.
     // just check task status in onResume
@@ -105,12 +148,19 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         setResult(RESULT_OK, in);
 
         // for each path, update the status
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
         for (int i = 0; i < resultSize; i++) {
-            fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
+        	ContentValues values = new ContentValues();
+        	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
+        	try {
+        		getContentResolver().update(
+        			SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
+        			values, 
+        			SubmissionsStorage.KEY_INSTANCE_FILE_PATH + "= ?", 
+        			new String[] { result.get(i) });
+        	} catch ( Exception e ) {
+        		e.printStackTrace();
+        	}
         }
-        fda.close();
         finish();
     }
 

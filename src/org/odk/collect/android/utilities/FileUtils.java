@@ -302,7 +302,7 @@ public final class FileUtils {
             return null;
 
         } catch (FileNotFoundException e) {
-            Log.e("No Cache File", e.getMessage());
+            Log.e("No Xml File", e.getMessage());
             return null;
         } catch (IOException e) {
             Log.e("Problem reading from file", e.getMessage());
