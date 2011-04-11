@@ -18,6 +18,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.widget.EditText;
 
 public final class PasswordPromptDialogBuilder {
@@ -50,8 +52,9 @@ public final class PasswordPromptDialogBuilder {
 		b.setTitle(TITLE);
 		b.setMessage(PROMPT + username + ON + host);
 		input = new EditText(ctxt);
+		input.setInputType( InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		b.setView(input);
-		b.setPositiveButton("Ok", new OnClickListener() {
+		b.setPositiveButton("OK", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				String password = input.getText().toString();
