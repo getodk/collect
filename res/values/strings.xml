@@ -40,7 +40,7 @@
 	<string name="change_language">Change Language</string>
 	<string name="change_password">Change Password</string>
 	<string name="change_server">Change Server</string>
-	<string name="change_user">Change Username</string>
+	<string name="change_user">Change User e-mail address</string>
 	<string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 	<string name="clear_answer">Remove Response</string>
 	<string name="clear_answer_ask">Remove This Response?</string>
@@ -176,7 +176,7 @@
 	<string name="upload_all_successful">%s item(s) sent successfully.</string>
 	<string name="upload_some_failed">Sorry, %s item(s) failed to send!</string>
 	<string name="url_error">Sorry, invalid URL!</string>
-	<string name="username">Username</string>
+	<string name="user_email">User e-mail address</string>
 	<string name="view_hierarchy">Go To Prompt</string>
 	<string name="yes">Yes</string>
 </resources>

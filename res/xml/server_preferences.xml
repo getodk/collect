@@ -23,10 +23,10 @@ the License.
             android:dialogTitle="@string/change_server" />
             
     <EditTextPreference
-            android:id="@+id/username"
-            android:key="username"
+            android:id="@+id/user_email"
+            android:key="user_email"
             android:defaultValue=""
-            android:title="@string/username"
+            android:title="@string/user_email"
             android:dialogTitle="@string/change_user" />
 
 </PreferenceScreen>

@@ -66,7 +66,7 @@ public final class WebUtils {
     	return asList;
 	}
 
-    public static final boolean hasCredentials( String username, String host ) {
+    public static final boolean hasCredentials( String userEmail, String host ) {
     	HttpContext localContext = Collect.getInstance().getHttpContext();
     	CredentialsProvider credsProvider = 
     		(CredentialsProvider) localContext.getAttribute(ClientContext.CREDS_PROVIDER);
@@ -83,9 +83,9 @@ public final class WebUtils {
     	return hasCreds;
     }
     
-    public static final void addCredentials( String username, String password, String host ) {
+    public static final void addCredentials( String userEmail, String password, String host ) {
     	HttpContext localContext = Collect.getInstance().getHttpContext();
-    	Credentials c = new UsernamePasswordCredentials(username, password);
+    	Credentials c = new UsernamePasswordCredentials(userEmail, password);
     	addCredentials( localContext, c, host);
     }
     

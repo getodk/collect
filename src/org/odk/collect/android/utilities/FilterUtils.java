@@ -26,6 +26,8 @@ public final class FilterUtils {
 	private static final String SPACE_AND_SPACE = " AND ";
 	private static final String IS_NULL = " IS NULL";
 	private static final String IS_EQUAL_SUBSTITUTION = " = ?";
+	private static final String IS_NOT_NULL = " IS NOT NULL";
+	private static final String IS_NOT_EQUAL_SUBSTITUTION = " != ?";
 
 	public static final class FilterCriteria {
 		public final String selection;
@@ -104,5 +106,55 @@ public final class FilterUtils {
 			b.append(IS_NULL);
 		}
 		return new FilterCriteria( b.toString(), selectionArgs );
+	}
+
+	public static final FilterCriteria buildInverseSelectionClause( String key, Object value ) {
+		StringBuilder b = new StringBuilder();
+		String[] selectionArgs;
+		if ( value != null ) {
+			selectionArgs = new String[1];
+			selectionArgs[0] = value.toString();
+			b.append(key);
+			b.append(IS_NOT_EQUAL_SUBSTITUTION);
+		} else {
+			selectionArgs = null;
+			b.append(key);
+			b.append(IS_NOT_NULL);
+		}
+		return new FilterCriteria( b.toString(), selectionArgs );
+	}
+
+	private static final FilterCriteria join(FilterCriteria a, String join, FilterCriteria b) {
+		StringBuilder selection = new StringBuilder();
+		int nArgs = 0;
+		if ( a.selectionArgs != null ) nArgs += a.selectionArgs.length;
+		if ( b.selectionArgs != null ) nArgs += b.selectionArgs.length;
+		String[] selectionArgs = null;
+		if ( nArgs != 0 ) {
+			selectionArgs = new String[nArgs];
+			int i = 0;
+			if ( a.selectionArgs != null ) {
+				for ( int j = 0 ; j < a.selectionArgs.length ; ++j ) {
+					selectionArgs[i++] = a.selectionArgs[j];
+				}
+			}
+			if ( b.selectionArgs != null ) {
+				for ( int j = 0 ; j < b.selectionArgs.length ; ++j ) {
+					selectionArgs[i++] = b.selectionArgs[j];
+				}
+			}
+		}
+		selection.append(a.selection);
+		selection.append(join);
+		selection.append(b.selection);
+		return new FilterCriteria( selection.toString(), selectionArgs );
+	}
+	
+	public static final FilterCriteria and(FilterCriteria a, FilterCriteria b) {
+		return join(a, " AND ", b);
+	}
+
+	public static final FilterCriteria or(FilterCriteria a, FilterCriteria b) {
+		return join(a, " OR ", b);
 	}
 }

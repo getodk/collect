@@ -28,7 +28,7 @@ public class ServerPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     public static String KEY_SERVER = "server";
-    public static String KEY_USERNAME = "username";
+    public static String KEY_USER_EMAIL = "user_email";
 
 
     @Override
@@ -37,7 +37,7 @@ public class ServerPreferences extends PreferenceActivity implements
         addPreferencesFromResource(R.xml.server_preferences);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.server_preferences));
         updateServer();
-        updateUsername();
+        updateUserEmail();
     }
 
 
@@ -60,8 +60,8 @@ public class ServerPreferences extends PreferenceActivity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(KEY_SERVER)) {
             updateServer();
-        } else if (key.equals(KEY_USERNAME)) {
-            updateUsername();
+        } else if (key.equals(KEY_USER_EMAIL)) {
+            updateUserEmail();
         }
     }
 
@@ -82,9 +82,9 @@ public class ServerPreferences extends PreferenceActivity implements
     }
 
 
-    private void updateUsername() {
+    private void updateUserEmail() {
         EditTextPreference etp =
-            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_USERNAME);
+            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_USER_EMAIL);
         String s = etp.getText().trim();
 
         etp.setText(s);

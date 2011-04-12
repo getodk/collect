@@ -65,7 +65,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private static final class UploadArgs {
     	Set<String> hosts;
     	ArrayList<String> instances;
-    	String username;
+    	String userEmail;
     }
 
     @Override
@@ -88,19 +88,20 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-            String username =
-            	settings.getString(ServerPreferences.KEY_USERNAME, null);
+            String userEmail =
+            	settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
 
             UploadArgs argSet = new UploadArgs();
         	argSet.instances = instanceDirs;
         	argSet.hosts = new HashSet<String>();
-        	argSet.username = username;
+        	argSet.userEmail = userEmail;
         	
             boolean deferForPassword = false;
-            if (username != null && username.length() != 0 ) {
+            if (userEmail != null && userEmail.length() != 0 ) {
             	
-            	FilterCriteria fc = FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, 
-            														 SubmissionsStorage.STATUS_COMPLETE);
+            	// you cannot submit incomplete instances...
+            	FilterCriteria fc = FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, 
+            														 SubmissionsStorage.STATUS_INCOMPLETE);
             	
             	Cursor c =null;
             	try {
@@ -123,7 +124,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 	            			URI uri = url.toURI();
 	            			String host = uri.getHost();
 	
-	            	    	if ( !WebUtils.hasCredentials(username, host) ) {
+	            	    	if ( !WebUtils.hasCredentials(userEmail, host) ) {
 	            	    		argSet.hosts.add(host);
 	            	    	}
 	            		} catch ( MalformedURLException e ) {
@@ -170,7 +171,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 		PasswordPromptDialogBuilder b = 
 			new PasswordPromptDialogBuilder(
 					this, 
-					args.username, 
+					args.userEmail, 
 					h,
 					new OnOkListener() {
 						@Override
@@ -183,9 +184,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
     
     private void executeUpload(ArrayList<String> instanceDirs) {
+        mInstanceUploaderTask = new InstanceUploaderTask();
+        mInstanceUploaderTask.setUploaderListener(this);
+
         // setup dialog and upload task
         showDialog(PROGRESS_DIALOG);
-        mInstanceUploaderTask = new InstanceUploaderTask();
         
         totalCount = instanceDirs.size();
 
@@ -197,31 +200,43 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     // TODO: if uploadingComplete() when activity backgrounded, won't work.
     // just check task status in onResume
     @Override
-	public void uploadingComplete(ArrayList<String> result) {
-        int resultSize = result.size();
+	public void uploadingComplete(ArrayList<InstanceUploaderListener.UploadOutcome> result) {    	
+        int failureCount = 0;
+        for ( UploadOutcome o : result ) {
+        	if ( !o.isSuccessful ) {
+        		++failureCount;
+        	}
+        }
         boolean success = false;
-        if (resultSize == totalCount) {
+        if (failureCount == 0) {
             Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
                 Toast.LENGTH_SHORT).show();
 
             success = true;
         } else {
-            String s = totalCount - resultSize + " of " + totalCount;
-            Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
-                    .show();
+            String s = failureCount + " of " + totalCount;
+            Toast.makeText(this, getString(R.string.upload_some_failed, s),
+        		Toast.LENGTH_LONG).show();
         }
 
-        Intent in = new Intent();
-        in.putExtra(FormEntryActivity.KEY_SUCCESS, success);
-        setResult(RESULT_OK, in);
-
         // for each path, update the status
-        for (int i = 0; i < resultSize; i++) {
+        for ( UploadOutcome o : result ) {
         	ContentValues values = new ContentValues();
-        	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
+        	if ( o.isSuccessful ) {
+        		if ( o.notAllFilesUploaded ) {
+        			values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_PARTIALLY_SUBMITTED);
+        		} else {
+        			values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
+        		}
+        	} else {
+    			values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMISSION_FAILED);
+    			if ( o.errorMessage != null ) {
+    				values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, o.errorMessage);
+    			}
+        	}
         	try {
         		FilterCriteria fc = FilterUtils.buildSelectionClause(
-        				SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, result.get(i));
+        				SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, o.instanceDir);
         		
         		getContentResolver().update(
         			SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
@@ -230,6 +245,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         		e.printStackTrace();
         	}
         }
+
+        Intent in = new Intent();
+        in.putExtra(FormEntryActivity.KEY_SUCCESS, success);
+        setResult(RESULT_OK, in);
+
         finish();
     }
 

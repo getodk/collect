@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.listeners;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +22,46 @@ import java.util.ArrayList;
  */
 // TODO: more useful errors in results
 public interface InstanceUploaderListener {
-    void uploadingComplete(ArrayList<String> result);
+    /**
+	 * Returns the outcomes of the task
+	 * 
+	 * @author mitchellsundt@gmail.com
+	 */
+	public static class UploadOutcome {
+		public final boolean isSuccessful;
+		public final boolean notAllFilesUploaded;
+		public final String instanceDir;
+		public final String errorMessage;
+		
+		public UploadOutcome(String instanceDir) {
+			isSuccessful = true;
+			notAllFilesUploaded = false;
+			this.instanceDir = instanceDir;
+			errorMessage = null;
+		}
+		
+		public UploadOutcome(String instanceDir, boolean ignored) {
+			isSuccessful = true;
+			notAllFilesUploaded = true;
+			this.instanceDir = instanceDir;
+			errorMessage = null;
+		}
+		
+		public UploadOutcome(String instanceDir, String uri, String message) {
+			isSuccessful = false;
+			notAllFilesUploaded = true;
+			this.instanceDir = instanceDir;
+			errorMessage = message + " while sending to: " + uri;
+		}
+		
+		public UploadOutcome(String instanceDir, URI uri, String message) {
+			isSuccessful = false;
+			notAllFilesUploaded = true;
+			this.instanceDir = instanceDir;
+			errorMessage = message + " while sending to: " + uri.toString();
+		}
+	}
+	
+	void uploadingComplete(ArrayList<UploadOutcome> result);
     void progressUpdate(int progress, int total);
 }

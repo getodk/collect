@@ -70,11 +70,16 @@ public class SubmissionsStorage extends ContentProvider {
     public static final String STATUS_INCOMPLETE = "incomplete";
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
+    public static final String STATUS_PARTIALLY_SUBMITTED = "partiallySubmitted";
+    public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
 
 	// these values are read-only through content provider...
 	public static final String KEY_ID = "_id"; // required for Android
 	public static final String KEY_DISPLAY_NAME = "displayName"; // (form name)
 	public static final String KEY_DISPLAY_SUBTEXT = "displaySubtext";
+	// KEY_DISPLAY_SUB_SUBTEXT is a text fragment that is appended to the synthesized 
+	// KEY_DISPLAY_SUBTEXT.  It is not separately retained in the datastore.
+	public static final String KEY_DISPLAY_SUB_SUBTEXT = "displaySubSubtext";
 
 	public static final String KEY_STATUS = "status";
 	public static final String KEY_LAST_STATUS_CHANGE_DATE = "date";
@@ -179,6 +184,10 @@ public class SubmissionsStorage extends ContentProvider {
 			return "Finished on " + ts;
 		} else if ( STATUS_SUBMITTED.equalsIgnoreCase(state) ) {
 			return "Submitted on " + ts;
+		} else if ( STATUS_PARTIALLY_SUBMITTED.equalsIgnoreCase(state) ) {
+			return "Partially submitted on " + ts;
+		} else if ( STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state) ) {
+			return "Submission attempt failed on " + ts;
 		} else {
 			return "Added on " + ts;
 		}
@@ -507,7 +516,7 @@ public class SubmissionsStorage extends ContentProvider {
 		}
 		return s;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
 	 */
@@ -572,7 +581,14 @@ public class SubmissionsStorage extends ContentProvider {
         	status = values.getAsString(KEY_STATUS);
         }
         v.put(KEY_STATUS, status);
-        v.put(KEY_DISPLAY_SUBTEXT, getDisplaySubtext(status, now));
+        String subtext = getDisplaySubtext(status, now);
+        if ( values.containsKey(KEY_DISPLAY_SUB_SUBTEXT) ) {
+        	String subsubtext = values.getAsString(KEY_DISPLAY_SUB_SUBTEXT).trim();
+        	if ( subsubtext.length() != 0 ) {
+        		subtext += "\n[" + subsubtext + "]";
+        	}
+        }
+        v.put(KEY_DISPLAY_SUBTEXT, subtext);
         v.put(KEY_LAST_STATUS_CHANGE_DATE, now.getTime());
         boolean canEditSubmission = xmlInstanceFile.exists();
     	v.put(KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
@@ -760,8 +776,32 @@ public class SubmissionsStorage extends ContentProvider {
 			c = new SelectionCriteria(selection, selectionArgs, uri);
 			break;
 		}
+
+		if (values.containsKey(KEY_STATUS)) {
+			String status = values.getAsString(KEY_STATUS);
+			
+			// doesn't exist --- insert it.
+	        Date now = new Date();
+	        GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+	        g.setTime(now);
+			
+	        String subtext = getDisplaySubtext(status, now);
+	        if ( values.containsKey(KEY_DISPLAY_SUB_SUBTEXT) ) {
+	        	String subsubtext = values.getAsString(KEY_DISPLAY_SUB_SUBTEXT).trim();
+	        	if ( subsubtext.length() != 0 ) {
+	        		subtext += "\n[" + subsubtext + "]";
+	        	}
+	        	values.remove(KEY_DISPLAY_SUB_SUBTEXT);
+	        }
+	        values.put(KEY_DISPLAY_SUBTEXT, subtext);
+	        values.put(KEY_LAST_STATUS_CHANGE_DATE, now.getTime());
+		}
 		// TODO: update selective fields...
-		return getStorageDb().update(SUBMISSIONS_TABLE, values, c.selection, c.selectionArgs);
+		int change = getStorageDb().update(SUBMISSIONS_TABLE, values, c.selection, c.selectionArgs);
+		if ( change != 0 ) {
+    		getContext().getContentResolver().notifyChange(CONTENT_URI, null);
+		}
+		return change;
 	}
 
 }

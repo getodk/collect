@@ -126,8 +126,14 @@ public class InstanceUploaderList extends ListActivity {
         };
         String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC";
 
-        FilterUtils.FilterCriteria fd =
-    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+        FilterUtils.FilterCriteria fNotIncomplete =
+    		FilterUtils.buildInverseSelectionClause( SubmissionsStorage.KEY_STATUS, 
+    										  SubmissionsStorage.STATUS_INCOMPLETE );
+        FilterUtils.FilterCriteria fNotSubmitted =
+    		FilterUtils.buildInverseSelectionClause( SubmissionsStorage.KEY_STATUS, 
+    										  SubmissionsStorage.STATUS_SUBMITTED );
+        FilterUtils.FilterCriteria fd = 
+        	FilterUtils.and(fNotIncomplete, fNotSubmitted);
 
         Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
         		projection, fd.selection, fd.selectionArgs, sortOrder );

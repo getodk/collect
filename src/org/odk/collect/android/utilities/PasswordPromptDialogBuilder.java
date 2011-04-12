@@ -32,25 +32,25 @@ public final class PasswordPromptDialogBuilder {
 	}
 	
 	private final AlertDialog.Builder b;
-	private final String username;
+	private final String userEmail;
 	private final String host;
 	private final EditText input;
 	private final OnOkListener okListener;
 	private final Object okListenerContext;
 	
 	public PasswordPromptDialogBuilder( Context ctxt, 
-										String username, 
+										String userEmail, 
 										String host,
 										OnOkListener okListener,
 										Object okListenerContext) {
 		b = new AlertDialog.Builder(ctxt);
-		this.username = username;
+		this.userEmail = userEmail;
 		this.host = host;
 		this.okListener = okListener;
 		this.okListenerContext = okListenerContext;
 		
 		b.setTitle(TITLE);
-		b.setMessage(PROMPT + username + ON + host);
+		b.setMessage(PROMPT + userEmail + ON + host);
 		input = new EditText(ctxt);
 		input.setInputType( InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		b.setView(input);
@@ -58,7 +58,7 @@ public final class PasswordPromptDialogBuilder {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				String password = input.getText().toString();
-				WebUtils.addCredentials(PasswordPromptDialogBuilder.this.username, password, PasswordPromptDialogBuilder.this.host);
+				WebUtils.addCredentials(PasswordPromptDialogBuilder.this.userEmail, password, PasswordPromptDialogBuilder.this.host);
 				PasswordPromptDialogBuilder.this.okListener.onOk(PasswordPromptDialogBuilder.this.okListenerContext);
 			}
 		});

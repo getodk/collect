@@ -1607,7 +1607,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         						   fd.selection, fd.selectionArgs, null );
         	if ( c != null && c.moveToFirst() ) {
         		String status = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_STATUS));
-        		complete = SubmissionsStorage.STATUS_COMPLETE.equalsIgnoreCase(status);
+        		// complete includes not sent, failed, and partially sent submissions 
+        		complete = !SubmissionsStorage.STATUS_INCOMPLETE.equalsIgnoreCase(status) &&
+        					!SubmissionsStorage.STATUS_SUBMITTED.equalsIgnoreCase(status);
         	}
         } finally {
         	if ( c != null ) {

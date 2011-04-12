@@ -127,7 +127,6 @@ public class MainMenuActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
                     startActivityForResult(i, INSTANCE_CHOOSER);
                 }
 
@@ -313,8 +312,12 @@ public class MainMenuActivity extends Activity {
 
     	try {
         	// count for completed instances
+	    	FilterUtils.FilterCriteria fNotIncomplete =
+	    		FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+	    	FilterUtils.FilterCriteria fNotSubmitted =
+	    		FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
 	    	FilterUtils.FilterCriteria fd =
-	    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+	    		FilterUtils.and(fNotIncomplete, fNotSubmitted);
 
 	        c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
 	        		new String[]{SubmissionsStorage.KEY_ID},

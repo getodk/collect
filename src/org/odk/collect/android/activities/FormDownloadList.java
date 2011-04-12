@@ -214,14 +214,14 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         arg.put(LIST_URL, new FormDetails(url));
 
         boolean deferForPassword = false;
-        final String username =
-            	settings.getString(ServerPreferences.KEY_USERNAME, null);
-        if (username != null && username.length() != 0 ) {
+        final String userEmail =
+            	settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
+        if (userEmail != null && userEmail.length() != 0 ) {
         	final Uri u = Uri.parse(url);
-        	if ( !WebUtils.hasCredentials(username, u.getHost()) ) {
+        	if ( !WebUtils.hasCredentials(userEmail, u.getHost()) ) {
         		PasswordPromptDialogBuilder b = 
         			new PasswordPromptDialogBuilder(this, 
-        											username, 
+        											userEmail, 
         											u.getHost(),
         											new OnOkListener() {
 
@@ -341,7 +341,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     private static class DownloadArgs {
         HashMap<String, FormDetails> filesToDownload;
         Set<String> hosts;
-        String username;
+        String userEmail;
     }
     
     /**
@@ -367,20 +367,20 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
             FileUtils.createFolder(FileUtils.FORMS_PATH);
             boolean deferForPassword = false;
-            String username =
-            	settings.getString(ServerPreferences.KEY_USERNAME, null);
-            if (username != null && username.length() != 0 ) {
+            String userEmail =
+            	settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
+            if (userEmail != null && userEmail.length() != 0 ) {
             	Set<String> hosts = new HashSet<String>();
             	for ( FormDetails f : filesToDownload.values() ) {
             		if ( f.downloadUrl != null ) {
             			Uri u = Uri.parse(f.downloadUrl);
-                    	if ( !WebUtils.hasCredentials(username, u.getHost()) ) {
+                    	if ( !WebUtils.hasCredentials(userEmail, u.getHost()) ) {
                     		hosts.add(u.getHost());
                     	}
             		}
             		if ( f.manifestUrl != null ) {
             			Uri u = Uri.parse(f.manifestUrl);
-                    	if ( !WebUtils.hasCredentials(username, u.getHost()) ) {
+                    	if ( !WebUtils.hasCredentials(userEmail, u.getHost()) ) {
                     		hosts.add(u.getHost());
                     	}
             		}
@@ -390,7 +390,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             		DownloadArgs args = new DownloadArgs();
             		args.filesToDownload = filesToDownload;
             		args.hosts = hosts;
-            		args.username = username;
+            		args.userEmail = userEmail;
             		deferForPassword = true;
             		launchPasswordDialog(args);
             	}
@@ -417,7 +417,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     	PasswordPromptDialogBuilder b = 
     			new PasswordPromptDialogBuilder(
     					this, 
-						args.username, 
+						args.userEmail, 
 						h,
 						new PasswordPromptDialogBuilder.OnOkListener() {
 
