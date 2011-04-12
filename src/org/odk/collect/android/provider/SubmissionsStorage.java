@@ -592,7 +592,11 @@ public class SubmissionsStorage extends ContentProvider {
         v.put(KEY_LAST_STATUS_CHANGE_DATE, now.getTime());
         boolean canEditSubmission = xmlInstanceFile.exists();
     	v.put(KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
-		
+
+    	if ( values.containsKey(KEY_SUBMISSION_URI) ) {
+    		v.put(KEY_SUBMISSION_URI, values.getAsString(KEY_SUBMISSION_URI));
+    	}
+
         // insert
         long keyId = getStorageDb().insert(SUBMISSIONS_TABLE, v);
 		getContext().getContentResolver().notifyChange(FormsStorage.CONTENT_URI, null);
