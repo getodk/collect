@@ -74,12 +74,12 @@ public class GroupView extends AbstractFolioView {
     /* (non-Javadoc)
 	 * @see org.odk.collect.android.views.IFoliosView#buildView(org.javarosa.form.api.FormEntryCaption[])
 	 */
-	public void buildView(String instancePath, FormEntryCaption[] groups) {
+	public void buildView(String instanceDirPath, FormEntryCaption[] groups) {
 
 		FormEntryModel model = Collect.getInstance().getFormEntryController().getModel();
 		List<FormIndex> indices = getTopLevelFormIndicesInGroup(model);
 		
-		groupLayout.buildView(this, indices, instancePath, groups);
+		groupLayout.buildView(this, indices, instanceDirPath, groups);
 
 		lastViewInFocus = groupLayout.getDefaultFocus();
         viewInFocus = lastViewInFocus;

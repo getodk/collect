@@ -82,8 +82,7 @@ public class SubmissionsStorage extends ContentProvider {
 	public static final String KEY_CAN_EDIT_SUBMISSION = "canEditSubmission"; // boolean
 	public static final String KEY_SUBMISSION_URI = "submissionUri";
 	
-	public static final String KEY_INSTANCE_FILE_PATH = "xmlFilePath"; // hidden
-	public static final String KEY_SUBMISSION_BLOB_PATH = "submissionBlobPath";// hidden
+	public static final String KEY_INSTANCE_DIRECTORY_PATH = "instanceDirectory";
 
 	// this is a key into the synthesized CONTENT_URI_FORMS_INFO_URI_DATASET
 	public static final String KEY_URI_FORMS_INFO = "uriFormsInfo";
@@ -125,12 +124,9 @@ public class SubmissionsStorage extends ContentProvider {
 	
 	private static final void isExposableProjection(String[] projection) {
 		for ( String s : projection ) {
-			if ( KEY_INSTANCE_FILE_PATH.equalsIgnoreCase(s)) {
-				Log.w(t, "Exposing KEY_INSTANCE_FILE_PATH -- consider restructuring to hide this!");
+			if ( KEY_INSTANCE_DIRECTORY_PATH.equalsIgnoreCase(s)) {
+				Log.w(t, "Exposing KEY_INSTANCE_DIRECTORY_PATH -- consider restructuring to hide this!");
 				// throw new IllegalArgumentException("Unrecognized element");
-			}
-			if ( KEY_SUBMISSION_BLOB_PATH.equalsIgnoreCase(s)) {
-				throw new IllegalArgumentException("Unrecognized element");
 			}
 		}
 	}
@@ -203,18 +199,16 @@ public class SubmissionsStorage extends ContentProvider {
         
         private static final String SUBMISSIONS_TABLE_CREATE =
             "create table " + SubmissionsStorage.SUBMISSIONS_TABLE + " ("
-            		+ SubmissionsStorage.KEY_ID + " integer primary key, " 
-                    + SubmissionsStorage.KEY_DISPLAY_NAME + " text not null, " 
+            		+ KEY_ID + " integer primary key, " 
+                    + KEY_DISPLAY_NAME + " text not null, " 
                     
-                    + SubmissionsStorage.KEY_DISPLAY_SUBTEXT + " text not null, "
-                    + SubmissionsStorage.KEY_STATUS + " text not null, "
-                    + SubmissionsStorage.KEY_LAST_STATUS_CHANGE_DATE + " date not null, "
+                    + KEY_DISPLAY_SUBTEXT + " text not null, "
+                    + KEY_STATUS + " text not null, "
+                    + KEY_LAST_STATUS_CHANGE_DATE + " date not null, "
 
-                    + SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION + " integer not null, "
-                    + SubmissionsStorage.KEY_SUBMISSION_URI + " text null, "
-                	
-                    + SubmissionsStorage.KEY_INSTANCE_FILE_PATH + " text not null, "
-                    + SubmissionsStorage.KEY_SUBMISSION_BLOB_PATH + " text null );";
+                    + KEY_CAN_EDIT_SUBMISSION + " integer not null, "
+                    + KEY_SUBMISSION_URI + " text null, "
+                	+ KEY_INSTANCE_DIRECTORY_PATH + " text not null );";
 
         DatabaseHelper1(String databaseName) {
             super(FileUtils.getDatabasePath(), databaseName, null, DATABASE_VERSION);
@@ -327,17 +321,17 @@ public class SubmissionsStorage extends ContentProvider {
 		        List<Long> toMarkAsSubmitted = new ArrayList<Long>();
 		        
 		        Cursor c = getStorageDb().query(SUBMISSIONS_TABLE, 
-		        				new String[] { KEY_ID, KEY_INSTANCE_FILE_PATH, KEY_STATUS },
+		        				new String[] { KEY_ID, KEY_INSTANCE_DIRECTORY_PATH, KEY_STATUS },
 		        						null, null, null);
 		        int idxKey = c.getColumnIndex(KEY_ID);
-		        int idxInstanceFile = c.getColumnIndex(KEY_INSTANCE_FILE_PATH);
+		        int idxInstanceDirectory = c.getColumnIndex(KEY_INSTANCE_DIRECTORY_PATH);
 		        int idxStatus = c.getColumnIndex(KEY_STATUS);
 		        while (c.moveToNext()) {
-		    		String path = c.getString(idxInstanceFile);
-		    		File submission = new File(path);
-		    		String submissionDir = submission.getParentFile().getAbsolutePath();
+		    		String dirPath = c.getString(idxInstanceDirectory);
+		    		File submissionDir = new File(dirPath);
+		    		File instanceFile = new File(FileUtils.getInstanceFilePath(dirPath));
 
-		    		if ( !submission.exists() ) {
+		    		if ( !instanceFile.exists() ) {
 		    			// file doesn't exist -- must have been submitted
 		    			String status = c.getString(idxStatus);
 		    			if ( status.compareToIgnoreCase(STATUS_SUBMITTED) != 0 ) {
@@ -345,7 +339,7 @@ public class SubmissionsStorage extends ContentProvider {
 		    			}
 		    		} else {
 		    			// file and database entry exist -- everything is ok
-		    			xmlSubmissions.remove(submissionDir);
+		    			xmlSubmissions.remove(submissionDir.getAbsolutePath());
 		    		}
 		    	}
 		    	c.close();
@@ -365,20 +359,20 @@ public class SubmissionsStorage extends ContentProvider {
 		    	
 		    	// and add the newly found submissions...
 		    	for ( String xmlSubmissionDirs : xmlSubmissions ) {
-		        	File formSubmissionDir = new File(xmlSubmissionDirs);
-		        	File formXml = new File(formSubmissionDir, formSubmissionDir.getName() + ".xml");
+		        	File submissionDir = new File(xmlSubmissionDirs);
+		        	File formXml = new File(FileUtils.getInstanceFilePath(xmlSubmissionDirs));
+		        	File submissionXml = new File(FileUtils.getSubmissionBlobPath(xmlSubmissionDirs));
 		        	
-		        	if ( formXml.exists() ) {
-		        		// submission exists -- must be incomplete submission 
+		        	if ( formXml.exists() || submissionXml.exists() ) {
+		        		// instance or submission exists -- must be incomplete submission 
 			    		ContentValues v = new ContentValues();
-			    		v.put(KEY_INSTANCE_FILE_PATH, formXml.getAbsolutePath());
-			    		v.put(KEY_STATUS, STATUS_INCOMPLETE);
+			    		v.put(KEY_INSTANCE_DIRECTORY_PATH, submissionDir.getAbsolutePath());
 			    		SubmissionsStorage.this.insert(CONTENT_URI_INFO_DATASET, v);
 						changeCount++;
 		        	} else {
 		        		// must be submitted submission
-		        		if ( formSubmissionDir.listFiles().length == 0 ) {
-		        			if ( !formSubmissionDir.delete() ) {
+		        		if ( submissionDir.listFiles().length == 0 ) {
+		        			if ( !submissionDir.delete() ) {
 		        				Log.i(t, "Failed to delete directory: " + xmlSubmissionDirs);
 		        			} else {
 								changeCount++;
@@ -421,8 +415,7 @@ public class SubmissionsStorage extends ContentProvider {
 
     private static class InstanceFilesetInfo {
     	String id;
-    	File instancePath;
-    	File submissionBlobPath;
+    	File instanceDirPath;
     }
 
 	/* (non-Javadoc)
@@ -439,7 +432,7 @@ public class SubmissionsStorage extends ContentProvider {
 			criteria = new SelectionCriteria(selection, selectionArgs, uri);
 			break;
 		}
-		String[] projection = new String[] { KEY_ID, KEY_INSTANCE_FILE_PATH, KEY_SUBMISSION_BLOB_PATH };
+		String[] projection = new String[] { KEY_ID, KEY_INSTANCE_DIRECTORY_PATH };
 		
 		List<InstanceFilesetInfo> toDelete = new ArrayList<InstanceFilesetInfo>();
 		
@@ -447,15 +440,12 @@ public class SubmissionsStorage extends ContentProvider {
 		try {
 			c = getStorageDb().query(SUBMISSIONS_TABLE, projection, criteria.selection, criteria.selectionArgs, null);
 			int idxId = c.getColumnIndex(KEY_ID);
-			int idxInstancePath = c.getColumnIndex(KEY_INSTANCE_FILE_PATH);
-			int idxSubmissionBlobPath = c.getColumnIndex(KEY_SUBMISSION_BLOB_PATH);
+			int idxInstanceDirPath = c.getColumnIndex(KEY_INSTANCE_DIRECTORY_PATH);
 	
 			while ( c.moveToNext() ) {
 				InstanceFilesetInfo f = new InstanceFilesetInfo();
 				f.id = c.getString(idxId);
-				f.instancePath = new File(c.getString(idxInstancePath));
-				String submissionPath = c.getString(idxSubmissionBlobPath);
-				f.submissionBlobPath = (submissionPath == null) ? null : new File(submissionPath);
+				f.instanceDirPath = new File(c.getString(idxInstanceDirPath));
 				toDelete.add(f);
 			}
 		} finally {
@@ -471,27 +461,26 @@ public class SubmissionsStorage extends ContentProvider {
 		
 		int deleteCount = 0;
 		for ( InstanceFilesetInfo f : toDelete ) {
-			try {
-				if ( f.instancePath.exists()) {
-					f.instancePath.delete();
+			boolean success = true;
+			for ( File file : f.instanceDirPath.listFiles() ) {
+				try {
+					success = success && file.delete();
+				} catch ( Exception e ) {
+					e.printStackTrace();
+					Log.e(t, "Unable to delete instance file: " + file.getAbsolutePath());
 				}
+			}
+			try {
+				success = success && f.instanceDirPath.delete();
 			} catch ( Exception e ) {
 				e.printStackTrace();
-				Log.e(t, "Unable to delete instance file: " + f.instancePath.getAbsolutePath());
+				Log.e(t, "Unable to delete instance directory: " + f.instanceDirPath.getAbsolutePath());
 			}
 			
 			int found = getStorageDb().delete(SUBMISSIONS_TABLE, KEY_ID + " = ?", new String[] { f.id } );
-			try {
-				if ( f.submissionBlobPath != null && f.submissionBlobPath.exists()) {
-					f.submissionBlobPath.delete();
-				}
-			} catch ( Exception e ) {
-				e.printStackTrace();
-				Log.e(t, "Unable to delete submissionBlob file: " + f.submissionBlobPath.getAbsolutePath());
-			}
 			if ( found != 1 ) {
 				Log.w(t, "Unexpected found count(" + Integer.toString(found) 
-						+ ") returned from delete on forms table record: " + f.instancePath.getAbsolutePath());
+						+ ") returned from delete on instance record: " + f.instanceDirPath.getAbsolutePath());
 			}
 			deleteCount += found;
 		}
@@ -527,17 +516,20 @@ public class SubmissionsStorage extends ContentProvider {
 		// any insert into FORM_FILE or INFO dataset is equivalent
 		int type = matchOnly(uri, INFO_ALLROWS);
 		
-		String xmlInstancePath = values.getAsString(KEY_INSTANCE_FILE_PATH);
-		if ( xmlInstancePath == null ) {
+		String instanceDirPath = values.getAsString(KEY_INSTANCE_DIRECTORY_PATH);
+		if ( instanceDirPath == null ) {
 			throw new IllegalArgumentException("insertions must specify "
-												+ KEY_INSTANCE_FILE_PATH );
+												+ KEY_INSTANCE_DIRECTORY_PATH );
 		}
-    	File formXml = new File(xmlInstancePath);
+    	File instanceDir = new File(instanceDirPath);
+    	File xmlInstanceFile = new File(FileUtils.getInstanceFilePath(instanceDirPath));
+    	File submissionFile = new File(FileUtils.getSubmissionBlobPath(instanceDirPath));
+    	
 		// double-check that the form file does not already exist...
 		Cursor c = null;
 		try {
 			FilterUtils.FilterCriteria fd = 
-				FilterUtils.buildSelectionClause(KEY_INSTANCE_FILE_PATH, formXml.getAbsolutePath());
+				FilterUtils.buildSelectionClause(KEY_INSTANCE_DIRECTORY_PATH, instanceDir.getAbsolutePath());
 			c = getStorageDb().query(SUBMISSIONS_TABLE, new String[] { KEY_ID },
 					fd.selection, fd.selectionArgs, null);
 			if ( c.moveToNext() ) {
@@ -568,24 +560,22 @@ public class SubmissionsStorage extends ContentProvider {
 
         // build up actual inserted content
         ContentValues v = new ContentValues();
-        v.put(KEY_INSTANCE_FILE_PATH, formXml.getAbsolutePath());
+        v.put(KEY_INSTANCE_DIRECTORY_PATH, instanceDir.getAbsolutePath());
         if ( values.containsKey(KEY_DISPLAY_NAME) ) {
         	v.put(KEY_DISPLAY_NAME, values.getAsString(KEY_DISPLAY_NAME));
         } else {
-        	v.put(KEY_DISPLAY_NAME, formXml.getParentFile().getName());
+        	v.put(KEY_DISPLAY_NAME, instanceDir.getName());
         }
-        String status = STATUS_INCOMPLETE;
+        
+        String status = submissionFile.exists() ? STATUS_COMPLETE : STATUS_INCOMPLETE;
         if ( values.containsKey(KEY_STATUS) ) {
         	status = values.getAsString(KEY_STATUS);
         }
         v.put(KEY_STATUS, status);
         v.put(KEY_DISPLAY_SUBTEXT, getDisplaySubtext(status, now));
         v.put(KEY_LAST_STATUS_CHANGE_DATE, now.getTime());
-        if ( values.containsKey(KEY_CAN_EDIT_SUBMISSION) ) {
-        	v.put(KEY_CAN_EDIT_SUBMISSION, values.getAsBoolean(KEY_CAN_EDIT_SUBMISSION));
-        } else {
-        	v.put(KEY_CAN_EDIT_SUBMISSION, true);
-        }
+        boolean canEditSubmission = xmlInstanceFile.exists();
+    	v.put(KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
 		
         // insert
         long keyId = getStorageDb().insert(SUBMISSIONS_TABLE, v);
@@ -608,16 +598,17 @@ public class SubmissionsStorage extends ContentProvider {
 			throws FileNotFoundException {
 
 		SelectionCriteria criteria = null;
-		String[] projection = null;
+		String[] projection = new String[] { KEY_INSTANCE_DIRECTORY_PATH };
 		int uriType = matchOnly(uri, INSTANCE_FILE_SINGLE_ROW, SUBMISSION_BLOB_FILE_SINGLE_ROW);
+		boolean wantInstanceFile = true;
 		switch (uriType) {
 		case INSTANCE_FILE_SINGLE_ROW:
 			criteria = new SelectionCriteria(null, null, uri);
-			projection = new String[] { KEY_INSTANCE_FILE_PATH };
+			wantInstanceFile = true;
 			break;
 		case SUBMISSION_BLOB_FILE_SINGLE_ROW:
 			criteria = new SelectionCriteria(null, null, uri);
-			projection = new String[] { KEY_SUBMISSION_BLOB_PATH };
+			wantInstanceFile = false;
 			break;
 		}
 		
@@ -630,11 +621,15 @@ public class SubmissionsStorage extends ContentProvider {
 				throw new FileNotFoundException("Unable to locate indicated record: " + uri.toString());
 			}
 		
-			String filepath = c.getString(c.getColumnIndex(projection[0]));
-			if ( filepath == null ) {
+			String instanceDirPath = c.getString(c.getColumnIndex(projection[0]));
+			if ( instanceDirPath == null ) {
 				throw new FileNotFoundException("No path defined for this instance: " + uri.toString());
 			}
-			file = new File(filepath);
+			if ( wantInstanceFile ) {
+				file = new File(FileUtils.getInstanceFilePath(instanceDirPath));
+			} else {
+				file = new File(FileUtils.getSubmissionBlobPath(instanceDirPath));
+			}
 		} finally {
 			if ( c != null ) {
 				try { 
@@ -692,7 +687,7 @@ public class SubmissionsStorage extends ContentProvider {
 				if ( KEY_ID.equals(s) || KEY_URI_FORMS_INFO.equals(s) ) continue;
 				throw new IllegalStateException("Invalid projection element: " + s);
 			}
-			projection = new String[] { KEY_ID, KEY_INSTANCE_FILE_PATH };
+			projection = new String[] { KEY_ID, KEY_INSTANCE_DIRECTORY_PATH };
 		}
 		Cursor cursor = getStorageDb().query(SUBMISSIONS_TABLE, projection, 
 										c.selection, c.selectionArgs, sortOrder );
@@ -702,11 +697,11 @@ public class SubmissionsStorage extends ContentProvider {
 			try {
 				while ( cursor.moveToNext() ) {
 					long instanceId = cursor.getLong(cursor.getColumnIndex(KEY_ID));
-					String instancePath = cursor.getString(cursor.getColumnIndex(KEY_INSTANCE_FILE_PATH));
-					if ( instancePath == null || instancePath.length() == 0 ) continue;
-					File file = new File(instancePath);
-					if ( !file.exists() ) continue;
-					InstanceDetails id = retrieveDetails(file);
+					String instanceDirPath = cursor.getString(cursor.getColumnIndex(KEY_INSTANCE_DIRECTORY_PATH));
+					if ( instanceDirPath == null || instanceDirPath.length() == 0 ) continue;
+					File instance = new File(FileUtils.getInstanceFilePath(instanceDirPath));
+					if ( !instance.exists() ) continue;
+					InstanceDetails id = retrieveDetails(instance);
 					Cursor fc = null;
 					try {
 						FilterUtils.FilterCriteria fd = FilterUtils.buildSelectionClause(

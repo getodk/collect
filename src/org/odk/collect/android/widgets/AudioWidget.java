@@ -61,13 +61,13 @@ public class AudioWidget extends AbstractQuestionWidget implements IBinaryWidget
     private int mPlayText;
 
 
-    public AudioWidget(Handler handler, Context context, FormEntryPrompt prompt, String instancePath) {
+    public AudioWidget(Handler handler, Context context, FormEntryPrompt prompt, String instanceDirPath) {
         super(handler, context, prompt);
-        initialize(instancePath);
+        initialize(instanceDirPath);
     }
 
-    private void initialize(String instancePath) {
-        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
+    private void initialize(String instanceDirPath) {
+        mInstanceFolder = instanceDirPath + "/";
 
         mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;

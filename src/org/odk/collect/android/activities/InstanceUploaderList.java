@@ -170,9 +170,9 @@ public class InstanceUploaderList extends ListActivity {
         	try {
         		c = getContentResolver().query(
         			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
-        				new String[] { SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_INSTANCE_FILE_PATH }, null, null, null);
+        				new String[] { SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH }, null, null, null);
         		if ( c.moveToNext() ) {
-        			String s = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_FILE_PATH));
+        			String s = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
         			selectedInstances.add(s);
         		}
         	} finally {

@@ -14,15 +14,23 @@
 
 package org.odk.collect.android.activities;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.provider.SubmissionsStorage;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.FilterUtils;
 import org.odk.collect.android.utilities.PasswordPromptDialogBuilder;
 import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.utilities.FilterUtils.FilterCriteria;
 import org.odk.collect.android.utilities.PasswordPromptDialogBuilder.OnOkListener;
 
 import android.app.Activity;
@@ -32,9 +40,10 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -44,6 +53,8 @@ import android.widget.Toast;
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
 
+	private static final String t = "InstanceUploaderActivity";
+	
     private final static int PROGRESS_DIALOG = 1;
     private final static String KEY_TOTALCOUNT = "totalcount";
     private ProgressDialog mProgressDialog;
@@ -52,8 +63,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private int totalCount = -1;
 
     private static final class UploadArgs {
-    	String url;
+    	Set<String> hosts;
     	ArrayList<String> instances;
+    	String username;
     }
 
     @Override
@@ -64,8 +76,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // get instances to upload
         Intent i = getIntent();
-        ArrayList<String> instances = i.getStringArrayListExtra(FormEntryActivity.KEY_INSTANCES);
-        if (instances == null) {
+        ArrayList<String> instanceDirs = i.getStringArrayListExtra(FormEntryActivity.KEY_INSTANCES);
+        if (instanceDirs == null) {
             // nothing to upload
             return;
         }
@@ -75,54 +87,110 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         if (mInstanceUploaderTask == null) {
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            String url =
-                settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
-                        + "/submission";
-            
-            UploadArgs args = new UploadArgs();
-            args.instances = instances;
-            args.url = url;
-            boolean deferForPassword = false;
+
             String username =
             	settings.getString(ServerPreferences.KEY_USERNAME, null);
-            if (username != null && username.length() != 0 ) {
-            	Uri u = Uri.parse(url);
-            	if ( !WebUtils.hasCredentials(username, u.getHost()) ) {
-            		PasswordPromptDialogBuilder b = 
-            			new PasswordPromptDialogBuilder(this, 
-            											username, 
-            											u.getHost(),
-            											new OnOkListener() {
 
-															@Override
-															public void onOk(
-																	Object okListenerContext) {
-																UploadArgs args = (UploadArgs) okListenerContext;
-																InstanceUploaderActivity.this.executeUpload(args);
-															}
-            				
-            			},
-            			args);
+            UploadArgs argSet = new UploadArgs();
+        	argSet.instances = instanceDirs;
+        	argSet.hosts = new HashSet<String>();
+        	argSet.username = username;
+        	
+            boolean deferForPassword = false;
+            if (username != null && username.length() != 0 ) {
+            	
+            	FilterCriteria fc = FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, 
+            														 SubmissionsStorage.STATUS_COMPLETE);
+            	
+            	Cursor c =null;
+            	try {
+	            	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+	            				new String[] { SubmissionsStorage.KEY_ID,
+	            								SubmissionsStorage.KEY_SUBMISSION_URI,
+	            								SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH },
+	            				fc.selection, fc.selectionArgs, null);
+	            	
+	            	int idxInstanceDir = c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH);
+	            	int idxUri = c.getColumnIndex(SubmissionsStorage.KEY_SUBMISSION_URI);
+	            	while ( c.moveToNext() ) {
+	            		String instanceDir = c.getString(idxInstanceDir);
+	            		if ( !instanceDirs.contains(instanceDir) ) continue;
+	            		
+	            		String urlString = c.getString(idxUri);
+	            		// it is one of the submissions we want to do...
+	            		try {
+	            			URL url = new URL(urlString);
+	            			URI uri = url.toURI();
+	            			String host = uri.getHost();
+	
+	            	    	if ( !WebUtils.hasCredentials(username, host) ) {
+	            	    		argSet.hosts.add(host);
+	            	    	}
+	            		} catch ( MalformedURLException e ) {
+	            			e.printStackTrace();
+	            			Log.e(t, "Invalid url: " + urlString + " for submission " + instanceDir);
+	            		} catch (URISyntaxException e ) {
+	            			e.printStackTrace();
+	            			Log.e(t, "Invalid uri: " + urlString + " for submission " + instanceDir);
+	            		} catch ( Exception e ) {
+	            			e.printStackTrace();
+	            			Log.e(t, "Invalid uri: " + ((urlString == null) ? "null" : urlString) +
+	            					" for submission " + instanceDir);
+	            		}
+	            	}
+            	} finally {
+            		if ( c != null ) {
+            			c.close();
+            			c = null;
+            		}
+            	}
+
+            	// OK. we have the list of distinct hosts...
+            	if ( !argSet.hosts.isEmpty() ) {
             		deferForPassword = true;
-            		b.show();
+            		launchPasswordDialog(argSet);
             	}
             }
+
             if ( !deferForPassword ) {
-            	executeUpload(args);
+            	executeUpload(instanceDirs);
             }
         }
     }
 
-    private void executeUpload(UploadArgs args) {
+    private void launchPasswordDialog( UploadArgs args ) {
+    	if ( args.hosts.isEmpty() ) {
+    		executeUpload(args.instances);
+    		return;
+    	}
+    	
+		String h = args.hosts.iterator().next();
+		args.hosts.remove(h);
+
+		PasswordPromptDialogBuilder b = 
+			new PasswordPromptDialogBuilder(
+					this, 
+					args.username, 
+					h,
+					new OnOkListener() {
+						@Override
+						public void onOk(Object okListenerContext) {
+							UploadArgs args = (UploadArgs) okListenerContext;
+							InstanceUploaderActivity.this.launchPasswordDialog(args);
+						}
+    			}, args);
+		b.show();
+    }
+    
+    private void executeUpload(ArrayList<String> instanceDirs) {
         // setup dialog and upload task
         showDialog(PROGRESS_DIALOG);
         mInstanceUploaderTask = new InstanceUploaderTask();
         
-        mInstanceUploaderTask.setUploadServer(args.url);
-        totalCount = args.instances.size();
+        totalCount = instanceDirs.size();
 
         // convert array list to an array
-        String[] sa = args.instances.toArray(new String[totalCount]);
+        String[] sa = instanceDirs.toArray(new String[totalCount]);
         mInstanceUploaderTask.execute(sa);
     }
 
@@ -152,11 +220,12 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         	ContentValues values = new ContentValues();
         	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
         	try {
+        		FilterCriteria fc = FilterUtils.buildSelectionClause(
+        				SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, result.get(i));
+        		
         		getContentResolver().update(
         			SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-        			values, 
-        			SubmissionsStorage.KEY_INSTANCE_FILE_PATH + "= ?", 
-        			new String[] { result.get(i) });
+        			values, fc.selection, fc.selectionArgs);
         	} catch ( Exception e ) {
         		e.printStackTrace();
         	}

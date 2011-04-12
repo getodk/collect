@@ -118,9 +118,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FormDef fd = null;
 
         String formPath = path[0];
-        String instancePath = path[1];
-        if ( formPath == null && instancePath != null ) {
-        	String instanceName = (new File(instancePath)).getName();
+        String instanceDirPath = path[1];
+        File instance = null;
+        if ( instanceDirPath != null ) {
+        	instance = new File(FileUtils.getInstanceFilePath(instanceDirPath));
+        }
+        if ( formPath == null && instanceDirPath != null ) {
+        	String instanceName = instance.getName();
         	this.publishProgress(Collect.getInstance().getString(R.string.load_error_no_form,
             		instanceName ));
     		return null;
@@ -259,9 +263,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         try {
             // import existing data into formdef
-            if (instancePath != null) {
+            if (instance != null) {
                 // This order is important. Import data, then initialize.
-                importData(instancePath, fec);
+                importData(instance.getAbsolutePath(), fec);
                 fd.initialize(false);
             } else {
                 fd.initialize(true);
@@ -278,7 +282,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // clean up vars
         fd = null;
         formPath = null;
-        instancePath = null;
+        instanceDirPath = null;
 
         data = new FECWrapper(fec);
         return data;

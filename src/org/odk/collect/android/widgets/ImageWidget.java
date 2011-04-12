@@ -66,14 +66,14 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
     private int mReplaceText;
 
 
-    public ImageWidget(Handler handler, Context context, FormEntryPrompt prompt, String instancePath) {
+    public ImageWidget(Handler handler, Context context, FormEntryPrompt prompt, String instanceDirPath) {
         super(handler, context, prompt);
-        initialize(instancePath);
+        initialize(instanceDirPath);
     }
 
 
-    private void initialize(String instancePath) {
-        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
+    private void initialize(String instanceDirPath) {
+        mInstanceFolder = instanceDirPath + "/";
         mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
         mRequestCode = FormEntryActivity.IMAGE_CAPTURE;

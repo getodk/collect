@@ -26,7 +26,7 @@ public class FieldList implements IGroupLayout {
     }
 
     @Override
-	public void buildView(GroupView view, List<FormIndex> indices, String instancePath, FormEntryCaption[] groups) {
+	public void buildView(GroupView view, List<FormIndex> indices, String instanceDirPath, FormEntryCaption[] groups) {
 
 		LinearLayout mView = new LinearLayout(view.getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
@@ -65,7 +65,7 @@ public class FieldList implements IGroupLayout {
         	
     		FormEntryPrompt formEntryPrompt = Collect.getInstance().getFormEntryController().getModel().getQuestionPrompt(fi);
             // if question or answer type is not supported, use text widget
-    		AbstractQuestionWidget mQuestionWidget = WidgetFactory.createWidgetFromPrompt(view.getHandler(), formEntryPrompt, view.getContext(), instancePath);
+    		AbstractQuestionWidget mQuestionWidget = WidgetFactory.createWidgetFromPrompt(view.getHandler(), formEntryPrompt, view.getContext(), instanceDirPath);
 
     		mQuestionWidget.buildView(view);
             

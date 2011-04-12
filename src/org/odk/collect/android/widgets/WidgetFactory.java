@@ -32,10 +32,10 @@ public class WidgetFactory {
      * 
      * @param fep prompt element to be rendered
      * @param context Android context
-     * @param instancePath path to the instance file
+     * @param instanceDirPath path to the instance directory
      */
     static public AbstractQuestionWidget createWidgetFromPrompt(Handler handler, FormEntryPrompt fep, Context context,
-            String instancePath) {
+            String instanceDirPath) {
     	AbstractQuestionWidget questionWidget = null;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
@@ -67,13 +67,13 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new ImageWidget(handler, context, fep, instancePath);
+                questionWidget = new ImageWidget(handler, context, fep, instanceDirPath);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(handler, context, fep, instancePath);
+                questionWidget = new AudioWidget(handler, context, fep, instanceDirPath);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(handler, context, fep, instancePath);
+                questionWidget = new VideoWidget(handler, context, fep, instanceDirPath);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(handler, context, fep);

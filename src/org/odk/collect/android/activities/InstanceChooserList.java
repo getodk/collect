@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsStorage;
 import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.ListActivity;
 import android.content.ContentUris;
@@ -52,7 +53,7 @@ public class InstanceChooserList extends ListActivity {
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get full path to the instance
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        String instancePath = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_FILE_PATH));
+        String instanceDirPath = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
 
         String formpath = null;
         Cursor fp = null;
@@ -89,7 +90,7 @@ public class InstanceChooserList extends ListActivity {
         if ( formpath != null ) {
             // create intent for return and store path
             Intent i = new Intent();
-            i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+            i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, FileUtils.getInstanceFilePath(instanceDirPath));
             i.putExtra(FormEntryActivity.KEY_FORMPATH, formpath);
 
             // return the result to the parent class
@@ -114,7 +115,7 @@ public class InstanceChooserList extends ListActivity {
     			SubmissionsStorage.KEY_ID, 
     			SubmissionsStorage.KEY_DISPLAY_NAME,
     			SubmissionsStorage.KEY_DISPLAY_SUBTEXT,
-    			SubmissionsStorage.KEY_INSTANCE_FILE_PATH
+    			SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH
     	};
 
     	// create data and views for cursor adapter

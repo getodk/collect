@@ -30,6 +30,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.provider.SubmissionsStorage;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
@@ -48,6 +49,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -55,6 +57,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -118,7 +121,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     // private ProgressBar mProgressBar;
 
     private String mFormPath;
-    private String mInstancePath;
+    private String mInstanceDirPath;
     private GestureDetector mGestureDetector;
 
     public FormEntryModel mFormEntryModel;
@@ -180,7 +183,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormPath = savedInstanceState.getString(KEY_FORMPATH);
             }
             if (savedInstanceState.containsKey(KEY_INSTANCEPATH)) {
-                mInstancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
+            	String instancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
+            	if ( instancePath != null ) {
+	            	File instance = new File(instancePath);
+	            	File instanceDir = instance.getParentFile();
+	            	if ( !instance.getAbsolutePath().equals(
+	            			FileUtils.getInstanceFilePath(instanceDir.getAbsolutePath())) ) {
+	                    mErrorMessage = "Instance filename is not the same name as the instance directory";
+	            	}
+	            	mInstanceDirPath = instanceDir.getAbsolutePath();
+            	} else {
+            		mInstanceDirPath = null;
+            	}
             }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
@@ -217,9 +231,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Intent intent = getIntent();
             if (intent != null) {
                 mFormPath = intent.getStringExtra(KEY_FORMPATH);
-                mInstancePath = intent.getStringExtra(KEY_INSTANCEPATH);
+            	String instancePath = intent.getStringExtra(KEY_INSTANCEPATH);
+            	if ( instancePath != null ) {
+	            	File instance = new File(instancePath);
+	            	File instanceDir = instance.getParentFile();
+	            	if ( !instance.getAbsolutePath().equals(
+	            			FileUtils.getInstanceFilePath(instanceDir.getAbsolutePath())) ) {
+	                    mErrorMessage = "Instance filename is not the same name as the instance directory";
+	            	}
+	            	mInstanceDirPath = instanceDir.getAbsolutePath();
+            	} else {
+            		mInstanceDirPath = null;
+            	}
                 mFormLoaderTask = new FormLoaderTask();
-                mFormLoaderTask.execute(mFormPath, mInstancePath);
+                mFormLoaderTask.execute(mFormPath, mInstanceDirPath);
                 showDialog(PROGRESS_DIALOG);
             }
         }
@@ -235,7 +260,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_FORMPATH, mFormPath);
-        outState.putString(KEY_INSTANCEPATH, mInstancePath);
+        outState.putString(KEY_INSTANCEPATH, FileUtils.getInstanceFilePath(mInstanceDirPath));
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, mErrorMessage);
     }
@@ -269,9 +294,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 // provider.
                 File fi = new File(FileUtils.TMPFILE_PATH);
 
-                String mInstanceFolder =
-                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
-                String s = mInstanceFolder + "/" + System.currentTimeMillis() + ".jpg";
+                String s = mInstanceDirPath + "/" + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
                 if (!fi.renameTo(nf)) {
@@ -586,14 +609,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 return endView;
             case FormEntryController.EVENT_GROUP:
                 GroupView gv = new GroupView(mHandler, mFormEntryModel.getFormIndex(), this);
-                gv.buildView(mInstancePath, getGroupsForCurrentIndex());
+                gv.buildView(mInstanceDirPath, getGroupsForCurrentIndex());
                 // if we came from a constraint violation, set the focus to the violated field
                 if (subIndex != null)
                     gv.setSubFocus(subIndex);
                 return gv;
             case FormEntryController.EVENT_QUESTION:
                 QuestionView qv = new QuestionView(mHandler, mFormEntryModel.getFormIndex(), this);
-                qv.buildView(mInstancePath, getGroupsForCurrentIndex());
+                qv.buildView(mInstanceDirPath, getGroupsForCurrentIndex());
                 return qv;
             default:
                 Log.e(t, "Attempted to create a view that does not exist.");
@@ -900,7 +923,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // TODO move to constructor <--? No. the mInstancePath isn't set until
         // the form loads.
         // TODO remove context
-        mSaveToDiskTask.setExportVars(mInstancePath, getApplicationContext(), exit, complete);
+        SharedPreferences settings =
+            PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String url =
+            settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
+                    + "/submission";
+        
+        mSaveToDiskTask.setExportVars(mInstanceDirPath, url, getApplicationContext(), exit, complete);
         mSaveToDiskTask.execute();
         showDialog(SAVING_DIALOG);
 
@@ -926,7 +955,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     Cursor cursor = null;
                                     try {
                                     	FilterUtils.FilterCriteria fd =
-                                    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, mInstancePath);
+                                    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, mInstanceDirPath);
                                     	cursor = getContentResolver().query(
                                     		SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
                                     		new String[] { SubmissionsStorage.KEY_ID }, 
@@ -935,9 +964,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     		Log.i(t, "previously saved");
                                     	} else {
 	                                        // not previously saved, cleaning up
-	                                        String instanceFolder =
-	                                            mInstancePath.substring(0,
-	                                                mInstancePath.lastIndexOf("/") + 1);
+	                                        String instanceFolder = mInstanceDirPath + "/";
 	
 	                                        String[] projection = {
 	                                            Images.ImageColumns._ID
@@ -1290,7 +1317,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mFormEntryModel = fec.getModel();
 
         // Set saved answer path
-        if (mInstancePath == null) {
+        if (mInstanceDirPath == null) {
 
             // Create new answer folder.
             String time =
@@ -1300,7 +1327,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
             String path = FileUtils.INSTANCES_PATH + file + "_" + time;
             if (FileUtils.createFolder(path)) {
-                mInstancePath = path + "/" + file + "_" + time + ".xml";
+                mInstanceDirPath = path;
             }
         } else {
             // we've just loaded a saved form, so start in the hierarchy view
@@ -1573,7 +1600,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         Cursor c = null;
         try {
         	FilterUtils.FilterCriteria fd =
-        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_FILE_PATH, mInstancePath);
+        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, mInstanceDirPath);
         	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,	
         			new String[] { SubmissionsStorage.KEY_ID, 
         						   SubmissionsStorage.KEY_STATUS },

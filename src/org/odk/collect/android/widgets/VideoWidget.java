@@ -62,13 +62,13 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
     private int mPlayText;
 
 
-    public VideoWidget(Handler handler, Context context, FormEntryPrompt prompt, String instancePath) {
+    public VideoWidget(Handler handler, Context context, FormEntryPrompt prompt, String instanceDirPath) {
         super(handler, context, prompt);
-        initialize(instancePath);
+        initialize(instanceDirPath);
     }
 
-    private void initialize(String instancePath) {
-        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
+    private void initialize(String instanceDirPath) {
+        mInstanceFolder = instanceDirPath + "/";
 
         mExternalUri = Video.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
