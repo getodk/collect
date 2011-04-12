@@ -308,7 +308,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onDestroy() {
-        mInstanceUploaderTask.setUploaderListener(null);
+    	if ( mInstanceUploaderTask != null ) {
+    		mInstanceUploaderTask.setUploaderListener(null);
+    	}
         super.onDestroy();
     }
 

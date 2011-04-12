@@ -42,6 +42,7 @@
 	<string name="change_server">Change Server</string>
 	<string name="change_user">Change User e-mail address</string>
 	<string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
+    <string name="clear_all_credentials">Clear All Passwords</string>
 	<string name="clear_answer">Remove Response</string>
 	<string name="clear_answer_ask">Remove This Response?</string>
 	<string name="clear_answer_no">Do Not Remove</string>

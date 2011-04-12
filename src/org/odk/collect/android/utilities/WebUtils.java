@@ -66,6 +66,15 @@ public final class WebUtils {
     	return asList;
 	}
 
+
+    public static final void clearAllCredentials() {
+    	HttpContext localContext = Collect.getInstance().getHttpContext();
+    	CredentialsProvider credsProvider = 
+    		(CredentialsProvider) localContext.getAttribute(ClientContext.CREDS_PROVIDER);
+    	credsProvider.clear();
+    }
+
+
     public static final boolean hasCredentials( String userEmail, String host ) {
     	HttpContext localContext = Collect.getInstance().getHttpContext();
     	CredentialsProvider credsProvider = 

@@ -16,12 +16,16 @@ package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.WebUtils;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class ServerPreferences extends PreferenceActivity implements
@@ -30,12 +34,22 @@ public class ServerPreferences extends PreferenceActivity implements
     public static String KEY_SERVER = "server";
     public static String KEY_USER_EMAIL = "user_email";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.server_preferences);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.server_preferences));
+        addPreferencesFromResource(R.xml.server_preferences);
+        setContentView(R.layout.server_preferences);
+        
+        Button clearCredentials = (Button) findViewById(R.id.clear_credentials);
+        clearCredentials.setText(getString(R.string.clear_all_credentials));
+        clearCredentials.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+	        	WebUtils.clearAllCredentials();
+			}
+        });
+
         updateServer();
         updateUserEmail();
     }
