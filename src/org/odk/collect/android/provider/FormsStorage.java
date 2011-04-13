@@ -181,24 +181,12 @@ public class FormsStorage extends ContentProvider {
 				throw new IllegalArgumentException("Expected a rowId qualifier: " + uri.toString());
 			}
 			String key = uri.getPathSegments().get(1);
-			String newSelection = null;
-			String[] newArgs = null;
-			if ( selectionArgs == null || selectionArgs.length == 0 ) {
-				newArgs = new String[] { key };
-				newSelection = ((selection == null || selection.length() == 0) ?
-								"" : (selection + " AND ")) + KEY_ID + " = ?";
-			} else {
-				newArgs = new String[selectionArgs.length+1];
-				int i = 0;
-				for (; i < selectionArgs.length ; ++i ) {
-					newArgs[i] = selectionArgs[i];
-				}
-				newArgs[i] = key;
-				newSelection = ((selection == null || selection.length() == 0) ?
-						"" : (selection + " AND ")) + KEY_ID + " = ?";
-			}
-			this.selection = newSelection;
-			this.selectionArgs = newArgs;
+			FilterUtils.FilterCriteria fGiven = FilterUtils.buildAsGiven(selection, selectionArgs);
+			FilterUtils.FilterCriteria fKeyId = FilterUtils.buildSelectionClause(KEY_ID, key);
+			FilterUtils.FilterCriteria joined = FilterUtils.and(fGiven, fKeyId);
+			
+			this.selection = joined.selection;
+			this.selectionArgs = joined.selectionArgs;
 		}
 	}
 	
@@ -435,7 +423,8 @@ public class FormsStorage extends ContentProvider {
 		    	
 		    	// delete the dead forms...
 		    	for ( Integer idx : toDelete ) {
-		    		getStorageDb().delete(FORMS_TABLE, KEY_ID + "= ?", new String[]{ idx.toString() });
+		    		FilterUtils.FilterCriteria fc = FilterUtils.buildSelectionClause(KEY_ID, idx);
+		    		getStorageDb().delete(FORMS_TABLE, fc.selection, fc.selectionArgs);
 					changeCount++;
 		    	}
 		    	
@@ -569,8 +558,8 @@ public class FormsStorage extends ContentProvider {
 			if ( deleteOnlyJRCacheFile ) {
 				if ( cacheDeleted ) ++deleteCount;
 			} else {
-				
-				int found = getStorageDb().delete(FORMS_TABLE, KEY_ID + " = ?", new String[] { f.id } );
+	    		FilterUtils.FilterCriteria fc = FilterUtils.buildSelectionClause(KEY_ID, f.id);
+				int found = getStorageDb().delete(FORMS_TABLE, fc.selection, fc.selectionArgs);
 				try {
 					if ( f.formPath.exists()) {
 						f.formPath.delete();

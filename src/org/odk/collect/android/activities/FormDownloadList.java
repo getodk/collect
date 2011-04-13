@@ -497,7 +497,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                         while (i.hasNext()) {
                             String form = i.next();
                             dialogMessage +=
-                                " " + getString(R.string.form_renamed, form, result.get(form));
+                                " " + getString(R.string.form_renamed, form, result.get(form).stringValue);
                         }
                     }
                     mSuccess = true;

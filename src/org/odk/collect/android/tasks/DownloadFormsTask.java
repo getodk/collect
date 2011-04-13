@@ -46,6 +46,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormDownloaderListener.FormDetails;
 import org.odk.collect.android.provider.FormsStorage;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FilterUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -312,7 +313,7 @@ public class DownloadFormsTask extends
             				continue; 
             			}
         				formList.put(formName, 
-        						new FormDetails(formId, formName, modelVersion, uiVersion, description, downloadUrl, manifestUrl));
+        						new FormDetails(formName, formId, modelVersion, uiVersion, description, downloadUrl, manifestUrl));
         			}                			
                 } else {
                 	// Aggregate 0.9.x mode...
@@ -341,7 +342,7 @@ public class DownloadFormsTask extends
                 						+ " is missing form name or url attribute"));
                 				continue;
                 			}
-        					formList.put(formName, new FormDetails(null, formName, null, null, null, downloadUrl, null));
+        					formList.put(formName, new FormDetails(formName, null, null, null, null, downloadUrl, null));
         				}
 	                }
                 }
@@ -388,12 +389,18 @@ public class DownloadFormsTask extends
                     	String formId = c.getString(c.getColumnIndex(FormsStorage.KEY_FORM_ID));
                     	long keyId = c.getLong(c.getColumnIndex(FormsStorage.KEY_ID));
 
-                    	int nDel = Collect.getInstance().getContentResolver().delete(FormsStorage.CONTENT_URI_INFO_DATASET,
-                    									FormsStorage.KEY_FORM_ID + " = ? AND " +
-                    									FormsStorage.KEY_ID + " != ?",
-                    									new String[] { formId, Long.toString(keyId) });
+                    	FilterUtils.FilterCriteria fFormId = 
+                    		FilterUtils.buildSelectionClause(FormsStorage.KEY_FORM_ID, formId);
+                    	FilterUtils.FilterCriteria fNotKeyId =
+                    		FilterUtils.buildInverseSelectionClause(FormsStorage.KEY_ID, keyId);
+                    	FilterUtils.FilterCriteria fc = FilterUtils.and(fFormId, fNotKeyId);
                     	
-                    	if ( nDel != 0 || !fd.formName.equalsIgnoreCase(dl.getName()) ) {
+                    	int nDel = Collect.getInstance().getContentResolver().delete(FormsStorage.CONTENT_URI_INFO_DATASET,
+                    									fc.selection, fc.selectionArgs);
+                    	
+                    	int idxDot = dl.getName().lastIndexOf(".");
+                    	String dlFileNamePart = dl.getName().substring(0,idxDot);
+                    	if ( nDel != 0 || !fd.formName.equalsIgnoreCase(dlFileNamePart) ) {
                     		result.put(fd.formName, new FormDetails(dl.getName()));
                     	}
                     	

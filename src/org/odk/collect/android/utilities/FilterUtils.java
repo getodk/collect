@@ -123,31 +123,63 @@ public final class FilterUtils {
 		}
 		return new FilterCriteria( b.toString(), selectionArgs );
 	}
+	
+	public static final FilterCriteria buildAsGiven(String selection, String[] selectionArgs ) {
+		boolean nonBlankSelection = (selection != null && selection.trim().length() != 0);
+		if ( nonBlankSelection && selectionArgs != null && selectionArgs.length != 0) {
+			return new FilterCriteria( selection, selectionArgs );
+		} else if ( nonBlankSelection ) {
+			return new FilterCriteria( selection, null );
+		} else {
+			return new FilterCriteria( null, null );
+		}
+	}
 
 	private static final FilterCriteria join(FilterCriteria a, String join, FilterCriteria b) {
 		StringBuilder selection = new StringBuilder();
+		boolean aNonBlankSelection = (a.selection != null && a.selection.trim().length() != 0);
+		boolean bNonBlankSelection = (b.selection != null && b.selection.trim().length() != 0);
+		
 		int nArgs = 0;
-		if ( a.selectionArgs != null ) nArgs += a.selectionArgs.length;
-		if ( b.selectionArgs != null ) nArgs += b.selectionArgs.length;
+		if ( aNonBlankSelection && a.selectionArgs != null ) {
+			// can't apply the first args if no selection string...
+			nArgs += a.selectionArgs.length;
+		}
+		
+		if ( bNonBlankSelection && b.selectionArgs != null ) {
+			// can't apply the second args if no selection string...
+			nArgs += b.selectionArgs.length;
+		}
 		String[] selectionArgs = null;
 		if ( nArgs != 0 ) {
 			selectionArgs = new String[nArgs];
 			int i = 0;
-			if ( a.selectionArgs != null ) {
+			if ( aNonBlankSelection && a.selectionArgs != null ) {
 				for ( int j = 0 ; j < a.selectionArgs.length ; ++j ) {
 					selectionArgs[i++] = a.selectionArgs[j];
 				}
 			}
-			if ( b.selectionArgs != null ) {
+			if ( bNonBlankSelection && b.selectionArgs != null ) {
 				for ( int j = 0 ; j < b.selectionArgs.length ; ++j ) {
 					selectionArgs[i++] = b.selectionArgs[j];
 				}
 			}
 		}
-		selection.append(a.selection);
-		selection.append(join);
-		selection.append(b.selection);
-		return new FilterCriteria( selection.toString(), selectionArgs );
+		if ( aNonBlankSelection && bNonBlankSelection ) {
+			selection.append(a.selection);
+			selection.append(join);
+			selection.append(b.selection);
+		} else if ( aNonBlankSelection ) {
+			selection.append(a.selection );
+		} else if ( bNonBlankSelection ) {
+			selection.append(b.selection );
+		}
+		
+		if ( selection.length() == 0 ) {
+			return new FilterCriteria(null, null);
+		} else {
+			return new FilterCriteria( selection.toString(), selectionArgs );
+		}
 	}
 	
 	public static final FilterCriteria and(FilterCriteria a, FilterCriteria b) {

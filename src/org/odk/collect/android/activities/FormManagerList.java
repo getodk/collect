@@ -21,10 +21,10 @@ import org.odk.collect.android.provider.FormsStorage;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -176,10 +176,8 @@ public class FormManagerList extends ListActivity {
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
         	deleted += getContentResolver().delete(
-        			Uri.withAppendedPath(FormsStorage.CONTENT_URI,
-        								 FormsStorage.INFO_DATASET),
-        					FormsStorage.KEY_ID + " = ?",
-        					new String[] { Long.toString(mSelected.get(i)) });
+        			ContentUris.withAppendedId(FormsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
+        			null, null);
         }
 
         if (deleted > 0) {

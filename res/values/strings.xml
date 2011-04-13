@@ -93,7 +93,7 @@
 	<string name="form">Form</string>
 	<string name="forms">Forms</string>
 	<string name="form_path">Form Path: /</string>
-	<string name="form_renamed">%1$s was renamed %2$s.</string>
+	<string name="form_renamed">%1$s is stored locally as file %2$s.</string>
 	<string name="getting_location">Loading Location...</string>
 	<string name="get_barcode">Get Barcode</string>
 	<string name="get_forms">Get New Forms</string>

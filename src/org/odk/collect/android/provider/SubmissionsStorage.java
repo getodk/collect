@@ -150,24 +150,12 @@ public class SubmissionsStorage extends ContentProvider {
 				throw new IllegalArgumentException("Expected a rowId qualifier: " + uri.toString());
 			}
 			String key = uri.getPathSegments().get(1);
-			String newSelection = null;
-			String[] newArgs = null;
-			if ( selectionArgs == null || selectionArgs.length == 0 ) {
-				newArgs = new String[] { key };
-				newSelection = ((selection == null || selection.length() == 0) ?
-								"" : (selection + " AND ")) + KEY_ID + " = ?";
-			} else {
-				newArgs = new String[selectionArgs.length+1];
-				int i = 0;
-				for (; i < selectionArgs.length ; ++i ) {
-					newArgs[i] = selectionArgs[i];
-				}
-				newArgs[i] = key;
-				newSelection = ((selection == null || selection.length() == 0) ?
-						"" : (selection + " AND ")) + KEY_ID + " = ?";
-			}
-			this.selection = newSelection;
-			this.selectionArgs = newArgs;
+			FilterUtils.FilterCriteria fGiven = FilterUtils.buildAsGiven(selection, selectionArgs);
+			FilterUtils.FilterCriteria fKeyId = FilterUtils.buildSelectionClause(KEY_ID, key);
+			FilterUtils.FilterCriteria joined = FilterUtils.and(fGiven, fKeyId);
+			
+			this.selection = joined.selection;
+			this.selectionArgs = joined.selectionArgs;
 		}
 	}
 
@@ -361,8 +349,8 @@ public class SubmissionsStorage extends ContentProvider {
 		    	values.put(KEY_LAST_STATUS_CHANGE_DATE, now.getTime());
 		    	
 		    	for ( Long id : toMarkAsSubmitted ) {
-		    		getStorageDb().update(SUBMISSIONS_TABLE, values, KEY_ID + " = ?",
-		    				new String[] { Long.toString(id)} );
+		    		FilterUtils.FilterCriteria fc = FilterUtils.buildSelectionClause(KEY_ID, id);
+		    		getStorageDb().update(SUBMISSIONS_TABLE, values, fc.selection, fc.selectionArgs);
 					changeCount++;
 		    	}
 		    	
@@ -486,7 +474,8 @@ public class SubmissionsStorage extends ContentProvider {
 				Log.e(t, "Unable to delete instance directory: " + f.instanceDirPath.getAbsolutePath());
 			}
 			
-			int found = getStorageDb().delete(SUBMISSIONS_TABLE, KEY_ID + " = ?", new String[] { f.id } );
+    		FilterUtils.FilterCriteria fc = FilterUtils.buildSelectionClause(KEY_ID, f.id);
+			int found = getStorageDb().delete(SUBMISSIONS_TABLE, fc.selection, fc.selectionArgs);
 			if ( found != 1 ) {
 				Log.w(t, "Unexpected found count(" + Integer.toString(found) 
 						+ ") returned from delete on instance record: " + f.instanceDirPath.getAbsolutePath());
