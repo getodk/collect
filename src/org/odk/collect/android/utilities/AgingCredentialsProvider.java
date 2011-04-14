@@ -19,48 +19,71 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 
+/**
+ * Wrapper to a basic credentials provider that will clear the provider
+ * after 'expiryInterval' milliseconds of inactivity.  Use the WebUtils
+ * methods to manipulate the credentials in the local context.  You should
+ * first check that the credentials exist (which will reset the expiration
+ * date), then set them if they are missing.
+ * 
+ * @author mitchellsundt@gmail.com
+ *
+ */
 public class AgingCredentialsProvider implements CredentialsProvider {
 
-	private final BasicCredentialsProvider provider = new BasicCredentialsProvider();
-	private final long expiryInterval;
-	
-	private long nextClearTimestamp;
-	
-	public AgingCredentialsProvider(int expiryInterval) {
-		this.expiryInterval = expiryInterval;
-		nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-	}
+    private final BasicCredentialsProvider provider = new BasicCredentialsProvider();
+    private final long expiryInterval;
 
-	/* (non-Javadoc)
-	 * @see org.apache.http.impl.client.BasicCredentialsProvider#clear()
-	 */
-	@Override
-	public synchronized void clear() {
-		provider.clear();
-	}
+    private long nextClearTimestamp;
 
-	/* (non-Javadoc)
-	 * @see org.apache.http.impl.client.BasicCredentialsProvider#getCredentials(org.apache.http.auth.AuthScope)
-	 */
-	@Override
-	public synchronized Credentials getCredentials(AuthScope authscope) {
-		if ( nextClearTimestamp < System.currentTimeMillis() ) {
-			clear();
-		}
-		nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-		return provider.getCredentials(authscope);
-	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.http.impl.client.BasicCredentialsProvider#setCredentials(org.apache.http.auth.AuthScope, org.apache.http.auth.Credentials)
-	 */
-	@Override
-	public synchronized void setCredentials(AuthScope authscope,
-			Credentials credentials) {
-		if ( nextClearTimestamp < System.currentTimeMillis() ) {
-			clear();
-		}
-		nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-		provider.setCredentials(authscope, credentials);
-	}
+    public AgingCredentialsProvider(int expiryInterval) {
+        this.expiryInterval = expiryInterval;
+        nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.http.impl.client.BasicCredentialsProvider#clear()
+     */
+    @Override
+    public synchronized void clear() {
+        provider.clear();
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.http.impl.client.BasicCredentialsProvider#getCredentials(org.apache.http.auth.
+     * AuthScope)
+     */
+    @Override
+    public synchronized Credentials getCredentials(AuthScope authscope) {
+        if (nextClearTimestamp < System.currentTimeMillis()) {
+            clear();
+        }
+        nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
+        return provider.getCredentials(authscope);
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.http.impl.client.BasicCredentialsProvider#setCredentials(org.apache.http.auth.
+     * AuthScope, org.apache.http.auth.Credentials)
+     */
+    @Override
+    public synchronized void setCredentials(AuthScope authscope, Credentials credentials) {
+        if (nextClearTimestamp < System.currentTimeMillis()) {
+            clear();
+        }
+        nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
+        provider.setCredentials(authscope, credentials);
+    }
 }

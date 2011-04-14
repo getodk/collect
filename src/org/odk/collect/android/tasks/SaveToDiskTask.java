@@ -31,6 +31,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XPathReference;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.provider.SubmissionsStorage;
@@ -58,7 +59,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private String mDefaultUrl;
     private Context mContext;
     private Boolean mSave;
-    private Boolean mMarkCompleted;	
+    private Boolean mMarkCompleted;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -73,7 +74,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      */
     @Override
     protected Integer doInBackground(Void... nothing) {
-    	
+
         // validation failed, pass specific failure
         int validateStatus = validateAnswers(mMarkCompleted);
         if (validateStatus != VALIDATED) {
@@ -93,17 +94,20 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public boolean exportData(String instanceDirPath, String defaultUrl, Context context, boolean markCompleted) {
+    public boolean exportData(String instanceDirPath, String defaultUrl, Context context,
+            boolean markCompleted) {
+
+        Collect app = Collect.getInstance();
 
         File instanceDir = new File(instanceDirPath);
         File f = new File(FileUtils.getInstanceFilePath(instanceDirPath));
-        
+
         ByteArrayPayload payload;
         try {
 
             // assume no binary data inside the model.
-            FormInstance datamodel = 
-            	Collect.getInstance().getFormEntryController().getModel().getForm().getInstance();
+            FormInstance datamodel =
+                app.getFormEntryController().getModel().getForm().getInstance();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
@@ -119,107 +123,120 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         boolean canEditSubmission = true;
         String url = mDefaultUrl;
         {
-	        // now try to construct submission file
-	        File fSubmit = new File(FileUtils.getSubmissionBlobPath(instanceDirPath));
-	        try {
-	        	// assume no binary data inside the model.
-	        	FormEntryModel dataModel = 
-	        		Collect.getInstance().getFormEntryController().getModel();
-	        	FormDef formDef = dataModel.getForm();
-	
-	        	FormInstance formInstance = formDef.getInstance();
-	
-	        	IDataReference submissionElement = new XPathReference("/");
-	        	// Determine the information about the submission...
-	            SubmissionProfile p = formDef.getSubmissionProfile();
-	            if ( p != null ) {
-	            	submissionElement = p.getRef();
-	            	String altUrl = p.getAction();
-	            	if ( submissionElement == null ||
-	            		altUrl == null || !altUrl.startsWith("http") ||
-	            		p.getMethod() == null || !p.getMethod().equals("form-data-post")) {
-	        			Log.e(t, "Submission element should specify attributes: ref, method=\"form-data-post\", and action=\"http...\"");
-	        			return false;
-	            	}
-	            	url = altUrl;
-	            	TreeElement e = formInstance.resolveReference(new XPathReference("/"));
-	            	TreeElement ee = formInstance.resolveReference(submissionElement);
-	            	// we can edit the submission if the published fragment is the whole tree.
-	            	canEditSubmission = e.equals(ee);
-	            }
+            // now try to construct submission file
+            File fSubmit = new File(FileUtils.getSubmissionBlobPath(instanceDirPath));
+            try {
+                // assume no binary data inside the model.
+                FormEntryModel dataModel = app.getFormEntryController().getModel();
+                FormDef formDef = dataModel.getForm();
 
-	            if ( mMarkCompleted ) {
-		            XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-		            payload = (ByteArrayPayload) serializer.createSerializedPayload(formInstance, submissionElement);
-		
-		            // write out xml
-		            exportXmlFile(payload, fSubmit.getAbsolutePath());
-	            }
-	
-	        } catch (IOException e) {
-	            Log.e(t, "Error creating serialized payload");
-	            e.printStackTrace();
-	            return false;
-	        }
+                FormInstance formInstance = formDef.getInstance();
+
+                IDataReference submissionElement = new XPathReference("/");
+                // Determine the information about the submission...
+                SubmissionProfile p = formDef.getSubmissionProfile();
+                if (p != null) {
+                    submissionElement = p.getRef();
+                    String altUrl = p.getAction();
+                    if (submissionElement == null || altUrl == null || !altUrl.startsWith("http")
+                            || p.getMethod() == null || !p.getMethod().equals("form-data-post")) {
+                        Log
+                                .e(
+                                    t,
+                                    "Submission element should specify attributes: ref, method=\"form-data-post\", and action=\"http...\"");
+                        return false;
+                    }
+                    url = altUrl;
+                    TreeElement e = formInstance.resolveReference(new XPathReference("/"));
+                    TreeElement ee = formInstance.resolveReference(submissionElement);
+                    // we can edit the submission if the published fragment is the whole tree.
+                    canEditSubmission = e.equals(ee);
+                }
+
+                if (mMarkCompleted) {
+                    XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+                    payload =
+                        (ByteArrayPayload) serializer.createSerializedPayload(formInstance,
+                            submissionElement);
+
+                    // write out xml
+                    exportXmlFile(payload, fSubmit.getAbsolutePath());
+                }
+
+            } catch (IOException e) {
+                Log.e(t, "Error creating serialized payload");
+                e.printStackTrace();
+                return false;
+            }
         }
 
         boolean exists = false;
         long id = 0L;
         Cursor c = null;
         try {
-        	FilterUtils.FilterCriteria fd =
-        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH,
-        											instanceDir.getAbsolutePath());
+            FilterUtils.FilterCriteria fd =
+                FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH,
+                    instanceDir.getAbsolutePath());
 
-        	c = Collect.getInstance().getContentResolver().query(
-        			SubmissionsStorage.CONTENT_URI_INFO_DATASET,
-        			new String[] { SubmissionsStorage.KEY_ID },
-        			fd.selection, fd.selectionArgs, null );
-        	if ( c != null && c.moveToFirst() ) {
-        		exists = true;
-        		id = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
-        	}
+            c = app.getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+                    new String[] {
+                        SubmissionsStorage.KEY_ID
+                    }, fd.selection, fd.selectionArgs, null);
+            if (c != null && c.moveToFirst()) {
+                exists = true;
+                id = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
+            }
         } finally {
-        	if ( c != null ) {
-        		c.close();
-        		c = null;
-        	}
+            if (c != null) {
+                c.close();
+                c = null;
+            }
         }
         if (!mMarkCompleted) {
-        	url = null;
+            url = null;
             if (!exists) {
-            	ContentValues values = new ContentValues();
-            	values.put(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, instanceDir.getAbsolutePath());
-            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
-            	values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-            	values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, true);
-            	Collect.getInstance().getContentResolver().insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
-            } else {	
-            	ContentValues values = new ContentValues();
-            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
-            	values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-            	values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, true);
-            	Collect.getInstance().getContentResolver().update(
-            			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
-            			values, null, null);
-            }		
+                ContentValues values = new ContentValues();
+                values.put(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, instanceDir
+                        .getAbsolutePath());
+                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
+                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, true);
+                app.getContentResolver()
+                        .insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
+                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
+                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, true);
+                app.getContentResolver().update(
+                    ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
+                    values, null, null);
+            }
         } else {
-	        if (!exists) {
-            	ContentValues values = new ContentValues();
-            	values.put(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, instanceDir.getAbsolutePath());
-            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
-            	values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-            	values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
-            	Collect.getInstance().getContentResolver().insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
-	        } else {
-            	ContentValues values = new ContentValues();
-            	values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
-            	values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-            	values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
-            	Collect.getInstance().getContentResolver().update(
-            			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
-            			values, null, null);
-	        }
+            if (!exists) {
+                ContentValues values = new ContentValues();
+                values.put(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, instanceDir
+                        .getAbsolutePath());
+                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+                values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, app
+                        .getString(R.string.will_be_sent_to)
+                        + url);
+                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
+                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
+                app.getContentResolver()
+                        .insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
+                values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, app
+                        .getString(R.string.will_be_sent_to)
+                        + url);
+                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
+                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
+                app.getContentResolver().update(
+                    ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
+                    values, null, null);
+            }
         }
         return true;
 
@@ -278,8 +295,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public void setExportVars(String instanceDirPath, String defaultUrl, Context context, Boolean saveAndExit,
-    		Boolean markCompleted) {
+    public void setExportVars(String instanceDirPath, String defaultUrl, Context context,
+            Boolean saveAndExit, Boolean markCompleted) {
         mInstanceDirPath = instanceDirPath;
         mDefaultUrl = defaultUrl;
         mContext = context;
@@ -298,7 +315,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      */
 
     private int validateAnswers(Boolean markCompleted) {
-    	FormEntryController fec = Collect.getInstance().getFormEntryController();
+        FormEntryController fec = Collect.getInstance().getFormEntryController();
         FormEntryModel fem = fec.getModel();
         FormIndex i = fem.getFormIndex();
 
@@ -309,12 +326,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             if (event != FormEntryController.EVENT_QUESTION) {
                 continue;
             } else {
-                int saveStatus =
-                	fec.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
-                if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) { 
-                	this.publishProgress(fem.getQuestionPrompt()
-        					.getConstraintText(), Integer.toString(saveStatus));
-        			return saveStatus;
+                int saveStatus = fec.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
+                if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) {
+                    this.publishProgress(fem.getQuestionPrompt().getConstraintText(), Integer
+                            .toString(saveStatus));
+                    return saveStatus;
                 }
             }
         }
@@ -323,10 +339,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         return VALIDATED;
     }
 
+
     @Override
-	protected void onProgressUpdate(String... values) {
-    	Collect.getInstance().createConstraintToast(
-				values[0], Integer.valueOf(values[1]).intValue());
-	}
+    protected void onProgressUpdate(String... values) {
+        Collect.getInstance().createConstraintToast(values[0],
+            Integer.valueOf(values[1]).intValue());
+    }
 
 }

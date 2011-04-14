@@ -183,18 +183,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormPath = savedInstanceState.getString(KEY_FORMPATH);
             }
             if (savedInstanceState.containsKey(KEY_INSTANCEPATH)) {
-            	String instancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
-            	if ( instancePath != null ) {
-	            	File instance = new File(instancePath);
-	            	File instanceDir = instance.getParentFile();
-	            	if ( !instance.getAbsolutePath().equals(
-	            			FileUtils.getInstanceFilePath(instanceDir.getAbsolutePath())) ) {
-	                    mErrorMessage = "Instance filename is not the same name as the instance directory";
-	            	}
-	            	mInstanceDirPath = instanceDir.getAbsolutePath();
-            	} else {
-            		mInstanceDirPath = null;
-            	}
+                String instancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
+                if (instancePath != null) {
+                    File instance = new File(instancePath);
+                    File instanceDir = instance.getParentFile();
+                    if (!instance.getAbsolutePath().equals(
+                        FileUtils.getInstanceFilePath(instanceDir.getAbsolutePath()))) {
+                        mErrorMessage = getString(R.string.instance_file_name_error);
+                    }
+                    mInstanceDirPath = instanceDir.getAbsolutePath();
+                } else {
+                    mInstanceDirPath = null;
+                }
             }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
@@ -231,18 +231,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Intent intent = getIntent();
             if (intent != null) {
                 mFormPath = intent.getStringExtra(KEY_FORMPATH);
-            	String instancePath = intent.getStringExtra(KEY_INSTANCEPATH);
-            	if ( instancePath != null ) {
-	            	File instance = new File(instancePath);
-	            	File instanceDir = instance.getParentFile();
-	            	if ( !instance.getAbsolutePath().equals(
-	            			FileUtils.getInstanceFilePath(instanceDir.getAbsolutePath())) ) {
-	                    mErrorMessage = "Instance filename is not the same name as the instance directory";
-	            	}
-	            	mInstanceDirPath = instanceDir.getAbsolutePath();
-            	} else {
-            		mInstanceDirPath = null;
-            	}
+                String instancePath = intent.getStringExtra(KEY_INSTANCEPATH);
+                if (instancePath != null) {
+                    File instance = new File(instancePath);
+                    File instanceDir = instance.getParentFile();
+                    if (!instance.getAbsolutePath().equals(
+                        FileUtils.getInstanceFilePath(instanceDir.getAbsolutePath()))) {
+                        mErrorMessage = getString(R.string.instance_file_name_error);
+                    }
+                    mInstanceDirPath = instanceDir.getAbsolutePath();
+                } else {
+                    mInstanceDirPath = null;
+                }
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath, mInstanceDirPath);
                 showDialog(PROGRESS_DIALOG);
@@ -294,9 +294,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 // provider.
                 File fi = new File(FileUtils.TMPFILE_PATH);
 
-                String s = mInstanceDirPath + "/" + System.currentTimeMillis() + ".jpg";
-
-                File nf = new File(s);
+                File instanceDir = new File(mInstanceDirPath);
+                File nf = new File(instanceDir, Long.toString(System.currentTimeMillis()) + ".jpg");
                 if (!fi.renameTo(nf)) {
                     Log.e(t, "Failed to rename " + fi.getAbsolutePath());
                 } else {
@@ -376,22 +375,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         menu.removeItem(MENU_HIERARCHY_VIEW);
         menu.removeItem(MENU_SAVE);
 
-        menu.add(0, MENU_SAVE, 0, getString(R.string.save_all_answers)).setIcon(
-            android.R.drawable.ic_menu_save);
+        menu.add(0, MENU_SAVE, 0, getString(R.string.save_all_answers))
+            .setIcon(android.R.drawable.ic_menu_save);
         menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer))
-                .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
-                .setEnabled(!mFormEntryModel.isIndexReadonly() ? true : false);
+            .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
+            .setEnabled(!mFormEntryModel.isIndexReadonly() ? true : false);
         menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat))
-                .setIcon(R.drawable.ic_menu_clear_playlist)
-                .setEnabled(
-                    indexContainsRepeatableGroup(mFormEntryModel.getFormIndex()) ? true : false);
-        menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
-            R.drawable.ic_menu_goto);
+            .setIcon(R.drawable.ic_menu_clear_playlist)
+            .setEnabled(indexContainsRepeatableGroup(mFormEntryModel.getFormIndex()) ? true : false);
+        menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy))
+            .setIcon(R.drawable.ic_menu_goto);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language))
-                .setIcon(R.drawable.ic_menu_start_conversation)
-                .setEnabled(
-                    (mFormEntryModel.getLanguages() == null || mFormEntryModel.getLanguages().length == 1) ? false
-                            : true);
+            .setIcon(R.drawable.ic_menu_start_conversation)
+            .setEnabled((mFormEntryModel.getLanguages() == null 
+                    || mFormEntryModel.getLanguages().length == 1) ? false : true);
         return true;
     }
 
@@ -567,8 +564,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             || bitImage.getIntrinsicHeight() == 0
                             || bitImage.getIntrinsicWidth() == 0) {
                         // attempt to load the shared form logo...
-                        bitImage =
-                            new BitmapDrawable(FileUtils.FORM_LOGO_FILE_PATH);
+                        bitImage = new BitmapDrawable(FileUtils.FORM_LOGO_FILE_PATH);
                     }
 
                     if (bitImage != null && bitImage.getBitmap() != null
@@ -609,14 +605,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 return endView;
             case FormEntryController.EVENT_GROUP:
                 GroupView gv = new GroupView(mHandler, mFormEntryModel.getFormIndex(), this);
-                gv.buildView(mInstanceDirPath, getGroupsForCurrentIndex());
+                gv.buildView(new File(mInstanceDirPath), getGroupsForCurrentIndex());
                 // if we came from a constraint violation, set the focus to the violated field
                 if (subIndex != null)
                     gv.setSubFocus(subIndex);
                 return gv;
             case FormEntryController.EVENT_QUESTION:
                 QuestionView qv = new QuestionView(mHandler, mFormEntryModel.getFormIndex(), this);
-                qv.buildView(mInstanceDirPath, getGroupsForCurrentIndex());
+                qv.buildView(new File(mInstanceDirPath), getGroupsForCurrentIndex());
                 return qv;
             default:
                 Log.e(t, "Attempted to create a view that does not exist.");
@@ -928,8 +924,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         String url =
             settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
                     + "/submission";
-        
-        mSaveToDiskTask.setExportVars(mInstanceDirPath, url, getApplicationContext(), exit, complete);
+
+        mSaveToDiskTask.setExportVars(mInstanceDirPath, url, getApplicationContext(), exit,
+            complete);
         mSaveToDiskTask.execute();
         showDialog(SAVING_DIALOG);
 
@@ -945,84 +942,88 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             };
 
         mAlertDialog =
-            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle(getString(R.string.quit_application))
-                    .setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case 0: // discard changes and exit
-                                    Cursor cursor = null;
-                                    try {
-                                    	FilterUtils.FilterCriteria fd =
-                                    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, mInstanceDirPath);
-                                    	cursor = getContentResolver().query(
-                                    		SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-                                    		new String[] { SubmissionsStorage.KEY_ID }, 
-                                    		fd.selection, fd.selectionArgs, null);
-                                    	if ( cursor.moveToNext() ) {
-                                    		Log.i(t, "previously saved");
-                                    	} else {
-	                                        // not previously saved, cleaning up
-	                                        String instanceFolder = mInstanceDirPath + "/";
-	
-	                                        String[] projection = {
-	                                            Images.ImageColumns._ID
-	                                        };
-	                                        int del = 0;
-                                            Cursor ci = null;
-	                                        try {
-	                                        	ci = getContentResolver()
-	                                                    .query(Images.Media.EXTERNAL_CONTENT_URI,
-	                                                        projection,
-	                                                        "_data like ?",
-	                                                        new String[] {"'%" + instanceFolder + "%'"},
-	                                                        null);
-		                                        while (ci != null && ci.moveToNext()) {
-	                                                String id =
-	                                                    ci.getString(ci
-	                                                            .getColumnIndex(Images.ImageColumns._ID));
-	
-	                                                Log.i(
-	                                                    t,
-	                                                    "attempting to delete unused image: "
-	                                                            + Uri.withAppendedPath(
-	                                                                Images.Media.EXTERNAL_CONTENT_URI,
-	                                                                id));
-	                                                del +=
-	                                                    getContentResolver().delete(
-	                                                        Uri.withAppendedPath(
-	                                                            Images.Media.EXTERNAL_CONTENT_URI, id),
-	                                                        null, null);
-	                                            }
-	                                        } finally {
-	                                        	if (ci != null) {
-	                                        		ci.close();
-	                                        	}
-	                                        }
-	
-	                                        Log.i(t, "Deleted " + del + " images from content provider");
-	                                        FileUtils.deleteFolder(instanceFolder);
-	                                    }
-                                    } finally {
-	                                    // clean up cursor
-	                                    if (cursor != null) {
-	                                        cursor.close();
-	                                    }
+            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle(
+                getString(R.string.quit_application)).setItems(items,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: // discard changes and exit
+                                Cursor cursor = null;
+                                try {
+                                    FilterUtils.FilterCriteria fd =
+                                        FilterUtils.buildSelectionClause(
+                                            SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH,
+                                            mInstanceDirPath);
+                                    cursor =
+                                        getContentResolver().query(
+                                            SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+                                            new String[] {
+                                                SubmissionsStorage.KEY_ID
+                                            }, fd.selection, fd.selectionArgs, null);
+                                    if (cursor.moveToNext()) {
+                                        Log.i(t, "previously saved");
+                                    } else {
+                                        // not previously saved, cleaning up
+                                        String instanceFolder = mInstanceDirPath + "/";
+
+                                        String[] projection = {
+                                            Images.ImageColumns._ID
+                                        };
+                                        int del = 0;
+                                        Cursor ci = null;
+                                        try {
+                                            ci =
+                                                getContentResolver().query(
+                                                    Images.Media.EXTERNAL_CONTENT_URI, projection,
+                                                    "_data like ?", new String[] {
+                                                        "'%" + instanceFolder + "%'"
+                                                    }, null);
+                                            while (ci != null && ci.moveToNext()) {
+                                                String id =
+                                                    ci
+                                                            .getString(ci
+                                                                    .getColumnIndex(Images.ImageColumns._ID));
+
+                                                Log.i(t, "attempting to delete unused image: "
+                                                        + Uri.withAppendedPath(
+                                                            Images.Media.EXTERNAL_CONTENT_URI, id));
+                                                del +=
+                                                    getContentResolver().delete(
+                                                        Uri.withAppendedPath(
+                                                            Images.Media.EXTERNAL_CONTENT_URI, id),
+                                                        null, null);
+                                            }
+                                        } finally {
+                                            if (ci != null) {
+                                                ci.close();
+                                            }
+                                        }
+
+                                        Log
+                                                .i(t, "Deleted " + del
+                                                        + " images from content provider");
+                                        FileUtils.deleteFolder(instanceFolder);
                                     }
-                                    finish();
-                                    break;
+                                } finally {
+                                    // clean up cursor
+                                    if (cursor != null) {
+                                        cursor.close();
+                                    }
+                                }
+                                finish();
+                                break;
 
-                                case 1: // save and exit
-                                    saveDataToDisk(true, isInstanceComplete());
-                                    break;
+                            case 1: // save and exit
+                                saveDataToDisk(true, isInstanceComplete());
+                                break;
 
-                                case 2:// do nothing
-                                    break;
+                            case 2:// do nothing
+                                break;
 
-                            }
                         }
-                    }).create();
+                    }
+                }).create();
         mAlertDialog.show();
     }
 
@@ -1079,28 +1080,24 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
         mAlertDialog =
-            new AlertDialog.Builder(this)
-                    .setSingleChoiceItems(languages, selected,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                FormEntryController fec =
-                                    Collect.getInstance().getFormEntryController();
-                                fec.setLanguage(languages[whichButton]);
-                                dialog.dismiss();
-                                if (currentPromptIsQuestion()) {
-                                    saveCurrentAnswer(false);
-                                }
-                                refreshCurrentView();
-                            }
-                        })
-                    .setTitle(getString(R.string.change_language))
-                    .setNegativeButton(getString(R.string.do_not_change),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).create();
+            new AlertDialog.Builder(this).setSingleChoiceItems(languages, selected,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        FormEntryController fec = Collect.getInstance().getFormEntryController();
+                        fec.setLanguage(languages[whichButton]);
+                        dialog.dismiss();
+                        if (currentPromptIsQuestion()) {
+                            saveCurrentAnswer(false);
+                        }
+                        refreshCurrentView();
+                    }
+                }).setTitle(getString(R.string.change_language)).setNegativeButton(
+                getString(R.string.do_not_change), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                }).create();
         mAlertDialog.show();
     }
 
@@ -1412,58 +1409,63 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
     }
 
-	private boolean isCurrentIndexRelevant() {
-		FormIndex idx = mFormEntryModel.getFormIndex();
-		// Test whether the index is in the form first because 
-		// isIndexRelevant(idx) blows up if the index marks the 
-		// start or end of a form.  Return true to exit the loop
-		// within the callers of this routine.
-		if ( !idx.isInForm() ) return true;
-		
-		boolean outcome = mFormEntryModel.isIndexRelevant(idx);
-		if ( !outcome ) return outcome; // if it isn't then return now...
-		if ( currentPromptIsGroupFolio() ) {
-			// Relevance is not properly percolated up to the group level.
-			// We need to traverse all the fields within the group to see
-			// if any of the fields are relevant.  If none are, we should 
-			// skip the group...
-			
-			// NOTE: incrementIndex does not change the current index
-			// so nothing here alters where the form thinks it is.
-			
-			FormIndex idxEnd = mFormEntryModel.incrementIndex(idx, false);
-			
-			// NOTE: isIndexRelevant(idx) == true to get here, so we need to
-			// advance into the group and check all the fields within the group.
-			// i.e., we want to iterate over (idx..idxEnd)
-			
-			for (FormIndex idxQ = mFormEntryModel.incrementIndex(idx, true) ;
-					!idxQ.equals(idxEnd); 
-					idxQ = mFormEntryModel.incrementIndex(idxQ, true) ) {
-				if ( mFormEntryModel.isIndexRelevant(idxQ) ) return true;
-			}
-			return false;
-		}
-		return outcome;
-	}
 
-	private int stepToNextEvent() {
-		int outcome;
-		FormIndex idx;
-        do {
-        	outcome = stepToNextPossiblyIrrelevantEvent();
-			idx = mFormEntryModel.getFormIndex();
-        } while ( idx.isInForm() && !isCurrentIndexRelevant() );
+    private boolean isCurrentIndexRelevant() {
+        FormIndex idx = mFormEntryModel.getFormIndex();
+        // Test whether the index is in the form first because
+        // isIndexRelevant(idx) blows up if the index marks the
+        // start or end of a form. Return true to exit the loop
+        // within the callers of this routine.
+        if (!idx.isInForm())
+            return true;
+
+        boolean outcome = mFormEntryModel.isIndexRelevant(idx);
+        if (!outcome)
+            return outcome; // if it isn't then return now...
+        if (currentPromptIsGroupFolio()) {
+            // Relevance is not properly percolated up to the group level.
+            // We need to traverse all the fields within the group to see
+            // if any of the fields are relevant. If none are, we should
+            // skip the group...
+
+            // NOTE: incrementIndex does not change the current index
+            // so nothing here alters where the form thinks it is.
+
+            FormIndex idxEnd = mFormEntryModel.incrementIndex(idx, false);
+
+            // NOTE: isIndexRelevant(idx) == true to get here, so we need to
+            // advance into the group and check all the fields within the group.
+            // i.e., we want to iterate over (idx..idxEnd)
+
+            for (FormIndex idxQ = mFormEntryModel.incrementIndex(idx, true); !idxQ.equals(idxEnd); idxQ =
+                mFormEntryModel.incrementIndex(idxQ, true)) {
+                if (mFormEntryModel.isIndexRelevant(idxQ))
+                    return true;
+            }
+            return false;
+        }
         return outcome;
-	}
+    }
+
+
+    private int stepToNextEvent() {
+        int outcome;
+        FormIndex idx;
+        do {
+            outcome = stepToNextPossiblyIrrelevantEvent();
+            idx = mFormEntryModel.getFormIndex();
+        } while (idx.isInForm() && !isCurrentIndexRelevant());
+        return outcome;
+    }
+
 
     private int stepToPreviousEvent() {
         FormEntryController fec = Collect.getInstance().getFormEntryController();
-		int event = fec.stepToPreviousEvent();
-		while ( !isCurrentIndexRelevant() ) {
-			event = fec.stepToPreviousEvent();
-		}
-		return event;
+        int event = fec.stepToPreviousEvent();
+        while (!isCurrentIndexRelevant()) {
+            event = fec.stepToPreviousEvent();
+        }
+        return event;
     }
 
 
@@ -1599,22 +1601,25 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         boolean complete = false;
         Cursor c = null;
         try {
-        	FilterUtils.FilterCriteria fd =
-        		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, mInstanceDirPath);
-        	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,	
-        			new String[] { SubmissionsStorage.KEY_ID, 
-        						   SubmissionsStorage.KEY_STATUS },
-        						   fd.selection, fd.selectionArgs, null );
-        	if ( c != null && c.moveToFirst() ) {
-        		String status = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_STATUS));
-        		// complete includes not sent, failed, and partially sent submissions 
-        		complete = !SubmissionsStorage.STATUS_INCOMPLETE.equalsIgnoreCase(status) &&
-        					!SubmissionsStorage.STATUS_SUBMITTED.equalsIgnoreCase(status);
-        	}
+            FilterUtils.FilterCriteria fd =
+                FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH,
+                    mInstanceDirPath);
+            c =
+                getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+                    new String[] {
+                            SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_STATUS
+                    }, fd.selection, fd.selectionArgs, null);
+            if (c != null && c.moveToFirst()) {
+                String status = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_STATUS));
+                // complete includes not sent, failed, and partially sent submissions
+                complete =
+                    !SubmissionsStorage.STATUS_INCOMPLETE.equalsIgnoreCase(status)
+                            && !SubmissionsStorage.STATUS_SUBMITTED.equalsIgnoreCase(status);
+            }
         } finally {
-        	if ( c != null ) {
-        		c.close();
-        	}
+            if (c != null) {
+                c.close();
+            }
         }
         return complete;
     }

@@ -21,47 +21,71 @@ import java.util.HashMap;
  */
 public interface FormDownloaderListener {
 
-	public static final class FormDetails {
-		public final String stringValue;
-		
-		public final String formName;
-		public final String formId;
-		public final Integer modelVersion;
-		public final Integer uiVersion;
-		public final String description;
-		public final String downloadUrl;
-		public final String manifestUrl;
-		
-		public FormDetails(String stringValue) {
-			this.stringValue = stringValue;
-			
-			formName = null;
-			formId = null;
-			modelVersion = null;
-			uiVersion = null;
-			description = null;
-			downloadUrl = null;
-			manifestUrl = null;
-		}
-		
-		public FormDetails(String formName,
-					String formId,
-					Integer modelVersion,
-					Integer uiVersion,
-					String description,
-					String downloadUrl,
-					String manifestUrl) {
-			this.stringValue = null;
-			this.formName = formName;
-			this.formId = formId;
-			this.modelVersion = modelVersion;
-			this.uiVersion = uiVersion;
-			this.description = description;
-			this.downloadUrl = downloadUrl;
-			this.manifestUrl = manifestUrl;
-		}
-	}
+    /**
+     * Class for returning the details about the forms available for download
+     * and any errors that might be returned during the retrieval attempt.
+     * 
+     * @author mitchellsundt@gmail.com
+     *
+     */
+    public static final class FormDetails {
+        public final String stringValue;
+
+        public final String formName;
+        public final String formId;
+        public final Integer modelVersion;
+        public final Integer uiVersion;
+        public final String description;
+        public final String downloadUrl;
+        public final String manifestUrl;
+
+
+        /**
+         * Download error constructor.
+         * 
+         * @param stringValue
+         */
+        public FormDetails(String stringValue) {
+            this.stringValue = stringValue;
+
+            formName = null;
+            formId = null;
+            modelVersion = null;
+            uiVersion = null;
+            description = null;
+            downloadUrl = null;
+            manifestUrl = null;
+        }
+
+
+        /**
+         * Successful download constructor.  
+         * Only formName and downloadUrl are guaranteed to be non-null.
+         * 
+         * @param formName  not null
+         * @param formId
+         * @param modelVersion
+         * @param uiVersion
+         * @param description
+         * @param downloadUrl
+         * @param manifestUrl
+         */
+        public FormDetails(String formName, String formId, Integer modelVersion, Integer uiVersion,
+                String description, String downloadUrl, String manifestUrl) {
+            this.stringValue = null;
+            this.formName = formName;
+            this.formId = formId;
+            this.modelVersion = modelVersion;
+            this.uiVersion = uiVersion;
+            this.description = description;
+            this.downloadUrl = downloadUrl;
+            this.manifestUrl = manifestUrl;
+        }
+    }
+
 
     void formDownloadingComplete(HashMap<String, FormDetails> result);
+
+
     void progressUpdate(String currentFile, int progress, int total);
 }

@@ -34,20 +34,21 @@ public class ServerPreferences extends PreferenceActivity implements
     public static String KEY_SERVER = "server";
     public static String KEY_USER_EMAIL = "user_email";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.server_preferences));
         addPreferencesFromResource(R.xml.server_preferences);
         setContentView(R.layout.server_preferences);
-        
+
         Button clearCredentials = (Button) findViewById(R.id.clear_credentials);
         clearCredentials.setText(getString(R.string.clear_all_credentials));
         clearCredentials.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-	        	WebUtils.clearAllCredentials();
-			}
+            @Override
+            public void onClick(View v) {
+                WebUtils.clearAllCredentials();
+            }
         });
 
         updateServer();
@@ -71,7 +72,7 @@ public class ServerPreferences extends PreferenceActivity implements
 
 
     @Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(KEY_SERVER)) {
             updateServer();
         } else if (key.equals(KEY_USER_EMAIL)) {

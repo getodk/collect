@@ -82,9 +82,11 @@ public class DataManagerList extends ListActivity {
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
+        String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC, "
+                        + SubmissionsStorage.KEY_LAST_STATUS_CHANGE_DATE + " ASC";
 
         Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-        		projection, null, null, null );
+        		projection, null, null, sortOrder );
         startManagingCursor(c);
         // render total instance view
         mInstances =

@@ -1,5 +1,6 @@
 package org.odk.collect.android.views.layout;
 
+import java.io.File;
 import java.util.List;
 
 import org.javarosa.core.model.FormIndex;
@@ -13,10 +14,10 @@ public interface IGroupLayout {
 	 * 
 	 * @param view under which to lay out widgets
 	 * @param indices the javarosa fields to be rendered (ordered)
-	 * @param instancePath the path to the storage for media captures
+	 * @param instanceDir the path to the storage for media captures
 	 * @param groups the chain of groups, including this one, for display 
 	 */
-	public void buildView(GroupView view, List<FormIndex> indices, String instancePath, FormEntryCaption[] groups);
+	public void buildView(GroupView view, List<FormIndex> indices, File instanceDir, FormEntryCaption[] groups);
 	
 	/**
 	 * @return the UI element that, by default, receives focus

@@ -1,5 +1,7 @@
+
 package org.odk.collect.android.views.layout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,23 +20,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FieldList implements IGroupLayout {
-	
-	// maintain separate list of all question views...
-	private List<AbstractQuestionWidget> viewList = new ArrayList<AbstractQuestionWidget>();
-    
+
+    // maintain separate list of all question views...
+    private List<AbstractQuestionWidget> viewList = new ArrayList<AbstractQuestionWidget>();
+
+
     public FieldList() {
     }
 
-    @Override
-	public void buildView(GroupView view, List<FormIndex> indices, String instanceDirPath, FormEntryCaption[] groups) {
 
-		LinearLayout mView = new LinearLayout(view.getContext());
+    @Override
+    public void buildView(GroupView view, List<FormIndex> indices, File instanceDir,
+            FormEntryCaption[] groups) {
+
+        LinearLayout mView = new LinearLayout(view.getContext());
         mView.setOrientation(LinearLayout.VERTICAL);
         mView.setGravity(Gravity.TOP);
         mView.setPadding(0, 7, 0, 0);
 
         // build view
-        
+
         // put crumb trail on top...
         String crumbTrail = GroupView.getGroupText(groups);
         if (crumbTrail.length() > 0) {
@@ -46,53 +51,60 @@ public class FieldList implements IGroupLayout {
         }
 
         LinearLayout.LayoutParams mLayout =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 
         boolean first = true;
-        for ( FormIndex fi : indices) {
-        	if ( !first ) {
+        for (FormIndex fi : indices) {
+            if (!first) {
                 // Add a dividing line before all but the first element
                 View divider = new View(view.getContext());
-                
+
                 divider.setId(AbstractQuestionWidget.newUniqueId());
                 divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 divider.setMinimumHeight(3);
                 mView.addView(divider);
-        	}
-        	first = false;
-        	
-    		FormEntryPrompt formEntryPrompt = Collect.getInstance().getFormEntryController().getModel().getQuestionPrompt(fi);
-            // if question or answer type is not supported, use text widget
-    		AbstractQuestionWidget mQuestionWidget = WidgetFactory.createWidgetFromPrompt(view.getHandler(), formEntryPrompt, view.getContext(), instanceDirPath);
+            }
+            first = false;
 
-    		mQuestionWidget.buildView(view);
-            
+            FormEntryPrompt formEntryPrompt =
+                Collect.getInstance().getFormEntryController().getModel().getQuestionPrompt(fi);
+            // if question or answer type is not supported, use text widget
+            AbstractQuestionWidget mQuestionWidget =
+                WidgetFactory.createWidgetFromPrompt(view.getHandler(), formEntryPrompt, view
+                        .getContext(), instanceDir);
+
+            mQuestionWidget.buildView(view);
+
             mView.addView((View) mQuestionWidget, mLayout);
             viewList.add(mQuestionWidget);
-    	}
-        
+        }
+
         view.addView(mView);
-	}
+    }
 
-	@Override
-	public AbstractQuestionWidget getDefaultFocus() {
-		return viewList.get(0);
-	}
 
-	@Override
-	public AbstractQuestionWidget getQuestionWidget(FormIndex subIndex) {
-		for ( AbstractQuestionWidget qv : viewList ) {
-			if ( qv.getFormIndex().equals(subIndex) ) return qv;
-		}
-		return null;
-	}
+    @Override
+    public AbstractQuestionWidget getDefaultFocus() {
+        return viewList.get(0);
+    }
 
-	@Override
-	public void unregister() {
-		for ( AbstractQuestionWidget v : viewList ) {
-			v.unregister();
-		}
-	}
+
+    @Override
+    public AbstractQuestionWidget getQuestionWidget(FormIndex subIndex) {
+        for (AbstractQuestionWidget qv : viewList) {
+            if (qv.getFormIndex().equals(subIndex))
+                return qv;
+        }
+        return null;
+    }
+
+
+    @Override
+    public void unregister() {
+        for (AbstractQuestionWidget v : viewList) {
+            v.unregister();
+        }
+    }
 }

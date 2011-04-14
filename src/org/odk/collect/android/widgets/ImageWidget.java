@@ -22,6 +22,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FilterUtils;
+import org.odk.collect.android.utilities.FilterUtils.FilterCriteria;
 import org.odk.collect.android.views.AbstractFolioView;
 import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
@@ -60,20 +62,20 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
 
     private Uri mExternalUri;
     private String mCaptureIntent;
-    private String mInstanceFolder;
+    private File mInstanceDir;
     private int mRequestCode;
     private int mCaptureText;
     private int mReplaceText;
 
 
-    public ImageWidget(Handler handler, Context context, FormEntryPrompt prompt, String instanceDirPath) {
+    public ImageWidget(Handler handler, Context context, FormEntryPrompt prompt, File instanceDir) {
         super(handler, context, prompt);
-        initialize(instanceDirPath);
+        initialize(instanceDir);
     }
 
 
-    private void initialize(String instanceDirPath) {
-        mInstanceFolder = instanceDirPath + "/";
+    private void initialize(File instanceDir) {
+        mInstanceDir = instanceDir;
         mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
         mRequestCode = FormEntryActivity.IMAGE_CAPTURE;
@@ -98,9 +100,12 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         String[] projection = {
             Images.ImageColumns._ID
         };
+        File fBinary = new File(mInstanceDir, mBinaryName);
+        FilterCriteria fc = FilterUtils.buildSelectionClause("_data", 
+                                    fBinary.getAbsolutePath());
         Cursor c =
             getContext().getContentResolver().query(mExternalUri, projection,
-                "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
+                                        fc.selection, fc.selectionArgs, null);
         int del = 0;
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -178,9 +183,11 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
             		if ( mBinaryName == null ) return;
                     Intent i = new Intent("android.intent.action.VIEW");
                     String[] projection = {"_id"};
+                    File fBinary = new File(mInstanceDir, mBinaryName);
+                    FilterCriteria fc = FilterUtils.buildSelectionClause("_data", fBinary.getAbsolutePath());
                     Cursor c =
                         getContext().getContentResolver().query(mExternalUri, projection,
-                            "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
+                                                fc.selection, fc.selectionArgs, null);
                     if (c.getCount() > 0) {
                         c.moveToFirst();
                         String id = c.getString(c.getColumnIndex("_id"));
@@ -215,7 +222,7 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
             int screenWidth = display.getWidth();
             int screenHeight = display.getHeight();
 
-            File f = new File(mInstanceFolder + "/" + mBinaryName);
+            File f = new File(mInstanceDir, mBinaryName);
             Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
             mImageView.setImageBitmap(bmp);
         } else {

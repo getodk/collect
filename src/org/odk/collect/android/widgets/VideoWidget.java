@@ -21,6 +21,8 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.utilities.FilterUtils;
+import org.odk.collect.android.utilities.FilterUtils.FilterCriteria;
 import org.odk.collect.android.views.AbstractFolioView;
 import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
@@ -55,20 +57,20 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
 
     private Uri mExternalUri;
     private String mCaptureIntent;
-    private String mInstanceFolder;
+    private File mInstanceDir;
     private int mRequestCode;
     private int mCaptureText;
     private int mReplaceText;
     private int mPlayText;
 
 
-    public VideoWidget(Handler handler, Context context, FormEntryPrompt prompt, String instanceDirPath) {
+    public VideoWidget(Handler handler, Context context, FormEntryPrompt prompt, File instanceDir) {
         super(handler, context, prompt);
-        initialize(instanceDirPath);
+        initialize(instanceDir);
     }
 
-    private void initialize(String instanceDirPath) {
-        mInstanceFolder = instanceDirPath + "/";
+    private void initialize(File instanceDir) {
+        mInstanceDir = instanceDir;
 
         mExternalUri = Video.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
@@ -123,7 +125,7 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
 			public void onClick(View v) {
             	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
 	                Intent i = new Intent("android.intent.action.VIEW");
-	                File f = new File(mInstanceFolder + "/" + mBinaryName);
+	                File f = new File(mInstanceDir, mBinaryName);
 	                i.setDataAndType(Uri.fromFile(f), "video/*");
 	                ((Activity) getContext()).startActivity(i);
             	}
@@ -142,7 +144,7 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
 
     private void deleteMedia() {
         // get the file path and delete the file
-        File f = new File(mInstanceFolder + "/" + mBinaryName);
+        File f = new File(mInstanceDir, mBinaryName);
         if (!f.delete()) {
             Log.e(t, "Failed to delete " + f);
         }
@@ -172,9 +174,10 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
 
     private Uri getUriFromPath(String path) {
         // find entry in content provider
+        FilterCriteria fc = FilterUtils.buildSelectionClause("_data", path);
         Cursor c =
-            getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
-                null, null);
+            getContext().getContentResolver().query(mExternalUri, null,
+                            fc.selection, fc.selectionArgs, null);
         c.moveToFirst();
 
         // create uri from path
@@ -207,14 +210,14 @@ public class VideoWidget extends AbstractQuestionWidget implements IBinaryWidget
         String binarypath = getPathFromUri((Uri) binaryuri);
 
         File f = new File(binarypath);
-        String s = mInstanceFolder + "/" + binarypath.substring(binarypath.lastIndexOf('/') + 1);
-        if (!f.renameTo(new File(s))) {
+        File sub = new File(mInstanceDir, f.getName());
+        if (!f.renameTo(sub)) {
             Log.e(t, "Failed to rename " + f.getAbsolutePath());
         }
 
         // remove the database entry and update the name
         getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
-        mBinaryName = s.substring(s.lastIndexOf('/') + 1);
+        mBinaryName = sub.getName();
         saveAnswer(true); // and evaluate constraints and trigger UI update...
     }
 

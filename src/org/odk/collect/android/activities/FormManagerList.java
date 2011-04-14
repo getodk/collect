@@ -58,17 +58,17 @@ public class FormManagerList extends ListActivity {
         mGetButton.setText(getString(R.string.get_forms));
         mGetButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FormDownloadList.class);
                 startActivity(i);
             }
         });
-        
+
         mActionButton = (Button) findViewById(R.id.delete_button);
         mActionButton.setText(getString(R.string.delete_file));
         mActionButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
                     createDeleteDialog();
@@ -83,23 +83,23 @@ public class FormManagerList extends ListActivity {
 
 
     private void refreshView() {
-        String[] projection = new String[] {
-        		FormsStorage.KEY_ID,
-                FormsStorage.KEY_DISPLAY_NAME, 
-                FormsStorage.KEY_DISPLAY_SUBTEXT
-        };
-        
+        String[] projection =
+            new String[] {
+                    FormsStorage.KEY_ID, FormsStorage.KEY_DISPLAY_NAME,
+                    FormsStorage.KEY_DISPLAY_SUBTEXT
+            };
+
         String[] data = new String[] {
-                FormsStorage.KEY_DISPLAY_NAME, 
-                FormsStorage.KEY_DISPLAY_SUBTEXT
+                FormsStorage.KEY_DISPLAY_NAME, FormsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
         String sortOrder = FormsStorage.KEY_DISPLAY_NAME + " ASC";
-        
-        Cursor c = getContentResolver().query(FormsStorage.CONTENT_URI_INFO_DATASET,
-        								projection,	null, null, sortOrder);
+
+        Cursor c =
+            getContentResolver().query(FormsStorage.CONTENT_URI_INFO_DATASET, projection, null,
+                null, sortOrder);
         startManagingCursor(c);
         // render total instance view
         mInstances =
@@ -138,7 +138,7 @@ public class FormManagerList extends ListActivity {
         DialogInterface.OnClickListener dialogYesNoListener =
             new DialogInterface.OnClickListener() {
                 @Override
-				public void onClick(DialogInterface dialog, int i) {
+                public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();
@@ -158,9 +158,8 @@ public class FormManagerList extends ListActivity {
 
 
     private void refreshData() {
-    	// trigger rescan of directory...
-    	getContentResolver().update(FormsStorage.CONTENT_URI_INFO_DATASET,
-    						null, null, null);
+        // trigger rescan of directory...
+        getContentResolver().update(FormsStorage.CONTENT_URI_INFO_DATASET, null, null, null);
         if (!mRestored) {
             mSelected.clear();
         }
@@ -175,9 +174,10 @@ public class FormManagerList extends ListActivity {
         // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-        	deleted += getContentResolver().delete(
-        			ContentUris.withAppendedId(FormsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
-        			null, null);
+            deleted +=
+                getContentResolver().delete(
+                    ContentUris.withAppendedId(FormsStorage.CONTENT_URI_INFO_DATASET, mSelected
+                            .get(i)), null, null);
         }
 
         if (deleted > 0) {

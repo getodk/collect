@@ -70,7 +70,7 @@ public class InstanceUploaderList extends ListActivity {
         mActionButton.setOnClickListener(new OnClickListener() {
 
             @Override
-			public void onClick(View arg0) {
+            public void onClick(View arg0) {
                 if (mSelected.size() > 0) {
                     // items selected
                     uploadSelectedFiles();
@@ -88,7 +88,7 @@ public class InstanceUploaderList extends ListActivity {
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
@@ -109,17 +109,17 @@ public class InstanceUploaderList extends ListActivity {
 
 
     /**
-     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each row.
+     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each
+     * row.
      */
     private void refreshView() {
-    	String[] projection = new String[] {
-    			SubmissionsStorage.KEY_ID,
-    			SubmissionsStorage.KEY_DISPLAY_NAME,
-    			SubmissionsStorage.KEY_DISPLAY_SUBTEXT
-    	};
+        String[] projection =
+            new String[] {
+                    SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_DISPLAY_NAME,
+                    SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+            };
         String[] data = new String[] {
-        		SubmissionsStorage.KEY_DISPLAY_NAME,
-        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+                SubmissionsStorage.KEY_DISPLAY_NAME, SubmissionsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
@@ -127,16 +127,16 @@ public class InstanceUploaderList extends ListActivity {
         String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC";
 
         FilterUtils.FilterCriteria fNotIncomplete =
-    		FilterUtils.buildInverseSelectionClause( SubmissionsStorage.KEY_STATUS, 
-    										  SubmissionsStorage.STATUS_INCOMPLETE );
+            FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS,
+                SubmissionsStorage.STATUS_INCOMPLETE);
         FilterUtils.FilterCriteria fNotSubmitted =
-    		FilterUtils.buildInverseSelectionClause( SubmissionsStorage.KEY_STATUS, 
-    										  SubmissionsStorage.STATUS_SUBMITTED );
-        FilterUtils.FilterCriteria fd = 
-        	FilterUtils.and(fNotIncomplete, fNotSubmitted);
+            FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS,
+                SubmissionsStorage.STATUS_SUBMITTED);
+        FilterUtils.FilterCriteria fd = FilterUtils.and(fNotIncomplete, fNotSubmitted);
 
-        Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-        		projection, fd.selection, fd.selectionArgs, sortOrder );
+        Cursor c =
+            getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, projection,
+                fd.selection, fd.selectionArgs, sortOrder);
         startManagingCursor(c);
 
         // render total instance view
@@ -172,20 +172,27 @@ public class InstanceUploaderList extends ListActivity {
         ArrayList<String> selectedInstances = new ArrayList<String>();
 
         for (int i = 0; i < mSelected.size(); i++) {
-        	Cursor c = null;
-        	try {
-        		c = getContentResolver().query(
-        			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
-        				new String[] { SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH }, null, null, null);
-        		if ( c.moveToNext() ) {
-        			String s = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
-        			selectedInstances.add(s);
-        		}
-        	} finally {
-        		if ( c != null ) {
-        			c.close();
-        		}
-        	}
+            Cursor c = null;
+            try {
+                c =
+                    getContentResolver().query(
+                        ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+                            mSelected.get(i)),
+                        new String[] {
+                                SubmissionsStorage.KEY_ID,
+                                SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH
+                        }, null, null, null);
+                if (c.moveToNext()) {
+                    String s =
+                        c.getString(c
+                                .getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
+                    selectedInstances.add(s);
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
+            }
         }
 
         // bundle intent with upload files
@@ -248,7 +255,7 @@ public class InstanceUploaderList extends ListActivity {
     }
 
 
-	@Override
+    @Override
     protected void onResume() {
         refreshData();
         super.onResume();

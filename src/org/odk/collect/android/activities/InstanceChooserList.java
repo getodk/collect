@@ -18,6 +18,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsStorage;
 import org.odk.collect.android.provider.SubmissionsStorage;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FilterUtils;
+import org.odk.collect.android.utilities.FilterUtils.FilterCriteria;
 
 import android.app.ListActivity;
 import android.content.ContentUris;
@@ -36,13 +38,13 @@ import android.widget.SimpleCursorAdapter;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceChooserList extends ListActivity {
-	
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
-        refreshView();
+        // build view takes place in onResume
     }
 
 
@@ -53,85 +55,105 @@ public class InstanceChooserList extends ListActivity {
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get full path to the instance
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        String instanceDirPath = c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
+        String instanceDirPath =
+            c.getString(c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
 
         String formpath = null;
         Cursor fp = null;
         Cursor fi = null;
         try {
-        	fp = getContentResolver().query(
-        			ContentUris.withAppendedId( SubmissionsStorage.CONTENT_URI_FORMS_INFO_URI_DATASET,
-        										c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID))),
-        		new String[] { SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_URI_FORMS_INFO },
-        		null, null, null );
-        
-        	String uri = null;
-        	if ( fp.moveToNext() ) {
-        		uri = fp.getString(fp.getColumnIndex(SubmissionsStorage.KEY_URI_FORMS_INFO));
-        	}
-        	if ( uri != null ) {
-        		Uri u = Uri.parse(uri);
-        		fi = getContentResolver().query(u,
-        				new String[] { FormsStorage.KEY_ID, FormsStorage.KEY_FORM_FILE_PATH },
-        				null, null, null );
-        		if ( fi.moveToNext() ) {
-        			formpath = fi.getString(fi.getColumnIndex(FormsStorage.KEY_FORM_FILE_PATH));
-        		}
-        	}
+            fp =
+                getContentResolver().query(
+                    ContentUris.withAppendedId(
+                        SubmissionsStorage.CONTENT_URI_FORMS_INFO_URI_DATASET, c.getLong(c
+                                .getColumnIndex(SubmissionsStorage.KEY_ID))), new String[] {
+                            SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_URI_FORMS_INFO
+                    }, null, null, null);
+
+            String uri = null;
+            if (fp.moveToNext()) {
+                uri = fp.getString(fp.getColumnIndex(SubmissionsStorage.KEY_URI_FORMS_INFO));
+            }
+            if (uri != null) {
+                Uri u = Uri.parse(uri);
+                fi = getContentResolver().query(u, new String[] {
+                        FormsStorage.KEY_ID, FormsStorage.KEY_FORM_FILE_PATH
+                }, null, null, null);
+                if (fi.moveToNext()) {
+                    formpath = fi.getString(fi.getColumnIndex(FormsStorage.KEY_FORM_FILE_PATH));
+                }
+            }
         } finally {
-        	if ( fp != null ) {
-        		fp.close();
-        	}
-        	if ( fi != null ) {
-        		fi.close();
-        	}
+            if (fp != null) {
+                fp.close();
+            }
+            if (fi != null) {
+                fi.close();
+            }
         }
 
-        if ( formpath != null ) {
+        if (formpath != null) {
             // create intent for return and store path
             Intent i = new Intent();
-            i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, FileUtils.getInstanceFilePath(instanceDirPath));
+            i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, FileUtils
+                    .getInstanceFilePath(instanceDirPath));
             i.putExtra(FormEntryActivity.KEY_FORMPATH, formpath);
 
             // return the result to the parent class
             // getParent().setResult(RESULT_OK, i);
             setResult(RESULT_OK, i);
         } else {
-        	// form defn not available...
-        	// TODO: communicate back the error?
+            // form defn not available...
+            // TODO: communicate back the error?
         }
-        
+
         // don't close cursor or tab host delays closing
         finish();
     }
 
+    private void refreshData() {
+        // trigger rescan of directory...
+        getContentResolver().update(SubmissionsStorage.CONTENT_URI_INFO_DATASET, null, null, null);
+        refreshView();
+    }
+
+    @Override
+    protected void onResume() {
+        // update the list (for returning from the remote manager)
+        refreshData();
+        super.onResume();
+    }
 
     /**
-     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each row.
+     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each
+     * row.
      */
     private void refreshView() {
-    	
-    	String[] projection = new String[] {
-    			SubmissionsStorage.KEY_ID, 
-    			SubmissionsStorage.KEY_DISPLAY_NAME,
-    			SubmissionsStorage.KEY_DISPLAY_SUBTEXT,
-    			SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH
-    	};
 
-    	// create data and views for cursor adapter
+        String[] projection =
+            new String[] {
+                    SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_DISPLAY_NAME,
+                    SubmissionsStorage.KEY_DISPLAY_SUBTEXT,
+                    SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH
+            };
+
+        // create data and views for cursor adapter
         String[] data = new String[] {
-        		SubmissionsStorage.KEY_DISPLAY_NAME,
-        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+                SubmissionsStorage.KEY_DISPLAY_NAME, SubmissionsStorage.KEY_DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 android.R.id.text1, android.R.id.text2
         };
         String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC";
-        
-        Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
-        		projection, null, null, sortOrder);
+
+        FilterCriteria fNotSubmitted = FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
+        FilterCriteria fNotPartiallySubmitted = FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_PARTIALLY_SUBMITTED);
+        FilterCriteria fc = FilterUtils.and(fNotPartiallySubmitted, fNotSubmitted);
+        Cursor c =
+            getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, projection,
+                fc.selection, fc.selectionArgs, sortOrder);
         startManagingCursor(c);
-        
+
         // render total instance view
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);

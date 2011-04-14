@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 
@@ -32,10 +34,10 @@ public class WidgetFactory {
      * 
      * @param fep prompt element to be rendered
      * @param context Android context
-     * @param instanceDirPath path to the instance directory
+     * @param instanceDir path to the instance directory
      */
     static public AbstractQuestionWidget createWidgetFromPrompt(Handler handler, FormEntryPrompt fep, Context context,
-            String instanceDirPath) {
+            File instanceDir) {
     	AbstractQuestionWidget questionWidget = null;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
@@ -67,13 +69,13 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new ImageWidget(handler, context, fep, instanceDirPath);
+                questionWidget = new ImageWidget(handler, context, fep, instanceDir);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(handler, context, fep, instanceDirPath);
+                questionWidget = new AudioWidget(handler, context, fep, instanceDir);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(handler, context, fep, instanceDirPath);
+                questionWidget = new VideoWidget(handler, context, fep, instanceDir);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(handler, context, fep);

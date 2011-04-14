@@ -316,8 +316,12 @@ public class MainMenuActivity extends Activity {
 	    		FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
 	    	FilterUtils.FilterCriteria fNotSubmitted =
 	    		FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
-	    	FilterUtils.FilterCriteria fd =
+            FilterUtils.FilterCriteria fNotPartiallySubmitted =
+                FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_PARTIALLY_SUBMITTED);
+	    	FilterUtils.FilterCriteria fd1 =
 	    		FilterUtils.and(fNotIncomplete, fNotSubmitted);
+	    	FilterUtils.FilterCriteria fd = 
+	    	    FilterUtils.and(fd1,fNotPartiallySubmitted);
 
 	        c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
 	        		new String[]{SubmissionsStorage.KEY_ID},

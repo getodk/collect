@@ -24,53 +24,62 @@ public class StorageDatabase {
     private final ODKSQLiteOpenHelper mDbHelper;
     private SQLiteDatabase mDb = null;
 
-    public StorageDatabase(ODKSQLiteOpenHelper mDbHelper) {
-    	this.mDbHelper = mDbHelper;
-	}
 
-	public StorageDatabase open() throws SQLException {
+    public StorageDatabase(ODKSQLiteOpenHelper mDbHelper) {
+        this.mDbHelper = mDbHelper;
+    }
+
+
+    public StorageDatabase open() throws SQLException {
         mDb = mDbHelper.getWritableDatabase();
 
         return this;
     }
 
+
     public void close() {
-    	try {
-    		mDbHelper.close();
-    	} finally {
-    		try {
-	    		mDb.close();
-	    	} finally {
-	    		mDb = null;
-	    	}
-    	}
-    }
-    
-    public SQLiteDatabase getDb() {
-    	if ( mDb == null ) {
-    		open();
-    	}
-    	return mDb;
+        try {
+            mDbHelper.close();
+        } finally {
+            try {
+                mDb.close();
+            } finally {
+                mDb = null;
+            }
+        }
     }
 
-    public long insert( String tableName, ContentValues values ) {
-    	if ( values == null || values.size() == 0 ) {
-    		throw new IllegalArgumentException(
-    				"insert of empty ContentValues array is not allowed");
-    	}
-    	return getDb().insert( tableName, null, values);
+
+    public SQLiteDatabase getDb() {
+        if (mDb == null) {
+            open();
+        }
+        return mDb;
     }
-    
-	public int delete( String tableName, String selection, String[] selectionArgs ) {
-		return getDb().delete(tableName, selection, selectionArgs ); 
-	}
-	
-	public int update( String tableName, ContentValues values, String selection, String[] selectionArgs ) {
-		return getDb().update(tableName, values, selection, selectionArgs);
-	}
-	
-	public Cursor query( String tableName, String[] projection, String selection, String[] selectionArgs, String sortOrder ) {
-		return getDb().query(tableName, projection, selection, selectionArgs,
-						 null, null, sortOrder, null );
-	}
+
+
+    public long insert(String tableName, ContentValues values) {
+        if (values == null || values.size() == 0) {
+            throw new IllegalArgumentException("insert of empty ContentValues array is not allowed");
+        }
+        return getDb().insert(tableName, null, values);
+    }
+
+
+    public int delete(String tableName, String selection, String[] selectionArgs) {
+        return getDb().delete(tableName, selection, selectionArgs);
+    }
+
+
+    public int update(String tableName, ContentValues values, String selection,
+            String[] selectionArgs) {
+        return getDb().update(tableName, values, selection, selectionArgs);
+    }
+
+
+    public Cursor query(String tableName, String[] projection, String selection,
+            String[] selectionArgs, String sortOrder) {
+        return getDb().query(tableName, projection, selection, selectionArgs, null, null,
+            sortOrder, null);
+    }
 }

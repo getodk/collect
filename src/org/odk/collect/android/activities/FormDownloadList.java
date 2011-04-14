@@ -95,13 +95,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_forms));
         mAlertMsg = getString(R.string.please_wait);
-        
+
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);
 
@@ -109,7 +109,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mActionButton.setEnabled(false);
         mActionButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 downloadSelectedFiles();
                 mToggled = false;
             }
@@ -118,7 +118,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
@@ -133,17 +133,19 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mRefreshButton = (Button) findViewById(R.id.refresh_button);
         mRefreshButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 mToggled = false;
                 downloadFormList();
             }
         });
 
         if (savedInstanceState != null) {
-            // If the screen has rotated, the hashmap with the form names and urls is passed here.
+            // If the screen has rotated, the hashmap with the form names and
+            // urls is passed here.
             if (savedInstanceState.containsKey(BUNDLE_FORM_LIST)) {
                 mFormNamesAndDetails =
-                    (HashMap<String, FormDetails>) savedInstanceState.getSerializable(BUNDLE_FORM_LIST);
+                    (HashMap<String, FormDetails>) savedInstanceState
+                            .getSerializable(BUNDLE_FORM_LIST);
             }
             // indicating whether or not select-all is on or off.
             if (savedInstanceState.containsKey(BUNDLE_TOGGLED_KEY)) {
@@ -195,7 +197,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @SuppressWarnings("unchecked")
-	private void downloadFormList() {
+    private void downloadFormList() {
         mFormNamesAndDetails = new HashMap<String, FormDetails>();
         if (mProgressDialog != null) {
             // This is needed because onPrepareDialog() is broken in 1.6.
@@ -214,35 +216,33 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         arg.put(LIST_URL, new FormDetails(url));
 
         boolean deferForPassword = false;
-        final String userEmail =
-            	settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
-        if (userEmail != null && userEmail.length() != 0 ) {
-        	final Uri u = Uri.parse(url);
-        	if ( !WebUtils.hasCredentials(userEmail, u.getHost()) ) {
-        		PasswordPromptDialogBuilder b = 
-        			new PasswordPromptDialogBuilder(this, 
-        											userEmail, 
-        											u.getHost(),
-        											new OnOkListener() {
+        final String userEmail = settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
+        if (userEmail != null && userEmail.length() != 0) {
+            final Uri u = Uri.parse(url);
+            if (!WebUtils.hasCredentials(userEmail, u.getHost())) {
+                PasswordPromptDialogBuilder b =
+                    new PasswordPromptDialogBuilder(this, userEmail, u.getHost(),
+                            new OnOkListener() {
 
-														@Override
-														public void onOk(
-																Object okListenerContext) {
-															FormDownloadList.this.executeDownload((HashMap<String, FormDetails>) okListenerContext);
-														}
-        				
-        			}, arg);
-        		deferForPassword = true;
-        		b.show();
-        	}
+                                @Override
+                                public void onOk(Object okListenerContext) {
+                                    FormDownloadList.this
+                                            .executeDownload((HashMap<String, FormDetails>) okListenerContext);
+                                }
+
+                            }, arg);
+                deferForPassword = true;
+                b.show();
+            }
         }
-        if ( !deferForPassword ) {
-        	executeDownload(arg);
+        if (!deferForPassword) {
+            executeDownload(arg);
         }
     }
 
+
     @SuppressWarnings("unchecked")
-	private void executeDownload(HashMap<String, FormDetails> arg) {
+    private void executeDownload(HashMap<String, FormDetails> arg) {
         showDialog(PROGRESS_DIALOG);
         mDownloadFormsTask = new DownloadFormsTask();
 
@@ -321,7 +321,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
                         @Override
-						public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             mDownloadFormsTask.setDownloaderListener(null);
                         }
@@ -337,13 +337,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         return null;
     }
 
-
     private static class DownloadArgs {
         HashMap<String, FormDetails> filesToDownload;
         Set<String> hosts;
         String userEmail;
     }
-    
+
+
     /**
      * Adds the selected form
      */
@@ -367,37 +367,36 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
             FileUtils.createFolder(FileUtils.FORMS_PATH);
             boolean deferForPassword = false;
-            String userEmail =
-            	settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
-            if (userEmail != null && userEmail.length() != 0 ) {
-            	Set<String> hosts = new HashSet<String>();
-            	for ( FormDetails f : filesToDownload.values() ) {
-            		if ( f.downloadUrl != null ) {
-            			Uri u = Uri.parse(f.downloadUrl);
-                    	if ( !WebUtils.hasCredentials(userEmail, u.getHost()) ) {
-                    		hosts.add(u.getHost());
-                    	}
-            		}
-            		if ( f.manifestUrl != null ) {
-            			Uri u = Uri.parse(f.manifestUrl);
-                    	if ( !WebUtils.hasCredentials(userEmail, u.getHost()) ) {
-                    		hosts.add(u.getHost());
-                    	}
-            		}
-            	}
+            String userEmail = settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
+            if (userEmail != null && userEmail.length() != 0) {
+                Set<String> hosts = new HashSet<String>();
+                for (FormDetails f : filesToDownload.values()) {
+                    if (f.downloadUrl != null) {
+                        Uri u = Uri.parse(f.downloadUrl);
+                        if (!WebUtils.hasCredentials(userEmail, u.getHost())) {
+                            hosts.add(u.getHost());
+                        }
+                    }
+                    if (f.manifestUrl != null) {
+                        Uri u = Uri.parse(f.manifestUrl);
+                        if (!WebUtils.hasCredentials(userEmail, u.getHost())) {
+                            hosts.add(u.getHost());
+                        }
+                    }
+                }
 
-            	if ( !hosts.isEmpty() ) {
-            		DownloadArgs args = new DownloadArgs();
-            		args.filesToDownload = filesToDownload;
-            		args.hosts = hosts;
-            		args.userEmail = userEmail;
-            		deferForPassword = true;
-            		launchPasswordDialog(args);
-            	}
+                if (!hosts.isEmpty()) {
+                    DownloadArgs args = new DownloadArgs();
+                    args.filesToDownload = filesToDownload;
+                    args.hosts = hosts;
+                    args.userEmail = userEmail;
+                    deferForPassword = true;
+                    launchPasswordDialog(args);
+                }
             }
 
-            if ( !deferForPassword ) {
-            	executeMultiDownload(filesToDownload);
+            if (!deferForPassword) {
+                executeMultiDownload(filesToDownload);
             }
 
         } else {
@@ -406,33 +405,30 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         }
     }
 
-    private void launchPasswordDialog( DownloadArgs args ) {
-    	if ( args.hosts.isEmpty() ) {
-    		executeMultiDownload(args.filesToDownload);
-    		return;
-    	}
-    	
-		String h = args.hosts.iterator().next();
-		args.hosts.remove(h);
-    	PasswordPromptDialogBuilder b = 
-    			new PasswordPromptDialogBuilder(
-    					this, 
-						args.userEmail, 
-						h,
-						new PasswordPromptDialogBuilder.OnOkListener() {
 
-							@Override
-							public void onOk(
-									Object okListenerContext) {
-								DownloadArgs args = (DownloadArgs) okListenerContext;
-			            		FormDownloadList.this.launchPasswordDialog(args);
-							}
-    			}, args);
-    	b.show();
+    private void launchPasswordDialog(DownloadArgs args) {
+        if (args.hosts.isEmpty()) {
+            executeMultiDownload(args.filesToDownload);
+            return;
+        }
+
+        String h = args.hosts.iterator().next();
+        args.hosts.remove(h);
+        PasswordPromptDialogBuilder b =
+            new PasswordPromptDialogBuilder(this, args.userEmail, h,
+                    new PasswordPromptDialogBuilder.OnOkListener() {
+                        @Override
+                        public void onOk(Object okListenerContext) {
+                            DownloadArgs args = (DownloadArgs) okListenerContext;
+                            FormDownloadList.this.launchPasswordDialog(args);
+                        }
+                    }, args);
+        b.show();
     }
-    
+
+
     @SuppressWarnings("unchecked")
-	private void executeMultiDownload(HashMap<String, FormDetails> filesToDownload) {
+    private void executeMultiDownload(HashMap<String, FormDetails> filesToDownload) {
         // show dialog box
         showDialog(PROGRESS_DIALOG);
         mDownloadFormsTask = new DownloadFormsTask();
@@ -440,6 +436,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
         mDownloadFormsTask.execute(filesToDownload);
     }
+
 
     @Override
     public Object onRetainNonConfigurationInstance() {
@@ -475,7 +472,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @Override
-	public void formDownloadingComplete(HashMap<String, FormDetails> result) {
+    public void formDownloadingComplete(HashMap<String, FormDetails> result) {
         dismissDialog(PROGRESS_DIALOG);
         String dialogMessage = null;
         String dialogTitle = null;
@@ -490,14 +487,14 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
                     result.remove(DownloadFormsTask.DL_FORMS);
                     if (result.size() > 0) {
-                        // after we remove DL_FORMS, if we have anything left in the
-                        // hashmap it's the renamed files in <old, new>
+                        // after we remove DL_FORMS, if we have anything left in
+                        // the hashmap it's the renamed files in <old, new>
                         Set<String> keys = result.keySet();
                         Iterator<String> i = keys.iterator();
                         while (i.hasNext()) {
                             String form = i.next();
-                            dialogMessage +=
-                                " " + getString(R.string.form_renamed, form, result.get(form).stringValue);
+                            dialogMessage += getString(R.string.form_renamed, form,
+                                            result.get(form).stringValue);
                         }
                     }
                     mSuccess = true;
@@ -521,8 +518,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 } else {
                     // Download failed
                     dialogMessage =
-                        getString(R.string.list_failed_with_error, 
-                        	result.get(DownloadFormsTask.DL_ERROR_MSG).stringValue);
+                        getString(R.string.list_failed_with_error, result
+                                .get(DownloadFormsTask.DL_ERROR_MSG).stringValue);
                     dialogTitle = getString(R.string.load_remote_form_error);
                     createAlertDialog(dialogTitle, dialogMessage);
 
@@ -542,7 +539,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mAlertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
-			public void onClick(DialogInterface dialog, int i) {
+            public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
                         // just close the dialog
@@ -571,7 +568,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 
     @Override
-	public void progressUpdate(String currentFile, int progress, int total) {
+    public void progressUpdate(String currentFile, int progress, int total) {
         mAlertMsg = getString(R.string.fetching_file, currentFile, progress, total);
         mProgressDialog.setMessage(mAlertMsg);
     }

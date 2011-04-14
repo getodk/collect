@@ -53,8 +53,8 @@ import android.widget.Toast;
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
 
-	private static final String t = "InstanceUploaderActivity";
-	
+    private static final String t = "InstanceUploaderActivity";
+
     private final static int PROGRESS_DIALOG = 1;
     private final static String KEY_TOTALCOUNT = "totalcount";
     private ProgressDialog mProgressDialog;
@@ -63,10 +63,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private int totalCount = -1;
 
     private static final class UploadArgs {
-    	Set<String> hosts;
-    	ArrayList<String> instances;
-    	String userEmail;
+        Set<String> hosts;
+        ArrayList<String> instances;
+        String userEmail;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,108 +89,111 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-            String userEmail =
-            	settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
+            String userEmail = settings.getString(ServerPreferences.KEY_USER_EMAIL, null);
 
             UploadArgs argSet = new UploadArgs();
-        	argSet.instances = instanceDirs;
-        	argSet.hosts = new HashSet<String>();
-        	argSet.userEmail = userEmail;
-        	
-            boolean deferForPassword = false;
-            if (userEmail != null && userEmail.length() != 0 ) {
-            	
-            	// you cannot submit incomplete instances...
-            	FilterCriteria fc = FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, 
-            														 SubmissionsStorage.STATUS_INCOMPLETE);
-            	
-            	Cursor c =null;
-            	try {
-	            	c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
-	            				new String[] { SubmissionsStorage.KEY_ID,
-	            								SubmissionsStorage.KEY_SUBMISSION_URI,
-	            								SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH },
-	            				fc.selection, fc.selectionArgs, null);
-	            	
-	            	int idxInstanceDir = c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH);
-	            	int idxUri = c.getColumnIndex(SubmissionsStorage.KEY_SUBMISSION_URI);
-	            	while ( c.moveToNext() ) {
-	            		String instanceDir = c.getString(idxInstanceDir);
-	            		if ( !instanceDirs.contains(instanceDir) ) continue;
-	            		
-	            		String urlString = c.getString(idxUri);
-	            		// it is one of the submissions we want to do...
-	            		try {
-	            			URL url = new URL(urlString);
-	            			URI uri = url.toURI();
-	            			String host = uri.getHost();
-	
-	            	    	if ( !WebUtils.hasCredentials(userEmail, host) ) {
-	            	    		argSet.hosts.add(host);
-	            	    	}
-	            		} catch ( MalformedURLException e ) {
-	            			e.printStackTrace();
-	            			Log.e(t, "Invalid url: " + urlString + " for submission " + instanceDir);
-	            		} catch (URISyntaxException e ) {
-	            			e.printStackTrace();
-	            			Log.e(t, "Invalid uri: " + urlString + " for submission " + instanceDir);
-	            		} catch ( Exception e ) {
-	            			e.printStackTrace();
-	            			Log.e(t, "Invalid uri: " + ((urlString == null) ? "null" : urlString) +
-	            					" for submission " + instanceDir);
-	            		}
-	            	}
-            	} finally {
-            		if ( c != null ) {
-            			c.close();
-            			c = null;
-            		}
-            	}
+            argSet.instances = instanceDirs;
+            argSet.hosts = new HashSet<String>();
+            argSet.userEmail = userEmail;
 
-            	// OK. we have the list of distinct hosts...
-            	if ( !argSet.hosts.isEmpty() ) {
-            		deferForPassword = true;
-            		launchPasswordDialog(argSet);
-            	}
+            boolean deferForPassword = false;
+            if (userEmail != null && userEmail.length() != 0) {
+
+                // you cannot submit incomplete instances...
+                FilterCriteria fc =
+                    FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS,
+                        SubmissionsStorage.STATUS_INCOMPLETE);
+
+                Cursor c = null;
+                try {
+                    c =
+                        getContentResolver().query(
+                            SubmissionsStorage.CONTENT_URI_INFO_DATASET,
+                            new String[] {
+                                    SubmissionsStorage.KEY_ID,
+                                    SubmissionsStorage.KEY_SUBMISSION_URI,
+                                    SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH
+                            }, fc.selection, fc.selectionArgs, null);
+
+                    int idxInstanceDir =
+                        c.getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH);
+                    int idxUri = c.getColumnIndex(SubmissionsStorage.KEY_SUBMISSION_URI);
+                    while (c.moveToNext()) {
+                        String instanceDir = c.getString(idxInstanceDir);
+                        if (!instanceDirs.contains(instanceDir))
+                            continue;
+
+                        String urlString = c.getString(idxUri);
+                        // it is one of the submissions we want to do...
+                        try {
+                            URL url = new URL(urlString);
+                            URI uri = url.toURI();
+                            String host = uri.getHost();
+
+                            if (!WebUtils.hasCredentials(userEmail, host)) {
+                                argSet.hosts.add(host);
+                            }
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                            Log.e(t, "Invalid url: " + urlString + " for submission " + instanceDir);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                            Log.e(t, "Invalid uri: " + urlString + " for submission " + instanceDir);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e(t, "Invalid uri: " + ((urlString == null) ? "null" : urlString)
+                                    + " for submission " + instanceDir);
+                        }
+                    }
+                } finally {
+                    if (c != null) {
+                        c.close();
+                        c = null;
+                    }
+                }
+
+                // OK. we have the list of distinct hosts...
+                if (!argSet.hosts.isEmpty()) {
+                    deferForPassword = true;
+                    launchPasswordDialog(argSet);
+                }
             }
 
-            if ( !deferForPassword ) {
-            	executeUpload(instanceDirs);
+            if (!deferForPassword) {
+                executeUpload(instanceDirs);
             }
         }
     }
 
-    private void launchPasswordDialog( UploadArgs args ) {
-    	if ( args.hosts.isEmpty() ) {
-    		executeUpload(args.instances);
-    		return;
-    	}
-    	
-		String h = args.hosts.iterator().next();
-		args.hosts.remove(h);
 
-		PasswordPromptDialogBuilder b = 
-			new PasswordPromptDialogBuilder(
-					this, 
-					args.userEmail, 
-					h,
-					new OnOkListener() {
-						@Override
-						public void onOk(Object okListenerContext) {
-							UploadArgs args = (UploadArgs) okListenerContext;
-							InstanceUploaderActivity.this.launchPasswordDialog(args);
-						}
-    			}, args);
-		b.show();
+    private void launchPasswordDialog(UploadArgs args) {
+        if (args.hosts.isEmpty()) {
+            executeUpload(args.instances);
+            return;
+        }
+
+        String h = args.hosts.iterator().next();
+        args.hosts.remove(h);
+
+        PasswordPromptDialogBuilder b =
+            new PasswordPromptDialogBuilder(this, args.userEmail, h, new OnOkListener() {
+                @Override
+                public void onOk(Object okListenerContext) {
+                    UploadArgs args = (UploadArgs) okListenerContext;
+                    InstanceUploaderActivity.this.launchPasswordDialog(args);
+                }
+            }, args);
+        b.show();
     }
-    
+
+
     private void executeUpload(ArrayList<String> instanceDirs) {
         mInstanceUploaderTask = new InstanceUploaderTask();
         mInstanceUploaderTask.setUploaderListener(this);
 
         // setup dialog and upload task
         showDialog(PROGRESS_DIALOG);
-        
+
         totalCount = instanceDirs.size();
 
         // convert array list to an array
@@ -197,15 +201,16 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         mInstanceUploaderTask.execute(sa);
     }
 
+
     // TODO: if uploadingComplete() when activity backgrounded, won't work.
     // just check task status in onResume
     @Override
-	public void uploadingComplete(ArrayList<InstanceUploaderListener.UploadOutcome> result) {    	
+    public void uploadingComplete(ArrayList<InstanceUploaderListener.UploadOutcome> result) {
         int failureCount = 0;
-        for ( UploadOutcome o : result ) {
-        	if ( !o.isSuccessful ) {
-        		++failureCount;
-        	}
+        for (UploadOutcome o : result) {
+            if (!o.isSuccessful) {
+                ++failureCount;
+            }
         }
         boolean success = false;
         if (failureCount == 0) {
@@ -214,36 +219,38 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
             success = true;
         } else {
-            String s = failureCount + " of " + totalCount;
-            Toast.makeText(this, getString(R.string.upload_some_failed, s),
-        		Toast.LENGTH_LONG).show();
+            String s = getString(R.string.of, failureCount, totalCount);
+            Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
+                    .show();
         }
 
         // for each path, update the status
-        for ( UploadOutcome o : result ) {
-        	ContentValues values = new ContentValues();
-        	if ( o.isSuccessful ) {
-        		if ( o.notAllFilesUploaded ) {
-        			values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_PARTIALLY_SUBMITTED);
-        		} else {
-        			values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
-        		}
-        	} else {
-    			values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMISSION_FAILED);
-    			if ( o.errorMessage != null ) {
-    				values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, o.errorMessage);
-    			}
-        	}
-        	try {
-        		FilterCriteria fc = FilterUtils.buildSelectionClause(
-        				SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, o.instanceDir);
-        		
-        		getContentResolver().update(
-        			SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-        			values, fc.selection, fc.selectionArgs);
-        	} catch ( Exception e ) {
-        		e.printStackTrace();
-        	}
+        for (UploadOutcome o : result) {
+            ContentValues values = new ContentValues();
+            if (o.isSuccessful) {
+                if (o.notAllFilesUploaded) {
+                    values.put(SubmissionsStorage.KEY_STATUS,
+                        SubmissionsStorage.STATUS_PARTIALLY_SUBMITTED);
+                } else {
+                    values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
+                }
+            } else {
+                values.put(SubmissionsStorage.KEY_STATUS,
+                    SubmissionsStorage.STATUS_SUBMISSION_FAILED);
+                if (o.errorMessage != null) {
+                    values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, o.errorMessage);
+                }
+            }
+            try {
+                FilterCriteria fc =
+                    FilterUtils.buildSelectionClause(
+                        SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, o.instanceDir);
+
+                getContentResolver().update(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values,
+                    fc.selection, fc.selectionArgs);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Intent in = new Intent();
@@ -255,7 +262,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     @Override
-	public void progressUpdate(int progress, int total) {
+    public void progressUpdate(int progress, int total) {
         mProgressDialog.setMessage(getString(R.string.sending_items, progress, total));
     }
 
@@ -268,7 +275,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
                         @Override
-						public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             mInstanceUploaderTask.setUploaderListener(null);
                             finish();
@@ -308,9 +315,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onDestroy() {
-    	if ( mInstanceUploaderTask != null ) {
-    		mInstanceUploaderTask.setUploaderListener(null);
-    	}
+        if (mInstanceUploaderTask != null) {
+            mInstanceUploaderTask.setUploaderListener(null);
+        }
         super.onDestroy();
     }
 
