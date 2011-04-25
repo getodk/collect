@@ -14,36 +14,27 @@
 
 package org.odk.collect.android.tasks;
 
+import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.model.xform.XFormSerializingVisitor;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FormController;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.IDataReference;
-import org.javarosa.core.model.SubmissionProfile;
-import org.javarosa.core.model.instance.FormInstance;
-import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.services.transport.payload.ByteArrayPayload;
-import org.javarosa.form.api.FormEntryController;
-import org.javarosa.form.api.FormEntryModel;
-import org.javarosa.model.xform.XFormSerializingVisitor;
-import org.javarosa.model.xform.XPathReference;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.provider.SubmissionsStorage;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FilterUtils;
-
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * Background task for loading a form.
@@ -55,8 +46,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private final static String t = "SaveToDiskTask";
 
     private FormSavedListener mSavedListener;
-    private String mInstanceDirPath;
-    private String mDefaultUrl;
+    private String mInstancePath;
     private Context mContext;
     private Boolean mSave;
     private Boolean mMarkCompleted;
@@ -81,11 +71,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return validateStatus;
         }
 
-        Collect.getInstance().getFormEntryController().getModel().getForm().postProcessInstance();
+        FormEntryActivity.mFormController.postProcessInstance();
 
-        if (mSave && exportData(mInstanceDirPath, mDefaultUrl, mContext, mMarkCompleted)) {
+        if (mSave && exportData(mInstancePath, mContext, mMarkCompleted)) {
             return SAVED_AND_EXIT;
-        } else if (exportData(mInstanceDirPath, mDefaultUrl, mContext, mMarkCompleted)) {
+        } else if (exportData(mInstancePath, mContext, mMarkCompleted)) {
             return SAVED;
         }
 
@@ -94,25 +84,19 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public boolean exportData(String instanceDirPath, String defaultUrl, Context context,
-            boolean markCompleted) {
-
-        Collect app = Collect.getInstance();
-
-        File instanceDir = new File(instanceDirPath);
-        File f = new File(FileUtils.getInstanceFilePath(instanceDirPath));
+    public boolean exportData(String instancePath, Context context, boolean markCompleted) {
 
         ByteArrayPayload payload;
         try {
 
             // assume no binary data inside the model.
             FormInstance datamodel =
-                app.getFormEntryController().getModel().getForm().getInstance();
+                FormEntryActivity.mFormController.getInstance();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
             // write out xml
-            exportXmlFile(payload, f.getAbsolutePath());
+            exportXmlFile(payload, instancePath);
 
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
@@ -120,124 +104,32 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
-        boolean canEditSubmission = true;
-        String url = mDefaultUrl;
-        {
-            // now try to construct submission file
-            File fSubmit = new File(FileUtils.getSubmissionBlobPath(instanceDirPath));
-            try {
-                // assume no binary data inside the model.
-                FormEntryModel dataModel = app.getFormEntryController().getModel();
-                FormDef formDef = dataModel.getForm();
-
-                FormInstance formInstance = formDef.getInstance();
-
-                IDataReference submissionElement = new XPathReference("/");
-                // Determine the information about the submission...
-                SubmissionProfile p = formDef.getSubmissionProfile();
-                if (p != null) {
-                    submissionElement = p.getRef();
-                    String altUrl = p.getAction();
-                    if (submissionElement == null || altUrl == null || !altUrl.startsWith("http")
-                            || p.getMethod() == null || !p.getMethod().equals("form-data-post")) {
-                        Log
-                                .e(
-                                    t,
-                                    "Submission element should specify attributes: ref, method=\"form-data-post\", and action=\"http...\"");
-                        return false;
-                    }
-                    url = altUrl;
-                    TreeElement e = formInstance.resolveReference(new XPathReference("/"));
-                    TreeElement ee = formInstance.resolveReference(submissionElement);
-                    // we can edit the submission if the published fragment is the whole tree.
-                    canEditSubmission = e.equals(ee);
-                }
-
-                if (mMarkCompleted) {
-                    XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-                    payload =
-                        (ByteArrayPayload) serializer.createSerializedPayload(formInstance,
-                            submissionElement);
-
-                    // write out xml
-                    exportXmlFile(payload, fSubmit.getAbsolutePath());
-                }
-
-            } catch (IOException e) {
-                Log.e(t, "Error creating serialized payload");
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        boolean exists = false;
-        long id = 0L;
-        Cursor c = null;
-        try {
-            FilterUtils.FilterCriteria fd =
-                FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH,
-                    instanceDir.getAbsolutePath());
-
-            c = app.getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
-                    new String[] {
-                        SubmissionsStorage.KEY_ID
-                    }, fd.selection, fd.selectionArgs, null);
-            if (c != null && c.moveToFirst()) {
-                exists = true;
-                id = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-                c = null;
-            }
-        }
+        FileDbAdapter fda = new FileDbAdapter();
+        fda.open();
+        File f = new File(instancePath);
+        Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
         if (!mMarkCompleted) {
-            url = null;
-            if (!exists) {
-                ContentValues values = new ContentValues();
-                values.put(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, instanceDir
-                        .getAbsolutePath());
-                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
-                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, true);
-                app.getContentResolver()
-                        .insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
+            if (c != null && c.getCount() == 0) {
+                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                    FileDbAdapter.STATUS_INCOMPLETE);
             } else {
-                ContentValues values = new ContentValues();
-                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
-                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, true);
-                app.getContentResolver().update(
-                    ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
-                    values, null, null);
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);
             }
         } else {
-            if (!exists) {
-                ContentValues values = new ContentValues();
-                values.put(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH, instanceDir
-                        .getAbsolutePath());
-                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
-                values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, app
-                        .getString(R.string.will_be_sent_to)
-                        + url);
-                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
-                app.getContentResolver()
-                        .insert(SubmissionsStorage.CONTENT_URI_INFO_DATASET, values);
+            if (c != null && c.getCount() == 0) {
+                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                    FileDbAdapter.STATUS_COMPLETE);
+
             } else {
-                ContentValues values = new ContentValues();
-                values.put(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_COMPLETE);
-                values.put(SubmissionsStorage.KEY_DISPLAY_SUB_SUBTEXT, app
-                        .getString(R.string.will_be_sent_to)
-                        + url);
-                values.put(SubmissionsStorage.KEY_SUBMISSION_URI, url);
-                values.put(SubmissionsStorage.KEY_CAN_EDIT_SUBMISSION, canEditSubmission);
-                app.getContentResolver().update(
-                    ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, id),
-                    values, null, null);
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
             }
         }
+        // clean up cursor
+        if (c != null) {
+            c.close();
+        }
+
+        fda.close();
         return true;
 
     }
@@ -256,6 +148,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             if (read > 0) {
                 // write xml file
                 try {
+                    // String filename = path + "/" +
+                    // path.substring(path.lastIndexOf('/') + 1) + ".xml";
                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                     bw.write(new String(data, "UTF-8"));
                     bw.flush();
@@ -295,10 +189,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public void setExportVars(String instanceDirPath, String defaultUrl, Context context,
-            Boolean saveAndExit, Boolean markCompleted) {
-        mInstanceDirPath = instanceDirPath;
-        mDefaultUrl = defaultUrl;
+    public void setExportVars(String instancePath, Context context, Boolean saveAndExit,
+            Boolean markCompleted) {
+        mInstancePath = instancePath;
         mContext = context;
         mSave = saveAndExit;
         mMarkCompleted = markCompleted;
@@ -315,35 +208,27 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      */
 
     private int validateAnswers(Boolean markCompleted) {
-        FormEntryController fec = Collect.getInstance().getFormEntryController();
-        FormEntryModel fem = fec.getModel();
-        FormIndex i = fem.getFormIndex();
 
-        fec.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        FormIndex i = FormEntryActivity.mFormController.getFormIndex();
+
+        FormEntryActivity.mFormController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
         int event;
-        while ((event = fec.stepToNextEvent()) != FormEntryController.EVENT_END_OF_FORM) {
+        while ((event = FormEntryActivity.mFormController.stepToNextEvent(FormController.STEP_OVER_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
             if (event != FormEntryController.EVENT_QUESTION) {
                 continue;
             } else {
-                int saveStatus = fec.answerQuestion(fem.getQuestionPrompt().getAnswerValue());
+                int saveStatus =
+                    FormEntryActivity.mFormController.answerQuestion(FormEntryActivity.mFormController.getQuestionPrompt()
+                            .getAnswerValue());
                 if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) {
-                    this.publishProgress(fem.getQuestionPrompt().getConstraintText(), Integer
-                            .toString(saveStatus));
                     return saveStatus;
                 }
             }
         }
 
-        fec.jumpToIndex(i);
+        FormEntryActivity.mFormController.jumpToIndex(i);
         return VALIDATED;
-    }
-
-
-    @Override
-    protected void onProgressUpdate(String... values) {
-        Collect.getInstance().createConstraintToast(values[0],
-            Integer.valueOf(values[1]).intValue());
     }
 
 }

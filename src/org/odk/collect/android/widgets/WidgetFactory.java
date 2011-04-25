@@ -14,13 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
-import android.os.Handler;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -34,60 +31,55 @@ public class WidgetFactory {
      * 
      * @param fep prompt element to be rendered
      * @param context Android context
-     * @param instanceDir path to the instance directory
+     * @param instancePath path to the instance file
      */
-    static public AbstractQuestionWidget createWidgetFromPrompt(Handler handler, FormEntryPrompt fep, Context context,
-            File instanceDir) {
-    	AbstractQuestionWidget questionWidget = null;
+    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
+            String instancePath) {
+        
+        QuestionWidget questionWidget = null;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(handler, context, fep);
-                        break;
-                    case Constants.DATATYPE_DATE_TIME:
-                        questionWidget = new DateTimeWidget(handler, context, fep);
-                        break;
-                    case Constants.DATATYPE_TIME:
-                        questionWidget = new TimeWidget(handler, context, fep);
+                        questionWidget = new DateWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        questionWidget = new DecimalWidget(handler, context, fep);
+                        questionWidget = new DecimalWidget(context, fep);
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        questionWidget = new IntegerWidget(handler, context, fep);
+                        questionWidget = new IntegerWidget(context, fep);
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        questionWidget = new GeoPointWidget(handler, context, fep);
+                        questionWidget = new GeoPointWidget(context, fep);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(handler, context, fep);
+                        questionWidget = new BarcodeWidget(context, fep);
                         break;
                     default:
-                        questionWidget = new StringWidget(handler, context, fep);
+                        questionWidget = new StringWidget(context, fep);
                         break;
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new ImageWidget(handler, context, fep, instanceDir);
+                questionWidget = new ImageWidget(context, instancePath, fep);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(handler, context, fep, instanceDir);
+                questionWidget = new AudioWidget(context, instancePath, fep);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(handler, context, fep, instanceDir);
+                questionWidget = new VideoWidget(context, instancePath, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                questionWidget = new SelectOneWidget(handler, context, fep);
+                questionWidget = new SelectOneWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                questionWidget = new SelectMultiWidget(handler, context, fep);
+                questionWidget = new SelectMultiWidget(context, fep);
                 break;
             case Constants.CONTROL_TRIGGER:
-                questionWidget = new TriggerWidget(handler, context, fep);
+                questionWidget = new TriggerWidget(context, fep);
                 break;
             default:
-                questionWidget = new StringWidget(handler, context, fep);
+                questionWidget = new StringWidget(context, fep);
                 break;
         }
         return questionWidget;

@@ -14,34 +14,27 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.ServerPreferences;
-import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FilterUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.ImageView.ScaleType;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -51,6 +44,7 @@ import android.widget.ImageView.ScaleType;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends Activity {
+    private static final String t = "MainMenuActivity";
 
     // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
@@ -59,9 +53,6 @@ public class MainMenuActivity extends Activity {
 
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
-
-    // true if splash screen should be shown during onCreate
-    private static boolean mShowSplash = true;
 
     // buttons
     private Button mEnterDataButton;
@@ -75,27 +66,26 @@ public class MainMenuActivity extends Activity {
     private static int mAvailableCount;
     private static int mFormsCount;
 
-	private AlertDialog mAlertDialog;
+    private AlertDialog mAlertDialog;
 
-	
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_menu);
+        setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
 
         // if sd card error, quit
         if (!FileUtils.storageReady()) {
-        	createErrorDialog(getString(R.string.no_sd_error), true);
+            createErrorDialog(getString(R.string.no_sd_error), true);
+            return;
         }
-
-        displaySplash();
-        setContentView(R.layout.main_menu);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 // make sure we haven't added forms
                 ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
                 if (forms != null) {
@@ -120,13 +110,14 @@ public class MainMenuActivity extends Activity {
         mReviewDataButton = (Button) findViewById(R.id.review_data);
         mReviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 if ((mSavedCount + mCompletedCount) == 0) {
                     Toast.makeText(getApplicationContext(),
                         getString(R.string.no_items_error, getString(R.string.review)),
                         Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
                     startActivityForResult(i, INSTANCE_CHOOSER);
                 }
 
@@ -137,7 +128,7 @@ public class MainMenuActivity extends Activity {
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 if (mCompletedCount == 0) {
                     Toast.makeText(getApplicationContext(),
                         getString(R.string.no_items_error, getString(R.string.send)),
@@ -155,71 +146,13 @@ public class MainMenuActivity extends Activity {
         mManageFilesButton.setText(getString(R.string.manage_files));
         mManageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
                 startActivity(i);
             }
         });
     }
-    
-    /**
-     * displaySplash
-     * 
-     * Shows the splash screen if the mShowSplash member variable is true.
-     * Otherwise a no-op.
-     */
-    void displaySplash() {
-    	if ( ! mShowSplash ) return;
-    	
-    	// fetch the splash screen Drawable
-        Drawable image = null;
-        try {
-        	// attempt to load the configured default splash screen
-            BitmapDrawable bitImage = new BitmapDrawable(FileUtils.SPLASH_SCREEN_FILE_PATH);
 
-    		if ( bitImage.getBitmap() != null &&
-    			 bitImage.getIntrinsicHeight() > 0 &&
-    			 bitImage.getIntrinsicWidth() > 0 ) {
-    			image = bitImage;
-    		}
-        }
-        catch (Exception e) {
-        	// TODO: log exception for debugging?
-        }
-        
-        if ( image == null ) {
-        	// no splash provided...
-            if ( FileUtils.storageReady() &&
-            		!((new File(FileUtils.DEFAULT_CONFIG_PATH)).exists())) {
-            	// Show the built-in splash image if the config directory 
-            	// does not exist. Otherwise, suppress the icon.
-            	image = getResources().getDrawable(R.drawable.odk_color);
-            }
-            if ( image == null ) return;
-        }
-
-        // create ImageView to hold the Drawable...
-    	ImageView view = new ImageView(getApplicationContext());
-    	// initialize it with Drawable and full-screen layout parameters
-    	view.setImageDrawable(image);
-    	int width = getWindowManager().getDefaultDisplay().getWidth();
-    	int height = getWindowManager().getDefaultDisplay().getHeight();
-    	FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams( width, height, 0 );
-    	view.setLayoutParams(lp);
-    	view.setScaleType(ScaleType.CENTER);
-    	view.setBackgroundColor(Color.WHITE);
-
-    	// and wrap the image view in a frame layout so that the 
-    	// full-screen layout parameters are honored...
-    	FrameLayout layout = new FrameLayout(getApplicationContext());
-    	layout.addView(view);
-
-    	// Create the toast and set the view to be that of the FrameLayout
-    	Toast t = Toast.makeText(getApplicationContext(), "splash screen", Toast.LENGTH_SHORT);
-    	t.setView(layout);
-    	t.setGravity(Gravity.CENTER, 0, 0);
-    	t.show();
-    }
 
     /*
      * (non-Javadoc)
@@ -228,10 +161,11 @@ public class MainMenuActivity extends Activity {
      */
     @Override
     protected void onPause() {
-    	dismissDialogs();
+        dismissDialogs();
         super.onPause();
     }
-    
+
+
     /*
      * (non-Javadoc)
      * 
@@ -243,15 +177,6 @@ public class MainMenuActivity extends Activity {
         updateButtons();
     }
 
-    /**
-     * onStop
-     * Re-enable the splash screen.
-     */
-    @Override
-    protected void onStop() {
-    	super.onStop();
-    	mShowSplash = true;
-    }
 
     /**
      * Upon return, check intent for data needed to launch other activities.
@@ -292,73 +217,47 @@ public class MainMenuActivity extends Activity {
      * Updates the button count and sets the text in the buttons.
      */
     private void updateButtons() {
+        // create adapter
+        FileDbAdapter fda = new FileDbAdapter();
+        try {
+            fda.open();
 
-    	Cursor c = null;
-    	try {
-	        // count for saved instances
-	    	FilterUtils.FilterCriteria fd =
-	    		FilterUtils.buildSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
-	
-	        c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-	        		new String[]{SubmissionsStorage.KEY_ID}, 
-	        		fd.selection, fd.selectionArgs, null);
-	        mSavedCount = c.getCount();
-    	} finally {
-    		if ( c != null ) {
-    			c.close();
-    			c = null;
-    		}
-    	}
+            // count for saved instances
+            Cursor c =
+                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
+            mSavedCount = c.getCount();
+            c.close();
 
-    	try {
-        	// count for completed instances
-	    	FilterUtils.FilterCriteria fNotIncomplete =
-	    		FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_INCOMPLETE);
-	    	FilterUtils.FilterCriteria fNotSubmitted =
-	    		FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_SUBMITTED);
-            FilterUtils.FilterCriteria fNotPartiallySubmitted =
-                FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS, SubmissionsStorage.STATUS_PARTIALLY_SUBMITTED);
-	    	FilterUtils.FilterCriteria fd1 =
-	    		FilterUtils.and(fNotIncomplete, fNotSubmitted);
-	    	FilterUtils.FilterCriteria fd = 
-	    	    FilterUtils.and(fd1,fNotPartiallySubmitted);
+            // count for completed instances
+            c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
+            mCompletedCount = c.getCount();
+            c.close();
 
-	        c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-	        		new String[]{SubmissionsStorage.KEY_ID},
-	        		fd.selection, fd.selectionArgs, null);
-	        mCompletedCount = c.getCount();
-    	} finally {
-    		if ( c != null ) {
-    			c.close();
-    			c = null;
-    		}
-    	}
+            // count for downloaded forms
+            ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
+            if (forms != null) {
+                mFormsCount = forms.size();
+            } else {
+                mFormsCount = 0;
+            }
+            fda.close();
 
-        // count for downloaded forms
-        ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
-        if (forms != null) {
-            mFormsCount = forms.size();
-        } else {
-            mFormsCount = 0;
+            mEnterDataButton.setText(getString(R.string.enter_data_button, mFormsCount));
+            mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
+            mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
+                    + mCompletedCount));
+        } catch (SQLiteException e) {
+            Log.e(t, e.getMessage());
+
         }
-
-        mEnterDataButton.setText(getString(R.string.enter_data_button, mFormsCount));
-        mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
-        mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
-                + mCompletedCount));
     }
 
-
-    private void createPreferencesMenu() {
-        Intent i = new Intent(this, ServerPreferences.class);
-        startActivity(i);
-    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
             android.R.drawable.ic_menu_preferences);
         return true;
     }
@@ -368,41 +267,42 @@ public class MainMenuActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
-                createPreferencesMenu();
+                Intent ig = new Intent(this, PreferencesActivity.class);
+                startActivity(ig);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    
+
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-		mAlertDialog = new AlertDialog.Builder(this).create();
-		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-		mAlertDialog.setMessage(errorMsg);
-		DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int i) {
-				switch (i) {
-				case DialogInterface.BUTTON1:
-					if (shouldExit) {
-						finish();
-					}
-					break;
-				}
-			}
-		};
-		mAlertDialog.setCancelable(false);
-		mAlertDialog.setButton(getString(R.string.ok), errorListener);
-		mAlertDialog.show();
-	}
-    
-    
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        mAlertDialog.setMessage(errorMsg);
+        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON1:
+                        if (shouldExit) {
+                            finish();
+                        }
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.show();
+    }
+
+
     /**
-	 * Dismiss any showing dialogs that we manage.
-	 */
-	private void dismissDialogs() {
-		if (mAlertDialog != null && mAlertDialog.isShowing()) {
-			mAlertDialog.dismiss();
-		}
-	}
+     * Dismiss any showing dialogs that we manage.
+     */
+    private void dismissDialogs() {
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        }
+    }
 }

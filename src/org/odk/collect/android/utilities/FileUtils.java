@@ -34,86 +34,26 @@ import java.util.ArrayList;
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public final class FileUtils {
+public class FileUtils {
     private final static String t = "FileUtils";
 
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
     // Storage paths
-    public static final String ODK_ROOT = Environment.getExternalStorageDirectory() + "/odk/";
-    public static final String FORMS_PATH = ODK_ROOT + "forms/";
-    public static final String INSTANCES_PATH = ODK_ROOT + "instances/";
-    public static final String FORMS_X_MEDIA_DIRECTORY_SUFFIX = "-media/";
-    public static final String DATABASE_PATH = ODK_ROOT + "metadata/";
-
-    public static final String FORM_LOGO_FILE_NAME = "form_logo.png";
-    public static final String SPLASH_FILE_NAME = "splash.png";
-    public static final String CONFIG_PATH = ODK_ROOT + "config/";
-    public static final String DEFAULT_CONFIG_PATH = CONFIG_PATH + "default/";
-    public static final String SPLASH_SCREEN_FILE_PATH = DEFAULT_CONFIG_PATH + SPLASH_FILE_NAME;
-    public static final String FORM_LOGO_FILE_PATH = DEFAULT_CONFIG_PATH + FORM_LOGO_FILE_NAME;
-    public static final String XSL_EXTENSION_PATH = ODK_ROOT + "xsl/";
-    public static final String CACHE_PATH = ODK_ROOT + ".cache/";
+    public static final String FORMS_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/forms/";
+    public static final String INSTANCES_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/instances/";
+    public static final String CACHE_PATH = Environment.getExternalStorageDirectory()
+            + "/odk/.cache/";
     public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
 
 
-    public static final String getDatabasePath() {
-
-        File dir = new File(DATABASE_PATH);
-        if (!storageReady()) {
-            return null;
-        }
-
-        if (!dir.exists()) {
-            if (!createFolder(DATABASE_PATH)) {
-                return null;
-            }
-        }
-        return DATABASE_PATH;
-    }
-
-    public static final String getInstanceDirPath(String instanceFilePath) {
-    	File instance = new File(instanceFilePath);
-    	File instanceDir = instance.getParentFile();
-    	if ( !instance.getName().equals(instanceDir.getName() + ".xml")) {
-            return null;
-    	}
-    	return instanceDir.getAbsolutePath();
-    }
-    
-    public static final String getInstanceFilePath(String instanceDirPath) {
-    	File instanceDir = new File(instanceDirPath);
-    	File instance = new File(instanceDir, instanceDir.getName() + ".xml");
-    	return instance.getAbsolutePath();
-    }
-    
-
-    public static final String getSubmissionBlobPath(String instanceDirPath) {
-    	File instanceDir = new File(instanceDirPath);
-    	File submissionBlob = new File(instanceDir, instanceDir.getName() + ".xml.submit");
-    	return submissionBlob.getAbsolutePath();
-    }
-    
-    public static final String getFormMediaPath(String formXml) {
-        int startIdx = formXml.lastIndexOf("/") + 1;
-        String mediaPath =
-            FileUtils.FORMS_PATH + formXml.substring(startIdx, formXml.lastIndexOf("."))
-                    + FileUtils.FORMS_X_MEDIA_DIRECTORY_SUFFIX;
-
-        Log.i(t, "formXml: " + formXml + " mediaPath: " + mediaPath);
-        return mediaPath;
-    }
-
-
-    public static final ArrayList<String> getValidFormsAsArrayList(String path) {
+    public static ArrayList<String> getValidFormsAsArrayList(String path) {
         ArrayList<String> formPaths = new ArrayList<String>();
-
         File dir = new File(path);
-
-        if (!storageReady()) {
-            return null;
-        }
+        // ensure that directory exists
         if (!dir.exists()) {
             if (!createFolder(path)) {
                 return null;
@@ -121,22 +61,19 @@ public final class FileUtils {
         }
         File[] dirs = dir.listFiles();
         if (dirs != null) {
-	        for (int i = 0; i < dirs.length; i++) {
-	            // skip all the directories and "invisible" files that start with "."
-	            if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
-	                continue;
-	
-	            String formName = dirs[i].getName();
-	            Log.i(t, "Found formname: " + formName);
-	
-	            formPaths.add(dirs[i].getAbsolutePath());
-	        }
+            for (int i = 0; i < dirs.length; i++) {
+                // skip all the -media directories and "invisible" files that start with "."
+                if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
+                    continue;
+
+                formPaths.add(dirs[i].getAbsolutePath());
+            }
         }
         return formPaths;
     }
 
 
-    public static final ArrayList<String> getFoldersAsArrayList(String path) {
+    public static ArrayList<String> getFoldersAsArrayList(String path) {
         ArrayList<String> mFolderList = new ArrayList<String>();
         File root = new File(path);
 
@@ -161,7 +98,7 @@ public final class FileUtils {
     }
 
 
-    public static final boolean deleteFolder(String path) {
+    public static boolean deleteFolder(String path) {
         // not recursive
         if (path != null && storageReady()) {
             File dir = new File(path);
@@ -180,7 +117,7 @@ public final class FileUtils {
     }
 
 
-    public static final boolean createFolder(String path) {
+    public static boolean createFolder(String path) {
         if (storageReady()) {
             boolean made = true;
             File dir = new File(path);
@@ -194,7 +131,7 @@ public final class FileUtils {
     }
 
 
-    public static final boolean deleteFile(String path) {
+    public static boolean deleteFile(String path) {
         if (storageReady()) {
             File f = new File(path);
             return f.delete();
@@ -204,7 +141,7 @@ public final class FileUtils {
     }
 
 
-    public static final byte[] getFileAsBytes(File file) {
+    public static byte[] getFileAsBytes(File file) {
         byte[] bytes = null;
         InputStream is = null;
         try {
@@ -264,7 +201,7 @@ public final class FileUtils {
     }
 
 
-    public static final boolean storageReady() {
+    public static boolean storageReady() {
         String cardstatus = Environment.getExternalStorageState();
         if (cardstatus.equals(Environment.MEDIA_REMOVED)
                 || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
@@ -277,7 +214,7 @@ public final class FileUtils {
     }
 
 
-    public static final String getMd5Hash(File file) {
+    public static String getMd5Hash(File file) {
         try {
             // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -323,7 +260,7 @@ public final class FileUtils {
             return null;
 
         } catch (FileNotFoundException e) {
-            Log.e("No Xml File", e.getMessage());
+            Log.e("No Cache File", e.getMessage());
             return null;
         } catch (IOException e) {
             Log.e("Problem reading from file", e.getMessage());
@@ -333,7 +270,7 @@ public final class FileUtils {
     }
 
 
-    public static final Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
+    public static Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
@@ -351,7 +288,7 @@ public final class FileUtils {
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
         Log.i(t, "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by " + scale
-        		+ " to " + b.getHeight() + "x" + b.getWidth());
+                + " to " + b.getHeight() + "x" + b.getWidth());
 
         return b;
     }

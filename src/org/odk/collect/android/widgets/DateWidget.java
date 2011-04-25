@@ -14,19 +14,18 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -35,82 +34,94 @@ import android.widget.DatePicker;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DateWidget extends AbstractQuestionWidget {
-	// Holds the current date.  Used for determining if day of month is too big.
-	// Not in handler because constructor takes a while... 
-    private final Calendar currentDate = new GregorianCalendar(); // now...
-    
+public class DateWidget extends QuestionWidget {
+
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
 
-    public DateWidget(Handler handler, Context context, FormEntryPrompt prompt) {
-        super(handler, context, prompt);
-    }
+    // convert from j2me date to android date
+    private final static int YEARSHIFT = 1900;
 
-    @Override
-	public IAnswerData getAnswer() {
-        // clear focus first so the datewidget gets the value in the text box
-        mDatePicker.clearFocus();
-        GregorianCalendar c = new GregorianCalendar(mDatePicker.getYear(), 
-				mDatePicker.getMonth(), 
-				mDatePicker.getDayOfMonth());
-        Date d = c.getTime();
-        return new DateData(d);
-    }
 
-    /**
-     * Build view for date answer. Includes retrieving existing answer.
-     */
-    @Override
-    protected void buildViewBodyImpl() {
+    public DateWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+
+        final Calendar c = new GregorianCalendar();
+
         mDatePicker = new DatePicker(getContext());
-        mDatePicker.setFocusable(!prompt.isReadOnly());
-        mDatePicker.setEnabled(!prompt.isReadOnly());
+        if (!prompt.isReadOnly()) {
+            mDatePicker.setFocusable(true);
+            mDatePicker.setEnabled(true);
+        }
 
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
-			public void onDateChanged(DatePicker view, int year, int month, int day) {
-            	// TODO: MES -- is this broken if calculated date?
-            	// TODO: MES -- Or if calculated readonly() field?
-                if (!prompt.isReadOnly()) {
+            public void onDateChanged(DatePicker view, int year, int month, int day) {
+                if (mPrompt.isReadOnly()) {
+                    if (mPrompt.getAnswerValue() != null) {
+                        Date d = (Date) mPrompt.getAnswerValue().getValue();
+                        view.updateDate(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate());
+                    } else {
+                        view.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                            c.get(Calendar.DAY_OF_MONTH));
+                    }
+                } else {
                     // handle leap years and number of days in month
                     // TODO
                     // http://code.google.com/p/android/issues/detail?id=2081
-                    currentDate.set(year, month, 1);
-                    int max = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    c.set(year, month, 1);
+                    int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (day > max) {
                         view.updateDate(year, month, max);
                     } else {
                         view.updateDate(year, month, day);
                     }
                 }
-                // gain focus after change because we might have a 
-                // constraint violation somewhere else that will
-                // restore focus elsewhere
-            	signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL);
             }
         };
+
+        if (prompt.getAnswerValue() != null) {
+            Date d = (Date) prompt.getAnswerValue().getValue();
+            mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
+        } else {
+            // create date widget with now
+            clearAnswer();
+        }
 
         setGravity(Gravity.LEFT);
         addView(mDatePicker);
     }
 
-    protected void updateViewAfterAnswer() {
-    	IAnswerData answer = prompt.getAnswerValue();
-    	if ( answer == null ) {
-            final Calendar c = new GregorianCalendar();
-            mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
-                mDateListener);
-    	} else {
-    		final Calendar c = new GregorianCalendar();
-    		c.setTime((Date) prompt.getAnswerValue().getValue());
-            mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), 
-        		mDateListener);
-    	}
+
+    /**
+     * Resets date to today.
+     */
+    @Override
+    public void clearAnswer() {
+        final Calendar c = new GregorianCalendar();
+        mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
+            mDateListener);
     }
 
+
     @Override
-    public void setEnabled(boolean isEnabled) {
-    	mDatePicker.setEnabled(isEnabled && !prompt.isReadOnly());
+    public IAnswerData getAnswer() {
+        // clear focus first so the datewidget gets the value in the text box
+        mDatePicker.clearFocus();
+        Date d =
+            new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(),
+                    mDatePicker.getDayOfMonth());
+        return new DateData(d);
     }
+
+
+    @Override
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
+
+
 }

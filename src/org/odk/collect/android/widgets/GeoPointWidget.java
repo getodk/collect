@@ -20,17 +20,16 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.views.AbstractFolioView;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -39,19 +38,67 @@ import android.widget.TextView;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class GeoPointWidget extends AbstractQuestionWidget implements IBinaryWidget {
-
+public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private Button mActionButton;
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
+    private boolean mWaitingForData;
 
 
-    public GeoPointWidget(Handler handler, Context context, FormEntryPrompt prompt) {
-        super(handler, context, prompt);
+    public GeoPointWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        mWaitingForData = false;
+
+        setOrientation(LinearLayout.VERTICAL);
+
+        mActionButton = new Button(getContext());
+        mActionButton.setPadding(20, 20, 20, 20);
+        mActionButton.setText(getContext().getString(R.string.get_location));
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mActionButton.setEnabled(!prompt.isReadOnly());
+
+        mStringAnswer = new TextView(getContext());
+
+        mAnswerDisplay = new TextView(getContext());
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+            QuestionWidget.APPLICATION_FONTSIZE - 1);
+        mAnswerDisplay.setGravity(Gravity.CENTER);
+
+        String s = prompt.getAnswerText();
+        if (s != null && !s.equals("")) {
+            mActionButton.setText(getContext().getString(R.string.replace_location));
+            setBinaryData(s);
+        }
+
+        // when you press the button
+        mActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), GeoPointActivity.class);
+                ((Activity) getContext()).startActivityForResult(i,
+                    FormEntryActivity.LOCATION_CAPTURE);
+                mWaitingForData = true;
+
+            }
+        });
+
+        // finish complex layout
+        addView(mActionButton);
+        addView(mAnswerDisplay);
     }
 
+
     @Override
-	public IAnswerData getAnswer() {
+    public void clearAnswer() {
+        mStringAnswer.setText(null);
+        mAnswerDisplay.setText(null);
+        mActionButton.setText(getContext().getString(R.string.get_location));
+
+    }
+
+
+    @Override
+    public IAnswerData getAnswer() {
         String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
@@ -72,58 +119,6 @@ public class GeoPointWidget extends AbstractQuestionWidget implements IBinaryWid
         }
     }
 
-    @Override
-    protected void buildViewBodyImpl() {
-        
-        mActionButton = new Button(getContext());
-        mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
-        mActionButton.setEnabled(!prompt.isReadOnly());
-
-        mStringAnswer = new TextView(getContext());
-
-        mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-            AbstractFolioView.APPLICATION_FONTSIZE - 1);
-        mAnswerDisplay.setGravity(Gravity.CENTER);
-
-        // when you press the button
-        mActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-			public void onClick(View v) {
-            	// touches are not focus change events 
-            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL)) {
-                    Intent i = new Intent(getContext(), GeoPointActivity.class);
-                    ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.LOCATION_CAPTURE);
-            	}
-            }
-        });
-
-        // finish complex layout
-        addView(mActionButton);
-        addView(mAnswerDisplay);
-    }
-
-    protected void updateViewAfterAnswer() {
-        String s = prompt.getAnswerText();
-        if (s != null && !s.equals("")) {
-            mActionButton.setText(getContext().getString(R.string.replace_location));
-	        mStringAnswer.setText(s);
-            String[] sa = s.split(" ");
-            mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
-                    + formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
-                    + getContext().getString(R.string.longitude) + ": "
-                    + formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
-                    + getContext().getString(R.string.altitude) + ": " + sa[2] + "\n"
-                    + getContext().getString(R.string.accuracy) + ": " + sa[3] + "m");
-        } else {
-	        mActionButton.setText(getContext().getString(R.string.get_location));
-	        mStringAnswer.setText(null);
-	        mAnswerDisplay.setText(null);
-        }
-    }
 
     private String formatGps(double coordinates, String type) {
         String location = Double.toString(coordinates);
@@ -152,16 +147,35 @@ public class GeoPointWidget extends AbstractQuestionWidget implements IBinaryWid
         return degree;
     }
 
-    @Override
-    public void setEnabled(boolean isEnabled) {
-    	mAnswerDisplay.setEnabled(isEnabled);
-    	mActionButton.setEnabled(isEnabled && !prompt.isReadOnly());
-    }
 
     @Override
-	public void setBinaryData(Object answer) {
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
+
+
+    @Override
+    public void setBinaryData(Object answer) {
         String s = (String) answer;
         mStringAnswer.setText(s);
-        saveAnswer(true); // and evaluate constraints and trigger UI update...
+
+        String[] sa = s.split(" ");
+        mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
+                + formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
+                + getContext().getString(R.string.longitude) + ": "
+                + formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
+                + getContext().getString(R.string.altitude) + ": " + sa[2] + "\n"
+                + getContext().getString(R.string.accuracy) + ": " + sa[3] + "m");
+        mWaitingForData = false;
     }
+
+
+    @Override
+    public boolean isWaitingForBinaryData() {
+        return mWaitingForData;
+    }
+
 }

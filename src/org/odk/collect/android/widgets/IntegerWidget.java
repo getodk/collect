@@ -19,9 +19,10 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.method.DigitsKeyListener;
+import android.util.TypedValue;
 
 /**
  * Widget that restricts values to integers.
@@ -30,35 +31,43 @@ import android.text.InputType;
  */
 public class IntegerWidget extends StringWidget {
 
-    public IntegerWidget(Handler handler, Context context, FormEntryPrompt prompt) {
-        super(handler, context, prompt);
-    }
+    public IntegerWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
 
-    @Override
-    protected String accessPromptAnswerAsString() {
-        String value = null;
-        if (prompt.getAnswerValue() != null) {
-        	value = ((Integer) prompt.getAnswerValue().getValue()).toString();
-        }
-        return value;
-    }
+        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
-    @Override
-    protected void buildViewBodyImpl() {
+        // needed to make long readonly text scroll
+        mAnswer.setHorizontallyScrolling(false);
+        mAnswer.setSingleLine(false);
+
+        // only allows numbers and no periods
+        mAnswer.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
-    	
-    	// restrict field to only numbers...
-    	commonBuildView(InputType.TYPE_CLASS_NUMBER | 
-			 		 InputType.TYPE_NUMBER_FLAG_SIGNED, fa);
+        mAnswer.setFilters(fa);
+
+        if (prompt.isReadOnly()) {
+            setBackgroundDrawable(null);
+            setFocusable(false);
+            setClickable(false);
+        }
+
+        Integer i = null;
+        if (prompt.getAnswerValue() != null)
+            i = (Integer) prompt.getAnswerValue().getValue();
+
+        if (i != null) {
+            mAnswer.setText(i.toString());
+        }
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mStringAnswer.getText().toString();
+        String s = mAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

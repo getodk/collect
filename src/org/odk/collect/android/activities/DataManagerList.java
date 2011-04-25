@@ -14,17 +14,15 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.SubmissionsStorage;
+import org.odk.collect.android.database.FileDbAdapter;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,13 +30,17 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.ArrayList;
+
 /**
- * Responsible for displaying and deleting all the valid submissions in the instances directory.
+ * Responsible for displaying and deleting all the valid forms in the forms directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DataManagerList extends ListActivity {
+    private static String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
 
@@ -51,12 +53,12 @@ public class DataManagerList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_manage_list);
-        
+
         mDeleteButton = (Button) findViewById(R.id.delete_button);
         mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
 
                 if (mSelected.size() > 0) {
                     createDeleteDialog();
@@ -70,24 +72,19 @@ public class DataManagerList extends ListActivity {
 
 
     private void refreshView() {
-        String[] projection = new String[] {
-        		SubmissionsStorage.KEY_ID,
-        		SubmissionsStorage.KEY_DISPLAY_NAME,
-        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
-        };
+        // get all mInstances that match the status.
+        FileDbAdapter fda = new FileDbAdapter();
+        fda.open();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
+        startManagingCursor(c);
+
         String[] data = new String[] {
-        		SubmissionsStorage.KEY_DISPLAY_NAME, 
-        		SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
-        String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC, "
-                        + SubmissionsStorage.KEY_LAST_STATUS_CHANGE_DATE + " ASC";
 
-        Cursor c = getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, 
-        		projection, null, null, sortOrder );
-        startManagingCursor(c);
         // render total instance view
         mInstances =
             new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
@@ -95,6 +92,9 @@ public class DataManagerList extends ListActivity {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
+
+        // cleanup
+        fda.close();
 
         // if current activity is being reinitialized due to changing
         // orientation
@@ -124,7 +124,7 @@ public class DataManagerList extends ListActivity {
         DialogInterface.OnClickListener dialogYesNoListener =
             new DialogInterface.OnClickListener() {
                 @Override
-				public void onClick(DialogInterface dialog, int i) {
+                public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();
@@ -143,6 +143,9 @@ public class DataManagerList extends ListActivity {
 
 
     private void refreshData() {
+        if (mInstances != null) {
+            mInstances.getCursor().requery();
+        }
         if (!mRestored) {
             mSelected.clear();
         }
@@ -154,13 +157,23 @@ public class DataManagerList extends ListActivity {
      * Deletes the selected files.First from the database then from the file system
      */
     private void deleteSelectedFiles() {
+        FileDbAdapter fda = new FileDbAdapter();
+        fda.open();
+
         // delete removes the file from the database first
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-        	deleted += getContentResolver().delete(
-        			ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET, mSelected.get(i)),
-        			null, null);
+            Cursor c = fda.fetchFile(mSelected.get(i));
+            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+            if (fda.deleteFile(mSelected.get(i))) {
+                deleted++;
+                Log.i(t, "Deleting file: " + filename);
+                File del = new File(filename);
+                del.delete();
+            }
+            c.close();
         }
+        fda.close();
 
         if (deleted > 0) {
             // all deletes were successful
@@ -187,7 +200,7 @@ public class DataManagerList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -208,12 +221,14 @@ public class DataManagerList extends ListActivity {
         super.onPause();
     }
 
+
     @Override
     protected void onResume() {
         // update the list (for returning from the remote manager)
         refreshData();
         super.onResume();
     }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {

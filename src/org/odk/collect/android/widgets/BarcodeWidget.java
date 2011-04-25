@@ -19,18 +19,17 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.views.AbstractFolioView;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,18 +38,67 @@ import android.widget.Toast;
  * 
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends AbstractQuestionWidget implements IBinaryWidget {
-
+public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     private Button mActionButton;
     private TextView mStringAnswer;
+    private boolean mWaitingForData;
 
 
-    public BarcodeWidget(Handler handler, Context context, FormEntryPrompt prompt) {
-        super(handler, context, prompt);
+    public BarcodeWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        mWaitingForData = false;
+        setOrientation(LinearLayout.VERTICAL);
+
+        // set button formatting
+        mActionButton = new Button(getContext());
+        mActionButton.setText(getContext().getString(R.string.get_barcode));
+        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mActionButton.setPadding(20, 20, 20, 20);
+        mActionButton.setEnabled(!prompt.isReadOnly());
+
+        // launch barcode capture intent on click
+        mActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent("com.google.zxing.client.android.SCAN");
+                mWaitingForData = true;
+                try {
+                    ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.BARCODE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
+                            .show();
+                    mWaitingForData = false;
+                }
+            }
+        });
+
+        // set text formatting
+        mStringAnswer = new TextView(getContext());
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mStringAnswer.setGravity(Gravity.CENTER);
+
+        String s = prompt.getAnswerText();
+        if (s != null) {
+            mActionButton.setText(getContext().getString(R.string.replace_barcode));
+            mStringAnswer.setText(s);
+        }
+        // finish complex layout
+        addView(mActionButton);
+        addView(mStringAnswer);
     }
 
+
     @Override
-	public IAnswerData getAnswer() {
+    public void clearAnswer() {
+        mStringAnswer.setText(null);
+        mActionButton.setText(getContext().getString(R.string.get_barcode));
+    }
+
+
+    @Override
+    public IAnswerData getAnswer() {
         String s = mStringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
@@ -59,68 +107,30 @@ public class BarcodeWidget extends AbstractQuestionWidget implements IBinaryWidg
         }
     }
 
-    @Override
-    protected void buildViewBodyImpl() {
-
-    	// set button formatting
-        mActionButton = new Button(getContext());
-        mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
-        mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!prompt.isReadOnly());
-
-        // launch barcode capture intent on click
-        mActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-			public void onClick(View v) {
-            	// onFocusChange for buttons is not fired while in touch mode
-            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
-	                Intent i = new Intent("com.google.zxing.client.android.SCAN");
-	                try {
-	                    ((Activity) getContext()).startActivityForResult(i,
-	                        FormEntryActivity.BARCODE_CAPTURE);
-	                } catch (ActivityNotFoundException e) {
-	                    Toast.makeText(getContext(),
-	                        getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
-	                            .show();
-	                }
-            	}
-            }
-        });
-
-        // set text formatting
-        mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
-        mStringAnswer.setGravity(Gravity.CENTER);
-
-        // finish complex layout
-        addView(mActionButton);
-        addView(mStringAnswer);
-    }
-
-    protected void updateViewAfterAnswer() {
-        String s = prompt.getAnswerText();
-        if (s == null || s.equals("") ) {
-        	mActionButton.setText(getContext().getString(R.string.get_barcode));
-	        mStringAnswer.setText(null);
-        } else {
-            mActionButton.setText(getContext().getString(R.string.replace_barcode));
-            mStringAnswer.setText(s);
-        }
-    }
 
     /**
      * Allows answer to be set externally in {@Link FormEntryActivity}.
      */
     @Override
-	public void setBinaryData(Object answer) {
+    public void setBinaryData(Object answer) {
         mStringAnswer.setText((String) answer);
-        saveAnswer(true); // and evaluate constraints and trigger UI update...
+        mWaitingForData = false;
     }
 
+
     @Override
-    public void setEnabled(boolean isEnabled) {
-    	mStringAnswer.setEnabled(isEnabled);
-        mActionButton.setEnabled(isEnabled && !prompt.isReadOnly());
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
+
+
+    @Override
+    public boolean isWaitingForBinaryData() {
+        return mWaitingForData;
+    }
+
+
 }

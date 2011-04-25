@@ -17,12 +17,10 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.ServerPreferences;
-import org.odk.collect.android.provider.SubmissionsStorage;
-import org.odk.collect.android.utilities.FilterUtils;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.preferences.PreferencesActivity;
 
 import android.app.ListActivity;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -70,7 +68,7 @@ public class InstanceUploaderList extends ListActivity {
         mActionButton.setOnClickListener(new OnClickListener() {
 
             @Override
-            public void onClick(View arg0) {
+			public void onClick(View arg0) {
                 if (mSelected.size() > 0) {
                     // items selected
                     uploadSelectedFiles();
@@ -88,7 +86,7 @@ public class InstanceUploaderList extends ListActivity {
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
+			public void onClick(View v) {
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
@@ -109,35 +107,21 @@ public class InstanceUploaderList extends ListActivity {
 
 
     /**
-     * Retrieves instance information from {@link SubmissionsStorage}, composes and displays each
-     * row.
+     * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
      */
     private void refreshView() {
-        String[] projection =
-            new String[] {
-                    SubmissionsStorage.KEY_ID, SubmissionsStorage.KEY_DISPLAY_NAME,
-                    SubmissionsStorage.KEY_DISPLAY_SUBTEXT
-            };
+        // get all mInstances that match the status.
+        FileDbAdapter fda = new FileDbAdapter();
+        fda.open();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
+        startManagingCursor(c);
+
         String[] data = new String[] {
-                SubmissionsStorage.KEY_DISPLAY_NAME, SubmissionsStorage.KEY_DISPLAY_SUBTEXT
+                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
         };
-        String sortOrder = SubmissionsStorage.KEY_DISPLAY_NAME + " ASC";
-
-        FilterUtils.FilterCriteria fNotIncomplete =
-            FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS,
-                SubmissionsStorage.STATUS_INCOMPLETE);
-        FilterUtils.FilterCriteria fNotSubmitted =
-            FilterUtils.buildInverseSelectionClause(SubmissionsStorage.KEY_STATUS,
-                SubmissionsStorage.STATUS_SUBMITTED);
-        FilterUtils.FilterCriteria fd = FilterUtils.and(fNotIncomplete, fNotSubmitted);
-
-        Cursor c =
-            getContentResolver().query(SubmissionsStorage.CONTENT_URI_INFO_DATASET, projection,
-                fd.selection, fd.selectionArgs, sortOrder);
-        startManagingCursor(c);
 
         // render total instance view
         mInstances =
@@ -149,6 +133,9 @@ public class InstanceUploaderList extends ListActivity {
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
+
+        // cleanup
+        fda.close();
 
         // if current activity is being reinitialized due to changing orientation restore all check
         // marks for ones selected
@@ -171,38 +158,31 @@ public class InstanceUploaderList extends ListActivity {
     private void uploadSelectedFiles() {
         ArrayList<String> selectedInstances = new ArrayList<String>();
 
+        // get all checked items
+        FileDbAdapter fda = new FileDbAdapter();
+        fda.open();
+
+        Cursor c = null;
+
         for (int i = 0; i < mSelected.size(); i++) {
-            Cursor c = null;
-            try {
-                c =
-                    getContentResolver().query(
-                        ContentUris.withAppendedId(SubmissionsStorage.CONTENT_URI_INFO_DATASET,
-                            mSelected.get(i)),
-                        new String[] {
-                                SubmissionsStorage.KEY_ID,
-                                SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH
-                        }, null, null, null);
-                if (c.moveToNext()) {
-                    String s =
-                        c.getString(c
-                                .getColumnIndex(SubmissionsStorage.KEY_INSTANCE_DIRECTORY_PATH));
-                    selectedInstances.add(s);
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
+            c = fda.fetchFile(mSelected.get(i));
+            startManagingCursor(c);
+            String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+            selectedInstances.add(s);
         }
 
         // bundle intent with upload files
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(FormEntryActivity.KEY_INSTANCES, selectedInstances);
         startActivityForResult(i, INSTANCE_UPLOADER);
+        fda.close();
     }
 
 
     private void refreshData() {
+        if (mInstances != null) {
+            mInstances.getCursor().requery();
+        }
         if (!mRestored) {
             mSelected.clear();
         }
@@ -213,7 +193,7 @@ public class InstanceUploaderList extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
             android.R.drawable.ic_menu_preferences);
         return true;
     }
@@ -231,7 +211,7 @@ public class InstanceUploaderList extends ListActivity {
 
 
     private void createPreferencesMenu() {
-        Intent i = new Intent(this, ServerPreferences.class);
+        Intent i = new Intent(this, PreferencesActivity.class);
         startActivity(i);
     }
 
@@ -242,7 +222,7 @@ public class InstanceUploaderList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(SubmissionsStorage.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))

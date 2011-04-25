@@ -17,18 +17,10 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.views.AbstractFolioView;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
-import android.R;
 import android.content.Context;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.text.method.TextKeyListener;
+import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -40,28 +32,52 @@ import android.widget.EditText;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class StringWidget extends AbstractQuestionWidget implements TextWatcher {
-    
-    protected EditText mStringAnswer;
+public class StringWidget extends QuestionWidget {
 
-    private boolean insideUpdate = false;
-    
-    protected StringWidget(Handler handler, Context context, FormEntryPrompt prompt) {
-        super(handler, context, prompt);
+    boolean mReadOnly = false;
+    protected EditText mAnswer;
+
+
+    public StringWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        mAnswer = new EditText(context);
+
+        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+
+        // capitalize the first letter of the sentence
+        mAnswer.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
+
+        // needed to make long read only text scroll
+        mAnswer.setHorizontallyScrolling(false);
+        mAnswer.setSingleLine(false);
+
+        if (prompt != null) {
+            mReadOnly = prompt.isReadOnly();
+            String s = prompt.getAnswerText();
+            if (s != null) {
+                mAnswer.setText(s);
+            }
+
+            if (mReadOnly) {
+                mAnswer.setBackgroundDrawable(null);
+                mAnswer.setFocusable(false);
+                mAnswer.setClickable(false);
+            }
+        }
+        
+        addView(mAnswer);
     }
 
-    /**
-     * Override this as needed for derived classes
-     * 
-     * @return the prompt's Answer value as a string
-     */
-    protected String accessPromptAnswerAsString() {
-    	return prompt.getAnswerText();
-    }
 
     @Override
-	public IAnswerData getAnswer() {
-        String s = mStringAnswer.getText().toString();
+    public void clearAnswer() {
+        mAnswer.setText(null);
+    }
+
+
+    @Override
+    public IAnswerData getAnswer() {
+        String s = mAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -69,98 +85,20 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
         }
     }
 
-	/**
-     * Common widget-building code.  This is pulled out because some variables, 
-     * such as mReadOnly, are initialized here.  Derived classes must call this
-     * from within their buildView(...) method.
-     * 
-     * @param listener
-     * @param initialValue
-     */
-    protected void commonBuildView(int inputType, InputFilter[] filters) {
-
-    	mStringAnswer = new EditText(getContext(), null, R.attr.editTextStyle);
-    	// monitor focus change events...
-    	mStringAnswer.addTextChangedListener(this);
-        // font size
-    	mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
-
-        // needed to make long read only text scroll
-    	mStringAnswer.setHorizontallyScrolling(false);
-    	mStringAnswer.setSingleLine(false);
-
-    	mStringAnswer.setInputType(inputType);
-    	if ( filters != null ) {
-    		mStringAnswer.setFilters(filters);
-    	}
-    	
-    	addView(mStringAnswer);
-    }
 
     @Override
-    protected void buildViewBodyImpl() {
-
-    	// restrict field to text with sentence capitalization...
-    	commonBuildView(InputType.TYPE_CLASS_TEXT |
-	 			   InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, null);
-    }
-
-    protected void updateViewAfterAnswer() {
-		String s = accessPromptAnswerAsString();
-		Log.i(StringWidget.class.getName(), "updateViewAfterAnswer: " +  getFormIndex().toString());
-    	try {
-    		insideUpdate = true;
-	    	InputMethodManager inputManager =
-	            (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-			mStringAnswer.setText(s);
-			
-	    	// and if we are read-only and empty, suppress the display 
-			boolean inputManagerShowable = true;
-	    	if ( prompt.isReadOnly() ) {
-        		inputManagerShowable = false;
-	    		if ( s == null || s.length() == 0 ) {
-	        		mStringAnswer.setVisibility(INVISIBLE);
-	    		} else {
-	        		mStringAnswer.setVisibility(VISIBLE);
-	    		}
-	    	}
-
-	    	if ( inputManagerShowable ) {
-				// and be sure to let the input manager know the new string value...
-				if ( inputManager.isActive(mStringAnswer)) {
-					inputManager.restartInput(mStringAnswer);
-				}
-	    	} else {
-	    		Collect.getInstance().hideSoftKeyboard(mStringAnswer);
-	    		mStringAnswer.clearFocus();
-	    	}
-    	} finally {
-    		insideUpdate = false;
-    	}
-    }
-
-    @Override
-	public void setFocus(Context context) {
-        // if someone is setting focus to us, only gain focus
-        // and display the keyboard if we are enabled.
-        if (mStringAnswer.isEnabled()) {
-        	mStringAnswer.requestFocus();
-        	Collect.getInstance().showSoftKeyboard(mStringAnswer);
-        }
-        else {
-        	Collect.getInstance().hideSoftKeyboard(mStringAnswer);
-            mStringAnswer.clearFocus();
+    public void setFocus(Context context) {
+        // Put focus on text input field and display soft keyboard if appropriate.
+        this.requestFocus();
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (!mReadOnly) {
+            inputManager.showSoftInput(this, 0);
+        } else {
+            inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
         }
     }
 
-    public void setEnabled(boolean isEnabled) {
-    	boolean enableState = isEnabled && !prompt.isReadOnly();
-    	mStringAnswer.setEnabled(enableState);
-    	// if we are no longer enabled, shift the focus away from us...
-    	if (!enableState ) {
-			mStringAnswer.clearFocus();
-    	}
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -170,24 +108,4 @@ public class StringWidget extends AbstractQuestionWidget implements TextWatcher 
         return super.onKeyDown(keyCode, event);
     }
 
-	@Override
-	public void afterTextChanged(Editable s) {
-		if ( !insideUpdate ) {
-			Log.i(StringWidget.class.getName(), "afterTextChanged -- signalling DIVERGE_VIEW_FROM_MODEL " + getFormIndex().toString());
-			signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL);
-		} else {
-			Log.i(StringWidget.class.getName(), "afterTextChanged -- silent " + getFormIndex().toString());
-		}
-	}
-
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
-		// no-op
-	}
-
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		// no-op
-	}
 }

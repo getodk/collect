@@ -14,27 +14,23 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Vector;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.views.AbstractFolioView;
-import org.odk.collect.android.views.IAVTLayout;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
+import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import java.util.Vector;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -42,38 +38,117 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectMultiWidget extends AbstractQuestionWidget implements IMultipartSelectWidget, 
-	OnCheckedChangeListener {
-    
-    private boolean insideUpdate = false;
+public class SelectMultiWidget extends QuestionWidget {
+    private final static int CHECKBOX_ID = 100;
+    private boolean mCheckboxInit = true;
+    Vector<SelectChoice> mItems;
 
-    /**
-     * The buttons ordering is the same as the prompt's Vector<SelectChoice>
-     */
-    final CheckBox[] buttons;
 
-    public SelectMultiWidget(Handler handler, Context context, FormEntryPrompt prompt) {
-        super(handler, context, prompt);
-        int dim = 0;
-        if ( prompt.getSelectChoices() != null ) {
-        	dim = prompt.getSelectChoices().size();
+    @SuppressWarnings("unchecked")
+    public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        mPrompt = prompt;
+
+        mItems = prompt.getSelectChoices();
+
+        setOrientation(LinearLayout.VERTICAL);
+
+        Vector<Selection> ve = new Vector<Selection>();
+        if (prompt.getAnswerValue() != null) {
+            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
         }
-        if ( dim == 0 ) {
-        	buttons = null;
-        } else {
-        	buttons = new CheckBox[dim];
+
+        if (prompt.getSelectChoices() != null) {
+            for (int i = 0; i < mItems.size(); i++) {
+                // no checkbox group so id by answer + offset
+                CheckBox c = new CheckBox(getContext());
+
+                // when clicked, check for readonly before toggling
+                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
+                            if (buttonView.isChecked()) {
+                                buttonView.setChecked(false);
+                            } else {
+                                buttonView.setChecked(true);
+                            }
+                        }
+                    }
+                });
+
+                c.setId(CHECKBOX_ID + i);
+                c.setText(prompt.getSelectChoiceText(mItems.get(i)));
+                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+                c.setFocusable(!prompt.isReadOnly());
+                c.setEnabled(!prompt.isReadOnly());
+                for (int vi = 0; vi < ve.size(); vi++) {
+                    // match based on value, not key
+                    if (mItems.get(i).getValue().equals(ve.elementAt(vi).getValue())) {
+                        c.setChecked(true);
+                        break;
+                    }
+
+                }
+
+                String audioURI = null;
+                audioURI =
+                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        FormEntryCaption.TEXT_FORM_AUDIO);
+
+                String imageURI = null;
+                imageURI =
+                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        FormEntryCaption.TEXT_FORM_IMAGE);
+
+                String videoURI = null;
+                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
+
+                String bigImageURI = null;
+                bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
+
+                MediaLayout mediaLayout = new MediaLayout(getContext());
+                mediaLayout.setAVT(c, audioURI, imageURI, videoURI, bigImageURI);
+                addView(mediaLayout);
+
+                // Last, add the dividing line between elements (except for the last element)
+                ImageView divider = new ImageView(getContext());
+                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                if (i != mItems.size() - 1) {
+                    addView(divider);
+                }
+
+            }
+        }
+
+        mCheckboxInit = false;
+
+    }
+
+
+    @Override
+    public void clearAnswer() {
+        int j = mItems.size();
+        for (int i = 0; i < j; i++) {
+
+            // no checkbox group so find by id + offset
+            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
+            if (c.isChecked()) {
+                c.setChecked(false);
+            }
         }
     }
-    
+
+
     @Override
-	public IAnswerData getAnswer() {
+    public IAnswerData getAnswer() {
         Vector<Selection> vc = new Vector<Selection>();
-        for (int i = 0; i < prompt.getSelectChoices().size(); i++) {
-            CheckBox c = buttons[i];
+        for (int i = 0; i < mItems.size(); i++) {
+            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
             if (c.isChecked()) {
-            	SelectChoice sc = prompt.getSelectChoices().get(i);
-                vc.add(new Selection(sc));
+                vc.add(new Selection(mItems.get(i)));
             }
+
         }
 
         if (vc.size() == 0) {
@@ -84,131 +159,14 @@ public class SelectMultiWidget extends AbstractQuestionWidget implements IMultip
 
     }
 
-    @Override
-    protected void buildViewBodyImpl() {
-    	// buildStart
-		Vector<SelectChoice> items = prompt.getSelectChoices();
-		if ( items != null ) {
-			boolean first = true;
-	    	for ( SelectChoice c : items ) {
-	    		if ( !first ) {
-    		        // Add a dividing line before all but the first element
-    		        View divider = new View(getContext());
-    		        
-    		        divider.setId(AbstractQuestionWidget.newUniqueId());
-    		        divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-    	            addView(divider);
-	    		}
-	    		first = false;
-	    		buildSelectElement(c);
-	    	}
-		}
-    }
-
-	@Override
-	public ViewGroup buildSelectElement(SelectChoice sc) {
-		Vector<SelectChoice> items = prompt.getSelectChoices();
-		if ( items == null ) {
-			// should never get here...
-			throw new IllegalStateException("no selection choices!");
-		}
-
-		int i;
-		for ( i = 0 ; i < items.size() ; ++i ) {
-			if ( items.get(i).equals(sc) ) break;
-		}
-		
-		if ( i == items.size() ) {
-			throw new IllegalArgumentException("selection choice not found!");
-		}
-		
-        // no checkbox group so id by answer + offset
-        CheckBox c = new CheckBox(getContext());
-        buttons[i] = c;
-
-        c.setId(AbstractQuestionWidget.newUniqueId());
-        c.setText(prompt.getSelectChoiceText(sc));
-        c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
-        c.setEnabled(!prompt.isReadOnly());
-        
-        // when clicked, check for readonly before toggling
-        c.setOnCheckedChangeListener(this);
-
-        String audioURI =
-                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
-        
-        String imageURI =
-                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
-
-        String videoURI =
-        		prompt.getSpecialFormSelectChoiceText(sc, "video");
-        
-        String bigImageURI = null;
-        bigImageURI = prompt.getSpecialFormSelectChoiceText(sc, "big-image");
-         
-        IAVTLayout mediaLayout = new IAVTLayout(getContext());
-        
-        mediaLayout.setId(AbstractQuestionWidget.newUniqueId());
-        mediaLayout.setAVT(c, audioURI, imageURI, videoURI, bigImageURI);
-        
-        addView(mediaLayout);
-        return this;
-	}
-
-	@SuppressWarnings(value = { "unchecked" })
-    protected void updateViewAfterAnswer() {
-    	try {
-    		insideUpdate = true;
-	    	IAnswerData answer = prompt.getAnswerValue();
-	    	Vector<Selection> ve;
-	    	if ( (answer == null) || (answer.getValue() == null) ) {
-	    		ve = new Vector<Selection>();
-	    	} else {
-	    		ve = (Vector<Selection>) answer.getValue();
-	    	}
-	
-	    	if ( buttons != null ) {
-		    	for ( int i = 0 ; i < buttons.length; ++i ) {
-		            CheckBox c = buttons[i];
-		            
-		            String value = prompt.getSelectChoices().get(i).getValue();
-		            boolean found = false;
-		            for (Selection s : ve) {
-		            	if ( value.equals(s.getValue())) {
-		            		found = true;
-		            		break;
-		            	}
-		            }
-		            
-					Log.i(SelectMultiWidget.class.getName(), 
-							"updateViewAfterAnswer: " + value + " isChecked: " + Boolean.toString(found) );
-		            c.setChecked(found);
-		    	}
-	    	}
-    	} finally {
-    		insideUpdate = false;
-    	}
-    }
 
     @Override
-    public void setEnabled(boolean isEnabled) {
-    	if ( buttons != null ) {
-	    	for ( View v : buttons) {
-	    		v.setEnabled(isEnabled && !prompt.isReadOnly());
-	    	}
-    	}
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    	Log.i(SelectMultiWidget.class.getName(), 
-    			"onCheckedChanged isChecked:" + Boolean.toString(isChecked));
-    	// no-op if read-only
-    	// no-op if insideUpdate
-        if (!prompt.isReadOnly() && !insideUpdate) {
-        	// hide the soft keyboard if it is displayed for some other control...
-        	setFocus(getContext());
-	        signalDescendant(FocusChangeState.FLUSH_CHANGE_TO_MODEL);
-        }
-	}
+
 }

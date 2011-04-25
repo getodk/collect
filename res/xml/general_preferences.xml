@@ -1,0 +1,41 @@
+
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceScreen
+		android:id="@+id/info"
+		android:key="info"
+		android:title="@string/main_menu_message"
+		android:summary="@string/click_to_web">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:data="http://opendatakit.org" />
+	</PreferenceScreen>
+	<PreferenceCategory
+		android:title="@string/server_preferences">
+		<EditTextPreference
+			android:id="@+id/server"
+			android:key="server"
+			android:defaultValue="@string/default_server"
+			android:title="@string/server"
+			android:dialogTitle="@string/change_server" />
+		<EditTextPreference
+			android:id="@+id/username"
+			android:key="username"
+			android:title="@string/username"
+			android:dialogTitle="@string/change_username" />
+		<EditTextPreference
+			android:id="@+id/password"
+			android:key="password"
+			android:title="@string/password"
+			android:dialogTitle="@string/change_password"
+			android:password="true" />
+	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/utilities">
+		<CheckBoxPreference
+			android:id="@+id/firstRun"
+			android:key="firstRun"
+			android:title="@string/first_run"
+			android:summary="@string/first_run_info" />
+	</PreferenceCategory>
+</PreferenceScreen>

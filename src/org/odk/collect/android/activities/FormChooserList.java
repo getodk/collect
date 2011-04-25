@@ -15,7 +15,7 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsStorage;
+import org.odk.collect.android.database.FileDbAdapter;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -39,7 +39,6 @@ public class FormChooserList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
-        refreshView();
     }
 
 
@@ -47,29 +46,29 @@ public class FormChooserList extends ListActivity {
      * Get form list from database and insert into view.
      */
     private void refreshView() {
-        String[] projection =
-            new String[] {
-                    FormsStorage.KEY_ID, FormsStorage.KEY_FORM_FILE_PATH,
-                    FormsStorage.KEY_DISPLAY_NAME, FormsStorage.KEY_DISPLAY_SUBTEXT
-            };
+        // get all forms that match the status.
+        FileDbAdapter fda = new FileDbAdapter();
+        fda.open();
+        fda.addOrphanForms();
+        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
+        startManagingCursor(c);
 
+        // create data and views for cursor adapter
         String[] data = new String[] {
-                FormsStorage.KEY_DISPLAY_NAME, FormsStorage.KEY_DISPLAY_SUBTEXT
+                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
         };
         int[] view = new int[] {
                 android.R.id.text1, android.R.id.text2
         };
-        String sortOrder = FormsStorage.KEY_DISPLAY_NAME + " ASC";
-
-        Cursor c =
-            getContentResolver().query(FormsStorage.CONTENT_URI_INFO_DATASET, projection, null,
-                null, sortOrder);
-        startManagingCursor(c);
 
         // render total instance view
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
+
+        if (fda != null) {
+            fda.close();
+        }
     }
 
 
@@ -80,14 +79,28 @@ public class FormChooserList extends ListActivity {
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get full path to the form
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        String formPath = c.getString(c.getColumnIndex(FormsStorage.KEY_FORM_FILE_PATH));
-
+        String formPath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+        startManagingCursor(c);
+        
         // create intent for return and store path
         Intent i = new Intent();
         i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
         setResult(RESULT_OK, i);
 
         finish();
+
     }
+
+
+    /**
+     * refreshView() in onresume because onCreate doesn't get called when activity returns from background
+     */
+    @Override
+    protected void onResume() {
+        refreshView();
+        super.onResume();
+    }
+    
+    
 
 }

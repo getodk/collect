@@ -14,12 +14,12 @@
 
 package org.odk.collect.android.listeners;
 
-import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.android.logic.FormController;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener {
-    void loadingComplete(FormEntryController fec);
+    void loadingComplete(FormController fc);
     void loadingError(String errorMsg);
 }

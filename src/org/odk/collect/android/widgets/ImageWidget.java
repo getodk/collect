@@ -14,18 +14,12 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FilterUtils;
-import org.odk.collect.android.utilities.FilterUtils.FilterCriteria;
-import org.odk.collect.android.views.AbstractFolioView;
-import org.odk.collect.android.widgets.AbstractQuestionWidget.OnDescendantRequestFocusChangeListener.FocusChangeState;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,16 +27,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.io.File;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -50,8 +47,7 @@ import android.widget.TextView;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget {
-
+public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private final static String t = "MediaWidget";
 
     private Button mCaptureButton;
@@ -62,50 +58,126 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
 
     private Uri mExternalUri;
     private String mCaptureIntent;
-    private File mInstanceDir;
+    private String mInstanceFolder;
     private int mRequestCode;
     private int mCaptureText;
     private int mReplaceText;
 
-
-    public ImageWidget(Handler handler, Context context, FormEntryPrompt prompt, File instanceDir) {
-        super(handler, context, prompt);
-        initialize(instanceDir);
-    }
+    private boolean mWaitingForData;
 
 
-    private void initialize(File instanceDir) {
-        mInstanceDir = instanceDir;
+    public ImageWidget(Context context, String instancePath, FormEntryPrompt prompt) {
+        super(context, prompt);
+
+        mWaitingForData = false;
+
+        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
         mExternalUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         mCaptureIntent = android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
         mRequestCode = FormEntryActivity.IMAGE_CAPTURE;
         mCaptureText = R.string.capture_image;
         mReplaceText = R.string.replace_image;
+
+        setOrientation(LinearLayout.VERTICAL);
+
+        // setup capture button
+        mCaptureButton = new Button(getContext());
+        mCaptureButton.setText(getContext().getString(mCaptureText));
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mCaptureButton.setPadding(20, 20, 20, 20);
+        mCaptureButton.setEnabled(!prompt.isReadOnly());
+
+        // launch capture intent on click
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mCaptureIntent);
+                // We give the camera an absolute filename/path where to put the
+                // picture because of bug:
+                // http://code.google.com/p/android/issues/detail?id=1480
+                // The bug appears to be fixed in Android 2.0+, but as of feb 2,
+                // 2010, G1 phones only run 1.6. Without specifying the path the
+                // images returned by the camera in 1.6 (and earlier) are ~1/4
+                // the size. boo.
+
+                // if this gets modified, the onActivityResult in
+                // FormEntyActivity will also need to be updated.
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(new File(FileUtils.TMPFILE_PATH)));
+                ((Activity) getContext()).startActivityForResult(i, mRequestCode);
+                mWaitingForData = true;
+
+            }
+        });
+
+        // retrieve answer from data model and update ui
+        mDisplayText = new TextView(getContext());
+        mDisplayText.setPadding(5, 0, 0, 0);
+
+        mBinaryName = prompt.getAnswerText();
+        if (mBinaryName != null) {
+            mCaptureButton.setText(getContext().getString(mReplaceText));
+            mDisplayText.setText(getContext().getString(R.string.one_capture));
+        } else {
+            mDisplayText.setText(getContext().getString(R.string.no_capture));
+        }
+
+        // finish complex layout
+        addView(mCaptureButton);
+
+        // Only add the imageView if the user has taken a picture
+        if (mBinaryName != null) {
+            mImageView = new ImageView(getContext());
+            Display display =
+                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
+
+            File f = new File(mInstanceFolder + "/" + mBinaryName);
+            Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+            mImageView.setImageBitmap(bmp);
+            mImageView.setPadding(10, 10, 10, 10);
+            mImageView.setAdjustViewBounds(true);
+            mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent("android.intent.action.VIEW");
+                    String[] projection = {
+                        "_id"
+                    };
+                    Cursor c =
+                        getContext().getContentResolver().query(mExternalUri, projection,
+                            "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
+                    if (c.getCount() > 0) {
+                        c.moveToFirst();
+                        String id = c.getString(c.getColumnIndex("_id"));
+
+                        Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
+
+                        i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
+                        getContext().startActivity(i);
+                    }
+                    c.close();
+                }
+            });
+            addView(mImageView);
+        }
     }
 
 
     private void deleteMedia() {
-    	// non-existent?
-    	if ( mBinaryName == null ) return;
-
-    	Log.i(t, "Deleting current answer: " + mBinaryName);
-    	
-    	// release image...
-    	mImageView.setImageBitmap(null);
         // get the file path and delete the file
-    	//
+
         // There's only 1 in this case, but android 1.6 doesn't implement delete on
         // android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI only on
         // android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI + a #
         String[] projection = {
             Images.ImageColumns._ID
         };
-        File fBinary = new File(mInstanceDir, mBinaryName);
-        FilterCriteria fc = FilterUtils.buildSelectionClause("_data", 
-                                    fBinary.getAbsolutePath());
         Cursor c =
             getContext().getContentResolver().query(mExternalUri, projection,
-                                        fc.selection, fc.selectionArgs, null);
+                "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
         int del = 0;
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -123,8 +195,21 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         Log.i(t, "Deleted " + del + " rows from media content provider");
     }
 
+
     @Override
-	public IAnswerData getAnswer() {
+    public void clearAnswer() {
+        // remove the file
+        deleteMedia();
+        mImageView.setImageBitmap(null);
+
+        // reset buttons
+        mCaptureButton.setText(getContext().getString(mCaptureText));
+        mDisplayText.setText(getContext().getString(R.string.no_capture));
+    }
+
+
+    @Override
+    public IAnswerData getAnswer() {
         if (mBinaryName != null) {
             return new StringData(mBinaryName.toString());
         } else {
@@ -132,106 +217,6 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         }
     }
 
-    @Override
-    protected void buildViewBodyImpl() {
-        
-        // setup capture button
-        mCaptureButton = new Button(getContext());
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, AbstractFolioView.APPLICATION_FONTSIZE);
-        mCaptureButton.setPadding(20, 20, 20, 20);
-        mCaptureButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
-        mCaptureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-			public void onClick(View v) {
-            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL) ) {
-	                Intent i = new Intent(mCaptureIntent);
-	                // We give the camera an absolute filename/path where to put the
-	                // picture because of bug:
-	                // http://code.google.com/p/android/issues/detail?id=1480
-	                // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-	                // 2010, G1 phones only run 1.6. Without specifying the path the
-	                // images returned by the camera in 1.6 (and earlier) are ~1/4
-	                // the size. boo.
-	
-	                // if this gets modified, the onActivityResult in
-	                // FormEntyActivity will also need to be updated.
-	                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-	                        FileUtils.TMPFILE_PATH)));
-	                ((Activity) getContext()).startActivityForResult(i, mRequestCode);
-            	}
-            }
-        });
-
-        // finish complex layout
-        addView(mCaptureButton);
-
-        mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5, 0, 0, 0);
-
-        mImageView = new ImageView(getContext());
-        mImageView.setPadding(10, 10, 10, 10);
-        mImageView.setAdjustViewBounds(true);
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	if ( signalDescendant(FocusChangeState.DIVERGE_VIEW_FROM_MODEL)) {
-            		// do nothing if no image
-            		if ( mBinaryName == null ) return;
-                    Intent i = new Intent("android.intent.action.VIEW");
-                    String[] projection = {"_id"};
-                    File fBinary = new File(mInstanceDir, mBinaryName);
-                    FilterCriteria fc = FilterUtils.buildSelectionClause("_data", fBinary.getAbsolutePath());
-                    Cursor c =
-                        getContext().getContentResolver().query(mExternalUri, projection,
-                                                fc.selection, fc.selectionArgs, null);
-                    if (c.getCount() > 0) {
-                        c.moveToFirst();
-                        String id = c.getString(c.getColumnIndex("_id"));
-
-                        Log.i(t, "setting view path to: " + Uri.withAppendedPath(mExternalUri, id));
-
-                        i.setDataAndType(Uri.withAppendedPath(mExternalUri, id), "image/*");
-                        getContext().startActivity(i);
-                    }
-                    c.close();
-            	}
-            }
-        });
-        addView(mImageView);
-    }
-
-    protected void updateViewAfterAnswer() {
-    	
-    	String newAnswer = prompt.getAnswerText();
-    	if ( mBinaryName != null && !mBinaryName.equals(newAnswer)) {
-    		deleteMedia();
-    	}
-    	mBinaryName = newAnswer;
-    	
-        if (mBinaryName != null) {
-            mCaptureButton.setText(getContext().getString(mReplaceText));
-            mDisplayText.setText(getContext().getString(R.string.one_capture));
-            
-            Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
-
-            File f = new File(mInstanceDir, mBinaryName);
-            Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
-            mImageView.setImageBitmap(bmp);
-        } else {
-            mCaptureButton.setText(getContext().getString(mCaptureText));
-            mDisplayText.setText(getContext().getString(R.string.no_capture));
-            
-            mImageView.setImageBitmap(null);
-        }
-    }
 
     private String getPathFromUri(Uri uri) {
         // find entry in content provider
@@ -246,7 +231,7 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
 
 
     @Override
-	public void setBinaryData(Object binaryuri) {
+    public void setBinaryData(Object binaryuri) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (mBinaryName != null) {
@@ -255,18 +240,24 @@ public class ImageWidget extends AbstractQuestionWidget implements IBinaryWidget
         String binarypath = getPathFromUri((Uri) binaryuri);
         File f = new File(binarypath);
         mBinaryName = f.getName();
-        Log.i(t, "Setting current answer to " + mBinaryName);
-        saveAnswer(true); // and evaluate constraints and trigger UI update...
+        Log.i(t, "Setting current answer to " + f.getName());
+
+        mWaitingForData = false;
     }
 
+
     @Override
-    public void setEnabled(boolean isEnabled) {
-        if (mBinaryName != null) {
-        	mImageView.setEnabled(isEnabled);
-            mCaptureButton.setEnabled(isEnabled && !prompt.isReadOnly());
-        } else {
-        	mImageView.setEnabled(false);
-            mCaptureButton.setEnabled(isEnabled && !prompt.isReadOnly());
-        }
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
+
+
+    @Override
+    public boolean isWaitingForBinaryData() {
+        return mWaitingForData;
+    }
+
 }
