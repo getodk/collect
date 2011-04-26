@@ -14,6 +14,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,8 +28,11 @@ import java.util.Iterator;
  * 
  * @author carlhartung
  */
-public class ODKView extends ScrollView {
+public class ODKView extends ScrollView implements OnLongClickListener {
 
+    // starter random number for view IDs
+    private final static int VIEW_ID = 12345;  
+    
     private final static String t = "CLASSNAME";
     private final static int TEXTSIZE = 21;
 
@@ -69,6 +73,7 @@ public class ODKView extends ScrollView {
 
         addGroupText(groups);
         boolean first = true;
+        int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
@@ -81,10 +86,14 @@ public class ODKView extends ScrollView {
 
             // if question or answer type is not supported, use text widget
             QuestionWidget qw =
-                WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath);
+                WidgetFactory.createWidgetFromPrompt(p, getContext(), mInstancePath, this);
+            qw.setLongClickable(true);
+            qw.setOnLongClickListener(this);
+            qw.setId(VIEW_ID + id++);
 
             widgets.add(qw);
             mView.addView((View) qw, mLayout);
+
 
         }
 
@@ -220,6 +229,14 @@ public class ODKView extends ScrollView {
             QuestionWidget qw = widgets.get(i);
             qw.setOnFocusChangeListener(l);
         }
+    }
+
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        Log.e("Carl", "that's a long click.  woot.");
+        return false;
     }
 
 }

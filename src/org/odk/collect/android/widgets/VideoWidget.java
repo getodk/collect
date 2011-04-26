@@ -62,7 +62,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public VideoWidget(Context context, String instancePath, FormEntryPrompt prompt) {
+    public VideoWidget(Context context, String instancePath, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
 
         mWaitingForData = false;
@@ -95,6 +95,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
+        mCaptureButton.setOnLongClickListener(listener);
 
         // setup play button
         mPlayButton = new Button(getContext());
@@ -113,6 +114,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
+        mPlayButton.setOnLongClickListener(listener);
 
         // retrieve answer from data model and update ui
         mDisplayText = new TextView(getContext());

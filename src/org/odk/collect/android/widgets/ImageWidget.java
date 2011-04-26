@@ -66,7 +66,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public ImageWidget(Context context, String instancePath, FormEntryPrompt prompt) {
+    public ImageWidget(Context context, String instancePath, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
 
         mWaitingForData = false;
@@ -109,6 +109,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
+        mCaptureButton.setOnLongClickListener(listener);
 
         // retrieve answer from data model and update ui
         mDisplayText = new TextView(getContext());
@@ -161,6 +162,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                     c.close();
                 }
             });
+            mImageView.setOnLongClickListener(listener);
             addView(mImageView);
         }
     }

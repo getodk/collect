@@ -45,7 +45,7 @@ public class SelectMultiWidget extends QuestionWidget {
 
 
     @SuppressWarnings("unchecked")
-    public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
+    public SelectMultiWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
         mPrompt = prompt;
 
@@ -90,6 +90,7 @@ public class SelectMultiWidget extends QuestionWidget {
                     }
 
                 }
+                c.setOnLongClickListener(listener);
 
                 String audioURI = null;
                 audioURI =

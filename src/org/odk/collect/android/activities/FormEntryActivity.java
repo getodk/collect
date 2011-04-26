@@ -29,6 +29,7 @@ import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.GestureDetector;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -54,11 +55,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
@@ -80,6 +83,8 @@ import java.util.Set;
 public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener,
         FormSavedListener {
     private static final String t = "FormEntryActivity";
+
+    private static final int SELECTED_ID = 23948234;
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;;
@@ -109,11 +114,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     // rotation (or similar)
     private static final String NEWFORM = "newform";
 
-    private static final int MENU_CLEAR = Menu.FIRST;
-    private static final int MENU_DELETE_REPEAT = Menu.FIRST + 1;
-    private static final int MENU_LANGUAGES = Menu.FIRST + 2;
-    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 3;
-    private static final int MENU_SAVE = Menu.FIRST + 4;
+    private static final int MENU_DELETE_REPEAT = Menu.FIRST;
+    private static final int MENU_LANGUAGES = Menu.FIRST + 1;
+    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 2;
+    private static final int MENU_SAVE = Menu.FIRST + 3;
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
@@ -306,7 +310,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
             case HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so refresh
-                mFormController.jumpToBeginningOfGroupIfIsFieldList();
                 refreshCurrentView();
                 break;
         }
@@ -320,22 +323,22 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void refreshCurrentView() {
         int event = mFormController.getEvent();
 
-        // When we refresh, if we're at a repeat prompt then step back to the
-        // last question or group of questions.
+        // When we refresh, repeat dialog state isn't maintained, so step back to the previous
+        // question.
+        // Also, if we're within a group labeled 'field list', step back to the beginning of that
+        // group.
+        // That is, skip backwards over repeat prompts, groups that are not field-lists,
+        // repeat events, and indexes in field-lists that is not the containing group.
         while (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
                 || (event == FormEntryController.EVENT_GROUP && !mFormController
-                        .indexIsInFieldList()) || event == FormEntryController.EVENT_REPEAT) {
+                        .indexIsInFieldList())
+                || event == FormEntryController.EVENT_REPEAT
+                || (mFormController.indexIsInFieldList() && !(event == FormEntryController.EVENT_GROUP))) {
             event = mFormController.stepToPreviousEvent();
         }
-        Log.i(t, "refreshing view for event: " + event);
+        View current = createView(event);
+        showView(current, AnimationType.FADE);
 
-        if (event == FormEntryController.EVENT_GROUP) {
-            View current = createView(FormEntryController.EVENT_GROUP);
-            showView(current, AnimationType.FADE);
-        } else {
-            View current = createView(event);
-            showView(current, AnimationType.FADE);
-        }
     }
 
 
@@ -346,7 +349,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.removeItem(MENU_CLEAR);
         menu.removeItem(MENU_DELETE_REPEAT);
         menu.removeItem(MENU_LANGUAGES);
         menu.removeItem(MENU_HIERARCHY_VIEW);
@@ -354,9 +356,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
             android.R.drawable.ic_menu_save);
-        menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer))
-                .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
-                .setEnabled(!mFormController.isIndexReadonly() ? true : false);
         menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat))
                 .setIcon(R.drawable.ic_menu_clear_playlist)
                 .setEnabled(mFormController.indexContainsRepeatableGroup() ? true : false);
@@ -381,17 +380,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         switch (item.getItemId()) {
             case MENU_LANGUAGES:
                 createLanguageDialog();
-                return true;
-            case MENU_CLEAR:
-                if (mFormController.getEvent() == FormEntryController.EVENT_GROUP) {
-                    // TODO: make this a good error message. something about needing to long-press
-                    // on each element
-                    createErrorDialog("badness", DO_NOT_EXIT);
-                } else {
-                    // Otherwise, it's a single question so go ahead and clear it.
-                    createClearDialog();
-                }
-
                 return true;
             case MENU_DELETE_REPEAT:
                 createDeleteRepeatConfirmDialog();
@@ -441,7 +429,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 if (mFormController.getEvent(index) == FormEntryController.EVENT_QUESTION) {
                     int saveStatus = saveAnswer(answers.get(index), index, evaluateConstraints);
                     if (evaluateConstraints && saveStatus != FormEntryController.ANSWER_OK) {
-                        createConstraintToast(mFormController.getQuestionPrompt()
+                        createConstraintToast(mFormController.getQuestionPrompt(index)
                                 .getConstraintText(), saveStatus);
                         return false;
                     }
@@ -459,18 +447,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /**
      * Clears the answer on the screen.
      */
-    private boolean clearCurrentAnswer() {
-        // TODO: can probably get rid of this method.
-        if (!mFormController.isIndexReadonly()
-                && mFormController.getEvent() == FormEntryController.EVENT_QUESTION) {
-            ((ODKView) mCurrentView).clearAnswer();
-            return true;
-        } else {
-            createErrorDialog("can't do that", DO_NOT_EXIT);
-            // error longpress. group.
-            // readonly handled elsewhere?
-            return false;
-        }
+    private void clearAnswer(QuestionWidget qw) {
+        qw.clearAnswer();
     }
 
 
@@ -484,7 +462,21 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, v.getId(), 0, "Clear Answer");
-        // TODO: v.getquestoin?
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        /*
+         * We don't have the right view here, so we store the View's ID as the item ID and loop
+         * through the possible views to find the one the user clicked on.
+         */
+        for (QuestionWidget qw : ((ODKView) mCurrentView).getWidgets()) {
+            if (item.getItemId() == qw.getId()) {
+                createClearDialog(qw);
+            }
+        }
+        return super.onContextItemSelected(item);
     }
 
 
@@ -525,7 +517,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private View createView(int event) {
         setTitle(getString(R.string.app_name) + " > " + mFormController.getFormTitle());
 
-        ODKView gv = null;
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 View startView = View.inflate(this, R.layout.form_entry_start, null);
@@ -554,27 +545,30 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 return endView;
             case FormEntryController.EVENT_QUESTION:
-                gv =
-                    new ODKView(this, mInstancePath, mFormController.getQuestionPrompt(),
-                            mFormController.getGroupsForCurrentIndex());
-                Log.i(t, "created view for question");
-                return gv;
             case FormEntryController.EVENT_GROUP:
-                // should only get here if the event_group is a field-list
+                ODKView odkv = null;
+                // should only be a group here if the event_group is a field-list
                 try {
-                    gv =
+                    odkv =
                         new ODKView(this, mInstancePath, mFormController.getQuestionPrompts(),
                                 mFormController.getGroupsForCurrentIndex());
                     Log.i(t, "created view for group");
                 } catch (RuntimeException e) {
                     Log.e("Carl", "bad something in the group");
                     createErrorDialog(e.getMessage(), EXIT);
-                    // this is badness to avoid a crash.  
+                    // this is badness to avoid a crash.
                     // really a next view should increment the formcontroller, create the view
                     // if the view is null, then keep the current view and pop an error.
                     return new View(this);
                 }
-                return gv;
+
+                // ArrayList<QuestionWidget> qWidgtets = odkv.getWidgets();
+                for (QuestionWidget qw : odkv.getWidgets()) {
+                    this.registerForContextMenu(qw);
+                    // qw.setOnLongClickListener(this);
+                }
+
+                return odkv;
             default:
                 Log.e(t, "Attempted to create a view that does not exist.");
                 return null;
@@ -663,7 +657,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         break group_skip;
                     case FormEntryController.EVENT_GROUP:
                         if (mFormController.indexIsInFieldList()) {
-                            View nextGroupView = createView(FormEntryController.EVENT_GROUP);
+                            View nextGroupView = createView(event);
                             showView(nextGroupView, AnimationType.RIGHT);
                             break group_skip;
                         }
@@ -711,13 +705,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             .indexIsInFieldList())) {
                 event = mFormController.stepToPreviousEvent();
             }
-            if (event == FormEntryController.EVENT_GROUP) {
-                View nextGroupView = createView(FormEntryController.EVENT_GROUP);
-                showView(nextGroupView, AnimationType.LEFT);
-            } else {
-                View next = createView(event);
-                showView(next, AnimationType.LEFT);
-            }
+            View next = createView(event);
+            showView(next, AnimationType.LEFT);
+
         } else {
             mBeenSwiped = false;
         }
@@ -1038,13 +1028,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     /**
      * Confirm clear answer dialog
      */
-    private void createClearDialog() {
+    private void createClearDialog(final QuestionWidget qw) {
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
 
         mAlertDialog.setTitle(getString(R.string.clear_answer_ask));
 
-        String question = mFormController.getQuestionPrompt().getLongText();
+        String question = qw.getPrompt().getLongText();
         if (question.length() > 50) {
             question = question.substring(0, 50) + "...";
         }
@@ -1057,7 +1047,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
-                        clearCurrentAnswer();
+                        clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         break;
                     case DialogInterface.BUTTON2: // no
@@ -1386,8 +1376,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 refreshCurrentView();
-                createConstraintToast(mFormController.getQuestionPrompt().getConstraintText(),
-                    saveStatus);
+                // TODO:
+                createConstraintToast("Crap, this needs to get implemented", saveStatus);
                 Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
                     Toast.LENGTH_LONG).show();
                 break;
@@ -1414,8 +1404,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Checks the database to determine if the current instance being edited has already
-     * been 'marked completed'.  A form can be 'unmarked' complete and then resaved.
+     * Checks the database to determine if the current instance being edited has already been
+     * 'marked completed'. A form can be 'unmarked' complete and then resaved.
      * 
      * @return true if form has been marked completed, false otherwise.
      */

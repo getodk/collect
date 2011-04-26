@@ -45,7 +45,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public GeoPointWidget(Context context, FormEntryPrompt prompt) {
+    public GeoPointWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
         mWaitingForData = false;
 
@@ -81,6 +81,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
+        mActionButton.setOnLongClickListener(listener);
 
         // finish complex layout
         addView(mActionButton);

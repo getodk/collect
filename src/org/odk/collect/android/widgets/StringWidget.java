@@ -108,4 +108,14 @@ public class StringWidget extends QuestionWidget {
         return super.onKeyDown(keyCode, event);
     }
 
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        // TODO Auto-generated method stub
+        super.setOnLongClickListener(l);
+        mAnswer.setOnLongClickListener(l);
+    }
+    
+    
+
 }

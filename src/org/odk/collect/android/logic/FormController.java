@@ -37,6 +37,7 @@ import java.util.ArrayList;
  */
 public class FormController {
 
+    private static final String t = "FormController";
     private FormEntryController mFormEntryController;
 
     public static final boolean STEP_INTO_GROUP = true;
@@ -96,15 +97,7 @@ public class FormController {
 
 
     /**
-     * @return the FormEntryPrompt for the current FormIndex.
-     */
-    public FormEntryPrompt getQuestionPrompt() {
-        return mFormEntryController.getModel().getQuestionPrompt();
-    }
-
-
-    /**
-     * @return A String containing the title of rht ecurrent form.
+     * @return A String containing the title of the current form.
      */
     public String getFormTitle() {
         return mFormEntryController.getModel().getFormTitle();
@@ -176,23 +169,10 @@ public class FormController {
      * displayed as a multi-question view. This is useful for returning from the formhierarchy view
      * to a selected index.
      * 
-     * @return true if current index should be displayed as part of a formentry group. false
-     *         otherwise.
-     */
-    public boolean indexIsInFieldList() {
-        return indexIsInFieldList(mFormEntryController.getModel().getFormIndex());
-    }
-
-
-    /**
-     * A convenience method for determining if the current FormIndex is in a group that is/should be
-     * displayed as a multi-question view. This is useful for returning from the formhierarchy view
-     * to a selected index.
-     * 
      * @param index
      * @return
      */
-    private boolean indexIsInFieldList(FormIndex index) {
+    private boolean groupIsFieldList(FormIndex index) {
         // if this isn't a group, return right away
         if (!(mFormEntryController.getModel().getForm().getChild(index) instanceof GroupDef)) {
             return false;
@@ -204,32 +184,42 @@ public class FormController {
 
 
     /**
-     * Jumps the FormEntryController to the beginning of a group that should be displayed as a
-     * multi-question per screen view.
+     * Tests if the FormIndex 'index' is located inside a group that is marked as a "field-list"
      * 
-     * @return the event representing the GROUP_EVENT for the beginning of this mutli-question view,
-     *         or the current event if the current FormIndex isn't in a multi-question view. TODO:
-     *         Does this need to be public? doesn't need to be public, but needs to get called by
-     *         refresh view. I'd like to test this before changing
+     * @param index
+     * @return true if index is in a "field-list".  False otherwise.
      */
-    public int jumpToBeginningOfGroupIfIsFieldList() {
-        int event = mFormEntryController.getModel().getEvent();
+    public boolean indexIsInFieldList(FormIndex index) {
+        int event = mFormEntryController.getModel().getEvent(index);
         if (event == FormEntryController.EVENT_QUESTION) {
             // caption[0..len-1]
             // caption[len-1] == the question itself
             // caption[len-2] == the first group it is contained in.
             FormEntryCaption[] captions = mFormEntryController.getModel().getCaptionHierarchy();
             if (captions.length < 2) {
-                Log.e("carl", "not a group");
-                return event;
+                // no group
+                return false;
             }
             FormEntryCaption grp = captions[captions.length - 2];
-            if (indexIsInFieldList(grp.getIndex())) {
-                return mFormEntryController.jumpToIndex(grp.getIndex());
-            }
+            return groupIsFieldList(grp.getIndex());
+        } else if (event == FormEntryController.EVENT_GROUP) {
+            return groupIsFieldList(index);
+        } else {
+            // right now we only test Questions and Groups. Should we also handle
+            // repeats?
+            return false;
         }
 
-        return event;
+    }
+
+
+    /**
+     * Tests if the current FormIndex is located inside a group that is marked as a "field-list"
+     * 
+     * @return true if index is in a "field-list".  False otherwise.
+     */
+    public boolean indexIsInFieldList() {
+        return indexIsInFieldList(mFormEntryController.getModel().getFormIndex());
     }
 
 
@@ -300,12 +290,12 @@ public class FormController {
 
 
     /**
-     * if using a view like HierarchyView that doesn't support multi-question per screen, step over
+     * If using a view like HierarchyView that doesn't support multi-question per screen, step over
      * the group represented by the FormIndex.
      * 
      * @return
      */
-    public int stepOverGroup() {
+    private int stepOverGroup() {
         ArrayList<FormIndex> indicies = new ArrayList<FormIndex>();
         GroupDef gd =
             (GroupDef) mFormEntryController.getModel().getForm()
@@ -338,7 +328,22 @@ public class FormController {
          */
 
         mFormEntryController.stepToPreviousEvent();
-        return jumpToBeginningOfGroupIfIsFieldList();
+
+        // If after we've stepped, we're in a field-list, jump back to the beginning of the group
+        //
+
+        if (indexIsInFieldList()
+                && mFormEntryController.getModel().getEvent() == FormEntryController.EVENT_QUESTION) {
+            // caption[0..len-1]
+            // caption[len-1] == the question itself
+            // caption[len-2] == the first group it is contained in.
+            FormEntryCaption[] captions = mFormEntryController.getModel().getCaptionHierarchy();
+            FormEntryCaption grp = captions[captions.length - 2];
+            return mFormEntryController.jumpToIndex(grp.getIndex());
+        }
+
+        return mFormEntryController.getModel().getEvent();
+
     }
 
 
@@ -399,44 +404,65 @@ public class FormController {
 
 
     /**
-     * Returns an array of question promps.
-     * 
-     * TODO:  Can I call this with just one?
+     * Returns an array of question promps. TODO: Can I call this with just one?
      * 
      * @return
      */
-    public FormEntryPrompt[] getQuestionPrompts() {
+    public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
 
         ArrayList<FormIndex> indicies = new ArrayList<FormIndex>();
         FormIndex currentIndex = mFormEntryController.getModel().getFormIndex();
 
-        GroupDef gd = (GroupDef) mFormEntryController.getModel().getForm().getChild(currentIndex);
-        FormIndex idxChild = mFormEntryController.getModel().incrementIndex(currentIndex, true); // descend                                                                                                 // into
-                                                                                                 // group
-        //TODO:  just use size here.
-        for (Object child : gd.getChildren()) {
-            indicies.add(idxChild);
-            idxChild = mFormEntryController.getModel().incrementIndex(idxChild, false); // don't
-                                                                                        // descend
-        }
+        // For questions, there is only one.
+        // For groups, there could be many, but we set that below
+        FormEntryPrompt[] questions = new FormEntryPrompt[1];
 
-        FormEntryPrompt[] questions = new FormEntryPrompt[indicies.size()];
-        for (int i = 0; i < indicies.size(); i++) {
-            FormIndex index = indicies.get(i);
-
-            if (mFormEntryController.getModel().getEvent(index) != FormEntryController.EVENT_QUESTION) {
-                RuntimeException e =
-                    new RuntimeException(
-                            "Only questions are allowed in 'field-list'.  Bad node is: "
-                                    + index.getReference().toString(false));
-                throw e;
+        if (mFormEntryController.getModel().getForm().getChild(currentIndex) instanceof GroupDef) {
+            GroupDef gd =
+                (GroupDef) mFormEntryController.getModel().getForm().getChild(currentIndex);
+            FormIndex idxChild = mFormEntryController.getModel().incrementIndex(currentIndex, true); // descend
+                                                                                                     // //
+                                                                                                     // into
+                                                                                                     // group
+            // TODO: just use size here.
+            for (Object child : gd.getChildren()) {
+                indicies.add(idxChild);
+                idxChild = mFormEntryController.getModel().incrementIndex(idxChild, false); // don't
+                                                                                            // descend
             }
 
-            FormEntryPrompt p = mFormEntryController.getModel().getQuestionPrompt(index);
-            questions[i] = p;
+            questions = new FormEntryPrompt[indicies.size()];
+            for (int i = 0; i < indicies.size(); i++) {
+                FormIndex index = indicies.get(i);
+
+                if (mFormEntryController.getModel().getEvent(index) != FormEntryController.EVENT_QUESTION) {
+                    String errorMsg =
+                        "Only questions are allowed in 'field-list'.  Bad node is: "
+                                + index.getReference().toString(false);
+                    RuntimeException e = new RuntimeException(errorMsg);
+                    Log.e(t, errorMsg);
+                    throw e;
+                }
+
+                FormEntryPrompt p = mFormEntryController.getModel().getQuestionPrompt(index);
+                questions[i] = p;
+            }
+        } else {
+            // We have a quesion, so just get the one prompt
+            questions[0] = mFormEntryController.getModel().getQuestionPrompt();
         }
 
         return questions;
+    }
+
+
+    public FormEntryPrompt getQuestionPrompt(FormIndex index) {
+        return mFormEntryController.getModel().getQuestionPrompt(index);
+    }
+
+
+    public FormEntryPrompt getQuestionPrompt() {
+        return mFormEntryController.getModel().getQuestionPrompt();
     }
 
 

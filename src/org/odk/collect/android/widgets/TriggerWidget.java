@@ -47,7 +47,7 @@ public class TriggerWidget extends QuestionWidget {
     }
 
 
-    public TriggerWidget(Context context, FormEntryPrompt prompt) {
+    public TriggerWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
         mPrompt = prompt;
 
@@ -69,6 +69,7 @@ public class TriggerWidget extends QuestionWidget {
                 }
             }
         });
+        mActionButton.setOnLongClickListener(listener);
 
         mStringAnswer = new TextView(getContext());
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);

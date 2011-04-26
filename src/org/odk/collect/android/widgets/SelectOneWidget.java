@@ -52,10 +52,8 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
     Vector<RadioButton> buttons;
     Vector<MediaLayout> layout;
 
-    OnFocusChangeListener mListener;
 
-
-    public SelectOneWidget(Context context, FormEntryPrompt prompt) {
+    public SelectOneWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
 
         mItems = prompt.getSelectChoices();
@@ -76,15 +74,8 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 r.setId(i + RANDOM_BUTTON_ID);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
-                r.setOnLongClickListener(new OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Log.e("carl", "long clicked button");
-                        // TODO Auto-generated method stub
-                        return false;
-                    }
-                });
+                r.setOnLongClickListener(listener);
+                
                 buttons.add(r);
 
                 if (mItems.get(i).getValue().equals(s)) {
@@ -177,13 +168,6 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 button.setChecked(false);
             }
         }
-        mListener.onFocusChange(this, false);
-    }
-
-
-    @Override
-    public void setOnFocusChangeListener(OnFocusChangeListener l) {
-        mListener = l;
     }
 
 }
