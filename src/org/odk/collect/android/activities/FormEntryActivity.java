@@ -43,6 +43,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -55,13 +56,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
@@ -69,6 +68,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -99,6 +103,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int VIDEO_CAPTURE = 4;
     public static final int LOCATION_CAPTURE = 5;
     public static final int HIERARCHY_ACTIVITY = 6;
+    public static final int IMAGE_CHOOSER = 7;
 
     // Extra returned from location activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -254,6 +259,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return;
         }
 
+        ContentValues values;
+        Uri imageURI;
         switch (requestCode) {
             case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
@@ -261,11 +268,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CAPTURE:
-                // We saved the image to the tempfile_path, but we really want
-                // it to be in:
-                // /sdcard/odk/instances/[current instnace]/something.jpg
-                // so we move it there before inserting it into the content
-                // provider.
+                /*
+                 * We saved the image to the tempfile_path, but we really want it to be in:
+                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
+                 * inserting it into the content provider.
+                 */
                 File fi = new File(FileUtils.TMPFILE_PATH);
 
                 String mInstanceFolder =
@@ -281,18 +288,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // Add the new image to the Media content provider so that the
                 // viewing is fast in Android 2.0+
-                ContentValues values = new ContentValues(6);
+                values = new ContentValues(6);
                 values.put(Images.Media.TITLE, nf.getName());
                 values.put(Images.Media.DISPLAY_NAME, nf.getName());
                 values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
                 values.put(Images.Media.MIME_TYPE, "image/jpeg");
                 values.put(Images.Media.DATA, nf.getAbsolutePath());
 
-                Uri imageuri =
+                imageURI =
                     getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
-                Log.i(t, "Inserting image returned uri = " + imageuri.toString());
+                Log.i(t, "Inserting image returned uri = " + imageURI.toString());
 
-                ((ODKView) mCurrentView).setBinaryData(imageuri);
+                ((ODKView) mCurrentView).setBinaryData(imageURI);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 refreshCurrentView();
                 break;
@@ -310,6 +317,70 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
             case HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so refresh
+                refreshCurrentView();
+                break;
+            case IMAGE_CHOOSER:
+                /*
+                 * We have a saved image somewhere, but we really want it to be in:
+                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
+                 * inserting it into the content provider.
+                 */
+
+                // get location of chosen file
+                Uri selectedImage = intent.getData();
+                String[] projection = {
+                    Images.Media.DATA
+                };
+                Cursor cursor = managedQuery(selectedImage, projection, null, null, null);
+                startManagingCursor(cursor);
+                int column_index = cursor.getColumnIndexOrThrow(Images.Media.DATA);
+                cursor.moveToFirst();
+                String sourceImagePath = cursor.getString(column_index);
+
+                // Copy file to sdcard
+                String mInstanceFolder1 =
+                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                String destImagePath = mInstanceFolder1 + "/" + System.currentTimeMillis() + ".jpg";
+
+                File source = new File(sourceImagePath);
+                File destination = new File(destImagePath);
+                if (source.exists()) {
+                    FileChannel src;
+                    try {
+                        src = new FileInputStream(source).getChannel();
+                        FileChannel dst = new FileOutputStream(destination).getChannel();
+                        dst.transferFrom(src, 0, src.size());
+                        src.close();
+                        dst.close();
+                    } catch (FileNotFoundException e) {
+                        Log.e(t, "FileNotFoundExeception while copying image");
+                        e.printStackTrace();
+                        return;
+                    } catch (IOException e) {
+                        Log.e(t, "IOExeception while copying image");
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    // Add the new image to the Media content provider so that the
+                    // viewing is fast in Android 2.0+
+                    values = new ContentValues(6);
+                    values.put(Images.Media.TITLE, destination.getName());
+                    values.put(Images.Media.DISPLAY_NAME, destination.getName());
+                    values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
+                    values.put(Images.Media.MIME_TYPE, "image/jpeg");
+                    values.put(Images.Media.DATA, destination.getAbsolutePath());
+
+                    imageURI =
+                        getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Log.i(t, "Inserting image returned uri = " + imageURI.toString());
+
+                    ((ODKView) mCurrentView).setBinaryData(imageURI);
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                } else {
+                    Log.e(t, "NO IMAGE EXISTS at: " + source.getAbsolutePath());
+                }
+
                 refreshCurrentView();
                 break;
         }
@@ -556,6 +627,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 } catch (RuntimeException e) {
                     Log.e("Carl", "bad something in the group");
                     createErrorDialog(e.getMessage(), EXIT);
+                    e.printStackTrace();
                     // this is badness to avoid a crash.
                     // really a next view should increment the formcontroller, create the view
                     // if the view is null, then keep the current view and pop an error.
