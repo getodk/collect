@@ -43,7 +43,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -88,8 +88,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         FormSavedListener {
     private static final String t = "FormEntryActivity";
 
-    private static final int SELECTED_ID = 23948234;
-
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;;
     private static final boolean DO_NOT_EXIT = false;
@@ -104,6 +102,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int LOCATION_CAPTURE = 5;
     public static final int HIERARCHY_ACTIVITY = 6;
     public static final int IMAGE_CHOOSER = 7;
+    public static final int AUDIO_CHOOSER = 8;
+    public static final int VIDEO_CHOOSER = 9;
 
     // Extra returned from location activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -261,6 +261,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         ContentValues values;
         Uri imageURI;
+        Uri AudioURI = null;
         switch (requestCode) {
             case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
@@ -306,6 +307,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
                 Uri um = intent.getData();
+                Log.e("carl", "uri for capture is " + um);
                 ((ODKView) mCurrentView).setBinaryData(um);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 refreshCurrentView();
@@ -382,6 +384,66 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 }
 
                 refreshCurrentView();
+                break;
+            case AUDIO_CHOOSER:               
+             // get location of chosen file
+                Uri selectedAudio = intent.getData();
+                String[] audioProjection = {
+                    Audio.Media.DATA
+                };
+                Cursor c = managedQuery(selectedAudio, audioProjection, null, null, null);
+                startManagingCursor(c);
+                int column_index1 = c.getColumnIndexOrThrow(Images.Media.DATA);
+                c.moveToFirst();
+                String sourceAudioPath = c.getString(column_index1);
+
+                // Copy file to sdcard
+                String mInstanceFolder2 =
+                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                File audioFile = new File(sourceAudioPath);
+                String extension = audioFile.getName().substring(audioFile.getName().lastIndexOf("."));
+                String destAudioPath = mInstanceFolder2 + "/" + System.currentTimeMillis() + extension;
+                                
+                File source1 = audioFile;
+                File destination1 = new File(destAudioPath);
+                if (source1.exists()) {
+                    FileChannel src;
+                    try {
+                        src = new FileInputStream(source1).getChannel();
+                        FileChannel dst = new FileOutputStream(destination1).getChannel();
+                        dst.transferFrom(src, 0, src.size());
+                        src.close();
+                        dst.close();
+                    } catch (FileNotFoundException e) {
+                        Log.e(t, "FileNotFoundExeception while copying audio");
+                        e.printStackTrace();
+                        return;
+                    } catch (IOException e) {
+                        Log.e(t, "IOExeception while copying audio");
+                        e.printStackTrace();
+                        return;
+                    }
+                    
+                    
+                    values = new ContentValues(6);
+                    values.put(Audio.Media.TITLE, destination1.getName());
+                    values.put(Audio.Media.DISPLAY_NAME, destination1.getName());
+                    values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
+                    values.put(Audio.Media.DATA, destination1.getAbsolutePath());
+                   
+                    AudioURI =
+                        getContentResolver().insert(Audio.Media.INTERNAL_CONTENT_URI, values);
+                    Log.i(t, "Inserting AUDIO returned uri = " + AudioURI.toString());
+                }
+                
+                
+               ((ODKView) mCurrentView).setBinaryData(AudioURI);
+               saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                refreshCurrentView();
+                break;
+            case VIDEO_CHOOSER:
+                Log.e(t, "unimplemented");
+                //TODO:  make this.
                 break;
         }
     }

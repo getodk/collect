@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.File;
 
@@ -47,40 +46,28 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button mCaptureButton;
     private Button mPlayButton;
+    private Button mChooseButton;
 
     private String mBinaryName;
-    private TextView mDisplayText;
-
-    private Uri mExternalUri;
-    private String mCaptureIntent;
     private String mInstanceFolder;
-    private int mRequestCode;
-    private int mCaptureText;
-    private int mReplaceText;
-    private int mPlayText;
 
     private boolean mWaitingForData;
 
 
-    public AudioWidget(Context context, String instancePath, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public AudioWidget(Context context, String instancePath, FormEntryPrompt prompt,
+            OnLongClickListener listener) {
         super(context, prompt);
 
         mWaitingForData = false;
         mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
 
-        mExternalUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        mCaptureIntent = android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
-        mRequestCode = FormEntryActivity.AUDIO_CAPTURE;
-        mCaptureText = R.string.capture_audio;
-        mReplaceText = R.string.replace_audio;
-        mPlayText = R.string.play_audio;
-
         setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button
         mCaptureButton = new Button(getContext());
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mCaptureButton.setText(getContext().getString(R.string.capture_audio));
+        mCaptureButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -88,18 +75,43 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mCaptureIntent);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
+                Intent i = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
                 mWaitingForData = true;
-                ((Activity) getContext()).startActivityForResult(i, mRequestCode);
+                ((Activity) getContext())
+                        .startActivityForResult(i, FormEntryActivity.AUDIO_CAPTURE);
 
             }
         });
         mCaptureButton.setOnLongClickListener(listener);
 
+        // setup capture button
+        mChooseButton = new Button(getContext());
+        // TODO: add to strings.xml
+        mChooseButton.setText("Choose Sound");
+        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mChooseButton.setPadding(20, 20, 20, 20);
+        mChooseButton.setEnabled(!prompt.isReadOnly());
+
+        // launch capture intent on click
+        mChooseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i =
+                    new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Audio.Media.INTERNAL_CONTENT_URI);
+                mWaitingForData = true;
+                ((Activity) getContext())
+                        .startActivityForResult(i, FormEntryActivity.AUDIO_CHOOSER);
+
+            }
+        });
+        mChooseButton.setOnLongClickListener(listener);
+
         // setup play button
         mPlayButton = new Button(getContext());
-        mPlayButton.setText(getContext().getString(mPlayText));
+        mPlayButton.setText(getContext().getString(R.string.play_audio));
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
@@ -117,21 +129,16 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setOnLongClickListener(listener);
 
         // retrieve answer from data model and update ui
-        mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5, 0, 0, 0);
-
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
             mPlayButton.setEnabled(true);
-            mCaptureButton.setText(getContext().getString(mReplaceText));
-            mDisplayText.setText(getContext().getString(R.string.one_capture));
         } else {
             mPlayButton.setEnabled(false);
-            mDisplayText.setText(getContext().getString(R.string.no_capture));
         }
 
         // finish complex layout
         addView(mCaptureButton);
+        addView(mChooseButton);
         addView(mPlayButton);
     }
 
@@ -155,8 +162,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
         // reset buttons
         mPlayButton.setEnabled(false);
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mDisplayText.setText(getContext().getString(R.string.no_capture));
     }
 
 
@@ -173,12 +178,15 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private Uri getUriFromPath(String path) {
         // find entry in content provider
         Cursor c =
-            getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
-                null, null);
+            getContext().getContentResolver().query(
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
+                "_data='" + path + "'", null, null);
         c.moveToFirst();
 
         // create uri from path
-        String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
+        String newPath =
+            android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
+                    + c.getInt(c.getColumnIndex("_id"));
         c.close();
         return Uri.parse(newPath);
     }
