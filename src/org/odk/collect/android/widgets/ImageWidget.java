@@ -59,12 +59,13 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public ImageWidget(Context context, String instancePath, FormEntryPrompt prompt,
-            OnLongClickListener listener) {
+    public ImageWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
 
         mWaitingForData = false;
-        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
+        mInstanceFolder =
+            FormEntryActivity.InstancePath.substring(0,
+                FormEntryActivity.InstancePath.lastIndexOf("/") + 1);
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -113,9 +114,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =
-                    new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.setType("image/*");
 
                 ((Activity) getContext())
                         .startActivityForResult(i, FormEntryActivity.IMAGE_CHOOSER);

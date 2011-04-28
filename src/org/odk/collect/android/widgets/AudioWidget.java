@@ -19,12 +19,15 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore.Audio;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -33,6 +36,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -54,12 +62,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public AudioWidget(Context context, String instancePath, FormEntryPrompt prompt,
-            OnLongClickListener listener) {
+    public AudioWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
 
         mWaitingForData = false;
-        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
+        mInstanceFolder =
+            FormEntryActivity.InstancePath.substring(0,
+                FormEntryActivity.InstancePath.lastIndexOf("/") + 1);
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -98,9 +107,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =
-                    new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Audio.Media.INTERNAL_CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.setType("audio/*");
                 mWaitingForData = true;
                 ((Activity) getContext())
                         .startActivityForResult(i, FormEntryActivity.AUDIO_CHOOSER);
@@ -126,7 +134,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mCaptureButton.setOnLongClickListener(listener);
+        mPlayButton.setOnLongClickListener(listener);
 
         // retrieve answer from data model and update ui
         mBinaryName = prompt.getAnswerText();
@@ -193,35 +201,54 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
 
     private String getPathFromUri(Uri uri) {
-        // find entry in content provider
-        Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
-        c.moveToFirst();
 
-        // get data path
-        String colString = c.getString(c.getColumnIndex("_data"));
-        c.close();
-        return colString;
+        String[] audioProjection = {
+            Audio.Media.DATA
+        };
+        Cursor c = ((Activity) getContext()).managedQuery(uri, audioProjection, null, null, null);
+        ((Activity) getContext()).startManagingCursor(c);
+        int column_index = c.getColumnIndexOrThrow(Audio.Media.DATA);
+        String audioPath = null;
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            audioPath = c.getString(column_index);
+        }
+        return audioPath;
     }
 
 
     @Override
     public void setBinaryData(Object binaryuri) {
-        // you are replacing an answer. remove the media.
+        // when replacing an answer. remove the current media.
         if (mBinaryName != null) {
             deleteMedia();
         }
 
-        // get the file path and move the file
-        String binarypath = getPathFromUri((Uri) binaryuri);
-        File f = new File(binarypath);
-        String s = mInstanceFolder + "/" + binarypath.substring(binarypath.lastIndexOf('/') + 1);
-        if (!f.renameTo(new File(s))) {
-            Log.i(t, "Failed to rename " + f.getAbsolutePath());
+        // get the file path and create a copy in the instance folder
+        String binaryPath = getPathFromUri((Uri) binaryuri);
+        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
+        String destAudioPath = mInstanceFolder + "/" + System.currentTimeMillis() + extension;
+
+        File source = new File(binaryPath);
+        File newAudio = new File(destAudioPath);
+        FileUtils.copyFile(source, newAudio);
+
+        if (newAudio.exists()) {
+            // Add the copy to the content provier
+            ContentValues values = new ContentValues(6);
+            values.put(Audio.Media.TITLE, newAudio.getName());
+            values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
+            values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
+            values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
+
+            Uri AudioURI =
+                getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
+            Log.i(t, "Inserting AUDIO returned uri = " + AudioURI.toString());
+        } else {
+            Log.e(t, "Inserting Audio file FAILED");
         }
 
-        // remove the database entry and update the name
-        getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
-        mBinaryName = s.substring(s.lastIndexOf('/') + 1);
+        mBinaryName = newAudio.getName();
         mWaitingForData = false;
     }
 

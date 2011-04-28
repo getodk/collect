@@ -19,8 +19,10 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -32,7 +34,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.File;
 
@@ -47,40 +48,30 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button mCaptureButton;
     private Button mPlayButton;
+    private Button mChooseButton;
 
     private String mBinaryName;
-    private TextView mDisplayText;
 
-    private Uri mExternalUri;
-    private String mCaptureIntent;
     private String mInstanceFolder;
-    private int mRequestCode;
-    private int mCaptureText;
-    private int mReplaceText;
-    private int mPlayText;
 
     private boolean mWaitingForData;
 
 
-    public VideoWidget(Context context, String instancePath, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public VideoWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
         super(context, prompt);
 
         mWaitingForData = false;
-        mInstanceFolder = instancePath.substring(0, instancePath.lastIndexOf("/") + 1);
-
-        mExternalUri = Video.Media.EXTERNAL_CONTENT_URI;
-        mCaptureIntent = android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
-        mRequestCode = FormEntryActivity.VIDEO_CAPTURE;
-        mCaptureText = R.string.capture_video;
-        mReplaceText = R.string.replace_video;
-        mPlayText = R.string.play_video;
+        mInstanceFolder =
+            FormEntryActivity.InstancePath.substring(0,
+                FormEntryActivity.InstancePath.lastIndexOf("/") + 1);
 
         setOrientation(LinearLayout.VERTICAL);
 
         // setup capture button
         mCaptureButton = new Button(getContext());
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mCaptureButton.setText(getContext().getString(R.string.capture_video));
+        mCaptureButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -88,18 +79,43 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mCaptureIntent);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mExternalUri.toString());
-                ((Activity) getContext()).startActivityForResult(i, mRequestCode);
+                Intent i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Video.Media.EXTERNAL_CONTENT_URI.toString());
+                ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.VIDEO_CAPTURE);
                 mWaitingForData = true;
 
             }
         });
         mCaptureButton.setOnLongClickListener(listener);
 
+        // setup capture button
+        mChooseButton = new Button(getContext());
+        // TODO: add to strings.xml
+        mChooseButton.setText("Choose Video");
+        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mChooseButton.setPadding(20, 20, 20, 20);
+        mChooseButton.setEnabled(!prompt.isReadOnly());
+
+        // launch capture intent on click
+        mChooseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.setType("video/*");
+                // Intent i =
+                // new Intent(Intent.ACTION_PICK,
+                // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                mWaitingForData = true;
+                ((Activity) getContext())
+                        .startActivityForResult(i, FormEntryActivity.VIDEO_CHOOSER);
+
+            }
+        });
+        mChooseButton.setOnLongClickListener(listener);
+
         // setup play button
         mPlayButton = new Button(getContext());
-        mPlayButton.setText(getContext().getString(mPlayText));
+        mPlayButton.setText(getContext().getString(R.string.play_video));
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
         mPlayButton.setPadding(20, 20, 20, 20);
 
@@ -117,21 +133,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mPlayButton.setOnLongClickListener(listener);
 
         // retrieve answer from data model and update ui
-        mDisplayText = new TextView(getContext());
-        mDisplayText.setPadding(5, 0, 0, 0);
-
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
             mPlayButton.setEnabled(true);
-            mCaptureButton.setText(getContext().getString(mReplaceText));
-            mDisplayText.setText(getContext().getString(R.string.one_capture));
         } else {
             mPlayButton.setEnabled(false);
-            mDisplayText.setText(getContext().getString(R.string.no_capture));
         }
 
         // finish complex layout
         addView(mCaptureButton);
+        addView(mChooseButton);
         addView(mPlayButton);
 
     }
@@ -140,6 +151,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private void deleteMedia() {
         // get the file path and delete the file
         File f = new File(mInstanceFolder + "/" + mBinaryName);
+        Log.e("Carl", "attepting to delete: " + f.getAbsolutePath());
         if (!f.delete()) {
             Log.e(t, "Failed to delete " + f);
         }
@@ -156,8 +168,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
         // reset buttons
         mPlayButton.setEnabled(false);
-        mCaptureButton.setText(getContext().getString(mCaptureText));
-        mDisplayText.setText(getContext().getString(R.string.no_capture));
     }
 
 
@@ -171,29 +181,19 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     }
 
 
-    private Uri getUriFromPath(String path) {
-        // find entry in content provider
-        Cursor c =
-            getContext().getContentResolver().query(mExternalUri, null, "_data='" + path + "'",
-                null, null);
-        c.moveToFirst();
-
-        // create uri from path
-        String newPath = mExternalUri + "/" + c.getInt(c.getColumnIndex("_id"));
-        c.close();
-        return Uri.parse(newPath);
-    }
-
-
     private String getPathFromUri(Uri uri) {
-        // find entry in content provider
-        Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
-        c.moveToFirst();
-
-        // get data path
-        String colString = c.getString(c.getColumnIndex("_data"));
-        c.close();
-        return colString;
+        String[] videoProjection = {
+            Video.Media.DATA
+        };
+        Cursor c = ((Activity) getContext()).managedQuery(uri, videoProjection, null, null, null);
+        ((Activity) getContext()).startManagingCursor(c);
+        int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
+        String videoPath = null;
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            videoPath = c.getString(column_index);
+        }
+        return videoPath;
     }
 
 
@@ -204,18 +204,31 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             deleteMedia();
         }
 
-        // get the file path and move the file
-        String binarypath = getPathFromUri((Uri) binaryuri);
+        // get the file path and create a copy in the instance folder
+        String binaryPath = getPathFromUri((Uri) binaryuri);
+        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
+        String destVideoPath = mInstanceFolder + "/" + System.currentTimeMillis() + extension;
 
-        File f = new File(binarypath);
-        String s = mInstanceFolder + "/" + binarypath.substring(binarypath.lastIndexOf('/') + 1);
-        if (!f.renameTo(new File(s))) {
-            Log.e(t, "Failed to rename " + f.getAbsolutePath());
+        File source = new File(binaryPath);
+        File newVideo = new File(destVideoPath);
+        FileUtils.copyFile(source, newVideo);
+
+        if (newVideo.exists()) {
+            // Add the copy to the content provier
+            ContentValues values = new ContentValues(6);
+            values.put(Video.Media.TITLE, newVideo.getName());
+            values.put(Video.Media.DISPLAY_NAME, newVideo.getName());
+            values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
+            values.put(Video.Media.DATA, newVideo.getAbsolutePath());
+
+            Uri VideoURI =
+                getContext().getContentResolver().insert(Video.Media.EXTERNAL_CONTENT_URI, values);
+            Log.i(t, "Inserting VIDEO returned uri = " + VideoURI.toString());
+        } else {
+            Log.e(t, "Inserting Video file FAILED");
         }
 
-        // remove the database entry and update the name
-        getContext().getContentResolver().delete(getUriFromPath(binarypath), null, null);
-        mBinaryName = s.substring(s.lastIndexOf('/') + 1);
+        mBinaryName = newVideo.getName();
         mWaitingForData = false;
     }
 

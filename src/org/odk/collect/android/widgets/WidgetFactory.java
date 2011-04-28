@@ -35,7 +35,7 @@ public class WidgetFactory {
      * @param instancePath path to the instance file
      */
     static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
-            String instancePath, OnLongClickListener listener) {
+            OnLongClickListener listener) {
 
         QuestionWidget questionWidget = null;
         switch (fep.getControlType()) {
@@ -62,13 +62,13 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new ImageWidget(context, instancePath, fep, listener);
+                questionWidget = new ImageWidget(context, fep, listener);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, instancePath, fep, listener);
+                questionWidget = new AudioWidget(context, fep, listener);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(context, instancePath, fep, listener);
+                questionWidget = new VideoWidget(context, fep, listener);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = new SelectOneWidget(context, fep, listener);

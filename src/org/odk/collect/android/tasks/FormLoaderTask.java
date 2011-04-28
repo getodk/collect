@@ -28,6 +28,7 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
@@ -117,7 +118,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FileInputStream fis = null;
 
         String formPath = path[0];
-        String instancePath = path[1];
 
         File formXml = new File(formPath);
         String formHash = FileUtils.getMd5Hash(formXml);
@@ -199,9 +199,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         fec = new FormEntryController(fem);
 
         // import existing data into formdef
-        if (instancePath != null) {
+        if (FormEntryActivity.InstancePath != null) {
             // This order is important. Import data, then initialize.
-            importData(instancePath, fec);
+            importData(FormEntryActivity.InstancePath , fec);
             fd.initialize(false);
         } else {
             fd.initialize(true);
@@ -234,7 +234,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formBin = null;
         formXml = null;
         formPath = null;
-        instancePath = null;
+
 
         FormController fc = new FormController(fec);
         data = new FECWrapper(fc);

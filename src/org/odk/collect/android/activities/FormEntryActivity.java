@@ -43,7 +43,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -68,11 +67,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -128,7 +122,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final int SAVING_DIALOG = 2;
 
     private String mFormPath;
-    private String mInstancePath;
+    public static String InstancePath;
     private GestureDetector mGestureDetector;
 
     public static FormController mFormController;
@@ -185,9 +179,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 mFormPath = savedInstanceState.getString(KEY_FORMPATH);
             }
-            if (savedInstanceState.containsKey(KEY_INSTANCEPATH)) {
-                mInstancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
-            }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
@@ -221,9 +212,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Intent intent = getIntent();
             if (intent != null) {
                 mFormPath = intent.getStringExtra(KEY_FORMPATH);
-                mInstancePath = intent.getStringExtra(KEY_INSTANCEPATH);
+                InstancePath = intent.getStringExtra(KEY_INSTANCEPATH);
                 mFormLoaderTask = new FormLoaderTask();
-                mFormLoaderTask.execute(mFormPath, mInstancePath);
+                mFormLoaderTask.execute(mFormPath);
                 showDialog(PROGRESS_DIALOG);
             }
         }
@@ -239,7 +230,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_FORMPATH, mFormPath);
-        outState.putString(KEY_INSTANCEPATH, mInstancePath);
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, mErrorMessage);
     }
@@ -262,6 +252,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         ContentValues values;
         Uri imageURI;
         Uri AudioURI = null;
+        Uri VideoURI = null;
         switch (requestCode) {
             case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
@@ -273,11 +264,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                  * We saved the image to the tempfile_path, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
                  * inserting it into the content provider.
+                 * TODO:  Once the android image capture bug gets fixed, 
+                 * (read, we move on from Android 1.6)
+                 * we want to handle images the audio and video
                  */
+                // The intent is empty, but we know we saved the image to the temp file
                 File fi = new File(FileUtils.TMPFILE_PATH);
 
                 String mInstanceFolder =
-                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                    InstancePath.substring(0, InstancePath.lastIndexOf("/") + 1);
                 String s = mInstanceFolder + "/" + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
@@ -304,28 +299,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 refreshCurrentView();
                 break;
-            case AUDIO_CAPTURE:
-            case VIDEO_CAPTURE:
-                Uri um = intent.getData();
-                Log.e("carl", "uri for capture is " + um);
-                ((ODKView) mCurrentView).setBinaryData(um);
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
-                break;
-            case LOCATION_CAPTURE:
-                String sl = intent.getStringExtra(LOCATION_RESULT);
-                ((ODKView) mCurrentView).setBinaryData(sl);
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case HIERARCHY_ACTIVITY:
-                // We may have jumped to a new index in hierarchy activity, so refresh
-                refreshCurrentView();
-                break;
             case IMAGE_CHOOSER:
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
                  * inserting it into the content provider.
+                 * TODO:  Once the android image capture bug gets fixed, 
+                 * (read, we move on from Android 1.6)
+                 * we want to handle images the audio and video
                  */
 
                 // get location of chosen file
@@ -341,37 +322,22 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // Copy file to sdcard
                 String mInstanceFolder1 =
-                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                    InstancePath.substring(0, InstancePath.lastIndexOf("/") + 1);
                 String destImagePath = mInstanceFolder1 + "/" + System.currentTimeMillis() + ".jpg";
 
                 File source = new File(sourceImagePath);
-                File destination = new File(destImagePath);
-                if (source.exists()) {
-                    FileChannel src;
-                    try {
-                        src = new FileInputStream(source).getChannel();
-                        FileChannel dst = new FileOutputStream(destination).getChannel();
-                        dst.transferFrom(src, 0, src.size());
-                        src.close();
-                        dst.close();
-                    } catch (FileNotFoundException e) {
-                        Log.e(t, "FileNotFoundExeception while copying image");
-                        e.printStackTrace();
-                        return;
-                    } catch (IOException e) {
-                        Log.e(t, "IOExeception while copying image");
-                        e.printStackTrace();
-                        return;
-                    }
-
+                File newImage = new File(destImagePath);
+                FileUtils.copyFile(source, newImage);
+                
+                if (newImage.exists()) {
                     // Add the new image to the Media content provider so that the
                     // viewing is fast in Android 2.0+
                     values = new ContentValues(6);
-                    values.put(Images.Media.TITLE, destination.getName());
-                    values.put(Images.Media.DISPLAY_NAME, destination.getName());
+                    values.put(Images.Media.TITLE, newImage.getName());
+                    values.put(Images.Media.DISPLAY_NAME, newImage.getName());
                     values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
                     values.put(Images.Media.MIME_TYPE, "image/jpeg");
-                    values.put(Images.Media.DATA, destination.getAbsolutePath());
+                    values.put(Images.Media.DATA, newImage.getAbsolutePath());
 
                     imageURI =
                         getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
@@ -382,69 +348,29 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 } else {
                     Log.e(t, "NO IMAGE EXISTS at: " + source.getAbsolutePath());
                 }
-
                 refreshCurrentView();
-                break;
-            case AUDIO_CHOOSER:               
-             // get location of chosen file
-                Uri selectedAudio = intent.getData();
-                String[] audioProjection = {
-                    Audio.Media.DATA
-                };
-                Cursor c = managedQuery(selectedAudio, audioProjection, null, null, null);
-                startManagingCursor(c);
-                int column_index1 = c.getColumnIndexOrThrow(Images.Media.DATA);
-                c.moveToFirst();
-                String sourceAudioPath = c.getString(column_index1);
-
-                // Copy file to sdcard
-                String mInstanceFolder2 =
-                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
-                File audioFile = new File(sourceAudioPath);
-                String extension = audioFile.getName().substring(audioFile.getName().lastIndexOf("."));
-                String destAudioPath = mInstanceFolder2 + "/" + System.currentTimeMillis() + extension;
-                                
-                File source1 = audioFile;
-                File destination1 = new File(destAudioPath);
-                if (source1.exists()) {
-                    FileChannel src;
-                    try {
-                        src = new FileInputStream(source1).getChannel();
-                        FileChannel dst = new FileOutputStream(destination1).getChannel();
-                        dst.transferFrom(src, 0, src.size());
-                        src.close();
-                        dst.close();
-                    } catch (FileNotFoundException e) {
-                        Log.e(t, "FileNotFoundExeception while copying audio");
-                        e.printStackTrace();
-                        return;
-                    } catch (IOException e) {
-                        Log.e(t, "IOExeception while copying audio");
-                        e.printStackTrace();
-                        return;
-                    }
-                    
-                    
-                    values = new ContentValues(6);
-                    values.put(Audio.Media.TITLE, destination1.getName());
-                    values.put(Audio.Media.DISPLAY_NAME, destination1.getName());
-                    values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-                    values.put(Audio.Media.DATA, destination1.getAbsolutePath());
-                   
-                    AudioURI =
-                        getContentResolver().insert(Audio.Media.INTERNAL_CONTENT_URI, values);
-                    Log.i(t, "Inserting AUDIO returned uri = " + AudioURI.toString());
-                }
-                
-                
-               ((ODKView) mCurrentView).setBinaryData(AudioURI);
-               saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
-                break;
+                break;       
+            case AUDIO_CAPTURE:
+            case VIDEO_CAPTURE:
+            case AUDIO_CHOOSER:
             case VIDEO_CHOOSER:
-                Log.e(t, "unimplemented");
-                //TODO:  make this.
+                // For audio/video capture/chooser, we get the URI from the content provider
+                // then the widget copies the file and makes a new entry in the content provider.
+                Uri media = intent.getData();
+                ((ODKView) mCurrentView).setBinaryData(media);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                refreshCurrentView();
                 break;
+            case LOCATION_CAPTURE:
+                String sl = intent.getStringExtra(LOCATION_RESULT);
+                ((ODKView) mCurrentView).setBinaryData(sl);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                break;
+            case HIERARCHY_ACTIVITY:
+                // We may have jumped to a new index in hierarchy activity, so refresh
+                refreshCurrentView();
+                break;
+            
         }
     }
 
@@ -683,7 +609,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 // should only be a group here if the event_group is a field-list
                 try {
                     odkv =
-                        new ODKView(this, mInstancePath, mFormController.getQuestionPrompts(),
+                        new ODKView(this, mFormController.getQuestionPrompts(),
                                 mFormController.getGroupsForCurrentIndex());
                     Log.i(t, "created view for group");
                 } catch (RuntimeException e) {
@@ -1063,7 +989,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // TODO move to constructor <--? No. the mInstancePath isn't set until
         // the form loads.
         // TODO remove context if possilbe
-        mSaveToDiskTask.setExportVars(mInstancePath, getApplicationContext(), exit, complete);
+        mSaveToDiskTask.setExportVars(getApplicationContext(), exit, complete);
         mSaveToDiskTask.execute();
         showDialog(SAVING_DIALOG);
 
@@ -1091,14 +1017,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 case 0: // discard changes and exit
                                     FileDbAdapter fda = new FileDbAdapter();
                                     fda.open();
-                                    Cursor c = fda.fetchFilesByPath(mInstancePath, null);
+                                    Cursor c = fda.fetchFilesByPath(InstancePath, null);
                                     if (c != null && c.getCount() > 0) {
                                         Log.i(t, "prevously saved");
                                     } else {
                                         // not previously saved, cleaning up
                                         String instanceFolder =
-                                            mInstancePath.substring(0,
-                                                mInstancePath.lastIndexOf("/") + 1);
+                                            InstancePath.substring(0,
+                                                InstancePath.lastIndexOf("/") + 1);
 
                                         String[] projection = {
                                             Images.ImageColumns._ID
@@ -1390,6 +1316,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         mFormController = null;
+        InstancePath = null;
         super.onDestroy();
 
     }
@@ -1441,7 +1368,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mFormController = fc;
 
         // Set saved answer path
-        if (mInstancePath == null) {
+        if (InstancePath == null) {
 
             // Create new answer folder.
             String time =
@@ -1451,7 +1378,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
             String path = FileUtils.INSTANCES_PATH + file + "_" + time;
             if (FileUtils.createFolder(path)) {
-                mInstancePath = path + "/" + file + "_" + time + ".xml";
+                InstancePath = path + "/" + file + "_" + time + ".xml";
             }
         } else {
             // we've just loaded a saved form, so start in the hierarchy view
@@ -1547,7 +1474,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         boolean complete = false;
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
-        Cursor c = fda.fetchFilesByPath(mInstancePath, null);
+        Cursor c = fda.fetchFilesByPath(InstancePath, null);
         if (c != null
                 && c.moveToFirst()
                 && FileDbAdapter.STATUS_COMPLETE.equals(c.getString(c

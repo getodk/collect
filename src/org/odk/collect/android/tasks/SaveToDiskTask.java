@@ -46,7 +46,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private final static String t = "SaveToDiskTask";
 
     private FormSavedListener mSavedListener;
-    private String mInstancePath;
     private Context mContext;
     private Boolean mSave;
     private Boolean mMarkCompleted;
@@ -73,9 +72,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
         FormEntryActivity.mFormController.postProcessInstance();
 
-        if (mSave && exportData(mInstancePath, mContext, mMarkCompleted)) {
+        if (mSave && exportData(mContext, mMarkCompleted)) {
             return SAVED_AND_EXIT;
-        } else if (exportData(mInstancePath, mContext, mMarkCompleted)) {
+        } else if (exportData(mContext, mMarkCompleted)) {
             return SAVED;
         }
 
@@ -84,7 +83,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public boolean exportData(String instancePath, Context context, boolean markCompleted) {
+    public boolean exportData(Context context, boolean markCompleted) {
 
         ByteArrayPayload payload;
         try {
@@ -96,7 +95,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
             // write out xml
-            exportXmlFile(payload, instancePath);
+            exportXmlFile(payload, FormEntryActivity.InstancePath);
 
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
@@ -106,22 +105,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
         FileDbAdapter fda = new FileDbAdapter();
         fda.open();
-        File f = new File(instancePath);
+        File f = new File(FormEntryActivity.InstancePath);
         Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
         if (!mMarkCompleted) {
             if (c != null && c.getCount() == 0) {
-                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                fda.createFile(FormEntryActivity.InstancePath, FileDbAdapter.TYPE_INSTANCE,
                     FileDbAdapter.STATUS_INCOMPLETE);
             } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_INCOMPLETE);
+                fda.updateFile(FormEntryActivity.InstancePath, FileDbAdapter.STATUS_INCOMPLETE);
             }
         } else {
             if (c != null && c.getCount() == 0) {
-                fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
+                fda.createFile(FormEntryActivity.InstancePath, FileDbAdapter.TYPE_INSTANCE,
                     FileDbAdapter.STATUS_COMPLETE);
 
             } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETE);
+                fda.updateFile(FormEntryActivity.InstancePath, FileDbAdapter.STATUS_COMPLETE);
             }
         }
         // clean up cursor
@@ -189,9 +188,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public void setExportVars(String instancePath, Context context, Boolean saveAndExit,
+    public void setExportVars(Context context, Boolean saveAndExit,
             Boolean markCompleted) {
-        mInstancePath = instancePath;
         mContext = context;
         mSave = saveAndExit;
         mMarkCompleted = markCompleted;

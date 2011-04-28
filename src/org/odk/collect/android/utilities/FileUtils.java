@@ -22,9 +22,11 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -293,4 +295,26 @@ public class FileUtils {
         return b;
     }
 
+    public static void copyFile(File sourceFile, File destFile) {
+        if (sourceFile.exists()) {
+            FileChannel src;
+            try {
+                src = new FileInputStream(sourceFile).getChannel();
+                FileChannel dst = new FileOutputStream(destFile).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+            } catch (FileNotFoundException e) {
+                Log.e(t, "FileNotFoundExeception while copying audio");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(t, "IOExeception while copying audio");
+                e.printStackTrace();
+            }
+        } else {
+            Log.e(t, "Source file does not exist: " + sourceFile.getAbsolutePath());
+        }
+
+    }
+    
 }
