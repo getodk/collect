@@ -38,7 +38,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
     private LinearLayout mView;
     private LinearLayout.LayoutParams mLayout;
-    private String mInstancePath;
     private ArrayList<QuestionWidget> widgets;
 
     public final static String FIELD_LIST = "field-list";

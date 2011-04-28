@@ -32,7 +32,6 @@ public class WidgetFactory {
      * 
      * @param fep prompt element to be rendered
      * @param context Android context
-     * @param instancePath path to the instance file
      */
     static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
             OnLongClickListener listener) {
