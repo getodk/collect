@@ -17,10 +17,12 @@
 <string name="add_another_repeat">Add another \"%s\" group?</string>
 <string name="add_repeat">Add a new \"%s\" group?</string>
 <string name="add_repeat_no">Do Not Add</string>
+<string name="advance">advance to next question</string>
 <string name="altitude">Altitude</string>
 <string name="app_name">ODK Collect</string>
 <string name="audio_file_error">No audio file was specified.</string>
 <string name="audio_file_invalid">File: %s is not a valid audio file.</string>
+<string name="backup">return to previous question</string>
 <string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
 <string name="cancel">Cancel</string>
 <string name="cancel_loading_form">Stop Loading</string>

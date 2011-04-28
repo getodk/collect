@@ -40,6 +40,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +64,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -263,10 +266,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 /*
                  * We saved the image to the tempfile_path, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
-                 * inserting it into the content provider.
-                 * TODO:  Once the android image capture bug gets fixed, 
-                 * (read, we move on from Android 1.6)
-                 * we want to handle images the audio and video
+                 * inserting it into the content provider. TODO: Once the android image capture bug
+                 * gets fixed, (read, we move on from Android 1.6) we want to handle images the
+                 * audio and video
                  */
                 // The intent is empty, but we know we saved the image to the temp file
                 File fi = new File(FileUtils.TMPFILE_PATH);
@@ -291,8 +293,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 values.put(Images.Media.MIME_TYPE, "image/jpeg");
                 values.put(Images.Media.DATA, nf.getAbsolutePath());
 
-                imageURI =
-                    getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+                imageURI = getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
                 Log.i(t, "Inserting image returned uri = " + imageURI.toString());
 
                 ((ODKView) mCurrentView).setBinaryData(imageURI);
@@ -303,10 +304,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
-                 * inserting it into the content provider.
-                 * TODO:  Once the android image capture bug gets fixed, 
-                 * (read, we move on from Android 1.6)
-                 * we want to handle images the audio and video
+                 * inserting it into the content provider. TODO: Once the android image capture bug
+                 * gets fixed, (read, we move on from Android 1.6) we want to handle images the
+                 * audio and video
                  */
 
                 // get location of chosen file
@@ -328,7 +328,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 File source = new File(sourceImagePath);
                 File newImage = new File(destImagePath);
                 FileUtils.copyFile(source, newImage);
-                
+
                 if (newImage.exists()) {
                     // Add the new image to the Media content provider so that the
                     // viewing is fast in Android 2.0+
@@ -349,7 +349,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     Log.e(t, "NO IMAGE EXISTS at: " + source.getAbsolutePath());
                 }
                 refreshCurrentView();
-                break;       
+                break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
             case AUDIO_CHOOSER:
@@ -370,7 +370,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 // We may have jumped to a new index in hierarchy activity, so refresh
                 refreshCurrentView();
                 break;
-            
+
         }
     }
 
@@ -582,6 +582,27 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 setTitle(getString(R.string.app_name) + " > " + mFormController.getFormTitle());
                 ((TextView) startView.findViewById(R.id.description)).setText(getString(
                     R.string.enter_data_description, mFormController.getFormTitle()));
+
+                Drawable image = null;
+
+                String formLogoPath = null;
+                // FileUtils.getFormMediaPath(mFormPath) + FileUtils.FORM_LOGO_FILE_NAME;
+                // TODO: need to get the form logo file from the xform.
+                BitmapDrawable bitImage = null;
+                // attempt to load the form-specific logo...
+                bitImage = new BitmapDrawable(formLogoPath);
+
+                if (bitImage != null && bitImage.getBitmap() != null
+                        && bitImage.getIntrinsicHeight() > 0 && bitImage.getIntrinsicWidth() > 0) {
+                    image = bitImage;
+                }
+
+                if (image == null) {
+                    // show the opendatakit zig...
+                    image = getResources().getDrawable(R.drawable.opendatakit_zig);
+                }
+
+                //((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
                 return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
