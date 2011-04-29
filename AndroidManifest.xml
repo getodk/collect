@@ -93,6 +93,33 @@
 					android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<!-- Enable Shortcuts for Command Actions -->
+		<activity
+			android:name=".activities.AndroidShortcuts"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.MAIN" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+
+		</activity>
+
+		<activity-alias
+			android:name=".activities.ShortcutGenerator"
+			android:targetActivity=".activities.AndroidShortcuts"
+			android:label="ODK Form">
+
+			<!-- This intent-filter allows your shortcuts to be created in the launcher. -->
+			<intent-filter>
+				<action
+					android:name="android.intent.action.CREATE_SHORTCUT" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+
+		</activity-alias>
 	</application>
 	<uses-permission
 		xmlns:android="http://schemas.android.com/apk/res/android"

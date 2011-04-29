@@ -1058,6 +1058,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                                         null, null);
                                         int del = 0;
                                         if (ci != null && ci.getCount() > 0) {
+                                            //TODO:  skipping one here?
                                             while (ci.moveToNext()) {
                                                 String id =
                                                     ci.getString(ci
