@@ -14,6 +14,12 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Set;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
@@ -64,16 +70,9 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Set;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -86,7 +85,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final String t = "FormEntryActivity";
 
     // Defines for FormEntryActivity
-    private static final boolean EXIT = true;;
+    private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
