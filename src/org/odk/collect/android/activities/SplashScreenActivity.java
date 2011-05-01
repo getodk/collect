@@ -34,7 +34,7 @@ public class SplashScreenActivity extends Activity {
 
         // get the shared preferences object
         SharedPreferences sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sharedPreferences.edit();
 
         // get the package info object with version number
@@ -50,7 +50,7 @@ public class SplashScreenActivity extends Activity {
         boolean showSplash = sharedPreferences.getBoolean(PreferencesActivity.KEY_SHOW_SPLASH, false);
 
         boolean versionChange;
-
+        
         // if you've increased version code, then update the version number and set firstRun to true
         if (sharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
             editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);

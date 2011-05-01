@@ -154,7 +154,10 @@
 <string name="first_run">Do first run on restart</string>
 <string name="client">Client</string>
 <string name="show_splash">Show splash screen</string>
-<string name="splash_path">Select splash image</string>
-<string name="splash_path_info">Currently using ODK default</string>
+<string name="splash_path">Selected splash screen image</string>
+<string name="default_splash_path">ODK Default</string>
+<string name="select_another_image">Select another image</string>
+<string name="remove_this_image">Remove this image</string>
+<string name="change_splash_path">Change splash screen image</string>
 
 </resources>
