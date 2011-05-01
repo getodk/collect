@@ -47,6 +47,8 @@ public class SplashScreenActivity extends Activity {
         }
 
         boolean firstRun = sharedPreferences.getBoolean(PreferencesActivity.KEY_FIRST_RUN, true);
+        boolean showSplash = sharedPreferences.getBoolean(PreferencesActivity.KEY_SHOW_SPLASH, false);
+
         boolean versionChange;
 
         // if you've increased version code, then update the version number and set firstRun to true
@@ -59,13 +61,10 @@ public class SplashScreenActivity extends Activity {
         }
 
         // do all the first run things
-        if (firstRun) {
-            
-            // TODO clear cache
+        if (firstRun || showSplash) {
             editor.putBoolean(PreferencesActivity.KEY_FIRST_RUN, false);
             editor.commit();
             startSplashScreen();
-
         } else {
             endSplashScreen();
         }

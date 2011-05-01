@@ -31,11 +31,19 @@
 			android:password="true" />
 	</PreferenceCategory>
 	<PreferenceCategory
-		android:title="@string/utilities">
+		android:title="@string/client">
 		<CheckBoxPreference
-			android:id="@+id/firstRun"
-			android:key="firstRun"
-			android:title="@string/first_run"
-			android:summary="@string/first_run_info" />
+			android:id="@+id/show_splash"
+			android:key="show_splash"
+			android:title="@string/show_splash" />
+		<PreferenceScreen
+			android:id="@+id/splash_path"
+			android:key="splash_path"
+			android:title="@string/splash_path"
+			android:summary="@string/splash_path_info">
+			<intent
+				android:action="android.intent.action.ACTION_GET_CONTENT"
+				android:data="image/*" />
+		</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>

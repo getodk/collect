@@ -17,6 +17,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     public static String KEY_LAST_VERSION = "lastVersion";
     public static String KEY_FIRST_RUN = "firstRun";
+    public static String KEY_SHOW_SPLASH = "showSplash";
     public static String KEY_SERVER = "server";
     public static String KEY_USERNAME = "username";
     public static String KEY_PASSWORD = "password";
@@ -25,9 +26,9 @@ public class PreferencesActivity extends PreferenceActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.general_preferences);
+        addPreferencesFromResource(R.xml.preferences);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.general_preferences));
-        updateFirstRun();
+        updateSplash();
         updateServer();
         updateUsername();
         updatePassword();
@@ -57,8 +58,8 @@ public class PreferencesActivity extends PreferenceActivity implements
             updateUsername();
         } else if (key.equals(KEY_PASSWORD)) {
             updatePassword();
-        } else if (key.equals(KEY_FIRST_RUN)) {
-            updateFirstRun();
+        } else if (key.equals(KEY_SHOW_SPLASH)) {
+            updateSplash();
         }
     }
 
@@ -79,10 +80,15 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
 
-    private void updateFirstRun() {
+    private void updateSplash() {
         CheckBoxPreference cbp =
-            (CheckBoxPreference) this.getPreferenceScreen().findPreference(KEY_FIRST_RUN);
-        cbp.setSummary(getString(R.string.first_run_info));
+            (CheckBoxPreference) this.getPreferenceScreen().findPreference(KEY_SHOW_SPLASH);
+        if(cbp.isChecked()) {
+            cbp.setSummary("show splash screen on startup");
+        } else{ 
+            cbp.setSummary("no splash screen on startup");
+
+        }
     }
 
 

@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -189,7 +190,7 @@ public class FormManagerList extends ListActivity {
                 del.delete();
 
                 // also delete formdef.
-                String hashname = "/sdcard/odk/.cache/" + hash + ".formdef";
+                String hashname = FileUtils.CACHE_PATH + hash + ".formdef";
                 File fd = new File(hashname);
                 fd.delete();
                 Log.i(t, "Deleting cache: " + hashname);

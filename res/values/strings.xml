@@ -152,6 +152,9 @@
 <string name="change_username">Change Username</string>
 <string name="click_to_web">Touch for http://opendatakit.org</string>
 <string name="first_run">Do first run on restart</string>
-<string name="utilities">Utilities</string>
-<string name="first_run_info">Wipe cache and show splash screen</string>
+<string name="client">Client</string>
+<string name="show_splash">Show splash screen</string>
+<string name="splash_path">Select splash image</string>
+<string name="splash_path_info">Currently using ODK default</string>
+
 </resources>
