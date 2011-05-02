@@ -13,7 +13,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,8 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
     private MyLocationOverlay mLocationOverlay;
     private GeoPoint mGeoPoint;
     private Location mLocation;
+    private Button mAcceptLocation;
+    private Button mCancelLocation;
 
     private static double LOCATION_ACCURACY = 5;
 
@@ -66,6 +71,22 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
 
         mMapView = (MapView) findViewById(R.id.mapview);
         mLocationStatus = (TextView) findViewById(R.id.location_status);
+        mAcceptLocation = (Button) findViewById(R.id.accept_location);
+        mAcceptLocation.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                returnLocation();
+            }
+        });
+        mCancelLocation = (Button) findViewById(R.id.cancel_location);
+        mCancelLocation.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mMapView.setBuiltInZoomControls(true);
         mMapView.setSatellite(false);

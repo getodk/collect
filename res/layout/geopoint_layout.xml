@@ -5,12 +5,13 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+	<!-- http://code.google.com/p/workregistrationwidget-android/source/browse/trunk/WorkRegistrationWidgetAndroid/res/layout/gmap.xml -->
 	<com.google.android.maps.MapView
 		android:id="@+id/mapview"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:clickable="true"
-		android:apiKey="0wsgFhRvVBLVpgaFzmwaYuqfU898z_2YtlKSlkg" />
+		android:apiKey="04nS1kohp8ZyXT9QSa2JkgSS_xFla1deOELZjqA" />
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
@@ -27,11 +28,13 @@
 			android:paddingTop="2dip"
 			android:paddingBottom="2dip">
 			<Button
+				android:id="@+id/accept_location"
 				android:text="@string/accept_location"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
 				android:layout_weight="1" />
 			<Button
+				android:id="@+id/cancel_location"
 				android:text="@string/cancel_location"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
@@ -40,7 +43,7 @@
 		<TextView
 			android:id="@+id/location_status"
 			android:text="@string/please_wait_long"
-			android:color="#FFFFFF"
+			android:textColor="#FFFFFF"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 	</LinearLayout>
