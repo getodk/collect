@@ -59,7 +59,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public ImageWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public ImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         mWaitingForData = false;
@@ -100,7 +100,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mCaptureButton.setOnLongClickListener(listener);
 
         // setup chooser button
         mChooseButton = new Button(getContext());
@@ -123,7 +122,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mChooseButton.setOnLongClickListener(listener);
 
         // finish complex layout
         addView(mCaptureButton);
@@ -185,7 +183,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 }
             });
 
-            mImageView.setOnLongClickListener(listener);
             addView(mImageView);
         }
     }
@@ -289,6 +286,17 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mCaptureButton.setOnLongClickListener(l);
+        mChooseButton.setOnLongClickListener(l);
+        if (mImageView != null) {
+            mImageView.setOnLongClickListener(l);
+        }
     }
 
 }

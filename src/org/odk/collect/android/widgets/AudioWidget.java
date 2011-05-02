@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -37,6 +35,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.io.File;
+
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
  * 
@@ -57,7 +57,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public AudioWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public AudioWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         mWaitingForData = false;
@@ -88,7 +88,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mCaptureButton.setOnLongClickListener(listener);
+        // mCaptureButton.setOnLongClickListener(listener);
 
         // setup capture button
         mChooseButton = new Button(getContext());
@@ -110,7 +110,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mChooseButton.setOnLongClickListener(listener);
+        // mChooseButton.setOnLongClickListener(listener);
 
         // setup play button
         mPlayButton = new Button(getContext());
@@ -129,7 +129,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mPlayButton.setOnLongClickListener(listener);
+        // mPlayButton.setOnLongClickListener(listener);
 
         // retrieve answer from data model and update ui
         mBinaryName = prompt.getAnswerText();
@@ -260,6 +260,15 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mCaptureButton.setOnLongClickListener(l);
+        mChooseButton.setOnLongClickListener(l);
+        mPlayButton.setOnLongClickListener(l);
     }
 
 }

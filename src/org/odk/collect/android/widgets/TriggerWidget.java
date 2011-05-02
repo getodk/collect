@@ -47,7 +47,7 @@ public class TriggerWidget extends QuestionWidget {
     }
 
 
-    public TriggerWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mPrompt = prompt;
 
@@ -69,7 +69,6 @@ public class TriggerWidget extends QuestionWidget {
                 }
             }
         });
-        mActionButton.setOnLongClickListener(listener);
 
         mStringAnswer = new TextView(getContext());
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
@@ -116,6 +115,14 @@ public class TriggerWidget extends QuestionWidget {
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mActionButton.setOnLongClickListener(l);
+        mStringAnswer.setOnLongClickListener(l);
     }
 
 }
