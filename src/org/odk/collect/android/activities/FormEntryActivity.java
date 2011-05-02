@@ -601,7 +601,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     image = getResources().getDrawable(R.drawable.opendatakit_zig);
                 }
 
-                //((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
+                // ((ImageView)
+                // startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
                 return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
@@ -1023,13 +1024,21 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private void createQuitDialog() {
         String[] items =
             {
-                    getString(R.string.do_not_save), getString(R.string.quit_entry),
-                    getString(R.string.do_not_exit)
-            };
+                getString(R.string.quit_entry), getString(R.string.do_not_save)           };
 
         mAlertDialog =
             new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle(getString(R.string.quit_application))
+                    .setNeutralButton(getString(R.string.do_not_exit),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                int id) {
+                           
+                            dialog.cancel();
+
+                        }
+                    })
                     .setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

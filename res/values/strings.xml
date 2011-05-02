@@ -61,7 +61,7 @@
 <string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
 <string name="do_not_change">Do Not Change</string>
 <string name="do_not_exit">Do Not Exit</string>
-<string name="do_not_save">Discard Changes And Exit</string>
+<string name="do_not_save">Remove Changes and Exit</string>
 <string name="enter">start</string>
 <string name="entering_repeat">Add Group</string>
 <string name="entering_repeat_ask">Add New Group?</string>
@@ -119,7 +119,7 @@
 <string name="please_wait_long">This could take a few minutes. Please wait for greater accuracy.</string>
 
 <string name="quit_application">Exit Without Saving?</string>
-<string name="quit_entry">Save Data And Exit</string>
+<string name="quit_entry">Save Data and Exit</string>
 <string name="refresh">Refresh</string>
 <string name="replace_audio">Replace Sound</string>
 <string name="replace_barcode">Replace Barcode</string>
