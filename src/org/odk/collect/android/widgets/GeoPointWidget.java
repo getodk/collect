@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -24,6 +26,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -40,6 +43,8 @@ import android.widget.TextView;
  */
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private Button mActionButton;
+    private Button mViewButton;
+
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
     private boolean mWaitingForData;
@@ -57,6 +62,32 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
         mActionButton.setEnabled(!prompt.isReadOnly());
 
+        // setup play button
+        mViewButton = new Button(getContext());
+        mViewButton.setText(getContext().getString(R.string.show_location));
+        mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mViewButton.setPadding(20, 20, 20, 20);
+
+        // on play, launch the appropriate viewer
+        mViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String s = mStringAnswer.getText().toString();
+                String[] sa = s.split(" ");
+                double gp[] = new double[4];
+                gp[0] = Double.valueOf(sa[0]).doubleValue();
+                gp[1] = Double.valueOf(sa[1]).doubleValue();
+
+                Intent intent =
+                    new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:" + gp[0] + ","
+                            + gp[1]));
+                ((Activity) getContext()).startActivity(intent);
+
+            }
+        });
+        mViewButton.setOnLongClickListener(listener);
+
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
@@ -68,8 +99,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         if (s != null && !s.equals("")) {
             mActionButton.setText(getContext().getString(R.string.replace_location));
             setBinaryData(s);
+            mViewButton.setEnabled(true);
+        } else {
+            mViewButton.setEnabled(false);
         }
-
         // when you press the button
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +117,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mActionButton.setOnLongClickListener(listener);
 
         // finish complex layout
+        // retrieve answer from data model and update ui
+
         addView(mActionButton);
+        addView(mViewButton);
         addView(mAnswerDisplay);
     }
 
