@@ -83,7 +83,7 @@
 <string name="get_barcode">Get Barcode</string>
 <string name="get_forms">Get New Forms</string>
 <string name="get_location">Record Location</string>
-<string name="gps_disabled_error">Sorry, GPS is disabled!</string>
+<string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
 <string name="invalid_answer_error">Sorry, this response is invalid!</string>
 <string name="jump_to_beginning">Go To Start</string>
 <string name="jump_to_end">Go To End</string>
@@ -95,7 +95,8 @@
 <string name="list_failed_with_error">Form listing failed. %s.</string>
 <string name="loading_form">Loading Form...</string>
 <string name="load_remote_form_error">Error Getting Form List</string>
-<string name="location_accuracy">Using %1$s provider. Accuracy is %2$s meters.</string>
+<string name="location_provider">Using %1$s provider. Please wait for greater accuracy.</string>
+<string name="location_accuracy">Accuracy is %1$s m...</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Magnifying human resources with technology</string>
@@ -115,7 +116,7 @@
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
 <string name="please_wait">Please wait a few moments.</string>
-<string name="please_wait_long">Please wait for greater accuracy. This could take a few minutes.</string>
+<string name="please_wait_long">This could take a few minutes. Please wait for greater accuracy.</string>
 
 <string name="quit_application">Exit Without Saving?</string>
 <string name="quit_entry">Save Data And Exit</string>

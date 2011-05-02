@@ -15,7 +15,7 @@
 package org.odk.collect.android.activities;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.util.List;
 
 import org.odk.collect.android.R;
 
@@ -53,7 +53,26 @@ public class GeoPointActivity extends Activity implements LocationListener {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_location));
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        setupLocationDialog();
+
+        // make sure we have at least one non-passive location provider before continuing
+        List<String> providers = mLocationManager.getProviders(true);
+        boolean gps = false;
+        boolean network = false;
+        for (String provider : providers) {
+            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
+                gps = true;
+            }
+            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+                network = true;
+            }
+        }
+        if (gps || network) {
+            setupLocationDialog();
+        } else {
+            Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
+                Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
 
@@ -140,11 +159,11 @@ public class GeoPointActivity extends Activity implements LocationListener {
         finish();
     }
 
-    
+
     private String truncateFloat(float f) {
-        return new DecimalFormat("#.####").format(f);
+        return new DecimalFormat("#").format(f);
     }
-    
+
 
     /*
      * (non-Javadoc)
@@ -154,8 +173,10 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-        mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getProvider(),
-          truncateFloat(mLocation.getAccuracy())));
+
+        mLocationDialog.setTitle(getString(R.string.location_accuracy,
+            truncateFloat(mLocation.getAccuracy())));
+        mLocationDialog.setMessage(getString(R.string.location_provider, mLocation.getProvider()));
         if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
             returnLocation();
         }
@@ -169,9 +190,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
      */
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(getBaseContext(), getString(R.string.gps_disabled_error), Toast.LENGTH_SHORT)
-                .show();
-        finish();
     }
 
 
