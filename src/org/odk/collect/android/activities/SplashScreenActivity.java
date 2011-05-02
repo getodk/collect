@@ -2,6 +2,9 @@
 package org.odk.collect.android.activities;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -13,10 +16,12 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Display;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +29,8 @@ import android.widget.TextView;
 
 public class SplashScreenActivity extends Activity {
 
-    private int mSplashTimeout = 3000; // milliseconds
+    private int mImageMaxWidth;
+    private int mSplashTimeout = 2000; // milliseconds
 
 
     // private SharedPreferences mSharedPreferences;
@@ -32,6 +38,8 @@ public class SplashScreenActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        mImageMaxWidth = (int) (getWindowManager().getDefaultDisplay().getWidth()*.75); 
 
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -88,17 +96,56 @@ public class SplashScreenActivity extends Activity {
     }
 
 
+  //decodes image and scales it to reduce memory consumption
+    private Bitmap decodeFile(File f){
+        Bitmap b = null;
+        try {
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+
+            FileInputStream fis = new FileInputStream(f);
+            BitmapFactory.decodeStream(fis, null, o);
+            try {
+                fis.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            int scale = 1;
+            if (o.outHeight > mImageMaxWidth || o.outWidth > mImageMaxWidth) {
+                scale = (int) Math.pow(2, (int) Math.round(Math.log(mImageMaxWidth / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+            }
+
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            fis = new FileInputStream(f);
+            b = BitmapFactory.decodeStream(fis, null, o2);
+            try {
+                fis.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+        }
+        return b;
+    }
+    
     private void startSplashScreen(String path) {
 
         // add items to the splash screen here. makes things less distracting.
-        ImageView iv = (ImageView) findViewById(R.id.splash);
-        TextView tv = (TextView) findViewById(R.id.text);
-        
+        ImageView iv = (ImageView) findViewById(R.id.splash);  
+        LinearLayout ll = (LinearLayout) findViewById(R.id.splash_default);        
+
         File f = new File(path);
         if (f.exists()) {
-            iv.setImageDrawable(Drawable.createFromPath(path));
-        }
-        tv.setText(getString(R.string.app_name));
+            iv.setImageBitmap(decodeFile(f));
+            ll.setVisibility(View.GONE);
+            iv.setVisibility(View.VISIBLE);
+        } 
 
         // create a thread that counts up to the timeout
         Thread t = new Thread() {

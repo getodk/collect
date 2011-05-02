@@ -163,5 +163,6 @@
 <string name="use_odk_default">Use default image</string>
 <string name="change_splash_path">Change splash screen image</string>
 <string name="show_location">Show Location</string>
+<string name="app_url">http://opendatakit.org</string>
 
 </resources>
