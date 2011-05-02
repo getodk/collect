@@ -61,7 +61,7 @@
 <string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
 <string name="do_not_change">Do Not Change</string>
 <string name="do_not_exit">Do Not Exit</string>
-<string name="do_not_save">Remove Changes and Exit</string>
+<string name="do_not_save">Remove Changes</string>
 <string name="enter">start</string>
 <string name="entering_repeat">Add Group</string>
 <string name="entering_repeat_ask">Add New Group?</string>
@@ -164,5 +164,6 @@
 <string name="change_splash_path">Change splash screen image</string>
 <string name="show_location">Show Location</string>
 <string name="app_url">http://opendatakit.org</string>
+<string name="keep_changes">Save Changes</string>
 
 </resources>

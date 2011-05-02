@@ -1024,7 +1024,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private void createQuitDialog() {
         String[] items =
             {
-                getString(R.string.quit_entry), getString(R.string.do_not_save)           };
+                getString(R.string.keep_changes), getString(R.string.do_not_save)           };
 
         mAlertDialog =
             new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
@@ -1043,7 +1043,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
-                                case 0: // discard changes and exit
+
+                                case 0: // save and exit
+                                    saveDataToDisk(EXIT, isInstanceComplete());
+                                    break;
+                                    
+                                case 1: // discard changes and exit
                                     FileDbAdapter fda = new FileDbAdapter();
                                     fda.open();
                                     Cursor c = fda.fetchFilesByPath(InstancePath, null);
@@ -1099,10 +1104,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                                     fda.close();
                                     finish();
-                                    break;
-
-                                case 1: // save and exit
-                                    saveDataToDisk(EXIT, isInstanceComplete());
                                     break;
 
                                 case 2:// do nothing
