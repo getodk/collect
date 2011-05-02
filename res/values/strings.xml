@@ -95,6 +95,7 @@
 <string name="list_failed_with_error">Form listing failed. %s.</string>
 <string name="loading_form">Loading Form...</string>
 <string name="load_remote_form_error">Error Getting Form List</string>
+<string name="location_provider_accuracy">Using %1$s provider. Accuracy is %1$s m.</string>
 <string name="location_provider">Using %1$s provider. Please wait for greater accuracy.</string>
 <string name="location_accuracy">Accuracy is %1$s m...</string>
 <string name="longitude">Longitude</string>

@@ -38,6 +38,9 @@ public class WidgetFactory {
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
+                    case Constants.DATATYPE_DATE_TIME:
+                        questionWidget = new DateTimeWidget(context, fep);
+                        break;
                     case Constants.DATATYPE_DATE:
                         questionWidget = new DateWidget(context, fep);
                         break;

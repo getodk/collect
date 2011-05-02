@@ -81,7 +81,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
                 Intent intent =
                     new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:" + gp[0] + ","
-                            + gp[1] + "?z=" + 18));
+                            + gp[1] + "?z=" + 16));
                 ((Activity) getContext()).startActivity(intent);
 
             }

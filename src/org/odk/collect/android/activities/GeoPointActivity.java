@@ -1,16 +1,3 @@
-/*
- * Copyright (C) 2009 University of Washington
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
 
 package org.odk.collect.android.activities;
 
@@ -18,39 +5,44 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
+import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class GeoPointActivity extends Activity implements LocationListener {
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 
-    private ProgressDialog mLocationDialog;
+public class GeoPointActivity extends MapActivity implements LocationListener {
+
+    private MapView mMapView;
+    private TextView mLocationStatus;
+
+    private MapController mMapController;
     private LocationManager mLocationManager;
+    private MyLocationOverlay mLocationOverlay;
+    private GeoPoint mGeoPoint;
     private Location mLocation;
 
-    // default location accuracy
     private static double LOCATION_ACCURACY = 5;
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onCreate(android.os.Bundle)
-     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_location));
+        setContentView(R.layout.geopoint_layout);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -66,84 +58,24 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 network = true;
             }
         }
-        if (gps || network) {
-            setupLocationDialog();
-        } else {
+        if (!gps && !network) {
             Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
                 Toast.LENGTH_SHORT).show();
             finish();
         }
-    }
 
+        mMapView = (MapView) findViewById(R.id.mapview);
+        mLocationStatus = (TextView) findViewById(R.id.location_status);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onPause()
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
+        mMapView.setBuiltInZoomControls(true);
+        mMapView.setSatellite(false);
 
-        // stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
-        mLocationManager.removeUpdates(this);
+        mMapController = mMapView.getController();
+        mMapController.setZoom(16);
 
-        // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
-        // leaking memory.
-        if (mLocationDialog != null && mLocationDialog.isShowing())
-            mLocationDialog.dismiss();
-    }
+        mLocationOverlay = new MyLocationOverlay(this, mMapView);
+        mMapView.getOverlays().add(mLocationOverlay);
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onResume()
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        mLocationDialog.show();
-    }
-
-
-    /**
-     * Sets up the look and actions for the progress dialog while the GPS is searching.
-     */
-    private void setupLocationDialog() {
-        // dialog displayed while fetching gps location
-        mLocationDialog = new ProgressDialog(this);
-        DialogInterface.OnClickListener geopointButtonListener =
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case DialogInterface.BUTTON1:
-                            returnLocation();
-                            break;
-                        case DialogInterface.BUTTON2:
-                            mLocation = null;
-                            finish();
-                            break;
-                    }
-                    // TODO: does this stop gps?
-                    // on cancel, stop gps
-                }
-            };
-
-        // back button doesn't cancel
-        mLocationDialog.setCancelable(false);
-        mLocationDialog.setIndeterminate(true);
-        mLocationDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mLocationDialog.setTitle(getString(R.string.getting_location));
-        mLocationDialog.setMessage(getString(R.string.please_wait_long));
-        mLocationDialog.setButton(DialogInterface.BUTTON1, getString(R.string.accept_location),
-            geopointButtonListener);
-        mLocationDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel_location),
-            geopointButtonListener);
     }
 
 
@@ -165,63 +97,63 @@ public class GeoPointActivity extends Activity implements LocationListener {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onLocationChanged(android.location. Location)
-     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mLocationManager.removeUpdates(this);
+        mLocationOverlay.disableMyLocation();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        mLocationOverlay.enableMyLocation();
+    }
+
+
+    @Override
+    protected boolean isRouteDisplayed() {
+        return false;
+    }
+
+
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
+        if (mLocation != null) {
+            mLocationStatus.setText(getString(R.string.location_provider_accuracy,
+                mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
+            mGeoPoint =
+                new GeoPoint((int) (mLocation.getLatitude() * 1E6),
+                        (int) (mLocation.getLongitude() * 1E6));
 
-        mLocationDialog.setTitle(getString(R.string.location_accuracy,
-            truncateFloat(mLocation.getAccuracy())));
-        mLocationDialog.setMessage(getString(R.string.location_provider, mLocation.getProvider()));
-        if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
-            returnLocation();
+            mMapController.animateTo(mGeoPoint);
+
+            if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
+                returnLocation();
+            }
         }
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
-     */
     @Override
     public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
-     */
     @Override
     public void onProviderEnabled(String provider) {
-
+        // TODO Auto-generated method stub
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onStatusChanged(java.lang.String, int,
-     * android.os.Bundle)
-     */
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        switch (status) {
-            case LocationProvider.AVAILABLE:
-                mLocationDialog.setMessage(getString(R.string.location_accuracy,
-                    mLocation.getAccuracy()));
-                break;
-            case LocationProvider.OUT_OF_SERVICE:
-                break;
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                break;
-        }
+        // TODO Auto-generated method stub
     }
-
 }
