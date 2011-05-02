@@ -20,12 +20,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class SplashScreenActivity extends Activity {
 
@@ -39,7 +37,7 @@ public class SplashScreenActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        mImageMaxWidth = (int) (getWindowManager().getDefaultDisplay().getWidth()*.75); 
+        mImageMaxWidth = getWindowManager().getDefaultDisplay().getWidth(); 
 
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
