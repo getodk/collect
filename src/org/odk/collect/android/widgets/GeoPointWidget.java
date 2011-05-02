@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -81,7 +82,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
                 Intent intent =
                     new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:" + gp[0] + ","
-                            + gp[1]));
+                            + gp[1] + "?z=" + 18));
                 ((Activity) getContext()).startActivity(intent);
 
             }
@@ -157,6 +158,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     }
 
 
+    private String truncateDouble(String s) {
+        DecimalFormat df = new DecimalFormat("#.####");
+        return df.format(Double.valueOf(s));
+    }
+
+
     private String formatGps(double coordinates, String type) {
         String location = Double.toString(coordinates);
         String degreeSign = "\u00B0";
@@ -204,8 +211,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 + formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
                 + getContext().getString(R.string.longitude) + ": "
                 + formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
-                + getContext().getString(R.string.altitude) + ": " + sa[2] + "\n"
-                + getContext().getString(R.string.accuracy) + ": " + sa[3] + "m");
+                + getContext().getString(R.string.altitude) + ": " + truncateDouble(sa[2]) + "m\n"
+                + getContext().getString(R.string.accuracy) + ": " + truncateDouble(sa[3]) + "m");
         mWaitingForData = false;
     }
 

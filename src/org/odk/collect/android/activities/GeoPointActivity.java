@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import org.odk.collect.android.R;
 
 import android.app.Activity;
@@ -137,6 +140,11 @@ public class GeoPointActivity extends Activity implements LocationListener {
         finish();
     }
 
+    
+    private String truncateFloat(float f) {
+        return new DecimalFormat("#.####").format(f);
+    }
+    
 
     /*
      * (non-Javadoc)
@@ -146,7 +154,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-        mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getAccuracy()));
+        mLocationDialog.setMessage(getString(R.string.location_accuracy, mLocation.getProvider(),
+          truncateFloat(mLocation.getAccuracy())));
         if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
             returnLocation();
         }
