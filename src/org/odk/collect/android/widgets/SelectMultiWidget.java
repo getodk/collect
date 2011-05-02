@@ -43,12 +43,14 @@ public class SelectMultiWidget extends QuestionWidget {
     private boolean mCheckboxInit = true;
     Vector<SelectChoice> mItems;
 
+    private Vector<CheckBox> mCheckboxes;
+
 
     @SuppressWarnings("unchecked")
-    public SelectMultiWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mPrompt = prompt;
-
+        mCheckboxes = new Vector<CheckBox>();
         mItems = prompt.getSelectChoices();
 
         setOrientation(LinearLayout.VERTICAL);
@@ -90,7 +92,7 @@ public class SelectMultiWidget extends QuestionWidget {
                     }
 
                 }
-                c.setOnLongClickListener(listener);
+                mCheckboxes.add(c);
 
                 String audioURI = null;
                 audioURI =
@@ -169,5 +171,14 @@ public class SelectMultiWidget extends QuestionWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+
+        for (CheckBox c : mCheckboxes) {
+            c.setOnLongClickListener(l);
+        }
+    }
 
 }

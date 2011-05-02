@@ -44,7 +44,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public BarcodeWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public BarcodeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mWaitingForData = false;
         setOrientation(LinearLayout.VERTICAL);
@@ -73,7 +73,6 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
                 }
             }
         });
-        mActionButton.setOnLongClickListener(listener);
 
         // set text formatting
         mStringAnswer = new TextView(getContext());
@@ -133,5 +132,11 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         return mWaitingForData;
     }
 
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mActionButton.setOnLongClickListener(l);
+    }
 
 }

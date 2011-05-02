@@ -14,9 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-import java.text.DecimalFormat;
-
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,6 +33,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
  * 
@@ -51,7 +50,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mWaitingForData;
 
 
-    public GeoPointWidget(Context context, FormEntryPrompt prompt, OnLongClickListener listener) {
+    public GeoPointWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mWaitingForData = false;
 
@@ -87,7 +86,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mViewButton.setOnLongClickListener(listener);
 
         mStringAnswer = new TextView(getContext());
 
@@ -115,7 +113,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
-        mActionButton.setOnLongClickListener(listener);
 
         // finish complex layout
         // retrieve answer from data model and update ui
@@ -220,6 +217,16 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mViewButton.setOnLongClickListener(l);
+        mActionButton.setOnLongClickListener(l);
+        mStringAnswer.setOnLongClickListener(l);
+        mAnswerDisplay.setOnLongClickListener(l);
     }
 
 }
