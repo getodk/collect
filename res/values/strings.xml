@@ -115,6 +115,8 @@
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
 <string name="please_wait">Please wait a few moments.</string>
+<string name="please_wait_long">Please wait. This could take a few minutes.</string>
+
 <string name="quit_application">Exit Without Saving?</string>
 <string name="quit_entry">Save Data And Exit</string>
 <string name="refresh">Refresh</string>

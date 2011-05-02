@@ -83,6 +83,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
         super.onResume();
 
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         mLocationDialog.show();
     }
 
@@ -116,7 +117,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
         mLocationDialog.setIndeterminate(true);
         mLocationDialog.setIcon(android.R.drawable.ic_dialog_info);
         mLocationDialog.setTitle(getString(R.string.getting_location));
-        mLocationDialog.setMessage(getString(R.string.please_wait));
+        mLocationDialog.setMessage(getString(R.string.please_wait_long));
         mLocationDialog.setButton(DialogInterface.BUTTON1, getString(R.string.accept_location),
             geopointButtonListener);
         mLocationDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel_location),
