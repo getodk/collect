@@ -83,7 +83,8 @@
 			android:label="@string/app_name" />
 		<activity
 			android:name=".activities.SplashScreenActivity"
-			android:label="@string/app_name">
+			android:label="@string/app_name"
+			android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
 				<action
 					android:name="android.intent.action.MAIN" />
@@ -103,14 +104,11 @@
 				<category
 					android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-
 		</activity>
-
 		<activity-alias
 			android:name=".activities.ShortcutGenerator"
 			android:targetActivity=".activities.AndroidShortcuts"
 			android:label="ODK Form">
-
 			<!-- This intent-filter allows your shortcuts to be created in the launcher. -->
 			<intent-filter>
 				<action
@@ -118,7 +116,6 @@
 				<category
 					android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-
 		</activity-alias>
 	</application>
 	<uses-permission

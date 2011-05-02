@@ -157,7 +157,7 @@
 <string name="splash_path">Selected splash screen image</string>
 <string name="default_splash_path">ODK Default</string>
 <string name="select_another_image">Select another image</string>
-<string name="remove_this_image">Remove this image</string>
+<string name="use_odk_default">Use default image</string>
 <string name="change_splash_path">Change splash screen image</string>
 
 </resources>

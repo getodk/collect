@@ -40,7 +40,6 @@
 			android:id="@+id/splash_path"
 			android:key="splashPath"
 			android:defaultValue="@string/default_splash_path"
-			android:title="@string/splash_path"
-			android:persistent="true" />
+			android:title="@string/splash_path" />
 	</PreferenceCategory>
 </PreferenceScreen>

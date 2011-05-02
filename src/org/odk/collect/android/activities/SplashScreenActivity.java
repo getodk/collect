@@ -1,6 +1,8 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesActivity;
 
@@ -12,17 +14,20 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SplashScreenActivity extends Activity {
 
-    @SuppressWarnings("rawtypes")
-    private Class mNextActivity = MainMenuActivity.class;
     private int mSplashTimeout = 3000; // milliseconds
+
+
+    // private SharedPreferences mSharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +38,8 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.splash_screen);
 
         // get the shared preferences object
-        SharedPreferences sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        Editor editor = sharedPreferences.edit();
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = mSharedPreferences.edit();
 
         // get the package info object with version number
         PackageInfo packageInfo = null;
@@ -46,13 +50,17 @@ public class SplashScreenActivity extends Activity {
             e.printStackTrace();
         }
 
-        boolean firstRun = sharedPreferences.getBoolean(PreferencesActivity.KEY_FIRST_RUN, true);
-        boolean showSplash = sharedPreferences.getBoolean(PreferencesActivity.KEY_SHOW_SPLASH, false);
+        boolean firstRun = mSharedPreferences.getBoolean(PreferencesActivity.KEY_FIRST_RUN, true);
+        boolean showSplash =
+            mSharedPreferences.getBoolean(PreferencesActivity.KEY_SHOW_SPLASH, false);
+        String splashPath =
+            mSharedPreferences.getString(PreferencesActivity.KEY_SPLASH_PATH,
+                getString(R.string.default_splash_path));
 
         boolean versionChange;
-        
+
         // if you've increased version code, then update the version number and set firstRun to true
-        if (sharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
+        if (mSharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
             editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);
             editor.commit();
 
@@ -64,7 +72,7 @@ public class SplashScreenActivity extends Activity {
         if (firstRun || showSplash) {
             editor.putBoolean(PreferencesActivity.KEY_FIRST_RUN, false);
             editor.commit();
-            startSplashScreen();
+            startSplashScreen(splashPath);
         } else {
             endSplashScreen();
         }
@@ -75,22 +83,27 @@ public class SplashScreenActivity extends Activity {
     private void endSplashScreen() {
 
         // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, mNextActivity));
+        startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
         finish();
     }
 
 
-    private void startSplashScreen() {
+    private void startSplashScreen(String path) {
 
         // add items to the splash screen here. makes things less distracting.
-        LinearLayout ll = (LinearLayout) findViewById(R.id.layout);
-        ll.setBackgroundColor(Color.RED);
+        ImageView iv = (ImageView) findViewById(R.id.splash);
         TextView tv = (TextView) findViewById(R.id.text);
-        tv.setText("ODK Collect");
+        
+        File f = new File(path);
+        if (f.exists()) {
+            iv.setImageDrawable(Drawable.createFromPath(path));
+        }
+        tv.setText(getString(R.string.app_name));
 
         // create a thread that counts up to the timeout
         Thread t = new Thread() {
             int count = 0;
+
 
             @Override
             public void run() {

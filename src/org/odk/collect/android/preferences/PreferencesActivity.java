@@ -85,7 +85,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                         final CharSequence[] items =
                             {
                                     getString(R.string.select_another_image),
-                                    getString(R.string.remove_this_image)
+                                    getString(R.string.use_odk_default)
                             };
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -217,7 +217,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 
     private void updateSplashPath() {
-        System.out.println("on shared pareference updating splash path");
         mSplashPathPreference =
             (PreferenceScreen) this.getPreferenceScreen().findPreference(KEY_SPLASH_PATH);
         mSplashPathPreference.setSummary(mSplashPathPreference.getSharedPreferences().getString(
