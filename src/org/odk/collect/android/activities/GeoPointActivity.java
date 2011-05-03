@@ -64,6 +64,15 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
         }
 
         mMapView = (MapView) findViewById(R.id.mapview);
+        mCancelLocation = (Button) findViewById(R.id.cancel_location);
+        mCancelLocation.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        
         mMapController = mMapView.getController();
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -99,15 +108,7 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
                     returnLocation();
                 }
             });
-            mCancelLocation = (Button) findViewById(R.id.cancel_location);
-            mCancelLocation.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-
+          
             mLocationOverlay = new MyLocationOverlay(this, mMapView);
             mMapView.getOverlays().add(mLocationOverlay);
 
@@ -116,19 +117,11 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
             mLocationOverlay = new Marker(mGeoPoint);
 
             mMapView.getOverlays().add(mLocationOverlay);
+            mMapView.setClickable(false);
 
-            ((Button) findViewById(R.id.accept_location)).setVisibility(View.GONE);
             ((Button) findViewById(R.id.cancel_location)).setVisibility(View.GONE);
             ((TextView) findViewById(R.id.location_status)).setVisibility(View.GONE);
-            mShowLocation = ((Button) findViewById(R.id.show_location));
-            mShowLocation.setVisibility(View.VISIBLE);
-            mShowLocation.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mMapController.animateTo(mGeoPoint);
-                }
-            });
+            
 
         }
     }
@@ -242,7 +235,7 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
             super.draw(canvas, mapView, shadow);
             Point screenPoint = new Point();
             mMapView.getProjection().toPixels(gp, screenPoint);
-            canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.blue_dot),
+            canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_indicator_current_position),
                 screenPoint.x, screenPoint.y - 8, null); // -8 as image is 16px high
         }
     }
