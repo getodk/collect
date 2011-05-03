@@ -242,7 +242,7 @@ public class GeoPointActivity extends MapActivity implements LocationListener {
             super.draw(canvas, mapView, shadow);
             Point screenPoint = new Point();
             mMapView.getProjection().toPixels(gp, screenPoint);
-            canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_marker_blue),
+            canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.blue_dot),
                 screenPoint.x, screenPoint.y - 8, null); // -8 as image is 16px high
         }
     }
