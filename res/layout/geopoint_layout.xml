@@ -13,12 +13,12 @@
 		android:clickable="true"
 		android:apiKey="04nS1kohp8ZyXT9QSa2JkgSS_xFla1deOELZjqA" />
 	<LinearLayout
+		android:id="@+id/location_buttons"
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_horizontal"
-		android:paddingTop="5dip"
-		android:paddingBottom="5dip"
+		android:padding="5dip"
 		android:background="#BF000000">
 		<LinearLayout
 			android:orientation="horizontal"
@@ -27,6 +27,13 @@
 			android:gravity="center_horizontal"
 			android:paddingTop="2dip"
 			android:paddingBottom="2dip">
+			<Button
+				android:id="@+id/show_location"
+				android:text="@string/show_location"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:visibility="gone" />
 			<Button
 				android:id="@+id/accept_location"
 				android:text="@string/accept_location"

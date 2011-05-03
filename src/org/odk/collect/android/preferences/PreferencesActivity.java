@@ -163,7 +163,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
             case IMAGE_CHOOSER:
 
-                // get location of chosen file
+                // get gp of chosen file
                 Uri uri = intent.getData();
                 String[] projection = {
                     Images.Media.DATA

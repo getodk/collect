@@ -101,10 +101,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int AUDIO_CHOOSER = 8;
     public static final int VIDEO_CHOOSER = 9;
 
-    // Extra returned from location activity
+    // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
 
-    // Identifies the location of the form used to launch form entry
+    // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_INSTANCES = "instances";
@@ -308,7 +308,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                  * audio and video
                  */
 
-                // get location of chosen file
+                // get gp of chosen file
                 Uri selectedImage = intent.getData();
                 String[] projection = {
                     Images.Media.DATA

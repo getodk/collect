@@ -48,6 +48,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
     private boolean mWaitingForData;
+    public static String LOCATION = "gp";
 
 
     public GeoPointWidget(Context context, FormEntryPrompt prompt) {
@@ -78,11 +79,11 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 double gp[] = new double[4];
                 gp[0] = Double.valueOf(sa[0]).doubleValue();
                 gp[1] = Double.valueOf(sa[1]).doubleValue();
-
-                Intent intent =
-                    new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:" + gp[0] + ","
-                            + gp[1] + "?z=" + 16));
-                ((Activity) getContext()).startActivity(intent);
+                gp[2] = Double.valueOf(sa[2]).doubleValue();
+                gp[3] = Double.valueOf(sa[3]).doubleValue();
+                Intent i = new Intent(getContext(), GeoPointActivity.class);
+                i.putExtra(LOCATION, gp);
+                ((Activity) getContext()).startActivity(i);
 
             }
         });
@@ -156,7 +157,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 
     private String truncateDouble(String s) {
-        DecimalFormat df = new DecimalFormat("#.####");
+        DecimalFormat df = new DecimalFormat("#.##");
         return df.format(Double.valueOf(s));
     }
 
