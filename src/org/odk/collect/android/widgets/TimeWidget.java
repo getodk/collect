@@ -19,10 +19,13 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,8 +37,9 @@ import java.util.Date;
 public class TimeWidget extends QuestionWidget {
 
     private TimePicker mTimePicker;
-
-
+    // Tue May 03 08:49:00 PDT 2011
+    private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+    
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -46,12 +50,17 @@ public class TimeWidget extends QuestionWidget {
 
         // If there's an answer, use it.
         if (prompt.getAnswerValue() != null) {
-            String time = prompt.getAnswerValue().getDisplayText();
-            Integer hour = new Integer(time.substring(0, 2));
-            Integer minute = new Integer(time.substring(3, 5));
-
-            mTimePicker.setCurrentHour(hour.intValue());
-            mTimePicker.setCurrentMinute(minute.intValue());
+            String time = ((TimeData) prompt.getAnswerValue()).getValue().toString();
+            try {
+                Date d = sdf.parse(time);
+                mTimePicker.setCurrentHour(d.getHours());
+                mTimePicker.setCurrentMinute(d.getMinutes());
+            } catch (ParseException e) {
+                // bad date, clear answer
+                clearAnswer();
+                e.printStackTrace();
+            }
+            
         } else {
             // create time widget with current time as of right now
             clearAnswer();

@@ -61,7 +61,7 @@
 <string name="download_failed_with_error">Form \"%1$s\" failed. %2$s.</string>
 <string name="do_not_change">Do Not Change</string>
 <string name="do_not_exit">Do Not Exit</string>
-<string name="do_not_save">Remove Changes</string>
+<string name="do_not_save">Ignore Changes</string>
 <string name="enter">start</string>
 <string name="entering_repeat">Add Group</string>
 <string name="entering_repeat_ask">Add New Group?</string>
