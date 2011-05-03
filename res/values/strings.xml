@@ -165,5 +165,6 @@
 <string name="show_location">Show Location</string>
 <string name="app_url">http://opendatakit.org</string>
 <string name="keep_changes">Save Changes</string>
+<string name="go_to_location">Go to Location</string>
 
 </resources>
