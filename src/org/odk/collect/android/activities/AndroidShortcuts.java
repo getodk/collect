@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -106,9 +107,6 @@ public class AndroidShortcuts extends Activity {
         Intent shortcutIntent = new Intent(Intent.ACTION_VIEW);
         shortcutIntent.setData(command);
 
-        // Home here makes the intent new every time you call it
-        shortcutIntent.addCategory(Intent.CATEGORY_HOME);
-
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
@@ -121,4 +119,5 @@ public class AndroidShortcuts extends Activity {
         finish();
         return;
     }
+        
 }
