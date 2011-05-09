@@ -5,13 +5,12 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<!-- http://code.google.com/p/workregistrationwidget-android/source/browse/trunk/WorkRegistrationWidgetAndroid/res/layout/gmap.xml -->
 	<com.google.android.maps.MapView
 		android:id="@+id/mapview"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:clickable="true"
-		android:apiKey="04nS1kohp8ZyXT9QSa2JkgSS_xFla1deOELZjqA" />
+		android:apiKey="0wsgFhRvVBLVpgaFzmwaYuqfU898z_2YtlKSlkg" />
 	<LinearLayout
 		android:id="@+id/location_buttons"
 		android:orientation="vertical"
@@ -29,7 +28,7 @@
 			android:paddingBottom="2dip">
 			<Button
 				android:id="@+id/show_location"
-				android:text="@string/show_location"
+				android:text="@string/go_to_location"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
@@ -42,7 +41,7 @@
 				android:layout_weight="1" />
 			<Button
 				android:id="@+id/cancel_location"
-				android:text="@string/cancel_location"
+				android:text="@string/cancel"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
 				android:layout_weight="1" />
