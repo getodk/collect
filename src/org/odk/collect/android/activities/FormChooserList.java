@@ -15,11 +15,19 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.tasks.DiskSyncTask;
 
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -32,30 +40,41 @@ import android.widget.SimpleCursorAdapter;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends ListActivity {
+public class FormChooserList extends ListActivity implements DiskSyncListener {
+
+    private static final String t = "FormChooserList";
+    DiskSyncTask mDiskSyncTask;
+
+    private static final int PROGRESS = 1;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
-    }
 
+        Cursor managedCursor = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
+        mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
+        if (mDiskSyncTask == null) {
+            mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
+            mDiskSyncTask.setDiskSyncListener(this);
+            mDiskSyncTask.execute((Void[]) null);
+        }
 
-    /**
-     * Get form list from database and insert into view.
-     */
-    private void refreshView() {
-        // get all forms that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        fda.addOrphanForms();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
-        startManagingCursor(c);
+        if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            // TODO: set something to progressing
+        }
 
-        // create data and views for cursor adapter
+        if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            // TODO: set something to done
+            mDiskSyncTask.setDiskSyncListener(null);
+        }
+
+        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
+
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 android.R.id.text1, android.R.id.text2
@@ -66,9 +85,13 @@ public class FormChooserList extends ListActivity {
             new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
         setListAdapter(instances);
 
-        if (fda != null) {
-            fda.close();
-        }
+    }
+
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        // pass the thread on restart
+        return mDiskSyncTask;
     }
 
 
@@ -77,15 +100,21 @@ public class FormChooserList extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
-        // get full path to the form
+        // get uri to form
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        String formPath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
         startManagingCursor(c);
-        
-        // create intent for return and store path
-        Intent i = new Intent();
-        i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
-        setResult(RESULT_OK, i);
+        Uri formUri =
+            ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
+                c.getLong(c.getColumnIndex(FormsColumns._ID)));
+
+        String action = getIntent().getAction();
+        if (Intent.ACTION_PICK.equals(action)) {
+            // caller is waiting on a picked form
+            setResult(RESULT_OK, new Intent().setData(formUri));
+        } else {
+            // caller wants to view/edit a form, so launch formentryactivity
+            startActivity(new Intent(Intent.ACTION_EDIT, formUri));
+        }
 
         finish();
 
@@ -93,14 +122,54 @@ public class FormChooserList extends ListActivity {
 
 
     /**
-     * refreshView() in onresume because onCreate doesn't get called when activity returns from background
+     * refreshView() in onresume because onCreate doesn't get called when activity returns from
+     * background
      */
     @Override
     protected void onResume() {
-        refreshView();
+        mDiskSyncTask.setDiskSyncListener(this);
         super.onResume();
     }
-    
-    
+
+
+    @Override
+    protected void onPause() {
+        mDiskSyncTask.setDiskSyncListener(null);
+        super.onPause();
+    }
+
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case PROGRESS:
+                ProgressDialog p = new ProgressDialog(this);
+                DialogInterface.OnClickListener loadingButtonListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // dialog.dismiss();
+                            // p.setFormLoaderListener(null);
+                            // p.cancel(true);
+                            // finish();
+                        }
+                    };
+                p.setIcon(android.R.drawable.ic_dialog_info);
+                p.setTitle(getString(R.string.loading_form));
+                p.setMessage(getString(R.string.please_wait));
+                p.setIndeterminate(true);
+                p.setCancelable(false);
+                p.setButton(getString(R.string.cancel_loading_form), loadingButtonListener);
+                return p;
+        }
+        return null;
+    }
+
+
+    @Override
+    public void SyncComplete() {
+        // TODO: set finished
+
+    }
 
 }

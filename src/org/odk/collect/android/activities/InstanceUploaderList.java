@@ -14,11 +14,10 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -32,6 +31,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -68,11 +69,10 @@ public class InstanceUploaderList extends ListActivity {
         mActionButton.setOnClickListener(new OnClickListener() {
 
             @Override
-			public void onClick(View arg0) {
+            public void onClick(View arg0) {
                 if (mSelected.size() > 0) {
                     // items selected
                     uploadSelectedFiles();
-                    refreshData();
                     mToggled = false;
                 } else {
                     // no items selected
@@ -86,7 +86,7 @@ public class InstanceUploaderList extends ListActivity {
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
-			public void onClick(View v) {
+            public void onClick(View v) {
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
@@ -103,21 +103,18 @@ public class InstanceUploaderList extends ListActivity {
             }
         });
 
-    }
-
-
-    /**
-     * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
-     */
-    private void refreshView() {
         // get all mInstances that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
+
+        String selection = InstanceColumns.STATUS + "=?";
+        String selectionArgs[] = {
+            InstanceProviderAPI.STATUS_COMPLETE
+        };
+
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
         startManagingCursor(c);
 
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
@@ -134,9 +131,6 @@ public class InstanceUploaderList extends ListActivity {
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
 
-        // cleanup
-        fda.close();
-
         // if current activity is being reinitialized due to changing orientation restore all check
         // marks for ones selected
         if (mRestored) {
@@ -152,41 +146,39 @@ public class InstanceUploaderList extends ListActivity {
             }
             mRestored = false;
         }
+
     }
 
 
     private void uploadSelectedFiles() {
         ArrayList<String> selectedInstances = new ArrayList<String>();
 
-        // get all checked items
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
-        Cursor c = null;
-
+        String selection = "";
+        String[] selectionArgs = new String[mSelected.size()];
         for (int i = 0; i < mSelected.size(); i++) {
-            c = fda.fetchFile(mSelected.get(i));
-            startManagingCursor(c);
-            String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            selectedInstances.add(s);
+            selection += InstanceColumns._ID + "=?";
+            if (i != mSelected.size() - 1) {
+                selection += " or ";
+            }
+            selectionArgs[i] = mSelected.get(i).toString();
         }
 
-        // bundle intent with upload files
-        Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(FormEntryActivity.KEY_INSTANCES, selectedInstances);
-        startActivityForResult(i, INSTANCE_UPLOADER);
-        fda.close();
-    }
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+        if (c.getCount() > 0) {
+            c.moveToPosition(-1);
+            while (c.moveToNext()) {
+                String s = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_DIRECTORY_PATH));
+                selectedInstances.add(s);
+            }
 
+            // bundle intent with upload files
+            Intent i = new Intent(this, InstanceUploaderActivity.class);
+            i.putExtra(FormEntryActivity.KEY_INSTANCES, selectedInstances);
+            startActivityForResult(i, INSTANCE_UPLOADER);
+        } else {
+            Toast.makeText(this, "nothing there?", Toast.LENGTH_LONG).show();
+        }
 
-    private void refreshData() {
-        if (mInstances != null) {
-            mInstances.getCursor().requery();
-        }
-        if (!mRestored) {
-            mSelected.clear();
-        }
-        refreshView();
     }
 
 
@@ -222,7 +214,7 @@ public class InstanceUploaderList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -232,13 +224,6 @@ public class InstanceUploaderList extends ListActivity {
 
         mActionButton.setEnabled(!(mSelected.size() == 0));
 
-    }
-
-
-    @Override
-    protected void onResume() {
-        refreshData();
-        super.onResume();
     }
 
 
@@ -273,7 +258,8 @@ public class InstanceUploaderList extends ListActivity {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
                 if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
-                    refreshData();
+                    mSelected.clear();
+                    getListView().clearChoices();
                     if (mInstances.isEmpty()) {
                         finish();
                     }

@@ -15,16 +15,20 @@
 package org.odk.collect.android.tasks;
 
 import org.odk.collect.android.activities.FormDownloadList;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,11 +69,16 @@ public class DownloadFormsTask extends
     private static final int CONNECTION_TIMEOUT = 30000;
 
     private FormDownloaderListener mStateListener;
+    private ContentResolver mContentResolver;
+
+
+    public DownloadFormsTask(ContentResolver cr) {
+        mContentResolver = cr;
+    }
 
 
     @Override
     protected HashMap<String, String> doInBackground(HashMap<String, String>... values) {
-        FileDbAdapter fda = null;
         if (values != null && values[0].containsKey(FormDownloadList.LIST_URL)) {
             // This gets a list of available forms from the specified server.
             HashMap<String, String> formList = new HashMap<String, String>();
@@ -136,8 +145,6 @@ public class DownloadFormsTask extends
             // boolean error = false;
             int total = formNames.size();
             int count = 1;
-            fda = new FileDbAdapter();
-            fda.open();
 
             for (int i = 0; i < total; i++) {
                 String form = formNames.get(i);
@@ -145,22 +152,46 @@ public class DownloadFormsTask extends
                         .toString());
                 try {
                     File dl = downloadFile(form, toDownload.get(form));
+                    String hash = FileUtils.getMd5Hash(dl);
+                   
+                    String selection = FormsColumns.MD5_HASH + "=?";
+                    String[] selectionArgs = {hash};
+                    Cursor c = mContentResolver.query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                    if (c.getCount() > 0) {
+                        // we alredy have this, so ignore it.
+                        // actually, delete it.
+                        dl.delete();
+                    } else {
+                        // add it
+                        ContentValues newValues = new ContentValues();
 
-                    // if the file already existed, the name will be changed to formname_#
-                    if (form.compareTo(dl.getName()) != 0) {
-                        // hash of raw form
-                        String hash = FileUtils.getMd5Hash(dl);
+                        HashMap<String, String> fields = FileUtils.parseXML(dl);
 
-                        Cursor c = fda.fetchFilesByPath(null, hash);
-                        if (c.getCount() > 0) {
-                            // db has the hash and this is a duplicate. the dupliate will be
-                            // discarded.
+                        String title = fields.get(FileUtils.TITLE);
+                        String ui = fields.get(FileUtils.UI);
+                        String model = fields.get(FileUtils.MODEL);
+                        String formid = fields.get(FileUtils.FORMID);
+
+                        if (title != null) {
+                            newValues.put(FormsColumns.DISPLAY_NAME, title);
                         } else {
-                            // the form is new, but the file name was the same.
-                            // tell the user we renamed the form.
-                            result.put(form, dl.getName());
+                            // TODO: Return some nasty error.
                         }
-                        c.close();
+                        if (formid != null) {
+                            newValues.put(FormsColumns.JR_FORM_ID, formid);
+                        } else {
+                            // TODO: return some nasty error.
+                        }
+                        if (ui != null) {
+                            newValues.put(FormsColumns.UI_VERSION, ui);
+                        }
+                        if (model != null) {
+                            newValues.put(FormsColumns.MODEL_VERSION, model);
+                        }
+
+                        newValues.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
+
+                        Uri uri = mContentResolver.insert(FormsColumns.CONTENT_URI, newValues);
                     }
 
                 } catch (SocketTimeoutException se) {
@@ -175,12 +206,6 @@ public class DownloadFormsTask extends
                     break;
                 }
                 count++;
-            }
-
-            if (fda != null) {
-                // addOrphanForms will remove duplicates, and add new forms to the database
-                fda.addOrphanForms();
-                fda.close();
             }
 
             return result;

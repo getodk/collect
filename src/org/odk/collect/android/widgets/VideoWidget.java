@@ -148,7 +148,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private void deleteMedia() {
         // get the file path and delete the file
         File f = new File(mInstanceFolder + "/" + mBinaryName);
-        Log.e("Carl", "attepting to delete: " + f.getAbsolutePath());
         if (!f.delete()) {
             Log.e(t, "Failed to delete " + f);
         }

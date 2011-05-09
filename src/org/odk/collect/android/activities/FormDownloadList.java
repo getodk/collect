@@ -199,7 +199,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         showDialog(PROGRESS_DIALOG);
 
         FileUtils.createFolder(FileUtils.CACHE_PATH);
-        mDownloadFormsTask = new DownloadFormsTask();
+        mDownloadFormsTask = new DownloadFormsTask(getContentResolver());
         mDownloadFormsTask.setDownloaderListener(this);
 
         SharedPreferences settings =
@@ -322,7 +322,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             showDialog(PROGRESS_DIALOG);
 
             FileUtils.createFolder(FileUtils.FORMS_PATH);
-            mDownloadFormsTask = new DownloadFormsTask();
+            mDownloadFormsTask = new DownloadFormsTask(getContentResolver());
             mDownloadFormsTask.setDownloaderListener(this);
             mDownloadFormsTask.execute(filesToDownload);
         } else {
@@ -469,4 +469,3 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
 }
 
-// TODO: make dialog persist through screen rotations.

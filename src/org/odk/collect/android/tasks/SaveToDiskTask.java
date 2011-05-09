@@ -21,12 +21,17 @@ import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -49,6 +54,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private Context mContext;
     private Boolean mSave;
     private Boolean mMarkCompleted;
+    private ContentResolver mContentResolver;
+    private Uri mUri;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -56,6 +63,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     public static final int VALIDATED = 503;
     public static final int SAVED_AND_EXIT = 504;
 
+    public SaveToDiskTask(ContentResolver cr, Uri uri) {
+        mContentResolver = cr;
+        mUri = uri;
+    }
 
     /**
      * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
@@ -103,32 +114,39 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        File f = new File(FormEntryActivity.InstancePath);
-        Cursor c = fda.fetchFilesByPath(f.getAbsolutePath(), null);
-        if (!mMarkCompleted) {
-            if (c != null && c.getCount() == 0) {
-                fda.createFile(FormEntryActivity.InstancePath, FileDbAdapter.TYPE_INSTANCE,
-                    FileDbAdapter.STATUS_INCOMPLETE);
+        if (mContentResolver.getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) { 
+            ContentValues values = new ContentValues();
+            if (!mMarkCompleted) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+                mContentResolver.update(mUri, values, null, null);
             } else {
-                fda.updateFile(FormEntryActivity.InstancePath, FileDbAdapter.STATUS_INCOMPLETE);
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+                mContentResolver.update(mUri, values, null, null);
             }
-        } else {
-            if (c != null && c.getCount() == 0) {
-                fda.createFile(FormEntryActivity.InstancePath, FileDbAdapter.TYPE_INSTANCE,
-                    FileDbAdapter.STATUS_COMPLETE);
+            
+        } else if (mContentResolver.getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
+            Cursor c =  mContentResolver.query(mUri, null, null, null, null);
+            c.moveToFirst();
+            String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+            String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+            
+            ContentValues values = new ContentValues();
 
+            if (mMarkCompleted) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
             } else {
-                fda.updateFile(FormEntryActivity.InstancePath, FileDbAdapter.STATUS_COMPLETE);
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             }
+            values.put(InstanceColumns.INSTANCE_DIRECTORY_PATH, FormEntryActivity.InstancePath);
+            values.put(InstanceColumns.INSTANCE_DIRECTORY_PATH, FormEntryActivity.InstancePath);
+            values.put(InstanceColumns.SUBMISSION_URI, "submission");
+            values.put(InstanceColumns.DISPLAY_NAME, formname + " DATA");
+            values.put(InstanceColumns.JR_FORM_ID, jrformid );
+            mContentResolver.insert(InstanceColumns.CONTENT_URI, values);
+            
         }
-        // clean up cursor
-        if (c != null) {
-            c.close();
-        }
-
-        fda.close();
+        
+        
         return true;
 
     }

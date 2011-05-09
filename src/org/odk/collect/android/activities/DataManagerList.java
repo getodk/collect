@@ -15,14 +15,15 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,7 +31,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -68,18 +68,12 @@ public class DataManagerList extends ListActivity {
                 }
             }
         });
-    }
-
-
-    private void refreshView() {
-        // get all mInstances that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
+        
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, null);
         startManagingCursor(c);
 
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
@@ -92,9 +86,6 @@ public class DataManagerList extends ListActivity {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
-
-        // cleanup
-        fda.close();
 
         // if current activity is being reinitialized due to changing
         // orientation
@@ -109,9 +100,12 @@ public class DataManagerList extends ListActivity {
                     }
                 }
             }
-            mRestored = false;
+           mRestored = false;
         }
+        
+        
     }
+    
 
 
     /**
@@ -128,7 +122,8 @@ public class DataManagerList extends ListActivity {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();
-                            refreshData();
+                            mSelected.clear();
+                            getListView().clearChoices();
                             break;
                         case DialogInterface.BUTTON2: // do nothing
                             break;
@@ -142,47 +137,21 @@ public class DataManagerList extends ListActivity {
     }
 
 
-    private void refreshData() {
-        if (mInstances != null) {
-            mInstances.getCursor().requery();
-        }
-        if (!mRestored) {
-            mSelected.clear();
-        }
-        refreshView();
-    }
-
-
     /**
      * Deletes the selected files.First from the database then from the file system
      */
     private void deleteSelectedFiles() {
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
-        // delete removes the file from the database first
+        ContentResolver cr = getContentResolver();
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-            Cursor c = fda.fetchFile(mSelected.get(i));
-            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            if (fda.deleteFile(mSelected.get(i))) {
-                deleted++;
-                Log.i(t, "Deleting file: " + filename);
-                File del = new File(filename);
-                del.delete();
-            }
-            c.close();
+            Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, mSelected.get(i).toString());
+            deleted += cr.delete(deleteForm, null, null);
         }
-        fda.close();
-
-        if (deleted > 0) {
+        
+        if (deleted == mSelected.size()) {
             // all deletes were successful
             Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
                 Toast.LENGTH_SHORT).show();
-            refreshData();
-            if (mInstances.isEmpty()) {
-                finish();
-            }
         } else {
             // had some failures
             Toast.makeText(
@@ -190,7 +159,6 @@ public class DataManagerList extends ListActivity {
                 getString(R.string.file_deleted_error, mSelected.size() - deleted + " of "
                         + mSelected.size()), Toast.LENGTH_LONG).show();
         }
-
     }
 
 
@@ -200,7 +168,7 @@ public class DataManagerList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -219,14 +187,6 @@ public class DataManagerList extends ListActivity {
             mAlertDialog.dismiss();
         }
         super.onPause();
-    }
-
-
-    @Override
-    protected void onResume() {
-        // update the list (for returning from the remote manager)
-        refreshData();
-        super.onResume();
     }
 
 

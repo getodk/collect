@@ -14,23 +14,26 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Activity to upload completed forms.
@@ -104,13 +107,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         in.putExtra(FormEntryActivity.KEY_SUCCESS, success);
         setResult(RESULT_OK, in);
 
-        // for each path, update the status
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
         for (int i = 0; i < resultSize; i++) {
-            fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED);
-        }
-        fda.close();
+            ContentValues values = new ContentValues();
+            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+            String where = InstanceColumns.INSTANCE_DIRECTORY_PATH + " =?";
+            String [] selectionArgs = {result.get(i)};
+            getContentResolver().update(InstanceColumns.CONTENT_URI, values, where, selectionArgs);
+      }
         finish();
     }
 

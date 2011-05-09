@@ -14,22 +14,18 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Set;
-
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
@@ -41,6 +37,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +48,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -73,6 +71,12 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -213,8 +217,53 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
             Intent intent = getIntent();
             if (intent != null) {
-                mFormPath = intent.getStringExtra(KEY_FORMPATH);
-                InstancePath = intent.getStringExtra(KEY_INSTANCEPATH);
+                Uri uri = intent.getData();
+                                
+                if (getContentResolver().getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
+                    Cursor instanceCursor = this.managedQuery(uri, null, null, null, null);
+                    if (instanceCursor.getCount() != 1) {
+                        this.createErrorDialog("Bad URI: " + uri, EXIT);
+                        return;
+                    } else {
+                        instanceCursor.moveToFirst();
+                        InstancePath = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_DIRECTORY_PATH));
+              
+                        String jrFormId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                        String submissionURI = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.SUBMISSION_URI));
+                        String[] projection = {FormsColumns._ID};
+                        
+                        String[] selectionArgs = {jrFormId};
+                        String selection = FormsColumns.JR_FORM_ID + " like ?";
+                        
+                        Cursor formCursor = managedQuery(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                        if (formCursor.getCount() == 1) {
+                            formCursor.moveToFirst();
+                            mFormPath = formCursor.getString(formCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                        } else if (formCursor.getCount() < 1){
+                            this.createErrorDialog("Parent form does not exist", EXIT);
+                            return;
+                        } else if (formCursor.getCount() > 1) {
+                            this.createErrorDialog("More than one possible parent form", EXIT);
+                            return;
+                        }
+                            
+                    }
+                    
+                } else if (getContentResolver().getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
+                    Cursor c = this.managedQuery(uri, null, null, null, null);
+                    if (c.getCount() != 1) {
+                        this.createErrorDialog("Bad URI: " + uri, EXIT);
+                        return;
+                    } else {
+                        c.moveToFirst();
+                        mFormPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                    }
+                } else {
+                    Log.e(t, "unrecognized URI");
+                    this.createErrorDialog("unrecognized URI: " + uri, EXIT);
+                    return;
+                }
+                
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath);
                 showDialog(PROGRESS_DIALOG);
@@ -253,8 +302,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         ContentValues values;
         Uri imageURI;
-        Uri AudioURI = null;
-        Uri VideoURI = null;
         switch (requestCode) {
             case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
@@ -634,7 +681,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 mFormController.getGroupsForCurrentIndex());
                     Log.i(t, "created view for group");
                 } catch (RuntimeException e) {
-                    Log.e("Carl", "bad something in the group");
                     createErrorDialog(e.getMessage(), EXIT);
                     e.printStackTrace();
                     // this is badness to avoid a crash.
@@ -715,13 +761,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
 
-        /*
-         * TODO: carlhartung. I'm not a huge fan of this do-while loop. the point here is that we
-         * need to get the event. and then do something based on that event. if that event is a
-         * group (not in a field list) or a repeat, then we need to go to the next event. It didn't
-         * feel right to recursively call showNextView().
-         */
-
         if (mFormController.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
             int event;
             group_skip: do {
@@ -733,7 +772,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         showView(next, AnimationType.RIGHT);
                         break group_skip;
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                        Log.e("Carl", "new repeat dialog");
                         createRepeatDialog();
                         break group_skip;
                     case FormEntryController.EVENT_GROUP:
@@ -1003,7 +1041,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return false;
         }
 
-        mSaveToDiskTask = new SaveToDiskTask();
+        mSaveToDiskTask = new SaveToDiskTask(getContentResolver(), getIntent().getData());
         mSaveToDiskTask.setFormSavedListener(this);
 
         // TODO remove completion option from db
@@ -1049,60 +1087,27 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     break;
                                     
                                 case 1: // discard changes and exit
-                                    FileDbAdapter fda = new FileDbAdapter();
-                                    fda.open();
-                                    Cursor c = fda.fetchFilesByPath(InstancePath, null);
-                                    if (c != null && c.getCount() > 0) {
-                                        Log.i(t, "prevously saved");
-                                    } else {
-                                        // not previously saved, cleaning up
+                                    
+                                    String selection = InstanceColumns.INSTANCE_DIRECTORY_PATH + " like '" + InstancePath + "'";
+                                    Cursor c = FormEntryActivity.this.managedQuery(InstanceColumns.CONTENT_URI, null, selection, null, null);
+                                    // if it's not already saved, erase everything
+                                    if (c.getCount() < 1) {
+                                        // delete media first
                                         String instanceFolder =
                                             InstancePath.substring(0,
                                                 InstancePath.lastIndexOf("/") + 1);
-
-                                        String[] projection = {
-                                            Images.ImageColumns._ID
-                                        };
-                                        Cursor ci =
-                                            getContentResolver()
-                                                    .query(Images.Media.EXTERNAL_CONTENT_URI,
-                                                        projection,
-                                                        "_data like '%" + instanceFolder + "%'",
-                                                        null, null);
-                                        int del = 0;
-                                        if (ci != null && ci.getCount() > 0) {
-                                            //TODO:  skipping one here?
-                                            while (ci.moveToNext()) {
-                                                String id =
-                                                    ci.getString(ci
-                                                            .getColumnIndex(Images.ImageColumns._ID));
-
-                                                Log.i(
-                                                    t,
-                                                    "attempting to delete unused image: "
-                                                            + Uri.withAppendedPath(
-                                                                Images.Media.EXTERNAL_CONTENT_URI,
-                                                                id));
-                                                del +=
-                                                    getContentResolver().delete(
-                                                        Uri.withAppendedPath(
-                                                            Images.Media.EXTERNAL_CONTENT_URI, id),
-                                                        null, null);
+                                        String where = Images.Media.DATA + " like '" + instanceFolder + "%'";
+                                        getContentResolver().delete(Images.Media.EXTERNAL_CONTENT_URI, where, null);
+                                        getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where, null);
+                                        getContentResolver().delete(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where, null);
+                                        File f = new File(InstancePath);
+                                        if (f.exists() && f.isDirectory()) {
+                                            for (File del : f.listFiles()) {
+                                                del.delete();
                                             }
                                         }
-                                        if (ci != null) {
-                                            ci.close();
-                                        }
-
-                                        Log.i(t, "Deleted " + del + " images from content provider");
-                                        FileUtils.deleteFolder(instanceFolder);
                                     }
-                                    // clean up cursor
-                                    if (c != null) {
-                                        c.close();
-                                    }
-
-                                    fda.close();
+  
                                     finish();
                                     break;
 
@@ -1503,20 +1508,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private boolean isInstanceComplete() {
         boolean complete = false;
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByPath(InstancePath, null);
-        if (c != null
-                && c.moveToFirst()
-                && FileDbAdapter.STATUS_COMPLETE.equals(c.getString(c
-                        .getColumnIndex(FileDbAdapter.KEY_STATUS)))) {
-            complete = true;
+        
+        String selection = InstanceColumns.INSTANCE_DIRECTORY_PATH + "=?";
+        String[] selectionArgs = {InstancePath};
+        Cursor c = getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+        startManagingCursor(c);
+        if (c != null && c.getCount() > 0) {
+            c.moveToFirst();
+            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+            if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
+                complete = true;
+            }
         }
-        if (c != null) {
-            c.close();
-            fda.close();
-        }
-
         return complete;
     }
 

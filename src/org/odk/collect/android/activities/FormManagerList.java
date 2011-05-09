@@ -15,14 +15,21 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.tasks.DiskSyncTask;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +41,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms directory.
@@ -41,7 +49,7 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManagerList extends ListActivity {
+public class FormManagerList extends ListActivity implements DiskSyncListener {
     private static String t = "FormManagerList";
     private AlertDialog mAlertDialog;
     private Button mActionButton;
@@ -51,6 +59,9 @@ public class FormManagerList extends ListActivity {
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
     private final String SELECTED = "selected";
+
+    private static final int PROGRESS = 1;
+    DiskSyncTask mDiskSyncTask;
 
 
     @Override
@@ -81,20 +92,25 @@ public class FormManagerList extends ListActivity {
                 }
             }
         });
-        // buildView takes place in resume
-    }
 
+        Cursor managedCursor = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
+        mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
+        if (mDiskSyncTask == null) {
+            mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
+            mDiskSyncTask.setDiskSyncListener(this);
+            mDiskSyncTask.execute((Void[]) null);
+            // TODO: set something to progressing
+        }
 
-    private void refreshView() {
-        // get all mInstances that match the status.
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        fda.addOrphanForms();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
-        startManagingCursor(c);
+        if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            // TODO: set done here.
+            mDiskSyncTask.setDiskSyncListener(null);
+        }
+
+        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
 
         String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
+                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
@@ -108,11 +124,7 @@ public class FormManagerList extends ListActivity {
         getListView().setItemsCanFocus(false);
         mActionButton.setEnabled(!(mSelected.size() == 0));
 
-        // cleanup
-        fda.close();
-
-        // if current activity is being reinitialized due to changing
-        // orientation
+        // if current activity is being reinitialized due to changing orientation
         // restore all check marks for ones selected
         if (mRestored) {
             ListView ls = getListView();
@@ -130,6 +142,13 @@ public class FormManagerList extends ListActivity {
     }
 
 
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        // pass the thread on restart
+        return mDiskSyncTask;
+    }
+
+
     /**
      * Create the file delete dialog
      */
@@ -144,7 +163,8 @@ public class FormManagerList extends ListActivity {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete and
                             deleteSelectedFiles();
-                            refreshData();
+                            mSelected.clear();
+                            getListView().clearChoices();
                             break;
                         case DialogInterface.BUTTON2: // do nothing
                             break;
@@ -159,54 +179,22 @@ public class FormManagerList extends ListActivity {
     }
 
 
-    private void refreshData() {
-        if (mInstances != null) {
-            mInstances.getCursor().requery();
-        }
-        if (!mRestored) {
-            mSelected.clear();
-        }
-        refreshView();
-    }
-
-
     /**
      * Deletes the selected files.First from the database then from the file system
      */
     private void deleteSelectedFiles() {
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
-        // delete removes the file from the database first
+        ContentResolver cr = getContentResolver();
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-            Cursor c = fda.fetchFile(mSelected.get(i));
-            String filename = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-            String hash = c.getString(c.getColumnIndex(FileDbAdapter.KEY_HASH));
-            if (fda.deleteFile(mSelected.get(i))) {
-                deleted++;
-                Log.i(t, "Deleting file: " + filename);
-                File del = new File(filename);
-                del.delete();
-
-                // also delete formdef.
-                String hashname = FileUtils.CACHE_PATH + hash + ".formdef";
-                File fd = new File(hashname);
-                fd.delete();
-                Log.i(t, "Deleting cache: " + hashname);
-            }
-            c.close();
+            Uri deleteForm =
+                Uri.withAppendedPath(FormsColumns.CONTENT_URI, mSelected.get(i).toString());
+            deleted += cr.delete(deleteForm, null, null);
         }
-        fda.close();
 
-        if (deleted > 0) {
+        if (deleted == mSelected.size()) {
             // all deletes were successful
             Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
                 Toast.LENGTH_SHORT).show();
-            refreshData();
-            if (mInstances.isEmpty()) {
-                finish();
-            }
         } else {
             // had some failures
             Toast.makeText(
@@ -224,7 +212,7 @@ public class FormManagerList extends ListActivity {
 
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(FileDbAdapter.KEY_ID));
+        long k = c.getLong(c.getColumnIndex(FormsColumns._ID));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -234,23 +222,6 @@ public class FormManagerList extends ListActivity {
 
         mActionButton.setEnabled(!(mSelected.size() == 0));
 
-    }
-
-
-    @Override
-    protected void onPause() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
-        }
-        super.onPause();
-    }
-
-
-    @Override
-    protected void onResume() {
-        // update the list (for returning from the remote manager)
-        refreshData();
-        super.onResume();
     }
 
 
@@ -271,5 +242,29 @@ public class FormManagerList extends ListActivity {
         for (int i = 0; i < mSelected.size(); i++)
             selectedArray[i] = mSelected.get(i);
         outState.putLongArray(SELECTED, selectedArray);
+    }
+
+
+    @Override
+    protected void onResume() {
+        mDiskSyncTask.setDiskSyncListener(this);
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        mDiskSyncTask.setDiskSyncListener(null);
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        }
+
+        super.onPause();
+    }
+
+
+    @Override
+    public void SyncComplete() {
+        // TODO: set something done.  probably set text box.
     }
 }

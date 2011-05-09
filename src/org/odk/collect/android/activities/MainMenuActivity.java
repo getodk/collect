@@ -14,10 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -25,16 +22,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -46,11 +39,6 @@ import android.widget.Toast;
 public class MainMenuActivity extends Activity {
     private static final String t = "MainMenuActivity";
 
-    // request codes for returning chosen form to main menu.
-    private static final int FORM_CHOOSER = 0;
-    private static final int INSTANCE_CHOOSER = 1;
-    private static final int INSTANCE_UPLOADER = 2;
-
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
@@ -59,12 +47,6 @@ public class MainMenuActivity extends Activity {
     private Button mManageFilesButton;
     private Button mSendDataButton;
     private Button mReviewDataButton;
-
-    // counts for buttons
-    private static int mSavedCount;
-    private static int mCompletedCount;
-    private static int mAvailableCount;
-    private static int mFormsCount;
 
     private AlertDialog mAlertDialog;
 
@@ -83,61 +65,34 @@ public class MainMenuActivity extends Activity {
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
+        mEnterDataButton.setText(getString(R.string.enter_data_button));
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // make sure we haven't added forms
-                ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
-                if (forms != null) {
-                    mFormsCount = forms.size();
-                } else {
-                    mFormsCount = 0;
-                }
-
-                if (mFormsCount == 0 && mAvailableCount == 0) {
-                    Toast.makeText(getApplicationContext(),
-                        getString(R.string.no_items_error, getString(R.string.enter)),
-                        Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), FormChooserList.class);
-                    startActivityForResult(i, FORM_CHOOSER);
-                }
-
+                Intent i = new Intent(getApplicationContext(), FormChooserList.class);
+                startActivity(i);
             }
         });
 
         // review data button. expects a result.
         mReviewDataButton = (Button) findViewById(R.id.review_data);
+        mReviewDataButton.setText(getString(R.string.review_data_button));
         mReviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((mSavedCount + mCompletedCount) == 0) {
-                    Toast.makeText(getApplicationContext(),
-                        getString(R.string.no_items_error, getString(R.string.review)),
-                        Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
-                    startActivityForResult(i, INSTANCE_CHOOSER);
-                }
-
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                startActivity(i);
             }
         });
 
         // send data button. expects a result.
         mSendDataButton = (Button) findViewById(R.id.send_data);
+        mSendDataButton.setText(getString(R.string.send_data_button));
         mSendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCompletedCount == 0) {
-                    Toast.makeText(getApplicationContext(),
-                        getString(R.string.no_items_error, getString(R.string.send)),
-                        Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
-                    startActivityForResult(i, INSTANCE_UPLOADER);
-                }
-
+                Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
+                startActivity(i);
             }
         });
 
@@ -164,94 +119,6 @@ public class MainMenuActivity extends Activity {
         dismissDialogs();
         super.onPause();
     }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onResume()
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateButtons();
-    }
-
-
-    /**
-     * Upon return, check intent for data needed to launch other activities.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (resultCode == RESULT_CANCELED) {
-            return;
-        }
-
-        String formPath = null;
-        Intent i = null;
-        switch (requestCode) {
-            // returns with a form path, start entry
-            case FORM_CHOOSER:
-                formPath = intent.getStringExtra(FormEntryActivity.KEY_FORMPATH);
-                i = new Intent("org.odk.collect.android.action.FormEntry");
-                i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
-                startActivity(i);
-                break;
-            // returns with an instance path, start entry
-            case INSTANCE_CHOOSER:
-                formPath = intent.getStringExtra(FormEntryActivity.KEY_FORMPATH);
-                String instancePath = intent.getStringExtra(FormEntryActivity.KEY_INSTANCEPATH);
-                i = new Intent("org.odk.collect.android.action.FormEntry");
-                i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);
-                i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-                startActivity(i);
-                break;
-            default:
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
-
-
-    /**
-     * Updates the button count and sets the text in the buttons.
-     */
-    private void updateButtons() {
-        // create adapter
-        FileDbAdapter fda = new FileDbAdapter();
-        try {
-            fda.open();
-
-            // count for saved instances
-            Cursor c =
-                fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
-            mSavedCount = c.getCount();
-            c.close();
-
-            // count for completed instances
-            c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
-            mCompletedCount = c.getCount();
-            c.close();
-
-            // count for downloaded forms
-            ArrayList<String> forms = FileUtils.getValidFormsAsArrayList(FileUtils.FORMS_PATH);
-            if (forms != null) {
-                mFormsCount = forms.size();
-            } else {
-                mFormsCount = 0;
-            }
-            fda.close();
-
-            mEnterDataButton.setText(getString(R.string.enter_data_button, mFormsCount));
-            mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
-            mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
-                    + mCompletedCount));
-        } catch (SQLiteException e) {
-            Log.e(t, e.getMessage());
-
-        }
-    }
-
 
 
     @Override

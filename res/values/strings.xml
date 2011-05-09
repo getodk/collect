@@ -66,7 +66,7 @@
 <string name="entering_repeat">Add Group</string>
 <string name="entering_repeat_ask">Add New Group?</string>
 <string name="enter_data">Start New Form</string>
-<string name="enter_data_button">Start New Form (%s)</string>
+<string name="enter_data_button">Start New Form</string>
 <string name="enter_data_description">%s has been selected.</string>
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="error_downloading">Error Getting Form</string>
@@ -129,7 +129,7 @@
 <string name="required_answer_error">Sorry, this response is required!</string>
 <string name="review">continue</string>
 <string name="review_data">Continue Saved Form</string>
-<string name="review_data_button">Continue Saved Form (%s)</string>
+<string name="review_data_button">Continue Saved Form</string>
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Save Data</string>
 <string name="save_data_message">Please save data to keep your responses.</string>
@@ -138,7 +138,7 @@
 <string name="send">send</string>
 <string name="sending_items">Sending %1$s of %2$s item(s)"</string>
 <string name="send_data">Send Finished Data</string>
-<string name="send_data_button">Send Finished Data (%s)</string>
+<string name="send_data_button">Send Finished Data</string>
 <string name="send_selected_data">Send Selected</string>
 <string name="server">Server</string>
 <string name="server_preferences">Server</string>

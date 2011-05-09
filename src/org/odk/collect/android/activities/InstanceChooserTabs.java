@@ -15,11 +15,9 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -47,16 +45,6 @@ public class InstanceChooserTabs extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
-        refreshView();
-    }
-
-
-    /**
-     * Build tab host view and setup tab intents.
-     */
-    private void refreshView() {
-        // update tab host count
-        updateTabHostCount();
 
         // create tab host and tweak color
         final TabHost tabHost = getTabHost();
@@ -65,13 +53,11 @@ public class InstanceChooserTabs extends TabActivity {
 
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
-        saved.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_INCOMPLETE);
         tabHost.addTab(tabHost.newTabSpec(SAVED_TAB)
                 .setIndicator(getString(R.string.saved_data, mSavedCount)).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
-        completed.putExtra(FileDbAdapter.KEY_STATUS, FileDbAdapter.STATUS_COMPLETE);
         tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB)
                 .setIndicator(getString(R.string.completed_data, mCompletedCount))
                 .setContent(completed));
@@ -96,30 +82,6 @@ public class InstanceChooserTabs extends TabActivity {
         } else {
             getTabHost().setCurrentTabByTag(COMPLETED_TAB);
         }
-    }
-
-
-    /**
-     * Update count of saved and completed instances for tab host header.
-     */
-    private void updateTabHostCount() {
-        // create file adapter
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-
-        // get saved instances
-        Cursor c =
-            fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_INCOMPLETE);
-        mSavedCount = c.getCount();
-        c.close();
-
-        // get completed instances
-        c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETE);
-        mCompletedCount = c.getCount();
-        c.close();
-
-        // memory cleanup
-        fda.close();
     }
 
 }

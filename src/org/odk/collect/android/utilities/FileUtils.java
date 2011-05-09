@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.utilities;
 
+import org.javarosa.xform.parse.XFormParser;
+import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -25,11 +30,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Static methods used for common file operations.
@@ -315,6 +323,87 @@ public class FileUtils {
             Log.e(t, "Source file does not exist: " + sourceFile.getAbsolutePath());
         }
 
+    }
+    
+    public static String FORMID = "formid";
+    public static String UI = "uiversion";
+    public static String MODEL = "modelversion";
+    public static String TITLE = "title";
+    public static String SUBMISSIONURI = "submission";
+
+
+    public static HashMap<String, String> parseXML(File xmlFile) {
+        HashMap<String, String> fields = new HashMap<String, String>();
+        InputStream is;
+        try {
+            is = new FileInputStream(xmlFile);
+        } catch (FileNotFoundException e1) {
+            throw new IllegalStateException(e1);
+        }
+
+        InputStreamReader isr;
+        try {
+            isr = new InputStreamReader(is, "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            Log.w(t, "UTF 8 encoding unavailable, trying default encoding");
+            isr = new InputStreamReader(is);
+        }
+
+        if (isr != null) {
+
+            Document doc;
+            try {
+                doc = XFormParser.getXMLDocument(isr);
+            } finally {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    Log.w(t, "Error closing form reader");
+                    e.printStackTrace();
+                }
+            }
+
+            String xforms = "http://www.w3.org/2002/xforms";
+            String html = doc.getRootElement().getNamespace();
+
+            Element cur = doc.getRootElement().getElement(html, "head");
+            Element title = cur.getElement(html, "title");
+            if (title != null) {
+                fields.put(TITLE, XFormParser.getXMLText(title, true));
+            } else {
+                String name = xmlFile.getName();
+                // strip off file extension
+                name = name.substring(0, name.lastIndexOf("."));
+                fields.put(TITLE, name);
+            }
+            cur = cur.getElement(xforms, "model");
+            cur = cur.getElement(xforms, "instance");
+            int idx = cur.getChildCount();
+            int i;
+            for (i = 0; i < idx; ++i) {
+                if (cur.isText(i))
+                    continue;
+                if (cur.getType(i) == Node.ELEMENT) {
+                    break;
+                }
+            }
+
+            //TODO:  GET SUBMISSION URI
+            if (i < idx) {
+                cur = cur.getElement(i); // this is the first data element
+                String id = cur.getAttributeValue(null, "id");
+                String xmlns = cur.getNamespace();
+                String modelVersion = cur.getAttributeValue(null, "version");
+                String uiVersion = cur.getAttributeValue(null, "uiVersion");
+
+                fields.put(FORMID, (id == null) ? xmlns : id);
+                fields.put(MODEL, (modelVersion == null) ? null : modelVersion);
+                fields.put(UI, (uiVersion == null) ? null : uiVersion);
+            } else {
+                throw new IllegalStateException("Form could not be parsed");
+            }
+        }
+        return fields;
     }
     
 }

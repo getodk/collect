@@ -15,19 +15,17 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import java.io.File;
-import java.util.regex.Pattern;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -42,17 +40,22 @@ public class InstanceChooserList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+        
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, null);
+
+        String[] data = new String[] {
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
+        };
+        int[] view = new int[] {
+                android.R.id.text1, android.R.id.text2
+        };
+
+        // render total instance view
+        SimpleCursorAdapter instances =
+            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+        setListAdapter(instances);
     }
     
-    /**
-     * refreshView() in onresume because onCreate doesn't get called when activity returns from background
-     */
-    @Override
-    protected void onResume() {
-        refreshView();
-        super.onResume();
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -65,77 +68,22 @@ public class InstanceChooserList extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
-        // get full path to the instance
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        String instancePath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+        startManagingCursor(c);
+        Uri instanceUri =
+            ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
+                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-        // create intent for return and store path
-        Intent i = new Intent();
-        i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-        i.putExtra(FormEntryActivity.KEY_FORMPATH, getFormPathFromInstancePath(instancePath));
-
-        // return the result to the parent class
-        // getParent().setResult(RESULT_OK, i);
-        setResult(RESULT_OK, i);
-
-        // don't close cursor or tab host delays closing
+        String action = getIntent().getAction();
+        if (Intent.ACTION_PICK.equals(action)) {
+            // caller is waiting on a picked form
+            setResult(RESULT_OK, new Intent().setData(instanceUri));
+        } else {
+            // caller wants to view/edit a form, so launch formentryactivity
+            startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
+        }
         finish();
     }
 
-
-    /**
-     * Retrieves instance information from {@link FileDbAdapter}, composes and displays each row.
-     */
-    private void refreshView() {
-
-        // get all instances
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, null);
-        startManagingCursor(c);
-
-        // create data and views for cursor adapter
-        String[] data = new String[] {
-                FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META
-        };
-        int[] view = new int[] {
-                android.R.id.text1, android.R.id.text2
-        };
-
-        // render total instance view
-        SimpleCursorAdapter instances =
-            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
-        setListAdapter(instances);
-
-        // cleanup
-        fda.close();
-    }
-
-
-    /**
-     * Given an instance path, return the full path to the form
-     * 
-     * @param instancePath full path to the instance
-     * @return formPath full path to the form the instance was generated from
-     */
-    private String getFormPathFromInstancePath(String instancePath) {
-        // trim the timestamp
-        String regex = "\\_[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}\\_[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}\\.xml$";
-        Pattern pattern = Pattern.compile(regex);
-        String formName = pattern.split(instancePath)[0];
-        formName = formName.substring(formName.lastIndexOf("/") + 1);
-
-        File xmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xml");
-        File xhtmlFile = new File(FileUtils.FORMS_PATH + "/" + formName + ".xhtml");
-
-        // form is either xml or xhtml file. find the appropriate one.
-        if (xmlFile.exists()) {
-            return xmlFile.getAbsolutePath();
-        } else if (xhtmlFile.exists()) {
-            return xhtmlFile.getAbsolutePath();
-        } else {
-            return null;
-        }
-    }
 
 }

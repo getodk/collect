@@ -15,7 +15,7 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 
@@ -34,7 +35,7 @@ import java.util.ArrayList;
  */
 public class AndroidShortcuts extends Activity {
 
-    String[] commands;
+    Uri[] commands;
     String[] names;
 
 
@@ -54,30 +55,28 @@ public class AndroidShortcuts extends Activity {
 
     private void buildMenuList() {
         ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> commands = new ArrayList<String>();
+        ArrayList<Uri> commands = new ArrayList<Uri>();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Select ODK Shortcut");
 
-        FileDbAdapter fda = new FileDbAdapter();
-        fda.open();
-        fda.addOrphanForms();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_FORM, null);
+        
+        Cursor c = getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
         startManagingCursor(c);
 
         if (c.getCount() > 0) {
             c.moveToPosition(-1);
             while (c.moveToNext()) {
-                String formName = c.getString(c.getColumnIndex(FileDbAdapter.KEY_DISPLAY));
+                String formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
                 names.add(formName);
-                String formPath = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
-                commands.add(formPath);
+                Uri uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, c.getString(c.getColumnIndex(FormsColumns._ID)));
+                commands.add(uri);
             }
         }
 
         this.names = names.toArray(new String[0]);
-        this.commands = commands.toArray(new String[0]);
+        this.commands = commands.toArray(new Uri[0]);
 
         builder.setItems(this.names, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
@@ -103,10 +102,9 @@ public class AndroidShortcuts extends Activity {
     /**
      * 
      */
-    private void returnShortcut(String name, String command) {
-        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
-        shortcutIntent.setClassName(this, FormEntryActivity.class.getName());
-        shortcutIntent.putExtra(FormEntryActivity.KEY_FORMPATH, command);
+    private void returnShortcut(String name, Uri command) {
+        Intent shortcutIntent = new Intent(Intent.ACTION_VIEW);
+        shortcutIntent.setData(command);
 
         // Home here makes the intent new every time you call it
         shortcutIntent.addCategory(Intent.CATEGORY_HOME);

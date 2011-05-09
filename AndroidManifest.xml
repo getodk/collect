@@ -9,12 +9,20 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.odk.collect.android"
-	android:versionName="1.1.5"
+	android:versionName="1.1.7"
 	android:versionCode="12">
 	<application
 		android:icon="@drawable/notes"
 		android:label="@string/app_name"
 		android:theme="@android:style/Theme.Light">
+
+		<provider
+			android:name="org.odk.collect.android.provider.FormsProvider"
+			android:authorities="org.odk.collect.android.provider.odk.forms" />
+		<provider
+			android:name="org.odk.collect.android.provider.InstanceProvider"
+			android:authorities="org.odk.collect.android.provider.odk.instances" />
+
 		<activity
 			android:label="@string/app_name"
 			android:configChanges="orientation"
@@ -24,16 +32,6 @@
 			android:name=".activities.FormEntryActivity"
 			android:label="@string/app_name"
 			android:configChanges="orientation">
-			<!-- the intent filter below is a bit of a hack until we create a content 
-				provider for forms -->
-			<intent-filter>
-				<action
-					android:name="org.odk.collect.android.action.FormEntry" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-			<!-- this is what we should be doing once we have the content provider 
-				working -->
 			<intent-filter>
 				<action
 					android:name="android.intent.action.VIEW" />
@@ -41,19 +39,45 @@
 					android:name="android.intent.action.EDIT" />
 				<category
 					android:name="android.intent.category.DEFAULT" />
-				<!-- need to add something like: <data android:mimeType="vnd.android.cursor.item/vnd.google.note" 
-					/> here once we make a contentProvider for forms. -->
+				<data
+					android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
+				<data
+					android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
 			</intent-filter>
 		</activity>
 		<activity
 			android:name=".activities.InstanceChooserList"
 			android:label="@string/app_name" />
+			<intent-filter>
+				<action
+					android:name="android.intent.action.VIEW" />
+				<action
+					android:name="android.intent.action.EDIT" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+				<data
+					android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+			</intent-filter>
+			
 		<activity
 			android:name=".activities.InstanceChooserTabs"
 			android:label="@string/app_name" />
 		<activity
 			android:name=".activities.FormChooserList"
-			android:label="@string/app_name" />
+			android:label="@string/app_name">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.VIEW" />
+				<action
+					android:name="android.intent.action.EDIT" />
+				<action
+					android:name="android.intent.action.PICK" />
+				<category
+					android:name="android.intent.category.DEFAULT" />
+				<data
+					android:mimeType="vnd.android.cursor.dir/vnd.godk.form" />
+			</intent-filter>
+		</activity>
 		<activity
 			android:name=".activities.FormManagerList"
 			android:label="@string/app_name" />
@@ -98,7 +122,7 @@
 		<activity
 			android:name=".activities.AndroidShortcuts"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar">
-			<intent-filter>
+ 			<intent-filter>
 				<action
 					android:name="android.intent.action.MAIN" />
 				<category
@@ -144,4 +168,6 @@
 		android:largeScreens="true"
 		android:xlargeScreens="true"
 		android:anyDensity="true" />
+
+
 </manifest>
