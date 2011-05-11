@@ -18,6 +18,7 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -74,10 +75,54 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                questionWidget = new SelectOneWidget(context, fep);
+                String appearance = fep.getAppearanceHint();
+
+                if (appearance != null && appearance.contains("compact")) {
+                    int numColumns = -1;
+                    try {
+                        numColumns =
+                            Integer.parseInt(appearance.substring(appearance.indexOf('-') + 1));
+                    } catch (Exception e) {
+                        // Do nothing, leave numColumns as -1
+                        Log.e("WidgetFactory", "Exception parsing numColumns");
+                    }
+
+                    questionWidget = new GridWidget(context, fep, numColumns);
+                } else if (appearance != null && appearance.equals("minimal")) {
+                    questionWidget = new SpinnerWidget(context, fep);
+                } else if (appearance != null && appearance.contains("autocomplete")) {
+                    String filterType = null;
+                    try {
+                        filterType = appearance.substring(appearance.indexOf('-') + 1);
+                    } catch (Exception e) {
+                        // Do nothing, leave filerType null
+                        Log.e("WidgetFactory", "Exception parsing numColumns");
+                    }
+                    questionWidget = new AutoCompleteWidget(context, fep, filterType);
+
+                } else {
+                    questionWidget = new SelectOneWidget(context, fep);
+                }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                questionWidget = new SelectMultiWidget(context, fep);
+                appearance = fep.getAppearanceHint();
+
+                if (appearance != null && appearance.contains("compact")) {
+                    int numColumns = -1;
+                    try {
+                        numColumns =
+                            Integer.parseInt(appearance.substring(appearance.indexOf('-') + 1));
+                    } catch (Exception e) {
+                        // Do nothing, leave numColumns as -1
+                        Log.e("WidgetFactory", "Exception parsing numColumns");
+                    }
+
+                    questionWidget = new GridMultiWidget(context, fep, numColumns);
+                } else if (appearance != null && appearance.equals("minimal")) {
+                    questionWidget = new SpinnerMultiWidget(context, fep);
+                } else {
+                    questionWidget = new SelectMultiWidget(context, fep);
+                }
                 break;
             case Constants.CONTROL_TRIGGER:
                 questionWidget = new TriggerWidget(context, fep);
