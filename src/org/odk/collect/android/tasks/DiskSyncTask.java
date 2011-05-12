@@ -55,11 +55,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         mCursor.moveToPosition(-1);
-        String[] names = mCursor.getColumnNames();
 
         File formDir = new File(FileUtils.FORMS_PATH);
         if (formDir.exists() && formDir.isDirectory()) {
-            ArrayList<File> asdf = new ArrayList<File>(Arrays.asList(formDir.listFiles()));
+            ArrayList<File> xForms = new ArrayList<File>(Arrays.asList(formDir.listFiles()));
 
             while (mCursor.moveToNext()) {
                 String sqlFilename =
@@ -68,14 +67,17 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                 File sqlFile = new File(sqlFilename);
                 if (sqlFile.exists()) {
                     // remove it from the arraylist
-                    asdf.remove(sqlFile);
+                    xForms.remove(sqlFile);
                     if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
-                        // Probably someone overwrite the file on the sdcard, update it's md5.
+                        // Probably someone overwrite the file on the sdcard, update its md5.
                         String id =  mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
                         Uri update = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
                         ContentValues updateValues = new ContentValues();
-                        updateValues.put(FormsColumns.MD5_HASH, FileUtils.getMd5Hash(sqlFile));
+                        // Note, this is the same path here, but update will automatically update the .md5
+                        // and the cache path.
+                        updateValues.put(FormsColumns.FORM_FILE_PATH, sqlFile.getAbsolutePath());
                         int count = mContentResolver.update(update, updateValues, null, null);
+                        Log.i(t, count + " records successfully updated");
                     }
                 } else {
                     Log.w(t, "file referenced by content provider does not exist " + sqlFile);
@@ -83,9 +85,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
             }
 
             // Whatever is left in our arraylist isn't in the database, so add it
-            for (int i = 0; i < asdf.size(); i++) {
+            for (int i = 0; i < xForms.size(); i++) {
                 ContentValues values = new ContentValues();
-                File addMe = asdf.get(i);
+                File addMe = xForms.get(i);
                 
                 if (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml")) {
                     HashMap<String, String> fields = FileUtils.parseXML(addMe);
