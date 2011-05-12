@@ -226,7 +226,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         return;
                     } else {
                         instanceCursor.moveToFirst();
-                        InstancePath = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_DIRECTORY_PATH));
+                        InstancePath = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
               
                         String jrFormId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
                         String submissionURI = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.SUBMISSION_URI));
@@ -1088,7 +1088,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     
                                 case 1: // discard changes and exit
                                     
-                                    String selection = InstanceColumns.INSTANCE_DIRECTORY_PATH + " like '" + InstancePath + "'";
+                                    String selection = InstanceColumns.INSTANCE_FILE_PATH + " like '" + InstancePath + "'";
                                     Cursor c = FormEntryActivity.this.managedQuery(InstanceColumns.CONTENT_URI, null, selection, null, null);
                                     // if it's not already saved, erase everything
                                     if (c.getCount() < 1) {
@@ -1509,7 +1509,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private boolean isInstanceComplete() {
         boolean complete = false;
         
-        String selection = InstanceColumns.INSTANCE_DIRECTORY_PATH + "=?";
+        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] selectionArgs = {InstancePath};
         Cursor c = getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
         startManagingCursor(c);

@@ -68,7 +68,7 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns._ID + " integer primary key, " 
                + InstanceColumns.DISPLAY_NAME + " text not null, "
                + InstanceColumns.SUBMISSION_URI + " text, " 
-               + InstanceColumns.INSTANCE_DIRECTORY_PATH + " text not null, "
+               + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                + InstanceColumns.JR_FORM_ID + " text not null, "
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
@@ -233,7 +233,7 @@ public class InstanceProvider extends ContentProvider {
                 Cursor del = this.query(uri, null, where, whereArgs, null);
                 del.moveToPosition(-1);
                 while (del.moveToNext()) {
-                    deleteFileOrDir(del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_DIRECTORY_PATH)));
+                    deleteFileOrDir(del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                 }
                 del.close();
                 count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
@@ -246,7 +246,7 @@ public class InstanceProvider extends ContentProvider {
                 // This should only ever return 1 record.  I hope.
                 c.moveToPosition(-1);
                 while (c.moveToNext()) {
-                    deleteFileOrDir(c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_DIRECTORY_PATH)));           
+                    deleteFileOrDir(c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));           
                 }
                 c.close();
                 
@@ -321,7 +321,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
         sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
-        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_DIRECTORY_PATH, InstanceColumns.INSTANCE_DIRECTORY_PATH);
+        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.INSTANCE_FILE_PATH);
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, InstanceColumns.LAST_STATUS_CHANGE_DATE);

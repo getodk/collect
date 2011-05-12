@@ -167,7 +167,7 @@ public class InstanceUploaderList extends ListActivity {
         if (c.getCount() > 0) {
             c.moveToPosition(-1);
             while (c.moveToNext()) {
-                String s = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_DIRECTORY_PATH));
+                String s = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                 selectedInstances.add(s);
             }
 

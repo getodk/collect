@@ -110,7 +110,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         for (int i = 0; i < resultSize; i++) {
             ContentValues values = new ContentValues();
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-            String where = InstanceColumns.INSTANCE_DIRECTORY_PATH + " =?";
+            String where = InstanceColumns.INSTANCE_FILE_PATH + " =?";
             String [] selectionArgs = {result.get(i)};
             getContentResolver().update(InstanceColumns.CONTENT_URI, values, where, selectionArgs);
       }
