@@ -35,7 +35,8 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static String KEY_FIRST_RUN = "firstRun";
     public static String KEY_SHOW_SPLASH = "showSplash";
     public static String KEY_SPLASH_PATH = "splashPath";
-
+    public static String KEY_FONT_SIZE = "font_size";
+    
     public static String KEY_SERVER_URL = "server_url";
     public static String KEY_USERNAME = "username";
     public static String KEY_PASSWORD = "password";
@@ -75,6 +76,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         updateShowSplash();
         updateSplashPath();
+ 
+        updateFontSize();
 
     }
 
@@ -223,6 +226,8 @@ public class PreferencesActivity extends PreferenceActivity implements
             updateShowSplash();
         } else if (key.equals(KEY_SPLASH_PATH)) {
             updateSplashPath();
+        }else if (key.equals(KEY_FONT_SIZE)) {
+            updateFontSize();
         }
 
     }
@@ -284,6 +289,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
     }
 
+    private void updateFontSize() {
+        ListPreference lp = (ListPreference) findPreference(KEY_FONT_SIZE);
+        lp.setSummary(lp.getEntry());
+    }
 
     private void updateProtocol() {
         ListPreference lp = (ListPreference) findPreference(KEY_PROTOCOL);

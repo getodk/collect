@@ -50,6 +50,14 @@
 	</PreferenceCategory>
 	<PreferenceCategory
 		android:title="@string/client">
+		<ListPreference
+			android:id="@+id/font_size"
+			android:key="font_size"
+			android:title="@string/font_size"
+			android:dialogTitle="@string/change_font_size"
+			android:defaultValue="18"
+			android:entries="@array/font_size_entries"
+			android:entryValues="@array/font_size_entry_values" />
 		<CheckBoxPreference
 			android:id="@+id/show_splash"
 			android:key="showSplash"
@@ -59,6 +67,7 @@
 			android:key="splashPath"
 			android:defaultValue="@string/default_splash_path"
 			android:title="@string/splash_path"
-			android:dependency="showSplash" />
+			android:dependency="showSplash"
+			android:layout="?android:attr/preferenceLayoutChild" />
 	</PreferenceCategory>
 </PreferenceScreen>

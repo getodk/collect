@@ -33,7 +33,7 @@
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">Change Password</string>
-<string name="change_server_url">Change Server URL</string>
+<string name="change_server_url">Change URL</string>
 <string name="change_user">Change Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 <string name="clear_answer">Remove Response</string>
@@ -140,7 +140,7 @@
 <string name="send_data">Send Finished Data</string>
 <string name="send_data_button">Send Finished Data</string>
 <string name="send_selected_data">Send Selected</string>
-<string name="server_url">Server URL</string>
+<string name="server_url">URL</string>
 <string name="server_preferences">Server</string>
 <string name="toggle_selected">Toggle All</string>
 <string name="trigger">OK. Please continue.</string>
@@ -157,19 +157,22 @@
 <string name="first_run">Do first run on restart</string>
 <string name="client">Client</string>
 <string name="show_splash">Show splash screen</string>
-<string name="splash_path">Selected splash screen image</string>
+<string name="splash_path">Selected image</string>
 <string name="default_splash_path">ODK Default</string>
 <string name="select_another_image">Select another image</string>
 <string name="use_odk_default">Use default image</string>
-<string name="change_splash_path">Change splash screen image</string>
+<string name="change_splash_path">Change image</string>
 <string name="show_location">Show Location</string>
 <string name="app_url">http://opendatakit.org</string>
 <string name="keep_changes">Save Changes</string>
 <string name="go_to_location">Go to Location</string>
-<string name="change_formlist_url">Change Form List URL</string>
-<string name="protocol">Server Protocol</string>
-<string name="change_protocol">Change Transfer Protocol</string>
-<string name="change_submission_url">Change Submission URL</string>
-<string name="formlist_url">Form List URL</string>
+<string name="change_formlist_url">Change form list URL</string>
+<string name="protocol">Protocol</string>
+<string name="change_protocol">Change protocol</string>
+<string name="change_submission_url">Change submission URL</string>
+<string name="formlist_url">Form list URL</string>
 <string name="submission_url">Submission URL</string>
+<string name="font_size">Font size</string>
+<string name="change_font_size">Change font size</string>
+
 </resources>

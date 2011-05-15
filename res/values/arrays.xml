@@ -31,7 +31,7 @@
 		<item>saved</item>
 		<item>done</item>
 	</string-array>
-	<!--  make sure to match these values in preferences activity -->
+	<!-- make sure to match these values in preferences activity -->
 	<string-array
 		name="protocol_entry_values">
 		<item>aggregate_1_00</item>
@@ -43,5 +43,22 @@
 		<item>Aggregate 1.00</item>
 		<item>Aggregate 0.9X</item>
 		<item>Custom</item>
+	</string-array>
+	<string-array
+		name="font_size_entry_values">
+		<item>22</item>
+		<item>20</item>
+		<item>18</item>
+		<item>16</item>
+		<item>14</item>
+		<item></item>
+	</string-array>
+	<string-array
+		name="font_size_entries">
+		<item>Extra Large</item>
+		<item>Large</item>
+		<item>Medium</item>
+		<item>Small</item>
+		<item>Extra Small</item>
 	</string-array>
 </resources>
