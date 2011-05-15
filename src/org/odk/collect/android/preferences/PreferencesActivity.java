@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -35,12 +36,20 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static String KEY_SHOW_SPLASH = "showSplash";
     public static String KEY_SPLASH_PATH = "splashPath";
 
-    public static String KEY_SERVER = "server";
+    public static String KEY_SERVER_URL = "server_url";
     public static String KEY_USERNAME = "username";
     public static String KEY_PASSWORD = "password";
 
+    public static String KEY_PROTOCOL = "protocol";
+    public static String KEY_FORMLIST_URL = "formlist_url";
+    public static String KEY_SUBMISSION_URL = "submission_url";
+
     private PreferenceScreen mSplashPathPreference;
-    private String mSplashPath;
+    private EditTextPreference mSubmissionUrlPreference;
+    private EditTextPreference mFormListUrlPreference;
+    private EditTextPreference mServerUrlPreference;
+    private EditTextPreference mUsernamePreference;
+    private EditTextPreference mPasswordPreference;
     private Context mContext;
 
 
@@ -54,17 +63,24 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         setupSplashPathPreference();
 
-        updateShowSplash();
-        updateSplashPath();
-        updateServer();
+        updateProtocol();
+
+        updateServerUrl();
+
         updateUsername();
         updatePassword();
+
+        updateFormListUrl();
+        updateSubmissionUrl();
+
+        updateShowSplash();
+        updateSplashPath();
+
     }
 
 
     private void setupSplashPathPreference() {
-        mSplashPathPreference =
-            (PreferenceScreen) this.getPreferenceScreen().findPreference(KEY_SPLASH_PATH);
+        mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
 
         if (mSplashPathPreference != null) {
             mSplashPathPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -128,7 +144,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         Editor editor = sharedPreferences.edit();
         editor.putString(KEY_SPLASH_PATH, path);
         editor.commit();
-        
+
     }
 
 
@@ -186,8 +202,19 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_SERVER)) {
-            updateServer();
+        if (key.equals(KEY_PROTOCOL)) {
+            updateProtocol();
+            updateServerUrl();
+            updateUsername();
+            updatePassword();
+            updateFormListUrl();
+            updateSubmissionUrl();
+        } else if (key.equals(KEY_SERVER_URL)) {
+            updateServerUrl();
+        } else if (key.equals(KEY_FORMLIST_URL)) {
+            updateFormListUrl();
+        } else if (key.equals(KEY_SUBMISSION_URL)) {
+            updateSubmissionUrl();
         } else if (key.equals(KEY_USERNAME)) {
             updateUsername();
         } else if (key.equals(KEY_PASSWORD)) {
@@ -197,54 +224,124 @@ public class PreferencesActivity extends PreferenceActivity implements
         } else if (key.equals(KEY_SPLASH_PATH)) {
             updateSplashPath();
         }
+
     }
 
 
-    private void updateServer() {
-        EditTextPreference etp =
-            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
-        String s = etp.getText().trim();
-
-        if (UrlUtils.isValidUrl(s)) {
-            etp.setText(s);
-            etp.setSummary(s);
-        } else {
-            etp.setText((String) etp.getSummary());
-            Toast.makeText(getApplicationContext(), getString(R.string.url_error),
-                Toast.LENGTH_SHORT).show();
+    private void validateUrl(EditTextPreference preference) {
+        if (preference != null) {
+            String url = preference.getText();
+            if (UrlUtils.isValidUrl(url)) {
+                preference.setText(url);
+                preference.setSummary(url);
+            } else {
+                preference.setText((String) preference.getSummary());
+                Toast.makeText(getApplicationContext(), getString(R.string.url_error),
+                    Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+
+    private void updateServerUrl() {
+        mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
+        mServerUrlPreference.setSummary(mServerUrlPreference.getText());
     }
 
 
     private void updateSplashPath() {
-        mSplashPathPreference =
-            (PreferenceScreen) this.getPreferenceScreen().findPreference(KEY_SPLASH_PATH);
+        mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
         mSplashPathPreference.setSummary(mSplashPathPreference.getSharedPreferences().getString(
             KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
-
     }
 
 
     private void updateShowSplash() {
-        CheckBoxPreference cbp =
-            (CheckBoxPreference) this.getPreferenceScreen().findPreference(KEY_SHOW_SPLASH);
-        if (cbp != null && mSplashPathPreference != null) {
-            mSplashPathPreference.setEnabled(cbp.isChecked());
-        }
-
+        CheckBoxPreference cbp = (CheckBoxPreference) findPreference(KEY_SHOW_SPLASH);
     }
 
 
     private void updateUsername() {
-        EditTextPreference etp =
-            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_USERNAME);
-        etp.setSummary(etp.getText());
+        mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
+        mUsernamePreference.setSummary(mUsernamePreference.getText());
     }
 
 
     private void updatePassword() {
-        EditTextPreference etp =
-            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_PASSWORD);
-        etp.setSummary("***************");
+        mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
+        mPasswordPreference.setSummary("***************");
+    }
+
+
+    private void updateFormListUrl() {
+        mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
+        mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
+    }
+
+
+    private void updateSubmissionUrl() {
+        mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
+        mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
+    }
+
+
+    private void updateProtocol() {
+        ListPreference lp = (ListPreference) findPreference(KEY_PROTOCOL);
+        lp.setSummary(lp.getEntry());
+
+        String protocol = lp.getValue();
+        if (protocol.equals("aggregate_0_9x")) {
+            if (mServerUrlPreference != null) {
+                mServerUrlPreference.setEnabled(true);
+            }
+            if (mUsernamePreference != null) {
+                mUsernamePreference.setEnabled(false);
+            }
+            if (mPasswordPreference != null) {
+                mPasswordPreference.setEnabled(false);
+            }
+            if (mFormListUrlPreference != null) {
+                mFormListUrlPreference.setEnabled(false);
+            }
+            if (mSubmissionUrlPreference != null) {
+                mSubmissionUrlPreference.setEnabled(false);
+            }
+
+        } else if (protocol.equals("aggregate_1_00")) {
+            if (mServerUrlPreference != null) {
+                mServerUrlPreference.setEnabled(true);
+            }
+            if (mUsernamePreference != null) {
+                mUsernamePreference.setEnabled(true);
+            }
+            if (mPasswordPreference != null) {
+                mPasswordPreference.setEnabled(true);
+            }
+            if (mFormListUrlPreference != null) {
+                mFormListUrlPreference.setEnabled(false);
+            }
+            if (mSubmissionUrlPreference != null) {
+                mSubmissionUrlPreference.setEnabled(false);
+            }
+
+        } else {
+            if (mServerUrlPreference != null) {
+                mServerUrlPreference.setEnabled(false);
+            }
+            if (mUsernamePreference != null) {
+                mUsernamePreference.setEnabled(true);
+            }
+            if (mPasswordPreference != null) {
+                mPasswordPreference.setEnabled(true);
+            }
+            if (mFormListUrlPreference != null) {
+                mFormListUrlPreference.setEnabled(true);
+            }
+            if (mSubmissionUrlPreference != null) {
+                mSubmissionUrlPreference.setEnabled(true);
+            }
+
+        }
+
     }
 }

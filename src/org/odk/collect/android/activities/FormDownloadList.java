@@ -205,7 +205,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         SharedPreferences settings =
             PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String url =
-            settings.getString(PreferencesActivity.KEY_SERVER, getString(R.string.default_server))
+            settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server))
                     + "/formList";
 
         HashMap<String, String> arg = new HashMap<String, String>();

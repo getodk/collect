@@ -12,12 +12,20 @@
 	</PreferenceScreen>
 	<PreferenceCategory
 		android:title="@string/server_preferences">
+		<ListPreference
+			android:id="@+id/protocol"
+			android:key="protocol"
+			android:title="@string/protocol"
+			android:dialogTitle="@string/change_protocol"
+			android:defaultValue="aggregate_1_0"
+			android:entries="@array/protocol_entries"
+			android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
-			android:id="@+id/server"
-			android:key="server"
-			android:defaultValue="@string/default_server"
-			android:title="@string/server"
-			android:dialogTitle="@string/change_server" />
+			android:id="@+id/server_url"
+			android:key="server_url"
+			android:defaultValue="@string/default_server_url"
+			android:title="@string/server_url"
+			android:dialogTitle="@string/change_server_url" />
 		<EditTextPreference
 			android:id="@+id/username"
 			android:key="username"
@@ -29,6 +37,16 @@
 			android:title="@string/password"
 			android:dialogTitle="@string/change_password"
 			android:password="true" />
+		<EditTextPreference
+			android:id="@+id/formlist_url"
+			android:key="formlist_url"
+			android:title="@string/formlist_url"
+			android:dialogTitle="@string/change_formlist_url" />
+		<EditTextPreference
+			android:id="@+id/submission_url"
+			android:key="submission_url"
+			android:title="@string/submission_url"
+			android:dialogTitle="@string/change_submission_url" />
 	</PreferenceCategory>
 	<PreferenceCategory
 		android:title="@string/client">
@@ -40,6 +58,7 @@
 			android:id="@+id/splash_path"
 			android:key="splashPath"
 			android:defaultValue="@string/default_splash_path"
-			android:title="@string/splash_path" />
+			android:title="@string/splash_path"
+			android:dependency="showSplash" />
 	</PreferenceCategory>
 </PreferenceScreen>

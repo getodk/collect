@@ -74,7 +74,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
-                settings.getString(PreferencesActivity.KEY_SERVER, getString(R.string.default_server))
+                settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server))
                         + "/submission";
             mInstanceUploaderTask.setUploadServer(url);
             totalCount = instances.size();
