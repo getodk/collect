@@ -14,16 +14,24 @@
 
 package org.odk.collect.android.tasks;
 
-import org.odk.collect.android.activities.FormDownloadList;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.protocol.HttpContext;
+import org.javarosa.xform.parse.XFormParser;
+import org.kxml2.io.KXmlParser;
+import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.odk.collect.android.utilities.WebUtils;
+import org.xmlpull.v1.XmlPullParser;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -32,18 +40,16 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.List;
 
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task a
@@ -53,225 +59,588 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * 
  * @author carlhartung
  */
-public class DownloadFormsTask extends
-        AsyncTask<HashMap<String, String>, String, HashMap<String, String>> {
+public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String, String> {
 
-    // used to store form name if one errors
-    public static final String DL_FORM = "dlform";
-
-    // used to store error message if one occurs
-    public static final String DL_ERROR_MSG = "dlerrormessage";
-
-    // used to indicate that we tried to download forms. If it's not included we tried to download a
-    // form list.
-    public static final String DL_FORMS = "dlforms";
+    private static final String t = "DownlaodFormsTask";
 
     private static final int CONNECTION_TIMEOUT = 30000;
+    private static final String MD5_COLON_PREFIX = "md5:";
 
     private FormDownloaderListener mStateListener;
-    private ContentResolver mContentResolver;
+
+    private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+
+    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
+        "http://openrosa.org/xforms/xformsManifest";
 
 
-    public DownloadFormsTask(ContentResolver cr) {
-        mContentResolver = cr;
+    private boolean isXformsManifestNamespacedElement(Element e) {
+        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
+    }
+
+    private static class DocumentFetchResult {
+        public final String errorMessage;
+        public final Document doc;
+        public final boolean isOpenRosaResponse;
+
+
+        DocumentFetchResult(String msg) {
+            errorMessage = msg;
+            doc = null;
+            isOpenRosaResponse = false;
+        }
+
+
+        DocumentFetchResult(Document doc, boolean isOpenRosaResponse) {
+            errorMessage = null;
+            this.doc = doc;
+            this.isOpenRosaResponse = isOpenRosaResponse;
+        }
+    }
+
+
+    /**
+     * Common method for returning a parsed xml document given a url and the http context and client
+     * objects involved in the web connection.
+     * 
+     * @param urlString
+     * @param localContext
+     * @param httpclient
+     * @return
+     */
+    private DocumentFetchResult getXmlDocument(String urlString, HttpContext localContext,
+            HttpClient httpclient, int fetch_doc_failed, int fetch_doc_failed_no_detail) {
+        URI u = null;
+        try {
+            URL url = new URL(urlString);
+            u = url.toURI();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new DocumentFetchResult(e.getLocalizedMessage()
+            // + app.getString(R.string.while_accessing) + urlString);
+                    + ("while accessing") + urlString);
+        }
+
+        // set up request...
+        HttpGet req = WebUtils.createOpenRosaHttpGet(u);
+
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(req, localContext);
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null
+                    && (statusCode != 200 || !entity.getContentType().getValue().toLowerCase()
+                            .contains(HTTP_CONTENT_TYPE_TEXT_XML))) {
+                try {
+                    // don't really care about the stream...
+                    InputStream is = response.getEntity().getContent();
+                    // read to end of stream...
+                    final long count = 1024L;
+                    while (is.skip(count) == count)
+                        ;
+                    is.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statusCode != 200) {
+                String webError =
+                    response.getStatusLine().getReasonPhrase() + " (" + statusCode + ")";
+
+                return new DocumentFetchResult(
+                // app.getString(fetch_doc_failed)
+                        "fetch doc failed 1" + webError
+                        // + app.getString(R.string.while_accessing) + u.toString()
+                        // + app.getString(R.string.network_login_failure));
+                                + "while accessing" + u.toString() + "network login failure");
+            }
+
+            if (entity == null) {
+                Log.e(t, "No entity body returned from: " + u.toString() + " is not text/xml");
+                return new DocumentFetchResult(
+                // app.getString(fetch_doc_failed_no_detail)
+                        "fetch doc failed no detail"
+                        // + app.getString(R.string.while_accessing) + u.toString()
+                        // + app.getString(R.string.network_login_failure));
+                                + "while accessing" + u.toString() + "network login failure");
+            }
+
+            if (!entity.getContentType().getValue().toLowerCase()
+                    .contains(HTTP_CONTENT_TYPE_TEXT_XML)) {
+                Log.e(t, "ContentType: " + entity.getContentType().getValue() + "returned from: "
+                        + u.toString() + " is not text/xml");
+                return new DocumentFetchResult(
+                // app.getString(fetch_doc_failed_no_detail)
+                        "fetch doc failed no detail 2"
+                        // + app.getString(R.string.while_accessing) + u.toString()
+                        // + app.getString(R.string.network_login_failure));
+                                + "while accessing" + u.toString() + "network login failure");
+            }
+
+            // parse response
+            Document doc = null;
+            try {
+                InputStream is = null;
+                InputStreamReader isr = null;
+                try {
+                    is = entity.getContent();
+                    isr = new InputStreamReader(is, "UTF-8");
+                    doc = new Document();
+                    KXmlParser parser = new KXmlParser();
+                    parser.setInput(isr);
+                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+                    doc.parse(parser);
+                    isr.close();
+                } finally {
+                    if (isr != null) {
+                        try {
+                            isr.close();
+                        } catch (Exception e) {
+                            // no-op
+                        }
+                    }
+                    if (is != null) {
+                        try {
+                            is.close();
+                        } catch (Exception e) {
+                            // no-op
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(t, "Parsing failed with " + e.getMessage());
+                return new DocumentFetchResult(
+                // app.getString(fetch_doc_failed_no_detail)
+                        "fetch doc failed no detail 3"
+                        // + app.getString(R.string.while_accessing) + u.toString());
+                                + "while accessing " + u.toString());
+            }
+
+            boolean isOR = false;
+            Header[] fields = response.getHeaders(WebUtils.OPEN_ROSA_VERSION_HEADER);
+            if (fields != null && fields.length >= 1) {
+                isOR = true;
+                boolean versionMatch = false;
+                boolean first = true;
+                StringBuilder b = new StringBuilder();
+                for (Header h : fields) {
+                    if (WebUtils.OPEN_ROSA_VERSION.equals(h.getValue())) {
+                        versionMatch = true;
+                        break;
+                    }
+                    if (!first) {
+                        b.append("; ");
+                    }
+                    first = false;
+                    b.append(h.getValue());
+                }
+                if (!versionMatch) {
+                    Log.w(
+                        t,
+                        WebUtils.OPEN_ROSA_VERSION_HEADER + " unrecognized version(s): "
+                                + b.toString());
+                }
+            }
+            return new DocumentFetchResult(doc, isOR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new DocumentFetchResult(
+            // app.getString(fetch_doc_failed)
+                    "fetch doc failed 2"
+                    // + e.getLocalizedMessage() + app.getString(R.string.while_accessing)
+                            + e.getLocalizedMessage() + "while accessing" + u.toString());
+        }
     }
 
 
     @Override
-    protected HashMap<String, String> doInBackground(HashMap<String, String>... values) {
-        if (values != null && values[0].containsKey(FormDownloadList.LIST_URL)) {
-            // This gets a list of available forms from the specified server.
-            HashMap<String, String> formList = new HashMap<String, String>();
-            URL u = null;
+    protected String doInBackground(ArrayList<FormDetails>... values) {
+        ArrayList<FormDetails> toDownload = values[0];
+
+        String result = "";
+        int total = toDownload.size();
+        int count = 1;
+
+        for (int i = 0; i < total; i++) {
+            FormDetails fd = toDownload.get(i);
+            publishProgress(fd.formName, Integer.valueOf(count).toString(), Integer.valueOf(total)
+                    .toString());
             try {
-                u = new URL(values[0].get(FormDownloadList.LIST_URL));
-            } catch (MalformedURLException e) {
-                formList.put(DL_ERROR_MSG, e.getLocalizedMessage());
-                e.printStackTrace();
-            }
+                // get the xml file
+                File dl = downloadXform(fd.formName, fd.downloadUrl);
 
-            try {
-                // prevent deadlock when connection is invalid
-                URLConnection c = u.openConnection();
-                c.setConnectTimeout(CONNECTION_TIMEOUT);
-                c.setReadTimeout(CONNECTION_TIMEOUT);
+                String[] projection = {
+                        FormsColumns._ID, FormsColumns.FORM_FILE_PATH
+                };
+                String[] selectionArgs = {
+                    dl.getAbsolutePath()
+                };
+                String selection = FormsColumns.FORM_FILE_PATH + "=?";
+                Cursor alreadyExists =
+                    Collect.getInstance()
+                            .getContentResolver()
+                            .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs,
+                                null);
 
-                // write connection to file
-                InputStream is = c.getInputStream();
+                Uri uri = null;
+                if (!(alreadyExists.getCount() > 0)) {
+                    // doesn't exist, so insert it
 
-                Document doc = null;
-                try {
-                    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder db = dbf.newDocumentBuilder();
-                    doc = db.parse(is);
-                } catch (Exception e) {
-                    formList.put(DL_ERROR_MSG,
-                        "DocumentBuilderFactory error: " + e.getLocalizedMessage());
-                    e.printStackTrace();
+                    ContentValues v = new ContentValues();
+                    v.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
+                    v.put(FormsColumns.DISPLAY_NAME, fd.formName);
+                    v.put(FormsColumns.JR_FORM_ID, fd.formID);
+                    uri =
+                        Collect.getInstance().getContentResolver()
+                                .insert(FormsColumns.CONTENT_URI, v);
+                } else {
+                    alreadyExists.moveToFirst();
+                    uri =
+                        Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+                            alreadyExists.getString(alreadyExists.getColumnIndex(FormsColumns._ID)));
                 }
 
-                // populate HashMap with form names and urls
-                int formCount = 0;
-                if (doc != null) {
-                    NodeList formElements = doc.getElementsByTagName("form");
-                    formCount = formElements.getLength();
-                    Node n;
-                    NodeList childList;
-                    NamedNodeMap attrMap;
-                    for (int i = 0; i < formCount; i++) {
-                        n = formElements.item(i);
-                        childList = n.getChildNodes();
-                        attrMap = n.getAttributes();
-                        if (childList.getLength() > 0 && attrMap.getLength() > 0) {
-                            formList.put(childList.item(0).getNodeValue() + ".xml", attrMap.item(0)
-                                    .getNodeValue());
-                        }
-
-                    }
-                }
-            } catch (IOException e) {
-                formList.put(DL_ERROR_MSG, e.getLocalizedMessage());
-                e.printStackTrace();
-            }
-            return formList;
-
-        } else if (values != null) {
-            // This downloads the selected forms.
-            HashMap<String, String> toDownload = values[0];
-            HashMap<String, String> result = new HashMap<String, String>();
-            result.put(DL_FORMS, DL_FORMS); // indicate that we're trying to download forms.
-            ArrayList<String> formNames = new ArrayList<String>(toDownload.keySet());
-
-            // boolean error = false;
-            int total = formNames.size();
-            int count = 1;
-
-            for (int i = 0; i < total; i++) {
-                String form = formNames.get(i);
-                publishProgress(form, Integer.valueOf(count).toString(), Integer.valueOf(total)
-                        .toString());
-                try {
-                    File dl = downloadFile(form, toDownload.get(form));
-                    String hash = FileUtils.getMd5Hash(dl);
-                   
-                    String selection = FormsColumns.MD5_HASH + "=?";
-                    String[] selectionArgs = {hash};
-                    Cursor c = mContentResolver.query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                if (fd.manifestUrl != null) {
+                    Cursor c =
+                        Collect.getInstance().getContentResolver()
+                                .query(uri, null, null, null, null);
                     if (c.getCount() > 0) {
-                        // we alredy have this, so ignore it.
-                        // actually, delete it.
-                        dl.delete();
-                    } else {
-                        // add it
-                        ContentValues newValues = new ContentValues();
+                        // should be exactly 1
+                        c.moveToFirst();
 
-                        HashMap<String, String> fields = FileUtils.parseXML(dl);
-
-                        String title = fields.get(FileUtils.TITLE);
-                        String ui = fields.get(FileUtils.UI);
-                        String model = fields.get(FileUtils.MODEL);
-                        String formid = fields.get(FileUtils.FORMID);
-
-                        if (title != null) {
-                            newValues.put(FormsColumns.DISPLAY_NAME, title);
-                        } else {
-                            // TODO: Return some nasty error.
+                        String error =
+                            downloadManifestAndMediaFiles(
+                                c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)), fd,
+                                count, total);
+                        if (error != null) {
+                            result = error;
                         }
-                        if (formid != null) {
-                            newValues.put(FormsColumns.JR_FORM_ID, formid);
-                        } else {
-                            // TODO: return some nasty error.
-                        }
-                        if (ui != null) {
-                            newValues.put(FormsColumns.UI_VERSION, ui);
-                        }
-                        if (model != null) {
-                            newValues.put(FormsColumns.MODEL_VERSION, model);
-                        }
-
-                        newValues.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
-
-                        Uri uri = mContentResolver.insert(FormsColumns.CONTENT_URI, newValues);
                     }
-
-                } catch (SocketTimeoutException se) {
-                    se.printStackTrace();
-                    result.put(DL_FORM, form);
-                    result.put(DL_ERROR_MSG, "Unknown timeout exception");
-                    break;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    result.put(DL_FORM, form);
-                    result.put(DL_ERROR_MSG, e.getLocalizedMessage());
-                    break;
-                }
-                count++;
+                } else {
+                    //TODO:  manifest was null?                
+                    }
+            } catch (SocketTimeoutException se) {
+                se.printStackTrace();
+                result = "socket timeout exception";
+                // result.put(DL_FORM, new FormDetails(fd.formName));
+                // result.put(DL_ERROR_MSG, new FormDetails(app.getString(R.string.timeout_error)
+                // + se.getLocalizedMessage() + app.getString(R.string.while_accessing)
+                // + fd.downloadUrl + app.getString(R.string.network_login_failure)));
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = "exeception e";
+                // result.put(DL_FORM, new FormDetails(fd.formName));
+                // result.put(DL_ERROR_MSG, new FormDetails(e.getLocalizedMessage()
+                // + app.getString(R.string.while_accessing) + fd.downloadUrl
+                // + app.getString(R.string.network_login_failure)));
+                break;
             }
-
-            return result;
+            count++;
         }
 
-        return null;
+        return result;
     }
 
 
-    private File downloadFile(String name, String url) throws IOException {
-        // create url
-        URL u = null;
+    /**
+     * Takes the formName and the URL and attempts to download the specified file. Returns a file
+     * object representing the downloaded file.
+     * 
+     * @param formName
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    private File downloadXform(String formName, String url) throws Exception {
+
         File f = null;
-        try {
-            u = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            throw e;
-        }
 
-        try {
-            // prevent deadlock when connection is invalid
-            URLConnection c = u.openConnection();
-            c.setConnectTimeout(CONNECTION_TIMEOUT);
-            c.setReadTimeout(CONNECTION_TIMEOUT);
-
-            // write connection to file
-            InputStream is = c.getInputStream();
-
-            String path = FileUtils.FORMS_PATH + name;
-            int i = 2;
-            int slash = path.lastIndexOf("/") + 1;
-            int period = path.lastIndexOf(".") + 1;
-            String base = path.substring(0, slash - 1);
-            String filename = path.substring(slash, period - 1);
-            String ext = path.substring(period);
+        // clean up friendly form name...
+        String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
+        rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
+        rootName = rootName.trim();
+        FileUtils.createFolder(FileUtils.FORMS_PATH);
+        // proposed name of xml file...
+        String path = FileUtils.FORMS_PATH + rootName + ".xml";
+        int i = 2;
+        f = new File(path);
+        while (f.exists()) {
+            path = FileUtils.FORMS_PATH + rootName + "_" + i + ".xml";
             f = new File(path);
-            while (f.exists()) {
-                f = new File(base + "/" + filename + "_" + i + "." + ext);
-                i++;
-            }
-
-            OutputStream os = new FileOutputStream(f);
-            byte buf[] = new byte[1024];
-            int len;
-            while ((len = is.read(buf)) > 0) {
-                os.write(buf, 0, len);
-            }
-            os.flush();
-            os.close();
-            is.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+            i++;
         }
+
+        downloadFile(f, url);
+
+        // we've downloaded the file, and we may have renamed it
+        // make sure it's not the same as a file we already have
+        String[] projection = {
+            FormsColumns.FORM_FILE_PATH
+        };
+        String[] selectionArgs = {
+            FileUtils.getMd5Hash(f)
+        };
+        String selection = FormsColumns.MD5_HASH + "=?";
+
+        Cursor c =
+            Collect.getInstance().getContentResolver()
+                    .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+        if (c.getCount() > 0) {
+            // Should be at most, 1
+            c.moveToFirst();
+
+            // delete the file we just downloaded, because it's a duplicate
+            f.delete();
+
+            // set the file returned to the file we already had
+            f = new File(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+        }
+        c.close();
 
         return f;
     }
 
 
+    /**
+     * Common routine to download a document from the downloadUrl and save the contents in the file
+     * 'f'. Shared by media file download and form file download.
+     * 
+     * @param f
+     * @param downloadUrl
+     * @throws Exception
+     */
+    private void downloadFile(File f, String downloadUrl) throws Exception {
+        URI uri = null;
+        try {
+            URL url = new URL(downloadUrl);
+            uri = url.toURI();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+
+        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+
+        // set up request...
+        HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
+
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(req, localContext);
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            if (statusCode != 200) {
+                String errMsg =
+                    "fetch file failed; " + f.getAbsolutePath()
+                            + response.getStatusLine().getReasonPhrase() + " (" + statusCode + ")";
+                Log.e(t, "Fetch of " + f.getAbsolutePath() + " failed: "
+                        + response.getStatusLine().getReasonPhrase() + " (" + statusCode + ")");
+                throw new Exception(errMsg);
+            }
+
+            // write connection to file
+            InputStream is = null;
+            OutputStream os = null;
+            try {
+                is = response.getEntity().getContent();
+                os = new FileOutputStream(f);
+                byte buf[] = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (Exception e) {
+                    }
+                }
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    private static class MediaFile {
+        final String filename;
+        final String hash;
+        final String downloadUrl;
+
+
+        MediaFile(String filename, String hash, String downloadUrl) {
+            this.filename = filename;
+            this.hash = hash;
+            this.downloadUrl = downloadUrl;
+        }
+    }
+
+
+    private String downloadManifestAndMediaFiles(String mediaPath, FormDetails fd, int count,
+            int total) {
+        if (fd.manifestUrl == null)
+            return null;
+
+        publishProgress(fd.formName + " getting manifest ", Integer.valueOf(count).toString(),
+            Integer.valueOf(total).toString());
+
+        List<MediaFile> files = new ArrayList<MediaFile>();
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+
+        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+
+        DocumentFetchResult result =
+            getXmlDocument(fd.manifestUrl, localContext, httpclient, 555, 777);
+
+        if (result.errorMessage != null) {
+            return result.errorMessage;
+        }
+
+        String errMessage =
+        // app.getString(R.string.fetch_manifest_failed_no_detail)
+        // + app.getString(R.string.while_accessing)
+            "manifest failed no detail 1 " + "while accessing " + fd.manifestUrl;
+
+        if (!result.isOpenRosaResponse) {
+            Log.e(t, "Manifest reply doesn't report an OpenRosa version -- bad server?");
+            return errMessage;
+        }
+
+        // Attempt OpenRosa 1.0 parsing
+        Element manifestElement = result.doc.getRootElement();
+        if (!manifestElement.getName().equals("manifest")) {
+            Log.e(t, "Root element is not <manifest> -- was " + manifestElement.getName());
+            return errMessage;
+        }
+        String namespace = manifestElement.getNamespace();
+        if (!isXformsManifestNamespacedElement(manifestElement)) {
+            Log.e(t, "Root element Namespace is incorrect: " + namespace);
+            return errMessage;
+        }
+        int nElements = manifestElement.getChildCount();
+        for (int i = 0; i < nElements; ++i) {
+            if (manifestElement.getType(i) != Element.ELEMENT) {
+                // e.g., whitespace (text)
+                continue;
+            }
+            Element mediaFileElement = (Element) manifestElement.getElement(i);
+            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
+                // someone else's extension?
+                continue;
+            }
+            String name = mediaFileElement.getName();
+            if (name.equalsIgnoreCase("mediaFile")) {
+                String filename = null;
+                String hash = null;
+                String downloadUrl = null;
+                // don't process descriptionUrl
+                int childCount = mediaFileElement.getChildCount();
+                for (int j = 0; j < childCount; ++j) {
+                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
+                        // e.g., whitespace (text)
+                        continue;
+                    }
+                    Element child = mediaFileElement.getElement(j);
+                    if (!isXformsManifestNamespacedElement(child)) {
+                        // someone else's extension?
+                        continue;
+                    }
+                    String tag = child.getName();
+                    if (tag.equals("filename")) {
+                        filename = XFormParser.getXMLText(child, true);
+                        if (filename != null && filename.length() == 0) {
+                            filename = null;
+                        }
+                    } else if (tag.equals("hash")) {
+                        hash = XFormParser.getXMLText(child, true);
+                        if (hash != null && hash.length() == 0) {
+                            hash = null;
+                        }
+                    } else if (tag.equals("downloadUrl")) {
+                        downloadUrl = XFormParser.getXMLText(child, true);
+                        if (downloadUrl != null && downloadUrl.length() == 0) {
+                            downloadUrl = null;
+                        }
+                    }
+                }
+                if (filename == null || downloadUrl == null || hash == null) {
+                    Log.e(t, "Manifest entry " + Integer.toString(i)
+                            + " is missing one or more tags: filename, hash, or downloadUrl");
+                    return errMessage;
+                }
+                files.add(new MediaFile(filename, hash, downloadUrl));
+            }
+        }
+
+        // OK we now have the full set of files to download...
+        Log.i(t, "Downloading " + files.size() + " media files.");
+        int mCount = 0;
+        if (files.size() > 0) {
+            FileUtils.createFolder(mediaPath);
+            File mediaDir = new File(mediaPath);
+            for (MediaFile toDownload : files) {
+                if (isCancelled()) {
+                    return "cancelled";
+                }
+                ++mCount;
+                publishProgress(fd.formName + "getting media files count: " + mCount + " and size "
+                        + files.size(), Integer.valueOf(count).toString(), Integer.valueOf(total)
+                        .toString());
+                try {
+                    File mediaFile = new File(mediaDir, toDownload.filename);
+
+                    String currentFileHash = FileUtils.getMd5Hash(mediaFile);
+                    String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
+
+                    if (!mediaFile.exists()) {
+                        downloadFile(mediaFile, toDownload.downloadUrl);
+                    } else {
+                        if (!currentFileHash.contentEquals(downloadFileHash)) {
+                            // if the hashes match, it's the same file
+                            // otherwise delete our current one and replace it with the new one
+                            mediaFile.delete();
+                            downloadFile(mediaFile, toDownload.downloadUrl);
+                        } else {
+                            // exists, and the hash is the same
+                            // no need to download it again
+                        }
+                    }
+                } catch (Exception e) {
+                    return e.getLocalizedMessage();
+                }
+            }
+        }
+        return null;
+    }
+
+
     @Override
-    protected void onPostExecute(HashMap<String, String> value) {
+    protected void onPostExecute(String value) {
         synchronized (this) {
             if (mStateListener != null) {
-                mStateListener.formDownloadingComplete(value);
+                mStateListener.formsDownloadingComplete(value);
             }
         }
     }
@@ -295,4 +664,5 @@ public class DownloadFormsTask extends
             mStateListener = sl;
         }
     }
+
 }
