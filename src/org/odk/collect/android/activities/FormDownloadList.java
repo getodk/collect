@@ -14,16 +14,15 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.listeners.FormListDownloaderListener;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.WebUtils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,29 +32,37 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadList extends ListActivity implements FormDownloaderListener {
+public class FormDownloadList extends ListActivity implements FormListDownloaderListener,
+        FormDownloaderListener {
     private static final String t = "RemoveFileManageList";
 
     private static final int PROGRESS_DIALOG = 1;
+    private static final int AUTH_DIALOG = 2;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_TOGGLED_KEY = "toggled";
@@ -76,11 +83,12 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     private ProgressDialog mProgressDialog;
     private Button mActionButton;
 
+    private DownloadFormListTask mDownloadFormListTask;
     private DownloadFormsTask mDownloadFormsTask;
     private Button mToggleButton;
     private Button mRefreshButton;
 
-    private HashMap<String, String> mFormNamesAndURLs;
+    private HashMap<String, FormDetails> mFormNamesAndURLs;
     private ArrayAdapter<String> mFileAdapter;
 
     private boolean mToggled = false;
@@ -138,7 +146,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             // If the screen has rotated, the hashmap with the form names and urls is passed here.
             if (savedInstanceState.containsKey(BUNDLE_FORM_LIST)) {
                 mFormNamesAndURLs =
-                    (HashMap<String, String>) savedInstanceState.getSerializable(BUNDLE_FORM_LIST);
+                    (HashMap<String, FormDetails>) savedInstanceState
+                            .getSerializable(BUNDLE_FORM_LIST);
             }
             // indicating whether or not select-all is on or off.
             if (savedInstanceState.containsKey(BUNDLE_TOGGLED_KEY)) {
@@ -168,15 +177,34 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             createAlertDialog(mAlertTitle, mAlertMsg);
         }
 
-        mDownloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
-        if (mDownloadFormsTask == null) {
-            downloadFormList();
-        } else if (mDownloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-            try {
-                dismissDialog(PROGRESS_DIALOG);
-            } catch (IllegalArgumentException e) {
-                Log.w(t, "Attempting to close a dialog that was not previously opened");
+        if (getLastNonConfigurationInstance() instanceof DownloadFormListTask) {
+            mDownloadFormListTask = (DownloadFormListTask) getLastNonConfigurationInstance();
+            if (mDownloadFormListTask == null) {
+                Log.e("Carl", "downloading forms list...");
+                downloadFormList();
+            } else if (mDownloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
+                try {
+                    dismissDialog(PROGRESS_DIALOG);
+                } catch (IllegalArgumentException e) {
+                    Log.w(t, "Attempting to close a dialog that was not previously opened");
+                }
+
+                buildView();
             }
+        } else if (getLastNonConfigurationInstance() instanceof DownloadFormsTask) {
+            mDownloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
+
+            if (mDownloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
+                try {
+                    dismissDialog(PROGRESS_DIALOG);
+                } catch (IllegalArgumentException e) {
+                    Log.w(t, "Attempting to close a dialog that was not previously opened");
+                }
+                mDownloadFormsTask = null;
+                buildView();
+            }
+        } else if (getLastNonConfigurationInstance() == null) {
+            downloadFormList();
             buildView();
         }
     }
@@ -189,9 +217,8 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     }
 
 
-    @SuppressWarnings("unchecked")
     private void downloadFormList() {
-        mFormNamesAndURLs = new HashMap<String, String>();
+        mFormNamesAndURLs = new HashMap<String, FormDetails>();
         if (mProgressDialog != null) {
             // This is needed because onPrepareDialog() is broken in 1.6.
             mProgressDialog.setMessage(getString(R.string.please_wait));
@@ -199,18 +226,9 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         showDialog(PROGRESS_DIALOG);
 
         FileUtils.createFolder(FileUtils.CACHE_PATH);
-        mDownloadFormsTask = new DownloadFormsTask(getContentResolver());
-        mDownloadFormsTask.setDownloaderListener(this);
-
-        SharedPreferences settings =
-            PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String url =
-            settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server))
-                    + "/formList";
-
-        HashMap<String, String> arg = new HashMap<String, String>();
-        arg.put(LIST_URL, url);
-        mDownloadFormsTask.execute(arg);
+        mDownloadFormListTask = new DownloadFormListTask(getContentResolver());
+        mDownloadFormListTask.setDownloaderListener(this);
+        mDownloadFormListTask.execute();
     }
 
 
@@ -285,7 +303,15 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            mDownloadFormsTask.setDownloaderListener(null);
+                            // we use the same progress dialog for both
+                            // so whatever isn't null is running
+                            if (mDownloadFormListTask != null) {
+                                mDownloadFormListTask.setDownloaderListener(null);
+                            }
+                            if (mDownloadFormsTask != null) {
+                                mDownloadFormsTask.cancel(true);
+                                mDownloadFormsTask.setDownloaderListener(null);
+                            }
                         }
                     };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
@@ -295,6 +321,47 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
+            case AUTH_DIALOG:
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle("Server Requires Authentication");
+                b.setMessage("Please enter usernamd and password");
+
+                LayoutInflater factory = LayoutInflater.from(this);
+                final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
+
+                b.setView(dialogView);
+                b.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
+                        EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+
+                        SharedPreferences settings =
+                            PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                        String server =
+                            settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                                getString(R.string.default_server_url) + "formList");
+                        Uri u = Uri.parse(server);
+
+                        WebUtils.addCredentials(username.getText().toString(), password.getText()
+                                .toString(), u.getHost());
+
+                        downloadFormList();
+                    }
+                });
+                b.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TOOD: cancel
+
+                    }
+                });
+
+                b.setCancelable(false);
+                mAlertShowing = false;
+                return b.create();
         }
         return null;
     }
@@ -306,13 +373,13 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     @SuppressWarnings("unchecked")
     private void downloadSelectedFiles() {
         totalCount = 0;
-        HashMap<String, String> filesToDownload = new HashMap<String, String>();
+        ArrayList<FormDetails> filesToDownload = new ArrayList<FormDetails>();
 
         SparseBooleanArray sba = getListView().getCheckedItemPositions();
         for (int i = 0; i < getListView().getCount(); i++) {
             if (sba.get(i, false)) {
                 String form = (String) getListAdapter().getItem(i);
-                filesToDownload.put(form, mFormNamesAndURLs.get(form));
+                filesToDownload.add(mFormNamesAndURLs.get(form));
             }
         }
         totalCount = filesToDownload.size();
@@ -322,7 +389,7 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
             showDialog(PROGRESS_DIALOG);
 
             FileUtils.createFolder(FileUtils.FORMS_PATH);
-            mDownloadFormsTask = new DownloadFormsTask(getContentResolver());
+            mDownloadFormsTask = new DownloadFormsTask();
             mDownloadFormsTask.setDownloaderListener(this);
             mDownloadFormsTask.execute(filesToDownload);
         } else {
@@ -334,12 +401,19 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
     @Override
     public Object onRetainNonConfigurationInstance() {
-        return mDownloadFormsTask;
+        if (mDownloadFormsTask != null) {
+            return mDownloadFormsTask;
+        } else {
+            return mDownloadFormListTask;
+        }
     }
 
 
     @Override
     protected void onDestroy() {
+        if (mDownloadFormListTask != null) {
+            mDownloadFormListTask.setDownloaderListener(null);
+        }
         if (mDownloadFormsTask != null) {
             mDownloadFormsTask.setDownloaderListener(null);
         }
@@ -349,6 +423,9 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
 
     @Override
     protected void onResume() {
+        if (mDownloadFormListTask != null) {
+            mDownloadFormListTask.setDownloaderListener(this);
+        }
         if (mDownloadFormsTask != null) {
             mDownloadFormsTask.setDownloaderListener(this);
         }
@@ -365,64 +442,30 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
     }
 
 
-    @Override
-    public void formDownloadingComplete(HashMap<String, String> result) {
+    public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
         dismissDialog(PROGRESS_DIALOG);
         String dialogMessage = null;
         String dialogTitle = null;
 
-        if (result != null) {
-            if (result.containsKey(DownloadFormsTask.DL_FORMS)) {
-                // We tried to download one or more forms
-                if (!result.containsKey(DownloadFormsTask.DL_ERROR_MSG)) {
-                    // Download of forms succeeded
-                    dialogTitle = getString(R.string.download_complete);
-                    dialogMessage = getString(R.string.download_all_successful);
-
-                    result.remove(DownloadFormsTask.DL_FORMS);
-                    if (result.size() > 0) {
-                        // after we remove DL_FORMS, if we have anything left in the
-                        // hashmap it's the renamed files in <old, new>
-                        Set<String> keys = result.keySet();
-                        Iterator<String> i = keys.iterator();
-                        while (i.hasNext()) {
-                            String form = i.next();
-                            dialogMessage +=
-                                " " + getString(R.string.form_renamed, form, result.get(form));
-                        }
-                    }
-                    mSuccess = true;
-                } else {
-                    // Download of at least one form had an error
-                    String formName = result.get(DownloadFormsTask.DL_FORM);
-                    String errorMsg = result.get(DownloadFormsTask.DL_ERROR_MSG);
-
-                    dialogMessage =
-                        getString(R.string.download_failed_with_error, formName, errorMsg);
-                    dialogTitle = getString(R.string.error_downloading);
-                    mSuccess = false;
-                }
-                createAlertDialog(dialogTitle, dialogMessage);
-            } else {
-                // We tried to download a formlist
-                if (!result.containsKey(DownloadFormsTask.DL_ERROR_MSG)) {
-                    // Download succeeded
-                    mFormNamesAndURLs = result;
-                    mSuccess = true;
-                } else {
-                    // Download failed
-                    dialogMessage =
-                        getString(R.string.list_failed_with_error,
-                            result.get(DownloadFormsTask.DL_ERROR_MSG));
-                    dialogTitle = getString(R.string.load_remote_form_error);
-                    createAlertDialog(dialogTitle, dialogMessage);
-
-                    mSuccess = false;
-                }
-            }
-        } else {
-            Log.e(t, "result was null when downloading");
+        if (result == null) {
+            Log.e(t, "some bad error");
+            return;
         }
+        if (!result.containsKey(DownloadFormListTask.DL_ERROR_MSG)) {
+            // Download succeeded
+            mFormNamesAndURLs = result;
+            mSuccess = true;
+        } else {
+            // Download failed
+            dialogMessage =
+                getString(R.string.list_failed_with_error,
+                    result.get(DownloadFormListTask.DL_ERROR_MSG).errorStr);
+            dialogTitle = getString(R.string.load_remote_form_error);
+            createAlertDialog(dialogTitle, dialogMessage);
+
+            mSuccess = false;
+        }
+
         buildView();
     }
 
@@ -467,5 +510,58 @@ public class FormDownloadList extends ListActivity implements FormDownloaderList
         mProgressDialog.setMessage(mAlertMsg);
     }
 
-}
 
+    @Override
+    public void formListDownloadingError(int errorCode, String msg) {
+        if (mProgressDialog.isShowing()) {
+            // should always be true here
+            mProgressDialog.dismiss();
+        }
+        switch (errorCode) {
+            case 401:
+                String message = getString(R.string.list_failed_with_error, msg);
+                showDialog(AUTH_DIALOG);
+                break;
+            default:
+                String dialogMessage = getString(R.string.list_failed_with_error, msg);
+                String dialogTitle = getString(R.string.load_remote_form_error);
+                createAlertDialog(dialogTitle, dialogMessage);
+
+        }
+
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void formsDownloadingComplete(String result) {
+
+        if (mDownloadFormsTask != null) {
+            mDownloadFormsTask.setDownloaderListener(null);
+            mDownloadFormsTask = null;
+        }
+
+        if (mProgressDialog.isShowing()) {
+            // should always be true here
+            mProgressDialog.dismiss();
+        }
+
+        if (result.contentEquals("401")) {
+            mDownloadFormsTask = new DownloadFormsTask();
+            mDownloadFormsTask.setDownloaderListener(this);
+
+            ArrayList<FormDetails> filesToDownload = new ArrayList<FormDetails>();
+
+            SparseBooleanArray sba = getListView().getCheckedItemPositions();
+            for (int i = 0; i < getListView().getCount(); i++) {
+                if (sba.get(i, false)) {
+                    String form = (String) getListAdapter().getItem(i);
+                    filesToDownload.add(mFormNamesAndURLs.get(form));
+                }
+            }
+
+            mDownloadFormsTask.execute(filesToDownload);
+        }
+    }
+
+}
