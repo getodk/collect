@@ -299,24 +299,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         lp.setSummary(lp.getEntry());
 
         String protocol = lp.getValue();
-        if (protocol.equals("aggregate_0_9x")) {
-            if (mServerUrlPreference != null) {
-                mServerUrlPreference.setEnabled(true);
-            }
-            if (mUsernamePreference != null) {
-                mUsernamePreference.setEnabled(false);
-            }
-            if (mPasswordPreference != null) {
-                mPasswordPreference.setEnabled(false);
-            }
-            if (mFormListUrlPreference != null) {
-                mFormListUrlPreference.setEnabled(false);
-            }
-            if (mSubmissionUrlPreference != null) {
-                mSubmissionUrlPreference.setEnabled(false);
-            }
-
-        } else if (protocol.equals("aggregate_1_00")) {
+        if (protocol.equals("odk_default")) {
             if (mServerUrlPreference != null) {
                 mServerUrlPreference.setEnabled(true);
             }
