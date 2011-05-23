@@ -16,64 +16,51 @@ the License.
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-
 	<TextView
 		android:id="@+id/pathtext"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_margin="4dp"
-		/>
-
-	<!--
-		would prefer not to use an extra LinearLayout here, but weights don't
-		seem to work properly in RelativeLayout
-	-->
+		android:layout_margin="4dp" />
+	<!-- would prefer not to use an extra LinearLayout here, but weights don't 
+		seem to work properly in RelativeLayout -->
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
 		android:layout_alignParentBottom="true"
 		android:id="@+id/buttonholder">
-			
-	          <Button
-      android:id="@+id/jumpPreviousButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/jump_to_previous"
-      android:padding="12dp"
-     android:textSize="16dp"
-     android:layout_weight="1"/>
-            
-	
-	
-    <Button
-      android:id="@+id/jumpBeginningButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/jump_to_beginning"
-           android:padding="12dp"
-     android:textSize="16dp" 
-      android:layout_weight="1" />
-
-          <Button
-      android:id="@+id/jumpEndButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/jump_to_end"
-           android:padding="12dp"
-     android:textSize="16dp" 
-      android:layout_weight="1" />
-            
-
+		<Button
+			android:id="@+id/jumpPreviousButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/jump_to_previous"
+			android:padding="12dp"
+			android:textSize="16dp"
+			android:layout_weight="1" />
+		<Button
+			android:id="@+id/jumpBeginningButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/jump_to_beginning"
+			android:padding="12dp"
+			android:textSize="16dp"
+			android:layout_weight="1" />
+		<Button
+			android:id="@+id/jumpEndButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/jump_to_end"
+			android:padding="12dp"
+			android:textSize="16dp"
+			android:layout_weight="1" />
 	</LinearLayout>
-
 	<ListView
 		android:id="@android:id/list"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_above="@id/buttonholder" 
-		android:layout_below="@id/pathtext"/>
-
+		android:layout_above="@id/buttonholder"
+		android:layout_below="@id/pathtext"
+		android:scrollbarAlwaysDrawVerticalTrack="true" />
 	<TextView
 		android:id="@android:id/empty"
 		android:layout_width="fill_parent"
@@ -82,10 +69,5 @@ the License.
 		android:textSize="19dp"
 		android:padding="20dp"
 		android:gravity="center"
-		android:background="@drawable/white"/>
-		
-	
-
-
-
+		android:background="@drawable/white" />
 </RelativeLayout>
