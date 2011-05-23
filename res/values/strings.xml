@@ -174,5 +174,8 @@
 <string name="submission_url">Submission URL</string>
 <string name="font_size">Font size</string>
 <string name="change_font_size">Change font size</string>
+<string name="form_scan_starting">Scanning for forms...</string>
+<string name="form_scan_finished">Form scan completed</string>
+
 
 </resources>

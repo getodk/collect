@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -60,10 +61,14 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
+            
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(getString(R.string.form_scan_starting));
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
-            // TODO: set something to progressing
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(getString(R.string.form_scan_starting));
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -168,8 +173,11 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
 
     @Override
     public void SyncComplete() {
+
         // TODO: set finished
 
+        TextView tv = (TextView) findViewById(R.id.status_text);
+        tv.setText(getString(R.string.form_scan_finished));
     }
 
 }

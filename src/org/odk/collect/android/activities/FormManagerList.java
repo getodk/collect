@@ -37,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -99,9 +100,15 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
-            // TODO: set something to progressing
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(getString(R.string.form_scan_starting));
         }
 
+        if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(getString(R.string.form_scan_starting));
+        }
+        
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
             // TODO: set done here.
             mDiskSyncTask.setDiskSyncListener(null);
@@ -266,5 +273,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
     @Override
     public void SyncComplete() {
         // TODO: set something done.  probably set text box.
+        
+        TextView tv = (TextView) findViewById(R.id.status_text);
+        tv.setText(getString(R.string.form_scan_finished));
     }
 }

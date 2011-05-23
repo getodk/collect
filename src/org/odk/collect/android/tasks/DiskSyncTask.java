@@ -143,7 +143,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
         if (mListener != null) {
-            // mListener.SyncComplete();
+            mListener.SyncComplete();
         }
     }
 

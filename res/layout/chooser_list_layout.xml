@@ -18,23 +18,35 @@ the License.
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-
-	<ListView
-		android:id="@id/android:list"
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent" />
-
-	<TextView
-		android:id="@android:id/empty"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:text="@string/no_items_display"
-		android:textSize="19dp"
-		android:paddingLeft="20dp"
-		android:paddingRight="20dp"
-		android:gravity="center"
-		android:background="@drawable/white"
-		android:textColor="@drawable/black" />
-
+		android:layout_height="fill_parent">
+		<TextView
+			android:id="@+id/status_text"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/form_scan_finished"
+			android:textSize="14dp"
+			android:padding="5dp"
+			android:paddingTop="0dp"
+			android:background="#DDDDDD" />
+		<ListView
+			android:id="@id/android:list"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+			 <TextView
+    android:id="@android:id/empty"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:text="@string/no_items_display"
+    android:textSize="19dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:gravity="center"
+    android:background="@drawable/white"
+    android:textColor="@drawable/black" />
+	</LinearLayout>
 </LinearLayout>
  
