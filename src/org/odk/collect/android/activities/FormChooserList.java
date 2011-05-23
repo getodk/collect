@@ -82,12 +82,12 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
                 FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[] {
-                android.R.id.text1, android.R.id.text2
+                R.id.text1, R.id.text2
         };
 
         // render total instance view
         SimpleCursorAdapter instances =
-            new SimpleCursorAdapter(this, R.layout.two_line_list_item, c, data, view);
+            new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
         setListAdapter(instances);
 
     }

@@ -18,6 +18,7 @@ import org.odk.collect.android.logic.HierarchyElement;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class HierarchyElementView extends RelativeLayout {
         mIcon = new ImageView(context);
         mIcon.setImageDrawable(it.getIcon());
         mIcon.setId(1);
-        mIcon.setPadding(5, 1, 5, 0);
+       // mIcon.setPadding(0, 0, dipToPx(4), 0);
         addView(mIcon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
@@ -45,6 +46,7 @@ public class HierarchyElementView extends RelativeLayout {
         mPrimaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
         mPrimaryTextView.setText(it.getPrimaryText());
         mPrimaryTextView.setId(2);
+        mPrimaryTextView.setGravity(Gravity.CENTER_VERTICAL);
         LayoutParams l =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         l.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
@@ -52,15 +54,17 @@ public class HierarchyElementView extends RelativeLayout {
 
         mSecondaryTextView = new TextView(context);
         mSecondaryTextView.setText(it.getSecondaryText());
-//        mSecondaryTextView.setPadding(, 0, 7, 0);
         mSecondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
+        mSecondaryTextView.setGravity(Gravity.CENTER_VERTICAL);
+
         LayoutParams lp =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.BELOW, mPrimaryTextView.getId());
         lp.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
         addView(mSecondaryTextView, lp);
 
-        setPadding(5, 10, 5, 7);
+        setMinimumHeight(android.R.attr.listPreferredItemHeight);
+        setPadding(dipToPx(8), dipToPx(4), dipToPx(8), dipToPx(8));
 
     }
 
@@ -91,6 +95,10 @@ public class HierarchyElementView extends RelativeLayout {
         } else {
             mSecondaryTextView.setVisibility(GONE);
         }
+    }
+    
+    public int dipToPx(int dip) {
+        return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
     }
 
 }
