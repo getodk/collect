@@ -38,7 +38,8 @@ public class HierarchyElementView extends RelativeLayout {
         mIcon = new ImageView(context);
         mIcon.setImageDrawable(it.getIcon());
         mIcon.setId(1);
-       // mIcon.setPadding(0, 0, dipToPx(4), 0);
+        mIcon.setPadding(0, 0, dipToPx(4), 0);
+
         addView(mIcon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
@@ -63,7 +64,6 @@ public class HierarchyElementView extends RelativeLayout {
         lp.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
         addView(mSecondaryTextView, lp);
 
-        setMinimumHeight(android.R.attr.listPreferredItemHeight);
         setPadding(dipToPx(8), dipToPx(4), dipToPx(8), dipToPx(8));
 
     }
@@ -92,8 +92,12 @@ public class HierarchyElementView extends RelativeLayout {
     public void showSecondary(boolean bool) {
         if (bool) {
             mSecondaryTextView.setVisibility(VISIBLE);
+            setMinimumHeight(dipToPx(64));
+
         } else {
             mSecondaryTextView.setVisibility(GONE);
+            setMinimumHeight(dipToPx(32));
+
         }
     }
     

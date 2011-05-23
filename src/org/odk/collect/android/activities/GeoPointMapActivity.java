@@ -30,7 +30,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
-public class GeoPointActivity extends MapActivity implements LocationListener {
+public class GeoPointMapActivity extends MapActivity implements LocationListener {
 
     private MapView mMapView;
     private TextView mLocationStatus;
