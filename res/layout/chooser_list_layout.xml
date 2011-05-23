@@ -29,14 +29,16 @@ the License.
 			android:layout_height="wrap_content"
 			android:text="@string/form_scan_finished"
 			android:textSize="14dp"
-			android:padding="5dp"
-			android:paddingTop="0dp"
+			android:paddingLeft="8dip"
+			android:paddingRight="8dip"
+			android:paddingBottom="4dip"
+			
+			android:paddingTop="4dip"
 			android:background="#DDDDDD" />
 		<ListView
 			android:id="@id/android:list"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:scrollbarAlwaysDrawVerticalTrack="true" />
+			android:layout_height="fill_parent"/>
 		<TextView
 			android:id="@android:id/empty"
 			android:layout_width="fill_parent"

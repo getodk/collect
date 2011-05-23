@@ -46,8 +46,7 @@ the License.
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_above="@+id/buttonholder"
-		android:layout_alignParentTop="true"
-		android:scrollbarAlwaysDrawVerticalTrack="true" />
+		android:layout_alignParentTop="true" />
 	<TextView
 		android:id="@android:id/empty"
 		android:layout_width="fill_parent"

@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -40,6 +41,8 @@ public class InstanceChooserList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+        TextView tv = (TextView) findViewById(R.id.status_text);
+        tv.setVisibility(View.GONE);
         
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, null);
 
@@ -52,7 +55,7 @@ public class InstanceChooserList extends ListActivity {
 
         // render total instance view
         SimpleCursorAdapter instances =
-            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+            new SimpleCursorAdapter(this, R.layout.two_line_list_item, c, data, view);
         setListAdapter(instances);
     }
     

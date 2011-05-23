@@ -87,7 +87,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
 
         // render total instance view
         SimpleCursorAdapter instances =
-            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, data, view);
+            new SimpleCursorAdapter(this, R.layout.two_line_list_item, c, data, view);
         setListAdapter(instances);
 
     }

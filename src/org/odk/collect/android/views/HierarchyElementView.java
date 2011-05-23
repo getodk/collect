@@ -37,7 +37,7 @@ public class HierarchyElementView extends RelativeLayout {
         mIcon = new ImageView(context);
         mIcon.setImageDrawable(it.getIcon());
         mIcon.setId(1);
-        mIcon.setPadding(0, 1, 2, 0);
+        mIcon.setPadding(5, 1, 5, 0);
         addView(mIcon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
@@ -52,7 +52,7 @@ public class HierarchyElementView extends RelativeLayout {
 
         mSecondaryTextView = new TextView(context);
         mSecondaryTextView.setText(it.getSecondaryText());
-        mSecondaryTextView.setPadding(7, 0, 7, 0);
+//        mSecondaryTextView.setPadding(, 0, 7, 0);
         mSecondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
         LayoutParams lp =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -60,7 +60,7 @@ public class HierarchyElementView extends RelativeLayout {
         lp.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
         addView(mSecondaryTextView, lp);
 
-        setPadding(0, 2, 0, 4);
+        setPadding(5, 10, 5, 7);
 
     }
 
