@@ -64,6 +64,10 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             return;
         }
 
+        for (int j = 0; j < instances.size(); j++) {
+            Log.e("Carl", "instance: " + instances.get(j));
+        }
+        
         // get the task if we've changed orientations. If it's null it's a new upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mInstanceUploaderTask == null) {
@@ -74,7 +78,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String url =
-                settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server))
+                settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url))
                         + "/submission";
             mInstanceUploaderTask.setUploadServer(url);
             totalCount = instances.size();

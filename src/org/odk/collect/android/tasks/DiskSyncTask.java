@@ -96,6 +96,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                     String ui = fields.get(FileUtils.UI);
                     String model = fields.get(FileUtils.MODEL);
                     String formid = fields.get(FileUtils.FORMID);
+                    String submission = fields.get(FileUtils.SUBMISSIONURI);
                     
                     if (title != null) {
                         values.put(FormsColumns.DISPLAY_NAME, title);   
@@ -112,6 +113,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                     }
                     if (model != null) {
                         values.put(FormsColumns.MODEL_VERSION, model);   
+                    }
+                    if (submission != null) {
+                        values.put(FormsColumns.SUBMISSION_URI, submission);
                     }
                     
                     
