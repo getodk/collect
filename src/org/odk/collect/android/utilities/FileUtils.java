@@ -297,11 +297,13 @@ public class FileUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
-        Log.i(t, "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by " + scale
-                + " to " + b.getHeight() + "x" + b.getWidth());
+        Log.i(t,
+            "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by "
+                    + scale + " to " + b.getHeight() + "x" + b.getWidth());
 
         return b;
     }
+
 
     public static void copyFile(File sourceFile, File destFile) {
         if (sourceFile.exists()) {
@@ -324,7 +326,7 @@ public class FileUtils {
         }
 
     }
-    
+
     public static String FORMID = "formid";
     public static String UI = "uiversion";
     public static String MODEL = "modelversion";
@@ -366,8 +368,8 @@ public class FileUtils {
             String xforms = "http://www.w3.org/2002/xforms";
             String html = doc.getRootElement().getNamespace();
 
-            Element cur = doc.getRootElement().getElement(html, "head");
-            Element title = cur.getElement(html, "title");
+            Element head = doc.getRootElement().getElement(html, "head");
+            Element title = head.getElement(html, "title");
             if (title != null) {
                 fields.put(TITLE, XFormParser.getXMLText(title, true));
             } else {
@@ -376,8 +378,8 @@ public class FileUtils {
                 name = name.substring(0, name.lastIndexOf("."));
                 fields.put(TITLE, name);
             }
-            cur = cur.getElement(xforms, "model");
-            cur = cur.getElement(xforms, "instance");
+            Element model = head.getElement(xforms, "model");
+            Element cur = model.getElement(xforms, "instance");
             int idx = cur.getChildCount();
             int i;
             for (i = 0; i < idx; ++i) {
@@ -388,7 +390,6 @@ public class FileUtils {
                 }
             }
 
-            //TODO:  GET SUBMISSION URI
             if (i < idx) {
                 cur = cur.getElement(i); // this is the first data element
                 String id = cur.getAttributeValue(null, "id");
@@ -402,8 +403,17 @@ public class FileUtils {
             } else {
                 throw new IllegalStateException("Form could not be parsed");
             }
+            try {
+                Element submission = model.getElement(xforms, "submission");
+                String submissionUri = submission.getAttributeValue(null, "action");
+                fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
+            } catch (Exception e) {
+                Log.i(t, "Form does not have a submission element");
+                // and that's totally fine.
+            }
+
         }
         return fields;
     }
-    
+
 }
