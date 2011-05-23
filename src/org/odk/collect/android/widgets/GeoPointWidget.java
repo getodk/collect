@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 
 import android.app.Activity;
@@ -107,7 +108,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), GeoPointMapActivity.class);
+                Intent i = new Intent(getContext(), GeoPointActivity.class);
                 ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.LOCATION_CAPTURE);
                 mWaitingForData = true;
