@@ -14,23 +14,9 @@
 	android:orientation="vertical"
 	android:padding="0dip"
 	android:layout_margin="0dip">
-	<!-- <TextView
-		android:id="@+id/main_menu_header"
-		android:layout_alignParentTop="true"
-		android:gravity="center"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:paddingTop="6dp"
-		android:paddingBottom="6dp"
-		android:textSize="26dp"
-		android:textStyle="bold"
-		android:text="@string/main_menu_message"
-	 	/> 
-	 	
-	 	 android:layout_below="@id/main_menu_header"-->
-
 	<ScrollView
-	
+	 android:layout_above="@+id/main_menu_footer"
+		android:layout_alignParentTop="true"
 		android:id="@+id/scrollview"
 		android:layout_width="fill_parent"
 		android:orientation="vertical"
@@ -42,7 +28,6 @@
 			android:paddingLeft="10dp"
 			android:paddingTop="10dp"
 			android:paddingRight="10dp">
-			
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
