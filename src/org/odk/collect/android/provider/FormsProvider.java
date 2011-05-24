@@ -170,7 +170,7 @@ public class FormsProvider extends ContentProvider {
         if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
             Date today = new Date();
             String ts = new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(today);
-            values.put(FormsColumns.DISPLAY_SUBTEXT, "added on " + ts);
+            values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
         }
 
         // if we don't have a path to the file, the rest are irrelevant.

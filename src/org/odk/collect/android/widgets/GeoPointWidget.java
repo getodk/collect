@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.text.DecimalFormat;
+
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -25,7 +27,6 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -33,8 +34,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.text.DecimalFormat;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -49,12 +48,15 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
     private boolean mWaitingForData;
+    private String mAppearance;
     public static String LOCATION = "gp";
 
 
     public GeoPointWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+
         mWaitingForData = false;
+        mAppearance = prompt.getAppearanceHint();
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -65,6 +67,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mActionButton.setEnabled(!prompt.isReadOnly());
 
         // setup play button
+
         mViewButton = new Button(getContext());
         mViewButton.setText(getContext().getString(R.string.show_location));
         mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
@@ -108,7 +111,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), GeoPointActivity.class);
+                Intent i = null;
+                if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
+                    i = new Intent(getContext(), GeoPointMapActivity.class);
+                } else {
+                    i = new Intent(getContext(), GeoPointActivity.class);
+                }
                 ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.LOCATION_CAPTURE);
                 mWaitingForData = true;
@@ -120,7 +128,9 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // retrieve answer from data model and update ui
 
         addView(mActionButton);
-        addView(mViewButton);
+        if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
+            addView(mViewButton);
+        }
         addView(mAnswerDisplay);
     }
 

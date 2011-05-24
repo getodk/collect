@@ -1066,7 +1066,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         mAlertDialog =
             new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle(getString(R.string.quit_application))
+                    .setTitle(getString(R.string.quit_application,mFormController.getFormTitle()))
                     .setNeutralButton(getString(R.string.do_not_exit),
                     new DialogInterface.OnClickListener() {
                         @Override

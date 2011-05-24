@@ -16,14 +16,12 @@
 		android:label="@string/app_name"
 		android:theme="@android:style/Theme.Light"
 		android:name="org.odk.collect.android.application.Collect">
-
 		<provider
 			android:name="org.odk.collect.android.provider.FormsProvider"
 			android:authorities="org.odk.collect.android.provider.odk.forms" />
 		<provider
 			android:name="org.odk.collect.android.provider.InstanceProvider"
 			android:authorities="org.odk.collect.android.provider.odk.instances" />
-
 		<activity
 			android:label="@string/app_name"
 			android:configChanges="orientation"
@@ -59,7 +57,6 @@
 			<data
 				android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
 		</intent-filter>
-
 		<activity
 			android:name=".activities.InstanceChooserTabs"
 			android:label="@string/app_name" />
@@ -103,11 +100,11 @@
 		<activity
 			android:name=".activities.FormHierarchyActivity"
 			android:label="@string/app_name" />
-			   <activity
-      android:name="activities.GeoPointActivity"
-      android:label="@string/app_name" />
 		<activity
-			android:name="activities.GeoPointMapActivity"
+			android:name=".activities.GeoPointActivity"
+			android:label="@string/app_name" />
+		<activity
+			android:name=".activities.GeoPointMapActivity"
 			android:label="@string/app_name" />
 		<activity
 			android:name=".activities.SplashScreenActivity"

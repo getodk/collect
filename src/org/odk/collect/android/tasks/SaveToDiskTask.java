@@ -140,7 +140,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.InstancePath);
             values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.InstancePath);
             values.put(InstanceColumns.SUBMISSION_URI, "submission");
-            values.put(InstanceColumns.DISPLAY_NAME, formname + " DATA");
+            values.put(InstanceColumns.DISPLAY_NAME, formname);
             values.put(InstanceColumns.JR_FORM_ID, jrformid );
             mContentResolver.insert(InstanceColumns.CONTENT_URI, values);
             
