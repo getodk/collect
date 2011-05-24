@@ -176,7 +176,5 @@
 <string name="change_font_size">Change font size</string>
 <string name="form_scan_starting">Scanning for forms...</string>
 <string name="form_scan_finished">Form scanning completed</string>
-<string name="powered_by_odk">Powered by Open Data Kit</string>
-
-
+<string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
 </resources>
