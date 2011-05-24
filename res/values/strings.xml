@@ -100,8 +100,8 @@
 <string name="location_accuracy">Accuracy is %1$s m...</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
-<string name="main_menu_details">Magnifying human resources with technology</string>
-<string name="main_menu_message">ODK Collect</string>
+<string name="main_menu_details">Magnifying human resources\nwith technology</string>
+<string name="main_menu_message">ODK Collect v1.1.7</string>
 <string name="manage_files">Manage Forms</string>
 <string name="mark_finished">Mark Form as Finished</string>
 <string name="no">No</string>
@@ -175,8 +175,8 @@
 <string name="font_size">Font size</string>
 <string name="change_font_size">Change font size</string>
 <string name="form_scan_starting">Scanning for forms...</string>
-<string name="form_scan_finished">Form scan completed</string>
-<string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
+<string name="form_scan_finished">Form scanning completed</string>
+<string name="powered_by_odk">Powered by Open Data Kit</string>
 
 
 </resources>

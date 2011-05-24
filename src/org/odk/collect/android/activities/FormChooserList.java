@@ -63,12 +63,12 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask.execute((Void[]) null);
             
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(getString(R.string.form_scan_starting));
+            tv.setVisibility(View.VISIBLE);
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(getString(R.string.form_scan_starting));
+            tv.setVisibility(View.VISIBLE);
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -177,7 +177,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         // TODO: set finished
 
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setText(getString(R.string.form_scan_finished));
+        tv.setVisibility(View.GONE);
     }
 
 }

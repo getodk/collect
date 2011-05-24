@@ -101,12 +101,12 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(getString(R.string.form_scan_starting));
+            tv.setVisibility(View.VISIBLE);
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(getString(R.string.form_scan_starting));
+            tv.setVisibility(View.VISIBLE);
         }
         
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -275,6 +275,6 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         // TODO: set something done.  probably set text box.
         
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setText(getString(R.string.form_scan_finished));
+        tv.setVisibility(View.GONE);
     }
 }

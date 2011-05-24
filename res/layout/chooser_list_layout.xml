@@ -27,14 +27,14 @@ the License.
 			android:id="@+id/status_text"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:text="@string/form_scan_finished"
+			android:text="@string/form_scan_starting"
 			android:textSize="14dp"
 			android:paddingLeft="8dip"
 			android:paddingRight="8dip"
 			android:paddingBottom="4dip"
-			
 			android:paddingTop="4dip"
-			android:background="#DDDDDD" />
+			android:background="#DDDDDD"
+			android:visibility="gone" />
 		<ListView
 			android:id="@id/android:list"
 			android:layout_width="fill_parent"
