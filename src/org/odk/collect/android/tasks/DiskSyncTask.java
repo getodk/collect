@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
@@ -56,7 +57,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
     protected Void doInBackground(Void... params) {
         mCursor.moveToPosition(-1);
 
-        File formDir = new File(FileUtils.FORMS_PATH);
+        File formDir = new File(Collect.FORMS_PATH);
         if (formDir.exists() && formDir.isDirectory()) {
             ArrayList<File> xForms = new ArrayList<File>(Arrays.asList(formDir.listFiles()));
 

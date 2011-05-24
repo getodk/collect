@@ -36,7 +36,6 @@ import java.math.BigInteger;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -50,104 +49,14 @@ public class FileUtils {
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
 
-    // Storage paths
-    public static final String FORMS_PATH = Environment.getExternalStorageDirectory()
-            + "/odk/forms/";
-    public static final String INSTANCES_PATH = Environment.getExternalStorageDirectory()
-            + "/odk/instances/";
-    public static final String CACHE_PATH = Environment.getExternalStorageDirectory()
-            + "/odk/.cache/";
-    public static final String TMPFILE_PATH = CACHE_PATH + "tmp.jpg";
-
-
-    public static ArrayList<String> getValidFormsAsArrayList(String path) {
-        ArrayList<String> formPaths = new ArrayList<String>();
-        File dir = new File(path);
-        // ensure that directory exists
-        if (!dir.exists()) {
-            if (!createFolder(path)) {
-                return null;
-            }
-        }
-        File[] dirs = dir.listFiles();
-        if (dirs != null) {
-            for (int i = 0; i < dirs.length; i++) {
-                // skip all the -media directories and "invisible" files that start with "."
-                if (dirs[i].isDirectory() || dirs[i].getName().startsWith("."))
-                    continue;
-
-                formPaths.add(dirs[i].getAbsolutePath());
-            }
-        }
-        return formPaths;
-    }
-
-
-    public static ArrayList<String> getFoldersAsArrayList(String path) {
-        ArrayList<String> mFolderList = new ArrayList<String>();
-        File root = new File(path);
-
-        if (!storageReady()) {
-            return null;
-        }
-        if (!root.exists()) {
-            if (!createFolder(path)) {
-                return null;
-            }
-        }
-        if (root.isDirectory()) {
-            File[] children = root.listFiles();
-            for (File child : children) {
-                boolean directory = child.isDirectory();
-                if (directory) {
-                    mFolderList.add(child.getAbsolutePath());
-                }
-            }
-        }
-        return mFolderList;
-    }
-
-
-    public static boolean deleteFolder(String path) {
-        // not recursive
-        if (path != null && storageReady()) {
-            File dir = new File(path);
-            if (dir.exists() && dir.isDirectory()) {
-                File[] files = dir.listFiles();
-                for (File file : files) {
-                    if (!file.delete()) {
-                        Log.i(t, "Failed to delete " + file);
-                    }
-                }
-            }
-            return dir.delete();
-        } else {
-            return false;
-        }
-    }
-
-
+    
     public static boolean createFolder(String path) {
-        if (storageReady()) {
-            boolean made = true;
-            File dir = new File(path);
-            if (!dir.exists()) {
-                made = dir.mkdirs();
-            }
-            return made;
-        } else {
-            return false;
+        boolean made = true;
+        File dir = new File(path);
+        if (!dir.exists()) {
+            made = dir.mkdirs();
         }
-    }
-
-
-    public static boolean deleteFile(String path) {
-        if (storageReady()) {
-            File f = new File(path);
-            return f.delete();
-        } else {
-            return false;
-        }
+        return made;
     }
 
 
@@ -207,19 +116,6 @@ public class FileUtils {
                 e.printStackTrace();
                 return null;
             }
-        }
-    }
-
-
-    public static boolean storageReady() {
-        String cardstatus = Environment.getExternalStorageState();
-        if (cardstatus.equals(Environment.MEDIA_REMOVED)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
-                || cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-            return false;
-        } else {
-            return true;
         }
     }
 

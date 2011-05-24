@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Vector;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -31,6 +29,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+
+import java.util.Vector;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.

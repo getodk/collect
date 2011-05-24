@@ -15,8 +15,8 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 
 /**
@@ -51,20 +50,25 @@ public class MainMenuActivity extends Activity {
 
     private AlertDialog mAlertDialog;
 
+    private static boolean EXIT = true;
+
+
+    // private static boolean DO_NOT_EXIT = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // must be at the beginning of any activity that can be called from an external intent
+        try {
+            Collect.createODKDirs();
+        } catch (RuntimeException e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
 
         setContentView(R.layout.main_menu);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
-
-        // if sd card error, quit
-        if (!FileUtils.storageReady()) {
-            createErrorDialog(getString(R.string.no_sd_error), true);
-            return;
-        }
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);

@@ -372,13 +372,13 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
         rootName = rootName.trim();
-        FileUtils.createFolder(FileUtils.FORMS_PATH);
+
         // proposed name of xml file...
-        String path = FileUtils.FORMS_PATH + rootName + ".xml";
+        String path = Collect.FORMS_PATH + "/" + rootName + ".xml";
         int i = 2;
         f = new File(path);
         while (f.exists()) {
-            path = FileUtils.FORMS_PATH + rootName + "_" + i + ".xml";
+            path = Collect.FORMS_PATH + "/" + rootName + "_" + i + ".xml";
             f = new File(path);
             i++;
         }

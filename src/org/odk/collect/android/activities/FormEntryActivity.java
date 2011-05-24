@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
@@ -37,7 +38,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -161,6 +161,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // must be at the beginning of any activity that can be called from an external intent 
+        try {
+            Collect.createODKDirs();
+        } catch (RuntimeException e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        
         setContentView(R.layout.form_entry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.loading_form));
 
@@ -317,7 +326,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                  * audio and video
                  */
                 // The intent is empty, but we know we saved the image to the temp file
-                File fi = new File(FileUtils.TMPFILE_PATH);
+                File fi = new File(Collect.TMPFILE_PATH);
 
                 String mInstanceFolder =
                     InstancePath.substring(0, InstancePath.lastIndexOf("/") + 1);
@@ -1412,7 +1421,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         .format(Calendar.getInstance().getTime());
             String file =
                 mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
-            String path = FileUtils.INSTANCES_PATH + file + "_" + time;
+            String path = Collect.INSTANCES_PATH + "/" + file + "_" + time;
             if (FileUtils.createFolder(path)) {
                 InstancePath = path + "/" + file + "_" + time + ".xml";
             }

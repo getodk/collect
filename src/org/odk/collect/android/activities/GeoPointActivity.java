@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.text.DecimalFormat;
-
 import org.odk.collect.android.R;
 
 import android.app.Activity;
@@ -29,6 +27,8 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import java.text.DecimalFormat;
 
 public class GeoPointActivity extends Activity implements LocationListener {
 

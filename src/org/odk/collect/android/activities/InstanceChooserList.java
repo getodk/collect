@@ -15,10 +15,13 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -36,9 +39,21 @@ import android.widget.TextView;
  */
 public class InstanceChooserList extends ListActivity {
 
+    private static boolean EXIT = true;
+    private AlertDialog mAlertDialog;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // must be at the beginning of any activity that can be called from an external intent
+        try {
+            Collect.createODKDirs();
+        } catch (RuntimeException e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
@@ -86,6 +101,27 @@ public class InstanceChooserList extends ListActivity {
             startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
         }
         finish();
+    }
+    
+    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        mAlertDialog.setMessage(errorMsg);
+        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON1:
+                        if (shouldExit) {
+                            finish();
+                        }
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.show();
     }
 
 

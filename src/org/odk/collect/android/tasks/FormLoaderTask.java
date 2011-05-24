@@ -29,6 +29,7 @@ import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
@@ -119,7 +120,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         File formXml = new File(formPath);
         String formHash = FileUtils.getMd5Hash(formXml);
-        File formBin = new File(FileUtils.CACHE_PATH + formHash + ".formdef");
+        File formBin = new File(Collect.CACHE_PATH + "/" + formHash + ".formdef");
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -156,7 +157,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             } catch (Exception e) {
                 mErrorMsg = e.getMessage();
                 e.printStackTrace();
-            } 
+            }
         }
 
         // new evaluation context for function handlers
@@ -170,7 +171,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // import existing data into formdef
         if (FormEntryActivity.InstancePath != null) {
             // This order is important. Import data, then initialize.
-            importData(FormEntryActivity.InstancePath , fec);
+            importData(FormEntryActivity.InstancePath, fec);
             fd.initialize(false);
         } else {
             fd.initialize(true);
@@ -203,7 +204,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formBin = null;
         formXml = null;
         formPath = null;
-
 
         FormController fc = new FormController(fec);
         data = new FECWrapper(fc);
@@ -293,27 +293,23 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * @param filepath path to the form file
      */
     public void serializeFormDef(FormDef fd, String filepath) {
-        // if cache folder is missing, create it.
-        if (FileUtils.createFolder(FileUtils.CACHE_PATH)) {
+        // calculate unique md5 identifier
+        String hash = FileUtils.getMd5Hash(new File(filepath));
+        File formDef = new File(Collect.CACHE_PATH + "/" + hash + ".formdef");
 
-            // calculate unique md5 identifier
-            String hash = FileUtils.getMd5Hash(new File(filepath));
-            File formDef = new File(FileUtils.CACHE_PATH + hash + ".formdef");
-
-            // formdef does not exist, create one.
-            if (!formDef.exists()) {
-                FileOutputStream fos;
-                try {
-                    fos = new FileOutputStream(formDef);
-                    DataOutputStream dos = new DataOutputStream(fos);
-                    fd.writeExternal(dos);
-                    dos.flush();
-                    dos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        // formdef does not exist, create one.
+        if (!formDef.exists()) {
+            FileOutputStream fos;
+            try {
+                fos = new FileOutputStream(formDef);
+                DataOutputStream dos = new DataOutputStream(fos);
+                fd.writeExternal(dos);
+                dos.flush();
+                dos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

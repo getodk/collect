@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
@@ -93,7 +94,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(new File(FileUtils.TMPFILE_PATH)));
+                    Uri.fromFile(new File(Collect.TMPFILE_PATH)));
                 ((Activity) getContext())
                         .startActivityForResult(i, FormEntryActivity.IMAGE_CAPTURE);
                 mWaitingForData = true;

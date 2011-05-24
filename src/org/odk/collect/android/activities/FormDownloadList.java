@@ -21,7 +21,6 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
 import android.app.AlertDialog;
@@ -225,7 +224,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         }
         showDialog(PROGRESS_DIALOG);
 
-        FileUtils.createFolder(FileUtils.CACHE_PATH);
         mDownloadFormListTask = new DownloadFormListTask(getContentResolver());
         mDownloadFormListTask.setDownloaderListener(this);
         mDownloadFormListTask.execute();
@@ -388,7 +386,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // show dialog box
             showDialog(PROGRESS_DIALOG);
 
-            FileUtils.createFolder(FileUtils.FORMS_PATH);
             mDownloadFormsTask = new DownloadFormsTask();
             mDownloadFormsTask.setDownloaderListener(this);
             mDownloadFormsTask.execute(filesToDownload);
