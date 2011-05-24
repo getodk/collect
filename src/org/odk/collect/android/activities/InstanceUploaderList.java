@@ -42,7 +42,6 @@ import java.util.ArrayList;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-// TODO long click form for submission log
 public class InstanceUploaderList extends ListActivity {
 
     private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
@@ -151,34 +150,15 @@ public class InstanceUploaderList extends ListActivity {
 
 
     private void uploadSelectedFiles() {
-        ArrayList<String> selectedInstances = new ArrayList<String>();
-
-        String selection = "";
-        String[] selectionArgs = new String[mSelected.size()];
+        // send list of _IDs. 
+        long[] instanceIDs = new long[mSelected.size()];
         for (int i = 0; i < mSelected.size(); i++) {
-            selection += InstanceColumns._ID + "=?";
-            if (i != mSelected.size() - 1) {
-                selection += " or ";
-            }
-            selectionArgs[i] = mSelected.get(i).toString();
+           instanceIDs[i] = mSelected.get(i);
         }
-
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
-        if (c.getCount() > 0) {
-            c.moveToPosition(-1);
-            while (c.moveToNext()) {
-                String s = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                selectedInstances.add(s);
-            }
-
-            // bundle intent with upload files
-            Intent i = new Intent(this, InstanceUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, selectedInstances);
-            startActivityForResult(i, INSTANCE_UPLOADER);
-        } else {
-            Toast.makeText(this, "nothing there?", Toast.LENGTH_LONG).show();
-        }
-
+        
+        Intent i = new Intent(this, InstanceUploaderActivity.class);
+        i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
+        startActivityForResult(i, INSTANCE_UPLOADER);
     }
 
 

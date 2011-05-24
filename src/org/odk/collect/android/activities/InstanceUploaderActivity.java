@@ -16,24 +16,28 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.WebUtils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Activity to upload completed forms.
@@ -43,31 +47,40 @@ import java.util.ArrayList;
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
 
     private final static int PROGRESS_DIALOG = 1;
-    private final static String KEY_TOTALCOUNT = "totalcount";
+    private final static int AUTH_DIALOG = 2;
+
     private ProgressDialog mProgressDialog;
+    private AlertDialog mAlertDialog;
 
     private InstanceUploaderTask mInstanceUploaderTask;
-    private int totalCount = -1;
+
+    // maintain a list of what we've yet to send, in case we're interrupted by auth requests
+    private ArrayList<String> toSend;
+    
+    // maintain a list of what we've sent, in case we're interrupted by auth requests
+    private HashMap<String, String> completed;  
+    
+    private final static String AUTH_URI = "auth";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        completed = new HashMap<String, String>();
+
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
 
         // get instances to upload
-        Intent i = getIntent();
-        ArrayList<String> instances = i.getStringArrayListExtra(FormEntryActivity.KEY_INSTANCES);
-        if (instances == null) {
+        Intent intent = getIntent();
+        long[] selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+        if (selectedInstanceIDs.length == 0) {
             // nothing to upload
+            //TODO:  toast and quit?
             return;
         }
 
-        for (int j = 0; j < instances.size(); j++) {
-            Log.e("Carl", "instance: " + instances.get(j));
-        }
-        
+
         // get the task if we've changed orientations. If it's null it's a new upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
         if (mInstanceUploaderTask == null) {
@@ -75,50 +88,52 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             showDialog(PROGRESS_DIALOG);
             mInstanceUploaderTask = new InstanceUploaderTask();
 
-            SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            String url =
-                settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url))
-                        + "/submission";
-            mInstanceUploaderTask.setUploadServer(url);
-            totalCount = instances.size();
+            String selection = InstanceColumns._ID + "=?";
+            String[] selectionArgs = new String[selectedInstanceIDs.length];
+            for (int i = 0; i < selectedInstanceIDs.length; i++) {
+                selectionArgs[i] = new Long(selectedInstanceIDs[i]).toString();
+                if (i != selectedInstanceIDs.length - 1) {
+                    selection += " or " + InstanceColumns._ID + "=?";
+                }
+            }
 
-            // convert array list to an array
-            String[] sa = instances.toArray(new String[totalCount]);
-            mInstanceUploaderTask.execute(sa);
+            String[] instances = new String[selectedInstanceIDs.length];
+            Cursor c =
+                managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            if (c.getCount() > 0) {
+                c.moveToPosition(-1);
+                while (c.moveToNext()) {
+                    instances[c.getPosition()] =
+                        c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                }
+                mInstanceUploaderTask.execute(instances);
+            }
+            toSend = new ArrayList<String>(Arrays.asList(instances));
+
         }
     }
 
 
-    // TODO: if uploadingComplete() when activity backgrounded, won't work.
-    // just check task status in onResume
     @Override
-    public void uploadingComplete(ArrayList<String> result) {
-        int resultSize = result.size();
-        boolean success = false;
-        if (resultSize == totalCount) {
-            Toast.makeText(this, getString(R.string.upload_all_successful, totalCount),
-                Toast.LENGTH_SHORT).show();
-
-            success = true;
-        } else {
-            String s = totalCount - resultSize + " of " + totalCount;
-            Toast.makeText(this, getString(R.string.upload_some_failed, s), Toast.LENGTH_LONG)
-                    .show();
+    public void uploadingComplete(HashMap<String, String> result) {
+        try {
+            dismissDialog(PROGRESS_DIALOG);
+        } catch (Exception e) {
+            // tried to close a dialog not open.  don't care.
         }
 
-        Intent in = new Intent();
-        in.putExtra(FormEntryActivity.KEY_SUCCESS, success);
-        setResult(RESULT_OK, in);
+        StringBuilder b = new StringBuilder();
+        Set<String> keys = result.keySet();
+        Iterator<String> it = keys.iterator();
+        while (it.hasNext()) {
+            String instance = it.next();
+            b.append(instance + " :: ");
+            b.append(result.get(instance) + " \n");
+        }
 
-        for (int i = 0; i < resultSize; i++) {
-            ContentValues values = new ContentValues();
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-            String where = InstanceColumns.INSTANCE_FILE_PATH + " =?";
-            String [] selectionArgs = {result.get(i)};
-            getContentResolver().update(InstanceColumns.CONTENT_URI, values, where, selectionArgs);
-      }
-        finish();
+        String msg = b.toString();
+
+        createAlertDialog("title", msg);
     }
 
 
@@ -129,7 +144,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     @Override
-    protected Dialog onCreateDialog(int id) {
+    protected Dialog onCreateDialog(int id, final Bundle bundle) {
         switch (id) {
             case PROGRESS_DIALOG:
                 mProgressDialog = new ProgressDialog(this);
@@ -149,6 +164,46 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
+            case AUTH_DIALOG:
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle("Server Requires Authentication");
+                b.setMessage("Please enter usernamd and password");
+
+                LayoutInflater factory = LayoutInflater.from(this);
+                final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
+
+                b.setView(dialogView);
+                b.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
+                        EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+
+                        URI u = URI.create(bundle.getString(AUTH_URI));
+                        WebUtils.addCredentials(username.getText().toString(), password.getText()
+                                .toString(), u.getHost());
+
+                        mInstanceUploaderTask = new InstanceUploaderTask();
+
+                        String[] toSendArray = new String[toSend.size()];
+                        toSend.toArray(toSendArray);
+                        mInstanceUploaderTask.execute(toSendArray);
+                        showDialog(PROGRESS_DIALOG);
+                    }
+                });
+                b.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TOOD: cancel
+
+                    }
+                });
+
+                b.setCancelable(false);
+                // mAlertShowing = true;
+                return b.create();
         }
         return null;
     }
@@ -157,14 +212,12 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        totalCount = savedInstanceState.getInt(KEY_TOTALCOUNT);
     }
 
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(KEY_TOTALCOUNT, totalCount);
     }
 
 
@@ -187,6 +240,67 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             mInstanceUploaderTask.setUploaderListener(this);
         }
         super.onResume();
+    }
+
+
+    @Override
+    public void authRequest(URI url, HashMap<String, String> doneSoFar) {
+
+        if (mProgressDialog.isShowing()) {
+            // should always be showing here
+            mProgressDialog.dismiss();
+        }
+
+        // add our list of completed uploads to "completed"
+        // and remove them from our toSend list.
+        if (doneSoFar != null) {
+            Set<String> uploadedInstances = doneSoFar.keySet();
+            Iterator<String> itr = uploadedInstances.iterator();
+            while (itr.hasNext()) {
+                String removeMe = itr.next();
+                boolean test = toSend.remove(removeMe);
+                //TODO:  I think this doesn't work with strings.
+            }
+            completed.putAll(doneSoFar);
+        }
+
+        Bundle b = new Bundle();
+        b.putString(AUTH_URI, url.toString());
+        showDialog(AUTH_DIALOG, b);
+    }
+
+
+    private void createAlertDialog(String title, String message) {
+        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog.setTitle(title);
+        mAlertDialog.setMessage(message);
+        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON1: // ok
+                        // just close the dialog
+                        // mAlertShowing = false;
+                        // // successful download, so quit
+                        // if (mSuccess) {
+                        // finish();
+                        // }
+
+                        break;
+                }
+            }
+        };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.ok), quitListener);
+        // if (mSuccess) {
+        // mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        // } else {
+        // mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        // }
+        // mAlertShowing = true;
+        // mAlertMsg = message;
+        // mAlertTitle = title;
+        mAlertDialog.show();
     }
 
 }

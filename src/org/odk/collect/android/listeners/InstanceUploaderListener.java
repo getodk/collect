@@ -14,13 +14,14 @@
 
 package org.odk.collect.android.listeners;
 
-import java.util.ArrayList;
+import java.net.URI;
+import java.util.HashMap;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-// TODO: more useful errors in results
 public interface InstanceUploaderListener {
-    void uploadingComplete(ArrayList<String> result);
+    void uploadingComplete(HashMap<String, String> result);
     void progressUpdate(int progress, int total);
+    void authRequest(URI url, HashMap<String, String> doneSoFar);
 }
