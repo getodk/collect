@@ -23,5 +23,4 @@ import java.util.HashMap;
  */
 public interface FormListDownloaderListener {
     void formListDownloadingComplete(HashMap<String, FormDetails> value);
-    void formListDownloadingError(int errorCode, String msg);
 }

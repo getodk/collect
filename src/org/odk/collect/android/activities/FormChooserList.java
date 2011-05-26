@@ -21,9 +21,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +29,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -46,36 +45,40 @@ import android.widget.TextView;
 public class FormChooserList extends ListActivity implements DiskSyncListener {
 
     private static final String t = "FormChooserList";
-    DiskSyncTask mDiskSyncTask;
+    private DiskSyncTask mDiskSyncTask;
 
-    private static final int PROGRESS = 1;
     private static final boolean EXIT = true;
-    
+
     private AlertDialog mAlertDialog;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // must be at the beginning of any activity that can be called from an external intent 
+
+        // must be at the beginning of any activity that can be called from an external intent
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
-        
+
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
+        // get all forms
         Cursor managedCursor = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
+
+        // DiskSyncTask checks the disk for any forms not already in the content provider
+        // that is, put here by dragging and dropping onto the SDCard
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
+            Log.i(t, "Starting new disk sync task");
             mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
-            
+
             TextView tv = (TextView) findViewById(R.id.status_text);
             tv.setVisibility(View.VISIBLE);
         }
@@ -86,8 +89,9 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            // TODO: set something to done
             mDiskSyncTask.setDiskSyncListener(null);
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setVisibility(View.GONE);
         }
 
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
@@ -103,7 +107,6 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
         setListAdapter(instances);
-
     }
 
 
@@ -136,14 +139,9 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         }
 
         finish();
-
     }
 
 
-    /**
-     * refreshView() in onresume because onCreate doesn't get called when activity returns from
-     * background
-     */
     @Override
     protected void onResume() {
         mDiskSyncTask.setDiskSyncListener(this);
@@ -158,42 +156,24 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     }
 
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS:
-                ProgressDialog p = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // dialog.dismiss();
-                            // p.setFormLoaderListener(null);
-                            // p.cancel(true);
-                            // finish();
-                        }
-                    };
-                p.setIcon(android.R.drawable.ic_dialog_info);
-                p.setTitle(getString(R.string.loading_form));
-                p.setMessage(getString(R.string.please_wait));
-                p.setIndeterminate(true);
-                p.setCancelable(false);
-                p.setButton(getString(R.string.cancel_loading_form), loadingButtonListener);
-                return p;
-        }
-        return null;
-    }
-
-
+    /**
+     * Called by DiskSyncTask when the task is finished
+     */
     @Override
     public void SyncComplete() {
-
-        // TODO: set finished
-
+        Log.i(t, "disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
     }
-    
+
+
+    /**
+     * Creates a dialog with the given message. Will exit the activity when the user preses "ok" if
+     * shouldExit is set to true.
+     * 
+     * @param errorMsg
+     * @param shouldExit
+     */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);

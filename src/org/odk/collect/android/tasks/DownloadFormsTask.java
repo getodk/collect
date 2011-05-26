@@ -14,23 +14,19 @@
 
 package org.odk.collect.android.tasks;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.HttpContext;
 import org.javarosa.xform.parse.XFormParser;
-import org.kxml2.io.KXmlParser;
-import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
-import org.xmlpull.v1.XmlPullParser;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -41,7 +37,6 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -53,23 +48,21 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Background task for downloading forms from urls or a formlist from a url. We overload this task a
- * bit so that we don't have to keep track of two separate downloading tasks and it simplifies
- * interfaces. If LIST_URL is passed to doInBackground(), we fetch a form list. If a hashmap
- * containing form/url pairs is passed, we download those forms.
+ * Background task for downloading a given list of forms. We assume right now that the forms are
+ * coming from the same server that presented the form list, but theoretically that won't always be
+ * true.
  * 
+ * @author msundt
  * @author carlhartung
  */
-public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String, String> {
+public class DownloadFormsTask extends
+        AsyncTask<ArrayList<FormDetails>, String, HashMap<String, String>> {
 
     private static final String t = "DownlaodFormsTask";
 
-    private static final int CONNECTION_TIMEOUT = 30000;
     private static final String MD5_COLON_PREFIX = "md5:";
 
     private FormDownloaderListener mStateListener;
-
-    private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
         "http://openrosa.org/xforms/xformsManifest";
@@ -79,198 +72,23 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
-    private static class DocumentFetchResult {
-        public final String errorMessage;
-        public final Document doc;
-        public final boolean isOpenRosaResponse;
-
-
-        DocumentFetchResult(String msg) {
-            errorMessage = msg;
-            doc = null;
-            isOpenRosaResponse = false;
-        }
-
-
-        DocumentFetchResult(Document doc, boolean isOpenRosaResponse) {
-            errorMessage = null;
-            this.doc = doc;
-            this.isOpenRosaResponse = isOpenRosaResponse;
-        }
-    }
-
-
-    /**
-     * Common method for returning a parsed xml document given a url and the http context and client
-     * objects involved in the web connection.
-     * 
-     * @param urlString
-     * @param localContext
-     * @param httpclient
-     * @return
-     */
-    private DocumentFetchResult getXmlDocument(String urlString, HttpContext localContext,
-            HttpClient httpclient, int fetch_doc_failed, int fetch_doc_failed_no_detail) {
-        URI u = null;
-        try {
-            URL url = new URL(urlString);
-            u = url.toURI();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new DocumentFetchResult(e.getLocalizedMessage()
-            // + app.getString(R.string.while_accessing) + urlString);
-                    + ("while accessing") + urlString);
-        }
-
-        // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(u);
-
-        HttpResponse response = null;
-        try {
-            response = httpclient.execute(req, localContext);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            HttpEntity entity = response.getEntity();
-
-            if (entity != null
-                    && (statusCode != 200 || !entity.getContentType().getValue().toLowerCase()
-                            .contains(HTTP_CONTENT_TYPE_TEXT_XML))) {
-                try {
-                    // don't really care about the stream...
-                    InputStream is = response.getEntity().getContent();
-                    // read to end of stream...
-                    final long count = 1024L;
-                    while (is.skip(count) == count)
-                        ;
-                    is.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (statusCode != 200) {
-                String webError =
-                    response.getStatusLine().getReasonPhrase() + " (" + statusCode + ")";
-
-                return new DocumentFetchResult(
-                // app.getString(fetch_doc_failed)
-                        "fetch doc failed 1" + webError
-                        // + app.getString(R.string.while_accessing) + u.toString()
-                        // + app.getString(R.string.network_login_failure));
-                                + "while accessing" + u.toString() + "network login failure");
-            }
-
-            if (entity == null) {
-                Log.e(t, "No entity body returned from: " + u.toString() + " is not text/xml");
-                return new DocumentFetchResult(
-                // app.getString(fetch_doc_failed_no_detail)
-                        "fetch doc failed no detail"
-                        // + app.getString(R.string.while_accessing) + u.toString()
-                        // + app.getString(R.string.network_login_failure));
-                                + "while accessing" + u.toString() + "network login failure");
-            }
-
-            if (!entity.getContentType().getValue().toLowerCase()
-                    .contains(HTTP_CONTENT_TYPE_TEXT_XML)) {
-                Log.e(t, "ContentType: " + entity.getContentType().getValue() + "returned from: "
-                        + u.toString() + " is not text/xml");
-                return new DocumentFetchResult(
-                // app.getString(fetch_doc_failed_no_detail)
-                        "fetch doc failed no detail 2"
-                        // + app.getString(R.string.while_accessing) + u.toString()
-                        // + app.getString(R.string.network_login_failure));
-                                + "while accessing" + u.toString() + "network login failure");
-            }
-
-            // parse response
-            Document doc = null;
-            try {
-                InputStream is = null;
-                InputStreamReader isr = null;
-                try {
-                    is = entity.getContent();
-                    isr = new InputStreamReader(is, "UTF-8");
-                    doc = new Document();
-                    KXmlParser parser = new KXmlParser();
-                    parser.setInput(isr);
-                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-                    doc.parse(parser);
-                    isr.close();
-                } finally {
-                    if (isr != null) {
-                        try {
-                            isr.close();
-                        } catch (Exception e) {
-                            // no-op
-                        }
-                    }
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (Exception e) {
-                            // no-op
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(t, "Parsing failed with " + e.getMessage());
-                return new DocumentFetchResult(
-                // app.getString(fetch_doc_failed_no_detail)
-                        "fetch doc failed no detail 3"
-                        // + app.getString(R.string.while_accessing) + u.toString());
-                                + "while accessing " + u.toString());
-            }
-
-            boolean isOR = false;
-            Header[] fields = response.getHeaders(WebUtils.OPEN_ROSA_VERSION_HEADER);
-            if (fields != null && fields.length >= 1) {
-                isOR = true;
-                boolean versionMatch = false;
-                boolean first = true;
-                StringBuilder b = new StringBuilder();
-                for (Header h : fields) {
-                    if (WebUtils.OPEN_ROSA_VERSION.equals(h.getValue())) {
-                        versionMatch = true;
-                        break;
-                    }
-                    if (!first) {
-                        b.append("; ");
-                    }
-                    first = false;
-                    b.append(h.getValue());
-                }
-                if (!versionMatch) {
-                    Log.w(
-                        t,
-                        WebUtils.OPEN_ROSA_VERSION_HEADER + " unrecognized version(s): "
-                                + b.toString());
-                }
-            }
-            return new DocumentFetchResult(doc, isOR);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new DocumentFetchResult(
-            // app.getString(fetch_doc_failed)
-                    "fetch doc failed 2"
-                    // + e.getLocalizedMessage() + app.getString(R.string.while_accessing)
-                            + e.getLocalizedMessage() + "while accessing" + u.toString());
-        }
-    }
-
 
     @Override
-    protected String doInBackground(ArrayList<FormDetails>... values) {
+    protected HashMap<String, String> doInBackground(ArrayList<FormDetails>... values) {
         ArrayList<FormDetails> toDownload = values[0];
 
-        String result = "";
         int total = toDownload.size();
         int count = 1;
+
+        HashMap<String, String> result = new HashMap<String, String>();
 
         for (int i = 0; i < total; i++) {
             FormDetails fd = toDownload.get(i);
             publishProgress(fd.formName, Integer.valueOf(count).toString(), Integer.valueOf(total)
                     .toString());
+
+            String message = "";
+
             try {
                 // get the xml file
                 // if we've downloaded a duplicate, this gives us the file
@@ -290,18 +108,17 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
                                 null);
 
                 Uri uri = null;
-                if (!(alreadyExists.getCount() > 0)) {
+                if (alreadyExists.getCount() <= 0) {
                     // doesn't exist, so insert it
-
                     ContentValues v = new ContentValues();
                     v.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
-                    
-                    HashMap<String, String> formInfo = FileUtils.parseXML(dl);                    
-                    v.put(FormsColumns.DISPLAY_NAME, FileUtils.TITLE);
-                    v.put(FormsColumns.MODEL_VERSION, FileUtils.MODEL);
-                    v.put(FormsColumns.UI_VERSION, FileUtils.UI);
+
+                    HashMap<String, String> formInfo = FileUtils.parseXML(dl);
+                    v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
+                    v.put(FormsColumns.MODEL_VERSION, formInfo.get(FileUtils.MODEL));
+                    v.put(FormsColumns.UI_VERSION, formInfo.get(FileUtils.UI));
                     v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
-                    v.put(FormsColumns.SUBMISSION_URI, FileUtils.SUBMISSIONURI);
+                    v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
                     uri =
                         Collect.getInstance().getContentResolver()
                                 .insert(FormsColumns.CONTENT_URI, v);
@@ -325,30 +142,25 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
                                 c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)), fd,
                                 count, total);
                         if (error != null) {
-                            result = error;
+                            message += error;
                         }
                     }
                 } else {
-                    //TODO:  manifest was null?                
-                    }
+                    // TODO: manifest was null?
+                    Log.e(t, "Manifest was null.  PANIC");
+                }
             } catch (SocketTimeoutException se) {
                 se.printStackTrace();
-                result = "socket timeout exception";
-                // result.put(DL_FORM, new FormDetails(fd.formName));
-                // result.put(DL_ERROR_MSG, new FormDetails(app.getString(R.string.timeout_error)
-                // + se.getLocalizedMessage() + app.getString(R.string.while_accessing)
-                // + fd.downloadUrl + app.getString(R.string.network_login_failure)));
-                break;
+                message += se.getMessage();
             } catch (Exception e) {
                 e.printStackTrace();
-                result = "exeception e";
-                // result.put(DL_FORM, new FormDetails(fd.formName));
-                // result.put(DL_ERROR_MSG, new FormDetails(e.getLocalizedMessage()
-                // + app.getString(R.string.while_accessing) + fd.downloadUrl
-                // + app.getString(R.string.network_login_failure)));
-                break;
+                message += e.getMessage();
             }
             count++;
+            if (message.equalsIgnoreCase("")) {
+                message = "SUCCESS";
+            }
+            result.put(fd.formName, message);
         }
 
         return result;
@@ -438,7 +250,7 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
 
-        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         // set up request...
         HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
@@ -516,10 +328,10 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
 
-        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-            getXmlDocument(fd.manifestUrl, localContext, httpclient, 555, 777);
+            WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient);
 
         if (result.errorMessage != null) {
             return result.errorMessage;
@@ -603,7 +415,7 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
 
         // OK we now have the full set of files to download...
         Log.i(t, "Downloading " + files.size() + " media files.");
-        int mCount = 0;
+        int mediaCount = 0;
         if (files.size() > 0) {
             FileUtils.createFolder(mediaPath);
             File mediaDir = new File(mediaPath);
@@ -611,10 +423,10 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
                 if (isCancelled()) {
                     return "cancelled";
                 }
-                ++mCount;
-                publishProgress(fd.formName + "getting media files count: " + mCount + " and size "
-                        + files.size(), Integer.valueOf(count).toString(), Integer.valueOf(total)
-                        .toString());
+                ++mediaCount;
+                publishProgress(fd.formName + "getting media files count: " + mediaCount
+                        + " and size " + files.size(), Integer.valueOf(count).toString(), Integer
+                        .valueOf(total).toString());
                 try {
                     File mediaFile = new File(mediaDir, toDownload.filename);
 
@@ -644,7 +456,7 @@ public class DownloadFormsTask extends AsyncTask<ArrayList<FormDetails>, String,
 
 
     @Override
-    protected void onPostExecute(String value) {
+    protected void onPostExecute(HashMap<String, String> value) {
         synchronized (this) {
             if (mStateListener != null) {
                 mStateListener.formsDownloadingComplete(value);

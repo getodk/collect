@@ -72,7 +72,7 @@
 <string name="error_downloading">Error Getting Form</string>
 <string name="error_occured">Error Occurred</string>
 <string name="fetching_file">"Getting \"%1$s\".\n\nForm %2$s of %3$s form(s)..."</string>
-<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
+<string name="file_deleted_error">Sorry, %1$s of %2$s selected item(s) failed to delete!</string>
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 <string name="file_invalid">File: %s is invalid.</string>
 <string name="file_missing">File: %s is missing.</string>
@@ -113,6 +113,8 @@
 <string name="ok">OK</string>
 <string name="one_capture">Multimedia recorded.</string>
 <string name="parse_error">Sorry, unable to parse form.</string>
+<string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
+<string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compliant with the OpenRosa version 1.0 standard: %s</string>
 <string name="password">Password</string>
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
@@ -140,6 +142,8 @@
 <string name="send_data">Send Finished Forms</string>
 <string name="send_data_button">Send Finished Forms</string>
 <string name="send_selected_data">Send Selected</string>
+<string name="server_auth_credentials">Please enter username and password for server:\n%s</string>
+<string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
 <string name="server_preferences">Server</string>
 <string name="toggle_selected">Toggle All</string>

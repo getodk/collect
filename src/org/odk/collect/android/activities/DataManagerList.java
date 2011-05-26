@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -40,13 +41,15 @@ import java.util.ArrayList;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DataManagerList extends ListActivity {
-    private static String t = "DataManagerList";
+    private static final String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
 
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
+
+    private static final String SELECTED = "selected";
 
 
     @Override
@@ -59,18 +62,16 @@ public class DataManagerList extends ListActivity {
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (mSelected.size() > 0) {
-                    createDeleteDialog();
+                    createDeleteInstanceDialog();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.noselect_error,
                         Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        
+
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, null);
-        startManagingCursor(c);
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
@@ -79,7 +80,6 @@ public class DataManagerList extends ListActivity {
                 R.id.text1, R.id.text2
         };
 
-        // render total instance view
         mInstances =
             new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
         setListAdapter(mInstances);
@@ -87,8 +87,7 @@ public class DataManagerList extends ListActivity {
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
-        // if current activity is being reinitialized due to changing
-        // orientation
+        // if current activity is being reinitialized due to changing orientation
         // restore all check marks for ones selected
         if (mRestored) {
             ListView ls = getListView();
@@ -100,18 +99,16 @@ public class DataManagerList extends ListActivity {
                     }
                 }
             }
-           mRestored = false;
+            mRestored = false;
         }
-        
-        
+
     }
-    
 
 
     /**
-     * Create the file delete dialog
+     * Create the instance delete dialog
      */
-    private void createDeleteDialog() {
+    private void createDeleteInstanceDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(getString(R.string.delete_file));
         mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
@@ -120,8 +117,8 @@ public class DataManagerList extends ListActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
                     switch (i) {
-                        case DialogInterface.BUTTON1: // delete and
-                            deleteSelectedFiles();
+                        case DialogInterface.BUTTON1: // delete files and clear checkboxes
+                            deleteSelectedInstances();
                             mSelected.clear();
                             getListView().clearChoices();
                             break;
@@ -138,26 +135,28 @@ public class DataManagerList extends ListActivity {
 
 
     /**
-     * Deletes the selected files.First from the database then from the file system
+     * Deletes the selected files. Content provider handles removing the files from the filesystem.
      */
-    private void deleteSelectedFiles() {
+    private void deleteSelectedInstances() {
         ContentResolver cr = getContentResolver();
         int deleted = 0;
         for (int i = 0; i < mSelected.size(); i++) {
-            Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, mSelected.get(i).toString());
+            Uri deleteForm =
+                Uri.withAppendedPath(InstanceColumns.CONTENT_URI, mSelected.get(i).toString());
             deleted += cr.delete(deleteForm, null, null);
         }
-        
+
         if (deleted == mSelected.size()) {
             // all deletes were successful
-            Toast.makeText(getApplicationContext(), getString(R.string.file_deleted_ok, deleted),
-                Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.file_deleted_ok, deleted), Toast.LENGTH_SHORT)
+                    .show();
         } else {
             // had some failures
+            Log.e(t, "Failed to delete " + (mSelected.size() - deleted) + " instances");
             Toast.makeText(
-                getApplicationContext(),
-                getString(R.string.file_deleted_error, mSelected.size() - deleted + " of "
-                        + mSelected.size()), Toast.LENGTH_LONG).show();
+                this,
+                getString(R.string.file_deleted_error, mSelected.size() - deleted, mSelected.size()),
+                Toast.LENGTH_LONG).show();
         }
     }
 
@@ -177,7 +176,6 @@ public class DataManagerList extends ListActivity {
             mSelected.add(k);
 
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
-
     }
 
 
@@ -193,9 +191,10 @@ public class DataManagerList extends ListActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        long[] selectedArray = savedInstanceState.getLongArray("selected");
-        for (int i = 0; i < selectedArray.length; i++)
+        long[] selectedArray = savedInstanceState.getLongArray(SELECTED);
+        for (int i = 0; i < selectedArray.length; i++) {
             mSelected.add(selectedArray[i]);
+        }
         mRestored = true;
     }
 
@@ -204,8 +203,9 @@ public class DataManagerList extends ListActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         long[] selectedArray = new long[mSelected.size()];
-        for (int i = 0; i < mSelected.size(); i++)
+        for (int i = 0; i < mSelected.size(); i++) {
             selectedArray[i] = mSelected.get(i);
-        outState.putLongArray("selected", selectedArray);
+        }
+        outState.putLongArray(SELECTED, selectedArray);
     }
 }

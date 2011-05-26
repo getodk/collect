@@ -74,11 +74,17 @@ public class FileManagerTabs extends TabActivity {
     }
 
 
-    public static void setTabHeader(String string, String tab) {
+    /**
+     * Sets the tab header to the specified name
+     * 
+     * @param name
+     * @param tab
+     */
+    public static void setTabHeader(String name, String tab) {
         if (tab.equals(FORMS_TAB)) {
-            mTVFF.setText(string);
+            mTVFF.setText(name);
         } else if (tab.equals(DATA_TAB)) {
-            mTVDF.setText(string);
+            mTVDF.setText(name);
         }
     }
 
