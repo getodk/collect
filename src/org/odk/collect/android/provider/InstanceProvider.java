@@ -230,7 +230,9 @@ public class InstanceProvider extends ContentProvider {
                 Cursor del = this.query(uri, null, where, whereArgs, null);
                 del.moveToPosition(-1);
                 while (del.moveToNext()) {
-                    deleteFileOrDir(del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    String instanceDir = (new File(instanceFile)).getParent();
+                    deleteFileOrDir(instanceDir);
                 }
                 del.close();
                 count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
@@ -243,7 +245,9 @@ public class InstanceProvider extends ContentProvider {
                 // This should only ever return 1 record.  I hope.
                 c.moveToPosition(-1);
                 while (c.moveToNext()) {
-                    deleteFileOrDir(c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));           
+                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    String instanceDir = (new File(instanceFile)).getParent();
+                    deleteFileOrDir(instanceDir);           
                 }
                 c.close();
                 

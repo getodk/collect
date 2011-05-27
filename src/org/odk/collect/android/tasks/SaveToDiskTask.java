@@ -91,8 +91,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
+    /**
+     * Write's the data to the sdcard, and updates the instances content provider.
+     * In theory we don't have to write to disk, and this is where you'd add
+     * other methods.
+     * @param markCompleted
+     * @return
+     */
     public boolean exportData(boolean markCompleted) {
-
         ByteArrayPayload payload;
         try {
 
@@ -110,45 +116,72 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
+        // If FormEntryActivity was started with an Instance, just update that instance
         if (Collect.getInstance().getContentResolver().getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
             ContentValues values = new ContentValues();
             if (!mMarkCompleted) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-                Collect.getInstance().getContentResolver().update(mUri, values, null, null);
             } else {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
-                Collect.getInstance().getContentResolver().update(mUri, values, null, null);
             }
-
+            Collect.getInstance().getContentResolver().update(mUri, values, null, null);
         } else if (Collect.getInstance().getContentResolver().getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
-            Cursor c = Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
-            c.moveToFirst();
-            String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
-            String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-
+            // If FormEntryActivity was started with a form, then it's likely the first time we're
+            // saving.
+            // However, it could be a not-first time saving if the user has been using the manual
+            // 'save data' option from the menu. So try to update first, then make a new one if that
+            // fails.
             ContentValues values = new ContentValues();
-
             if (mMarkCompleted) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
             } else {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             }
-            values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
-            values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
-            values.put(InstanceColumns.SUBMISSION_URI, "submission");
-            values.put(InstanceColumns.DISPLAY_NAME, formname);
-            values.put(InstanceColumns.JR_FORM_ID, jrformid);
-            Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
 
+            String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+            String[] whereArgs = {
+                FormEntryActivity.mInstancePath
+            };
+            int updated =
+                Collect.getInstance().getContentResolver()
+                        .update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
+            if (updated > 1) {
+                Log.w(t, "Updated more than one entry, that's not good");
+            } else if (updated == 1) {
+                Log.i(t, "Instance already exists, updating");
+                // already existed and updated just fine
+                return true;
+            } else {
+                Log.e(t, "No instance found, creating");
+                // Entry didn't exist, so create it.
+                Cursor c =
+                    Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
+                c.moveToFirst();
+                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
+
+                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
+                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
+                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
+                values.put(InstanceColumns.DISPLAY_NAME, formname);
+                values.put(InstanceColumns.JR_FORM_ID, jrformid);
+                Collect.getInstance().getContentResolver()
+                        .insert(InstanceColumns.CONTENT_URI, values);
+            }
         }
 
         return true;
-
     }
 
 
+    /**
+     * This method actually writes the xml to disk.
+     * @param payload
+     * @param path
+     * @return
+     */
     private boolean exportXmlFile(ByteArrayPayload payload, String path) {
-
         // create data stream
         InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();
@@ -181,7 +214,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         }
 
         return false;
-
     }
 
 
@@ -215,11 +247,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * @param markCompleted
      * @return validatedStatus
      */
-
     private int validateAnswers(Boolean markCompleted) {
-
         FormIndex i = FormEntryActivity.mFormController.getFormIndex();
-
         FormEntryActivity.mFormController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
         int event;

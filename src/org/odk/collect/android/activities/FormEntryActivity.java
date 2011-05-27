@@ -620,10 +620,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     managedQuery(FormsColumns.CONTENT_URI, projection, selection, selectionArgs,
                         null);
                 String mediaDir = null;
-                if (c.getCount() != 1) {
+                if (c.getCount() < 1) {
                     createErrorDialog("form Doesn't exist", true);
                     return new View(this);
                 } else {
+                    c.moveToFirst();
                     mediaDir = c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
                 }
 
@@ -1021,7 +1022,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT).show();
             return false;
         }
-
+        
+        Log.e("Carl", "what?  intent? " + getIntent());
+        if (getIntent() != null) {
+            Log.e("Carl", "what?  data? " + getIntent().getData());
+        } else {
+            Log.e("Carl", "but no data");
+        }
         mSaveToDiskTask = new SaveToDiskTask(getIntent().getData());
         mSaveToDiskTask.setFormSavedListener(this);
         mSaveToDiskTask.setExportVars(exit, complete);
@@ -1076,21 +1083,27 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                         String instanceFolder =
                                             mInstancePath.substring(0,
                                                 mInstancePath.lastIndexOf("/") + 1);
+                                        Log.i(t, "attempting to delete: " + instanceFolder);
                                         String where =
                                             Images.Media.DATA + " like '" + instanceFolder + "%'";
-                                        getContentResolver().delete(
+                                        int images = getContentResolver().delete(
                                             Images.Media.EXTERNAL_CONTENT_URI, where, null);
-                                        getContentResolver().delete(
+                                        int audio = getContentResolver().delete(
                                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where,
                                             null);
-                                        getContentResolver().delete(
+                                        int video = getContentResolver().delete(
                                             MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where,
                                             null);
-                                        File f = new File(mInstancePath);
+                                        Log.i(t, "revmoved from content providers: " + images + " image files, " 
+                                            + audio + " audio files" + " and " 
+                                            + video + " video files.");
+                                        File f = new File(instanceFolder);
                                         if (f.exists() && f.isDirectory()) {
                                             for (File del : f.listFiles()) {
+                                                Log.i(t, "deleting file: " + del.getAbsolutePath());
                                                 del.delete();
                                             }
+                                            f.delete();
                                         }
                                     }
 
