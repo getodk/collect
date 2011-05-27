@@ -209,11 +209,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.view.ViewGroup#getFocusedChild()
-     */
     @Override
     public View getFocusedChild() {
         // TODO Auto-generated method stub

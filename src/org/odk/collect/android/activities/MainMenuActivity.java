@@ -116,11 +116,6 @@ public class MainMenuActivity extends Activity {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onPause()
-     */
     @Override
     protected void onPause() {
         dismissDialogs();

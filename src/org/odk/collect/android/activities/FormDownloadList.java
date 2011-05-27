@@ -369,7 +369,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // cancel
-                            // TODO: refresh?
                         }
                     });
 
@@ -536,7 +535,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     }
 
 
-    @SuppressWarnings("unchecked")
     @Override
     public void formsDownloadingComplete(HashMap<String, String> result) {
         if (mDownloadFormsTask != null) {
@@ -555,7 +553,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             b.append("\n\n");
         }
         
-        createAlertDialog("results", b.toString(), EXIT);
+        createAlertDialog(getString(R.string.download_forms_result), b.toString(), EXIT);
         
     }
 

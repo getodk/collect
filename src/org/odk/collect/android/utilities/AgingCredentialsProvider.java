@@ -43,24 +43,12 @@ public class AgingCredentialsProvider implements CredentialsProvider {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.http.impl.client.BasicCredentialsProvider#clear()
-     */
     @Override
     public synchronized void clear() {
         provider.clear();
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.http.impl.client.BasicCredentialsProvider#getCredentials(org.apache.http.auth.
-     * AuthScope)
-     */
     @Override
     public synchronized Credentials getCredentials(AuthScope authscope) {
         if (nextClearTimestamp < System.currentTimeMillis()) {
@@ -71,13 +59,6 @@ public class AgingCredentialsProvider implements CredentialsProvider {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.http.impl.client.BasicCredentialsProvider#setCredentials(org.apache.http.auth.
-     * AuthScope, org.apache.http.auth.Credentials)
-     */
     @Override
     public synchronized void setCredentials(AuthScope authscope, Credentials credentials) {
         if (nextClearTimestamp < System.currentTimeMillis()) {

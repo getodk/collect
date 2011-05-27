@@ -65,8 +65,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
         mWaitingForData = false;
         mInstanceFolder =
-            FormEntryActivity.InstancePath.substring(0,
-                FormEntryActivity.InstancePath.lastIndexOf("/") + 1);
+            FormEntryActivity.mInstancePath.substring(0,
+                FormEntryActivity.mInstancePath.lastIndexOf("/") + 1);
 
         setOrientation(LinearLayout.VERTICAL);
 

@@ -233,12 +233,7 @@ public class FormsProvider extends ContentProvider {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String,
-     * java.lang.String[])
-     * 
+    /**
      * This method removes the entry from the content provider, and also removes any associated
      * files. files: form.xml, [formmd5].formdef, formname-media {directory}
      */

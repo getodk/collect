@@ -21,15 +21,14 @@ import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -50,10 +49,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private final static String t = "SaveToDiskTask";
 
     private FormSavedListener mSavedListener;
-    private Context mContext;
     private Boolean mSave;
     private Boolean mMarkCompleted;
-    private ContentResolver mContentResolver;
     private Uri mUri;
 
     public static final int SAVED = 500;
@@ -62,10 +59,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     public static final int VALIDATED = 503;
     public static final int SAVED_AND_EXIT = 504;
 
-    public SaveToDiskTask(ContentResolver cr, Uri uri) {
-        mContentResolver = cr;
+
+    public SaveToDiskTask(Uri uri) {
         mUri = uri;
     }
+
 
     /**
      * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
@@ -82,9 +80,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
         FormEntryActivity.mFormController.postProcessInstance();
 
-        if (mSave && exportData(mContext, mMarkCompleted)) {
+        if (mSave && exportData(mMarkCompleted)) {
             return SAVED_AND_EXIT;
-        } else if (exportData(mContext, mMarkCompleted)) {
+        } else if (exportData(mMarkCompleted)) {
             return SAVED;
         }
 
@@ -93,19 +91,18 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public boolean exportData(Context context, boolean markCompleted) {
+    public boolean exportData(boolean markCompleted) {
 
         ByteArrayPayload payload;
         try {
 
             // assume no binary data inside the model.
-            FormInstance datamodel =
-                FormEntryActivity.mFormController.getInstance();
+            FormInstance datamodel = FormEntryActivity.mFormController.getInstance();
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
             // write out xml
-            exportXmlFile(payload, FormEntryActivity.InstancePath);
+            exportXmlFile(payload, FormEntryActivity.mInstancePath);
 
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
@@ -113,22 +110,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
-        if (mContentResolver.getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) { 
+        if (Collect.getInstance().getContentResolver().getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
             ContentValues values = new ContentValues();
             if (!mMarkCompleted) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-                mContentResolver.update(mUri, values, null, null);
+                Collect.getInstance().getContentResolver().update(mUri, values, null, null);
             } else {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
-                mContentResolver.update(mUri, values, null, null);
+                Collect.getInstance().getContentResolver().update(mUri, values, null, null);
             }
-            
-        } else if (mContentResolver.getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
-            Cursor c =  mContentResolver.query(mUri, null, null, null, null);
+
+        } else if (Collect.getInstance().getContentResolver().getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
+            Cursor c = Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
             c.moveToFirst();
             String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
             String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-            
+
             ContentValues values = new ContentValues();
 
             if (mMarkCompleted) {
@@ -136,16 +133,15 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             } else {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             }
-            values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.InstancePath);
-            values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.InstancePath);
+            values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
+            values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
             values.put(InstanceColumns.SUBMISSION_URI, "submission");
             values.put(InstanceColumns.DISPLAY_NAME, formname);
-            values.put(InstanceColumns.JR_FORM_ID, jrformid );
-            mContentResolver.insert(InstanceColumns.CONTENT_URI, values);
-            
+            values.put(InstanceColumns.JR_FORM_ID, jrformid);
+            Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
+
         }
-        
-        
+
         return true;
 
     }
@@ -205,9 +201,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
 
-    public void setExportVars(Context context, Boolean saveAndExit,
-            Boolean markCompleted) {
-        mContext = context;
+    public void setExportVars(Boolean saveAndExit, Boolean markCompleted) {
         mSave = saveAndExit;
         mMarkCompleted = markCompleted;
     }
@@ -229,13 +223,15 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         FormEntryActivity.mFormController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
         int event;
-        while ((event = FormEntryActivity.mFormController.stepToNextEvent(FormController.STEP_OVER_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
+        while ((event =
+            FormEntryActivity.mFormController.stepToNextEvent(FormController.STEP_OVER_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
             if (event != FormEntryController.EVENT_QUESTION) {
                 continue;
             } else {
                 int saveStatus =
-                    FormEntryActivity.mFormController.answerQuestion(FormEntryActivity.mFormController.getQuestionPrompt()
-                            .getAnswerValue());
+                    FormEntryActivity.mFormController
+                            .answerQuestion(FormEntryActivity.mFormController.getQuestionPrompt()
+                                    .getAnswerValue());
                 if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) {
                     return saveStatus;
                 }

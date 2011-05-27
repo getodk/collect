@@ -355,11 +355,6 @@ public class FormHierarchyActivity extends ListActivity {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
-     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {

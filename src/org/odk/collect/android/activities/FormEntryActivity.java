@@ -68,6 +68,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -128,7 +129,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final int SAVING_DIALOG = 2;
 
     private String mFormPath;
-    public static String InstancePath;
+    public static String mInstancePath;
     private GestureDetector mGestureDetector;
 
     public static FormController mFormController;
@@ -146,9 +147,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped;
 
-    // TODO: should this be a member variable?
-    private CheckBox mInstanceComplete;
-
     private FormLoaderTask mFormLoaderTask;
     private SaveToDiskTask mSaveToDiskTask;
 
@@ -161,15 +159,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // must be at the beginning of any activity that can be called from an external intent 
+
+        // must be at the beginning of any activity that can be called from an external intent
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
-        
+
         setContentView(R.layout.form_entry);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.loading_form));
 
@@ -227,7 +225,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
-                                
+
                 if (getContentResolver().getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
                     Cursor instanceCursor = this.managedQuery(uri, null, null, null, null);
                     if (instanceCursor.getCount() != 1) {
@@ -235,29 +233,37 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         return;
                     } else {
                         instanceCursor.moveToFirst();
-                        InstancePath = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-              
-                        String jrFormId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        String submissionURI = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.SUBMISSION_URI));
-                        String[] projection = {FormsColumns._ID};
-                        
-                        String[] selectionArgs = {jrFormId};
+                        mInstancePath =
+                            instanceCursor.getString(instanceCursor
+                                    .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+
+                        String jrFormId =
+                            instanceCursor.getString(instanceCursor
+                                    .getColumnIndex(InstanceColumns.JR_FORM_ID));
+
+                        String[] selectionArgs = {
+                            jrFormId
+                        };
                         String selection = FormsColumns.JR_FORM_ID + " like ?";
-                        
-                        Cursor formCursor = managedQuery(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+
+                        Cursor formCursor =
+                            managedQuery(FormsColumns.CONTENT_URI, null, selection, selectionArgs,
+                                null);
                         if (formCursor.getCount() == 1) {
                             formCursor.moveToFirst();
-                            mFormPath = formCursor.getString(formCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                        } else if (formCursor.getCount() < 1){
+                            mFormPath =
+                                formCursor.getString(formCursor
+                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                        } else if (formCursor.getCount() < 1) {
                             this.createErrorDialog("Parent form does not exist", EXIT);
                             return;
                         } else if (formCursor.getCount() > 1) {
                             this.createErrorDialog("More than one possible parent form", EXIT);
                             return;
                         }
-                            
+
                     }
-                    
+
                 } else if (getContentResolver().getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
                     Cursor c = this.managedQuery(uri, null, null, null, null);
                     if (c.getCount() != 1) {
@@ -272,7 +278,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     this.createErrorDialog("unrecognized URI: " + uri, EXIT);
                     return;
                 }
-                
+
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath);
                 showDialog(PROGRESS_DIALOG);
@@ -281,11 +287,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
-     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -295,11 +296,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -321,15 +317,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 /*
                  * We saved the image to the tempfile_path, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
-                 * inserting it into the content provider. TODO: Once the android image capture bug
-                 * gets fixed, (read, we move on from Android 1.6) we want to handle images the
-                 * audio and video
+                 * inserting it into the content provider. Once the android image capture bug gets
+                 * fixed, (read, we move on from Android 1.6) we want to handle images the audio and
+                 * video
                  */
                 // The intent is empty, but we know we saved the image to the temp file
                 File fi = new File(Collect.TMPFILE_PATH);
 
                 String mInstanceFolder =
-                    InstancePath.substring(0, InstancePath.lastIndexOf("/") + 1);
+                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
                 String s = mInstanceFolder + "/" + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
@@ -359,9 +355,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move it there before
-                 * inserting it into the content provider. TODO: Once the android image capture bug
-                 * gets fixed, (read, we move on from Android 1.6) we want to handle images the
-                 * audio and video
+                 * inserting it into the content provider. Once the android image capture bug gets
+                 * fixed, (read, we move on from Android 1.6) we want to handle images the audio and
+                 * video
                  */
 
                 // get gp of chosen file
@@ -377,7 +373,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // Copy file to sdcard
                 String mInstanceFolder1 =
-                    InstancePath.substring(0, InstancePath.lastIndexOf("/") + 1);
+                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
                 String destImagePath = mInstanceFolder1 + "/" + System.currentTimeMillis() + ".jpg";
 
                 File source = new File(sourceImagePath);
@@ -456,11 +452,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.removeItem(MENU_DELETE_REPEAT);
@@ -484,11 +475,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -517,7 +503,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * @return true if the current View represents a question in the form
      */
     private boolean currentPromptIsQuestion() {
-        // TODO: get rid of this when start/end screens are extended/interfaced
         return (mFormController.getEvent() == FormEntryController.EVENT_QUESTION || mFormController
                 .getEvent() == FormEntryController.EVENT_GROUP);
     }
@@ -534,8 +519,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mFormController.getEvent() == FormEntryController.EVENT_QUESTION
                 || (mFormController.getEvent() == FormEntryController.EVENT_GROUP && mFormController
                         .indexIsInFieldList())) {
-            // TODO: does this need to be a map? Widgets contain formIndexes and answers, so could
-            // potentially just be a list of IAnswerData
             HashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView).getAnswers();
             Set<FormIndex> indexKeys = answers.keySet();
             for (FormIndex index : indexKeys) {
@@ -566,12 +549,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu, android.view.View,
-     * android.view.ContextMenu.ContextMenuInfo)
-     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -594,11 +571,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onRetainNonConfigurationInstance() If we're loading, then we pass
-     * the loading thread to our next instance.
+    /**
+     * If we're loading, then we pass the loading thread to our next instance.
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
@@ -618,10 +592,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * TODO: carlhartung make the beginning and end of the forms implement an interface (or abstract
-     * the class. probably the interface is best.
-     */
     /**
      * Creates a view given the View type and an event
      * 
@@ -639,13 +609,28 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     R.string.enter_data_description, mFormController.getFormTitle()));
 
                 Drawable image = null;
+                String[] projection = {
+                    FormsColumns.FORM_MEDIA_PATH
+                };
+                String selection = FormsColumns.FORM_FILE_PATH + "=?";
+                String[] selectionArgs = {
+                    mFormPath
+                };
+                Cursor c =
+                    managedQuery(FormsColumns.CONTENT_URI, projection, selection, selectionArgs,
+                        null);
+                String mediaDir = null;
+                if (c.getCount() != 1) {
+                    createErrorDialog("form Doesn't exist", true);
+                    return new View(this);
+                } else {
+                    mediaDir = c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
+                }
 
-                String formLogoPath = null;
-                // FileUtils.getFormMediaPath(mFormPath) + FileUtils.FORM_LOGO_FILE_NAME;
-                // TODO: need to get the form logo file from the xform.
                 BitmapDrawable bitImage = null;
                 // attempt to load the form-specific logo...
-                bitImage = new BitmapDrawable(formLogoPath);
+                // this is arbitrarily silly
+                bitImage = new BitmapDrawable(mediaDir + "form_logo.png");
 
                 if (bitImage != null && bitImage.getBitmap() != null
                         && bitImage.getIntrinsicHeight() > 0 && bitImage.getIntrinsicWidth() > 0) {
@@ -657,8 +642,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     image = getResources().getDrawable(R.drawable.opendatakit_zig);
                 }
 
-                // ((ImageView)
-                // startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
+                ((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
                 return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
@@ -666,8 +650,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     R.string.save_enter_data_description, mFormController.getFormTitle()));
 
                 // checkbox for if finished or ready to send
-                mInstanceComplete = ((CheckBox) endView.findViewById(R.id.mark_finished));
-                mInstanceComplete.setChecked(isInstanceComplete());
+                final CheckBox instanceComplete =
+                    ((CheckBox) endView.findViewById(R.id.mark_finished));
+                instanceComplete.setChecked(isInstanceComplete());
 
                 // Create 'save for later' button
                 ((Button) endView.findViewById(R.id.save_exit_button))
@@ -675,7 +660,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             @Override
                             public void onClick(View v) {
                                 // Form is marked as 'saved' here.
-                                saveDataToDisk(EXIT, mInstanceComplete.isChecked());
+                                saveDataToDisk(EXIT, instanceComplete.isChecked());
                             }
                         });
 
@@ -698,10 +683,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     return new View(this);
                 }
 
-                // ArrayList<QuestionWidget> qWidgtets = odkv.getWidgets();
+                // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
-                    this.registerForContextMenu(qw);
-                    // qw.setOnLongClickListener(this);
+                    registerForContextMenu(qw);
                 }
 
                 return odkv;
@@ -712,11 +696,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#dispatchTouchEvent(android.view.MotionEvent)
-     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent mv) {
         boolean handled = onTouchEvent(mv);
@@ -727,11 +706,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
-     */
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         /*
@@ -818,8 +792,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * appropriate view. Also saves answers to the data model without checking constraints.
      */
     private void showPreviousView() {
-        // The answer is saved on a back swipe, but question constraints are
-        // ignored.
+        // The answer is saved on a back swipe, but question constraints are ignored.
         if (currentPromptIsQuestion()) {
             saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
         }
@@ -886,7 +859,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    // TODO: use managed dialogs when the bugs are fixed
+    // Hopefully someday we can use managed dialogs when the bugs are fixed
     /*
      * Ideally, we'd like to use Android to manage dialogs with onCreateDialog() and
      * onPrepareDialog(), but dialogs with dynamic content are broken in 1.5 (cupcake). We do use
@@ -1045,19 +1018,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private boolean saveDataToDisk(boolean exit, boolean complete) {
         // save current answer
         if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
-                Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        mSaveToDiskTask = new SaveToDiskTask(getContentResolver(), getIntent().getData());
+        mSaveToDiskTask = new SaveToDiskTask(getIntent().getData());
         mSaveToDiskTask.setFormSavedListener(this);
-
-        // TODO remove completion option from db
-        // TODO move to constructor <--? No. the mInstancePath isn't set until
-        // the form loads.
-        // TODO remove context if possilbe
-        mSaveToDiskTask.setExportVars(getApplicationContext(), exit, complete);
+        mSaveToDiskTask.setExportVars(exit, complete);
         mSaveToDiskTask.execute();
         showDialog(SAVING_DIALOG);
 
@@ -1069,24 +1036,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Create a dialog with options to save and exit, save, or quit without saving
      */
     private void createQuitDialog() {
-        String[] items =
-            {
-                getString(R.string.keep_changes), getString(R.string.do_not_save)           };
+        String[] items = {
+                getString(R.string.keep_changes), getString(R.string.do_not_save)
+        };
 
         mAlertDialog =
-            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle(getString(R.string.quit_application,mFormController.getFormTitle()))
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(getString(R.string.quit_application, mFormController.getFormTitle()))
                     .setNeutralButton(getString(R.string.do_not_exit),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog,
-                                int id) {
-                           
-                            dialog.cancel();
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
 
-                        }
-                    })
-                    .setItems(items, new DialogInterface.OnClickListener() {
+                                dialog.cancel();
+
+                            }
+                        }).setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
@@ -1094,29 +1060,40 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 case 0: // save and exit
                                     saveDataToDisk(EXIT, isInstanceComplete());
                                     break;
-                                    
+
                                 case 1: // discard changes and exit
-                                    
-                                    String selection = InstanceColumns.INSTANCE_FILE_PATH + " like '" + InstancePath + "'";
-                                    Cursor c = FormEntryActivity.this.managedQuery(InstanceColumns.CONTENT_URI, null, selection, null, null);
+
+                                    String selection =
+                                        InstanceColumns.INSTANCE_FILE_PATH + " like '"
+                                                + mInstancePath + "'";
+                                    Cursor c =
+                                        FormEntryActivity.this.managedQuery(
+                                            InstanceColumns.CONTENT_URI, null, selection, null,
+                                            null);
                                     // if it's not already saved, erase everything
                                     if (c.getCount() < 1) {
                                         // delete media first
                                         String instanceFolder =
-                                            InstancePath.substring(0,
-                                                InstancePath.lastIndexOf("/") + 1);
-                                        String where = Images.Media.DATA + " like '" + instanceFolder + "%'";
-                                        getContentResolver().delete(Images.Media.EXTERNAL_CONTENT_URI, where, null);
-                                        getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where, null);
-                                        getContentResolver().delete(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where, null);
-                                        File f = new File(InstancePath);
+                                            mInstancePath.substring(0,
+                                                mInstancePath.lastIndexOf("/") + 1);
+                                        String where =
+                                            Images.Media.DATA + " like '" + instanceFolder + "%'";
+                                        getContentResolver().delete(
+                                            Images.Media.EXTERNAL_CONTENT_URI, where, null);
+                                        getContentResolver().delete(
+                                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where,
+                                            null);
+                                        getContentResolver().delete(
+                                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where,
+                                            null);
+                                        File f = new File(mInstancePath);
                                         if (f.exists() && f.isDirectory()) {
                                             for (File del : f.listFiles()) {
                                                 del.delete();
                                             }
                                         }
                                     }
-  
+
                                     finish();
                                     break;
 
@@ -1206,11 +1183,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onCreateDialog(int) We use Android's dialog management for
-     * loading/saving progress dialogs
+    /**
+     * We use Android's dialog management for loading/saving progress dialogs
      */
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -1270,24 +1244,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onPause()
-     */
     @Override
     protected void onPause() {
         dismissDialogs();
-        // TODO: we should probably save the current screen here, too.
+        if (currentPromptIsQuestion()) {
+            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+        }
         super.onPause();
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onResume()
-     */
     @Override
     protected void onResume() {
         if (mFormLoaderTask != null) {
@@ -1304,11 +1270,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
-     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
@@ -1334,11 +1295,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onDestroy()
-     */
     @Override
     protected void onDestroy() {
         if (mFormLoaderTask != null) {
@@ -1361,42 +1317,24 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         mFormController = null;
-        InstancePath = null;
+        mInstancePath = null;
         super.onDestroy();
 
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.view.animation.Animation.AnimationListener#onAnimationEnd(android
-     * .view.animation.Animation)
-     */
     @Override
     public void onAnimationEnd(Animation arg0) {
         mBeenSwiped = false;
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.view.animation.Animation.AnimationListener#onAnimationRepeat(
-     * android.view.animation.Animation)
-     */
     @Override
     public void onAnimationRepeat(Animation animation) {
         // Added by AnimationListener interface.
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.view.animation.Animation.AnimationListener#onAnimationStart(android
-     * .view.animation.Animation)
-     */
     @Override
     public void onAnimationStart(Animation animation) {
         // Added by AnimationListener interface.
@@ -1413,7 +1351,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mFormController = fc;
 
         // Set saved answer path
-        if (InstancePath == null) {
+        if (mInstancePath == null) {
 
             // Create new answer folder.
             String time =
@@ -1423,7 +1361,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
             String path = Collect.INSTANCES_PATH + "/" + file + "_" + time;
             if (FileUtils.createFolder(path)) {
-                InstancePath = path + "/" + file + "_" + time + ".xml";
+                mInstancePath = path + "/" + file + "_" + time + ".xml";
             }
         } else {
             // we've just loaded a saved form, so start in the hierarchy view
@@ -1436,11 +1374,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.odk.collect.android.listeners.FormLoaderListener#loadingError(java.lang.String)
-     * 
+    /**
      * called by the FormLoaderTask if something goes wrong.
      */
     @Override
@@ -1455,11 +1389,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.odk.collect.android.listeners.FormSavedListener#savingComplete(int)
-     * 
+    /**
      * Called by the FormLoaderTask if everything loads correctly.
      */
     @Override
@@ -1467,25 +1397,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         dismissDialog(SAVING_DIALOG);
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
-                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.data_saved_ok), Toast.LENGTH_SHORT).show();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
-                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.data_saved_ok), Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
-                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
-                    Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_LONG)
+                        .show();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 refreshCurrentView();
-                // TODO:
-                createConstraintToast("Crap, this needs to get implemented", saveStatus);
-                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
-                    Toast.LENGTH_LONG).show();
+                Toast.makeText(this, saveStatus, Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -1517,10 +1442,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private boolean isInstanceComplete() {
         boolean complete = false;
-        
+
         String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] selectionArgs = {InstancePath};
-        Cursor c = getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+        String[] selectionArgs = {
+            mInstancePath
+        };
+        Cursor c =
+            getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
+                null);
         startManagingCursor(c);
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();

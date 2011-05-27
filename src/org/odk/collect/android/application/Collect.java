@@ -114,11 +114,6 @@ public class Collect extends Application {
     }
 
 
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Application#onCreate()
-     */
     @Override
     public void onCreate() {
         singleton = this;

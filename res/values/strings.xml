@@ -55,6 +55,7 @@
 <string name="discard_answer">Remove Response</string>
 <string name="discard_group">Remove Group</string>
 <string name="download">Get Selected</string>
+<string name="download_forms_result">Dowloading Forms Result</string>
 <string name="downloading_data">Connecting to Server</string>
 <string name="download_all_successful">All forms downloaded successfully.</string>
 <string name="download_complete">Form Get Complete</string>

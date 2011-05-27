@@ -40,11 +40,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private static double LOCATION_ACCURACY = 5;
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onCreate(android.os.Bundle)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +51,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onPause()
-     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -75,11 +65,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onResume()
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,21 +125,17 @@ public class GeoPointActivity extends Activity implements LocationListener {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onLocationChanged(android.location. Location)
-     */
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
         mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
             mLocation.getProvider(), truncateDouble(mLocation.getAccuracy())));
-        
+
         if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
             returnLocation();
         }
     }
+
 
     private String truncateDouble(float number) {
         DecimalFormat df = new DecimalFormat("#.##");
@@ -162,36 +143,20 @@ public class GeoPointActivity extends Activity implements LocationListener {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
-     */
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error), Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
+            Toast.LENGTH_SHORT).show();
         finish();
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
-     */
     @Override
     public void onProviderEnabled(String provider) {
 
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.location.LocationListener#onStatusChanged(java.lang.String, int,
-     * android.os.Bundle)
-     */
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
