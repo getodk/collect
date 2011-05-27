@@ -187,7 +187,7 @@ public class FormController {
      * Tests if the FormIndex 'index' is located inside a group that is marked as a "field-list"
      * 
      * @param index
-     * @return true if index is in a "field-list".  False otherwise.
+     * @return true if index is in a "field-list". False otherwise.
      */
     public boolean indexIsInFieldList(FormIndex index) {
         int event = mFormEntryController.getModel().getEvent(index);
@@ -216,7 +216,7 @@ public class FormController {
     /**
      * Tests if the current FormIndex is located inside a group that is marked as a "field-list"
      * 
-     * @return true if index is in a "field-list".  False otherwise.
+     * @return true if index is in a "field-list". False otherwise.
      */
     public boolean indexIsInFieldList() {
         return indexIsInFieldList(mFormEntryController.getModel().getFormIndex());
@@ -384,10 +384,6 @@ public class FormController {
      * (2) > group2 (3) and you call deleteRepeat, it will delete the 3rd instance of group2.
      */
     public void deleteRepeat() {
-        /*
-         * TODO: No idea what happens when you try to call this on a FormIndex not in a repeat.
-         * Should probably throw an error.
-         */
         FormIndex fi = mFormEntryController.deleteRepeat();
         mFormEntryController.jumpToIndex(fi);
     }
@@ -404,7 +400,7 @@ public class FormController {
 
 
     /**
-     * Returns an array of question promps. TODO: Can I call this with just one?
+     * Returns an array of question promps.
      * 
      * @return
      */
@@ -420,15 +416,13 @@ public class FormController {
         if (mFormEntryController.getModel().getForm().getChild(currentIndex) instanceof GroupDef) {
             GroupDef gd =
                 (GroupDef) mFormEntryController.getModel().getForm().getChild(currentIndex);
-            FormIndex idxChild = mFormEntryController.getModel().incrementIndex(currentIndex, true); // descend
-                                                                                                     // //
-                                                                                                     // into
-                                                                                                     // group
-            // TODO: just use size here.
-            for (Object child : gd.getChildren()) {
+            // descend into group
+            FormIndex idxChild = mFormEntryController.getModel().incrementIndex(currentIndex, true);
+
+            for (int i = 0; i < gd.getChildren().size(); i++) {
                 indicies.add(idxChild);
-                idxChild = mFormEntryController.getModel().incrementIndex(idxChild, false); // don't
-                                                                                            // descend
+                // don't descend
+                idxChild = mFormEntryController.getModel().incrementIndex(idxChild, false);
             }
 
             questions = new FormEntryPrompt[indicies.size()];

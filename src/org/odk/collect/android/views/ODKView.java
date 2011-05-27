@@ -151,13 +151,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
 
-    /**
-     * TODO: Legacy function to bring keyboard up/down. should we still do that?
-     * 
-     * @param context
-     */
     public void setFocus(Context context) {
-        // TODO: implement me
+        if (widgets.size() > 0) {
+            widgets.get(0).setFocus(context);
+        }
     }
 
 
@@ -199,20 +196,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
 
-    public void clearAnswer(FormIndex index) {
-        // TODO: implement me?
-    }
-
-
     public ArrayList<QuestionWidget> getWidgets() {
         return widgets;
-    }
-
-
-    @Override
-    public View getFocusedChild() {
-        // TODO Auto-generated method stub
-        return super.getFocusedChild();
     }
 
 
@@ -227,8 +212,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
     @Override
     public boolean onLongClick(View v) {
-
-        Log.e("Carl", "that's a long click.  woot.");
         return false;
     }
 
