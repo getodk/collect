@@ -64,17 +64,18 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
             while (mCursor.moveToNext()) {
                 String sqlFilename =
                     mCursor.getString(mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                String md5 =  mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
+                String md5 = mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
                 File sqlFile = new File(sqlFilename);
                 if (sqlFile.exists()) {
                     // remove it from the arraylist
                     xForms.remove(sqlFile);
                     if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
                         // Probably someone overwrite the file on the sdcard, update its md5.
-                        String id =  mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
+                        String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
                         Uri update = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
                         ContentValues updateValues = new ContentValues();
-                        // Note, this is the same path here, but update will automatically update the .md5
+                        // Note, this is the same path here, but update will automatically update
+                        // the .md5
                         // and the cache path.
                         updateValues.put(FormsColumns.FORM_FILE_PATH, sqlFile.getAbsolutePath());
                         int count = mContentResolver.update(update, updateValues, null, null);
@@ -89,40 +90,37 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
             for (int i = 0; i < xForms.size(); i++) {
                 ContentValues values = new ContentValues();
                 File addMe = xForms.get(i);
-                
+
                 if (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml")) {
                     HashMap<String, String> fields = FileUtils.parseXML(addMe);
-                    
+
                     String title = fields.get(FileUtils.TITLE);
                     String ui = fields.get(FileUtils.UI);
                     String model = fields.get(FileUtils.MODEL);
                     String formid = fields.get(FileUtils.FORMID);
                     String submission = fields.get(FileUtils.SUBMISSIONURI);
-                    
+
                     if (title != null) {
-                        values.put(FormsColumns.DISPLAY_NAME, title);   
+                        values.put(FormsColumns.DISPLAY_NAME, title);
                     } else {
-                        // TODO:  Return some nasty error.
+                        // TODO: Return some nasty error.
                     }
                     if (formid != null) {
-                        values.put(FormsColumns.JR_FORM_ID, formid);                    
+                        values.put(FormsColumns.JR_FORM_ID, formid);
                     } else {
-                     // TODO:  return some nasty error.  
+                        // TODO: return some nasty error.
                     }
                     if (ui != null) {
-                        values.put(FormsColumns.UI_VERSION, ui);   
+                        values.put(FormsColumns.UI_VERSION, ui);
                     }
                     if (model != null) {
-                        values.put(FormsColumns.MODEL_VERSION, model);   
+                        values.put(FormsColumns.MODEL_VERSION, model);
                     }
                     if (submission != null) {
                         values.put(FormsColumns.SUBMISSION_URI, submission);
                     }
-                    
-                    
+
                     values.put(FormsColumns.FORM_FILE_PATH, addMe.getAbsolutePath());
-                    
-                    Uri uri = mContentResolver.insert(FormsColumns.CONTENT_URI, values);
                 } else {
                     // it's a [formname]-media directory, likely, so skip it
                 }
@@ -136,8 +134,6 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
     public void setDiskSyncListener(DiskSyncListener l) {
         mListener = l;
     }
-
-   
 
 
     @Override

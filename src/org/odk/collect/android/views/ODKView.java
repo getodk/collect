@@ -153,6 +153,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
     public void setFocus(Context context) {
         if (widgets.size() > 0) {
+            Log.e("Carl", "setting focus");
             widgets.get(0).setFocus(context);
         }
     }

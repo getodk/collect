@@ -89,13 +89,13 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
-        this.requestFocus();
+        mAnswer.requestFocus();
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (!mReadOnly) {
-            inputManager.showSoftInput(this, 0);
+            inputManager.showSoftInput(mAnswer, 0);
         } else {
-            inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+            inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
         }
     }
 
@@ -111,7 +111,6 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        // TODO Auto-generated method stub
         super.setOnLongClickListener(l);
         mAnswer.setOnLongClickListener(l);
     }

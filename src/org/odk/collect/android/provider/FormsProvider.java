@@ -297,11 +297,11 @@ public class FormsProvider extends ContentProvider {
                 }
                 // if values contains path, then all filepaths and md5s will get updated
                 // this probably isn't a great thing to do.
-                if (values.containsKey(FormsColumns.FORM_FILE_PATH)) { 
+                if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
                     String formFile = values.getAsString(FormsColumns.FORM_FILE_PATH);
                     values.put(FormsColumns.MD5_HASH, FileUtils.getMd5Hash(new File(formFile)));
                 }
-                
+
                 Cursor c = this.query(uri, null, where, whereArgs, null);
 
                 if (c.getCount() > 0) {
@@ -309,11 +309,17 @@ public class FormsProvider extends ContentProvider {
                     while (c.moveToNext()) {
                         // before updating the paths, delete all the files
                         if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                            String delFile = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)); 
-                                deleteFileOrDir(delFile);                           
-                        }
-                        // before updating the jrpaths, delete all the current files
-                        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
+                            String newFile = values.getAsString(FormsColumns.FORM_FILE_PATH);
+                            String delFile =
+                                c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                            if (newFile.equalsIgnoreCase(delFile)) {
+                                // same file, so don't delete anything
+                            } else {
+                                // different files, delete the old one
+                                deleteFileOrDir(delFile);
+                            }
+
+                            // either way, delete the old cache because we'll calculate a new one.
                             deleteFileOrDir(c.getString(c
                                     .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
                         }
@@ -337,7 +343,7 @@ public class FormsProvider extends ContentProvider {
                     if (values.containsKey(FormsColumns.MD5_HASH)) {
                         values.remove(FormsColumns.MD5_HASH);
                     }
-                    
+
                     // the order here is important (jrcache needs to be before form file)
                     // because we update the jrcache file if there's a new form file
                     if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
@@ -347,16 +353,25 @@ public class FormsProvider extends ContentProvider {
 
                     if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
                         String formFile = values.getAsString(FormsColumns.FORM_FILE_PATH);
-                        deleteFileOrDir(update.getString(update
-                                .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                        
+                        String oldFile =
+                            update.getString(update.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+
+                        if (formFile != null && formFile.equalsIgnoreCase(oldFile)) {
+                            // Files are the same, so we may have just copied over something we had
+                            // already
+                        } else {
+                            // New file name. This probably won't ever happen, though.
+                            deleteFileOrDir(oldFile);
+                        }
+
                         // we're updating our file, so update the md5
                         // and get rid of the cache (doesn't harm anything)
                         deleteFileOrDir(update.getString(update
-                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
                         String newMd5 = FileUtils.getMd5Hash(new File(formFile));
                         values.put(FormsColumns.MD5_HASH, newMd5);
-                        values.put(FormsColumns.JRCACHE_FILE_PATH, "/sdcard/odk/.cache" + newMd5 + ".formdef");
+                        values.put(FormsColumns.JRCACHE_FILE_PATH, "/sdcard/odk/.cache" + newMd5
+                                + ".formdef");
                     }
 
                     count =
