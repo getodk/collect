@@ -28,6 +28,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -55,7 +56,6 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
     private boolean mRestored = false;
     private final String SELECTED = "selected";
 
-    private static final int PROGRESS = 1;
     DiskSyncTask mDiskSyncTask;
 
 
@@ -94,17 +94,11 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
-            TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setVisibility(View.VISIBLE);
         }
 
-        if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
-            TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setVisibility(View.VISIBLE);
-        }
-        
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            // TODO: set done here.
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(R.string.finished_disk_scan);
             mDiskSyncTask.setDiskSyncListener(null);
         }
 
@@ -266,9 +260,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
 
     @Override
     public void SyncComplete() {
-        // TODO: set something done.  probably set text box.
-        
+        Log.i(t, "Disk scan complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setVisibility(View.GONE);
+        tv.setText(R.string.finished_disk_scan);
     }
 }

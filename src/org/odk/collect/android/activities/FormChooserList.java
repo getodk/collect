@@ -78,20 +78,12 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
-
-            TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setVisibility(View.VISIBLE);
-        }
-
-        if (mDiskSyncTask.getStatus() == AsyncTask.Status.RUNNING) {
-            TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setVisibility(View.VISIBLE);
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
             mDiskSyncTask.setDiskSyncListener(null);
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setVisibility(View.GONE);
+            tv.setText(R.string.finished_disk_scan);
         }
 
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
@@ -163,7 +155,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     public void SyncComplete() {
         Log.i(t, "disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setVisibility(View.GONE);
+        tv.setText(R.string.finished_disk_scan);
     }
 
 

@@ -77,6 +77,7 @@
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 <string name="file_invalid">File: %s is invalid.</string>
 <string name="file_missing">File: %s is missing.</string>
+<string name="finished_disk_scan">Finished scanning...All forms loaded</string>
 <string name="form">Form</string>
 <string name="forms">New Forms</string>
 <string name="form_renamed">%1$s was renamed %2$s.</string>
