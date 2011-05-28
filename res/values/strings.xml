@@ -172,15 +172,17 @@
 <string name="app_url">http://opendatakit.org</string>
 <string name="keep_changes">Save Changes</string>
 <string name="go_to_location">Go to Location</string>
-<string name="change_formlist_url">Change form list URL</string>
+<string name="change_formlist_url">Change form list path. (This gets added on to the specified server URL)</string>
 <string name="protocol">Protocol</string>
 <string name="change_protocol">Change protocol</string>
-<string name="change_submission_url">Change submission URL</string>
-<string name="formlist_url">Form list URL</string>
-<string name="submission_url">Submission URL</string>
+<string name="change_submission_url">Change submission path.  (This gets added on to the specified server URL)</string>
+<string name="formlist_url">Custom Form list path</string>
+<string name="submission_url">Custom Submission path</string>
 <string name="font_size">Font size</string>
 <string name="change_font_size">Change font size</string>
 <string name="form_scan_starting">Scanning for forms...</string>
 <string name="form_scan_finished">Form scanning completed</string>
 <string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
+<string name="default_odk_formlist">/formList</string>
+<string name="default_odk_submission">/submission</string>
 </resources>

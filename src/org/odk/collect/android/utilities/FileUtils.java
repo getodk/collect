@@ -21,7 +21,6 @@ import org.kxml2.kdom.Node;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;

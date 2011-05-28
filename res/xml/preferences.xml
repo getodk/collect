@@ -12,14 +12,6 @@
 	</PreferenceScreen>
 	<PreferenceCategory
 		android:title="@string/server_preferences">
-		<ListPreference
-			android:id="@+id/protocol"
-			android:key="protocol"
-			android:title="@string/protocol"
-			android:dialogTitle="@string/change_protocol"
-			android:defaultValue="aggregate_1_0"
-			android:entries="@array/protocol_entries"
-			android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
 			android:id="@+id/server_url"
 			android:key="server_url"
@@ -37,15 +29,25 @@
 			android:title="@string/password"
 			android:dialogTitle="@string/change_password"
 			android:password="true" />
+		<ListPreference
+			android:id="@+id/protocol"
+			android:key="protocol"
+			android:title="@string/protocol"
+			android:dialogTitle="@string/change_protocol"
+			android:defaultValue="@string/default_splash_path"
+			android:entries="@array/protocol_entries"
+			android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
 			android:id="@+id/formlist_url"
 			android:key="formlist_url"
 			android:title="@string/formlist_url"
+			android:defaultValue="@string/default_odk_formlist"
 			android:dialogTitle="@string/change_formlist_url" />
 		<EditTextPreference
 			android:id="@+id/submission_url"
 			android:key="submission_url"
 			android:title="@string/submission_url"
+			android:defaultValue="@string/default_odk_submission"
 			android:dialogTitle="@string/change_submission_url" />
 	</PreferenceCategory>
 	<PreferenceCategory

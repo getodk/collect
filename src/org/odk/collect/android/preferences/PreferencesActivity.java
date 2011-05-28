@@ -5,7 +5,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +35,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static String KEY_SHOW_SPLASH = "showSplash";
     public static String KEY_SPLASH_PATH = "splashPath";
     public static String KEY_FONT_SIZE = "font_size";
-    
+
     public static String KEY_SERVER_URL = "server_url";
     public static String KEY_USERNAME = "username";
     public static String KEY_PASSWORD = "password";
@@ -76,7 +75,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         updateShowSplash();
         updateSplashPath();
- 
+
         updateFontSize();
 
     }
@@ -175,9 +174,6 @@ public class PreferencesActivity extends PreferenceActivity implements
             return;
         }
 
-        ContentValues values;
-        Uri imageURI;
-
         switch (requestCode) {
 
             case IMAGE_CHOOSER:
@@ -226,7 +222,7 @@ public class PreferencesActivity extends PreferenceActivity implements
             updateShowSplash();
         } else if (key.equals(KEY_SPLASH_PATH)) {
             updateSplashPath();
-        }else if (key.equals(KEY_FONT_SIZE)) {
+        } else if (key.equals(KEY_FONT_SIZE)) {
             updateFontSize();
         }
 
@@ -240,7 +236,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 preference.setText(url);
                 preference.setSummary(url);
             } else {
-                preference.setText((String) preference.getSummary());
+                // preference.setText((String) preference.getSummary());
                 Toast.makeText(getApplicationContext(), getString(R.string.url_error),
                     Toast.LENGTH_SHORT).show();
             }
@@ -250,6 +246,12 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateServerUrl() {
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
+        // remove all trailing "/"s
+        while (mServerUrlPreference.getText().endsWith("/")) {
+            mServerUrlPreference.setText(mServerUrlPreference.getText().substring(0,
+                mServerUrlPreference.getText().length() - 1));
+        }
+        validateUrl(mServerUrlPreference);
         mServerUrlPreference.setSummary(mServerUrlPreference.getText());
     }
 
@@ -289,10 +291,12 @@ public class PreferencesActivity extends PreferenceActivity implements
         mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
     }
 
+
     private void updateFontSize() {
         ListPreference lp = (ListPreference) findPreference(KEY_FONT_SIZE);
         lp.setSummary(lp.getEntry());
     }
+
 
     private void updateProtocol() {
         ListPreference lp = (ListPreference) findPreference(KEY_PROTOCOL);
@@ -310,15 +314,18 @@ public class PreferencesActivity extends PreferenceActivity implements
                 mPasswordPreference.setEnabled(true);
             }
             if (mFormListUrlPreference != null) {
+                mFormListUrlPreference.setText(getText(R.string.default_odk_formlist).toString());
                 mFormListUrlPreference.setEnabled(false);
             }
             if (mSubmissionUrlPreference != null) {
+                mSubmissionUrlPreference.setText(getText(R.string.default_odk_submission)
+                        .toString());
                 mSubmissionUrlPreference.setEnabled(false);
             }
 
         } else {
             if (mServerUrlPreference != null) {
-                mServerUrlPreference.setEnabled(false);
+                mServerUrlPreference.setEnabled(true);
             }
             if (mUsernamePreference != null) {
                 mUsernamePreference.setEnabled(true);
