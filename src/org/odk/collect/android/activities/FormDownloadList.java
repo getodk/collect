@@ -52,9 +52,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-/*
- * TODO:  Dialogs are acting funny, need to test/fix.
- */
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory.
@@ -210,7 +207,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 } catch (IllegalArgumentException e) {
                     Log.i(t, "Attempting to close a dialog that was not previously opened");
                 }
-                //mDownloadFormsTask = null;
                 buildView();
             }
         } else if (getLastNonConfigurationInstance() == null) {
@@ -336,27 +332,39 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             case AUTH_DIALOG:
                 AlertDialog.Builder b = new AlertDialog.Builder(this);
 
-                SharedPreferences settings =
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                final String server =
-                    settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                        getString(R.string.default_server_url) + "formList");
-
-                b.setTitle(getString(R.string.server_requires_auth));
-                b.setMessage(getString(R.string.server_auth_credentials, server));
-
                 LayoutInflater factory = LayoutInflater.from(this);
                 final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
+                
+                // Get the server, username, and password from the settings
+                SharedPreferences settings =
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String server =
+                    settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                        getString(R.string.default_server_url));
+                
+                final String url = server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
+                Log.i(t, "Trying to get formList from: " + url);
+                
+                EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
+                String storedUsername =
+                    settings.getString(PreferencesActivity.KEY_USERNAME, null);
+                username.setText(storedUsername);
+                
+                EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+                String storedPassword =
+                    settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+                password.setText(storedPassword);
 
+                b.setTitle(getString(R.string.server_requires_auth));
+                b.setMessage(getString(R.string.server_auth_credentials, url));
                 b.setView(dialogView);
                 b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
                         EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
 
-                        Uri u = Uri.parse(server);
+                        Uri u = Uri.parse(url);
 
                         WebUtils.addCredentials(username.getText().toString(), password.getText()
                                 .toString(), u.getHost());
