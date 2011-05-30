@@ -14,7 +14,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -73,7 +72,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateFormListUrl();
         updateSubmissionUrl();
 
-        updateShowSplash();
         updateSplashPath();
 
         updateFontSize();
@@ -218,8 +216,6 @@ public class PreferencesActivity extends PreferenceActivity implements
             updateUsername();
         } else if (key.equals(KEY_PASSWORD)) {
             updatePassword();
-        } else if (key.equals(KEY_SHOW_SPLASH)) {
-            updateShowSplash();
         } else if (key.equals(KEY_SPLASH_PATH)) {
             updateSplashPath();
         } else if (key.equals(KEY_FONT_SIZE)) {
@@ -260,11 +256,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
         mSplashPathPreference.setSummary(mSplashPathPreference.getSharedPreferences().getString(
             KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
-    }
-
-
-    private void updateShowSplash() {
-        CheckBoxPreference cbp = (CheckBoxPreference) findPreference(KEY_SHOW_SPLASH);
     }
 
 
