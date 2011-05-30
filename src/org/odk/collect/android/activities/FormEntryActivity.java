@@ -1423,7 +1423,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 refreshCurrentView();
-                Toast.makeText(this, saveStatus, Toast.LENGTH_LONG).show();
+                // an answer constraint was violated, so do a 'swipe' to the next
+                // question to display the proper toast(s)
+                next();
                 break;
         }
     }
@@ -1473,5 +1475,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
         return complete;
     }
+    
+    
+    public void next() {
+        if(!mBeenSwiped){
+                mBeenSwiped = true;
+                showNextView();
+        }
+        
+}
+    
 
 }
