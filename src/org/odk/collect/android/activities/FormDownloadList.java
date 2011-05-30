@@ -52,9 +52,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-
 /**
- * Responsible for displaying, adding and deleting all the valid forms in the forms directory.
+ * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
+ * caveat. If the server requires authentication, a dialog will pop up asking when you request the
+ * form list. If somehow you manage to wait long enough and then try to download selected forms and
+ * your authorization has timed out, it won't again ask for authentication, it will just throw a 401
+ * and you'll have to hit 'refresh' where it will ask for credentials again. Technically a server
+ * could point at other servers requiring authentication to download the forms, but the current
+ * implementation in Collect doesn't allow for that. Mostly this is just because it's a pain in the
+ * butt to keep track of which forms we've downloaded and where we're needing to authenticate. I
+ * think we do something similar in the instanceuploader task/activity, so should change the
+ * implementation eventually.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
@@ -95,7 +103,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private int mSelectedCount = 0;
 
     private int totalCount;
-    
+
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private boolean mShouldExit;
@@ -181,8 +189,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             if (savedInstanceState.containsKey(SHOULD_EXIT)) {
                 mShouldExit = savedInstanceState.getBoolean(SHOULD_EXIT);
             }
-           
-        } 
+
+        }
 
         if (mAlertShowing) {
             createAlertDialog(mAlertTitle, mAlertMsg, mShouldExit);
@@ -224,6 +232,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     }
 
 
+    /**
+     * Starts the download task and shows the progress dialog.
+     */
     private void downloadFormList() {
         mFormNamesAndURLs = new HashMap<String, FormDetails>();
         if (mProgressDialog != null) {
@@ -251,6 +262,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     }
 
 
+    /**
+     * returns the number of items currently selected in the list.
+     * 
+     * @return
+     */
     private int selectedItemCount() {
         int count = 0;
         SparseBooleanArray sba = getListView().getCheckedItemPositions();
@@ -263,6 +279,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     }
 
 
+    /**
+     * Updates the listview
+     */
     private void buildView() {
         ArrayList<String> formNames = new ArrayList<String>(mFormNamesAndURLs.keySet());
 
@@ -287,16 +306,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
-                createPreferencesMenu();
+                Intent i = new Intent(this, PreferencesActivity.class);
+                startActivity(i);
                 return true;
         }
         return super.onMenuItemSelected(featureId, item);
-    }
-
-
-    private void createPreferencesMenu() {
-        Intent i = new Intent(this, PreferencesActivity.class);
-        startActivity(i);
     }
 
 
@@ -334,25 +348,24 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
                 LayoutInflater factory = LayoutInflater.from(this);
                 final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
-                
+
                 // Get the server, username, and password from the settings
                 SharedPreferences settings =
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String server =
                     settings.getString(PreferencesActivity.KEY_SERVER_URL,
                         getString(R.string.default_server_url));
-                
-                final String url = server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
+
+                final String url =
+                    server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
                 Log.i(t, "Trying to get formList from: " + url);
-                
+
                 EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-                String storedUsername =
-                    settings.getString(PreferencesActivity.KEY_USERNAME, null);
+                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
                 username.setText(storedUsername);
-                
+
                 EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-                String storedPassword =
-                    settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
                 password.setText(storedPassword);
 
                 b.setTitle(getString(R.string.server_requires_auth));
@@ -389,7 +402,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
 
     /**
-     * Adds the selected form
+     * starts the task to download the selected forms, also shows progress dialog
      */
     @SuppressWarnings("unchecked")
     private void downloadSelectedFiles() {
@@ -463,9 +476,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
 
     /**
-     * Called when the form list has finished downloading.  results will either contain
-     * a set of <formname, formdetails> tuples, or one tuple of
-     * DL.ERROR.MSG and the associated message.
+     * Called when the form list has finished downloading. results will either contain a set of
+     * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
+     * 
      * @param result
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
@@ -479,7 +492,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 getString(R.string.error_occured), EXIT);
             return;
         }
-        
+
         if (result.containsKey(DownloadFormListTask.DL_AUTH_REQUIRED)) {
             // need authorization
             showDialog(AUTH_DIALOG);
@@ -494,14 +507,15 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // Everything worked
             mFormNamesAndURLs = result;
         }
-        
+
         buildView();
     }
 
 
     /**
-     * Creates an alert dialog with the given tite and message.
-     * If shouldExit is set to true, the activity will exit when the user clicks "ok".
+     * Creates an alert dialog with the given tite and message. If shouldExit is set to true, the
+     * activity will exit when the user clicks "ok".
+     * 
      * @param title
      * @param message
      * @param shouldExit
@@ -553,16 +567,15 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // should always be true here
             mProgressDialog.dismiss();
         }
-        
+
         StringBuilder b = new StringBuilder();
         Set<String> keys = result.keySet();
         for (String k : keys) {
             b.append(k + ": " + result.get(k));
             b.append("\n\n");
         }
-        
+
         createAlertDialog(getString(R.string.download_forms_result), b.toString(), EXIT);
-        
     }
 
 }
