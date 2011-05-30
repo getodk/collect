@@ -1403,7 +1403,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Called by the FormLoaderTask if everything loads correctly.
+     * Called by SavetoDiskTask if everything saves correctly.
      */
     @Override
     public void savingComplete(int saveStatus) {
