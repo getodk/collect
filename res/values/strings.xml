@@ -185,4 +185,13 @@
 <string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
+<string name="access_error">Error while accessing %s: </string>
+<string name="manifest_server_error">Manifest reply does not report an OpenRosa version -- bad server?</string>
+<string name="root_element_error">Root element is not &lt;manifest\&gt; -- was %s</string>
+<string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
+<string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
+<string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
+<string name="file_fetch_failed">Fetch of %1$s failed: %2$s (%3$s)</string>
+<string name="fetching_manifest">%s. Getting manifest </string>
+<string name="success">SUCCESS</string>
 </resources>
