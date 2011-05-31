@@ -32,7 +32,6 @@ public final class InstanceProviderAPI {
     public static final String STATUS_INCOMPLETE = "incomplete";
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
-    public static final String STATUS_PARTIALLY_SUBMITTED = "partiallySubmitted";
     public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
     
     /**

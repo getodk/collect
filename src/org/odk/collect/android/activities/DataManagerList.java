@@ -101,7 +101,6 @@ public class DataManagerList extends ListActivity {
             }
             mRestored = false;
         }
-
     }
 
 
@@ -196,6 +195,7 @@ public class DataManagerList extends ListActivity {
             mSelected.add(selectedArray[i]);
         }
         mRestored = true;
+        mDeleteButton.setEnabled(selectedArray.length > 0);
     }
 
 

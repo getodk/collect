@@ -23,6 +23,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,10 @@ public class InstanceUploaderList extends ListActivity {
 
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int INSTANCE_UPLOADER = 0;
+    private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
+    
+    // number of items selected in the list
+    private int mSelectedCount;
 
     private Button mActionButton;
     private Button mToggleButton;
@@ -102,11 +107,10 @@ public class InstanceUploaderList extends ListActivity {
             }
         });
 
-        // get all mInstances that match the status.
-
-        String selection = InstanceColumns.STATUS + "=?";
+        // get all complete or failed submission instances
+        String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
         String selectionArgs[] = {
-            InstanceProviderAPI.STATUS_COMPLETE
+            InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED
         };
 
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
@@ -145,9 +149,8 @@ public class InstanceUploaderList extends ListActivity {
             }
             mRestored = false;
         }
-
     }
-
+    
 
     private void uploadSelectedFiles() {
         // send list of _IDs. 
@@ -215,6 +218,7 @@ public class InstanceUploaderList extends ListActivity {
             mSelected.add(selectedArray[i]);
         mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
         mRestored = true;
+        mActionButton.setEnabled(selectedArray.length > 0);
     }
 
 

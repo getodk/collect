@@ -227,6 +227,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         for (int i = 0; i < selectedArray.length; i++)
             mSelected.add(selectedArray[i]);
         mRestored = true;
+        mActionButton.setEnabled(selectedArray.length > 0);
     }
 
 

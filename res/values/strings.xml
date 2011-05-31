@@ -72,7 +72,7 @@
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="error_downloading">Error Getting Form</string>
 <string name="error_occured">Error Occurred</string>
-<string name="fetching_file">"Getting \"%1$s\".\n\nForm %2$s of %3$s form(s)..."</string>
+<string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s)...</string>
 <string name="file_deleted_error">Sorry, %1$s of %2$s selected item(s) failed to delete!</string>
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 <string name="file_invalid">File: %s is invalid.</string>
@@ -194,4 +194,6 @@
 <string name="file_fetch_failed">Fetch of %1$s failed: %2$s (%3$s)</string>
 <string name="fetching_manifest">%s. Getting manifest </string>
 <string name="success">SUCCESS</string>
+<string name="no_forms_uploaded">Sorry, no forms were uploaded.</string>
+<string name="upload_results">Upload Results</string>
 </resources>

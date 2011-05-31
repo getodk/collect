@@ -122,7 +122,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         getListView().setBackgroundColor(Color.WHITE);
 
         mActionButton = (Button) findViewById(R.id.add_button);
-        mActionButton.setEnabled(false);
+        mActionButton.setEnabled(selectedItemCount() > 0);
         mActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,10 +170,10 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
 
             // how many items we've selected
+            // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
                 mActionButton.setEnabled(!(mSelectedCount == 0));
-
             }
 
             // to restore alert dialog.
@@ -204,7 +204,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 } catch (IllegalArgumentException e) {
                     Log.i(t, "Attempting to close a dialog that was not previously opened");
                 }
-                buildView();
             }
         } else if (getLastNonConfigurationInstance() instanceof DownloadFormsTask) {
             mDownloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
@@ -215,13 +214,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 } catch (IllegalArgumentException e) {
                     Log.i(t, "Attempting to close a dialog that was not previously opened");
                 }
-                buildView();
             }
         } else if (getLastNonConfigurationInstance() == null) {
             // first time, so get the formlist
             downloadFormList();
-            buildView();
         }
+        buildView();
+        
     }
 
 
@@ -389,7 +388,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // cancel
+                            finish();
                         }
                     });
 
