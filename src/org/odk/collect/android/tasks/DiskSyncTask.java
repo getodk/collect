@@ -121,6 +121,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                     }
 
                     values.put(FormsColumns.FORM_FILE_PATH, addMe.getAbsolutePath());
+                    Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
                 } else {
                     // it's a [formname]-media directory, likely, so skip it
                 }

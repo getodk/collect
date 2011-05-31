@@ -255,7 +255,7 @@ public class FileUtils {
                 try {
                     isr.close();
                 } catch (IOException e) {
-                    Log.w(t, "Error closing form reader");
+                    Log.w(t, xmlFile.getAbsolutePath() + " Error closing form reader");
                     e.printStackTrace();
                 }
             }
@@ -296,14 +296,14 @@ public class FileUtils {
                 fields.put(MODEL, (modelVersion == null) ? null : modelVersion);
                 fields.put(UI, (uiVersion == null) ? null : uiVersion);
             } else {
-                throw new IllegalStateException("Form could not be parsed");
+                throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
             }
             try {
                 Element submission = model.getElement(xforms, "submission");
                 String submissionUri = submission.getAttributeValue(null, "action");
                 fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
             } catch (Exception e) {
-                Log.i(t, "Form does not have a submission element");
+                Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
                 // and that's totally fine.
             }
 
