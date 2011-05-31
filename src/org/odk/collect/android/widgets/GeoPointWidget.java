@@ -63,14 +63,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mGetLocationButton = new Button(getContext());
         mGetLocationButton.setPadding(20, 20, 20, 20);
         mGetLocationButton.setText(getContext().getString(R.string.get_location));
-        mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
         mGetLocationButton.setEnabled(!prompt.isReadOnly());
 
         // setup play button
 
         mViewButton = new Button(getContext());
         mViewButton.setText(getContext().getString(R.string.show_location));
-        mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
         mViewButton.setPadding(20, 20, 20, 20);
 
         // on play, launch the appropriate viewer
@@ -96,7 +96,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
         mAnswerDisplay = new TextView(getContext());
         mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-            QuestionWidget.APPLICATION_FONTSIZE - 1);
+            answer_fontsize);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

@@ -71,7 +71,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_video));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP,  answer_fontsize);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -91,7 +91,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton = new Button(getContext());
         // TODO: add to strings.xml
         mChooseButton.setText("Choose Video");
-        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
         mChooseButton.setPadding(20, 20, 20, 20);
         mChooseButton.setEnabled(!prompt.isReadOnly());
 
@@ -114,7 +114,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // setup play button
         mPlayButton = new Button(getContext());
         mPlayButton.setText(getContext().getString(R.string.play_video));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
         mPlayButton.setPadding(20, 20, 20, 20);
 
         // on play, launch the appropriate viewer

@@ -57,7 +57,7 @@
 			android:key="font_size"
 			android:title="@string/font_size"
 			android:dialogTitle="@string/change_font_size"
-			android:defaultValue="18"
+			android:defaultValue="21"
 			android:entries="@array/font_size_entries"
 			android:entryValues="@array/font_size_entry_values" />
 		<CheckBoxPreference

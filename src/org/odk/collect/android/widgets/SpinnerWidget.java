@@ -34,9 +34,9 @@ import android.widget.TextView;
 import java.util.Vector;
 
 /**
- * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a 
- * spinner, wherein the user clicks a button and the choices pop up in a dialogue
- * box. The goal is to be more compact.
+ * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a spinner, wherein
+ * the user clicks a button and the choices pop up in a dialogue box. The goal is to be more
+ * compact.
  * 
  * @author Jeff Beorse (jeff@beorse.net)
  */
@@ -54,34 +54,35 @@ public class SpinnerWidget extends QuestionWidget {
         spinner = new Spinner(context);
         choices = new String[mItems.size()];
 
-        for ( int i = 0; i< mItems.size(); i++ ) {
+        for (int i = 0; i < mItems.size(); i++) {
             choices[i] = prompt.getSelectChoiceText(mItems.get(i));
         }
 
-        //The spinner requires a custom adapter. It is defined below
-        SpinnerAdapter adapter = new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices, TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        // The spinner requires a custom adapter. It is defined below
+        SpinnerAdapter adapter =
+            new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
+                    TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
         spinner.setEnabled(!prompt.isReadOnly());
         spinner.setFocusable(!prompt.isReadOnly());
 
-
-        //Fill in previous answer
+        // Fill in previous answer
         String s = null;
         if (prompt.getAnswerValue() != null) {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
-         
-        if ( s != null ) {
-            for ( int i = 0 ; i < mItems.size(); ++i ) {
+
+        if (s != null) {
+            for (int i = 0; i < mItems.size(); ++i) {
                 String sMatch = mItems.get(i).getValue();
-                if(sMatch.equals(s)){
+                if (sMatch.equals(s)) {
                     spinner.setSelection(i);
                 }
 
             }
-        } 
+        }
 
         Log.e("Carl", "adding spinner, for reals");
         addView(spinner);
@@ -95,18 +96,20 @@ public class SpinnerWidget extends QuestionWidget {
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i); //- RANDOM_BUTTON_ID);
+            SelectChoice sc = mItems.elementAt(i); // - RANDOM_BUTTON_ID);
             return new SelectOneData(new Selection(sc));
         }
     }
 
+
     @Override
     public void clearAnswer() {
-        //It seems that spinners cannot return a null answer. This resets the answer 
-        //to its original value, but it is not null. 
+        // It seems that spinners cannot return a null answer. This resets the answer
+        // to its original value, but it is not null.
         spinner.setSelection(0);
 
     }
+
 
     @Override
     public void setFocus(Context context) {
@@ -117,15 +120,16 @@ public class SpinnerWidget extends QuestionWidget {
 
     }
 
-    //Defines how to display the select answers
+    // Defines how to display the select answers
     private class SpinnerAdapter extends ArrayAdapter<String> {
         Context context;
         String[] items = new String[] {};
         int textUnit;
         float textSize;
 
-        public SpinnerAdapter(final Context context,
-                final int textViewResourceId, final String[] objects, int textUnit, float textSize) {
+
+        public SpinnerAdapter(final Context context, final int textViewResourceId,
+                final String[] objects, int textUnit, float textSize) {
             super(context, textViewResourceId, objects);
             this.items = objects;
             this.context = context;
@@ -135,22 +139,19 @@ public class SpinnerWidget extends QuestionWidget {
 
 
         @Override
-        //Defines the text view parameters for the drop down list entries
-        public View getDropDownView(int position, View convertView,
-                ViewGroup parent) {
+        // Defines the text view parameters for the drop down list entries
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
 
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(
-                        android.R.layout.simple_spinner_item, parent, false);
+                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
             }
 
-            TextView tv = (TextView) convertView
-            .findViewById(android.R.id.text1);
+            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
-            tv.setPadding(10, 10, 10, 10); //Are these values OK?
-                    return convertView;
+            tv.setPadding(10, 10, 10, 10); // Are these values OK?
+            return convertView;
         }
 
 
@@ -158,12 +159,10 @@ public class SpinnerWidget extends QuestionWidget {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(
-                        android.R.layout.simple_spinner_item, parent, false);
+                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
             }
 
-            TextView tv = (TextView) convertView
-            .findViewById(android.R.id.text1);
+            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
             return convertView;
@@ -171,16 +170,11 @@ public class SpinnerWidget extends QuestionWidget {
 
     }
 
-        @Override
-        public void setOnLongClickListener(OnLongClickListener l) {
-            super.setOnLongClickListener(l);
-            spinner.setOnLongClickListener(l);
-        }
-        
-        
 
-
-
-
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        spinner.setOnLongClickListener(l);
+    }
 
 }

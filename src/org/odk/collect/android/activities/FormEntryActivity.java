@@ -24,6 +24,7 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -42,12 +43,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
@@ -124,6 +128,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final int MENU_LANGUAGES = Menu.FIRST + 1;
     private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 2;
     private static final int MENU_SAVE = Menu.FIRST + 3;
+    private static final int MENU_FONT = Menu.FIRST + 4;
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
@@ -458,6 +463,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         menu.removeItem(MENU_LANGUAGES);
         menu.removeItem(MENU_HIERARCHY_VIEW);
         menu.removeItem(MENU_SAVE);
+        menu.removeItem(MENU_FONT);
 
         menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
             android.R.drawable.ic_menu_save);
@@ -471,6 +477,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 .setEnabled(
                     (mFormController.getLanguages() == null || mFormController.getLanguages().length == 1) ? false
                             : true);
+        //TODO:  Add to strings, and add an icon to the menu
+        menu.add(0, MENU_FONT, 0, "font");
         return true;
     }
 
@@ -494,6 +502,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
+                return true;
+            case MENU_FONT:
+                Intent pref = new Intent(this, PreferencesActivity.class);
+                startActivity(pref);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

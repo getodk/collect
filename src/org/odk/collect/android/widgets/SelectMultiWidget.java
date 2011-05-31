@@ -81,7 +81,7 @@ public class SelectMultiWidget extends QuestionWidget {
 
                 c.setId(CHECKBOX_ID + i);
                 c.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {

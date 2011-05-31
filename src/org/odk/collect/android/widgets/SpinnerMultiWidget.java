@@ -66,12 +66,11 @@ public class SpinnerMultiWidget extends QuestionWidget{
                         answer_items[i] = prompt.getSelectChoiceText(mItems.get(i));
                 }
 
-                //TODO: These strings and values should probably be global references
                 selectionText.setText("Selected: ");
-                selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+                selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
 
                 button.setText("Select Answer");
-                button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+                button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
                 button.setPadding(0, 0, 0, 7);
 
                 //Give the button a click listener. This defines the alert as well. All the

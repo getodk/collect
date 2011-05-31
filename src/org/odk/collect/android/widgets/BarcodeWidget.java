@@ -52,7 +52,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         // set button formatting
         mGetBarcodeButton = new Button(getContext());
         mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
-        mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
         mGetBarcodeButton.setPadding(20, 20, 20, 20);
         mGetBarcodeButton.setEnabled(!prompt.isReadOnly());
 
@@ -76,7 +76,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
         // set text formatting
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

@@ -2,10 +2,14 @@ package org.odk.collect.android.widgets;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -19,14 +23,19 @@ public abstract class QuestionWidget extends LinearLayout {
     private LinearLayout.LayoutParams mLayout;
     protected FormEntryPrompt mPrompt;
     
-    //TODO:  These should probably be some kind of global preference?
-    private final static int TEXTSIZE = 21;
-    public final static int APPLICATION_FONTSIZE = 23;
+    protected final int question_fontsize;
+    protected final int answer_fontsize;
 
 
     public QuestionWidget(Context context, FormEntryPrompt p) {
         super(context);
-
+        
+        SharedPreferences settings =
+            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        String question_font = settings.getString(PreferencesActivity.KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
+        question_fontsize = new Integer(question_font).intValue();
+        answer_fontsize = question_fontsize + 2;
+        
         mPrompt = p;
  
         setOrientation(LinearLayout.VERTICAL);
@@ -70,7 +79,7 @@ public abstract class QuestionWidget extends LinearLayout {
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, question_fontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setId(38475483); // assign random id
@@ -99,7 +108,7 @@ public abstract class QuestionWidget extends LinearLayout {
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 5);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, question_fontsize - 5);
             tv.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             tv.setHorizontallyScrolling(false);

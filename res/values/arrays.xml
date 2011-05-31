@@ -44,12 +44,11 @@
 	</string-array>
 	<string-array
 		name="font_size_entry_values">
-		<item>22</item>
-		<item>20</item>
-		<item>18</item>
-		<item>16</item>
-		<item>14</item>
-		<item></item>
+		<item>29</item>
+		<item>25</item>
+		<item>21</item>
+		<item>17</item>
+		<item>13</item>
 	</string-array>
 	<string-array
 		name="font_size_entries">
