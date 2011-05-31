@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,7 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // must be at the beginning of any activity that can be called from an external intent
+        Log.i(t, "Starting up, creating directories");
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
@@ -118,8 +120,10 @@ public class MainMenuActivity extends Activity {
 
     @Override
     protected void onPause() {
-        dismissDialogs();
         super.onPause();
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        }
     }
 
 
@@ -165,13 +169,4 @@ public class MainMenuActivity extends Activity {
         mAlertDialog.show();
     }
 
-
-    /**
-     * Dismiss any showing dialogs that we manage.
-     */
-    private void dismissDialogs() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
-        }
-    }
 }

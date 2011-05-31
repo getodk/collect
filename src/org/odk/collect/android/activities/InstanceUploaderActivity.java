@@ -39,7 +39,6 @@ import android.widget.Toast;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -56,27 +55,29 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     private ProgressDialog mProgressDialog;
     private AlertDialog mAlertDialog;
-    
+
     private String mAlertMsg;
     private String ALERT_MSG = "alertmsg";
     private String ALERT_SHOWING = "alertshowing";
+    private static final String TO_SEND = "tosend";
     private boolean mAlertShowing;
 
     private InstanceUploaderTask mInstanceUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
-    private ArrayList<String> mInstancesToSend;
-    
+    private ArrayList<Long> mInstancesToSend;
+
     // maintain a list of what we've sent, in case we're interrupted by auth requests
-    private HashMap<String, String> mUploadedInstances;  
-    
+    private HashMap<String, String> mUploadedInstances;
+
     private final static String AUTH_URI = "auth";
 
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         mAlertMsg = getString(R.string.please_wait);
 
         mUploadedInstances = new HashMap<String, String>();
@@ -92,24 +93,29 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             finish();
             return;
         }
-        
+
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
                 mAlertMsg = savedInstanceState.getString(ALERT_MSG);
-                Log.e("Carl", "alert messgage? " + mAlertMsg);
             }
-            if (savedInstanceState.containsKey(ALERT_SHOWING)){
+            if (savedInstanceState.containsKey(ALERT_SHOWING)) {
                 mAlertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
-                Log.e("Carl", "alert showing? " + mAlertShowing);
             }
         }
-        
+
+        if (savedInstanceState != null && !savedInstanceState.containsKey(TO_SEND)) {
+            mInstancesToSend = (ArrayList<Long>) savedInstanceState.getSerializable(TO_SEND);
+        } else {
+            mInstancesToSend = new ArrayList<Long>();
+            for (int i = 0; i < selectedInstanceIDs.length; i++) {
+                mInstancesToSend.add(new Long(selectedInstanceIDs[i]));
+            }
+        }
+
         if (mAlertShowing) {
-            Log.e("Carl", "showing dialog now..");
             createAlertDialog(mAlertMsg);
             return;
         }
-
 
         // get the task if we've changed orientations. If it's null it's a new upload.
         mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
@@ -118,30 +124,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             showDialog(PROGRESS_DIALOG);
             mInstanceUploaderTask = new InstanceUploaderTask();
 
-            String selection = InstanceColumns._ID + "=?";
-            String[] selectionArgs = new String[selectedInstanceIDs.length];
-            for (int i = 0; i < selectedInstanceIDs.length; i++) {
-                selectionArgs[i] = new Long(selectedInstanceIDs[i]).toString();
-                if (i != selectedInstanceIDs.length - 1) {
-                    selection += " or " + InstanceColumns._ID + "=?";
-                }
-            }
-
-            // This holds the paths of the instance.xml files
-            String[] instances = new String[selectedInstanceIDs.length];
-            Cursor c =
-                managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
-            if (c.getCount() > 0) {
-                c.moveToPosition(-1);
-                while (c.moveToNext()) {
-                    instances[c.getPosition()] =
-                        c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                }
-                mInstanceUploaderTask.execute(instances);
-            }
-            mInstancesToSend = new ArrayList<String>(Arrays.asList(instances));
-
+            Long[] toSendArray = new Long[mInstancesToSend.size()];
+            mInstancesToSend.toArray(toSendArray);
+            mInstanceUploaderTask.execute(toSendArray);
         }
+
     }
 
 
@@ -150,13 +137,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         try {
             dismissDialog(PROGRESS_DIALOG);
         } catch (Exception e) {
-            // tried to close a dialog not open.  don't care.
+            // tried to close a dialog not open. don't care.
         }
 
         StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
-        
+
         String[] selectionArgs = new String[keys.size()];
         int i = 0;
         while (it.hasNext()) {
@@ -168,20 +155,22 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             }
         }
 
-
-        Cursor results = managedQuery(InstanceColumns.CONTENT_URI, null, selection.toString(), selectionArgs, null);
+        Cursor results =
+            managedQuery(InstanceColumns.CONTENT_URI, null, selection.toString(), selectionArgs,
+                null);
         StringBuilder message = new StringBuilder();
         if (results.getCount() > 0) {
             results.moveToPosition(-1);
             while (results.moveToNext()) {
-                String name = results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                String name =
+                    results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                 String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
                 message.append(name + " : " + result.get(id) + "\n\n");
             }
         } else {
             message.append(getString(R.string.no_forms_uploaded));
         }
-        
+
         createAlertDialog(message.toString());
     }
 
@@ -224,13 +213,20 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 // Get the server, username, and password from the settings
                 SharedPreferences settings =
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String server =
-                    settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                        getString(R.string.default_server_url));
 
-                final String url =
-                    server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
-                Log.i(t, "Trying to get formList from: " + url);
+                String server = bundle.getString(AUTH_URI);
+                if (server == null) {
+                    // if the bundle is null, we're looking for a formlist
+                    server =
+                        settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                            getString(R.string.default_server_url))
+                                + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
+                                    "/formList");
+                }
+
+                final String url = server;
+
+                Log.i(t, "Trying connecting to: " + url);
 
                 EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
                 String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
@@ -255,7 +251,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
                         mInstanceUploaderTask = new InstanceUploaderTask();
 
-                        String[] toSendArray = new String[mInstancesToSend.size()];
+                        Long[] toSendArray = new Long[mInstancesToSend.size()];
                         mInstancesToSend.toArray(toSendArray);
                         mInstanceUploaderTask.execute(toSendArray);
                         showDialog(PROGRESS_DIALOG);
@@ -287,6 +283,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, mAlertMsg);
         outState.putBoolean(ALERT_SHOWING, mAlertShowing);
+        outState.putSerializable(TO_SEND, mInstancesToSend);
     }
 
 
@@ -303,8 +300,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
         super.onDestroy();
     }
-    
-    
 
 
     @Override
@@ -327,7 +322,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void authRequest(URI url, HashMap<String, String> doneSoFar) {
-
         if (mProgressDialog.isShowing()) {
             // should always be showing here
             mProgressDialog.dismiss();
@@ -338,10 +332,14 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         if (doneSoFar != null) {
             Set<String> uploadedInstances = doneSoFar.keySet();
             Iterator<String> itr = uploadedInstances.iterator();
+
             while (itr.hasNext()) {
-                String removeMe = itr.next();
-                boolean test = mInstancesToSend.remove(removeMe);
-                //TODO:  I think this doesn't work with strings.
+                Long removeMe = new Long(itr.next());
+                boolean removed = mInstancesToSend.remove(removeMe);
+                if (removed) {
+                    Log.i(t, removeMe
+                            + " was already sent, removing from queue before restarting task");
+                }
             }
             mUploadedInstances.putAll(doneSoFar);
         }

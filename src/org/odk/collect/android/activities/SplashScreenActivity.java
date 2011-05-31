@@ -75,14 +75,11 @@ public class SplashScreenActivity extends Activity {
             mSharedPreferences.getString(PreferencesActivity.KEY_SPLASH_PATH,
                 getString(R.string.default_splash_path));
 
-        boolean versionChange;
-
         // if you've increased version code, then update the version number and set firstRun to true
         if (mSharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
             editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);
             editor.commit();
 
-            versionChange = true;
             firstRun = true;
         }
 
