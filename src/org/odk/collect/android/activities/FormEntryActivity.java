@@ -1022,7 +1022,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT).show();
             return false;
         }
-        
+
         Log.e("Carl", "what?  intent? " + getIntent());
         if (getIntent() != null) {
             Log.e("Carl", "what?  data? " + getIntent().getData());
@@ -1086,17 +1086,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                         Log.i(t, "attempting to delete: " + instanceFolder);
                                         String where =
                                             Images.Media.DATA + " like '" + instanceFolder + "%'";
-                                        int images = getContentResolver().delete(
-                                            Images.Media.EXTERNAL_CONTENT_URI, where, null);
-                                        int audio = getContentResolver().delete(
-                                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where,
-                                            null);
-                                        int video = getContentResolver().delete(
-                                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where,
-                                            null);
-                                        Log.i(t, "revmoved from content providers: " + images + " image files, " 
-                                            + audio + " audio files" + " and " 
-                                            + video + " video files.");
+                                        int images =
+                                            getContentResolver().delete(
+                                                Images.Media.EXTERNAL_CONTENT_URI, where, null);
+                                        int audio =
+                                            getContentResolver().delete(
+                                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where,
+                                                null);
+                                        int video =
+                                            getContentResolver().delete(
+                                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where,
+                                                null);
+                                        Log.i(t, "revmoved from content providers: " + images
+                                                + " image files, " + audio + " audio files"
+                                                + " and " + video + " video files.");
                                         File f = new File(instanceFolder);
                                         if (f.exists() && f.isDirectory()) {
                                             for (File del : f.listFiles()) {
@@ -1107,7 +1110,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                         }
                                     }
 
-                                    finish();
+                                    finishReturnInstance();
                                     break;
 
                                 case 2:// do nothing
@@ -1414,7 +1417,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 Toast.makeText(this, getString(R.string.data_saved_ok), Toast.LENGTH_SHORT).show();
-                finish();
+                finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_LONG)
@@ -1475,15 +1478,38 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
         return complete;
     }
-    
-    
+
+
     public void next() {
-        if(!mBeenSwiped){
-                mBeenSwiped = true;
-                showNextView();
+        if (!mBeenSwiped) {
+            mBeenSwiped = true;
+            showNextView();
         }
-        
-}
-    
+    }
+
+
+    /**
+     * Returns the instance that was just filled out to the calling activity, if requested.
+     */
+    private void finishReturnInstance() {
+        String action = getIntent().getAction();
+        if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
+            // caller is waiting on a picked form
+            String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+            String[] selectionArgs = {
+                mInstancePath
+            };
+            Cursor c =
+                managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            if (c.getCount() > 0) {
+                // should only be one...
+                c.moveToFirst();
+                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
+                Uri instance = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
+                setResult(RESULT_OK, new Intent().setData(instance));
+            }
+        }
+        finish();
+    }
 
 }
