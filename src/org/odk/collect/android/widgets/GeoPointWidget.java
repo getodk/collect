@@ -42,7 +42,7 @@ import java.text.DecimalFormat;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
-    private Button mActionButton;
+    private Button mGetLocationButton;
     private Button mViewButton;
 
     private TextView mStringAnswer;
@@ -60,11 +60,11 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
         setOrientation(LinearLayout.VERTICAL);
 
-        mActionButton = new Button(getContext());
-        mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setText(getContext().getString(R.string.get_location));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
-        mActionButton.setEnabled(!prompt.isReadOnly());
+        mGetLocationButton = new Button(getContext());
+        mGetLocationButton.setPadding(20, 20, 20, 20);
+        mGetLocationButton.setText(getContext().getString(R.string.get_location));
+        mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mGetLocationButton.setEnabled(!prompt.isReadOnly());
 
         // setup play button
 
@@ -101,14 +101,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            mActionButton.setText(getContext().getString(R.string.replace_location));
+            mGetLocationButton.setText(getContext().getString(R.string.replace_location));
             setBinaryData(s);
             mViewButton.setEnabled(true);
         } else {
             mViewButton.setEnabled(false);
         }
         // when you press the button
-        mActionButton.setOnClickListener(new View.OnClickListener() {
+        mGetLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = null;
@@ -127,7 +127,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // finish complex layout
         // retrieve answer from data model and update ui
 
-        addView(mActionButton);
+        addView(mGetLocationButton);
         if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
             addView(mViewButton);
         }
@@ -139,7 +139,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     public void clearAnswer() {
         mStringAnswer.setText(null);
         mAnswerDisplay.setText(null);
-        mActionButton.setText(getContext().getString(R.string.get_location));
+        mGetLocationButton.setText(getContext().getString(R.string.get_location));
 
     }
 
@@ -236,7 +236,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         super.setOnLongClickListener(l);
         mViewButton.setOnLongClickListener(l);
-        mActionButton.setOnLongClickListener(l);
+        mGetLocationButton.setOnLongClickListener(l);
         mStringAnswer.setOnLongClickListener(l);
         mAnswerDisplay.setOnLongClickListener(l);
     }

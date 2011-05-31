@@ -35,7 +35,7 @@ import android.widget.TextView;
  */
 public class TriggerWidget extends QuestionWidget {
 
-    private CheckBox mActionButton;
+    private CheckBox mTriggerButton;
     private TextView mStringAnswer;
     private static String mOK = "OK";
 
@@ -53,16 +53,16 @@ public class TriggerWidget extends QuestionWidget {
 
         this.setOrientation(LinearLayout.VERTICAL);
 
-        mActionButton = new CheckBox(getContext());
-        mActionButton.setText(getContext().getString(R.string.trigger));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mTriggerButton = new CheckBox(getContext());
+        mTriggerButton.setText(getContext().getString(R.string.trigger));
+        mTriggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
         // mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!prompt.isReadOnly());
+        mTriggerButton.setEnabled(!prompt.isReadOnly());
 
-        mActionButton.setOnClickListener(new View.OnClickListener() {
+        mTriggerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mActionButton.isChecked()) {
+                if (mTriggerButton.isChecked()) {
                     mStringAnswer.setText(mOK);
                 } else {
                     mStringAnswer.setText(null);
@@ -77,16 +77,16 @@ public class TriggerWidget extends QuestionWidget {
         String s = prompt.getAnswerText();
         if (s != null) {
             if (s.equals(mOK)) {
-                mActionButton.setChecked(true);
+                mTriggerButton.setChecked(true);
             } else {
-                mActionButton.setChecked(false);
+                mTriggerButton.setChecked(false);
             }
             mStringAnswer.setText(s);
 
         }
 
         // finish complex layout
-        this.addView(mActionButton);
+        this.addView(mTriggerButton);
         // this.addView(mStringAnswer);
     }
 
@@ -94,7 +94,7 @@ public class TriggerWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         mStringAnswer.setText(null);
-        mActionButton.setChecked(false);
+        mTriggerButton.setChecked(false);
     }
 
 
@@ -121,7 +121,7 @@ public class TriggerWidget extends QuestionWidget {
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         super.setOnLongClickListener(l);
-        mActionButton.setOnLongClickListener(l);
+        mTriggerButton.setOnLongClickListener(l);
         mStringAnswer.setOnLongClickListener(l);
     }
 

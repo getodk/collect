@@ -23,7 +23,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,12 +49,8 @@ public class InstanceUploaderList extends ListActivity {
 
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int INSTANCE_UPLOADER = 0;
-    private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    
-    // number of items selected in the list
-    private int mSelectedCount;
 
-    private Button mActionButton;
+    private Button mUploadButton;
     private Button mToggleButton;
 
     private SimpleCursorAdapter mInstances;
@@ -69,8 +64,8 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
 
-        mActionButton = (Button) findViewById(R.id.upload_button);
-        mActionButton.setOnClickListener(new OnClickListener() {
+        mUploadButton = (Button) findViewById(R.id.upload_button);
+        mUploadButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -102,7 +97,7 @@ public class InstanceUploaderList extends ListActivity {
                     if (mToggled)
                         mSelected.add(ls.getItemIdAtPosition(pos));
                 }
-                mActionButton.setEnabled(!(mSelected.size() == 0));
+                mUploadButton.setEnabled(!(mSelected.size() == 0));
 
             }
         });
@@ -129,7 +124,7 @@ public class InstanceUploaderList extends ListActivity {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mActionButton.setEnabled(!(mSelected.size() == 0));
+        mUploadButton.setEnabled(!(mSelected.size() == 0));
 
         // set title
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
@@ -205,7 +200,7 @@ public class InstanceUploaderList extends ListActivity {
         else
             mSelected.add(k);
 
-        mActionButton.setEnabled(!(mSelected.size() == 0));
+        mUploadButton.setEnabled(!(mSelected.size() == 0));
 
     }
 
@@ -218,7 +213,7 @@ public class InstanceUploaderList extends ListActivity {
             mSelected.add(selectedArray[i]);
         mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
         mRestored = true;
-        mActionButton.setEnabled(selectedArray.length > 0);
+        mUploadButton.setEnabled(selectedArray.length > 0);
     }
 
 

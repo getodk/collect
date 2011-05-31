@@ -48,7 +48,7 @@ import java.util.ArrayList;
 public class FormManagerList extends ListActivity implements DiskSyncListener {
     private static String t = "FormManagerList";
     private AlertDialog mAlertDialog;
-    private Button mActionButton;
+    private Button mDeleteButton;
     private Button mGetButton;
 
     private SimpleCursorAdapter mInstances;
@@ -73,9 +73,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
             }
         });
 
-        mActionButton = (Button) findViewById(R.id.delete_button);
-        mActionButton.setText(getString(R.string.delete_file));
-        mActionButton.setOnClickListener(new OnClickListener() {
+        mDeleteButton = (Button) findViewById(R.id.delete_button);
+        mDeleteButton.setText(getString(R.string.delete_file));
+        mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -117,7 +117,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mActionButton.setEnabled(!(mSelected.size() == 0));
+        mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
         // if current activity is being reinitialized due to changing orientation
         // restore all check marks for ones selected
@@ -215,7 +215,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         else
             mSelected.add(k);
 
-        mActionButton.setEnabled(!(mSelected.size() == 0));
+        mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
     }
 
@@ -227,7 +227,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         for (int i = 0; i < selectedArray.length; i++)
             mSelected.add(selectedArray[i]);
         mRestored = true;
-        mActionButton.setEnabled(selectedArray.length > 0);
+        mDeleteButton.setEnabled(selectedArray.length > 0);
     }
 
 

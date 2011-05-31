@@ -39,7 +39,7 @@ import android.widget.Toast;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
-    private Button mActionButton;
+    private Button mGetBarcodeButton;
     private TextView mStringAnswer;
     private boolean mWaitingForData;
 
@@ -50,14 +50,14 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         setOrientation(LinearLayout.VERTICAL);
 
         // set button formatting
-        mActionButton = new Button(getContext());
-        mActionButton.setText(getContext().getString(R.string.get_barcode));
-        mActionButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
-        mActionButton.setPadding(20, 20, 20, 20);
-        mActionButton.setEnabled(!prompt.isReadOnly());
+        mGetBarcodeButton = new Button(getContext());
+        mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
+        mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionWidget.APPLICATION_FONTSIZE);
+        mGetBarcodeButton.setPadding(20, 20, 20, 20);
+        mGetBarcodeButton.setEnabled(!prompt.isReadOnly());
 
         // launch barcode capture intent on click
-        mActionButton.setOnClickListener(new View.OnClickListener() {
+        mGetBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
@@ -81,11 +81,11 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mActionButton.setText(getContext().getString(R.string.replace_barcode));
+            mGetBarcodeButton.setText(getContext().getString(R.string.replace_barcode));
             mStringAnswer.setText(s);
         }
         // finish complex layout
-        addView(mActionButton);
+        addView(mGetBarcodeButton);
         addView(mStringAnswer);
     }
 
@@ -93,7 +93,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         mStringAnswer.setText(null);
-        mActionButton.setText(getContext().getString(R.string.get_barcode));
+        mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
     }
 
 
@@ -136,7 +136,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         super.setOnLongClickListener(l);
-        mActionButton.setOnLongClickListener(l);
+        mGetBarcodeButton.setOnLongClickListener(l);
     }
 
 }

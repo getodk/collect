@@ -89,7 +89,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
-    private Button mActionButton;
+    private Button mDownloadButton;
 
     private DownloadFormListTask mDownloadFormListTask;
     private DownloadFormsTask mDownloadFormsTask;
@@ -121,9 +121,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         // need white background before load
         getListView().setBackgroundColor(Color.WHITE);
 
-        mActionButton = (Button) findViewById(R.id.add_button);
-        mActionButton.setEnabled(selectedItemCount() > 0);
-        mActionButton.setOnClickListener(new OnClickListener() {
+        mDownloadButton = (Button) findViewById(R.id.add_button);
+        mDownloadButton.setEnabled(selectedItemCount() > 0);
+        mDownloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 downloadSelectedFiles();
@@ -143,7 +143,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     ls.setItemChecked(pos, mToggled);
                 }
 
-                mActionButton.setEnabled(!(selectedItemCount() == 0));
+                mDownloadButton.setEnabled(!(selectedItemCount() == 0));
             }
         });
 
@@ -173,7 +173,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
-                mActionButton.setEnabled(!(mSelectedCount == 0));
+                mDownloadButton.setEnabled(!(mSelectedCount == 0));
             }
 
             // to restore alert dialog.
@@ -227,7 +227,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        mActionButton.setEnabled(!(selectedItemCount() == 0));
+        mDownloadButton.setEnabled(!(selectedItemCount() == 0));
     }
 
 
