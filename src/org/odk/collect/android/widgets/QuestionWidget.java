@@ -23,8 +23,8 @@ public abstract class QuestionWidget extends LinearLayout {
     private LinearLayout.LayoutParams mLayout;
     protected FormEntryPrompt mPrompt;
     
-    protected final int question_fontsize;
-    protected final int answer_fontsize;
+    protected final int mQuestionFontsize;
+    protected final int mAnswerFontsize;
 
 
     public QuestionWidget(Context context, FormEntryPrompt p) {
@@ -33,8 +33,8 @@ public abstract class QuestionWidget extends LinearLayout {
         SharedPreferences settings =
             PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         String question_font = settings.getString(PreferencesActivity.KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
-        question_fontsize = new Integer(question_font).intValue();
-        answer_fontsize = question_fontsize + 2;
+        mQuestionFontsize = new Integer(question_font).intValue();
+        mAnswerFontsize = mQuestionFontsize + 2;
         
         mPrompt = p;
  
@@ -68,7 +68,7 @@ public abstract class QuestionWidget extends LinearLayout {
      * To satisfy the RelativeLayout constraints, we add the audio first if it exists, then the
      * TextView to fit the rest of the space, then the image if applicable.
      */
-    private void addQuestionText(FormEntryPrompt p) {
+    protected void addQuestionText(FormEntryPrompt p) {
         String imageURI = p.getImageText();
         String audioURI = p.getAudioText();
         String videoURI = p.getSpecialFormQuestionText("video");
@@ -79,7 +79,7 @@ public abstract class QuestionWidget extends LinearLayout {
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, question_fontsize);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setId(38475483); // assign random id
@@ -108,7 +108,7 @@ public abstract class QuestionWidget extends LinearLayout {
 
         if (s != null && !s.equals("")) {
             TextView tv = new TextView(getContext());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, question_fontsize - 5);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize - 5);
             tv.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             tv.setHorizontallyScrolling(false);

@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 
 import android.content.Context;
 import android.util.Log;
@@ -36,7 +37,7 @@ import java.util.Vector;
 /**
  * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a spinner, wherein
  * the user clicks a button and the choices pop up in a dialogue box. The goal is to be more
- * compact.
+ * compact. If images, audio, or video are specified in the select answers they are ignored.
  * 
  * @author Jeff Beorse (jeff@beorse.net)
  */
@@ -61,7 +62,7 @@ public class SpinnerWidget extends QuestionWidget {
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
             new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                    TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+                    TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
@@ -144,7 +145,7 @@ public class SpinnerWidget extends QuestionWidget {
 
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+                convertView = inflater.inflate(R.layout.custom_spinner_item, parent, false);
             }
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);

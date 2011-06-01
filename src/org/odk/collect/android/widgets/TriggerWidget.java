@@ -55,7 +55,7 @@ public class TriggerWidget extends QuestionWidget {
 
         mTriggerButton = new CheckBox(getContext());
         mTriggerButton.setText(getContext().getString(R.string.trigger));
-        mTriggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+        mTriggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         // mActionButton.setPadding(20, 20, 20, 20);
         mTriggerButton.setEnabled(!prompt.isReadOnly());
 
@@ -71,7 +71,7 @@ public class TriggerWidget extends QuestionWidget {
         });
 
         mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mStringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

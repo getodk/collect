@@ -87,7 +87,11 @@ public class WidgetFactory {
                         Log.e("WidgetFactory", "Exception parsing numColumns");
                     }
 
-                    questionWidget = new GridWidget(context, fep, numColumns);
+                    if (appearance.contains("quick")) {
+                        questionWidget = new GridWidget(context, fep, numColumns, true);
+                    } else {
+                        questionWidget = new GridWidget(context, fep, numColumns, false);
+                    }
                 } else if (appearance != null && appearance.equals("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 } else if (appearance != null && appearance.contains("autocomplete")) {
@@ -96,10 +100,18 @@ public class WidgetFactory {
                         filterType = appearance.substring(appearance.indexOf('-') + 1);
                     } catch (Exception e) {
                         // Do nothing, leave filerType null
-                        Log.e("WidgetFactory", "Exception parsing numColumns");
+                        Log.e("WidgetFactory", "Exception parsing filterType");
                     }
                     questionWidget = new AutoCompleteWidget(context, fep, filterType);
 
+                } else if (appearance != null && appearance.equals("quick")) {
+                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
+                } else if (appearance != null && appearance.equals("list")) {
+                    questionWidget = new ListWidget(context, fep, true);
+                } else if (appearance != null && appearance.equals("list-nolabel")) {
+                    questionWidget = new ListWidget(context, fep, false);
+                } else if (appearance != null && appearance.equals("label")) {
+                    questionWidget = new LabelWidget(context, fep);
                 } else {
                     questionWidget = new SelectOneWidget(context, fep);
                 }
@@ -120,6 +132,12 @@ public class WidgetFactory {
                     questionWidget = new GridMultiWidget(context, fep, numColumns);
                 } else if (appearance != null && appearance.equals("minimal")) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
+                } else if (appearance != null && appearance.equals("list")) {
+                    questionWidget = new ListMultiWidget(context, fep, true);
+                } else if (appearance != null && appearance.equals("list-nolabel")) {
+                    questionWidget = new ListMultiWidget(context, fep, false);
+                } else if (appearance != null && appearance.equals("label")) {
+                    questionWidget = new LabelWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }

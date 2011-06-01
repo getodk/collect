@@ -74,7 +74,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_image));
         mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -106,7 +106,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton = new Button(getContext());
         // TODO: Add this to Strings.xml
         mChooseButton.setText("Choose Image");
-        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mChooseButton.setPadding(20, 20, 20, 20);
         mChooseButton.setEnabled(!prompt.isReadOnly());
 

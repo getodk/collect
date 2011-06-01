@@ -81,8 +81,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             "org.javarosa.xpath.expr.XPathVariableReference"
     };
 
-    FormLoaderListener mStateListener;
-    String mErrorMsg;
+    private FormLoaderListener mStateListener;
+    private String mErrorMsg;
 
     protected class FECWrapper {
         FormController controller;
@@ -115,6 +115,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FormEntryController fec = null;
         FormDef fd = null;
         FileInputStream fis = null;
+        mErrorMsg = null;
 
         String formPath = path[0];
 
@@ -144,8 +145,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 fis = new FileInputStream(formXml);
                 fd = XFormUtils.getFormFromInputStream(fis);
                 if (fd == null) {
+                    Log.e("Carl", "fd is null");
                     mErrorMsg = "Error reading XForm file";
                 } else {
+                    Log.e("Carl", "fd is NOT null");
+
                     serializeFormDef(fd, formPath);
                 }
             } catch (FileNotFoundException e) {
@@ -159,7 +163,16 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 e.printStackTrace();
             }
         }
-
+        
+        if (mErrorMsg != null) {
+            Log.e("Carl", "merrormsg? " + mErrorMsg);
+            return null;
+        } else {
+            Log.e("carl", "error msg? " + mErrorMsg);
+        }
+        
+        Log.e("Carl", "shouldn't get here?");
+        Log.e("carl", "nll? " + (fd == null));
         // new evaluation context for function handlers
         EvaluationContext ec = new EvaluationContext();
         fd.setEvaluationContext(ec);

@@ -1,3 +1,4 @@
+
 package org.odk.collect.android.widgets;
 
 import org.javarosa.core.model.SelectChoice;
@@ -19,175 +20,185 @@ import java.util.Vector;
 
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
- * but the user clicks a button to see the checkboxes. The goal is to be more compact. 
- * 
- * WARNING: There is a bug in android versions previous to 2.0 that affects 
- * this widget. You can find the report here: http://code.google.com/p/android/issues/detail?id=922
- * This bug causes text to be white in alert boxes, which makes the select options invisible in this
- * widget. For this reason, this widget should not be used on phones with android versions lower 
- * than 2.0. 
+ * but the user clicks a button to see the checkboxes. The goal is to be more compact. If images,
+ * audio, or video are specified in the select answers they are ignored. WARNING: There is a bug in
+ * android versions previous to 2.0 that affects this widget. You can find the report here:
+ * http://code.google.com/p/android/issues/detail?id=922 This bug causes text to be white in alert
+ * boxes, which makes the select options invisible in this widget. For this reason, this widget
+ * should not be used on phones with android versions lower than 2.0.
  * 
  * @author Jeff Beorse (jeff@beorse.net)
- * 
  */
-public class SpinnerMultiWidget extends QuestionWidget{
+public class SpinnerMultiWidget extends QuestionWidget {
 
-        Vector<SelectChoice> mItems;
+    Vector<SelectChoice> mItems;
 
-        //The possible select answers
-        CharSequence[] answer_items;
+    // The possible select answers
+    CharSequence[] answer_items;
 
-        //The button to push to display the answers to choose from
-        Button button;
+    // The button to push to display the answers to choose from
+    Button button;
 
-        //Defines which answers are selected
-        boolean[] selections;
+    // Defines which answers are selected
+    boolean[] selections;
 
-        //The alert box that contains the answer selection view
-        AlertDialog.Builder alert_builder;
+    // The alert box that contains the answer selection view
+    AlertDialog.Builder alert_builder;
 
-        //Displays the current selections below the button
-        TextView selectionText;
+    // Displays the current selections below the button
+    TextView selectionText;
 
-        @SuppressWarnings("unchecked")
-        public SpinnerMultiWidget(Context context, FormEntryPrompt prompt) {
-                super(context, prompt);
-                mItems = prompt.getSelectChoices();
-                mPrompt = prompt;
 
-                selections = new boolean[mItems.size()];
-                answer_items = new CharSequence[mItems.size()];
-                alert_builder = new AlertDialog.Builder(context);
-                button = new Button(context);
-                selectionText = new TextView(getContext());
+    @SuppressWarnings("unchecked")
+    public SpinnerMultiWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        mItems = prompt.getSelectChoices();
+        mPrompt = prompt;
 
-                //Build View
-                for ( int i = 0; i< mItems.size(); i++ ) {
-                        answer_items[i] = prompt.getSelectChoiceText(mItems.get(i));
-                }
+        selections = new boolean[mItems.size()];
+        answer_items = new CharSequence[mItems.size()];
+        alert_builder = new AlertDialog.Builder(context);
+        button = new Button(context);
+        selectionText = new TextView(getContext());
 
-                selectionText.setText("Selected: ");
-                selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+        // Build View
+        for (int i = 0; i < mItems.size(); i++) {
+            answer_items[i] = prompt.getSelectChoiceText(mItems.get(i));
+        }
 
-                button.setText("Select Answer");
-                button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
-                button.setPadding(0, 0, 0, 7);
+        // TODO: These strings and values should probably be global references
+        selectionText.setText("Selected: ");
+        selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        selectionText.setVisibility(View.GONE);
 
-                //Give the button a click listener. This defines the alert as well. All the
-                //click and selection behavior is defined here. 
-                button.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
+        button.setText("Select Answer");
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        button.setPadding(0, 0, 0, 7);
 
-                                alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                                boolean first = true;
-                                                for(int i = 0; i<selections.length; i++){
-                                                        if (selections[i]){
+        // Give the button a click listener. This defines the alert as well. All the
+        // click and selection behavior is defined here.
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-                                                                if (first){
-                                                                        first = false;
-                                                                        selectionText.setText("Selected: " + answer_items[i].toString());
-                                                                } else{
-                                                                        selectionText.setText(selectionText.getText() + ", " + answer_items[i].toString());
-                                                                }
-                                                        }
-                                                }
-                                        }
-                                });
+                alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            boolean first = true;
+                            selectionText.setText("");
+                            for (int i = 0; i < selections.length; i++) {
+                                if (selections[i]) {
 
-                                alert_builder.setMultiChoiceItems(answer_items, selections, new DialogInterface.OnMultiChoiceClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                                selections[which] = isChecked;
-                                        }
-                                });
-                                AlertDialog alert = alert_builder.create();
-                                alert.show();
-                        }
-                });
-
-                //Fill in previous answers
-                Vector<Selection> ve = new Vector<Selection>();
-                if (prompt.getAnswerValue() != null) {
-                        ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
-                }
-                
-                if (ve != null){
-                        boolean first = true;
-                        for ( int i = 0 ; i < selections.length; ++i ) {
-
-                                String value = prompt.getSelectChoices().get(i).getValue();
-                                boolean found = false;
-                                for (Selection s : ve) {
-                                        if ( value.equals(s.getValue())) {
-                                                found = true;
-                                                break;
-                                        }
+                                    if (first) {
+                                        first = false;
+                                        selectionText.setText("Selected: "
+                                                + answer_items[i].toString());
+                                        selectionText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        selectionText.setText(selectionText.getText() + ", "
+                                                + answer_items[i].toString());
+                                    }
                                 }
-
-                                selections[i] = found;
-
-                                if(found){
-                                        if (first){
-                                                first = false;
-                                                //TODO: This string should be a global reference
-                                                selectionText.setText("Selected: " + answer_items[i].toString());
-                                        } else{
-                                                selectionText.setText(selectionText.getText() + ", " + answer_items[i].toString());
-                                        }
-                                }
-
+                            }
                         }
-                }
+                    });
 
-                addView(button);
-                addView(selectionText);
+                alert_builder.setMultiChoiceItems(answer_items, selections,
+                    new DialogInterface.OnMultiChoiceClickListener() {
 
-        }
-
-
-
-        @Override
-        public IAnswerData getAnswer() {
-                Vector<Selection> vc = new Vector<Selection>();
-                for (int i = 0; i < mItems.size(); i++) {
-                        if(selections[i]){
-                                SelectChoice sc = mItems.get(i);
-                                vc.add(new Selection(sc));
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            selections[which] = isChecked;
                         }
+                    });
+                AlertDialog alert = alert_builder.create();
+                alert.show();
+            }
+        });
+
+        // Fill in previous answers
+        Vector<Selection> ve = new Vector<Selection>();
+        if (prompt.getAnswerValue() != null) {
+            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
+        }
+
+        if (ve != null) {
+            boolean first = true;
+            for (int i = 0; i < selections.length; ++i) {
+
+                String value = prompt.getSelectChoices().get(i).getValue();
+                boolean found = false;
+                for (Selection s : ve) {
+                    if (value.equals(s.getValue())) {
+                        found = true;
+                        break;
+                    }
                 }
-                if (vc.size() == 0) {
-                        return null;
-                } else {
-                        return new SelectMultiData(vc);
+
+                selections[i] = found;
+
+                if (found) {
+                    if (first) {
+                        first = false;
+                        // TODO: This string should be a global reference
+                        selectionText.setText("Selected: " + answer_items[i].toString());
+                        selectionText.setVisibility(View.VISIBLE);
+                    } else {
+                        selectionText.setText(selectionText.getText() + ", "
+                                + answer_items[i].toString());
+                    }
                 }
 
+            }
         }
 
+        addView(button);
+        addView(selectionText);
+
+    }
 
 
-        @Override
-        public void clearAnswer() {
-                //TODO: This string should be a global reference
-                selectionText.setText("Selected: ");
-                for(int i = 0; i< selections.length; i++){
-                        selections[i] = false;
-                }
+    @Override
+    public IAnswerData getAnswer() {
+        Vector<Selection> vc = new Vector<Selection>();
+        for (int i = 0; i < mItems.size(); i++) {
+            if (selections[i]) {
+                SelectChoice sc = mItems.get(i);
+                vc.add(new Selection(sc));
+            }
+        }
+        if (vc.size() == 0) {
+            return null;
+        } else {
+            return new SelectMultiData(vc);
         }
 
-        @Override
-        public void setFocus(Context context) {
-                // Hide the soft keyboard if it's showing.
-                InputMethodManager inputManager =
-                        (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
 
+
+    @Override
+    public void clearAnswer() {
+        // TODO: This string should be a global reference
+        selectionText.setText("Selected: ");
+        selectionText.setVisibility(View.GONE);
+        for (int i = 0; i < selections.length; i++) {
+            selections[i] = false;
         }
-        
-        @Override
-        public void setOnLongClickListener(OnLongClickListener l) {
-            super.setOnLongClickListener(l);
-            button.setOnLongClickListener(l);
-        }
+    }
+
+
+    @Override
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        button.setOnLongClickListener(l);
+    }
 }

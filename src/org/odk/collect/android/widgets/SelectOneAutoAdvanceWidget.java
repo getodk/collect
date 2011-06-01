@@ -20,43 +20,53 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
 import java.util.Vector;
 
 /**
- * SelectOneWidgets handles select-one fields using radio buttons.
+ * SelectOneWidgets handles select-one fields using radio buttons. Unlike the classic
+ * SelectOneWidget, when a user clicks an option they are then immediately advanced to the next
+ * question.
  * 
- * @author Carl Hartung (carlhartung@gmail.com)
- * @author Yaw Anokwa (yanokwa@gmail.com)
+ * @author Jeff Beorse (jeff@beorse.net)
  */
-/*
- * TODO: We're not actually using the RadioGroup anymore, so this should probably be changed to a
- * LinearLayout
- */
-public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeListener {
+public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener {
 
     private static final int RANDOM_BUTTON_ID = 4853487;
     Vector<SelectChoice> mItems;
 
     Vector<RadioButton> buttons;
-    Vector<MediaLayout> layout;
+    Vector<MediaLayout> mediaLayouts;
+    Vector<RelativeLayout> parentLayout;
+
+    AdvanceToNextListener listener;
 
 
-    public SelectOneWidget(Context context, FormEntryPrompt prompt) {
+    public SelectOneAutoAdvanceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         mItems = prompt.getSelectChoices();
         buttons = new Vector<RadioButton>();
-        layout = new Vector<MediaLayout>();
+        mediaLayouts = new Vector<MediaLayout>();
+        parentLayout = new Vector<RelativeLayout>();
+        listener = (AdvanceToNextListener) context;
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
@@ -65,13 +75,24 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
         if (prompt.getSelectChoices() != null) {
             for (int i = 0; i < mItems.size(); i++) {
+
+                RelativeLayout thisParentLayout =
+                    (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
+                parentLayout.add(thisParentLayout);
+
+                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
+                ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
+
                 RadioButton r = new RadioButton(getContext());
                 r.setOnCheckedChangeListener(this);
                 r.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
                 r.setId(i + RANDOM_BUTTON_ID);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
+
+                Drawable image = getResources().getDrawable(R.drawable.right_arrow);
+                rightArrow.setImageDrawable(image);
 
                 buttons.add(r);
 
@@ -97,8 +118,8 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
                 mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
-                addView(mediaLayout);
-                layout.add(mediaLayout);
+                questionLayout.addView(mediaLayout);
+                mediaLayouts.add(mediaLayout);
 
                 // Last, add the dividing line (except for the last element)
                 ImageView divider = new ImageView(getContext());
@@ -106,6 +127,8 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 if (i != mItems.size() - 1) {
                     mediaLayout.addDivider(divider);
                 }
+
+                addView(thisParentLayout);
             }
         }
     }
@@ -160,6 +183,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
             return;
         }
 
+        listener.next();
         for (RadioButton button : this.buttons) {
             if (button.isChecked() && !(buttonView == button)) {
                 button.setChecked(false);

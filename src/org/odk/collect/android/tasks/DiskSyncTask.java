@@ -91,7 +91,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                 ContentValues values = new ContentValues();
                 File addMe = xForms.get(i);
 
-                if (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml")) {
+                // Ignore invisible files that start with periods.
+                if (!addMe.getName().startsWith(".")
+                        && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml"))) {
                     HashMap<String, String> fields = FileUtils.parseXML(addMe);
 
                     String title = fields.get(FileUtils.TITLE);
@@ -121,7 +123,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                     }
 
                     values.put(FormsColumns.FORM_FILE_PATH, addMe.getAbsolutePath());
-                    Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
+                    Collect.getInstance().getContentResolver()
+                            .insert(FormsColumns.CONTENT_URI, values);
                 } else {
                     // it's a [formname]-media directory, likely, so skip it
                 }

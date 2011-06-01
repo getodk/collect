@@ -42,7 +42,7 @@ public class StringWidget extends QuestionWidget {
         super(context, prompt);
         mAnswer = new EditText(context);
 
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answer_fontsize);
+        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 
         // capitalize the first letter of the sentence
         mAnswer.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
