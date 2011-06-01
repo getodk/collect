@@ -480,11 +480,8 @@ public class FormController {
                 || mFormEntryController.getModel().getEvent() == FormEntryController.EVENT_GROUP) {
             lastquestion = 0;
         }
-        // start debugging
+
         FormEntryCaption[] v = mFormEntryController.getModel().getCaptionHierarchy();
-        for (int a = 0; a < v.length; a++) {
-            Log.e("carl", "group: " + v[a].getLongText());
-        } // end debugging
         FormEntryCaption[] groups = new FormEntryCaption[v.length - lastquestion];
         for (int i = 0; i < v.length - lastquestion; i++) {
             groups[i] = v[i];

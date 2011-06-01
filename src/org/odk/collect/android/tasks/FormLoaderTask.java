@@ -145,11 +145,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 fis = new FileInputStream(formXml);
                 fd = XFormUtils.getFormFromInputStream(fis);
                 if (fd == null) {
-                    Log.e("Carl", "fd is null");
                     mErrorMsg = "Error reading XForm file";
                 } else {
-                    Log.e("Carl", "fd is NOT null");
-
                     serializeFormDef(fd, formPath);
                 }
             } catch (FileNotFoundException e) {
@@ -165,14 +162,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
         
         if (mErrorMsg != null) {
-            Log.e("Carl", "merrormsg? " + mErrorMsg);
             return null;
-        } else {
-            Log.e("carl", "error msg? " + mErrorMsg);
         }
         
-        Log.e("Carl", "shouldn't get here?");
-        Log.e("carl", "nll? " + (fd == null));
         // new evaluation context for function handlers
         EvaluationContext ec = new EvaluationContext();
         fd.setEvaluationContext(ec);

@@ -49,7 +49,6 @@ public class SpinnerWidget extends QuestionWidget {
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        Log.e("Carl", "constructing spinner");
 
         mItems = prompt.getSelectChoices();
         spinner = new Spinner(context);

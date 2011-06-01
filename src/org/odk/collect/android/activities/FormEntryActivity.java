@@ -1034,12 +1034,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return false;
         }
 
-        Log.e("Carl", "what?  intent? " + getIntent());
-        if (getIntent() != null) {
-            Log.e("Carl", "what?  data? " + getIntent().getData());
-        } else {
-            Log.e("Carl", "but no data");
-        }
         mSaveToDiskTask = new SaveToDiskTask(getIntent().getData());
         mSaveToDiskTask.setFormSavedListener(this);
         mSaveToDiskTask.setExportVars(exit, complete);

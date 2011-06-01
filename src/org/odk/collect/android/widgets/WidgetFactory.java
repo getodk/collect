@@ -60,6 +60,14 @@ public class WidgetFactory {
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, fep);
                         break;
+                    case Constants.DATATYPE_TEXT:
+                        String appearance = fep.getAppearanceHint();
+                        if (appearance != null && appearance.equalsIgnoreCase("numbers")) {
+                            questionWidget = new StringNumberWidget(context, fep);
+                        } else {
+                            questionWidget = new StringWidget(context, fep);
+                        }
+                        break;
                     default:
                         questionWidget = new StringWidget(context, fep);
                         break;

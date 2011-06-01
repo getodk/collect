@@ -215,7 +215,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         buttonParams.weight = 1;
 
-        Log.e("Carl", "question layout about to be null");
         questionLayout.addView(buttonLayout, buttonParams);
         addView(questionLayout);
 
@@ -313,7 +312,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         labelParams.weight = 1;
 
-        Log.e("Carl", "questionLayout just got a value.  woot");
         questionLayout = new LinearLayout(getContext());
         questionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
