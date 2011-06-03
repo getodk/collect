@@ -34,7 +34,7 @@
 			android:key="protocol"
 			android:title="@string/protocol"
 			android:dialogTitle="@string/change_protocol"
-			android:defaultValue="@string/default_splash_path"
+			android:defaultValue="odk_default"
 			android:entries="@array/protocol_entries"
 			android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
