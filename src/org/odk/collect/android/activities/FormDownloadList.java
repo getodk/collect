@@ -42,10 +42,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -80,8 +80,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private static final String DIALOG_TITLE = "dialogtitle";
     private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
+    private static final String FORMLIST = "formlist";
 
     public static final String LIST_URL = "listurl";
+
+    private static final String FORMNAME = "formname";
+    private static final String FORMID = "formid";
+    private static final String FORMID_DISPLAY = "formiddisplay";
 
     private String mAlertMsg;
     private boolean mAlertShowing = false;
@@ -97,12 +102,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private Button mRefreshButton;
 
     private HashMap<String, FormDetails> mFormNamesAndURLs;
-    private ArrayAdapter<String> mFileAdapter;
+    private SimpleAdapter mFormListAdapter;
+    private ArrayList<HashMap<String, String>> mFormList;
 
     private boolean mToggled = false;
     private int mSelectedCount = 0;
-
-    private int totalCount;
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -157,7 +161,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         });
 
         if (savedInstanceState != null) {
-            // If the screen has rotated, the hashmap with the form names and urls is passed here.
+            // If the screen has rotated, the hashmap with the form ids and urls is passed here.
             if (savedInstanceState.containsKey(BUNDLE_FORM_LIST)) {
                 mFormNamesAndURLs =
                     (HashMap<String, FormDetails>) savedInstanceState
@@ -189,7 +193,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             if (savedInstanceState.containsKey(SHOULD_EXIT)) {
                 mShouldExit = savedInstanceState.getBoolean(SHOULD_EXIT);
             }
+        }
 
+        if (savedInstanceState != null && savedInstanceState.containsKey(FORMLIST)) {
+            mFormList =
+                (ArrayList<HashMap<String, String>>) savedInstanceState.getSerializable(FORMLIST);
+        } else {
+            mFormList = new ArrayList<HashMap<String, String>>();
         }
 
         if (mAlertShowing) {
@@ -219,8 +229,19 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // first time, so get the formlist
             downloadFormList();
         }
-        buildView();
-        
+
+        String[] data = new String[] {
+                FORMNAME, FORMID_DISPLAY, FORMID
+        };
+        int[] view = new int[] {
+                R.id.text1, R.id.text2
+        };
+
+        mFormListAdapter =
+            new SimpleAdapter(this, mFormList, R.layout.two_item_multiple_choice, data, view);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        getListView().setItemsCanFocus(false);
+        setListAdapter(mFormListAdapter);
     }
 
 
@@ -258,6 +279,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         outState.putString(DIALOG_MSG, mAlertMsg);
         outState.putBoolean(DIALOG_SHOWING, mAlertShowing);
         outState.putBoolean(SHOULD_EXIT, mShouldExit);
+        outState.putSerializable(FORMLIST, mFormList);
     }
 
 
@@ -275,21 +297,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
         }
         return count;
-    }
-
-
-    /**
-     * Updates the listview
-     */
-    private void buildView() {
-        ArrayList<String> formNames = new ArrayList<String>(mFormNamesAndURLs.keySet());
-
-        mFileAdapter =
-            new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
-                    formNames);
-        setListAdapter(mFileAdapter);
-        getListView().setItemsCanFocus(false);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
 
@@ -405,14 +412,15 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      */
     @SuppressWarnings("unchecked")
     private void downloadSelectedFiles() {
-        totalCount = 0;
+        int totalCount = 0;
         ArrayList<FormDetails> filesToDownload = new ArrayList<FormDetails>();
 
         SparseBooleanArray sba = getListView().getCheckedItemPositions();
         for (int i = 0; i < getListView().getCount(); i++) {
             if (sba.get(i, false)) {
-                String form = (String) getListAdapter().getItem(i);
-                filesToDownload.add(mFormNamesAndURLs.get(form));
+                HashMap<String, String> item =
+                    (HashMap<String, String>) getListAdapter().getItem(i);
+                filesToDownload.add(mFormNamesAndURLs.get(item.get(FORMID)));
             }
         }
         totalCount = filesToDownload.size();
@@ -503,11 +511,21 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             String dialogTitle = getString(R.string.load_remote_form_error);
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
-            // Everything worked
+            // Everything worked.  Clear the list and add the results.
             mFormNamesAndURLs = result;
-        }
 
-        buildView();
+            mFormList.clear();
+
+            ArrayList<String> ids = new ArrayList<String>(mFormNamesAndURLs.keySet());
+            for (int i = 0; i < result.size(); i++) {
+                HashMap<String, String> item = new HashMap<String, String>();
+                item.put(FORMNAME, mFormNamesAndURLs.get(ids.get(i)).formName);
+                item.put(FORMID_DISPLAY, "ID: " + mFormNamesAndURLs.get(ids.get(i)).formID);
+                item.put(FORMID, mFormNamesAndURLs.get(ids.get(i)).formID);
+                mFormList.add(item);
+            }
+            mFormListAdapter.notifyDataSetChanged();
+        }
     }
 
 

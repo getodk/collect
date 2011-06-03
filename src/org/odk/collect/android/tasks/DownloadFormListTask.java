@@ -225,7 +225,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 // error)));
                 // return formList;
                 // }
-                formList.put(formName, new FormDetails(formName, downloadUrl, manifestUrl, formId));
+                formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId));
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -268,7 +268,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                 R.string.parse_legacy_formlist_failed, error)));
                         return formList;
                     }
-                    formList.put(formName, new FormDetails(formName, downloadUrl, null, formId));
+                    formList.put(formId, new FormDetails(formName, downloadUrl, null, formId));
                 }
             }
         }
