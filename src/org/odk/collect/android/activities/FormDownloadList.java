@@ -76,7 +76,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     private static final String BUNDLE_TOGGLED_KEY = "toggled";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String BUNDLE_FORM_LIST = "formlist";
+    private static final String BUNDLE_FORM_MAP = "formmap";
     private static final String DIALOG_TITLE = "dialogtitle";
     private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
@@ -132,6 +132,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             public void onClick(View v) {
                 downloadSelectedFiles();
                 mToggled = false;
+                clearChoices();
             }
         });
 
@@ -157,15 +158,17 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             public void onClick(View v) {
                 mToggled = false;
                 downloadFormList();
+                FormDownloadList.this.getListView().clearChoices();
+                clearChoices();
             }
         });
 
         if (savedInstanceState != null) {
             // If the screen has rotated, the hashmap with the form ids and urls is passed here.
-            if (savedInstanceState.containsKey(BUNDLE_FORM_LIST)) {
+            if (savedInstanceState.containsKey(BUNDLE_FORM_MAP)) {
                 mFormNamesAndURLs =
                     (HashMap<String, FormDetails>) savedInstanceState
-                            .getSerializable(BUNDLE_FORM_LIST);
+                            .getSerializable(BUNDLE_FORM_MAP);
             }
 
             // indicating whether or not select-all is on or off.
@@ -243,6 +246,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         getListView().setItemsCanFocus(false);
         setListAdapter(mFormListAdapter);
     }
+    
+    private void clearChoices() {
+        FormDownloadList.this.getListView().clearChoices();
+        mDownloadButton.setEnabled(false);
+    }
 
 
     @Override
@@ -274,7 +282,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         super.onSaveInstanceState(outState);
         outState.putBoolean(BUNDLE_TOGGLED_KEY, mToggled);
         outState.putInt(BUNDLE_SELECTED_COUNT, selectedItemCount());
-        outState.putSerializable(BUNDLE_FORM_LIST, mFormNamesAndURLs);
+        outState.putSerializable(BUNDLE_FORM_MAP, mFormNamesAndURLs);
         outState.putString(DIALOG_TITLE, mAlertTitle);
         outState.putString(DIALOG_MSG, mAlertMsg);
         outState.putBoolean(DIALOG_SHOWING, mAlertShowing);
