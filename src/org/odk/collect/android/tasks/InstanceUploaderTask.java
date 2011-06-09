@@ -186,7 +186,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    mResults.put(id, fail + e.getMessage());
+                                    mResults.put(id, fail + urlString + " " + e.getMessage());
                                     cv.put(InstanceColumns.STATUS,
                                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                     Collect.getInstance().getContentResolver()
@@ -415,8 +415,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             if (responseCode == 200) {
                                 mResults.put(id, fail + "Network login failure?  again?");
                             } else {
-                                mResults.put(id, fail + responseCode + " returned "
-                                        + response.getStatusLine().getReasonPhrase());
+                                mResults.put(id, fail + urlString + " returned " + responseCode + " " + 
+                                        response.getStatusLine().getReasonPhrase());
                             }
                             cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
