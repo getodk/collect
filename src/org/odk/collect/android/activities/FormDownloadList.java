@@ -205,10 +205,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             mFormList = new ArrayList<HashMap<String, String>>();
         }
 
-        if (mAlertShowing) {
-            createAlertDialog(mAlertTitle, mAlertMsg, mShouldExit);
-        }
-
         if (getLastNonConfigurationInstance() instanceof DownloadFormListTask) {
             mDownloadFormListTask = (DownloadFormListTask) getLastNonConfigurationInstance();
             if (mDownloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -476,6 +472,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         }
         if (mDownloadFormsTask != null) {
             mDownloadFormsTask.setDownloaderListener(this);
+        }
+        if (mAlertShowing) {
+            createAlertDialog(mAlertTitle, mAlertMsg, mShouldExit);
         }
         super.onResume();
     }
