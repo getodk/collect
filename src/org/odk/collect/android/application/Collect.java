@@ -20,10 +20,12 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 
 import android.app.Application;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import java.io.File;
 
@@ -119,6 +121,7 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         singleton = this;
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
     }
 
