@@ -67,15 +67,12 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
-        // get all forms
-        Cursor managedCursor = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
-
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
             Log.i(t, "Starting new disk sync task");
-            mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
+            mDiskSyncTask = new DiskSyncTask();
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
         }

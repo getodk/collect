@@ -19,7 +19,6 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -40,45 +39,77 @@ import java.util.HashMap;
 public class DiskSyncTask extends AsyncTask<Void, String, Void> {
     private final static String t = "DiskSyncTask";
 
-    Cursor mCursor;
-    ContentResolver mContentResolver;
     DiskSyncListener mListener;
-
-
-    public DiskSyncTask(Cursor c, ContentResolver cr) {
-        super();
-        mCursor = c;
-        mContentResolver = cr;
-        mListener = null;
-    }
 
 
     @Override
     protected Void doInBackground(Void... params) {
+        // get all forms
+        Cursor mCursor =
+            Collect.getInstance().getContentResolver()
+                    .query(FormsColumns.CONTENT_URI, null, null, null, null);
+        if (mCursor == null) {
+            Log.e(t, "Forms Content Provider returned NULL");
+            return null;
+        }
+
         mCursor.moveToPosition(-1);
 
         File formDir = new File(Collect.FORMS_PATH);
         if (formDir.exists() && formDir.isDirectory()) {
-            ArrayList<File> xForms = new ArrayList<File>(Arrays.asList(formDir.listFiles()));
+            // This is all the files in the /odk/foms directory
+            ArrayList<File> xFormsToAdd = new ArrayList<File>(Arrays.asList(formDir.listFiles()));
 
             while (mCursor.moveToNext()) {
+                // For each element in the provider, see if the file already exists
                 String sqlFilename =
                     mCursor.getString(mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                 String md5 = mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
                 File sqlFile = new File(sqlFilename);
                 if (sqlFile.exists()) {
-                    // remove it from the arraylist
-                    xForms.remove(sqlFile);
+                    // remove it from the list of forms (we only want forms we haven't added at the
+                    // end)
+                    xFormsToAdd.remove(sqlFile);
                     if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
-                        // Probably someone overwrite the file on the sdcard, update its md5.
+                        // Probably someone overwrite the file on the sdcard
+                        // So re-parse it and update it's information
                         String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
-                        Uri update = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
+                        Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
                         ContentValues updateValues = new ContentValues();
-                        // Note, this is the same path here, but update will automatically update
-                        // the .md5
-                        // and the cache path.
+
+                        HashMap<String, String> fields = FileUtils.parseXML(sqlFile);
+
+                        String title = fields.get(FileUtils.TITLE);
+                        String ui = fields.get(FileUtils.UI);
+                        String model = fields.get(FileUtils.MODEL);
+                        String formid = fields.get(FileUtils.FORMID);
+                        String submission = fields.get(FileUtils.SUBMISSIONURI);
+
+                        if (title != null) {
+                            updateValues.put(FormsColumns.DISPLAY_NAME, title);
+                        } else {
+                            // TODO: Return some nasty error.
+                        }
+                        if (formid != null) {
+                            updateValues.put(FormsColumns.JR_FORM_ID, formid);
+                        } else {
+                            // TODO: return some nasty error.
+                        }
+                        if (ui != null) {
+                            updateValues.put(FormsColumns.UI_VERSION, ui);
+                        }
+                        if (model != null) {
+                            updateValues.put(FormsColumns.MODEL_VERSION, model);
+                        }
+                        if (submission != null) {
+                            updateValues.put(FormsColumns.SUBMISSION_URI, submission);
+                        }
+                        // Note, the path doesn't change here, but it needs to be included so the
+                        // update will automatically update the .md5 and the cache path.
                         updateValues.put(FormsColumns.FORM_FILE_PATH, sqlFile.getAbsolutePath());
-                        int count = mContentResolver.update(update, updateValues, null, null);
+                        int count =
+                            Collect.getInstance().getContentResolver()
+                                    .update(updateUri, updateValues, null, null);
                         Log.i(t, count + " records successfully updated");
                     }
                 } else {
@@ -87,9 +118,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
             }
 
             // Whatever is left in our arraylist isn't in the database, so add it
-            for (int i = 0; i < xForms.size(); i++) {
+            for (int i = 0; i < xFormsToAdd.size(); i++) {
                 ContentValues values = new ContentValues();
-                File addMe = xForms.get(i);
+                File addMe = xFormsToAdd.get(i);
 
                 // Ignore invisible files that start with periods.
                 if (!addMe.getName().startsWith(".")
@@ -129,6 +160,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                     // it's a [formname]-media directory, likely, so skip it
                 }
             }
+        }
+        if (mCursor != null) {
+            mCursor.close();
         }
         return null;
 

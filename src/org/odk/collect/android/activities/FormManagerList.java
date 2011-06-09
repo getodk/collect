@@ -88,10 +88,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
             }
         });
 
-        Cursor managedCursor = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
-            mDiskSyncTask = new DiskSyncTask(managedCursor, getContentResolver());
+            mDiskSyncTask = new DiskSyncTask();
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
         }
