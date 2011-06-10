@@ -196,4 +196,5 @@
 <string name="success">SUCCESS</string>
 <string name="no_forms_uploaded">Sorry, no forms were uploaded.</string>
 <string name="upload_results">Upload Results</string>
+<string name="xform_parse_error">XForm parse error.  %1$s is missing element %2$s</string>
 </resources>

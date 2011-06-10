@@ -51,6 +51,8 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
 
     private AlertDialog mAlertDialog;
 
+    private final String syncMsgKey = "syncmsgkey";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +81,6 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
             mDiskSyncTask.setDiskSyncListener(null);
-            TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(R.string.finished_disk_scan);
         }
 
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
@@ -96,6 +96,11 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         SimpleCursorAdapter instances =
             new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
         setListAdapter(instances);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(savedInstanceState.getString(syncMsgKey));
+        }
     }
 
 
@@ -103,6 +108,14 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     public Object onRetainNonConfigurationInstance() {
         // pass the thread on restart
         return mDiskSyncTask;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        TextView tv = (TextView) findViewById(R.id.status_text);
+        outState.putString(syncMsgKey, tv.getText().toString());
     }
 
 
@@ -149,10 +162,10 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
      * Called by DiskSyncTask when the task is finished
      */
     @Override
-    public void SyncComplete() {
+    public void SyncComplete(String result) {
         Log.i(t, "disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setText(R.string.finished_disk_scan);
+        tv.setText(result);
     }
 
 

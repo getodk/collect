@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -32,18 +33,18 @@ import java.util.HashMap;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
- * sdcard manuall
+ * sdcard manually. Returns immediately if it detects an error.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class DiskSyncTask extends AsyncTask<Void, String, Void> {
+public class DiskSyncTask extends AsyncTask<Void, String, String> {
     private final static String t = "DiskSyncTask";
 
     DiskSyncListener mListener;
 
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected String doInBackground(Void... params) {
         // get all forms
         Cursor mCursor =
             Collect.getInstance().getContentResolver()
@@ -77,7 +78,12 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                         Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
                         ContentValues updateValues = new ContentValues();
 
-                        HashMap<String, String> fields = FileUtils.parseXML(sqlFile);
+                        HashMap<String, String> fields = null;
+                        try {
+                            fields = FileUtils.parseXML(sqlFile);
+                        } catch (RuntimeException e) {
+                            return sqlFile.getName() + " :: " + e.getMessage();
+                        }
 
                         String title = fields.get(FileUtils.TITLE);
                         String ui = fields.get(FileUtils.UI);
@@ -88,12 +94,14 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                         if (title != null) {
                             updateValues.put(FormsColumns.DISPLAY_NAME, title);
                         } else {
-                            // TODO: Return some nasty error.
+                            return Collect.getInstance().getString(R.string.xform_parse_error,
+                                sqlFile.getName(), "title");
                         }
                         if (formid != null) {
                             updateValues.put(FormsColumns.JR_FORM_ID, formid);
                         } else {
-                            // TODO: return some nasty error.
+                            return Collect.getInstance().getString(R.string.xform_parse_error,
+                                sqlFile.getName(), "id");
                         }
                         if (ui != null) {
                             updateValues.put(FormsColumns.UI_VERSION, ui);
@@ -125,8 +133,14 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                 // Ignore invisible files that start with periods.
                 if (!addMe.getName().startsWith(".")
                         && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml"))) {
-                    HashMap<String, String> fields = FileUtils.parseXML(addMe);
-
+                    
+                    HashMap<String, String> fields = null;
+                    try {
+                        fields = FileUtils.parseXML(addMe);
+                    } catch (RuntimeException e) {
+                        return addMe.getName() + " :: " + e.getMessage();
+                    }
+                    
                     String title = fields.get(FileUtils.TITLE);
                     String ui = fields.get(FileUtils.UI);
                     String model = fields.get(FileUtils.MODEL);
@@ -136,12 +150,14 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
                     if (title != null) {
                         values.put(FormsColumns.DISPLAY_NAME, title);
                     } else {
-                        // TODO: Return some nasty error.
+                        return Collect.getInstance().getString(R.string.xform_parse_error,
+                            addMe.getName(), "title");
                     }
                     if (formid != null) {
                         values.put(FormsColumns.JR_FORM_ID, formid);
                     } else {
-                        // TODO: return some nasty error.
+                        return Collect.getInstance().getString(R.string.xform_parse_error,
+                            addMe.getName(), "id");
                     }
                     if (ui != null) {
                         values.put(FormsColumns.UI_VERSION, ui);
@@ -164,7 +180,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
         if (mCursor != null) {
             mCursor.close();
         }
-        return null;
+        return Collect.getInstance().getString(R.string.finished_disk_scan);
 
     }
 
@@ -175,10 +191,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, Void> {
 
 
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(String result) {
         super.onPostExecute(result);
         if (mListener != null) {
-            mListener.SyncComplete();
+            mListener.SyncComplete(result);
         }
     }
 

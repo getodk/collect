@@ -57,6 +57,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
     private final String SELECTED = "selected";
 
     DiskSyncTask mDiskSyncTask;
+    
+    private final String syncMsgKey = "syncmsgkey";
 
 
     @Override
@@ -96,8 +98,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         }
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(R.string.finished_disk_scan);
+            //TextView tv = (TextView) findViewById(R.id.status_text);
+            //tv.setText(R.string.finished_disk_scan);
             mDiskSyncTask.setDiskSyncListener(null);
         }
 
@@ -132,6 +134,11 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
 
             }
             mRestored = false;
+        }
+        
+        if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
+            TextView tv = (TextView) findViewById(R.id.status_text);
+            tv.setText(savedInstanceState.getString(syncMsgKey));
         }
     }
 
@@ -237,9 +244,11 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
         for (int i = 0; i < mSelected.size(); i++)
             selectedArray[i] = mSelected.get(i);
         outState.putLongArray(SELECTED, selectedArray);
+        TextView tv = (TextView) findViewById(R.id.status_text);
+        outState.putString(syncMsgKey, tv.getText().toString());
     }
-
-
+    
+    
     @Override
     protected void onResume() {
         mDiskSyncTask.setDiskSyncListener(this);
@@ -259,9 +268,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener {
 
 
     @Override
-    public void SyncComplete() {
+    public void SyncComplete(String result) {
         Log.i(t, "Disk scan complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setText(R.string.finished_disk_scan);
+        tv.setText(result);
     }
 }

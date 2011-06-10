@@ -267,12 +267,7 @@ public class FileUtils {
             Element title = head.getElement(html, "title");
             if (title != null) {
                 fields.put(TITLE, XFormParser.getXMLText(title, true));
-            } else {
-                String name = xmlFile.getName();
-                // strip off file extension
-                name = name.substring(0, name.lastIndexOf("."));
-                fields.put(TITLE, name);
-            }
+            } 
             Element model = head.getElement(xforms, "model");
             Element cur = model.getElement(xforms, "instance");
             int idx = cur.getChildCount();
