@@ -351,6 +351,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             entity.addPart(f.getName(), fb);
                             byteCount += f.length();
                             Log.i(t, "added csv file " + f.getName());
+                        } else if (f.getName().endsWith(".amr")) {
+                            fb = new FileBody(f, "audio/amr");
+                            entity.addPart(f.getName(), fb);
+                            Log.i(t, "added audio file " + f.getName());
                         } else if (extension.equals("xls")) {
                             fb = new FileBody(f, "application/vnd.ms-excel");
                             entity.addPart(f.getName(), fb);
