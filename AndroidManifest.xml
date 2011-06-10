@@ -30,7 +30,9 @@
 		<activity
 			android:name=".activities.FormEntryActivity"
 			android:label="@string/app_name"
-			android:configChanges="orientation">
+			android:configChanges="orientation"
+			android:windowSoftInputMode="adjustResize"
+			>
 			<intent-filter>
 				<action
 					android:name="android.intent.action.VIEW" />
