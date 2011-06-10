@@ -68,7 +68,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
-
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         mLocationDialog.show();
@@ -94,8 +93,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
                             finish();
                             break;
                     }
-                    // TODO: does this stop gps?
-                    // on cancel, stop gps
                 }
             };
 
@@ -145,9 +142,12 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
-            Toast.LENGTH_SHORT).show();
-        finish();
+        if (!(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
+            Toast.makeText(this, getString(R.string.provider_disabled_error), Toast.LENGTH_SHORT)
+                    .show();
+            finish();
+        }
     }
 
 

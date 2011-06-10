@@ -103,7 +103,6 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         mLocationOverlay = new MyLocationOverlay(this, mMapView);
         mMapView.getOverlays().add(mLocationOverlay);
 
-
         if (mCaptureLocation) {
             mLocationStatus = (TextView) findViewById(R.id.location_status);
             mAcceptLocation = (Button) findViewById(R.id.accept_location);
@@ -114,7 +113,6 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
                     returnLocation();
                 }
             });
-
 
         } else {
 
@@ -203,19 +201,16 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
     @Override
     public void onProviderDisabled(String provider) {
-        // TODO Auto-generated method stub
     }
 
 
     @Override
     public void onProviderEnabled(String provider) {
-        // TODO Auto-generated method stub
     }
 
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // TODO Auto-generated method stub
     }
 
     class Marker extends Overlay {
