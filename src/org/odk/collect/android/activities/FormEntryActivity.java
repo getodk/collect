@@ -20,9 +20,9 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -122,14 +122,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     // rotation (or similar)
     private static final String NEWFORM = "newform";
 
-    private static final int MENU_DELETE_REPEAT = Menu.FIRST;
-    private static final int MENU_LANGUAGES = Menu.FIRST + 1;
-    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 2;
-    private static final int MENU_SAVE = Menu.FIRST + 3;
-    private static final int MENU_PREFERENCES = Menu.FIRST + 4;
+    private static final int MENU_LANGUAGES = Menu.FIRST;
+    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
+    private static final int MENU_SAVE = Menu.FIRST + 2;
+    private static final int MENU_PREFERENCES = Menu.FIRST + 3;
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
+
+    // Random ID
+    private static final int DELETE_REPEAT = 654321;
 
     private String mFormPath;
     public static String mInstancePath;
@@ -457,7 +459,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.removeItem(MENU_DELETE_REPEAT);
         menu.removeItem(MENU_LANGUAGES);
         menu.removeItem(MENU_HIERARCHY_VIEW);
         menu.removeItem(MENU_SAVE);
@@ -465,9 +466,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
             android.R.drawable.ic_menu_save);
-        menu.add(0, MENU_DELETE_REPEAT, 0, getString(R.string.delete_repeat))
-                .setIcon(R.drawable.ic_menu_clear_playlist)
-                .setEnabled(mFormController.indexContainsRepeatableGroup() ? true : false);
         menu.add(0, MENU_HIERARCHY_VIEW, 0, getString(R.string.view_hierarchy)).setIcon(
             R.drawable.ic_menu_goto);
         menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language))
@@ -486,9 +484,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         switch (item.getItemId()) {
             case MENU_LANGUAGES:
                 createLanguageDialog();
-                return true;
-            case MENU_DELETE_REPEAT:
-                createDeleteRepeatConfirmDialog();
                 return true;
             case MENU_SAVE:
                 // don't exit
@@ -563,7 +558,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, v.getId(), 0, "Clear Answer");
+        menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
+        if (mFormController.indexContainsRepeatableGroup()) {
+            menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
+        }
     }
 
 
@@ -578,6 +576,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 createClearDialog(qw);
             }
         }
+        if (item.getItemId() == DELETE_REPEAT) {
+            createDeleteRepeatConfirmDialog();
+        }
+
         return super.onContextItemSelected(item);
     }
 
