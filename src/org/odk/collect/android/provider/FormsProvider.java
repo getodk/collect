@@ -43,7 +43,7 @@ public class FormsProvider extends ContentProvider {
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -76,9 +76,9 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.DATE
                     + " integer not null, " // milliseconds
                     + FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                    + FormsColumns.FORM_FILE_PATH + " text not null, "
-                    + FormsColumns.SUBMISSION_URI + " text, " + FormsColumns.JRCACHE_FILE_PATH
-                    + " text not null );");
+                    + FormsColumns.FORM_FILE_PATH + " text not null, " + FormsColumns.LANGUAGE
+                    + " text, " + FormsColumns.SUBMISSION_URI + " text, "
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
         }
 
 
@@ -411,6 +411,7 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH, FormsColumns.FORM_MEDIA_PATH);
         sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH, FormsColumns.JRCACHE_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
     }
 
 }

@@ -1212,6 +1212,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                // Update the language in the content provider when selecting a new
+                                // language
+                                ContentValues values = new ContentValues();
+                                values.put(FormsColumns.LANGUAGE, languages[whichButton]);
+                                String selection = FormsColumns.FORM_FILE_PATH + "=?";
+                                String selectArgs[] = {
+                                    mFormPath
+                                };
+                                int updated = getContentResolver().update(FormsColumns.CONTENT_URI, values,
+                                    selection, selectArgs);
+                                Log.i(t, "Updated language to: " + languages[whichButton] + " in " + updated + " rows" );
+
                                 mFormController.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
                                 if (currentPromptIsQuestion()) {
@@ -1416,6 +1428,27 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             Intent i = new Intent(this, FormHierarchyActivity.class);
             startActivity(i);
             return; // so we don't show the intro screen before jumping to the hierarchy
+        }
+
+        // Set the language if one has already been set in the past
+        String defaultLanguage = mFormController.getLanguage();
+        String newLanguage = "";
+
+        String selection = FormsColumns.FORM_FILE_PATH + "=?";
+        String selectArgs[] = {
+            mFormPath
+        };
+        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, selection, selectArgs, null);
+        if (c.getCount() == 1) {
+            c.moveToFirst();
+            newLanguage = c.getString(c.getColumnIndex(FormsColumns.LANGUAGE));
+        }
+
+        // if somehow we end up with a bad language, set it to the default
+        try {
+            mFormController.setLanguage(newLanguage);
+        } catch (Exception e) {
+            mFormController.setLanguage(defaultLanguage);
         }
 
         refreshCurrentView();
