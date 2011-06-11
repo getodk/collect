@@ -19,10 +19,8 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.util.TypedValue;
 
 /**

@@ -104,8 +104,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
         // setup chooser button
         mChooseButton = new Button(getContext());
-        // TODO: Add this to Strings.xml
-        mChooseButton.setText("Choose Image");
+        mChooseButton.setText(getContext().getString(R.string.choose_image));
         mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mChooseButton.setPadding(20, 20, 20, 20);
         mChooseButton.setEnabled(!prompt.isReadOnly());

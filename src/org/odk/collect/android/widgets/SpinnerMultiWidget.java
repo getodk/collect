@@ -6,6 +6,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -50,7 +51,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
 
     @SuppressWarnings("unchecked")
-    public SpinnerMultiWidget(Context context, FormEntryPrompt prompt) {
+    public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;
@@ -66,12 +67,11 @@ public class SpinnerMultiWidget extends QuestionWidget {
             answer_items[i] = prompt.getSelectChoiceText(mItems.get(i));
         }
 
-        // TODO: These strings and values should probably be global references
-        selectionText.setText("Selected: ");
+        selectionText.setText(context.getString(R.string.selected));
         selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         selectionText.setVisibility(View.GONE);
 
-        button.setText("Select Answer");
+        button.setText(context.getString(R.string.select_answer));
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         button.setPadding(0, 0, 0, 7);
 
@@ -80,7 +80,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton("Ok",
+                alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton(R.string.ok,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             boolean first = true;
@@ -90,7 +90,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
                                     if (first) {
                                         first = false;
-                                        selectionText.setText("Selected: "
+                                        selectionText.setText(context.getString(R.string.selected)
                                                 + answer_items[i].toString());
                                         selectionText.setVisibility(View.VISIBLE);
                                     } else {
@@ -139,8 +139,8 @@ public class SpinnerMultiWidget extends QuestionWidget {
                 if (found) {
                     if (first) {
                         first = false;
-                        // TODO: This string should be a global reference
-                        selectionText.setText("Selected: " + answer_items[i].toString());
+                        selectionText.setText(context.getString(R.string.selected)
+                                + answer_items[i].toString());
                         selectionText.setVisibility(View.VISIBLE);
                     } else {
                         selectionText.setText(selectionText.getText() + ", "
@@ -177,8 +177,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        // TODO: This string should be a global reference
-        selectionText.setText("Selected: ");
+        selectionText.setText(R.string.selected);
         selectionText.setVisibility(View.GONE);
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;

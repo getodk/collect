@@ -38,10 +38,6 @@ import java.util.Vector;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-/*
- * TODO: We're not actually using the RadioGroup anymore, so this should probably be changed to a
- * LinearLayout
- */
 public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeListener {
 
     private static final int RANDOM_BUTTON_ID = 4853487;

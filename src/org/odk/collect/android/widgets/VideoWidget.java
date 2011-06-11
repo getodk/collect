@@ -89,8 +89,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
         // setup capture button
         mChooseButton = new Button(getContext());
-        // TODO: add to strings.xml
-        mChooseButton.setText("Choose Video");
+        mChooseButton.setText(getContext().getString(R.string.choose_video));
         mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mChooseButton.setPadding(20, 20, 20, 20);
         mChooseButton.setEnabled(!prompt.isReadOnly());

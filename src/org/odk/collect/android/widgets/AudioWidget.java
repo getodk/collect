@@ -70,8 +70,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         // setup capture button
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_audio));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -92,8 +91,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
         // setup capture button
         mChooseButton = new Button(getContext());
-        // TODO: add to strings.xml
-        mChooseButton.setText("Choose Sound");
+        mChooseButton.setText(getContext().getString(R.string.choose_sound));
         mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mChooseButton.setPadding(20, 20, 20, 20);
         mChooseButton.setEnabled(!prompt.isReadOnly());
@@ -175,23 +173,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             return null;
         }
-    }
-
-
-    private Uri getUriFromPath(String path) {
-        // find entry in content provider
-        Cursor c =
-            getContext().getContentResolver().query(
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
-                "_data='" + path + "'", null, null);
-        c.moveToFirst();
-
-        // create uri from path
-        String newPath =
-            android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
-                    + c.getInt(c.getColumnIndex("_id"));
-        c.close();
-        return Uri.parse(newPath);
     }
 
 
