@@ -70,6 +70,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -487,7 +488,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 return true;
             case MENU_SAVE:
                 // don't exit
-                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete());
+                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(), null);
                 return true;
             case MENU_HIERARCHY_VIEW:
                 if (currentPromptIsQuestion()) {
@@ -668,13 +669,35 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     ((CheckBox) endView.findViewById(R.id.mark_finished));
                 instanceComplete.setChecked(isInstanceComplete());
 
-                // Create 'save for later' button
+                // edittext to change the displayed name of the instance
+                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
+                String saveName = mFormController.getFormTitle();
+                if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
+                    Uri instanceUri = getIntent().getData();
+                    Cursor instance = managedQuery(instanceUri, null, null, null, null);
+                    if (instance.getCount() == 1) {
+                        instance.moveToFirst();
+                        saveName =
+                            instance.getString(instance
+                                    .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                    }
+                }
+
+                saveAs.setText(saveName);
+
+                // Create 'save' button
                 ((Button) endView.findViewById(R.id.save_exit_button))
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // Form is marked as 'saved' here.
-                                saveDataToDisk(EXIT, instanceComplete.isChecked());
+                                if (saveAs.getText().length() < 1) {
+                                    Toast.makeText(FormEntryActivity.this, R.string.save_as_error,
+                                        Toast.LENGTH_SHORT).show();
+                                } else {
+                                    saveDataToDisk(EXIT, instanceComplete.isChecked(), saveAs
+                                            .getText().toString());
+                                }
                             }
                         });
 
@@ -1027,18 +1050,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * Called during a 'save and exit' command. The form is not 'done' here.
+     * Saves data and writes it to disk. If exit is set, program will exit after save completes.
+     * Complete indicates whether the user has marked the isntancs as complete. If updatedSaveName
+     * is non-null, the instances content provider is updated with the new name
      */
-    private boolean saveDataToDisk(boolean exit, boolean complete) {
+    private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
         // save current answer
         if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
             Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        mSaveToDiskTask = new SaveToDiskTask(getIntent().getData());
+        mSaveToDiskTask =
+            new SaveToDiskTask(getIntent().getData(), exit, complete, updatedSaveName);
         mSaveToDiskTask.setFormSavedListener(this);
-        mSaveToDiskTask.setExportVars(exit, complete);
         mSaveToDiskTask.execute();
         showDialog(SAVING_DIALOG);
 
@@ -1072,7 +1097,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             switch (which) {
 
                                 case 0: // save and exit
-                                    saveDataToDisk(EXIT, isInstanceComplete());
+                                    saveDataToDisk(EXIT, isInstanceComplete(), null);
                                     break;
 
                                 case 1: // discard changes and exit

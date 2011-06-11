@@ -202,4 +202,6 @@
 <string name="choose_image">Choose Image</string>
 <string name="selected">Selected: </string>
 <string name="select_answer">Select Answer</string>
+<string name="save_form_as">Form will be saved as:</string>
+<string name="save_as_error">Saved name must not be blank!</string>
 </resources>
