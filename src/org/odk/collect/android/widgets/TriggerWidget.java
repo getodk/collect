@@ -124,5 +124,13 @@ public class TriggerWidget extends QuestionWidget {
         mTriggerButton.setOnLongClickListener(l);
         mStringAnswer.setOnLongClickListener(l);
     }
+    
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mTriggerButton.cancelLongPress();
+        mStringAnswer.cancelLongPress();
+    }
+
 
 }

@@ -20,6 +20,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
 
@@ -38,7 +39,8 @@ public class TimeWidget extends QuestionWidget {
     private TimePicker mTimePicker;
     // Tue May 03 08:49:00 PDT 2011
     private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-    
+
+
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -59,7 +61,7 @@ public class TimeWidget extends QuestionWidget {
                 clearAnswer();
                 e.printStackTrace();
             }
-            
+
         } else {
             // create time widget with current time as of right now
             clearAnswer();
@@ -97,6 +99,20 @@ public class TimeWidget extends QuestionWidget {
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mTimePicker.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mTimePicker.cancelLongPress();
     }
 
 }

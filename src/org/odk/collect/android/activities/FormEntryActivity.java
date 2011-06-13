@@ -32,7 +32,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.GestureDetector;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -55,6 +54,8 @@ import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -89,7 +90,7 @@ import java.util.Set;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntryActivity extends Activity implements AnimationListener, FormLoaderListener,
-        FormSavedListener, AdvanceToNextListener {
+        FormSavedListener, AdvanceToNextListener, OnGestureListener {
     private static final String t = "FormEntryActivity";
 
     // Defines for FormEntryActivity
@@ -184,7 +185,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mCurrentView = null;
         mInAnimation = null;
         mOutAnimation = null;
-        mGestureDetector = new GestureDetector();
+        mGestureDetector = new GestureDetector(this);
 
         // Load JavaRosa modules. needed to restore forms.
         new XFormsModule().registerModule();
@@ -735,36 +736,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent mv) {
-        boolean handled = onTouchEvent(mv);
+        boolean handled = mGestureDetector.onTouchEvent(mv);
         if (!handled) {
             return super.dispatchTouchEvent(mv);
         }
+
         return handled; // this is always true
-    }
-
-
-    @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        /*
-         * constrain the user to only be able to swipe (that causes a view transition) once per
-         * screen with the mBeenSwiped variable.
-         */
-        boolean handled = false;
-        if (!mBeenSwiped) {
-            switch (mGestureDetector.getGesture(motionEvent)) {
-                case SWIPE_RIGHT:
-                    mBeenSwiped = true;
-                    showPreviousView();
-                    handled = true;
-                    break;
-                case SWIPE_LEFT:
-                    mBeenSwiped = true;
-                    showNextView();
-                    handled = true;
-                    break;
-            }
-        }
-        return handled;
     }
 
 
@@ -1220,9 +1197,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 String selectArgs[] = {
                                     mFormPath
                                 };
-                                int updated = getContentResolver().update(FormsColumns.CONTENT_URI, values,
-                                    selection, selectArgs);
-                                Log.i(t, "Updated language to: " + languages[whichButton] + " in " + updated + " rows" );
+                                int updated =
+                                    getContentResolver().update(FormsColumns.CONTENT_URI, values,
+                                        selection, selectArgs);
+                                Log.i(t, "Updated language to: " + languages[whichButton] + " in "
+                                        + updated + " rows");
 
                                 mFormController.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
@@ -1433,7 +1412,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // Set the language if one has already been set in the past
         String defaultLanguage = mFormController.getLanguage();
         String newLanguage = "";
-
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
         String selectArgs[] = {
             mFormPath
@@ -1575,6 +1553,54 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
         finish();
+    }
+
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        // Looks for user swipes. If the user has swiped, move to the appropriate screen.
+        if (Math.abs(e1.getX() - e2.getX()) > 60) {
+            if (velocityX > 0) {
+                mBeenSwiped = true;
+                showPreviousView();
+            } else {
+                mBeenSwiped = true;
+                showNextView();
+            }
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+    }
+
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        // The onFling() captures the 'up' event so our view thinks it gets long pressed.
+        // We don't wnat that, so cancel it.
+        mCurrentView.cancelLongPress();
+        return false;
+    }
+
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+    }
+
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
     }
 
 }

@@ -70,8 +70,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // setup capture button
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_video));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP,  mAnswerFontsize);
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -80,8 +79,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Video.Media.EXTERNAL_CONTENT_URI.toString());
-                ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.VIDEO_CAPTURE);
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    Video.Media.EXTERNAL_CONTENT_URI.toString());
+                ((Activity) getContext())
+                        .startActivityForResult(i, FormEntryActivity.VIDEO_CAPTURE);
                 mWaitingForData = true;
 
             }
@@ -241,14 +242,23 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
     }
-    
-    
+
+
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         super.setOnLongClickListener(l);
         mCaptureButton.setOnLongClickListener(l);
         mChooseButton.setOnLongClickListener(l);
         mPlayButton.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mCaptureButton.cancelLongPress();
+        mChooseButton.cancelLongPress();
+        mPlayButton.cancelLongPress();
     }
 
 }

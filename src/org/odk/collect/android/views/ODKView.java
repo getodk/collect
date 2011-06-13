@@ -214,5 +214,14 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public boolean onLongClick(View v) {
         return false;
     }
+    
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        for (QuestionWidget qw : widgets) {
+            qw.cancelLongPress();
+        }
+    }
 
 }

@@ -20,6 +20,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -147,6 +148,22 @@ public class DateTimeWidget extends QuestionWidget {
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+        mDatePicker.setOnLongClickListener(l);
+        mTimePicker.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mDatePicker.cancelLongPress();
+        mTimePicker.cancelLongPress();
     }
 
 }

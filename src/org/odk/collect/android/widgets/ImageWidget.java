@@ -73,8 +73,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         // setup capture button
         mCaptureButton = new Button(getContext());
         mCaptureButton.setText(getContext().getString(R.string.capture_image));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
 
@@ -296,6 +295,17 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton.setOnLongClickListener(l);
         if (mImageView != null) {
             mImageView.setOnLongClickListener(l);
+        }
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mCaptureButton.cancelLongPress();
+        mChooseButton.cancelLongPress();
+        if (mImageView != null) {
+            mImageView.cancelLongPress();
         }
     }
 

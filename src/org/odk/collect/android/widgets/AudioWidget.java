@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
 import java.io.File;
 
@@ -250,6 +251,15 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setOnLongClickListener(l);
         mChooseButton.setOnLongClickListener(l);
         mPlayButton.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mCaptureButton.cancelLongPress();
+        mChooseButton.cancelLongPress();
+        mPlayButton.cancelLongPress();
     }
 
 }

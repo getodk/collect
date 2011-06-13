@@ -95,8 +95,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mStringAnswer = new TextView(getContext());
 
         mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-            mAnswerFontsize);
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
@@ -239,6 +238,16 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mGetLocationButton.setOnLongClickListener(l);
         mStringAnswer.setOnLongClickListener(l);
         mAnswerDisplay.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mViewButton.cancelLongPress();
+        mGetLocationButton.cancelLongPress();
+        mStringAnswer.cancelLongPress();
+        mAnswerDisplay.cancelLongPress();
     }
 
 }

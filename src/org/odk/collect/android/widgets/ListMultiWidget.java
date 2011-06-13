@@ -297,6 +297,16 @@ public class ListMultiWidget extends QuestionWidget {
     }
 
 
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+
+        for (CheckBox c : mCheckboxes) {
+            c.cancelLongPress();
+        }
+    }
+
+
     // Override QuestionWidget's add question text. Build it the same
     // but add it to the questionLayout
     protected void addQuestionText(FormEntryPrompt p) {

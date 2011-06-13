@@ -340,4 +340,11 @@ public class GridWidget extends QuestionWidget {
         super.setOnLongClickListener(l);
         gridview.setOnLongClickListener(l);
     }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        gridview.cancelLongPress();
+    }
 }

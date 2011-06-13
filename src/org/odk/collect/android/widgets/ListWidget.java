@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -284,6 +285,16 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
         for (RadioButton r : buttons) {
             r.setOnLongClickListener(l);
+        }
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+
+        for (RadioButton r : buttons) {
+            r.cancelLongPress();
         }
     }
 

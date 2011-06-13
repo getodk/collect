@@ -203,6 +203,12 @@ public class LabelWidget extends QuestionWidget {
     }
 
 
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+    }
+
+
     // Override QuestionWidget's add question text. Build it the same
     // but add it to the relative layout
     protected void addQuestionText(FormEntryPrompt p) {

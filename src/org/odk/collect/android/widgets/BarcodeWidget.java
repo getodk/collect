@@ -136,7 +136,16 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         super.setOnLongClickListener(l);
+        mStringAnswer.setOnLongClickListener(l);
         mGetBarcodeButton.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mGetBarcodeButton.cancelLongPress();
+        mStringAnswer.cancelLongPress();
     }
 
 }

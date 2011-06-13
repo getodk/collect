@@ -99,9 +99,9 @@ public class StringWidget extends QuestionWidget {
              * automatically pop up. It's an Android issue.
              * 
              * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and showSoftInput(edittext,
-             * 0), showSoftinput() returns false. However, if the edittext is focused before the
-             * dialog pops up, everything works fine. great.
+             * dialog's button's OnClick() I call edittext.requestFocus() and
+             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
+             * is focused before the dialog pops up, everything works fine. great.
              */
         } else {
             inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
@@ -122,6 +122,13 @@ public class StringWidget extends QuestionWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         super.setOnLongClickListener(l);
         mAnswer.setOnLongClickListener(l);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mAnswer.cancelLongPress();
     }
 
 }
