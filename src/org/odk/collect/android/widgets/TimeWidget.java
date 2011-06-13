@@ -20,7 +20,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import android.content.Context;
 import android.view.Gravity;
-import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
 
