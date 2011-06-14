@@ -120,14 +120,12 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         mAnswer.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         mAnswer.cancelLongPress();
     }
 

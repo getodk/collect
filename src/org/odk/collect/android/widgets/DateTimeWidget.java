@@ -152,7 +152,6 @@ public class DateTimeWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         mDatePicker.setOnLongClickListener(l);
         mTimePicker.setOnLongClickListener(l);
     }
@@ -160,7 +159,6 @@ public class DateTimeWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         mDatePicker.cancelLongPress();
         mTimePicker.cancelLongPress();
     }

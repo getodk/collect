@@ -166,8 +166,6 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
-
         for (RadioButton r : buttons) {
             r.setOnLongClickListener(l);
         }
@@ -176,12 +174,9 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         for (RadioButton button : this.buttons) {
             button.cancelLongPress();
         }
     }
-    
-    
 
 }

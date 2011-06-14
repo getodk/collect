@@ -134,14 +134,12 @@ public class DateWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         mDatePicker.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         mDatePicker.cancelLongPress();
     }
 

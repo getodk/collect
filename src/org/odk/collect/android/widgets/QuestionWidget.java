@@ -1,3 +1,4 @@
+
 package org.odk.collect.android.widgets;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -16,28 +17,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public abstract class QuestionWidget extends LinearLayout {
-    
+
     @SuppressWarnings("unused")
     private final static String t = "QuestionWidget";
 
     private LinearLayout.LayoutParams mLayout;
     protected FormEntryPrompt mPrompt;
-    
+
     protected final int mQuestionFontsize;
     protected final int mAnswerFontsize;
 
 
     public QuestionWidget(Context context, FormEntryPrompt p) {
         super(context);
-        
+
         SharedPreferences settings =
             PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        String question_font = settings.getString(PreferencesActivity.KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
+        String question_font =
+            settings.getString(PreferencesActivity.KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
         mQuestionFontsize = new Integer(question_font).intValue();
         mAnswerFontsize = mQuestionFontsize + 2;
-        
+
         mPrompt = p;
- 
+
         setOrientation(LinearLayout.VERTICAL);
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
@@ -50,18 +52,29 @@ public abstract class QuestionWidget extends LinearLayout {
         addQuestionText(p);
         addHelpText(p);
     }
-    
+
+
     public FormEntryPrompt getPrompt() {
         return mPrompt;
     }
 
 
+    
+    // Abstract methods
     public abstract IAnswerData getAnswer();
 
+
     public abstract void clearAnswer();
-    
+
+
     public abstract void setFocus(Context context);
-     
+
+
+    public abstract void cancelLongPress();
+
+
+    public abstract void setOnLongClickListener(OnLongClickListener l);
+
 
     /**
      * Add a Views containing the question text, audio (if applicable), and image (if applicable).
@@ -90,7 +103,7 @@ public abstract class QuestionWidget extends LinearLayout {
         if (p.getLongText() == null) {
             questionText.setVisibility(GONE);
         }
-            
+
         // Create the layout for audio, image, text
         MediaLayout mediaLayout = new MediaLayout(getContext());
         mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
@@ -118,8 +131,5 @@ public abstract class QuestionWidget extends LinearLayout {
             addView(tv, mLayout);
         }
     }
-    
-    
-    
 
 }

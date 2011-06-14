@@ -287,26 +287,6 @@ public class ListMultiWidget extends QuestionWidget {
     }
 
 
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
-
-        for (CheckBox c : mCheckboxes) {
-            c.setOnLongClickListener(l);
-        }
-    }
-
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-
-        for (CheckBox c : mCheckboxes) {
-            c.cancelLongPress();
-        }
-    }
-
-
     // Override QuestionWidget's add question text. Build it the same
     // but add it to the questionLayout
     protected void addQuestionText(FormEntryPrompt p) {
@@ -337,4 +317,19 @@ public class ListMultiWidget extends QuestionWidget {
         questionLayout.addView(questionText, labelParams);
     }
 
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        for (CheckBox c : mCheckboxes) {
+            c.setOnLongClickListener(l);
+        }
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        for (CheckBox c : mCheckboxes) {
+            c.cancelLongPress();
+        }
+    }
 }

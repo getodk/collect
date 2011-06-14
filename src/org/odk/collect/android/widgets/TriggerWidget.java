@@ -120,17 +120,15 @@ public class TriggerWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         mTriggerButton.setOnLongClickListener(l);
         mStringAnswer.setOnLongClickListener(l);
     }
-    
+
+
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         mTriggerButton.cancelLongPress();
         mStringAnswer.cancelLongPress();
     }
-
 
 }

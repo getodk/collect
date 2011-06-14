@@ -233,7 +233,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         mViewButton.setOnLongClickListener(l);
         mGetLocationButton.setOnLongClickListener(l);
         mStringAnswer.setOnLongClickListener(l);
@@ -243,7 +242,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         mViewButton.cancelLongPress();
         mGetLocationButton.cancelLongPress();
         mStringAnswer.cancelLongPress();

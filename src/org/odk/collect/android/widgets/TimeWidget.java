@@ -103,14 +103,12 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         mTimePicker.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         mTimePicker.cancelLongPress();
     }
 

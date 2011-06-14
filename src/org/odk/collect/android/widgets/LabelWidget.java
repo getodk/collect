@@ -197,18 +197,6 @@ public class LabelWidget extends QuestionWidget {
     }
 
 
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
-    }
-
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-    }
-
-
     // Override QuestionWidget's add question text. Build it the same
     // but add it to the relative layout
     protected void addQuestionText(FormEntryPrompt p) {
@@ -237,6 +225,20 @@ public class LabelWidget extends QuestionWidget {
         questionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         questionLayout.addView(questionText, labelParams);
+    }
+
+
+    @Override
+    public void cancelLongPress() {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

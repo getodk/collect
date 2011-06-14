@@ -197,15 +197,13 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
         button.setOnLongClickListener(l);
     }
-    
+
+
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
         button.cancelLongPress();
     }
-    
-    
+
 }

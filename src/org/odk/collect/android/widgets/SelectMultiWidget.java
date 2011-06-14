@@ -174,8 +174,6 @@ public class SelectMultiWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        super.setOnLongClickListener(l);
-
         for (CheckBox c : mCheckboxes) {
             c.setOnLongClickListener(l);
         }
@@ -184,8 +182,6 @@ public class SelectMultiWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
-        super.cancelLongPress();
-
         for (CheckBox c : mCheckboxes) {
             c.cancelLongPress();
         }
