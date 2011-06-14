@@ -133,13 +133,17 @@ public abstract class QuestionWidget extends LinearLayout {
 
 
     /**
-     * Every subclassed widget should override this, adding any views they may contain,
-     * and calling super.cancelLongPress()
+     * Every subclassed widget should override this, adding any views they may contain, and calling
+     * super.cancelLongPress()
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        mQuestionText.cancelLongPress();
-        mHelpText.cancelLongPress();
+        if (mQuestionText != null) {
+            mQuestionText.cancelLongPress();
+        }
+        if (mHelpText != null) {
+            mHelpText.cancelLongPress();
+        }
     }
 
 }
