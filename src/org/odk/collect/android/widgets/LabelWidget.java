@@ -43,6 +43,11 @@ public class LabelWidget extends QuestionWidget {
     LinearLayout questionLayout;
     Vector<SelectChoice> mItems;
 
+    private TextView mQuestionText;
+    private TextView mMissingImage;
+    private ImageView mImageView;
+    private TextView label;
+
 
     public LabelWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -61,8 +66,8 @@ public class LabelWidget extends QuestionWidget {
                         FormEntryCaption.TEXT_FORM_IMAGE);
 
                 // build image view (if an image is provided)
-                ImageView mImageView = null;
-                TextView mMissingImage = null;
+                mImageView = null;
+                mMissingImage = null;
 
                 // Now set up the image view
                 String errorMsg = null;
@@ -125,7 +130,7 @@ public class LabelWidget extends QuestionWidget {
 
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
-                TextView label = new TextView(getContext());
+                label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
 
@@ -202,18 +207,18 @@ public class LabelWidget extends QuestionWidget {
     protected void addQuestionText(FormEntryPrompt p) {
 
         // Add the text view. Textview always exists, regardless of whether there's text.
-        TextView questionText = new TextView(getContext());
-        questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
-        questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(RANDOM_BUTTON_ID); // assign random id
+        mQuestionText = new TextView(getContext());
+        mQuestionText.setText(p.getLongText());
+        mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
+        mQuestionText.setTypeface(null, Typeface.BOLD);
+        mQuestionText.setPadding(0, 0, 0, 7);
+        mQuestionText.setId(RANDOM_BUTTON_ID); // assign random id
 
         // Wrap to the size of the parent view
-        questionText.setHorizontallyScrolling(false);
+        mQuestionText.setHorizontallyScrolling(false);
 
         if (p.getLongText() == null) {
-            questionText.setVisibility(GONE);
+            mQuestionText.setVisibility(GONE);
         }
 
         // Put the question text on the left half of the screen
@@ -224,21 +229,39 @@ public class LabelWidget extends QuestionWidget {
         questionLayout = new LinearLayout(getContext());
         questionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        questionLayout.addView(questionText, labelParams);
+        questionLayout.addView(mQuestionText, labelParams);
     }
 
 
     @Override
     public void cancelLongPress() {
-        // TODO Auto-generated method stub
-        
+        super.cancelLongPress();
+        mQuestionText.cancelLongPress();
+
+        if (mMissingImage != null) {
+            mMissingImage.cancelLongPress();
+        }
+        if (mImageView != null) {
+            mImageView.cancelLongPress();
+        }
+        if (label != null) {
+            label.cancelLongPress();
+        }
     }
 
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        // TODO Auto-generated method stub
-        
+        mQuestionText.setOnLongClickListener(l);
+        if (mMissingImage != null) {
+            mMissingImage.setOnLongClickListener(l);
+        }
+        if (mImageView != null) {
+            mImageView.setOnLongClickListener(l);
+        }
+        if (label != null) {
+            label.setOnLongClickListener(l);
+        }
     }
 
 }

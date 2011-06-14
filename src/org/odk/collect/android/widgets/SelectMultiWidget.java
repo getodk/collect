@@ -182,6 +182,7 @@ public class SelectMultiWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         for (CheckBox c : mCheckboxes) {
             c.cancelLongPress();
         }

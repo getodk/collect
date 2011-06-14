@@ -174,6 +174,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         for (RadioButton button : this.buttons) {
             button.cancelLongPress();
         }

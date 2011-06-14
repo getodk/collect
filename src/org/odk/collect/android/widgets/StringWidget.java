@@ -126,6 +126,7 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         mAnswer.cancelLongPress();
     }
 

@@ -179,6 +179,7 @@ public class SpinnerWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         spinner.cancelLongPress();
     }
 

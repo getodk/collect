@@ -203,6 +203,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         button.cancelLongPress();
     }
 

@@ -202,6 +202,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         for (RadioButton r : buttons) {
             r.cancelLongPress();
         }

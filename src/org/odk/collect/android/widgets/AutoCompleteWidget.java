@@ -287,6 +287,7 @@ public class AutoCompleteWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         autocomplete.cancelLongPress();
     }
 

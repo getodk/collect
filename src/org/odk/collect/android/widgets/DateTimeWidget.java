@@ -159,6 +159,7 @@ public class DateTimeWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         mDatePicker.cancelLongPress();
         mTimePicker.cancelLongPress();
     }

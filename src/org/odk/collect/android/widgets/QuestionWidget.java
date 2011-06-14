@@ -27,6 +27,9 @@ public abstract class QuestionWidget extends LinearLayout {
     protected final int mQuestionFontsize;
     protected final int mAnswerFontsize;
 
+    private TextView mQuestionText;
+    private TextView mHelpText;
+
 
     public QuestionWidget(Context context, FormEntryPrompt p) {
         super(context);
@@ -59,7 +62,6 @@ public abstract class QuestionWidget extends LinearLayout {
     }
 
 
-    
     // Abstract methods
     public abstract IAnswerData getAnswer();
 
@@ -68,9 +70,6 @@ public abstract class QuestionWidget extends LinearLayout {
 
 
     public abstract void setFocus(Context context);
-
-
-    public abstract void cancelLongPress();
 
 
     public abstract void setOnLongClickListener(OnLongClickListener l);
@@ -90,23 +89,23 @@ public abstract class QuestionWidget extends LinearLayout {
         String bigImageURI = p.getSpecialFormQuestionText("big-image");
 
         // Add the text view. Textview always exists, regardless of whether there's text.
-        TextView questionText = new TextView(getContext());
-        questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
-        questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(38475483); // assign random id
+        mQuestionText = new TextView(getContext());
+        mQuestionText.setText(p.getLongText());
+        mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        mQuestionText.setTypeface(null, Typeface.BOLD);
+        mQuestionText.setPadding(0, 0, 0, 7);
+        mQuestionText.setId(38475483); // assign random id
 
         // Wrap to the size of the parent view
-        questionText.setHorizontallyScrolling(false);
+        mQuestionText.setHorizontallyScrolling(false);
 
         if (p.getLongText() == null) {
-            questionText.setVisibility(GONE);
+            mQuestionText.setVisibility(GONE);
         }
 
         // Create the layout for audio, image, text
         MediaLayout mediaLayout = new MediaLayout(getContext());
-        mediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
+        mediaLayout.setAVT(mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
 
         addView(mediaLayout, mLayout);
     }
@@ -120,16 +119,27 @@ public abstract class QuestionWidget extends LinearLayout {
         String s = p.getHelpText();
 
         if (s != null && !s.equals("")) {
-            TextView tv = new TextView(getContext());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize - 5);
-            tv.setPadding(0, -5, 0, 7);
+            mHelpText = new TextView(getContext());
+            mHelpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize - 5);
+            mHelpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
-            tv.setHorizontallyScrolling(false);
-            tv.setText(s);
-            tv.setTypeface(null, Typeface.ITALIC);
+            mHelpText.setHorizontallyScrolling(false);
+            mHelpText.setText(s);
+            mHelpText.setTypeface(null, Typeface.ITALIC);
 
-            addView(tv, mLayout);
+            addView(mHelpText, mLayout);
         }
+    }
+
+
+    /**
+     * Every subclassed widget should override this, adding any views they may contain,
+     * and calling super.cancelLongPress()
+     */
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mQuestionText.cancelLongPress();
+        mHelpText.cancelLongPress();
     }
 
 }

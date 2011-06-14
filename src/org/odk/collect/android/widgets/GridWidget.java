@@ -343,6 +343,7 @@ public class GridWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         gridview.cancelLongPress();
     }
 }

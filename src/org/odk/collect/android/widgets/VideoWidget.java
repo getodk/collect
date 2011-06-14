@@ -254,6 +254,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         mCaptureButton.cancelLongPress();
         mChooseButton.cancelLongPress();
         mPlayButton.cancelLongPress();

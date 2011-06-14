@@ -109,6 +109,7 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         mTimePicker.cancelLongPress();
     }
 

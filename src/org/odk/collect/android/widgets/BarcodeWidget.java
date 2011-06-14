@@ -142,6 +142,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void cancelLongPress() {
+        super.cancelLongPress();
         mGetBarcodeButton.cancelLongPress();
         mStringAnswer.cancelLongPress();
     }
