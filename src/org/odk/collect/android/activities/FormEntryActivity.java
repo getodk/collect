@@ -646,7 +646,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 BitmapDrawable bitImage = null;
                 // attempt to load the form-specific logo...
                 // this is arbitrarily silly
-                bitImage = new BitmapDrawable(mediaDir + "form_logo.png");
+                bitImage = new BitmapDrawable(mediaDir + "/form_logo.png");
 
                 if (bitImage != null && bitImage.getBitmap() != null
                         && bitImage.getIntrinsicHeight() > 0 && bitImage.getIntrinsicWidth() > 0) {
