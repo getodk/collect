@@ -1410,23 +1410,26 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         // Set the language if one has already been set in the past
-        String defaultLanguage = mFormController.getLanguage();
-        String newLanguage = "";
-        String selection = FormsColumns.FORM_FILE_PATH + "=?";
-        String selectArgs[] = {
-            mFormPath
-        };
-        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, selection, selectArgs, null);
-        if (c.getCount() == 1) {
-            c.moveToFirst();
-            newLanguage = c.getString(c.getColumnIndex(FormsColumns.LANGUAGE));
-        }
+        String[] languageTest = mFormController.getLanguages();
+        if (languageTest != null) {
+            String defaultLanguage = mFormController.getLanguage();
+            String newLanguage = "";
+            String selection = FormsColumns.FORM_FILE_PATH + "=?";
+            String selectArgs[] = {
+                mFormPath
+            };
+            Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, selection, selectArgs, null);
+            if (c.getCount() == 1) {
+                c.moveToFirst();
+                newLanguage = c.getString(c.getColumnIndex(FormsColumns.LANGUAGE));
+            }
 
-        // if somehow we end up with a bad language, set it to the default
-        try {
-            mFormController.setLanguage(newLanguage);
-        } catch (Exception e) {
-            mFormController.setLanguage(defaultLanguage);
+            // if somehow we end up with a bad language, set it to the default
+            try {
+                mFormController.setLanguage(newLanguage);
+            } catch (Exception e) {
+                mFormController.setLanguage(defaultLanguage);
+            }
         }
 
         refreshCurrentView();
