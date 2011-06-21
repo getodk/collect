@@ -971,6 +971,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Creates and displays dialog with the given errorMsg.
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+        mErrorMessage = errorMsg;
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
         mAlertDialog.setTitle(getString(R.string.error_occured));
@@ -1295,9 +1296,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(this);
-            if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
+            if (mFormController != null && mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
                 dismissDialog(PROGRESS_DIALOG);
                 refreshCurrentView();
             }
@@ -1305,7 +1307,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mSaveToDiskTask != null) {
             mSaveToDiskTask.setFormSavedListener(this);
         }
-        super.onResume();
+        if (mErrorMessage != null && (mAlertDialog != null && !mAlertDialog.isShowing())) {
+            createErrorDialog(mErrorMessage, EXIT);
+            return;
+        }
     }
 
 
@@ -1442,7 +1447,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void loadingError(String errorMsg) {
         dismissDialog(PROGRESS_DIALOG);
-        mErrorMessage = errorMsg;
         if (errorMsg != null) {
             createErrorDialog(errorMsg, EXIT);
         } else {
