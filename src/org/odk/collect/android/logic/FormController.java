@@ -425,7 +425,8 @@ public class FormController {
                 idxChild = mFormEntryController.getModel().incrementIndex(idxChild, false);
             }
 
-            questions = new FormEntryPrompt[indicies.size()];
+            // we only display relevant questions
+            questions = new FormEntryPrompt[getRelevantQuestionCount(indicies)];
             for (int i = 0; i < indicies.size(); i++) {
                 FormIndex index = indicies.get(i);
 
@@ -438,8 +439,11 @@ public class FormController {
                     throw e;
                 }
 
-                FormEntryPrompt p = mFormEntryController.getModel().getQuestionPrompt(index);
-                questions[i] = p;
+                // we only display relevant questions
+                if (mFormEntryController.getModel().isIndexRelevant(index)) {
+                    FormEntryPrompt p = mFormEntryController.getModel().getQuestionPrompt(index);
+                    questions[i] = p;
+                }
             }
         } else {
             // We have a quesion, so just get the one prompt
@@ -449,6 +453,16 @@ public class FormController {
         return questions;
     }
 
+    
+    private int getRelevantQuestionCount(ArrayList<FormIndex> indicies) {
+        int count = 0;
+        for (int i = 0; i < indicies.size(); i++) {
+            if (mFormEntryController.getModel().isIndexRelevant(indicies.get(i))){
+                count++;
+            }
+        }
+        return count;
+    }
 
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
         return mFormEntryController.getModel().getQuestionPrompt(index);
