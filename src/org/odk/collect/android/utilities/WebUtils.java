@@ -21,6 +21,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -318,9 +319,10 @@ public final class WebUtils {
                 }
             }
             return new DocumentFetchResult(doc, isOR);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
-            String error = "Error: " + e.getMessage() + " while accessing " + u.toString();
+            String error = "Error: " + e.getCause().getMessage() + " while accessing " + u.toString();
             Log.w(t, error);
             return new DocumentFetchResult(error, 0);
         }
