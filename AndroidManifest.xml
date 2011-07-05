@@ -75,7 +75,7 @@
 				<category
 					android:name="android.intent.category.DEFAULT" />
 				<data
-					android:mimeType="vnd.android.cursor.dir/vnd.godk.form" />
+					android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
 			</intent-filter>
 		</activity>
 		<activity
