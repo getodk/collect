@@ -61,14 +61,15 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     @Override
     protected HashMap<String, FormDetails> doInBackground(Void... values) {
-        // TODO: This needs to get the /Whatever from the preferences
         SharedPreferences settings =
-            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         String downloadListUrl =
             settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                Collect.getInstance().getString(R.string.default_server_url))
-                    + "/formList";
-
+                Collect.getInstance().getString(R.string.default_server_url));
+        String downloadPath =
+            settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formlist");
+        downloadListUrl += downloadPath;
+        
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
