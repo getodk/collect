@@ -48,6 +48,9 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
     private boolean mCaptureLocation = true;
     private Button mShowLocation;
 
+    private boolean mGPSOn = false;
+    private boolean mNetworkOn = false;
+    
     private static double LOCATION_ACCURACY = 5;
 
 
@@ -82,19 +85,17 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         mMapView.setSatellite(false);
         mMapController.setZoom(16);
 
-        // make sure we have at least one non-passive gp provider before continuing
-        List<String> providers = mLocationManager.getProviders(true);
-        boolean gps = false;
-        boolean network = false;
+        // make sure we have a good location provider before continuing
+        List<String> providers = mLocationManager.getProviders(true);        
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gps = true;
+                mGPSOn = true;
             }
             if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                network = true;
+                mNetworkOn = true;
             }
         }
-        if (!gps && !network) {
+        if (!mGPSOn && !mNetworkOn) {
             Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
                 Toast.LENGTH_SHORT).show();
             finish();
@@ -167,8 +168,13 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         super.onResume();
 
         ((MyLocationOverlay) mLocationOverlay).enableMyLocation();
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        if (mGPSOn) {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
+        if (mNetworkOn) {
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        }
+
     }
 
 
