@@ -48,6 +48,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private TextView mStringAnswer;
     private TextView mAnswerDisplay;
     private boolean mWaitingForData;
+    private boolean mUseMaps;
     private String mAppearance;
     public static String LOCATION = "gp";
 
@@ -56,6 +57,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         super(context, prompt);
 
         mWaitingForData = false;
+        mUseMaps = false;
         mAppearance = prompt.getAppearanceHint();
 
         setOrientation(LinearLayout.VERTICAL);
@@ -67,7 +69,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mGetLocationButton.setEnabled(!prompt.isReadOnly());
 
         // setup play button
-
         mViewButton = new Button(getContext());
         mViewButton.setText(getContext().getString(R.string.show_location));
         mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
@@ -106,12 +107,25 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             mViewButton.setEnabled(false);
         }
+        
+        // use maps or not
+        if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
+            try {
+                // do google maps exist on the device
+                Class.forName("com.google.android.maps.MapActivity");
+                mUseMaps = true;
+            } catch (ClassNotFoundException e) {
+                mUseMaps = false;
+            }
+        } 
+
+        
         // when you press the button
         mGetLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = null;
-                if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
+                if (mUseMaps) {
                     i = new Intent(getContext(), GeoPointMapActivity.class);
                 } else {
                     i = new Intent(getContext(), GeoPointActivity.class);
@@ -127,7 +141,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // retrieve answer from data model and update ui
 
         addView(mGetLocationButton);
-        if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
+        if (mUseMaps) {
             addView(mViewButton);
         }
         addView(mAnswerDisplay);
