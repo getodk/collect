@@ -51,7 +51,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // make sure we have at least one non-passive gp provider before continuing
+        // make sure we have a good location provider before continuing
         List<String> providers = mLocationManager.getProviders(true);        
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {

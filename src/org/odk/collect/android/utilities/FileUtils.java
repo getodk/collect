@@ -228,7 +228,6 @@ public class FileUtils {
     public static String TITLE = "title";
     public static String SUBMISSIONURI = "submission";
 
-
     public static HashMap<String, String> parseXML(File xmlFile) {
         HashMap<String, String> fields = new HashMap<String, String>();
         InputStream is;
@@ -262,14 +261,16 @@ public class FileUtils {
 
             String xforms = "http://www.w3.org/2002/xforms";
             String html = doc.getRootElement().getNamespace();
-
+            
             Element head = doc.getRootElement().getElement(html, "head");
             Element title = head.getElement(html, "title");
             if (title != null) {
                 fields.put(TITLE, XFormParser.getXMLText(title, true));
             } 
-            Element model = head.getElement(xforms, "model");
-            Element cur = model.getElement(xforms, "instance");
+            
+            Element model = getChildElement(head, "model");
+            Element cur = getChildElement(model,"instance");
+            
             int idx = cur.getChildCount();
             int i;
             for (i = 0; i < idx; ++i) {
@@ -306,4 +307,18 @@ public class FileUtils {
         return fields;
     }
 
+    // needed because element.getelement fails when there are attributes
+    private static Element getChildElement(Element parent, String childName) {
+        Element e = null;
+        int c = parent.getChildCount();
+        int i = 0;
+        for (i = 0; i < c; i++) {
+            if (parent.getType(i) == Node.ELEMENT) {
+                if (parent.getElement(i).getName().equalsIgnoreCase(childName)) {
+                    return parent.getElement(i);
+                }
+            }
+        }
+        return e;
+    }
 }
