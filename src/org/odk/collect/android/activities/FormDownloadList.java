@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
@@ -47,10 +51,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One

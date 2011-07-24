@@ -103,7 +103,7 @@
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Magnifying human resources\nwith technology</string>
-<string name="main_menu_message">ODK Collect v1.1.7</string>
+<string name="main_menu_message">ODK Collect v1.1.7-RC1</string>
 <string name="manage_files">Manage Forms</string>
 <string name="mark_finished">Mark Form as Finished</string>
 <string name="no">No</string>

@@ -13,6 +13,8 @@
  */
 package org.odk.collect.android.application;
 
+import java.io.File;
+
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.protocol.ClientContext;
@@ -26,8 +28,6 @@ import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import android.app.Application;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-
-import java.io.File;
 
 /**
  * Extends the Application class to implement 
