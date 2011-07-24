@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
@@ -26,8 +28,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-
-import java.util.ArrayList;
 
 /**
  * Allows the user to create desktop shortcuts to any form currently avaiable to Collect
