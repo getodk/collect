@@ -38,7 +38,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private Location mLocation;
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
-    
+
     // default location accuracy
     private static double LOCATION_ACCURACY = 5;
 
@@ -52,7 +52,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         // make sure we have a good location provider before continuing
-        List<String> providers = mLocationManager.getProviders(true);        
+        List<String> providers = mLocationManager.getProviders(true);
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
                 mGPSOn = true;
@@ -66,9 +66,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 Toast.LENGTH_SHORT).show();
             finish();
         }
-        
+
         setupLocationDialog();
-        
+
     }
 
 
@@ -150,11 +150,13 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-        mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
-            mLocation.getProvider(), truncateDouble(mLocation.getAccuracy())));
+        if (mLocation != null) {
+            mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
+                mLocation.getProvider(), truncateDouble(mLocation.getAccuracy())));
 
-        if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
-            returnLocation();
+            if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
+                returnLocation();
+            }
         }
     }
 
@@ -181,8 +183,10 @@ public class GeoPointActivity extends Activity implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
             case LocationProvider.AVAILABLE:
-                mLocationDialog.setMessage(getString(R.string.location_accuracy,
-                    mLocation.getAccuracy()));
+                if (mLocation != null) {
+                    mLocationDialog.setMessage(getString(R.string.location_accuracy,
+                        mLocation.getAccuracy()));
+                }
                 break;
             case LocationProvider.OUT_OF_SERVICE:
                 break;
