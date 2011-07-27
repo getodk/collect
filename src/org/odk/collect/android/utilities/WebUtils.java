@@ -180,6 +180,7 @@ public final class WebUtils {
 
         // setup client
         HttpClient httpclient = new DefaultHttpClient(params);
+        httpclient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 1); 
         httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true); 
 
         return httpclient;
