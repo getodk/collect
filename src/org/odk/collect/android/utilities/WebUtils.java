@@ -325,7 +325,14 @@ public final class WebUtils {
         } 
         catch (Exception e) {
             e.printStackTrace();
-            String error = "Error: " + e.getCause().getMessage() + " while accessing " + u.toString();
+            String cause;
+            if (e.getCause() != null) {
+                cause = e.getCause().getMessage();
+            } else {
+                cause = e.getMessage();
+            }
+            String error = "Error: " + cause + " while accessing " + u.toString();
+
             Log.w(t, error);
             return new DocumentFetchResult(error, 0);
         }
