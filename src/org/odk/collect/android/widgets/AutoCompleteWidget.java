@@ -51,7 +51,7 @@ public class AutoCompleteWidget extends QuestionWidget {
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;
 
-        choices = new AutoCompleteAdapter(getContext(), R.layout.simple_list_item_1);
+        choices = new AutoCompleteAdapter(getContext(), android.R.layout.simple_list_item_1);
         autocomplete = new AutoCompleteTextView(getContext());
 
         // Default to matching substring
@@ -64,7 +64,7 @@ public class AutoCompleteWidget extends QuestionWidget {
         for (SelectChoice sc : mItems) {
             choices.add(prompt.getSelectChoiceText(sc));
         }
-        choices.setDropDownViewResource(R.layout.simple_dropdown_item_1line);
+        choices.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         autocomplete.setAdapter(choices);
         autocomplete.setTextColor(Color.BLACK);
