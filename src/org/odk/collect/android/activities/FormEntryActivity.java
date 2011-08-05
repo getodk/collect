@@ -1572,17 +1572,19 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         // Looks for user swipes. If the user has swiped, move to the appropriate screen.
-        if (Math.abs(e1.getX() - e2.getX()) > 60) {
+        if (Math.abs(e1.getX() - e2.getX()) > 60 && Math.abs(e1.getY() - e2.getY()) < 60) {
             if (velocityX > 0) {
                 mBeenSwiped = true;
                 showPreviousView();
+                return true;
             } else {
                 mBeenSwiped = true;
                 showNextView();
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
 
