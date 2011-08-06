@@ -57,6 +57,8 @@ public class TimeWidget extends QuestionWidget {
             // create a new date time from date object using default time zone
             DateTime ldt =
                 new DateTime(((Date) ((TimeData) prompt.getAnswerValue()).getValue()).getTime());
+            System.out.println("retrieving:" + ldt);
+
             mTimePicker.setCurrentHour(ldt.getHourOfDay());
             mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
 
@@ -88,8 +90,9 @@ public class TimeWidget extends QuestionWidget {
         DateTime ldt =
             (new DateTime()).withTime(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(),
                 0, 0);
-        DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
-        return new TimeData(utc.toDate());
+        //DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+        System.out.println("storing:" + ldt);
+        return new TimeData(ldt.toDate());
     }
 
 

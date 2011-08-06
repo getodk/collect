@@ -107,8 +107,8 @@ public class DateWidget extends QuestionWidget {
         DateTime ldt =
             new DateTime(mDatePicker.getYear(), mDatePicker.getMonth() + 1,
                     mDatePicker.getDayOfMonth(), 0, 0);
-        DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
-        return new DateData(utc.toDate());
+       // DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+        return new DateData(ldt.toDate());
     }
 
 
