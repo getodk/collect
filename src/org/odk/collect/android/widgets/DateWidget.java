@@ -14,19 +14,19 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -38,13 +38,7 @@ import java.util.Date;
 public class DateWidget extends QuestionWidget {
 
     private DatePicker mDatePicker;
-    // Tue May 03 08:49:00 PDT 2011
-    private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-
     private DatePicker.OnDateChangedListener mDateListener;
-
-    // convert from j2me date to android date
-    private final static int YEARSHIFT = 1900;
 
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
@@ -60,8 +54,8 @@ public class DateWidget extends QuestionWidget {
                 if (mPrompt.isReadOnly()) {
                     setAnswer();
                 } else {
+                    // TODO support dates <1900 >2100
                     // handle leap years and number of days in month
-                    // TODO
                     // http://code.google.com/p/android/issues/detail?id=2081
                     Calendar c = Calendar.getInstance();
                     c.set(year, month, 1);
@@ -86,18 +80,12 @@ public class DateWidget extends QuestionWidget {
     private void setAnswer() {
 
         if (mPrompt.getAnswerValue() != null) {
-            String date = ((DateData) mPrompt.getAnswerValue()).getValue().toString();
-            try {
-                Date d = sdf.parse(date);
-                mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
-            } catch (ParseException e) {
-                // bad date, clear answer
-                clearAnswer();
-                e.printStackTrace();
-            }
-
+            DateTime ldt =
+                new DateTime(((Date) ((DateData) mPrompt.getAnswerValue()).getValue()).getTime());
+            mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
+                mDateListener);
         } else {
-            // create time widget with current time as of right now
+            // create date widget with current time as of right now
             clearAnswer();
         }
     }
@@ -108,18 +96,19 @@ public class DateWidget extends QuestionWidget {
      */
     @Override
     public void clearAnswer() {
-        Calendar c = Calendar.getInstance();
-        mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
+        DateTime ldt = new DateTime();
+        mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
             mDateListener);
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        Date d =
-            new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(),
-                    mDatePicker.getDayOfMonth());
-        return new DateData(d);
+        DateTime ldt =
+            new DateTime(mDatePicker.getYear(), mDatePicker.getMonth() + 1,
+                    mDatePicker.getDayOfMonth(), 0, 0);
+        DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+        return new DateData(utc.toDate());
     }
 
 

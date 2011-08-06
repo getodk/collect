@@ -14,20 +14,20 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -40,13 +40,7 @@ public class DateTimeWidget extends QuestionWidget {
 
     private DatePicker mDatePicker;
     private TimePicker mTimePicker;
-    // Tue May 03 08:49:00 PDT 2011
-    private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-
     private DatePicker.OnDateChangedListener mDateListener;
-
-    // convert from j2me date to android date
-    private final static int YEARSHIFT = 1900;
 
 
     public DateTimeWidget(Context context, FormEntryPrompt prompt) {
@@ -59,8 +53,14 @@ public class DateTimeWidget extends QuestionWidget {
         mTimePicker = new TimePicker(getContext());
         mTimePicker.setFocusable(!prompt.isReadOnly());
         mTimePicker.setEnabled(!prompt.isReadOnly());
-        mTimePicker.setIs24HourView(true);
         mTimePicker.setPadding(0, 20, 0, 0);
+
+        String clockType =
+            android.provider.Settings.System.getString(context.getContentResolver(),
+                android.provider.Settings.System.TIME_12_24);
+        if (clockType == null || clockType.equalsIgnoreCase("24")) {
+            mTimePicker.setIs24HourView(true);
+        }
 
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
@@ -96,18 +96,14 @@ public class DateTimeWidget extends QuestionWidget {
     private void setAnswer() {
 
         if (mPrompt.getAnswerValue() != null) {
-            String date = ((DateTimeData) mPrompt.getAnswerValue()).getValue().toString();
-            try {
-                Date d = sdf.parse(date);
-                mDatePicker.init(d.getYear() + YEARSHIFT, d.getMonth(), d.getDate(), mDateListener);
-                mTimePicker.setCurrentHour(d.getHours());
-                mTimePicker.setCurrentMinute(d.getMinutes());
 
-            } catch (ParseException e) {
-                // bad date, clear answer
-                clearAnswer();
-                e.printStackTrace();
-            }
+            DateTime ldt =
+                new DateTime(
+                        ((Date) ((DateTimeData) mPrompt.getAnswerValue()).getValue()).getTime());
+            mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
+                mDateListener);
+            mTimePicker.setCurrentHour(ldt.getHourOfDay());
+            mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
 
         } else {
             // create time widget with current time as of right now
@@ -121,23 +117,22 @@ public class DateTimeWidget extends QuestionWidget {
      */
     @Override
     public void clearAnswer() {
-        Calendar c = Calendar.getInstance();
-        mDatePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),
+        DateTime ldt = new DateTime();
+        mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
             mDateListener);
-
-        mTimePicker.setCurrentHour(c.get(Calendar.HOUR));
-        mTimePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+        mTimePicker.setCurrentHour(ldt.getHourOfDay());
+        mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        Date d =
-            new Date(mDatePicker.getYear() - YEARSHIFT, mDatePicker.getMonth(),
+        DateTime ldt =
+            new DateTime(mDatePicker.getYear(), mDatePicker.getMonth() + 1,
                     mDatePicker.getDayOfMonth(), mTimePicker.getCurrentHour(),
                     mTimePicker.getCurrentMinute(), 0);
-
-        return new DateTimeData(d);
+        DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+        return new DateTimeData(utc.toDate());
     }
 
 

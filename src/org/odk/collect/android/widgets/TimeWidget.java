@@ -14,19 +14,18 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Date;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Displays a TimePicker widget.
@@ -36,8 +35,6 @@ import java.util.Date;
 public class TimeWidget extends QuestionWidget {
 
     private TimePicker mTimePicker;
-    // Tue May 03 08:49:00 PDT 2011
-    private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
 
 
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
@@ -46,20 +43,22 @@ public class TimeWidget extends QuestionWidget {
         mTimePicker = new TimePicker(getContext());
         mTimePicker.setFocusable(!prompt.isReadOnly());
         mTimePicker.setEnabled(!prompt.isReadOnly());
-        mTimePicker.setIs24HourView(true);
+
+        String clockType =
+            android.provider.Settings.System.getString(context.getContentResolver(),
+                android.provider.Settings.System.TIME_12_24);
+        if (clockType == null || clockType.equalsIgnoreCase("24")) {
+            mTimePicker.setIs24HourView(true);
+        }
 
         // If there's an answer, use it.
         if (prompt.getAnswerValue() != null) {
-            String time = ((TimeData) prompt.getAnswerValue()).getValue().toString();
-            try {
-                Date d = sdf.parse(time);
-                mTimePicker.setCurrentHour(d.getHours());
-                mTimePicker.setCurrentMinute(d.getMinutes());
-            } catch (ParseException e) {
-                // bad date, clear answer
-                clearAnswer();
-                e.printStackTrace();
-            }
+
+            // create a new date time from date object using default time zone
+            DateTime ldt =
+                new DateTime(((Date) ((TimeData) prompt.getAnswerValue()).getValue()).getTime());
+            mTimePicker.setCurrentHour(ldt.getHourOfDay());
+            mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
 
         } else {
             // create time widget with current time as of right now
@@ -77,18 +76,20 @@ public class TimeWidget extends QuestionWidget {
      */
     @Override
     public void clearAnswer() {
-        Calendar c = Calendar.getInstance();
-        mTimePicker.setCurrentHour(c.get(Calendar.HOUR));
-        mTimePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+        DateTime ldt = new DateTime();
+        mTimePicker.setCurrentHour(ldt.getHourOfDay());
+        mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        Date d = new Date(0);
-        d.setHours(mTimePicker.getCurrentHour());
-        d.setMinutes(mTimePicker.getCurrentMinute());
-        return new TimeData(d);
+        // use picker time, convert to today's date, store as utc
+        DateTime ldt =
+            (new DateTime()).withTime(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(),
+                0, 0);
+        DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+        return new TimeData(utc.toDate());
     }
 
 

@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/javarosa-libraries.jar"/>
 	<classpathentry kind="lib" path="lib/regexp-me.jar"/>
 	<classpathentry kind="lib" path="lib/kxml2-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
