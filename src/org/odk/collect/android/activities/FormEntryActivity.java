@@ -228,6 +228,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
             // Not a restart from a screen orientation change (or other).
             mFormController = null;
+            mInstancePath = null;
 
             Intent intent = getIntent();
             if (intent != null) {
