@@ -178,18 +178,23 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
 
     private String getPathFromUri(Uri uri) {
-        String[] videoProjection = {
-            Video.Media.DATA
-        };
-        Cursor c = ((Activity) getContext()).managedQuery(uri, videoProjection, null, null, null);
-        ((Activity) getContext()).startManagingCursor(c);
-        int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
-        String videoPath = null;
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            videoPath = c.getString(column_index);
+        if (uri.toString().startsWith("file")) {
+            return uri.toString().substring(6);
+        } else {
+            String[] videoProjection = {
+                Video.Media.DATA
+            };
+            Cursor c =
+                ((Activity) getContext()).managedQuery(uri, videoProjection, null, null, null);
+            ((Activity) getContext()).startManagingCursor(c);
+            int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
+            String videoPath = null;
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                videoPath = c.getString(column_index);
+            }
+            return videoPath;
         }
-        return videoPath;
     }
 
 

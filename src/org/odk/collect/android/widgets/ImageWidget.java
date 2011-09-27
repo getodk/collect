@@ -246,14 +246,18 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
 
     private String getPathFromUri(Uri uri) {
-        // find entry in content provider
-        Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
-        c.moveToFirst();
+        if (uri.toString().startsWith("file")) {
+            return uri.toString().substring(6);
+        } else {
+            // find entry in content provider
+            Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
+            c.moveToFirst();
 
-        // get data path
-        String colString = c.getString(c.getColumnIndex("_data"));
-        c.close();
-        return colString;
+            // get data path
+            String colString = c.getString(c.getColumnIndex("_data"));
+            c.close();
+            return colString;
+        }
     }
 
 
