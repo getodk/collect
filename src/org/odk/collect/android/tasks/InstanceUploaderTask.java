@@ -158,6 +158,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             // we need authentication, so stop and return what we've
                             // done so far.
                             mAuthRequestingServer = u;
+                            return null;
                         } else if (statusCode == 204) {
                             Header[] locations = response.getHeaders("Location");
                             if (locations != null && locations.length == 1) {
