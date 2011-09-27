@@ -369,15 +369,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                  */
 
                 // get gp of chosen file
+                String sourceImagePath = null;
                 Uri selectedImage = intent.getData();
-                String[] projection = {
-                    Images.Media.DATA
-                };
-                Cursor cursor = managedQuery(selectedImage, projection, null, null, null);
-                startManagingCursor(cursor);
-                int column_index = cursor.getColumnIndexOrThrow(Images.Media.DATA);
-                cursor.moveToFirst();
-                String sourceImagePath = cursor.getString(column_index);
+                if (selectedImage.toString().startsWith("file")) {
+                    sourceImagePath = selectedImage.toString().substring(6);
+                } else {
+                    String[] projection = {
+                        Images.Media.DATA
+                    };
+                    Cursor cursor = managedQuery(selectedImage, projection, null, null, null);
+                    startManagingCursor(cursor);
+                    int column_index = cursor.getColumnIndexOrThrow(Images.Media.DATA);
+                    cursor.moveToFirst();
+                    sourceImagePath = cursor.getString(column_index);
+                }
 
                 // Copy file to sdcard
                 String mInstanceFolder1 =

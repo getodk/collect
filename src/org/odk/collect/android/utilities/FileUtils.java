@@ -192,10 +192,11 @@ public class FileUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        if (b != null) {
         Log.i(t,
             "Screen is " + screenHeight + "x" + screenWidth + ".  Image has been scaled down by "
                     + scale + " to " + b.getHeight() + "x" + b.getWidth());
-
+        }
         return b;
     }
 
