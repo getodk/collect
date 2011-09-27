@@ -91,6 +91,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         String formid = fields.get(FileUtils.FORMID);
                         String submission = fields.get(FileUtils.SUBMISSIONURI);
 
+                        // update date
+                        Long now = Long.valueOf(System.currentTimeMillis());
+                        updateValues.put(FormsColumns.DATE, now);
+
                         if (title != null) {
                             updateValues.put(FormsColumns.DISPLAY_NAME, title);
                         } else {
@@ -133,14 +137,14 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 // Ignore invisible files that start with periods.
                 if (!addMe.getName().startsWith(".")
                         && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml"))) {
-                    
+
                     HashMap<String, String> fields = null;
                     try {
                         fields = FileUtils.parseXML(addMe);
                     } catch (RuntimeException e) {
                         return addMe.getName() + " :: " + e.getMessage();
                     }
-                    
+
                     String title = fields.get(FileUtils.TITLE);
                     String ui = fields.get(FileUtils.UI);
                     String model = fields.get(FileUtils.MODEL);

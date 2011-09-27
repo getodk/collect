@@ -326,6 +326,13 @@ public class FormsProvider extends ContentProvider {
                     }
                 }
 
+                // Make sure that the necessary fields are all set
+                if (values.containsKey(FormsColumns.DATE) == true) {
+                    Date today = new Date();
+                    String ts = new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(today);
+                    values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
+                }
+
                 count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
                 break;
 
@@ -372,6 +379,14 @@ public class FormsProvider extends ContentProvider {
                         values.put(FormsColumns.MD5_HASH, newMd5);
                         values.put(FormsColumns.JRCACHE_FILE_PATH, "/sdcard/odk/.cache" + newMd5
                                 + ".formdef");
+                    }
+
+                    // Make sure that the necessary fields are all set
+                    if (values.containsKey(FormsColumns.DATE) == true) {
+                        Date today = new Date();
+                        String ts =
+                            new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(today);
+                        values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
                     }
 
                     count =
