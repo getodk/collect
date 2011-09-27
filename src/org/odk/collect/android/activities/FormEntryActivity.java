@@ -1360,8 +1360,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
 
-        mFormController = null;
-        mInstancePath = null;
         super.onDestroy();
 
     }
