@@ -14,16 +14,11 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Set;
-
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.model.xform.XFormsModule;
+import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -82,6 +77,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -944,7 +945,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes, repeat
-                        mFormController.newRepeat();
+                        try {
+                            mFormController.newRepeat();
+                        } catch (XPathTypeMismatchException e) {
+                            FormEntryActivity.this.createErrorDialog(e.getMessage(), EXIT);
+                            return;
+                        }
                         showNextView();
                         break;
                     case DialogInterface.BUTTON2: // no, no repeat
