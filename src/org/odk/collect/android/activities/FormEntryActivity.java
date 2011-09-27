@@ -778,7 +778,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         createRepeatDialog();
                         break group_skip;
                     case FormEntryController.EVENT_GROUP:
-                        if (mFormController.indexIsInFieldList()) {
+                        if (mFormController.indexIsInFieldList() && mFormController.getQuestionPrompts().length != 0) {
                             View nextGroupView = createView(event);
                             showView(nextGroupView, AnimationType.RIGHT);
                             break group_skip;
@@ -823,7 +823,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             while (event != FormEntryController.EVENT_BEGINNING_OF_FORM
                     && event != FormEntryController.EVENT_QUESTION
                     && !(event == FormEntryController.EVENT_GROUP && mFormController
-                            .indexIsInFieldList())) {
+                            .indexIsInFieldList() && mFormController.getQuestionPrompts().length != 0)) {
                 event = mFormController.stepToPreviousEvent();
             }
             View next = createView(event);
