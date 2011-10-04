@@ -84,7 +84,6 @@ public class SpinnerWidget extends QuestionWidget {
             }
         }
 
-        Log.e("Carl", "adding spinner, for reals");
         addView(spinner);
 
     }
