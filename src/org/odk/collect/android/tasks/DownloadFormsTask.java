@@ -158,6 +158,8 @@ public class DownloadFormsTask extends
                 e.printStackTrace();
                 if (e.getCause() != null) {
                     message += e.getCause().getMessage();
+                } else {
+                    message += e.getMessage();
                 }
             }
             count++;
