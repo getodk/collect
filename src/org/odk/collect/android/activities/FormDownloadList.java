@@ -242,7 +242,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         getListView().setItemsCanFocus(false);
         setListAdapter(mFormListAdapter);
     }
-    
+
+
     private void clearChoices() {
         FormDownloadList.this.getListView().clearChoices();
         mDownloadButton.setEnabled(false);
@@ -518,7 +519,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             String dialogTitle = getString(R.string.load_remote_form_error);
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
-            // Everything worked.  Clear the list and add the results.
+            // Everything worked. Clear the list and add the results.
             mFormNamesAndURLs = result;
 
             mFormList.clear();
@@ -529,7 +530,21 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 item.put(FORMNAME, mFormNamesAndURLs.get(ids.get(i)).formName);
                 item.put(FORMID_DISPLAY, "ID: " + mFormNamesAndURLs.get(ids.get(i)).formID);
                 item.put(FORMID, mFormNamesAndURLs.get(ids.get(i)).formID);
-                mFormList.add(item);
+
+                // Insert the new form in alphabetical order.
+                if (mFormList.size() == 0) {
+                    mFormList.add(item);
+                } else {
+                    int j;
+                    for (j = 0; j < mFormList.size(); j++) {
+                        HashMap<String, String> compareMe = mFormList.get(j);
+                        String name = compareMe.get(FORMNAME);
+                        if (name.compareTo(mFormNamesAndURLs.get(ids.get(i)).formName) > 0) {
+                            break;
+                        }
+                    }
+                    mFormList.add(j, item);
+                }
             }
             mFormListAdapter.notifyDataSetChanged();
         }
