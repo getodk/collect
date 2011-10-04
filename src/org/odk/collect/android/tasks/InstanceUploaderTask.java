@@ -20,6 +20,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -213,7 +214,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 
                             Log.w(t, "Status code on Head request: " + statusCode);
                             if (statusCode >= 200 && statusCode <= 299) {
-                                mResults.put(id, fail + "network login? ");
+                                mResults.put(
+                                    id,
+                                    fail
+                                            + "Invalid status code on Head request.  If you have a web proxy, you may need to login to your network. ");
                                 cv.put(InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()
@@ -223,13 +227,22 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                         }
                     } catch (ClientProtocolException e) {
                         e.printStackTrace();
-                        mResults.put(id, fail + "client protocol exeption?");
+                        Log.e(t, e.getMessage());
+                        mResults.put(id, fail + "Client Protocol Exeption");
+                        cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                        Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                        continue;
+                    } catch (ConnectTimeoutException e) {
+                        e.printStackTrace();
+                        Log.e(t, e.getMessage());
+                        mResults.put(id, fail + "Connection Timeout");
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                         continue;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        mResults.put(id, fail + "generic excpetion.  great");
+                        mResults.put(id, fail + "Generic Excpetion.");
+                        Log.e(t, e.getMessage());
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                         continue;
@@ -420,8 +433,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             if (responseCode == 200) {
                                 mResults.put(id, fail + "Network login failure?  again?");
                             } else {
-                                mResults.put(id, fail + urlString + " returned " + responseCode + " " + 
-                                        response.getStatusLine().getReasonPhrase());
+                                mResults.put(id, fail + urlString + " returned " + responseCode
+                                        + " " + response.getStatusLine().getReasonPhrase());
                             }
                             cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);

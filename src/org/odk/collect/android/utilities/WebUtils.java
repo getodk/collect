@@ -180,8 +180,8 @@ public final class WebUtils {
 
         // setup client
         HttpClient httpclient = new DefaultHttpClient(params);
-        httpclient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 1); 
-        httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true); 
+        httpclient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 1);
+        httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 
         return httpclient;
     }
@@ -252,8 +252,11 @@ public final class WebUtils {
             if (!entity.getContentType().getValue().toLowerCase()
                     .contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
                 String error =
-                    "ContentType: " + entity.getContentType().getValue() + "returned from: "
-                            + u.toString() + " is not text/xml";
+                    "ContentType: "
+                            + entity.getContentType().getValue()
+                            + " returned from: "
+                            + u.toString()
+                            + " is not text/xml.  This is often caused a network proxy.  Do you need to login to your network?";
                 Log.e(t, error);
                 return new DocumentFetchResult(error, 0);
             }
@@ -322,8 +325,7 @@ public final class WebUtils {
                 }
             }
             return new DocumentFetchResult(doc, isOR);
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             String cause;
             if (e.getCause() != null) {
