@@ -269,7 +269,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                 R.string.parse_legacy_formlist_failed, error)));
                         return formList;
                     }
-                    formList.put(formId, new FormDetails(formName, downloadUrl, null, formId));
+                    formList.put(formName, new FormDetails(formName, downloadUrl, null, formName));
                 }
             }
         }
