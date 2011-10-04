@@ -22,6 +22,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -81,9 +83,15 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                     Video.Media.EXTERNAL_CONTENT_URI.toString());
-                ((Activity) getContext())
-                        .startActivityForResult(i, FormEntryActivity.VIDEO_CAPTURE);
-                mWaitingForData = true;
+                try {
+                    ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.VIDEO_CAPTURE);
+                    mWaitingForData = true;
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "capture video"),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
@@ -105,8 +113,14 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 // new Intent(Intent.ACTION_PICK,
                 // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 mWaitingForData = true;
-                ((Activity) getContext())
-                        .startActivityForResult(i, FormEntryActivity.VIDEO_CHOOSER);
+                try {
+                    ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.VIDEO_CHOOSER);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "choose video "),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
@@ -124,8 +138,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + "/" + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "video/*");
-                ((Activity) getContext()).startActivity(i);
-
+                try {
+                    ((Activity) getContext()).startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "video video"),
+                        Toast.LENGTH_SHORT);
+                }
             }
         });
 

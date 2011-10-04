@@ -23,6 +23,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -39,6 +40,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -62,6 +64,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
     private TextView mErrorTextView;
 
+
     public ImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -71,7 +74,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 FormEntryActivity.mInstancePath.lastIndexOf("/") + 1);
 
         setOrientation(LinearLayout.VERTICAL);
-        
+
         mErrorTextView = new TextView(context);
         mErrorTextView.setText("Selected file is not a valid image");
 
@@ -100,9 +103,15 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 // FormEntyActivity will also need to be updated.
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                     Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-                ((Activity) getContext())
-                        .startActivityForResult(i, FormEntryActivity.IMAGE_CAPTURE);
-                mWaitingForData = true;
+                try {
+                    ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.IMAGE_CAPTURE);
+                    mWaitingForData = true;
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "image capture"),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
@@ -122,9 +131,15 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
 
-                ((Activity) getContext())
-                        .startActivityForResult(i, FormEntryActivity.IMAGE_CHOOSER);
-                mWaitingForData = true;
+                try {
+                    ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.IMAGE_CHOOSER);
+                    mWaitingForData = true;
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "choose image"),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
@@ -134,7 +149,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         addView(mChooseButton);
         addView(mErrorTextView);
         mErrorTextView.setVisibility(View.GONE);
-        
 
         // retrieve answer from data model and update ui
         mBinaryName = prompt.getAnswerText();
@@ -189,7 +203,13 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                         i.setDataAndType(Uri.withAppendedPath(
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id),
                             "image/*");
-                        getContext().startActivity(i);
+                        try {
+                            getContext().startActivity(i);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(getContext(),
+                                getContext().getString(R.string.activity_not_found, "view image"),
+                                Toast.LENGTH_SHORT);
+                        }
                     }
                     c.close();
                 }

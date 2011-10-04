@@ -22,6 +22,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -82,8 +84,14 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                     android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
                 mWaitingForData = true;
+                try {
                 ((Activity) getContext())
                         .startActivityForResult(i, FormEntryActivity.AUDIO_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "audio capture"),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
@@ -102,8 +110,14 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 mWaitingForData = true;
+                try {
                 ((Activity) getContext())
                         .startActivityForResult(i, FormEntryActivity.AUDIO_CHOOSER);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "choose audio"),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
@@ -121,7 +135,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + "/" + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
+                try {
                 ((Activity) getContext()).startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, "play audio"),
+                        Toast.LENGTH_SHORT);
+                }
 
             }
         });
