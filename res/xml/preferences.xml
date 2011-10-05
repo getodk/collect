@@ -71,5 +71,11 @@
 			android:title="@string/splash_path"
 			android:dependency="showSplash"
 			android:layout="?android:attr/preferenceLayoutChild" />
+		<CheckBoxPreference
+			android:id="@+id/default_completed"
+			android:key="default_completed"
+			android:title="@string/default_completed" 
+			android:defaultValue="true"
+			/>
 	</PreferenceCategory>
 </PreferenceScreen>

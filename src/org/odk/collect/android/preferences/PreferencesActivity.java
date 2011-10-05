@@ -58,6 +58,8 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static String KEY_PROTOCOL = "protocol";
     public static String KEY_FORMLIST_URL = "formlist_url";
     public static String KEY_SUBMISSION_URL = "submission_url";
+    
+    public static String KEY_COMPLETED_DEFAULT = "default_completed";
 
     private PreferenceScreen mSplashPathPreference;
     private EditTextPreference mSubmissionUrlPreference;
@@ -65,6 +67,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private EditTextPreference mServerUrlPreference;
     private EditTextPreference mUsernamePreference;
     private EditTextPreference mPasswordPreference;
+    
     private Context mContext;
 
 
@@ -234,7 +237,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         } else if (key.equals(KEY_FONT_SIZE)) {
             updateFontSize();
         }
-
     }
 
 
@@ -294,7 +296,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
         mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
     }
-
+    
 
     private void updateFontSize() {
         ListPreference lp = (ListPreference) findPreference(KEY_FONT_SIZE);

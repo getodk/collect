@@ -44,6 +44,7 @@
 <string name="data">Saved Forms</string>
 <string name="data_saved_error">Sorry, data save failed!</string>
 <string name="data_saved_ok">Form successfully saved!</string>
+<string name="default_completed">Default to Finished</string>
 <string name="default_server_url">http://opendatakit.appspot.com</string>
 <string name="delete_confirm">Delete %s item(s)?</string>
 <string name="delete_file">Delete Selected</string>

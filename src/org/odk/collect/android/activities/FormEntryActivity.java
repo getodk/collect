@@ -44,12 +44,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
@@ -1519,8 +1521,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * @return true if form has been marked completed, false otherwise.
      */
     private boolean isInstanceComplete() {
-        boolean complete = false;
+        // First get the value from the preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean complete = sharedPreferences.getBoolean(PreferencesActivity.KEY_COMPLETED_DEFAULT, true);
 
+        // Then see if we've already marked this form as complete
         String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] selectionArgs = {
             mInstancePath
