@@ -58,7 +58,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static String KEY_PROTOCOL = "protocol";
     public static String KEY_FORMLIST_URL = "formlist_url";
     public static String KEY_SUBMISSION_URL = "submission_url";
-    
+
     public static String KEY_COMPLETED_DEFAULT = "default_completed";
 
     private PreferenceScreen mSplashPathPreference;
@@ -67,7 +67,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private EditTextPreference mServerUrlPreference;
     private EditTextPreference mUsernamePreference;
     private EditTextPreference mPasswordPreference;
-    
+
     private Context mContext;
 
 
@@ -182,33 +182,34 @@ public class PreferencesActivity extends PreferenceActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
         if (resultCode == RESULT_CANCELED) {
             // request was canceled, so do nothing
             return;
         }
 
         switch (requestCode) {
-
             case IMAGE_CHOOSER:
+                String sourceImagePath = null;
 
                 // get gp of chosen file
                 Uri uri = intent.getData();
-                String[] projection = {
-                    Images.Media.DATA
-                };
-
-                Cursor c = managedQuery(uri, projection, null, null, null);
-                startManagingCursor(c);
-                int i = c.getColumnIndexOrThrow(Images.Media.DATA);
-                c.moveToFirst();
+                if (uri.toString().startsWith("file")) {
+                    sourceImagePath = uri.toString().substring(6);
+                } else {
+                    String[] projection = {
+                        Images.Media.DATA
+                    };
+                    Cursor c = managedQuery(uri, projection, null, null, null);
+                    startManagingCursor(c);
+                    int i = c.getColumnIndexOrThrow(Images.Media.DATA);
+                    c.moveToFirst();
+                    sourceImagePath = c.getString(i);
+                }
 
                 // setting image path
-                setSplashPath(c.getString(i));
+                setSplashPath(sourceImagePath);
                 updateSplashPath();
-
                 break;
-
         }
     }
 
@@ -296,7 +297,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
         mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
     }
-    
+
 
     private void updateFontSize() {
         ListPreference lp = (ListPreference) findPreference(KEY_FONT_SIZE);
