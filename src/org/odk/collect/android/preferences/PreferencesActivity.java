@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.WebUtils;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -278,12 +279,14 @@ public class PreferencesActivity extends PreferenceActivity implements
     private void updateUsername() {
         mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
         mUsernamePreference.setSummary(mUsernamePreference.getText());
+        WebUtils.clearAllCredentials();
     }
 
 
     private void updatePassword() {
         mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
         mPasswordPreference.setSummary("***************");
+        WebUtils.clearAllCredentials();
     }
 
 
