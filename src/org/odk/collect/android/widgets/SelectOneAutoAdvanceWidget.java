@@ -26,6 +26,7 @@ import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
@@ -178,17 +179,20 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!buttonView.isPressed()) {
+            return;
+        }
         if (!isChecked) {
             // If it got unchecked, we don't care.
             return;
         }
 
-        listener.next();
         for (RadioButton button : this.buttons) {
             if (button.isChecked() && !(buttonView == button)) {
                 button.setChecked(false);
             }
         }
+        listener.advance();
     }
 
 

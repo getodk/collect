@@ -1714,4 +1714,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         return false;
     }
 
+
+    @Override
+    public void advance() {
+        next();
+    }
+
 }
