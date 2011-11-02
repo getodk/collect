@@ -27,8 +27,9 @@
 			android:id="@+id/password"
 			android:key="password"
 			android:title="@string/password"
-			android:dialogTitle="@string/change_password"
-			android:password="true" />
+			android:dialogTitle="@string/change_password"/>
+			<!-- android:password="true" --> 
+			
 		<ListPreference
 			android:id="@+id/protocol"
 			android:key="protocol"

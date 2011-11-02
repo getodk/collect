@@ -36,6 +36,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.Toast;
 
 /**
@@ -94,7 +100,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         updateFontSize();
         updateProtocol();
-
     }
 
 
@@ -266,6 +271,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         }
         validateUrl(mServerUrlPreference);
         mServerUrlPreference.setSummary(mServerUrlPreference.getText());
+
+        mServerUrlPreference.getEditText().setFilters(new InputFilter[] {
+            getReturnFilter()
+        });
     }
 
 
@@ -279,6 +288,11 @@ public class PreferencesActivity extends PreferenceActivity implements
     private void updateUsername() {
         mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
         mUsernamePreference.setSummary(mUsernamePreference.getText());
+
+        mUsernamePreference.getEditText().setFilters(new InputFilter[] {
+            getWhitespaceFilter()
+        });
+
         WebUtils.clearAllCredentials();
     }
 
@@ -286,6 +300,11 @@ public class PreferencesActivity extends PreferenceActivity implements
     private void updatePassword() {
         mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
         mPasswordPreference.setSummary("***************");
+
+        mPasswordPreference.getEditText().setFilters(new InputFilter[] {
+            getWhitespaceFilter()
+        });
+
         WebUtils.clearAllCredentials();
     }
 
@@ -293,12 +312,20 @@ public class PreferencesActivity extends PreferenceActivity implements
     private void updateFormListUrl() {
         mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
         mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
+
+        mFormListUrlPreference.getEditText().setFilters(new InputFilter[] {
+            getReturnFilter()
+        });
     }
 
 
     private void updateSubmissionUrl() {
         mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
         mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
+
+        mSubmissionUrlPreference.getEditText().setFilters(new InputFilter[] {
+            getReturnFilter()
+        });
     }
 
 
@@ -352,5 +379,37 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         }
 
+    }
+
+
+    private InputFilter getWhitespaceFilter() {
+        InputFilter whitespaceFilter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
+                    int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (Character.isWhitespace(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+        return whitespaceFilter;
+    }
+
+
+    private InputFilter getReturnFilter() {
+        InputFilter returnFilter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
+                    int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+        return returnFilter;
     }
 }
