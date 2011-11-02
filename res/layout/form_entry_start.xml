@@ -11,18 +11,34 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp" >
+    android:fillViewport="true"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
+
+        <ImageView
+            android:id="@+id/form_start_bling"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="30dp"
+            android:scaleType="center" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:lineSpacingMultiplier="1.2"
             android:paddingBottom="30dp"
             android:paddingTop="10dp"
@@ -30,29 +46,17 @@
             android:textSize="21dp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/form_start_bling"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:paddingBottom="40dp"
-            android:scaleType="center" />
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp" >
+            android:orientation="horizontal" >
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingRight="10dp" >
+                android:orientation="vertical" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -65,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="@+string/backup"
-                    android:textSize="17dp" />
+                    android:textSize="21dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -74,8 +78,7 @@
                 android:layout_gravity="right"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:orientation="vertical"
-                android:paddingLeft="10dp" >
+                android:orientation="vertical" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -88,9 +91,14 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="@+string/advance"
-                    android:textSize="17dp" />
+                    android:textSize="21dp" />
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
     </LinearLayout>
 
 </ScrollView>

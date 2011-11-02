@@ -12,39 +12,36 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp" >
+    android:fillViewport="true"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="2dp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.2"
+            android:paddingBottom="30dp"
             android:paddingTop="2dp"
             android:textSize="21dp"
-            android:textStyle="bold" 
-            android:lineSpacingMultiplier="1.2"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/save_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="21dp" />
-
-        <Button
-            android:id="@+id/save_exit_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="20dp"
-            android:text="@string/quit_entry"
+            android:layout_gravity="center_vertical"
             android:textSize="21dp" />
 
         <CheckBox
@@ -52,8 +49,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginBottom="10dp"
             android:text="@string/mark_finished"
-            android:textSize="17dp" />
+            android:textSize="21dp" />
+
+        <Button
+            android:id="@+id/save_exit_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="20dp"
+            android:text="@string/quit_entry"
+            android:textSize="21dp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
     </LinearLayout>
 
 </ScrollView>
