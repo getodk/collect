@@ -102,17 +102,19 @@ public class WidgetFactory {
                     }
                 } else if (appearance != null && appearance.equals("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
-                } else if (appearance != null && appearance.contains("autocomplete")) {
-                    String filterType = null;
-                    try {
-                        filterType = appearance.substring(appearance.indexOf('-') + 1);
-                    } catch (Exception e) {
-                        // Do nothing, leave filerType null
-                        Log.e("WidgetFactory", "Exception parsing filterType");
-                    }
-                    questionWidget = new AutoCompleteWidget(context, fep, filterType);
-
-                } else if (appearance != null && appearance.equals("quick")) {
+                }
+                // else if (appearance != null && appearance.contains("autocomplete")) {
+                // String filterType = null;
+                // try {
+                // filterType = appearance.substring(appearance.indexOf('-') + 1);
+                // } catch (Exception e) {
+                // // Do nothing, leave filerType null
+                // Log.e("WidgetFactory", "Exception parsing filterType");
+                // }
+                // questionWidget = new AutoCompleteWidget(context, fep, filterType);
+                //
+                // }
+                else if (appearance != null && appearance.equals("quick")) {
                     questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
                 } else if (appearance != null && appearance.equals("list")) {
                     questionWidget = new ListWidget(context, fep, true);
