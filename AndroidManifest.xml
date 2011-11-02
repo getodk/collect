@@ -46,6 +46,12 @@
 					android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
 			</intent-filter>
 		</activity>
+    <activity
+      android:name=".activities.AccountList"
+      android:label="@string/app_name" />
+    <activity
+      android:name=".activities.AccountInfo"
+      android:label="@string/app_name" />    
 		<activity
 			android:name=".activities.InstanceChooserList"
 			android:label="@string/app_name" />
@@ -151,6 +157,13 @@
 	<uses-permission
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="android.permission.GET_ACCOUNTS" />
+  <uses-permission
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="android.permission.USE_CREDENTIALS" />
+    
 	<uses-sdk
 		android:minSdkVersion="3"></uses-sdk>
 	<supports-screens

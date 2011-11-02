@@ -15,6 +15,7 @@
 package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.AccountList;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -47,12 +48,14 @@ public class PreferencesActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     protected static final int IMAGE_CHOOSER = 0;
-
+    
     public static String KEY_LAST_VERSION = "lastVersion";
     public static String KEY_FIRST_RUN = "firstRun";
     public static String KEY_SHOW_SPLASH = "showSplash";
     public static String KEY_SPLASH_PATH = "splashPath";
     public static String KEY_FONT_SIZE = "font_size";
+    public static String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
+    public static String KEY_GOOGLE_SUBMISSION = "google_submission_id";
 
     public static String KEY_SERVER_URL = "server_url";
     public static String KEY_USERNAME = "username";
@@ -64,13 +67,20 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     public static String KEY_COMPLETED_DEFAULT = "default_completed";
 
+	public static String KEY_AUTH = "auth";
+    public static String KEY_ACCOUNT = "account";
+    
+    public static String googleServerBaseUrl = "https://gather.api.google.com/odk/n";
+    
+
     private PreferenceScreen mSplashPathPreference;
     private EditTextPreference mSubmissionUrlPreference;
     private EditTextPreference mFormListUrlPreference;
     private EditTextPreference mServerUrlPreference;
     private EditTextPreference mUsernamePreference;
     private EditTextPreference mPasswordPreference;
-
+    private PreferenceScreen mSelectedGoogleAccountPreference;
+    private EditTextPreference mGoogleCollectionEffortPreference;
     private Context mContext;
 
 
@@ -83,6 +93,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.general_preferences));
 
         setupSplashPathPreference();
+        setupSelectedGoogleAccountPreference();
 
         updateServerUrl();
 
@@ -96,6 +107,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         updateFontSize();
         updateProtocol();
+        updateSelectedGoogleAccount();
+        updateGoogleCollectionEffort();
     }
 
 
@@ -220,11 +233,21 @@ public class PreferencesActivity extends PreferenceActivity implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(KEY_PROTOCOL)) {
             updateProtocol();
+            updateSelectedGoogleAccount();
+            updateGoogleCollectionEffort();
             updateServerUrl();
             updateUsername();
             updatePassword();
             updateFormListUrl();
             updateSubmissionUrl();
+        } else if (key.equals(KEY_SELECTED_GOOGLE_ACCOUNT)) {
+          updateSelectedGoogleAccount();
+          updateGoogleCollectionEffort();
+          updateServerUrl();
+        } else if (key.equals(KEY_GOOGLE_SUBMISSION)) {
+          updateSelectedGoogleAccount();
+          updateGoogleCollectionEffort();
+          updateServerUrl();
         } else if (key.equals(KEY_SERVER_URL)) {
             updateServerUrl();
         } else if (key.equals(KEY_FORMLIST_URL)) {
@@ -260,6 +283,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateServerUrl() {
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
+        
         // remove all trailing "/"s
         while (mServerUrlPreference.getText().endsWith("/")) {
             mServerUrlPreference.setText(mServerUrlPreference.getText().substring(0,
@@ -333,14 +357,63 @@ public class PreferencesActivity extends PreferenceActivity implements
         ListPreference lp = (ListPreference) findPreference(KEY_FONT_SIZE);
         lp.setSummary(lp.getEntry());
     }
-
-
+    
+    private void updateSelectedGoogleAccount() {
+      mSelectedGoogleAccountPreference =
+          (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+      mSelectedGoogleAccountPreference.setSummary(
+          mSelectedGoogleAccountPreference.getSharedPreferences().getString(KEY_ACCOUNT, ""));
+    }
+    
+    private void updateGoogleCollectionEffort() {
+      mGoogleCollectionEffortPreference =
+          (EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION);
+      mGoogleCollectionEffortPreference.setSummary(
+          mGoogleCollectionEffortPreference.getSharedPreferences().getString(KEY_GOOGLE_SUBMISSION,
+              ""));
+      
+      // We have a fixed URL for using Google's service.
+      if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals("google")) {
+        String submissionId = ((EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION))
+            .getText();
+        mServerUrlPreference.setText(googleServerBaseUrl + submissionId);
+        updateServerUrl();      
+      }      
+    }
+    
+    private void setupSelectedGoogleAccountPreference() {
+      mSelectedGoogleAccountPreference =
+          (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+      
+      if (mSelectedGoogleAccountPreference == null) {
+        return;
+      }
+      
+      updateSelectedGoogleAccount();
+      
+      mSelectedGoogleAccountPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        @Override public boolean onPreferenceClick(Preference preference) {
+          Intent i = new Intent(getApplicationContext(), AccountList.class);
+          startActivity(i);
+          return true;
+        }
+      });      
+    }
+    
+    
+    
     private void updateProtocol() {
         ListPreference lp = (ListPreference) findPreference(KEY_PROTOCOL);
         lp.setSummary(lp.getEntry());
 
         String protocol = lp.getValue();
         if (protocol.equals("odk_default")) {
+            if (mGoogleCollectionEffortPreference != null) {
+                mGoogleCollectionEffortPreference.setEnabled(false);
+            }
+            if (mSelectedGoogleAccountPreference != null) {
+                mSelectedGoogleAccountPreference.setEnabled(false);
+            }
             if (mServerUrlPreference != null) {
                 mServerUrlPreference.setEnabled(true);
             }
@@ -359,8 +432,40 @@ public class PreferencesActivity extends PreferenceActivity implements
                         .toString());
                 mSubmissionUrlPreference.setEnabled(false);
             }
-
+         
+        } else if (protocol.equals("google")) {
+            if (mGoogleCollectionEffortPreference != null) {
+                mGoogleCollectionEffortPreference.setEnabled(true);
+            }
+            if (mSelectedGoogleAccountPreference != null) {
+                mSelectedGoogleAccountPreference.setEnabled(true);
+            }
+            if (mServerUrlPreference != null) {
+                mServerUrlPreference.setEnabled(false);
+            }
+            if (mUsernamePreference != null) {
+                mUsernamePreference.setEnabled(false);
+            }
+            if (mPasswordPreference != null) {
+                mPasswordPreference.setEnabled(false);
+            }
+            if (mFormListUrlPreference != null) {
+                mFormListUrlPreference.setEnabled(false);
+            }
+            if (mSubmissionUrlPreference != null) {
+                mSubmissionUrlPreference.setEnabled(false);
+            }
+            
+            updateSelectedGoogleAccount();
+            updateGoogleCollectionEffort();
+            
         } else {
+            if (mGoogleCollectionEffortPreference != null) {
+                mGoogleCollectionEffortPreference.setEnabled(false);
+            }
+            if (mSelectedGoogleAccountPreference != null) {
+                mSelectedGoogleAccountPreference.setEnabled(false);
+            }
             if (mServerUrlPreference != null) {
                 mServerUrlPreference.setEnabled(true);
             }

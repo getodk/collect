@@ -35,11 +35,13 @@
 	<string-array
 		name="protocol_entry_values">
 		<item>odk_default</item>
+		<item>google</item>
 		<item></item>
 	</string-array>
 	<string-array
 		name="protocol_entries">
 		<item>ODK Default</item>
+		<item>Google Forms</item>
 		<item>Custom</item>
 	</string-array>
 	<string-array
