@@ -667,10 +667,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 if (image == null) {
                     // show the opendatakit zig...
-                    image = getResources().getDrawable(R.drawable.opendatakit_zig);
+                    //image = getResources().getDrawable(R.drawable.opendatakit_zig);
+                    ((ImageView) startView.findViewById(R.id.form_start_bling)).setVisibility(View.GONE);
+                } else {
+                    ((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
                 }
 
-                ((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
                 return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
