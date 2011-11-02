@@ -610,11 +610,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         StringBuilder b = new StringBuilder();
         Set<String> keys = result.keySet();
         for (String k : keys) {
-            b.append(k + ": " + result.get(k));
+            b.append(k + " - " + result.get(k));
             b.append("\n\n");
         }
 
-        createAlertDialog(getString(R.string.download_forms_result), b.toString(), EXIT);
+        createAlertDialog(getString(R.string.download_forms_result), b.toString().trim(), EXIT);
     }
 
 }

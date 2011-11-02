@@ -191,9 +191,9 @@ public class InstanceProvider extends ContentProvider {
         } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
             return "Finished on " + ts;
         } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-            return "Submitted on " + ts;
+            return "Sent on " + ts;
         } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-            return "FAILED submission on " + ts;
+            return "Sending failed on " + ts;
         } else {
             return "Added on " + ts;
         }

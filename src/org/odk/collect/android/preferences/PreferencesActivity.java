@@ -299,8 +299,12 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updatePassword() {
         mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
-        mPasswordPreference.setSummary("***************");
+        if (mPasswordPreference.getText() != null && mPasswordPreference.getText().length() > 0) {
+            mPasswordPreference.setSummary("********");
+        } else {
+            mPasswordPreference.setSummary("");
 
+        }
         mPasswordPreference.getEditText().setFilters(new InputFilter[] {
             getWhitespaceFilter()
         });

@@ -18,6 +18,15 @@
 			android:defaultValue="@string/default_server_url"
 			android:title="@string/server_url"
 			android:dialogTitle="@string/change_server_url" />
+		      
+    <ListPreference
+      android:id="@+id/protocol"
+      android:key="protocol"
+      android:title="@string/protocol"
+      android:dialogTitle="@string/change_protocol"
+      android:defaultValue="odk_default"
+      android:entries="@array/protocol_entries"
+      android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
 			android:id="@+id/username"
 			android:key="username"
@@ -29,15 +38,6 @@
 			android:title="@string/password"
 			android:dialogTitle="@string/change_password"/>
 			<!-- android:password="true" --> 
-			
-		<ListPreference
-			android:id="@+id/protocol"
-			android:key="protocol"
-			android:title="@string/protocol"
-			android:dialogTitle="@string/change_protocol"
-			android:defaultValue="odk_default"
-			android:entries="@array/protocol_entries"
-			android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
 			android:id="@+id/formlist_url"
 			android:key="formlist_url"
@@ -61,10 +61,19 @@
 			android:defaultValue="21"
 			android:entries="@array/font_size_entries"
 			android:entryValues="@array/font_size_entry_values" />
+		    <CheckBoxPreference
+      android:id="@+id/default_completed"
+      android:key="default_completed"
+      android:title="@string/default_completed" 
+      android:defaultValue="true"
+      android:summary="@string/default_completed_summary"
+      />
 		<CheckBoxPreference
 			android:id="@+id/show_splash"
 			android:key="showSplash"
-			android:title="@string/show_splash" />
+			android:title="@string/show_splash" 
+			android:summary="@string/show_splash_summary"
+			/>
 		<PreferenceScreen
 			android:id="@+id/splash_path"
 			android:key="splashPath"
@@ -72,11 +81,5 @@
 			android:title="@string/splash_path"
 			android:dependency="showSplash"
 			android:layout="?android:attr/preferenceLayoutChild" />
-		<CheckBoxPreference
-			android:id="@+id/default_completed"
-			android:key="default_completed"
-			android:title="@string/default_completed" 
-			android:defaultValue="true"
-			/>
 	</PreferenceCategory>
 </PreferenceScreen>

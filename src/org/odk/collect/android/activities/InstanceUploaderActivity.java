@@ -163,13 +163,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 String name =
                     results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                 String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                message.append(name + " : " + result.get(id) + "\n\n");
+                message.append(name + " - " + result.get(id) + "\n\n");
             }
         } else {
             message.append(getString(R.string.no_forms_uploaded));
         }
 
-        createAlertDialog(message.toString());
+        createAlertDialog(message.toString().trim());
     }
 
 
