@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.app.AlertDialog;
@@ -59,7 +60,9 @@ public class InstanceChooserList extends ListActivity {
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
         
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, null);
+        String selection = InstanceColumns.STATUS + " is not ?";
+        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, InstanceColumns.STATUS + " desc");
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
