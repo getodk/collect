@@ -75,16 +75,16 @@
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="error_downloading">Error Getting Form</string>
 <string name="error_occured">Error Occurred</string>
-<string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s)...</string>
+<string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s)</string>
 <string name="file_deleted_error">Sorry, %1$s of %2$s selected item(s) failed to delete!</string>
 <string name="file_deleted_ok">%s item(s) successfully deleted!</string>
 <string name="file_invalid">File: %s is invalid.</string>
 <string name="file_missing">File: %s is missing.</string>
-<string name="finished_disk_scan">Finished scanning...All forms loaded</string>
+<string name="finished_disk_scan">Finished scanning. All forms loaded.</string>
 <string name="form">Form</string>
 <string name="forms">New Forms</string>
 <string name="form_renamed">%1$s was renamed %2$s.</string>
-<string name="getting_location">Loading Location...</string>
+<string name="getting_location">Loading Location</string>
 <string name="get_barcode">Get Barcode</string>
 <string name="get_forms">Get New Forms</string>
 <string name="get_location">Record Location</string>
@@ -102,7 +102,7 @@
 <string name="load_remote_form_error">Error Getting Form List</string>
 <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
 <string name="location_provider">Using %1$s provider. Please wait for greater accuracy.</string>
-<string name="location_accuracy">Accuracy is %1$s m...</string>
+<string name="location_accuracy">Accuracy is %1$s m</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Magnifying human resources\nwith technology</string>
@@ -141,7 +141,7 @@
 <string name="save_all_answers">Save Form</string>
 <string name="save_data_message">Please save data to keep your responses.</string>
 <string name="save_enter_data_description">You have reached the end of %s.</string>
-<string name="saving_form">Saving Form...</string>
+<string name="saving_form">Saving Form</string>
 <string name="send">send</string>
 <string name="sending_items">Sending %1$s of %2$s item(s)</string>
 <string name="send_data">Send Finished Forms</string>
@@ -183,7 +183,7 @@
 <string name="submission_url">Custom Submission Path</string>
 <string name="font_size">Text Font Size</string>
 <string name="change_font_size">Text Font Size</string>
-<string name="form_scan_starting">Scanning for forms...</string>
+<string name="form_scan_starting">Scanning for forms</string>
 <string name="form_scan_finished">Form scanning completed</string>
 <string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
