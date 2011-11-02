@@ -189,7 +189,7 @@ public class InstanceProvider extends ContentProvider {
         } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
             return "Saved on " + ts;
         } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-            return "Finished on " + ts;
+            return "Finalized on " + ts;
         } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
             return "Sent on " + ts;
         } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
