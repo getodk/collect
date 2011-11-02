@@ -22,7 +22,6 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.util.TypedValue;
 
 import java.text.NumberFormat;

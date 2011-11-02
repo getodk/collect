@@ -38,10 +38,6 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
 import android.widget.Toast;
 
 /**
