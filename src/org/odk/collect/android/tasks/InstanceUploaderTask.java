@@ -450,8 +450,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             if (responseCode == 200) {
                                 mResults.put(id, fail + "Network login failure? Again?");
                             } else {
-                                mResults.put(id, response.getStatusLine().getReasonPhrase() + " (" + responseCode
-                                    + ")");
+                                mResults.put(id, fail + response.getStatusLine().getReasonPhrase() + " (" + responseCode
+                                    + ") at " + urlString);
                             }
                             cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);

@@ -268,9 +268,9 @@ public class DownloadFormsTask extends
             if (statusCode != 200) {
                 String errMsg =
                     Collect.getInstance()
-                            .getString(R.string.file_fetch_failed,
+                            .getString(R.string.file_fetch_failed,downloadUrl,
                                 response.getStatusLine().getReasonPhrase(), statusCode);
-                Log.e(t, errMsg + " " + downloadUrl);
+                Log.e(t, errMsg);
                 throw new Exception(errMsg);
             }
 

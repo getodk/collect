@@ -194,7 +194,7 @@
 <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
 <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-<string name="file_fetch_failed">Error: %1$s (%2$s)</string>
+<string name="file_fetch_failed">Error: %2$s (%3$s) at %1$s</string>
 <string name="fetching_manifest">%s. Getting manifest </string>
 <string name="success">Success</string>
 <string name="no_forms_uploaded">Sorry, no forms were uploaded.</string>

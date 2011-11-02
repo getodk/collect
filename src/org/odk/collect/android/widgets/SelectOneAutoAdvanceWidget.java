@@ -92,7 +92,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
-                Drawable image = getResources().getDrawable(R.drawable.right_arrow);
+                Drawable image = getResources().getDrawable(R.drawable.expander_ic_right);
                 rightArrow.setImageDrawable(image);
 
                 buttons.add(r);
