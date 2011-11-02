@@ -291,6 +291,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         } catch (DeserializationException e) {
             e.printStackTrace();
             fd = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            fd = null;
         }
 
         return fd;
