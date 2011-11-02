@@ -51,6 +51,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -248,9 +249,16 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                         continue;
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                        mResults.put(id, fail + e.getMessage() + " :: Network Connection Failed");
+                        Log.e(t, e.getMessage());
+                        cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                        Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                        continue;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        mResults.put(id, fail + "Generic Excpetion.");
+                        mResults.put(id, fail + "Generic Exception.");
                         Log.e(t, e.getMessage());
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
