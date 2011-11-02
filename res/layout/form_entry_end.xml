@@ -1,57 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington Licensed under the Apache 
+<!--
+  Copyright (C) 2009 University of Washington Licensed under the Apache 
 	License, Version 2.0 (the "License"); you may not use this file except in 
 	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
 	Unless required by applicable law or agreed to in writing, software distributed 
 	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
-	the specific language governing permissions and limitations under the License. -->
+	the specific language governing permissions and limitations under the License.
+-->
 
-<ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:padding="10dp"
-	android:gravity="center">
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:orientation="vertical">
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/description"
-			android:gravity="center"
-			android:textSize="23dp"
-			android:paddingTop="2dp"
-			android:paddingBottom="20dp" />
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/save_as_text"
-			android:gravity="center"
-			android:text="@string/save_form_as"
-			android:textSize="23dp"
-			android:paddingTop="2dp"
-			android:paddingBottom="20dp" />
-		<EditText
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/save_name"
-			android:gravity="center"
-			android:textSize="23dp" />
-		<Button
-			android:id="@+id/save_exit_button"
-			android:text="@string/quit_entry"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:padding="20dp"
-			android:textSize="23dp" />
-		<CheckBox
-			android:text="@string/mark_finished"
-			android:id="@+id/mark_finished"
-			android:textSize="17dp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-	</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:textSize="21dp"
+            android:textStyle="bold" 
+            android:lineSpacingMultiplier="1.2"/>
+
+        <EditText
+            android:id="@+id/save_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="21dp" />
+
+        <Button
+            android:id="@+id/save_exit_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="@string/quit_entry"
+            android:textSize="21dp" />
+
+        <CheckBox
+            android:id="@+id/mark_finished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="@string/mark_finished"
+            android:textSize="17dp" />
+    </LinearLayout>
+
 </ScrollView>

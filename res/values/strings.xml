@@ -140,7 +140,7 @@
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Save Form</string>
 <string name="save_data_message">Please save data to keep your responses.</string>
-<string name="save_enter_data_description">You have reached the end of %s.</string>
+<string name="save_enter_data_description">You have finished %s. This finished form will be saved as:</string>
 <string name="saving_form">Saving Form</string>
 <string name="send">send</string>
 <string name="sending_items">Sending %1$s of %2$s item(s)</string>
@@ -205,6 +205,6 @@
 <string name="choose_image">Choose Image</string>
 <string name="selected">Selected: </string>
 <string name="select_answer">Select Answer</string>
-<string name="save_form_as">Form will be saved as:</string>
+<string name="save_form_as">This form will be saved as:</string>
 <string name="save_as_error">Saved name must not be blank!</string>
 </resources>
