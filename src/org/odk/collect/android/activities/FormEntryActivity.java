@@ -54,9 +54,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
@@ -1674,7 +1676,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         // Looks for user swipes. If the user has swiped, move to the appropriate screen.
-        if (Math.abs(e1.getX() - e2.getX()) > 60 && Math.abs(e1.getY() - e2.getY()) < 60) {
+
+        // for all screens a swipe is left/right of at least .25" and up/down of less than .25"
+        // OR left/right of > .5"
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int xPixelLimit = (int) (dm.xdpi * .25);
+        int yPixelLimit = (int) (dm.ydpi * .25);
+        
+        if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1.getY() - e2.getY()) < yPixelLimit)
+                || Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
             if (velocityX > 0) {
                 mBeenSwiped = true;
                 showPreviousView();
