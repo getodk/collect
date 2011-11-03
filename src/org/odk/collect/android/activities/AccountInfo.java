@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 public class AccountInfo extends Activity {
   final static int WAITING_ID = 1;
-  final static String authString = "cp";
+  final static String authString = "gather";
 
   /**
    * Activity startup.
