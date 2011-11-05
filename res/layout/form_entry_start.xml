@@ -40,7 +40,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:lineSpacingMultiplier="1.2"
-            android:paddingBottom="30dp"
+            android:paddingBottom="20dp"
             android:paddingTop="10dp"
             android:text="title"
             android:textSize="21dp"

@@ -71,7 +71,7 @@
 <string name="entering_repeat_ask">Add New Group?</string>
 <string name="enter_data">Start Blank Form</string>
 <string name="enter_data_button">Start Blank Form</string>
-<string name="enter_data_description">You are at the start of \"%s\". Swipe on the screen as shown below to begin.</string>
+<string name="enter_data_description">You are at the start of \"%s\". Swipe the screen as shown below to begin.</string>
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="error_downloading">Error Getting Form</string>
 <string name="error_occured">Error Occurred</string>
@@ -108,7 +108,7 @@
 <string name="main_menu_details">Data collection made easier...</string>
 <string name="main_menu_message">ODK Collect v1.1.7</string>
 <string name="manage_files">Delete Forms on Device</string>
-<string name="mark_finished">Mark Form as Finalized</string>
+<string name="mark_finished">Mark form as finalized</string>
 <string name="no">No</string>
 <string name="noselect_error">Sorry, you have not selected any forms!</string>
 <string name="no_capture">Nothing recorded yet.</string>
@@ -205,7 +205,7 @@
 <string name="choose_image">Choose Image</string>
 <string name="selected">Selected: </string>
 <string name="select_answer">Select Answer</string>
-<string name="save_form_as">Name this saved form:</string>
+<string name="save_form_as">Save them form with this name:</string>
 <string name="save_as_error">Saved name must not be blank!</string>
 <string name="form_name">Form Name:</string>
 <string name="edit_prompt">Edit Prompt</string>

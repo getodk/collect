@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,12 +50,16 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         mWaitingForData = false;
         setOrientation(LinearLayout.VERTICAL);
 
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+        
         // set button formatting
         mGetBarcodeButton = new Button(getContext());
         mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
         mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mGetBarcodeButton.setPadding(20, 20, 20, 20);
         mGetBarcodeButton.setEnabled(!prompt.isReadOnly());
+        mGetBarcodeButton.setLayoutParams(params);
 
         // launch barcode capture intent on click
         mGetBarcodeButton.setOnClickListener(new View.OnClickListener() {
