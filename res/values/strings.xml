@@ -37,7 +37,7 @@
 <string name="change_server_url">Server URL</string>
 <string name="change_username">ODK Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
-<string name="clear_answer">Remove Response</string>
+<string name="clear_answer">Remove response</string>
 <string name="clear_answer_ask">Remove This Response?</string>
 <string name="clear_answer_no">Cancel</string>
 <string name="completed_data">Complete (%s)</string>
@@ -50,13 +50,13 @@
 <string name="delete_confirm">Delete %s form(s)?</string>
 <string name="delete_file">Delete Selected</string>
 <string name="delete_no">Do Not Delete</string>
-<string name="delete_repeat">Remove Group</string>
+<string name="delete_repeat">Remove group</string>
 <string name="delete_repeat_ask">Remove This Group?</string>
 <string name="delete_repeat_confirm">Remove group \"%s\" and all of its sub-groups?</string>
 <string name="delete_repeat_no">Cancel</string>
 <string name="delete_yes">Delete Items</string>
-<string name="discard_answer">Remove Response</string>
-<string name="discard_group">Remove Group</string>
+<string name="discard_answer">Remove response</string>
+<string name="discard_group">Remove group</string>
 <string name="download">Get Selected</string>
 <string name="download_forms_result">Download Result</string>
 <string name="downloading_data">Connecting to Server</string>
@@ -69,9 +69,9 @@
 <string name="enter">start</string>
 <string name="entering_repeat">Add Group</string>
 <string name="entering_repeat_ask">Add New Group?</string>
-<string name="enter_data">Open Blank Forms</string>
-<string name="enter_data_button">Open Blank Forms</string>
-<string name="enter_data_description">You are at the start of "%s". Swipe on the screen as shown below to begin.</string>
+<string name="enter_data">Start Blank Form</string>
+<string name="enter_data_button">Start Blank Form</string>
+<string name="enter_data_description">You are at the start of \"%s\". Swipe on the screen as shown below to begin.</string>
 <string name="enter_data_message">To navigate, swipe your finger horizontally on the screen as if turning pages in a book. Press the Menu button for more choices.</string>
 <string name="error_downloading">Error Getting Form</string>
 <string name="error_occured">Error Occurred</string>
@@ -135,12 +135,12 @@
 <string name="replace_video">Replace Video</string>
 <string name="required_answer_error">Sorry, this response is required!</string>
 <string name="review">continue</string>
-<string name="review_data">Edit Saved Forms</string>
-<string name="review_data_button">Edit Saved Forms</string>
+<string name="review_data">Edit Saved Form</string>
+<string name="review_data_button">Edit Saved Form</string>
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Save Form</string>
 <string name="save_data_message">Please save form to keep your responses.</string>
-<string name="save_enter_data_description">You are at the end of "%s".</string>
+<string name="save_enter_data_description">You are at the end of \"%s\".</string>
 <string name="saving_form">Saving Form</string>
 <string name="send">send</string>
 <string name="sending_items">Sending %1$s of %2$s form(s)</string>
@@ -208,5 +208,7 @@
 <string name="save_form_as">Name this saved form:</string>
 <string name="save_as_error">Saved name must not be blank!</string>
 <string name="form_name">Form Name:</string>
+<string name="edit_prompt">Edit Prompt</string>
+    
     
 </resources>
