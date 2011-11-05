@@ -572,10 +572,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
+        if (!mFormController.getQuestionPrompt().isReadOnly()) {
+            menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
+        }
         if (mFormController.indexContainsRepeatableGroup()) {
             menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
         }
+        menu.setHeaderTitle(getString(R.string.edit_prompt));
     }
 
 
@@ -667,10 +670,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 if (image == null) {
                     // show the opendatakit zig...
-                    //image = getResources().getDrawable(R.drawable.opendatakit_zig);
-                    ((ImageView) startView.findViewById(R.id.form_start_bling)).setVisibility(View.GONE);
+                    // image = getResources().getDrawable(R.drawable.opendatakit_zig);
+                    ((ImageView) startView.findViewById(R.id.form_start_bling))
+                            .setVisibility(View.GONE);
                 } else {
-                    ((ImageView) startView.findViewById(R.id.form_start_bling)).setImageDrawable(image);
+                    ((ImageView) startView.findViewById(R.id.form_start_bling))
+                            .setImageDrawable(image);
                 }
 
                 return startView;
@@ -1701,7 +1706,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int xPixelLimit = (int) (dm.xdpi * .25);
         int yPixelLimit = (int) (dm.ydpi * .25);
-        
+
         if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1.getY() - e2.getY()) < yPixelLimit)
                 || Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
             if (velocityX > 0) {
