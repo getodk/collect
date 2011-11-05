@@ -48,6 +48,7 @@ public class MainMenuActivity extends Activity {
     private Button mManageFilesButton;
     private Button mSendDataButton;
     private Button mReviewDataButton;
+    private Button mGetFormsButton;
 
     private AlertDialog mAlertDialog;
 
@@ -102,6 +103,18 @@ public class MainMenuActivity extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), InstanceUploaderList.class);
                 startActivity(i);
+            }
+        });
+
+        // manage forms button. no result expected.
+        mGetFormsButton = (Button) findViewById(R.id.get_forms);
+        mGetFormsButton.setText(getString(R.string.get_forms));
+        mGetFormsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), FormDownloadList.class);
+                startActivity(i);
+
             }
         });
 

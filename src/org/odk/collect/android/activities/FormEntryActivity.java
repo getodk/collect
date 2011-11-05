@@ -913,7 +913,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
         }
 
-        showCustomToast(constraintText);
+        showCustomToast(constraintText, Toast.LENGTH_SHORT);
         mBeenSwiped = false;
     }
 
@@ -923,7 +923,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * 
      * @param message
      */
-    private void showCustomToast(String message) {
+    private void showCustomToast(String message, int duration) {
         LayoutInflater inflater =
             (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -935,7 +935,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         Toast t = new Toast(this);
         t.setView(view);
-        t.setDuration(Toast.LENGTH_SHORT);
+        t.setDuration(duration);
         t.setGravity(Gravity.CENTER, 0, 0);
         t.show();
     }
