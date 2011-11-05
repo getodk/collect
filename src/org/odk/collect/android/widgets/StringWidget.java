@@ -25,6 +25,8 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 /**
  * The most basic widget that allows for entry of any text.
@@ -44,6 +46,10 @@ public class StringWidget extends QuestionWidget {
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+        mAnswer.setLayoutParams(params);
+        
         // capitalize the first letter of the sentence
         mAnswer.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
 

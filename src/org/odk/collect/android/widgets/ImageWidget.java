@@ -39,6 +39,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,9 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
         setOrientation(LinearLayout.VERTICAL);
 
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+        
         mErrorTextView = new TextView(context);
         mErrorTextView.setText("Selected file is not a valid image");
 
@@ -84,6 +88,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mCaptureButton.setPadding(20, 20, 20, 20);
         mCaptureButton.setEnabled(!prompt.isReadOnly());
+        mCaptureButton.setLayoutParams(params);
 
         // launch capture intent on click
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +127,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mChooseButton.setPadding(20, 20, 20, 20);
         mChooseButton.setEnabled(!prompt.isReadOnly());
+        mChooseButton.setLayoutParams(params);
 
         // launch capture intent on click
         mChooseButton.setOnClickListener(new View.OnClickListener() {

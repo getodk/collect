@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:lineSpacingMultiplier="1.2"
-            android:paddingBottom="30dp"
+            android:paddingBottom="20dp"
             android:paddingTop="10dp"
             android:textSize="21dp"
             android:textStyle="bold" />
@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:lineSpacingMultiplier="1.2"
+            android:text="@string/save_form_as"
             android:textSize="21dp" />
 
         <EditText

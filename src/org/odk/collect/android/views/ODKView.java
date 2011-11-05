@@ -144,7 +144,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         if (s.length() > 0) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 7);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 4);
             tv.setPadding(0, 0, 0, 5);
             mView.addView(tv, mLayout);
         }
