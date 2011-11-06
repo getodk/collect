@@ -242,7 +242,8 @@ public class DownloadFormsTask extends
     private void downloadFile(File f, String downloadUrl) throws Exception {
         URI uri = null;
         try {
-            URL url = new URL(URLDecoder.decode(downloadUrl, "utf-8"));
+            // assume the downloadUrl is escaped properly
+            URL url = new URL(downloadUrl);
             uri = url.toURI();
         } catch (MalformedURLException e) {
             e.printStackTrace();

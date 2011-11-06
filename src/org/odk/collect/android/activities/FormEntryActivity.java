@@ -1024,7 +1024,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = mFormController.getLastRepeatedGroupName();
         int repeatcount = mFormController.getLastRepeatedGroupRepeatCount();
         if (repeatcount != -1) {
@@ -1084,7 +1084,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         mAlertDialog =
             new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(android.R.drawable.ic_dialog_info)
                     .setTitle(getString(R.string.quit_application, mFormController.getFormTitle()))
                     .setNeutralButton(getString(R.string.do_not_exit),
                         new DialogInterface.OnClickListener() {
@@ -1240,7 +1240,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createClearDialog(final QuestionWidget qw) {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 
         mAlertDialog.setTitle(getString(R.string.clear_answer_ask));
 

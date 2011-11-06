@@ -580,7 +580,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertMsg = message;
         mAlertTitle = title;
         mAlertShowing = true;
