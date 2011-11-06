@@ -48,7 +48,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     protected static final int IMAGE_CHOOSER = 0;
-    
+
     public static String KEY_LAST_VERSION = "lastVersion";
     public static String KEY_FIRST_RUN = "firstRun";
     public static String KEY_SHOW_SPLASH = "showSplash";
@@ -67,11 +67,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     public static String KEY_COMPLETED_DEFAULT = "default_completed";
 
-	public static String KEY_AUTH = "auth";
+    public static String KEY_AUTH = "auth";
     public static String KEY_ACCOUNT = "account";
-    
+
     public static String googleServerBaseUrl = "https://gather.api.google.com/odk/n";
-    
 
     private PreferenceScreen mSplashPathPreference;
     private EditTextPreference mSubmissionUrlPreference;
@@ -241,13 +240,13 @@ public class PreferencesActivity extends PreferenceActivity implements
             updateFormListUrl();
             updateSubmissionUrl();
         } else if (key.equals(KEY_SELECTED_GOOGLE_ACCOUNT)) {
-          updateSelectedGoogleAccount();
-          updateGoogleCollectionEffort();
-          updateServerUrl();
+            updateSelectedGoogleAccount();
+            updateGoogleCollectionEffort();
+            updateServerUrl();
         } else if (key.equals(KEY_GOOGLE_SUBMISSION)) {
-          updateSelectedGoogleAccount();
-          updateGoogleCollectionEffort();
-          updateServerUrl();
+            updateSelectedGoogleAccount();
+            updateGoogleCollectionEffort();
+            updateServerUrl();
         } else if (key.equals(KEY_SERVER_URL)) {
             updateServerUrl();
         } else if (key.equals(KEY_FORMLIST_URL)) {
@@ -283,7 +282,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateServerUrl() {
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
-        
+
         // remove all trailing "/"s
         while (mServerUrlPreference.getText().endsWith("/")) {
             mServerUrlPreference.setText(mServerUrlPreference.getText().substring(0,
@@ -357,51 +356,54 @@ public class PreferencesActivity extends PreferenceActivity implements
         ListPreference lp = (ListPreference) findPreference(KEY_FONT_SIZE);
         lp.setSummary(lp.getEntry());
     }
-    
+
+
     private void updateSelectedGoogleAccount() {
-      mSelectedGoogleAccountPreference =
-          (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
-      mSelectedGoogleAccountPreference.setSummary(
-          mSelectedGoogleAccountPreference.getSharedPreferences().getString(KEY_ACCOUNT, ""));
+        mSelectedGoogleAccountPreference =
+            (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+        mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference
+                .getSharedPreferences().getString(KEY_ACCOUNT, ""));
     }
-    
+
+
     private void updateGoogleCollectionEffort() {
-      mGoogleCollectionEffortPreference =
-          (EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION);
-      mGoogleCollectionEffortPreference.setSummary(
-          mGoogleCollectionEffortPreference.getSharedPreferences().getString(KEY_GOOGLE_SUBMISSION,
-              ""));
-      
-      // We have a fixed URL for using Google's service.
-      if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals("google")) {
-        String submissionId = ((EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION))
-            .getText();
-        mServerUrlPreference.setText(googleServerBaseUrl + submissionId);
-        updateServerUrl();      
-      }      
-    }
-    
-    private void setupSelectedGoogleAccountPreference() {
-      mSelectedGoogleAccountPreference =
-          (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
-      
-      if (mSelectedGoogleAccountPreference == null) {
-        return;
-      }
-      
-      updateSelectedGoogleAccount();
-      
-      mSelectedGoogleAccountPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-        @Override public boolean onPreferenceClick(Preference preference) {
-          Intent i = new Intent(getApplicationContext(), AccountList.class);
-          startActivity(i);
-          return true;
+        mGoogleCollectionEffortPreference =
+            (EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION);
+        mGoogleCollectionEffortPreference.setSummary(mGoogleCollectionEffortPreference
+                .getSharedPreferences().getString(KEY_GOOGLE_SUBMISSION, ""));
+
+        // We have a fixed URL for using Google's service.
+        if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals("google")) {
+            String submissionId =
+                ((EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION)).getText();
+            mServerUrlPreference.setText(googleServerBaseUrl + submissionId);
+            updateServerUrl();
         }
-      });      
     }
-    
-    
-    
+
+
+    private void setupSelectedGoogleAccountPreference() {
+        mSelectedGoogleAccountPreference =
+            (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+
+        if (mSelectedGoogleAccountPreference == null) {
+            return;
+        }
+
+        updateSelectedGoogleAccount();
+
+        mSelectedGoogleAccountPreference
+                .setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Intent i = new Intent(getApplicationContext(), AccountList.class);
+                        startActivity(i);
+                        return true;
+                    }
+                });
+    }
+
+
     private void updateProtocol() {
         ListPreference lp = (ListPreference) findPreference(KEY_PROTOCOL);
         lp.setSummary(lp.getEntry());
@@ -432,7 +434,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                         .toString());
                 mSubmissionUrlPreference.setEnabled(false);
             }
-         
+
         } else if (protocol.equals("google")) {
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(true);
@@ -455,10 +457,10 @@ public class PreferencesActivity extends PreferenceActivity implements
             if (mSubmissionUrlPreference != null) {
                 mSubmissionUrlPreference.setEnabled(false);
             }
-            
+
             updateSelectedGoogleAccount();
             updateGoogleCollectionEffort();
-            
+
         } else {
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(false);

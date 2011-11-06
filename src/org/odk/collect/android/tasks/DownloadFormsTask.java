@@ -67,12 +67,14 @@ public class DownloadFormsTask extends
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
         "http://openrosa.org/xforms/xformsManifest";
-    
+
     private String mAuth = "";
 
+
     public void setAuth(String auth) {
-      this.mAuth = auth;
-    }     
+        this.mAuth = auth;
+    }
+
 
     private boolean isXformsManifestNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
@@ -272,9 +274,8 @@ public class DownloadFormsTask extends
 
             if (statusCode != 200) {
                 String errMsg =
-                    Collect.getInstance()
-                            .getString(R.string.file_fetch_failed,downloadUrl,
-                                response.getStatusLine().getReasonPhrase(), statusCode);
+                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
+                        response.getStatusLine().getReasonPhrase(), statusCode);
                 Log.e(t, errMsg);
                 throw new Exception(errMsg);
             }

@@ -69,14 +69,16 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
     private InstanceUploaderListener mStateListener;
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final String fail = "Error: ";
-	private String mAuth = "";
+    private String mAuth = "";
 
     private URI mAuthRequestingServer;
     HashMap<String, String> mResults;
 
-	public void setAuth(String auth) {
-      this.mAuth = auth;
+
+    public void setAuth(String auth) {
+        this.mAuth = auth;
     }
+
 
     // TODO: This method is like 350 lines long, down from 400.
     // still. ridiculous. make it smaller.
@@ -178,7 +180,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             Header[] locations = response.getHeaders("Location");
                             if (locations != null && locations.length == 1) {
                                 try {
-                                    URL url = new URL(URLDecoder.decode(locations[0].getValue(), "utf-8"));
+                                    URL url =
+                                        new URL(URLDecoder.decode(locations[0].getValue(), "utf-8"));
                                     URI uNew = url.toURI();
                                     if (u.getHost().equalsIgnoreCase(uNew.getHost())) {
                                         openRosaServer = true;
@@ -454,8 +457,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             if (responseCode == 200) {
                                 mResults.put(id, fail + "Network login failure? Again?");
                             } else {
-                                mResults.put(id, fail + response.getStatusLine().getReasonPhrase() + " (" + responseCode
-                                    + ") at " + urlString);
+                                mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
+                                        + " (" + responseCode + ") at " + urlString);
                             }
                             cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);

@@ -149,27 +149,31 @@ public final class WebUtils {
 
 
     public static final HttpGet createOpenRosaHttpGet(URI uri) {
-      return createOpenRosaHttpGet(uri, "");
+        return createOpenRosaHttpGet(uri, "");
     }
-    
+
+
     public static final HttpGet createOpenRosaHttpGet(URI uri, String auth) {
-      HttpGet req = new HttpGet();
-      setOpenRosaHeaders(req);
-      setGoogleHeaders(req, auth);      
-      req.setURI(uri);
-      return req;
+        HttpGet req = new HttpGet();
+        setOpenRosaHeaders(req);
+        setGoogleHeaders(req, auth);
+        req.setURI(uri);
+        return req;
     }
-    
+
+
     public static final void setGoogleHeaders(HttpRequest req, String auth) {
-      if ((auth != null) && (auth.length() > 0)) {
-        req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-      }
+        if ((auth != null) && (auth.length() > 0)) {
+            req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+        }
     }
-    
+
+
     public static final HttpPost createOpenRosaHttpPost(URI uri) {
-      return createOpenRosaHttpPost(uri, "");
+        return createOpenRosaHttpPost(uri, "");
     }
-    
+
+
     public static final HttpPost createOpenRosaHttpPost(URI uri, String auth) {
         HttpPost req = new HttpPost(uri);
         setOpenRosaHeaders(req);
@@ -177,7 +181,7 @@ public final class WebUtils {
         return req;
     }
 
-    
+
     public static final HttpClient createHttpClient(int timeout) {
         // configure connection
         HttpParams params = new BasicHttpParams();
