@@ -149,20 +149,35 @@ public final class WebUtils {
 
 
     public static final HttpGet createOpenRosaHttpGet(URI uri) {
-        HttpGet req = new HttpGet();
-        setOpenRosaHeaders(req);
-        req.setURI(uri);
-        return req;
+      return createOpenRosaHttpGet(uri, "");
     }
-
-
+    
+    public static final HttpGet createOpenRosaHttpGet(URI uri, String auth) {
+      HttpGet req = new HttpGet();
+      setOpenRosaHeaders(req);
+      setGoogleHeaders(req, auth);      
+      req.setURI(uri);
+      return req;
+    }
+    
+    public static final void setGoogleHeaders(HttpRequest req, String auth) {
+      if ((auth != null) && (auth.length() > 0)) {
+        req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+      }
+    }
+    
     public static final HttpPost createOpenRosaHttpPost(URI uri) {
+      return createOpenRosaHttpPost(uri, "");
+    }
+    
+    public static final HttpPost createOpenRosaHttpPost(URI uri, String auth) {
         HttpPost req = new HttpPost(uri);
         setOpenRosaHeaders(req);
+        setGoogleHeaders(req, auth);
         return req;
     }
 
-
+    
     public static final HttpClient createHttpClient(int timeout) {
         // configure connection
         HttpParams params = new BasicHttpParams();
@@ -198,7 +213,7 @@ public final class WebUtils {
      * @return
      */
     public static DocumentFetchResult getXmlDocument(String urlString, HttpContext localContext,
-            HttpClient httpclient) {
+            HttpClient httpclient, String auth) {
         URI u = null;
         try {
             URL url = new URL(URLDecoder.decode(urlString, "utf-8"));
@@ -211,7 +226,7 @@ public final class WebUtils {
         }
 
         // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(u);
+        HttpGet req = WebUtils.createOpenRosaHttpGet(u, auth);
 
         HttpResponse response = null;
         try {

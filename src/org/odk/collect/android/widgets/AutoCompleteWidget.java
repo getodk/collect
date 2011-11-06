@@ -1,9 +1,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.Vector;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -19,6 +16,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * AutoCompleteWidget handles select-one fields using an autocomplete text box. The user types part

@@ -27,6 +27,17 @@
       android:defaultValue="odk_default"
       android:entries="@array/protocol_entries"
       android:entryValues="@array/protocol_entry_values" />
+		<PreferenceScreen
+      android:id="@+id/selected_google_account"
+      android:key="selected_google_account"
+      android:defaultValue=""
+      android:title="@string/selected_google_account_text" />
+    <EditTextPreference
+      android:id="@+id/google_submission_id"
+      android:key="google_submission_id"
+      android:title="@string/google_submission_id_text"
+      android:defaultValue=""
+      android:dialogTitle="@string/google_submission_id_text" />	
 		<EditTextPreference
 			android:id="@+id/username"
 			android:key="username"

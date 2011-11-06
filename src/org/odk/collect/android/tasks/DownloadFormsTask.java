@@ -67,7 +67,12 @@ public class DownloadFormsTask extends
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
         "http://openrosa.org/xforms/xformsManifest";
+    
+    private String mAuth = "";
 
+    public void setAuth(String auth) {
+      this.mAuth = auth;
+    }     
 
     private boolean isXformsManifestNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
@@ -258,7 +263,7 @@ public class DownloadFormsTask extends
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
+        HttpGet req = WebUtils.createOpenRosaHttpGet(uri, mAuth);
 
         HttpResponse response = null;
         try {
@@ -336,7 +341,7 @@ public class DownloadFormsTask extends
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-            WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient);
+            WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient, mAuth);
 
         if (result.errorMessage != null) {
             return result.errorMessage;

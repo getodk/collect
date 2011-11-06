@@ -71,7 +71,7 @@ public class DataManagerList extends ListActivity {
             }
         });
 
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, null);
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, InstanceColumns.DISPLAY_NAME);
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT

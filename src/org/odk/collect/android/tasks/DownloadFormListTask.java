@@ -69,6 +69,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         String downloadPath =
             settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formlist");
         downloadListUrl += downloadPath;
+        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
         
         // We populate this with available forms from the specified server.
         // <formname, details>
@@ -79,7 +80,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-            WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
+            WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient, auth);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {

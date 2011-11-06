@@ -60,6 +60,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -689,6 +691,21 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // edittext to change the displayed name of the instance
                 final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
+                
+                // disallow carriage returns in the name
+                InputFilter returnFilter = new InputFilter() {
+                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
+                            int dstart, int dend) {
+                        for (int i = start; i < end; i++) {
+                            if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+                                return "";
+                            }
+                        }
+                        return null;
+                    }
+                };
+                saveAs.setFilters(new InputFilter[] {returnFilter});
+                
                 String saveName = mFormController.getFormTitle();
                 if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
                     Uri instanceUri = getIntent().getData();
