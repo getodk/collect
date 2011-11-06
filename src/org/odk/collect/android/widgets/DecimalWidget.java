@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.text.NumberFormat;
+
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -23,8 +25,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
-
-import java.text.NumberFormat;
 
 /**
  * A widget that restricts values to floating point numbers.

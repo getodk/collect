@@ -14,6 +14,12 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Set;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
@@ -82,12 +88,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Set;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -691,11 +691,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // edittext to change the displayed name of the instance
                 final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
-                
+
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
-                            int dstart, int dend) {
+                    public CharSequence filter(CharSequence source, int start, int end,
+                            Spanned dest, int dstart, int dend) {
                         for (int i = start; i < end; i++) {
                             if (Character.getType((source.charAt(i))) == Character.CONTROL) {
                                 return "";
@@ -704,8 +704,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         return null;
                     }
                 };
-                saveAs.setFilters(new InputFilter[] {returnFilter});
-                
+                saveAs.setFilters(new InputFilter[] {
+                    returnFilter
+                });
+
                 String saveName = mFormController.getFormTitle();
                 if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
                     Uri instanceUri = getIntent().getData();
@@ -1014,7 +1016,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         mErrorMessage = errorMsg;
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertDialog.setTitle(getString(R.string.error_occured));
         mAlertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
@@ -1040,7 +1042,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createDeleteRepeatConfirmDialog() {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = mFormController.getLastRepeatedGroupName();
         int repeatcount = mFormController.getLastRepeatedGroupRepeatCount();
         if (repeatcount != -1) {
@@ -1100,7 +1102,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         mAlertDialog =
             new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(android.R.drawable.ic_dialog_info)
                     .setTitle(getString(R.string.quit_application, mFormController.getFormTitle()))
                     .setNeutralButton(getString(R.string.do_not_exit),
                         new DialogInterface.OnClickListener() {
@@ -1256,7 +1258,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private void createClearDialog(final QuestionWidget qw) {
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 
         mAlertDialog.setTitle(getString(R.string.clear_answer_ask));
 

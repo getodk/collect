@@ -26,7 +26,6 @@ import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
-import android.widget.TextView;
 
 /**
  * The most basic widget that allows for entry of any text.
