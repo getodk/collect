@@ -70,7 +70,6 @@ public class PreferencesActivity extends PreferenceActivity implements
     private EditTextPreference mServerUrlPreference;
     private EditTextPreference mUsernamePreference;
     private EditTextPreference mPasswordPreference;
-
     private Context mContext;
 
 

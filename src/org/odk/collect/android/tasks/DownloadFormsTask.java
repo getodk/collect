@@ -242,7 +242,7 @@ public class DownloadFormsTask extends
         URI uri = null;
         try {
             // assume the downloadUrl is escaped properly
-            URL url = new URL(downloadUrl);            
+            URL url = new URL(downloadUrl);
             uri = url.toURI();
         } catch (MalformedURLException e) {
             e.printStackTrace();

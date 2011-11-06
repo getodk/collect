@@ -209,6 +209,4 @@
 <string name="save_as_error">Saved name must not be blank!</string>
 <string name="form_name">Form Name:</string>
 <string name="edit_prompt">Edit Prompt</string>
-    
-    
 </resources>
