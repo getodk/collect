@@ -1014,7 +1014,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         mErrorMessage = errorMsg;
         mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertDialog.setTitle(getString(R.string.error_occured));
         mAlertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
