@@ -39,7 +39,7 @@
 	</string-array>
 	<string-array
 		name="protocol_entries">
-		<item>ODK Default</item>
+		<item>OpenRosa 1.0</item>
 		<item>Custom</item>
 	</string-array>
 	<string-array

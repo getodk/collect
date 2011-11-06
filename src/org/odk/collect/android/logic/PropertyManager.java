@@ -18,6 +18,7 @@ import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -58,7 +59,13 @@ public class PropertyManager implements IPropertyManager {
         mProperties = new HashMap<String, String>();
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
-        mProperties.put(DEVICE_ID_PROPERTY, mTelephonyManager.getDeviceId());
+        String deviceId = mTelephonyManager.getDeviceId();
+        if (deviceId != null && (deviceId.contains("*") || Double.valueOf(deviceId) == 0.0)) {
+            deviceId =
+                Settings.Secure
+                        .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        mProperties.put(DEVICE_ID_PROPERTY, deviceId);
         mProperties.put(SUBSCRIBER_ID_PROPERTY, mTelephonyManager.getSubscriberId());
         mProperties.put(SIM_SERIAL_PROPERTY, mTelephonyManager.getSimSerialNumber());
         mProperties.put(PHONE_NUMBER_PROPERTY, mTelephonyManager.getLine1Number());
