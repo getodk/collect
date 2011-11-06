@@ -21,7 +21,6 @@ import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import android.content.Context;
 import android.view.Gravity;

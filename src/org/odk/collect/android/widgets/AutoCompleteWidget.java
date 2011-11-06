@@ -10,7 +10,6 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import android.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
