@@ -86,7 +86,7 @@
 <string name="form_renamed">%1$s was renamed %2$s.</string>
 <string name="getting_location">Loading Location</string>
 <string name="get_barcode">Get Barcode</string>
-<string name="get_forms">Get Forms from Server</string>
+<string name="get_forms">Get Form from Server</string>
 <string name="get_location">Record Location</string>
 <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
 <string name="invalid_answer_error">Sorry, this response is invalid!</string>
@@ -107,7 +107,7 @@
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Data collection made easier...</string>
 <string name="main_menu_message">ODK Collect v1.1.7</string>
-<string name="manage_files">Delete Forms on Device</string>
+<string name="manage_files">Delete Form on Device</string>
 <string name="mark_finished">Mark form as finalized</string>
 <string name="no">No</string>
 <string name="noselect_error">Sorry, you have not selected any forms!</string>
@@ -119,7 +119,7 @@
 <string name="one_capture">Multimedia recorded.</string>
 <string name="parse_error">Sorry, unable to parse form.</string>
 <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
-<string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compliant with the OpenRosa version 1.0 standard: %s</string>
+<string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
 <string name="password">ODK Password</string>
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
@@ -144,8 +144,8 @@
 <string name="saving_form">Saving Form</string>
 <string name="send">send</string>
 <string name="sending_items">Sending %1$s of %2$s form(s)</string>
-<string name="send_data">Send Finalized Forms</string>
-<string name="send_data_button">Send Finalized Forms</string>
+<string name="send_data">Send Finalized Form</string>
+<string name="send_data_button">Send Finalized Form</string>
 <string name="send_selected_data">Send Selected</string>
 <string name="server_auth_credentials">Please enter username and password for server:\n%s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
@@ -205,7 +205,7 @@
 <string name="choose_image">Choose Image</string>
 <string name="selected">Selected: </string>
 <string name="select_answer">Select Answer</string>
-<string name="save_form_as">Save them form with this name:</string>
+<string name="save_form_as">Name this form:</string>
 <string name="save_as_error">Saved name must not be blank!</string>
 <string name="form_name">Form Name:</string>
 <string name="edit_prompt">Edit Prompt</string>
