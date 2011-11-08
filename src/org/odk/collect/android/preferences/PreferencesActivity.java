@@ -70,7 +70,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static String KEY_AUTH = "auth";
     public static String KEY_ACCOUNT = "account";
 
-    public static String googleServerBaseUrl = "https://gather.api.google.com/odk/n";
+    public static String googleServerBaseUrl = "https://gather.apis.google.com/odk/n/";
 
     private PreferenceScreen mSplashPathPreference;
     private EditTextPreference mSubmissionUrlPreference;
@@ -190,6 +190,20 @@ public class PreferencesActivity extends PreferenceActivity implements
     protected void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        updateServerUrl();
+
+        updateUsername();
+        updatePassword();
+
+        updateFormListUrl();
+        updateSubmissionUrl();
+
+        updateSplashPath();
+
+        updateFontSize();
+        updateProtocol();
+        updateSelectedGoogleAccount();
+        updateGoogleCollectionEffort();
     }
 
 

@@ -28,13 +28,6 @@ import org.odk.collect.android.preferences.PreferencesActivity;
  */
 public class AccountList extends ListActivity {
   protected AccountManager accountManager;
-  private static int selected = -1;
-  final private static String SELECTED = "selected";
-
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    outState.putInt(SELECTED, selected);
-  }
 
   /**
    * Called to initialize the activity the first time it is run.
@@ -42,12 +35,9 @@ public class AccountList extends ListActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (savedInstanceState != null) {
-      selected = savedInstanceState.getInt(SELECTED, -1);
-    }
     setTitle(getString(R.string.app_name) + " > " + getString(R.string.google_account));
   }
-
+  
   /**
    * Called when the activity is resumed.
    */
@@ -55,7 +45,7 @@ public class AccountList extends ListActivity {
   public void onResume() {
     super.onResume();
     accountManager = AccountManager.get(getApplicationContext());
-    Account[] accounts = accountManager.getAccountsByType("com.google");
+    final Account[] accounts = accountManager.getAccountsByType("com.google");
     this.setListAdapter(new ArrayAdapter<Account>(this, R.layout.account_chooser, accounts) {
       @Override
       public View getView(int position, View convertView, ViewGroup parent) {
@@ -68,7 +58,9 @@ public class AccountList extends ListActivity {
           row = convertView;
         }
         TextView vw = (TextView) row.findViewById(android.R.id.text1);
-        if (position == selected) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String selected = settings.getString(PreferencesActivity.KEY_ACCOUNT, "");
+        if (accounts[position].name.equals(selected)) {
           vw.setBackgroundColor(Color.LTGRAY);
         } else {
           vw.setBackgroundColor(Color.WHITE);
@@ -85,7 +77,6 @@ public class AccountList extends ListActivity {
    */
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    selected = position;
     Account account = (Account) getListView().getItemAtPosition(position);
     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     SharedPreferences.Editor editor = settings.edit();
