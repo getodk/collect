@@ -5,6 +5,7 @@ package org.odk.collect.android.activities;
 import org.odk.collect.android.preferences.PreferencesActivity;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
@@ -31,6 +32,7 @@ import java.io.IOException;
 public class AccountInfo extends Activity {
   final static int WAITING_ID = 1;
   final static String authString = "gather";
+  boolean shownDialog = false;
 
   /**
    * Activity startup.
@@ -65,9 +67,16 @@ public class AccountInfo extends Activity {
       try {
         bundle = result.getResult();
         Intent intent = (Intent) bundle.get(AccountManager.KEY_INTENT);
-        if (intent != null) {
+
+        // Check to see if the last intent failed.
+        if ((intent != null) && shownDialog) {
+           failedAuthToken();
+        }
+        // We need to call the intent to get the token.
+        else if (intent != null) {
           // Use the bundle dialog.
           startActivity(intent);
+          shownDialog = true;
         } else {
           gotAuthToken(bundle);
         }
@@ -85,8 +94,12 @@ public class AccountInfo extends Activity {
    * If we failed to get an auth token.
    */
   protected void failedAuthToken() {
+	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+	SharedPreferences.Editor editor = settings.edit();
+	editor.remove(PreferencesActivity.KEY_ACCOUNT);
+	editor.remove(PreferencesActivity.KEY_AUTH);
+	editor.commit();
     dismissDialog(WAITING_ID);
-    // TODO(cswenson@google.com): Show an error dialog.
     finish();
   }
   
@@ -98,10 +111,6 @@ public class AccountInfo extends Activity {
   protected void gotAuthToken(Bundle bundle) {
     // Set the authentication token and dismiss the dialog.
     String auth_token = bundle.getString(AccountManager.KEY_AUTHTOKEN);
-    Log.d("Collect", "Account type: " + bundle.getString(AccountManager.KEY_ACCOUNT_TYPE));
-    Log.d("Collect", "Account label: " + bundle.getString(AccountManager.KEY_AUTH_TOKEN_LABEL));
-    Log.d("Collect", "Account token: " + bundle.getString(AccountManager.KEY_AUTHTOKEN));
-
     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     SharedPreferences.Editor editor = settings.edit();
     editor.putString(PreferencesActivity.KEY_AUTH, auth_token);
