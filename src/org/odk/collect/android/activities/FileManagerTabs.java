@@ -50,13 +50,13 @@ public class FileManagerTabs extends TabActivity {
         tabHost.setBackgroundColor(Color.WHITE);
         tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
 
-        Intent local = new Intent(this, FormManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec(FORMS_TAB).setIndicator(getString(R.string.forms))
-                .setContent(local));
-
         Intent remote = new Intent(this, DataManagerList.class);
         tabHost.addTab(tabHost.newTabSpec(DATA_TAB).setIndicator(getString(R.string.data))
                 .setContent(remote));
+        
+        Intent local = new Intent(this, FormManagerList.class);
+        tabHost.addTab(tabHost.newTabSpec(FORMS_TAB).setIndicator(getString(R.string.forms))
+                .setContent(local));
 
         // hack to set font size
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);

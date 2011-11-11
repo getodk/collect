@@ -65,7 +65,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display"
-		android:textSize="19dp"
+		android:textSize="21dp"
 		android:padding="20dp"
 		android:gravity="center"
 		android:background="@drawable/white" />

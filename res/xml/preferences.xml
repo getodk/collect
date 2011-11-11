@@ -1,6 +1,5 @@
 
-<PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceScreen
 		android:id="@+id/info"
 		android:key="info"
@@ -10,34 +9,21 @@
 			android:action="android.intent.action.VIEW"
 			android:data="http://opendatakit.org" />
 	</PreferenceScreen>
-	<PreferenceCategory
-		android:title="@string/server_preferences">
+	<PreferenceCategory android:title="@string/server_preferences">
+		<ListPreference
+			android:id="@+id/protocol"
+			android:key="protocol"
+			android:title="@string/protocol"
+			android:dialogTitle="@string/change_protocol"
+			android:defaultValue="odk_default"
+			android:entries="@array/protocol_entries"
+			android:entryValues="@array/protocol_entry_values" />
 		<EditTextPreference
 			android:id="@+id/server_url"
 			android:key="server_url"
 			android:defaultValue="@string/default_server_url"
 			android:title="@string/server_url"
 			android:dialogTitle="@string/change_server_url" />
-		      
-    <ListPreference
-      android:id="@+id/protocol"
-      android:key="protocol"
-      android:title="@string/protocol"
-      android:dialogTitle="@string/change_protocol"
-      android:defaultValue="odk_default"
-      android:entries="@array/protocol_entries"
-      android:entryValues="@array/protocol_entry_values" />
-		<PreferenceScreen
-      android:id="@+id/selected_google_account"
-      android:key="selected_google_account"
-      android:defaultValue=""
-      android:title="@string/selected_google_account_text" />
-    <EditTextPreference
-      android:id="@+id/google_submission_id"
-      android:key="google_submission_id"
-      android:title="@string/google_submission_id_text"
-      android:defaultValue=""
-      android:dialogTitle="@string/google_submission_id_text" />	
 		<EditTextPreference
 			android:id="@+id/username"
 			android:key="username"
@@ -47,8 +33,19 @@
 			android:id="@+id/password"
 			android:key="password"
 			android:title="@string/password"
-			android:dialogTitle="@string/change_password"/>
-			<!-- android:password="true" --> 
+			android:dialogTitle="@string/change_password" />
+		<!-- android:password="true" -->
+		<PreferenceScreen
+			android:id="@+id/selected_google_account"
+			android:key="selected_google_account"
+			android:defaultValue=""
+			android:title="@string/selected_google_account_text" />
+		<EditTextPreference
+			android:id="@+id/google_submission_id"
+			android:key="google_submission_id"
+			android:title="@string/google_submission_id_text"
+			android:defaultValue=""
+			android:dialogTitle="@string/google_submission_id_text" />
 		<EditTextPreference
 			android:id="@+id/formlist_url"
 			android:key="formlist_url"
@@ -62,8 +59,7 @@
 			android:defaultValue="@string/default_odk_submission"
 			android:dialogTitle="@string/change_submission_url" />
 	</PreferenceCategory>
-	<PreferenceCategory
-		android:title="@string/client">
+	<PreferenceCategory android:title="@string/client">
 		<ListPreference
 			android:id="@+id/font_size"
 			android:key="font_size"
@@ -72,19 +68,17 @@
 			android:defaultValue="21"
 			android:entries="@array/font_size_entries"
 			android:entryValues="@array/font_size_entry_values" />
-		    <CheckBoxPreference
-      android:id="@+id/default_completed"
-      android:key="default_completed"
-      android:title="@string/default_completed" 
-      android:defaultValue="true"
-      android:summary="@string/default_completed_summary"
-      />
+		<CheckBoxPreference
+			android:id="@+id/default_completed"
+			android:key="default_completed"
+			android:title="@string/default_completed"
+			android:defaultValue="true"
+			android:summary="@string/default_completed_summary" />
 		<CheckBoxPreference
 			android:id="@+id/show_splash"
 			android:key="showSplash"
-			android:title="@string/show_splash" 
-			android:summary="@string/show_splash_summary"
-			/>
+			android:title="@string/show_splash"
+			android:summary="@string/show_splash_summary" />
 		<PreferenceScreen
 			android:id="@+id/splash_path"
 			android:key="splashPath"
