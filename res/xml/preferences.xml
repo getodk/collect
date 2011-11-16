@@ -1,85 +1,93 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceScreen
-		android:id="@+id/info"
-		android:key="info"
-		android:title="@string/main_menu_message"
-		android:summary="@string/click_to_web">
-		<intent
-			android:action="android.intent.action.VIEW"
-			android:data="http://opendatakit.org" />
-	</PreferenceScreen>
-	<PreferenceCategory
-		android:title="@string/server_preferences">
-		<EditTextPreference
-			android:id="@+id/server_url"
-			android:key="server_url"
-			android:defaultValue="@string/default_server_url"
-			android:title="@string/server_url"
-			android:dialogTitle="@string/change_server_url" />
-		      
-    <ListPreference
-      android:id="@+id/protocol"
-      android:key="protocol"
-      android:title="@string/protocol"
-      android:dialogTitle="@string/change_protocol"
-      android:defaultValue="odk_default"
-      android:entries="@array/protocol_entries"
-      android:entryValues="@array/protocol_entry_values" />
-		<EditTextPreference
-			android:id="@+id/username"
-			android:key="username"
-			android:title="@string/username"
-			android:dialogTitle="@string/change_username" />
-		<EditTextPreference
-			android:id="@+id/password"
-			android:key="password"
-			android:title="@string/password"
-			android:dialogTitle="@string/change_password"/>
-			<!-- android:password="true" --> 
-		<EditTextPreference
-			android:id="@+id/formlist_url"
-			android:key="formlist_url"
-			android:title="@string/formlist_url"
-			android:defaultValue="@string/default_odk_formlist"
-			android:dialogTitle="@string/change_formlist_url" />
-		<EditTextPreference
-			android:id="@+id/submission_url"
-			android:key="submission_url"
-			android:title="@string/submission_url"
-			android:defaultValue="@string/default_odk_submission"
-			android:dialogTitle="@string/change_submission_url" />
-	</PreferenceCategory>
-	<PreferenceCategory
-		android:title="@string/client">
-		<ListPreference
-			android:id="@+id/font_size"
-			android:key="font_size"
-			android:title="@string/font_size"
-			android:dialogTitle="@string/change_font_size"
-			android:defaultValue="21"
-			android:entries="@array/font_size_entries"
-			android:entryValues="@array/font_size_entry_values" />
-		    <CheckBoxPreference
-      android:id="@+id/default_completed"
-      android:key="default_completed"
-      android:title="@string/default_completed" 
-      android:defaultValue="true"
-      android:summary="@string/default_completed_summary"
-      />
-		<CheckBoxPreference
-			android:id="@+id/show_splash"
-			android:key="showSplash"
-			android:title="@string/show_splash" 
-			android:summary="@string/show_splash_summary"
-			/>
-		<PreferenceScreen
-			android:id="@+id/splash_path"
-			android:key="splashPath"
-			android:defaultValue="@string/default_splash_path"
-			android:title="@string/splash_path"
-			android:dependency="showSplash"
-			android:layout="?android:attr/preferenceLayoutChild" />
-	</PreferenceCategory>
+    <PreferenceScreen
+        android:id="@+id/info"
+        android:key="info"
+        android:summary="@string/click_to_web"
+        android:title="@string/main_menu_message" >
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://opendatakit.org" />
+    </PreferenceScreen>
+
+    <PreferenceCategory android:title="@string/server_preferences" >
+
+        <ListPreference
+            android:id="@+id/protocol"
+            android:defaultValue="odk_default"
+            android:dialogTitle="@string/change_protocol"
+            android:entries="@array/protocol_entries"
+            android:entryValues="@array/protocol_entry_values"
+            android:key="protocol"
+            android:title="@string/protocol" />
+
+        <EditTextPreference
+            android:id="@+id/server_url"
+            android:defaultValue="@string/default_server_url"
+            android:dialogTitle="@string/change_server_url"
+            android:key="server_url"
+            android:title="@string/server_url" />
+
+        <EditTextPreference
+            android:id="@+id/username"
+            android:dialogTitle="@string/change_username"
+            android:key="username"
+            android:title="@string/username" />
+
+        <EditTextPreference
+            android:id="@+id/password"
+            android:dialogTitle="@string/change_password"
+            android:key="password"
+            android:title="@string/password" />
+        <!-- android:password="true" -->
+
+        <EditTextPreference
+            android:id="@+id/formlist_url"
+            android:defaultValue="@string/default_odk_formlist"
+            android:dialogTitle="@string/change_formlist_url"
+            android:key="formlist_url"
+            android:title="@string/formlist_url" />
+
+        <EditTextPreference
+            android:id="@+id/submission_url"
+            android:defaultValue="@string/default_odk_submission"
+            android:dialogTitle="@string/change_submission_url"
+            android:key="submission_url"
+            android:title="@string/submission_url" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/client" >
+
+        <ListPreference
+            android:id="@+id/font_size"
+            android:defaultValue="21"
+            android:dialogTitle="@string/change_font_size"
+            android:entries="@array/font_size_entries"
+            android:entryValues="@array/font_size_entry_values"
+            android:key="font_size"
+            android:title="@string/font_size" />
+
+        <CheckBoxPreference
+            android:id="@+id/default_completed"
+            android:defaultValue="true"
+            android:key="default_completed"
+            android:summary="@string/default_completed_summary"
+            android:title="@string/default_completed" />
+
+        <CheckBoxPreference
+            android:id="@+id/show_splash"
+            android:key="showSplash"
+            android:summary="@string/show_splash_summary"
+            android:title="@string/show_splash" />
+
+        <PreferenceScreen
+            android:id="@+id/splash_path"
+            android:defaultValue="@string/default_splash_path"
+            android:dependency="showSplash"
+            android:key="splashPath"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/splash_path" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

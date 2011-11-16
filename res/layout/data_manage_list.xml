@@ -73,6 +73,6 @@ the License.
         android:layout_height="fill_parent"
         android:gravity="center"
         android:text="@string/no_items_display"
-        android:textSize="19dp" />
+        android:textSize="21dp" />
 
 </RelativeLayout>
