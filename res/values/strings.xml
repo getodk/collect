@@ -114,7 +114,7 @@
 <string name="no_capture">Nothing recorded yet.</string>
 <string name="no_items_display">Nothing available to display.</string>
 <string name="no_items_display_forms">Nothing available to display.\n\nTry getting and filling out a blank form.</string>
-<string name="no_items_display_instances">Nothing available to display.\n\Try finalizing saved forms before sending.</string>
+<string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing saved forms before sending.</string>
 <string name="no_items_error">Nothing available to %s!</string>
 <string name="no_sd_error">Sorry, your memory card is not working!</string>
 <string name="ok">OK</string>
