@@ -20,8 +20,11 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,20 +72,28 @@ public class InstanceUploaderList extends ListActivity {
 
             @Override
             public void onClick(View arg0) {
-                if (mSelected.size() > 0) {
-                    // items selected
-                    uploadSelectedFiles();
-                    mToggled = false;
-                    mSelected.clear();
-                    InstanceUploaderList.this.getListView().clearChoices();
-                    mUploadButton.setEnabled(false);
+                ConnectivityManager connectivityManager =
+                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+
+                if (ni == null || !ni.isConnected()) {
+                    Toast.makeText(InstanceUploaderList.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
                 } else {
-                    // no items selected
-                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
-                        Toast.LENGTH_SHORT).show();
+
+                    if (mSelected.size() > 0) {
+                        // items selected
+                        uploadSelectedFiles();
+                        mToggled = false;
+                        mSelected.clear();
+                        InstanceUploaderList.this.getListView().clearChoices();
+                        mUploadButton.setEnabled(false);
+                    } else {
+                        // no items selected
+                        Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
+                            Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
-
         });
 
         mToggleButton = (Button) findViewById(R.id.toggle_button);
@@ -108,7 +119,7 @@ public class InstanceUploaderList extends ListActivity {
         // get all complete or failed submission instances
         String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
         String selectionArgs[] = {
-            InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED
+                InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED
         };
 
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
@@ -148,15 +159,15 @@ public class InstanceUploaderList extends ListActivity {
             mRestored = false;
         }
     }
-    
+
 
     private void uploadSelectedFiles() {
-        // send list of _IDs. 
+        // send list of _IDs.
         long[] instanceIDs = new long[mSelected.size()];
         for (int i = 0; i < mSelected.size(); i++) {
-           instanceIDs[i] = mSelected.get(i);
+            instanceIDs[i] = mSelected.get(i);
         }
-        
+
         Intent i = new Intent(this, InstanceUploaderActivity.class);
         i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
         startActivityForResult(i, INSTANCE_UPLOADER);

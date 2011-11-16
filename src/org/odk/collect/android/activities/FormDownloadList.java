@@ -27,10 +27,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -261,16 +264,25 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        mFormNamesAndURLs = new HashMap<String, FormDetails>();
-        if (mProgressDialog != null) {
-            // This is needed because onPrepareDialog() is broken in 1.6.
-            mProgressDialog.setMessage(getString(R.string.please_wait));
-        }
-        showDialog(PROGRESS_DIALOG);
+        ConnectivityManager connectivityManager =
+            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-        mDownloadFormListTask = new DownloadFormListTask();
-        mDownloadFormListTask.setDownloaderListener(this);
-        mDownloadFormListTask.execute();
+        if (ni == null || !ni.isConnected()) {
+            Toast.makeText(this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+        } else {
+
+            mFormNamesAndURLs = new HashMap<String, FormDetails>();
+            if (mProgressDialog != null) {
+                // This is needed because onPrepareDialog() is broken in 1.6.
+                mProgressDialog.setMessage(getString(R.string.please_wait));
+            }
+            showDialog(PROGRESS_DIALOG);
+
+            mDownloadFormListTask = new DownloadFormListTask();
+            mDownloadFormListTask.setDownloaderListener(this);
+            mDownloadFormListTask.execute();
+        }
     }
 
 
