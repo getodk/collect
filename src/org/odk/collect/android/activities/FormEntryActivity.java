@@ -572,9 +572,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (!mFormController.getQuestionPrompt().isReadOnly()) {
             menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
-        }
         if (mFormController.indexContainsRepeatableGroup()) {
             menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
         }
@@ -759,7 +757,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
-                    registerForContextMenu(qw);
+                    if (!qw.getPrompt().isReadOnly()) {
+                        registerForContextMenu(qw);
+                    }
                 }
 
                 return odkv;
