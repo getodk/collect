@@ -79,7 +79,7 @@ public class AutoCompleteWidget extends QuestionWidget {
             String sMatch = mItems.get(i).getValue();
 
             if (sMatch.equals(s)) {
-                autocomplete.setText(sMatch);
+                autocomplete.setText(mItems.get(i).getLabelInnerText());
             }
         }
 
