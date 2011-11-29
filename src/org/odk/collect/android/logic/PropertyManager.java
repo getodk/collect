@@ -60,7 +60,7 @@ public class PropertyManager implements IPropertyManager {
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
         String deviceId = mTelephonyManager.getDeviceId();
-        if (deviceId != null && (deviceId.contains("*") || Double.valueOf(deviceId) == 0.0)) {
+        if (deviceId != null && (deviceId.contains("*") || deviceId.contains("000000000000000"))) {
             deviceId =
                 Settings.Secure
                         .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
