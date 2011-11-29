@@ -426,7 +426,7 @@ public class FormController {
             }
 
             // we only display relevant questions
-            questions = new FormEntryPrompt[getRelevantQuestionCount(indicies)];
+            ArrayList<FormEntryPrompt> questionList = new ArrayList<FormEntryPrompt>();
             for (int i = 0; i < indicies.size(); i++) {
                 FormIndex index = indicies.get(i);
 
@@ -441,9 +441,10 @@ public class FormController {
 
                 // we only display relevant questions
                 if (mFormEntryController.getModel().isIndexRelevant(index)) {
-                    FormEntryPrompt p = mFormEntryController.getModel().getQuestionPrompt(index);
-                    questions[i] = p;
+                    questionList.add(mFormEntryController.getModel().getQuestionPrompt(index));
                 }
+                questions = new FormEntryPrompt[questionList.size()];
+                questionList.toArray(questions);
             }
         } else {
             // We have a quesion, so just get the one prompt
@@ -454,16 +455,6 @@ public class FormController {
     }
 
     
-    private int getRelevantQuestionCount(ArrayList<FormIndex> indicies) {
-        int count = 0;
-        for (int i = 0; i < indicies.size(); i++) {
-            if (mFormEntryController.getModel().isIndexRelevant(indicies.get(i))){
-                count++;
-            }
-        }
-        return count;
-    }
-
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
         return mFormEntryController.getModel().getQuestionPrompt(index);
     }
