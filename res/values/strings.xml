@@ -214,5 +214,5 @@
 <string name="edit_prompt">Edit Prompt</string>
 <string name="google_account">Select Google Account</string>
 <string name="selected_google_account_text">Google Account</string>
-<string name="google_submission_id_text">Google Forms Effort</string>
+<string name="google_submission_id_text">Google Collection Effort</string>
 </resources>
