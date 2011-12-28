@@ -1150,83 +1150,97 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                         };
 
                                         // images
-                                        Cursor imageCursor =
-                                            getContentResolver()
-                                                    .query(
+                                        Cursor imageCursor = null;
+                                        try {
+                                        	imageCursor = getContentResolver().query(
                                                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                                                         projection, where, null, null);
-                                        if (imageCursor.getCount() > 0) {
-                                            imageCursor.moveToFirst();
-                                            String id =
-                                                imageCursor.getString(imageCursor
-                                                        .getColumnIndex(Images.ImageColumns._ID));
-
-                                            Log.i(
-                                                t,
-                                                "attempting to delete: "
-                                                        + Uri.withAppendedPath(
-                                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                                            id));
-                                            images =
-                                                getContentResolver()
-                                                        .delete(
-                                                            Uri.withAppendedPath(
-                                                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                                                id), null, null);
+	                                        if (imageCursor.getCount() > 0) {
+	                                            imageCursor.moveToFirst();
+	                                            String id =
+	                                                imageCursor.getString(imageCursor
+	                                                        .getColumnIndex(Images.ImageColumns._ID));
+	
+	                                            Log.i(
+	                                                t,
+	                                                "attempting to delete: "
+	                                                        + Uri.withAppendedPath(
+	                                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	                                                            id));
+	                                            images =
+	                                                getContentResolver()
+	                                                        .delete(
+	                                                            Uri.withAppendedPath(
+	                                                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	                                                                id), null, null);
+	                                        }
+                                        } finally {
+                                        	if ( imageCursor != null ) {
+                                                imageCursor.close();
+                                        	}
                                         }
-                                        imageCursor.close();
 
                                         // audio
-                                        Cursor audioCursor =
-                                            getContentResolver().query(
+                                        Cursor audioCursor = null;
+                                        try {
+                                        	audioCursor = getContentResolver().query(
                                                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                                                 projection, where, null, null);
-                                        if (audioCursor.getCount() > 0) {
-                                            audioCursor.moveToFirst();
-                                            String id =
-                                                audioCursor.getString(imageCursor
-                                                        .getColumnIndex(Images.ImageColumns._ID));
-
-                                            Log.i(
-                                                t,
-                                                "attempting to delete: "
-                                                        + Uri.withAppendedPath(
-                                                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                                            id));
-                                            audio =
-                                                getContentResolver()
-                                                        .delete(
-                                                            Uri.withAppendedPath(
-                                                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                                                id), null, null);
+	                                        if (audioCursor.getCount() > 0) {
+	                                            audioCursor.moveToFirst();
+	                                            String id =
+	                                                audioCursor.getString(imageCursor
+	                                                        .getColumnIndex(Images.ImageColumns._ID));
+	
+	                                            Log.i(
+	                                                t,
+	                                                "attempting to delete: "
+	                                                        + Uri.withAppendedPath(
+	                                                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+	                                                            id));
+	                                            audio =
+	                                                getContentResolver()
+	                                                        .delete(
+	                                                            Uri.withAppendedPath(
+	                                                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+	                                                                id), null, null);
+	                                        }
+                                        } finally {
+                                        	if ( audioCursor != null ) {
+                                                audioCursor.close();
+                                        	}
                                         }
-                                        audioCursor.close();
 
                                         // video
-                                        Cursor videoCursor =
-                                            getContentResolver().query(
+                                        Cursor videoCursor = null;
+                                        try {
+                                        	videoCursor = getContentResolver().query(
                                                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                                                 projection, where, null, null);
-                                        if (videoCursor.getCount() > 0) {
-                                            videoCursor.moveToFirst();
-                                            String id =
-                                                videoCursor.getString(imageCursor
-                                                        .getColumnIndex(Images.ImageColumns._ID));
-
-                                            Log.i(
-                                                t,
-                                                "attempting to delete: "
-                                                        + Uri.withAppendedPath(
-                                                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                                            id));
-                                            video =
-                                                getContentResolver()
-                                                        .delete(
-                                                            Uri.withAppendedPath(
-                                                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                                                id), null, null);
+	                                        if (videoCursor.getCount() > 0) {
+	                                            videoCursor.moveToFirst();
+	                                            String id =
+	                                                videoCursor.getString(imageCursor
+	                                                        .getColumnIndex(Images.ImageColumns._ID));
+	
+	                                            Log.i(
+	                                                t,
+	                                                "attempting to delete: "
+	                                                        + Uri.withAppendedPath(
+	                                                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+	                                                            id));
+	                                            video =
+	                                                getContentResolver()
+	                                                        .delete(
+	                                                            Uri.withAppendedPath(
+	                                                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+	                                                                id), null, null);
+	                                        }
+                                        } finally {
+                                        	if ( videoCursor != null ) {
+                                        		videoCursor.close();
+                                        	}
                                         }
-                                        audioCursor.close();
 
                                         Log.i(t, "removed from content providers: " + images
                                                 + " image files, " + audio + " audio files,"

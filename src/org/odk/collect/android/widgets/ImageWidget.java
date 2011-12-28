@@ -189,35 +189,39 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                     String[] projection = {
                         "_id"
                     };
-                    Cursor c =
-                        getContext().getContentResolver()
-                                .query(
+                    Cursor c = null;
+                    try {
+                    	c = getContext().getContentResolver().query(
                                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                                     projection, "_data='" + mInstanceFolder + mBinaryName + "'",
                                     null, null);
-                    if (c.getCount() > 0) {
-                        c.moveToFirst();
-                        String id = c.getString(c.getColumnIndex("_id"));
-
-                        Log.i(
-                            t,
-                            "setting view path to: "
-                                    + Uri.withAppendedPath(
-                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                        id));
-
-                        i.setDataAndType(Uri.withAppendedPath(
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id),
-                            "image/*");
-                        try {
-                            getContext().startActivity(i);
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(getContext(),
-                                getContext().getString(R.string.activity_not_found, "view image"),
-                                Toast.LENGTH_SHORT);
-                        }
+	                    if (c.getCount() > 0) {
+	                        c.moveToFirst();
+	                        String id = c.getString(c.getColumnIndex("_id"));
+	
+	                        Log.i(
+	                            t,
+	                            "setting view path to: "
+	                                    + Uri.withAppendedPath(
+	                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	                                        id));
+	
+	                        i.setDataAndType(Uri.withAppendedPath(
+	                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id),
+	                            "image/*");
+	                        try {
+	                            getContext().startActivity(i);
+	                        } catch (ActivityNotFoundException e) {
+	                            Toast.makeText(getContext(),
+	                                getContext().getString(R.string.activity_not_found, "view image"),
+	                                Toast.LENGTH_SHORT);
+	                        }
+	                    }
+                    } finally {
+                    	if ( c != null ) {
+                    		c.close();
+                    	}
                     }
-                    c.close();
                 }
             });
 
@@ -235,27 +239,32 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         String[] projection = {
             Images.ImageColumns._ID
         };
-        Cursor c =
-            getContext().getContentResolver().query(
+        int del = 0;
+        Cursor c = null;
+        try {
+        	c = getContext().getContentResolver().query(
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
                 "_data='" + mInstanceFolder + mBinaryName + "'", null, null);
-        int del = 0;
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            String id = c.getString(c.getColumnIndex(Images.ImageColumns._ID));
-
-            Log.i(
-                t,
-                "attempting to delete: "
-                        + Uri.withAppendedPath(
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id));
-            del =
-                getContext().getContentResolver().delete(
-                    Uri.withAppendedPath(
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id), null,
-                    null);
+	        if (c.getCount() > 0) {
+	            c.moveToFirst();
+	            String id = c.getString(c.getColumnIndex(Images.ImageColumns._ID));
+	
+	            Log.i(
+	                t,
+	                "attempting to delete: "
+	                        + Uri.withAppendedPath(
+	                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id));
+	            del =
+	                getContext().getContentResolver().delete(
+	                    Uri.withAppendedPath(
+	                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id), null,
+	                    null);
+	        }
+        } finally {
+        	if ( c != null ) {
+                c.close();
+        	}
         }
-        c.close();
 
         // clean up variables
         mBinaryName = null;
@@ -290,12 +299,19 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
             return uri.toString().substring(6);
         } else {
             // find entry in content provider
-            Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
-            c.moveToFirst();
+        	String colString = null;
+            Cursor c = null;
+            try {
+            	c = getContext().getContentResolver().query(uri, null, null, null, null);
+            	c.moveToFirst();
 
-            // get data path
-            String colString = c.getString(c.getColumnIndex("_data"));
-            c.close();
+	            // get data path
+	            colString = c.getString(c.getColumnIndex("_data"));
+            } finally {
+            	if ( c != null ) {
+            		c.close();
+            	}
+            }
             return colString;
         }
     }
