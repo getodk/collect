@@ -41,7 +41,6 @@ import org.apache.http.client.params.AuthPolicy;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -186,7 +185,7 @@ public final class WebUtils {
         // configure connection
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(params, timeout);
-        HttpConnectionParams.setSoTimeout(params, timeout);
+        HttpConnectionParams.setSoTimeout(params, 2*timeout);
         // support redirecting to handle http: => https: transition
         HttpClientParams.setRedirecting(params, true);
         // support authenticating
@@ -199,7 +198,7 @@ public final class WebUtils {
         params.setParameter("http.auth-target.scheme-pref", authPref);
 
         // setup client
-        HttpClient httpclient = new DefaultHttpClient(params);
+        HttpClient httpclient = new EnhancedHttpClient(params);
         httpclient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 1);
         httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 

@@ -41,6 +41,7 @@ import android.widget.TextView;
 public class InstanceChooserList extends ListActivity {
 
     private static boolean EXIT = true;
+    private static boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
     
     @Override
@@ -100,6 +101,20 @@ public class InstanceChooserList extends ListActivity {
             // caller is waiting on a picked form
             setResult(RESULT_OK, new Intent().setData(instanceUri));
         } else {
+            // the form can be edited if it is incomplete or if, when it was
+            // marked as complete, it was determined that it could be edited
+            // later.
+            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+            String strCanEditWhenComplete = 
+                c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+
+            boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
+                	           || Boolean.parseBoolean(strCanEditWhenComplete);
+            if (!canEdit) {
+            	createErrorDialog(getString(R.string.cannot_edit_completed_form),
+                    	          DO_NOT_EXIT);
+            	return;
+            }
             // caller wants to view/edit a form, so launch formentryactivity
             startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
         }

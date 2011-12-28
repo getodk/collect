@@ -42,7 +42,7 @@ public class InstanceProvider extends ContentProvider {
     private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -68,6 +68,7 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns._ID + " integer primary key, " 
                + InstanceColumns.DISPLAY_NAME + " text not null, "
                + InstanceColumns.SUBMISSION_URI + " text, " 
+               + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
                + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                + InstanceColumns.JR_FORM_ID + " text not null, "
                + InstanceColumns.STATUS + " text not null, "
@@ -227,29 +228,41 @@ public class InstanceProvider extends ContentProvider {
         
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:                
-                Cursor del = this.query(uri, null, where, whereArgs, null);
-                del.moveToPosition(-1);
-                while (del.moveToNext()) {
-                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                    String instanceDir = (new File(instanceFile)).getParent();
-                    deleteFileOrDir(instanceDir);
+                Cursor del = null;
+                try {
+                	del = this.query(uri, null, where, whereArgs, null);
+	                del.moveToPosition(-1);
+	                while (del.moveToNext()) {
+	                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+	                    String instanceDir = (new File(instanceFile)).getParent();
+	                    deleteFileOrDir(instanceDir);
+	                }
+                } finally {
+                	if ( del != null ) {
+                		del.close();
+                	}
                 }
-                del.close();
                 count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
                 break;
 
             case INSTANCE_ID:
                 String instanceId = uri.getPathSegments().get(1);
 
-                Cursor c = this.query(uri, null, where, whereArgs, null);
-                // This should only ever return 1 record.  I hope.
-                c.moveToPosition(-1);
-                while (c.moveToNext()) {
-                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                    String instanceDir = (new File(instanceFile)).getParent();
-                    deleteFileOrDir(instanceDir);           
+                Cursor c = null;
+                try {
+                	c = this.query(uri, null, where, whereArgs, null);
+	                // This should only ever return 1 record.  I hope.
+	                c.moveToPosition(-1);
+	                while (c.moveToNext()) {
+	                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+	                    String instanceDir = (new File(instanceFile)).getParent();
+	                    deleteFileOrDir(instanceDir);           
+	                }
+                } finally {
+                	if ( c != null ) {
+                		c.close();
+                	}
                 }
-                c.close();
                 
                 count =
                     db.delete(INSTANCES_TABLE_NAME,
@@ -322,6 +335,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
         sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
+        sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
         sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.INSTANCE_FILE_PATH);
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);

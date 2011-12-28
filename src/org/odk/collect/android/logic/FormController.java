@@ -14,18 +14,28 @@
 
 package org.odk.collect.android.logic;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.IDataReference;
+import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.model.xform.XFormSerializingVisitor;
+import org.javarosa.model.xform.XPathReference;
 import org.odk.collect.android.views.ODKView;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
@@ -42,6 +52,28 @@ public class FormController {
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
+
+    /**
+     * OpenRosa metadata tag names.
+     */
+    private static final String INSTANCE_ID = "instanceID";
+
+    /**
+     * OpenRosa metadata of a form instance.
+     * 
+     * Contains the values for the required metadata
+     * fields and nothing else.
+     * 
+     * @author mitchellsundt@gmail.com
+     *
+     */
+    public static final class InstanceMetadata {
+        public final String instanceId;
+    	
+        InstanceMetadata( String instanceId ) {
+            this.instanceId = instanceId;
+        }
+    };
 
 
     public FormController(FormEntryController fec) {
@@ -581,6 +613,114 @@ public class FormController {
             return getLastGroup().getLongText();
         }
         return null;
+    }
+    
+    /**
+     * Find the portion of the form that is to be submitted
+     * 
+     * @return
+     */
+    private IDataReference getSubmissionDataReference() {
+        FormDef formDef = mFormEntryController.getModel().getForm();
+        // Determine the information about the submission...
+        SubmissionProfile p = formDef.getSubmissionProfile();
+        if (p == null || p.getRef() == null) {
+            return new XPathReference("/");
+        } else {
+            return p.getRef();
+        }
+    }
+    
+    /**
+     * Once a submission is marked as complete, it is saved in the 
+     * submission format, which might be a fragment of the original
+     * form or might be a SMS text string, etc.
+     * 
+     * @return true if the submission is the entire form.  If it is, 
+     *              then the submission can be re-opened for editing
+     *              after it was marked-as-complete (provided it has
+     *              not been encrypted).
+     */
+    public boolean isSubmissionEntireForm() {
+        IDataReference sub = getSubmissionDataReference();
+        return ( getInstance().resolveReference(sub) == null );
+    }
+    
+    /**
+     * Extract the portion of the form that should be uploaded to the server.
+     * 
+     * @return
+     * @throws IOException
+     */
+    public ByteArrayPayload getSubmissionXml() throws IOException {
+        FormInstance instance = getInstance();
+        XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+        ByteArrayPayload payload = 
+                (ByteArrayPayload) serializer.createSerializedPayload(instance,
+                                                   getSubmissionDataReference());
+        return payload;
+    }
+    
+    /**
+     * Traverse the submission looking for the first matching tag in depth-first order.
+     * 
+     * @param parent
+     * @param name
+     * @return
+     */
+    private TreeElement findDepthFirst(TreeElement parent, String name) {
+        int len = parent.getNumChildren();
+        for ( int i = 0; i < len ; ++i ) {
+            TreeElement e = parent.getChildAt(i);
+            if ( name.equals(e.getName()) ) {
+                return e;
+            } else if ( e.getNumChildren() != 0 ) {
+                TreeElement v = findDepthFirst(e, name);
+                if ( v != null ) return v;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Get the OpenRosa required metadata of the portion of the form beng submitted
+     * @return
+     */
+    public InstanceMetadata getSubmissionMetadata() {
+        FormDef formDef = mFormEntryController.getModel().getForm();
+        TreeElement rootElement = formDef.getInstance().getRoot();
+
+        TreeElement trueSubmissionElement;
+        // Determine the information about the submission...
+        SubmissionProfile p = formDef.getSubmissionProfile();
+        if ( p == null || p.getRef() == null ) {
+            trueSubmissionElement = rootElement;
+        } else {
+            IDataReference ref = p.getRef();
+            trueSubmissionElement = formDef.getInstance().resolveReference(ref);
+            // resolveReference returns null if the reference is to the root element...
+            if ( trueSubmissionElement == null ) {
+                trueSubmissionElement = rootElement;
+            }
+        }
+        
+        // and find the depth-first meta block in this...
+        TreeElement e = findDepthFirst(trueSubmissionElement, "meta");
+        
+        String instanceId = null;
+        
+        if ( e != null ) {
+            Vector<TreeElement> v;
+
+            // instance id...
+            v = e.getChildrenWithName(INSTANCE_ID);
+            if ( v.size() == 1 ) {
+                StringData sa = (StringData) v.get(0).getValue();
+                instanceId = (String) sa.getValue();
+            }
+        }
+    	
+        return new InstanceMetadata(instanceId);
     }
 
 }

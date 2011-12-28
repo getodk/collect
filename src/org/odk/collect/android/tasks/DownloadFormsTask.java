@@ -102,52 +102,68 @@ public class DownloadFormsTask extends
                 // if we've downloaded a duplicate, this gives us the file
                 File dl = downloadXform(fd.formName, fd.downloadUrl);
 
-                String[] projection = {
-                        FormsColumns._ID, FormsColumns.FORM_FILE_PATH
-                };
-                String[] selectionArgs = {
-                    dl.getAbsolutePath()
-                };
-                String selection = FormsColumns.FORM_FILE_PATH + "=?";
-                Cursor alreadyExists =
-                    Collect.getInstance()
+                Cursor alreadyExists = null;
+                Uri uri = null;
+                try {
+                    String[] projection = {
+                            FormsColumns._ID, FormsColumns.FORM_FILE_PATH
+                    };
+                    String[] selectionArgs = {
+                        dl.getAbsolutePath()
+                    };
+                    String selection = FormsColumns.FORM_FILE_PATH + "=?";
+                    alreadyExists = Collect.getInstance()
                             .getContentResolver()
                             .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs,
                                 null);
-
-                Uri uri = null;
-                if (alreadyExists.getCount() <= 0) {
-                    // doesn't exist, so insert it
-                    ContentValues v = new ContentValues();
-                    v.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
-
-                    HashMap<String, String> formInfo = FileUtils.parseXML(dl);
-                    v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
-                    v.put(FormsColumns.MODEL_VERSION, formInfo.get(FileUtils.MODEL));
-                    v.put(FormsColumns.UI_VERSION, formInfo.get(FileUtils.UI));
-                    v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
-                    v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
-                    uri =
-                        Collect.getInstance().getContentResolver()
-                                .insert(FormsColumns.CONTENT_URI, v);
-                } else {
-                    alreadyExists.moveToFirst();
-                    uri =
-                        Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                            alreadyExists.getString(alreadyExists.getColumnIndex(FormsColumns._ID)));
+	
+	                if (alreadyExists.getCount() <= 0) {
+	                    // doesn't exist, so insert it
+	                    ContentValues v = new ContentValues();
+	                    v.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
+	
+	                    HashMap<String, String> formInfo = FileUtils.parseXML(dl);
+	                    v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
+	                    v.put(FormsColumns.MODEL_VERSION, formInfo.get(FileUtils.MODEL));
+	                    v.put(FormsColumns.UI_VERSION, formInfo.get(FileUtils.UI));
+	                    v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
+	                    v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
+	                    v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+	                    uri =
+	                        Collect.getInstance().getContentResolver()
+	                                .insert(FormsColumns.CONTENT_URI, v);
+	                } else {
+	                    alreadyExists.moveToFirst();
+	                    uri =
+	                        Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+	                            alreadyExists.getString(alreadyExists.getColumnIndex(FormsColumns._ID)));
+	                }
+                } finally {
+                	if ( alreadyExists != null ) {
+                		alreadyExists.close();
+                	}
                 }
 
                 if (fd.manifestUrl != null) {
-                    Cursor c =
-                        Collect.getInstance().getContentResolver()
+                	String formMediaPath = null;
+                	Cursor c = null;
+                	try {
+                		c = Collect.getInstance().getContentResolver()
                                 .query(uri, null, null, null, null);
-                    if (c.getCount() > 0) {
-                        // should be exactly 1
-                        c.moveToFirst();
-
+	                    if (c.getCount() > 0) {
+	                        // should be exactly 1
+	                        c.moveToFirst();
+	                        formMediaPath = c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
+	                    }
+                	} finally {
+                		if ( c != null ) {
+                			c.close();
+                		}
+                	}
+                	
+                	if ( formMediaPath != null ) {
                         String error =
-                            downloadManifestAndMediaFiles(
-                                c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)), fd,
+                            downloadManifestAndMediaFiles(formMediaPath, fd,
                                 count, total);
                         if (error != null) {
                             message += error;
@@ -218,20 +234,25 @@ public class DownloadFormsTask extends
         };
         String selection = FormsColumns.MD5_HASH + "=?";
 
-        Cursor c =
-            Collect.getInstance().getContentResolver()
+        Cursor c = null;
+        try {
+        	c = Collect.getInstance().getContentResolver()
                     .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs, null);
-        if (c.getCount() > 0) {
-            // Should be at most, 1
-            c.moveToFirst();
-
-            // delete the file we just downloaded, because it's a duplicate
-            f.delete();
-
-            // set the file returned to the file we already had
-            f = new File(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+	        if (c.getCount() > 0) {
+	            // Should be at most, 1
+	            c.moveToFirst();
+	
+	            // delete the file we just downloaded, because it's a duplicate
+	            f.delete();
+	
+	            // set the file returned to the file we already had
+	            f = new File(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+	        }
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
         }
-        c.close();
 
         return f;
     }

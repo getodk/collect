@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -25,11 +30,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -45,149 +45,186 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        // get all forms
-        Cursor mCursor =
-            Collect.getInstance().getContentResolver()
-                    .query(FormsColumns.CONTENT_URI, null, null, null, null);
-        if (mCursor == null) {
-            Log.e(t, "Forms Content Provider returned NULL");
-            return null;
-        }
 
-        mCursor.moveToPosition(-1);
-
+    	// Process everything then report what didn't work.
+    	StringBuffer errors = new StringBuffer();
+    	
         File formDir = new File(Collect.FORMS_PATH);
         if (formDir.exists() && formDir.isDirectory()) {
-            // This is all the files in the /odk/foms directory
-            ArrayList<File> xFormsToAdd = new ArrayList<File>(Arrays.asList(formDir.listFiles()));
-
-            while (mCursor.moveToNext()) {
-                // For each element in the provider, see if the file already exists
-                String sqlFilename =
-                    mCursor.getString(mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                String md5 = mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
-                File sqlFile = new File(sqlFilename);
-                if (sqlFile.exists()) {
-                    // remove it from the list of forms (we only want forms we haven't added at the
-                    // end)
-                    xFormsToAdd.remove(sqlFile);
-                    if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
-                        // Probably someone overwrite the file on the sdcard
-                        // So re-parse it and update it's information
-                        String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
-                        Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
-                        ContentValues updateValues = new ContentValues();
-
-                        HashMap<String, String> fields = null;
-                        try {
-                            fields = FileUtils.parseXML(sqlFile);
-                        } catch (RuntimeException e) {
-                            return sqlFile.getName() + " :: " + e.getMessage();
-                        }
-
-                        String title = fields.get(FileUtils.TITLE);
-                        String ui = fields.get(FileUtils.UI);
-                        String model = fields.get(FileUtils.MODEL);
-                        String formid = fields.get(FileUtils.FORMID);
-                        String submission = fields.get(FileUtils.SUBMISSIONURI);
-
-                        // update date
-                        Long now = Long.valueOf(System.currentTimeMillis());
-                        updateValues.put(FormsColumns.DATE, now);
-
-                        if (title != null) {
-                            updateValues.put(FormsColumns.DISPLAY_NAME, title);
-                        } else {
-                            return Collect.getInstance().getString(R.string.xform_parse_error,
-                                sqlFile.getName(), "title");
-                        }
-                        if (formid != null) {
-                            updateValues.put(FormsColumns.JR_FORM_ID, formid);
-                        } else {
-                            return Collect.getInstance().getString(R.string.xform_parse_error,
-                                sqlFile.getName(), "id");
-                        }
-                        if (ui != null) {
-                            updateValues.put(FormsColumns.UI_VERSION, ui);
-                        }
-                        if (model != null) {
-                            updateValues.put(FormsColumns.MODEL_VERSION, model);
-                        }
-                        if (submission != null) {
-                            updateValues.put(FormsColumns.SUBMISSION_URI, submission);
-                        }
-                        // Note, the path doesn't change here, but it needs to be included so the
-                        // update will automatically update the .md5 and the cache path.
-                        updateValues.put(FormsColumns.FORM_FILE_PATH, sqlFile.getAbsolutePath());
-                        int count =
-                            Collect.getInstance().getContentResolver()
-                                    .update(updateUri, updateValues, null, null);
-                        Log.i(t, count + " records successfully updated");
+            // Get all the files in the /odk/foms directory
+            ArrayList<File> xFormsToAdd = new ArrayList<File>();
+            
+            // Step 1: assemble the candidate form files
+            //         discard files beginning with "." 
+            //         discard files not ending with ".xml" or ".xhtml"
+            {
+            	File[] formDefs = formDir.listFiles();
+            	for ( File addMe: formDefs ) {
+                    // Ignore invisible files that start with periods.
+                    if (!addMe.getName().startsWith(".")
+                            && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml"))) {
+                    	xFormsToAdd.add(addMe);
+                    } else { 
+                    	Log.i(t, "Ignoring: " + addMe.getAbsolutePath());
                     }
-                } else {
-                    Log.w(t, "file referenced by content provider does not exist " + sqlFile);
-                }
+            	}
             }
 
-            // Whatever is left in our arraylist isn't in the database, so add it
-            for (int i = 0; i < xFormsToAdd.size(); i++) {
-                ContentValues values = new ContentValues();
-                File addMe = xFormsToAdd.get(i);
-
-                // Ignore invisible files that start with periods.
-                if (!addMe.getName().startsWith(".")
-                        && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(".xhtml"))) {
-
-                    HashMap<String, String> fields = null;
-                    try {
-                        fields = FileUtils.parseXML(addMe);
-                    } catch (RuntimeException e) {
-                        return addMe.getName() + " :: " + e.getMessage();
-                    }
-
-                    String title = fields.get(FileUtils.TITLE);
-                    String ui = fields.get(FileUtils.UI);
-                    String model = fields.get(FileUtils.MODEL);
-                    String formid = fields.get(FileUtils.FORMID);
-                    String submission = fields.get(FileUtils.SUBMISSIONURI);
-
-                    if (title != null) {
-                        values.put(FormsColumns.DISPLAY_NAME, title);
-                    } else {
-                        return Collect.getInstance().getString(R.string.xform_parse_error,
-                            addMe.getName(), "title");
-                    }
-                    if (formid != null) {
-                        values.put(FormsColumns.JR_FORM_ID, formid);
-                    } else {
-                        return Collect.getInstance().getString(R.string.xform_parse_error,
-                            addMe.getName(), "id");
-                    }
-                    if (ui != null) {
-                        values.put(FormsColumns.UI_VERSION, ui);
-                    }
-                    if (model != null) {
-                        values.put(FormsColumns.MODEL_VERSION, model);
-                    }
-                    if (submission != null) {
-                        values.put(FormsColumns.SUBMISSION_URI, submission);
-                    }
-
-                    values.put(FormsColumns.FORM_FILE_PATH, addMe.getAbsolutePath());
-                    Collect.getInstance().getContentResolver()
-                            .insert(FormsColumns.CONTENT_URI, values);
-                } else {
-                    // it's a [formname]-media directory, likely, so skip it
-                }
+            // Step 2: quickly run through and figure out what files we need to 
+            // parse and update; this is quick, as we only calculate the md5
+            // and see if it has changed.
+            Map<Uri, File> uriToUpdate = new HashMap<Uri, File>();
+            
+	        Cursor mCursor = null;
+	        // open the cursor within a try-catch block so it can always be closed. 
+	        try {
+	            mCursor = Collect.getInstance().getContentResolver()
+	                    .query(FormsColumns.CONTENT_URI, null, null, null, null);
+		        if (mCursor == null) {
+		            Log.e(t, "Forms Content Provider returned NULL");
+		            errors.append("Internal Error: Unable to access Forms content provider").append("\r\n");
+		            return errors.toString();
+		        }
+	
+		        mCursor.moveToPosition(-1);
+	
+	            while (mCursor.moveToNext()) {
+	                // For each element in the provider, see if the file already exists
+	                String sqlFilename =
+	                    mCursor.getString(mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+	                String md5 = mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
+	                File sqlFile = new File(sqlFilename);
+	                if (sqlFile.exists()) {
+	                    // remove it from the list of forms (we only want forms 
+	                	// we haven't added at the end)
+	                    xFormsToAdd.remove(sqlFile);
+	                    if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
+	                        // Probably someone overwrite the file on the sdcard
+	                        // So re-parse it and update it's information
+	                        String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
+	                        Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
+	                        uriToUpdate.put(updateUri, sqlFile);
+	                    }
+	                } else {
+	                	Log.w(t, "file referenced by content provider does not exist " + sqlFile);
+	                }
+	            }
+	        } finally {
+	        	if ( mCursor != null ) {
+	        		mCursor.close();
+	        	}
+	        }
+            
+	        // Step3: go through uriToUpdate to parse and update each in turn.
+	        // This is slow because buildContentValues(...) is slow.
+	        for ( Map.Entry<Uri, File> entry : uriToUpdate.entrySet() ) {
+	        	Uri updateUri = entry.getKey();
+	        	File formDefFile = entry.getValue();
+                // Probably someone overwrite the file on the sdcard
+                // So re-parse it and update it's information
+	        	ContentValues values;
+	        	
+	        	try {
+	        		values = buildContentValues(formDefFile);
+	        	} catch ( IllegalArgumentException e) {
+	        		errors.append(e.getMessage()).append("\r\n");
+	        		continue;
+	        	}
+                
+                // update in content provider
+                int count =
+                        Collect.getInstance().getContentResolver()
+                                .update(updateUri, values, null, null);
+                    Log.i(t, count + " records successfully updated");
+	        }
+	        uriToUpdate.clear();
+	        
+	        // Step 4: go through the newly-discovered files in xFormsToAdd and add them.
+	        // This is slow because buildContentValues(...) is slow.
+            for (File formDefFile : xFormsToAdd) {
+                // Parse it for the first time...
+                ContentValues values;
+	        	
+	        	try {
+	        		values = buildContentValues(formDefFile);
+	        	} catch ( IllegalArgumentException e) {
+	        		errors.append(e.getMessage()).append("\r\n");
+	        		continue;
+	        	}
+                
+                // insert into content provider
+                Collect.getInstance().getContentResolver()
+                        .insert(FormsColumns.CONTENT_URI, values);
             }
         }
-        if (mCursor != null) {
-            mCursor.close();
+        if ( errors.length() != 0 ) {
+        	return errors.toString();
+        } else {
+        	return Collect.getInstance().getString(R.string.finished_disk_scan);
         }
-        return Collect.getInstance().getString(R.string.finished_disk_scan);
-
     }
 
+    /**
+     * Attempts to parse the formDefFile as an XForm.
+	 * This is slow because FileUtils.parseXML is slow
+     * 
+     * @param formDefFile
+     * @return key-value list to update or insert into the content provider
+     * @throws IllegalArgumentException if the file failed to parse or was missing fields
+     */
+    public ContentValues buildContentValues(File formDefFile) throws IllegalArgumentException {
+        // Probably someone overwrite the file on the sdcard
+        // So re-parse it and update it's information
+        ContentValues updateValues = new ContentValues();
+
+        HashMap<String, String> fields = null;
+        try {
+            fields = FileUtils.parseXML(formDefFile);
+        } catch (RuntimeException e) {
+        	throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());
+        }
+
+        String title = fields.get(FileUtils.TITLE);
+        String ui = fields.get(FileUtils.UI);
+        String model = fields.get(FileUtils.MODEL);
+        String formid = fields.get(FileUtils.FORMID);
+        String submission = fields.get(FileUtils.SUBMISSIONURI);
+        String base64RsaPublicKey = fields.get(FileUtils.BASE64_RSA_PUBLIC_KEY);
+
+        // update date
+        Long now = Long.valueOf(System.currentTimeMillis());
+        updateValues.put(FormsColumns.DATE, now);
+
+        if (title != null) {
+            updateValues.put(FormsColumns.DISPLAY_NAME, title);
+        } else {
+        	throw new IllegalArgumentException(Collect.getInstance().getString(R.string.xform_parse_error,
+        			formDefFile.getName(), "title"));
+        }
+        if (formid != null) {
+            updateValues.put(FormsColumns.JR_FORM_ID, formid);
+        } else {
+        	throw new IllegalArgumentException(Collect.getInstance().getString(R.string.xform_parse_error,
+        			formDefFile.getName(), "id"));
+        }
+        if (ui != null) {
+            updateValues.put(FormsColumns.UI_VERSION, ui);
+        }
+        if (model != null) {
+            updateValues.put(FormsColumns.MODEL_VERSION, model);
+        }
+        if (submission != null) {
+            updateValues.put(FormsColumns.SUBMISSION_URI, submission);
+        }
+        if (base64RsaPublicKey != null) {
+        	updateValues.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, base64RsaPublicKey);
+        }
+        // Note, the path doesn't change here, but it needs to be included so the
+        // update will automatically update the .md5 and the cache path.
+        updateValues.put(FormsColumns.FORM_FILE_PATH, formDefFile.getAbsolutePath());
+        
+        return updateValues;
+    }
 
     public void setDiskSyncListener(DiskSyncListener l) {
         mListener = l;

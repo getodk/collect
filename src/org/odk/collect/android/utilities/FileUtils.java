@@ -228,7 +228,8 @@ public class FileUtils {
     public static String MODEL = "modelversion";
     public static String TITLE = "title";
     public static String SUBMISSIONURI = "submission";
-
+    public static String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
+    
     public static HashMap<String, String> parseXML(File xmlFile) {
         HashMap<String, String> fields = new HashMap<String, String>();
         InputStream is;
@@ -299,6 +300,10 @@ public class FileUtils {
                 Element submission = model.getElement(xforms, "submission");
                 String submissionUri = submission.getAttributeValue(null, "action");
                 fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
+                String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
+                fields.put(BASE64_RSA_PUBLIC_KEY,
+                  (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0) 
+                  ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
                 Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
                 // and that's totally fine.

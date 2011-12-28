@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.FormInstance;
@@ -27,17 +32,14 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.EncryptionUtils;
+import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Background task for loading a form.
@@ -84,16 +86,90 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
         FormEntryActivity.mFormController.postProcessInstance();
 
-        if (mSave && exportData(mMarkCompleted)) {
-            return SAVED_AND_EXIT;
-        } else if (exportData(mMarkCompleted)) {
-            return SAVED;
+        if (exportData(mMarkCompleted)) {
+        	return mSave ? SAVED_AND_EXIT : SAVED;
         }
 
         return SAVE_ERROR;
 
     }
 
+    private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
+        
+        // Update the instance database...
+        // If FormEntryActivity was started with an Instance, just update that instance
+        if (Collect.getInstance().getContentResolver().getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
+            ContentValues values = new ContentValues();
+            if (mInstanceName != null) {
+                values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
+            } 
+            if (incomplete || !mMarkCompleted) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            } else {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+            }
+            // update this whether or not the status is complete...
+            values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
+            Collect.getInstance().getContentResolver().update(mUri, values, null, null);
+        } else if (Collect.getInstance().getContentResolver().getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
+            // If FormEntryActivity was started with a form, then it's likely the first time we're
+            // saving.
+            // However, it could be a not-first time saving if the user has been using the manual
+            // 'save data' option from the menu. So try to update first, then make a new one if that
+            // fails.
+            ContentValues values = new ContentValues();
+            if (mInstanceName != null) {
+                values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
+            }
+            if (incomplete || mMarkCompleted) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+            } else {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            }
+            // update this whether or not the status is complete...
+            values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
+
+            String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+            String[] whereArgs = {
+                FormEntryActivity.mInstancePath
+            };
+            int updated =
+                Collect.getInstance().getContentResolver()
+                        .update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
+            if (updated > 1) {
+                Log.w(t, "Updated more than one entry, that's not good");
+            } else if (updated == 1) {
+                Log.i(t, "Instance already exists, updating");
+                // already existed and updated just fine
+            } else {
+                Log.e(t, "No instance found, creating");
+                // Entry didn't exist, so create it.
+                Cursor c = null;
+                try {
+                	c = Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
+	                c.moveToFirst();
+	                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+	                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+	                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
+	
+	                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
+	                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
+	                if (mInstanceName != null) {
+	                    values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
+	                } else {
+	                    values.put(InstanceColumns.DISPLAY_NAME, formname);
+	                }
+	                values.put(InstanceColumns.JR_FORM_ID, jrformid);
+                } finally {
+                	if ( c != null ) {
+                		c.close();
+                	}
+                }
+                mUri = Collect.getInstance().getContentResolver()
+                			.insert(InstanceColumns.CONTENT_URI, values);
+            }
+        }
+    }
 
     /**
      * Write's the data to the sdcard, and updates the instances content provider.
@@ -102,7 +178,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * @param markCompleted
      * @return
      */
-    public boolean exportData(boolean markCompleted) {
+    private boolean exportData(boolean markCompleted) {
         ByteArrayPayload payload;
         try {
 
@@ -120,71 +196,89 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
-        // If FormEntryActivity was started with an Instance, just update that instance
-        if (Collect.getInstance().getContentResolver().getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
-            ContentValues values = new ContentValues();
-            if (mInstanceName != null) {
-                values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
-            } 
-            if (!mMarkCompleted) {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-            } else {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
-            }
-            Collect.getInstance().getContentResolver().update(mUri, values, null, null);
-        } else if (Collect.getInstance().getContentResolver().getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
-            // If FormEntryActivity was started with a form, then it's likely the first time we're
-            // saving.
-            // However, it could be a not-first time saving if the user has been using the manual
-            // 'save data' option from the menu. So try to update first, then make a new one if that
-            // fails.
-            ContentValues values = new ContentValues();
-            if (mInstanceName != null) {
-                values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
-            }
-            if (mMarkCompleted) {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
-            } else {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+        // update the mUri. We've saved the reloadable instance, so update status...
+        updateInstanceDatabase(true, true);
+        
+        if ( markCompleted ) {
+            // now see if it is to be finalized and perhaps update everything...
+            boolean canEditAfterCompleted = FormEntryActivity.mFormController.isSubmissionEntireForm();
+            boolean isEncrypted = false;
+            
+            // build a submission.xml to hold the data being submitted 
+            // and (if appropriate) encrypt the files on the side
+
+            // pay attention to the ref attribute of the submission profile...
+            try {
+                payload = FormEntryActivity.mFormController.getSubmissionXml();
+            } catch (IOException e) {
+                Log.e(t, "Error creating serialized payload");
+                e.printStackTrace();
+                return false;
             }
 
-            String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            String[] whereArgs = {
-                FormEntryActivity.mInstancePath
-            };
-            int updated =
-                Collect.getInstance().getContentResolver()
-                        .update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
-            if (updated > 1) {
-                Log.w(t, "Updated more than one entry, that's not good");
-            } else if (updated == 1) {
-                Log.i(t, "Instance already exists, updating");
-                // already existed and updated just fine
-                return true;
-            } else {
-                Log.e(t, "No instance found, creating");
-                // Entry didn't exist, so create it.
-                Cursor c =
-                    Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
-                c.moveToFirst();
-                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
-                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
-
-                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
-                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
-                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
-                if (mInstanceName != null) {
-                    values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
-                } else {
-                    values.put(InstanceColumns.DISPLAY_NAME, formname);
+            File instanceXml = new File(FormEntryActivity.mInstancePath);
+            File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
+            // write out submission.xml -- the data to actually submit to aggregate
+            exportXmlFile(payload, submissionXml.getAbsolutePath());
+            
+            // see if the form is encrypted and we can encrypt it...
+            EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(mUri, 
+            		FormEntryActivity.mFormController.getSubmissionMetadata());
+            if ( formInfo != null ) {
+                // if we are encrypting, the form cannot be reopened afterward
+                canEditAfterCompleted = false;
+                // and encrypt the submission (this is a one-way operation)...
+                if ( !EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo) ) {
+                    return false;
                 }
-                values.put(InstanceColumns.JR_FORM_ID, jrformid);
-                Collect.getInstance().getContentResolver()
-                        .insert(InstanceColumns.CONTENT_URI, values);
+                isEncrypted = true;
             }
-        }
+        	
+            // At this point, we have:
+            // 1. the saved original instanceXml, 
+            // 2. all the plaintext attachments
+            // 2. the submission.xml that is the completed xml (whether encrypting or not)
+            // 3. all the encrypted attachments if encrypting (isEncrypted = true).
+            //
+            // NEXT:
+            // 1. Update the instance database (with status complete).
+            // 2. Overwrite the instanceXml with the submission.xml 
+            //    and remove the plaintext attachments if encrypting
+            
+            updateInstanceDatabase(false, canEditAfterCompleted);
 
+	        if (  !canEditAfterCompleted ) {
+	            // AT THIS POINT, there is no going back.  We are committed
+	            // to returning "success" (true) whether or not we can 
+	            // rename "submission.xml" to instanceXml and whether or 
+	            // not we can delete the plaintext media files.
+	        	//
+	        	// Handle the fall-out for a failed "submission.xml" rename
+	        	// in the InstanceUploader task.  Leftover plaintext media
+	        	// files are handled during form deletion.
+	
+	            // delete the restore Xml file.
+	            if ( !instanceXml.delete() ) {
+	                Log.e(t, "Error deleting " + instanceXml.getAbsolutePath() 
+	                		+ " prior to renaming submission.xml");
+	                return true;
+	            }
+	
+	            // rename the submission.xml to be the instanceXml
+	            if ( !submissionXml.renameTo(instanceXml) ) {
+	                Log.e(t, "Error renaming submission.xml to " + instanceXml.getAbsolutePath());
+	                return true;
+	            }
+	        	
+	            // if encrypted, delete all plaintext files
+	            // (anything not named instanceXml or anything not ending in .enc)
+	            if ( isEncrypted ) {
+	                if ( !EncryptionUtils.deletePlaintextFiles(instanceXml) ) {
+	                    Log.e(t, "Error deleting plaintext files for " + instanceXml.getAbsolutePath());
+	                }
+	            }
+	        }
+        }
         return true;
     }
 
@@ -209,10 +303,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 try {
                     // String filename = path + "/" +
                     // path.substring(path.lastIndexOf('/') + 1) + ".xml";
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    bw.write(new String(data, "UTF-8"));
-                    bw.flush();
-                    bw.close();
+                	FileWriter fw = new FileWriter(path);
+                	fw.write(new String(data, "UTF-8"));
+                	fw.flush();
+                	fw.close();
                     return true;
 
                 } catch (IOException e) {
