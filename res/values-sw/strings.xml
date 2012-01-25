@@ -25,10 +25,10 @@
 <string name="audio_file_invalid">File: %s is not a valid audio file.</string>
 <string name="backup">back to\nprevious\nprompt</string>
 <string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
-<string name="cancel">Cancel</string>
-<string name="cancel_loading_form">Cancel</string>
-<string name="cancel_location">Cancel</string>
-<string name="cancel_saving_form">Cancel</string>
+<string name="cancel">Batili</string>
+<string name="cancel_loading_form">Batili</string>
+<string name="cancel_location">Batili</string>
+<string name="cancel_saving_form">Batili</string>
 <string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as complete.</string>
 <string name="capture_audio">Record Sound</string>
 <string name="capture_image">Take Picture</string>
