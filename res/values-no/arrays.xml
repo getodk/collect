@@ -8,7 +8,7 @@
 	the specific language governing permissions and limitations under the License. -->
 <resources>
 	<string-array name="entries_list_preference">
-		<item>Lagret, ikke fullført</item>
+		<item>Lagret, men ikke fullført</item>
 		<item>Fullført, men ikke sendt</item>
 		<item>Sendt</item>
 	</string-array>
