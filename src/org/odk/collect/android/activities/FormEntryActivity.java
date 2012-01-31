@@ -1077,7 +1077,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
         // save current answer
-        if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+        if (!saveAnswersForCurrentScreen(complete)) {
             Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -1637,6 +1637,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 PreferenceManager.getDefaultSharedPreferences(this);
             complete =
                 sharedPreferences.getBoolean(PreferencesActivity.KEY_COMPLETED_DEFAULT, true);
+        } else {
+            Log.e("Carl", "not at end");
         }
 
         // Then see if we've already marked this form as complete before
@@ -1650,11 +1652,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         startManagingCursor(c);
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
+            Log.e("Carl", "count = " + c.getCount());
             String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
             if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
                 complete = true;
             }
         }
+        Log.e("Carl", "returning complete = " + complete);
         return complete;
     }
 
