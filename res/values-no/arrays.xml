@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2009 University of Washington Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<resources>
+	<string-array name="entries_list_preference">
+		<item>Lagret, men ikke fullført</item>
+		<item>Fullført, men ikke sendt</item>
+		<item>Sendt</item>
+	</string-array>
+	<!-- Used in app/menu examples -->
+	<string-array name="entryvalues_list_preference">
+		<item>lagret</item>
+		<item>fullført</item>
+		<item>sendt</item>
+	</string-array>
+	<string-array name="entries_saved_preference">
+		<item>Lagret, ikke fullført</item>
+		<item>Fullført, men ikke sendt</item>
+	</string-array>
+	<!-- Used in app/menu examples -->
+	<string-array name="entryvalues_saved_preference">
+		<item>lagret</item>
+		<item>fullført</item>
+	</string-array>
+	<!-- make sure to match these values in preferences activity -->
+	<string-array name="protocol_entry_values">
+		<item>odk_default</item>
+		<item>google</item>
+		<item></item>
+	</string-array>
+	<string-array name="protocol_entries">
+		<item>ODK Aggregate</item>
+		<item>Google Forms</item>
+		<item>OpenRosa 1.0</item>
+	</string-array>
+	<string-array name="font_size_entry_values">
+		<item>29</item>
+		<item>25</item>
+		<item>21</item>
+		<item>17</item>
+		<item>13</item>
+	</string-array>
+	<string-array name="font_size_entries">
+		<item>Ekstra stor</item>
+		<item>Stor</item>
+		<item>Medium</item>
+		<item>Liten</item>
+		<item>Ekstra liten</item>
+	</string-array>
+</resources>
