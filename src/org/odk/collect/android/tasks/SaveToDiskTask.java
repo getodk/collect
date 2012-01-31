@@ -263,21 +263,29 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 	                		+ " prior to renaming submission.xml");
 	                return true;
 	            }
-	
+	        	
 	            // rename the submission.xml to be the instanceXml
 	            if ( !submissionXml.renameTo(instanceXml) ) {
 	                Log.e(t, "Error renaming submission.xml to " + instanceXml.getAbsolutePath());
 	                return true;
 	            }
-	        	
-	            // if encrypted, delete all plaintext files
-	            // (anything not named instanceXml or anything not ending in .enc)
-	            if ( isEncrypted ) {
-	                if ( !EncryptionUtils.deletePlaintextFiles(instanceXml) ) {
-	                    Log.e(t, "Error deleting plaintext files for " + instanceXml.getAbsolutePath());
-	                }
+	        } else {
+	        	// try to delete the submissionXml file, since it is 
+	        	// identical to the existing instanceXml file 
+	        	// (we don't need to delete and rename anything).
+	            if ( !submissionXml.delete() ) {
+	                Log.w(t, "Error deleting " + submissionXml.getAbsolutePath() 
+	                		+ " (instance is re-openable)");
 	            }
 	        }
+        	
+            // if encrypted, delete all plaintext files
+            // (anything not named instanceXml or anything not ending in .enc)
+            if ( isEncrypted ) {
+                if ( !EncryptionUtils.deletePlaintextFiles(instanceXml) ) {
+                    Log.e(t, "Error deleting plaintext files for " + instanceXml.getAbsolutePath());
+                }
+            }
         }
         return true;
     }
