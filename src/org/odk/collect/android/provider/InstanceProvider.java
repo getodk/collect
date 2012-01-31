@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.provider;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -58,7 +59,7 @@ public class InstanceProvider extends ContentProvider {
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
         DatabaseHelper(String databaseName) {
-            super("/sdcard/odk/metadata", databaseName, null, DATABASE_VERSION);
+            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
         }
 
 

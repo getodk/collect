@@ -309,8 +309,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             if (read > 0) {
                 // write xml file
                 try {
-                    // String filename = path + "/" +
-                    // path.substring(path.lastIndexOf('/') + 1) + ".xml";
+                    // String filename = path + File.separator +
+                    // path.substring(path.lastIndexOf(File.separator) + 1) + ".xml";
                 	FileWriter fw = new FileWriter(path);
                 	fw.write(new String(data, "UTF-8"));
                 	fw.flush();
