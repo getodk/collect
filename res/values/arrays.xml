@@ -40,7 +40,7 @@
 	<string-array
 		name="protocol_entries">
 		<item>ODK Aggregate</item>
-		<item>OpenRosa 1.0</item>
+		<item>Other</item>
 	</string-array>
 	<string-array
 		name="font_size_entry_values">
