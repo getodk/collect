@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.FormInstance;
@@ -33,11 +38,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Background task for loading a form.
@@ -207,8 +207,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             if (read > 0) {
                 // write xml file
                 try {
-                    // String filename = path + "/" +
-                    // path.substring(path.lastIndexOf('/') + 1) + ".xml";
+                    // String filename = path + File.separator +
+                    // path.substring(path.lastIndexOf(File.separator) + 1) + ".xml";
                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                     bw.write(new String(data, "UTF-8"));
                     bw.flush();

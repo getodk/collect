@@ -72,7 +72,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mWaitingForData = false;
         mInstanceFolder =
             FormEntryActivity.mInstancePath.substring(0,
-                FormEntryActivity.mInstancePath.lastIndexOf("/") + 1);
+                FormEntryActivity.mInstancePath.lastIndexOf(File.separator) + 1);
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -168,7 +168,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
             int screenWidth = display.getWidth();
             int screenHeight = display.getHeight();
 
-            File f = new File(mInstanceFolder + "/" + mBinaryName);
+            File f = new File(mInstanceFolder + File.separator + mBinaryName);
 
             if (f.exists()) {
                 Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
