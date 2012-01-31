@@ -66,7 +66,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mWaitingForData = false;
         mInstanceFolder =
             FormEntryActivity.mInstancePath.substring(0,
-                FormEntryActivity.mInstancePath.lastIndexOf("/") + 1);
+                FormEntryActivity.mInstancePath.lastIndexOf(File.separator) + 1);
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -142,7 +142,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(mInstanceFolder + "/" + mBinaryName);
+                File f = new File(mInstanceFolder + File.separator + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "video/*");
                 try {
                     ((Activity) getContext()).startActivity(i);
@@ -172,7 +172,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     private void deleteMedia() {
         // get the file path and delete the file
-        File f = new File(mInstanceFolder + "/" + mBinaryName);
+        File f = new File(mInstanceFolder + File.separator + mBinaryName);
         if (!f.delete()) {
             Log.e(t, "Failed to delete " + f);
         }
@@ -233,7 +233,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // get the file path and create a copy in the instance folder
         String binaryPath = getPathFromUri((Uri) binaryuri);
         String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
-        String destVideoPath = mInstanceFolder + "/" + System.currentTimeMillis() + extension;
+        String destVideoPath = mInstanceFolder + File.separator + System.currentTimeMillis() + extension;
 
         File source = new File(binaryPath);
         File newVideo = new File(destVideoPath);

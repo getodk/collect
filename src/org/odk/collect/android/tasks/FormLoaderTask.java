@@ -14,6 +14,14 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.TreeElement;
@@ -36,16 +44,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Background task for loading a form.
@@ -121,7 +120,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         File formXml = new File(formPath);
         String formHash = FileUtils.getMd5Hash(formXml);
-        File formBin = new File(Collect.CACHE_PATH + "/" + formHash + ".formdef");
+        File formBin = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -197,7 +196,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         if (ReferenceManager._().getFactories().length == 0) {
             // this is /sdcard/odk
             ReferenceManager._().addReferenceFactory(
-                new FileReferenceFactory(Environment.getExternalStorageDirectory() + "/odk"));
+                new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
         // Set jr://... to point to /sdcard/odk/forms/filename-media/
@@ -308,7 +307,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     public void serializeFormDef(FormDef fd, String filepath) {
         // calculate unique md5 identifier
         String hash = FileUtils.getMd5Hash(new File(filepath));
-        File formDef = new File(Collect.CACHE_PATH + "/" + hash + ".formdef");
+        File formDef = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");
 
         // formdef does not exist, create one.
         if (!formDef.exists()) {

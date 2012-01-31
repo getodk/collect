@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.database;
 
+import java.io.File;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
@@ -107,7 +109,7 @@ public abstract class ODKSQLiteOpenHelper {
             if (mName == null) {
                 db = SQLiteDatabase.create(null);
             } else {
-                db = SQLiteDatabase.openOrCreateDatabase(mPath + "/" + mName, mFactory);
+                db = SQLiteDatabase.openOrCreateDatabase(mPath + File.separator + mName, mFactory);
                 // db = mContext.openOrCreateDatabase(mName, 0, mFactory);
             }
 
@@ -182,7 +184,7 @@ public abstract class ODKSQLiteOpenHelper {
         SQLiteDatabase db = null;
         try {
             mIsInitializing = true;
-            String path = mPath + "/" + mName;
+            String path = mPath + File.separator + mName;
             // mContext.getDatabasePath(mName).getPath();
             db = SQLiteDatabase.openDatabase(path, mFactory, SQLiteDatabase.OPEN_READONLY);
             if (db.getVersion() != mNewVersion) {
