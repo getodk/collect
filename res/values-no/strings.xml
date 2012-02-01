@@ -107,7 +107,7 @@
 <string name="longitude">Breddegrad</string>
 <string name="main_menu">Hovedmeny</string>
 <string name="main_menu_details">Forenklet datainnsamling...</string>
-<string name="main_menu_message">ODK Collect v1.1.7</string>
+<string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Slett lagret skjema</string>
 <string name="mark_finished">Kryss skjema som ferdig</string>
 <string name="no">Nei</string>
@@ -189,7 +189,7 @@
 <string name="change_font_size">Fontstørrelse</string>
 <string name="form_scan_starting">Søker...</string>
 <string name="form_scan_finished">Søket fullført</string>
-<string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
+<string name="powered_by_odk">v1.2 RC1 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Det er oppstått en feil."</string>

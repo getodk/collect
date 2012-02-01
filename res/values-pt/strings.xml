@@ -107,7 +107,7 @@
 <string name="longitude">Longitude</string>
 <string name="main_menu">Menu Principal</string>
 <string name="main_menu_details">Coleta de dados facilitada...</string>
-<string name="main_menu_message">ODK Collect v1.1.7</string>
+<string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Apagar Formulário Salvo</string>
 <string name="mark_finished">Marcar formulário como finalizado</string>
 <string name="no">Não</string>
@@ -189,7 +189,7 @@
 <string name="change_font_size">Tamanho da Fonte do Texto</string>
 <string name="form_scan_starting">Procurando por formulários...</string>
 <string name="form_scan_finished">Completa a varredura de formulários</string>
-<string name="powered_by_odk">v1.1.7 - Powered by Open Data Kit</string>
+<string name="powered_by_odk">v1.2 RC1 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Erro enquanto acessa %s: "</string>

@@ -25,6 +25,7 @@ import android.util.Log;
 /**
  * Task responsible for deleting selected instances.
  * @author norman86@gmail.com
+ * @author mitchellsundt@gmail.com
  *
  */
 public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {

@@ -106,7 +106,7 @@ License.
 <string name="longitude">Longitude</string> 
 <string name="main_menu">Menu Principal</string> 
 <string name="main_menu_details">La collecte de données rendue plus facile...</string>
-<string name="main_menu_message">ODK Collect v1.1.7</string> 
+<string name="main_menu_message">ODK Collect v1.2 RC1</string> 
 <string name="manage_files">Supprimer le Formulaire Sauvegardé</string> 
 <string name="mark_finished">Marquer le formulaire comme finalisé</string> 
 <string name="no">Non</string> 
@@ -188,7 +188,7 @@ License.
 <string name="change_font_size">Taille de la Police</string> 
 <string name="form_scan_starting">Recherche de formulaires...</string> 
 <string name="form_scan_finished">Recherche terminée</string> 
-<string name="powered_by_odk">v1.1.7 - Alimenté par Open Data Kit</string> 
+<string name="powered_by_odk">v1.2 RC1 - Alimenté par Open Data Kit</string> 
 <string name="default_odk_formlist">/formList</string> 
 <string name="default_odk_submission">/submission</string> 
 <string name="access_error">"Erreur lors de l\'accès à %s: "</string> 
