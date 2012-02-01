@@ -8,7 +8,7 @@
 	the specific language governing permissions and limitations under the License. -->
 <resources>
 	<string-array name="entries_list_preference">
-		<item>Salvos, Não Completou</item>
+		<item>Salvos, Não Completados</item>
 		<item>Completados, Não Submetidos</item>
 		<item>Submetidos</item>
 	</string-array>
