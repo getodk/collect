@@ -1077,7 +1077,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
         // save current answer
-        if (!saveAnswersForCurrentScreen(complete)) {
+        if (!saveAnswersForCurrentScreen(complete ? EVALUATE_CONSTRAINTS : DO_NOT_EVALUATE_CONSTRAINTS)) {
             Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT).show();
             return false;
         }
