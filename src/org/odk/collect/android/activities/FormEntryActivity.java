@@ -339,8 +339,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 File fi = new File(Collect.TMPFILE_PATH);
 
                 String mInstanceFolder =
-                    mInstancePath.substring(0, mInstancePath.lastIndexOf(File.separator) + 1);
-                String s = mInstanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                String s = mInstanceFolder + "/" + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
                 if (!fi.renameTo(nf)) {
@@ -392,8 +392,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 // Copy file to sdcard
                 String mInstanceFolder1 =
-                    mInstancePath.substring(0, mInstancePath.lastIndexOf(File.separator) + 1);
-                String destImagePath = mInstanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+                    mInstancePath.substring(0, mInstancePath.lastIndexOf("/") + 1);
+                String destImagePath = mInstanceFolder1 + "/" + System.currentTimeMillis() + ".jpg";
 
                 File source = new File(sourceImagePath);
                 File newImage = new File(destImagePath);
@@ -659,7 +659,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 BitmapDrawable bitImage = null;
                 // attempt to load the form-specific logo...
                 // this is arbitrarily silly
-                bitImage = new BitmapDrawable(mediaDir + File.separator + "form_logo.png");
+                bitImage = new BitmapDrawable(mediaDir + "/form_logo.png");
 
                 if (bitImage != null && bitImage.getBitmap() != null
                         && bitImage.getIntrinsicHeight() > 0 && bitImage.getIntrinsicWidth() > 0) {
@@ -1139,7 +1139,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                         // delete media first
                                         String instanceFolder =
                                             mInstancePath.substring(0,
-                                                mInstancePath.lastIndexOf(File.separator) + 1);
+                                                mInstancePath.lastIndexOf("/") + 1);
                                         Log.i(t, "attempting to delete: " + instanceFolder);
 
                                         String where =
@@ -1520,10 +1520,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
                         .format(Calendar.getInstance().getTime());
             String file =
-                mFormPath.substring(mFormPath.lastIndexOf(File.separator) + 1, mFormPath.lastIndexOf('.'));
-            String path = Collect.INSTANCES_PATH + File.separator + file + "_" + time;
+                mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
+            String path = Collect.INSTANCES_PATH + "/" + file + "_" + time;
             if (FileUtils.createFolder(path)) {
-                mInstancePath = path + File.separator + file + "_" + time + ".xml";
+                mInstancePath = path + "/" + file + "_" + time + ".xml";
             }
         } else {
             // we've just loaded a saved form, so start in the hierarchy view
