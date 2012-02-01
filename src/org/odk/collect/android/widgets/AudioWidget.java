@@ -66,7 +66,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         mWaitingForData = false;
         mInstanceFolder =
             FormEntryActivity.mInstancePath.substring(0,
-                FormEntryActivity.mInstancePath.lastIndexOf(File.separator) + 1);
+                FormEntryActivity.mInstancePath.lastIndexOf("/") + 1);
 
         setOrientation(LinearLayout.VERTICAL);
         
@@ -140,7 +140,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(mInstanceFolder + File.separator + mBinaryName);
+                File f = new File(mInstanceFolder + "/" + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
                 try {
                 ((Activity) getContext()).startActivity(i);
@@ -170,7 +170,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     private void deleteMedia() {
         // get the file path and delete the file
-        File f = new File(mInstanceFolder + File.separator + mBinaryName);
+        File f = new File(mInstanceFolder + "/" + mBinaryName);
         if (!f.delete()) {
             Log.i(t, "Failed to delete " + f);
         }
@@ -231,7 +231,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         // get the file path and create a copy in the instance folder
         String binaryPath = getPathFromUri((Uri) binaryuri);
         String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
-        String destAudioPath = mInstanceFolder + File.separator + System.currentTimeMillis() + extension;
+        String destAudioPath = mInstanceFolder + "/" + System.currentTimeMillis() + extension;
 
         File source = new File(binaryPath);
         File newAudio = new File(destAudioPath);
