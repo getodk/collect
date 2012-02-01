@@ -97,38 +97,34 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
         
         // Update the instance database...
+        ContentValues values = new ContentValues();
+        if (mInstanceName != null) {
+            values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
+        }
+        if (incomplete || !mMarkCompleted) {
+            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+        } else {
+            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+        }
+        // update this whether or not the status is complete...
+        values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
+
         // If FormEntryActivity was started with an Instance, just update that instance
         if (Collect.getInstance().getContentResolver().getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
-            ContentValues values = new ContentValues();
-            if (mInstanceName != null) {
-                values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
-            } 
-            if (incomplete || !mMarkCompleted) {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            int updated = Collect.getInstance().getContentResolver().update(mUri, values, null, null);
+            if (updated > 1) {
+                Log.w(t, "Updated more than one entry, that's not good: " + mUri.toString());
+            } else if (updated == 1) {
+                Log.i(t, "Instance successfully updated");
             } else {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+            	Log.e(t, "Instance doesn't exist but we have its Uri!! " + mUri.toString());
             }
-            // update this whether or not the status is complete...
-            values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
-            Collect.getInstance().getContentResolver().update(mUri, values, null, null);
         } else if (Collect.getInstance().getContentResolver().getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
             // If FormEntryActivity was started with a form, then it's likely the first time we're
             // saving.
             // However, it could be a not-first time saving if the user has been using the manual
             // 'save data' option from the menu. So try to update first, then make a new one if that
             // fails.
-            ContentValues values = new ContentValues();
-            if (mInstanceName != null) {
-                values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
-            }
-            if (incomplete || mMarkCompleted) {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
-            } else {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-            }
-            // update this whether or not the status is complete...
-            values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
-
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
             String[] whereArgs = {
                 FormEntryActivity.mInstancePath
@@ -137,21 +133,23 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 Collect.getInstance().getContentResolver()
                         .update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
             if (updated > 1) {
-                Log.w(t, "Updated more than one entry, that's not good");
+                Log.w(t, "Updated more than one entry, that's not good: " + FormEntryActivity.mInstancePath);
             } else if (updated == 1) {
-                Log.i(t, "Instance already exists, updating");
+                Log.i(t, "Instance found and successfully updated: " + FormEntryActivity.mInstancePath);
                 // already existed and updated just fine
             } else {
-                Log.e(t, "No instance found, creating");
+                Log.i(t, "No instance found, creating");
                 // Entry didn't exist, so create it.
                 Cursor c = null;
                 try {
+                	// retrieve the form definition...
                 	c = Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
 	                c.moveToFirst();
 	                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
 	                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
 	                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
 	
+	                // add missing fields into values
 	                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
 	                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
 	                if (mInstanceName != null) {
@@ -196,11 +194,15 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             return false;
         }
 
-        // update the mUri. We've saved the reloadable instance, so update status...
+        // update the mUri. We have exported the reloadable instance, so update status...
+        // Since we saved a reloadable instance, it is flagged as re-openable so that if any error 
+        // occurs during the packaging of the data for the server fails (e.g., encryption),
+        // we can still reopen the filled-out form and re-save it at a later time.
         updateInstanceDatabase(true, true);
         
         if ( markCompleted ) {
-            // now see if it is to be finalized and perhaps update everything...
+            // now see if the packaging of the data for the server would make it
+        	// non-reopenable (e.g., encryption or send an SMS or other fraction of the form).
             boolean canEditAfterCompleted = FormEntryActivity.mFormController.isSubmissionEntireForm();
             boolean isEncrypted = false;
             
