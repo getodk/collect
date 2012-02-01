@@ -60,7 +60,7 @@ public class InstanceChooserList extends ListActivity {
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
         
-        String selection = InstanceColumns.STATUS + " != ?";
+        String selection = InstanceColumns.STATUS + " is not ?";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, InstanceColumns.STATUS + " desc");
 
