@@ -170,8 +170,7 @@ public class DownloadFormsTask extends
                         }
                     }
                 } else {
-                    // TODO: manifest was null?
-                    Log.e(t, "Manifest was null.  PANIC");
+                    Log.i(t, "No Manifest for: " + fd.formID);
                 }
             } catch (SocketTimeoutException se) {
                 se.printStackTrace();
@@ -467,12 +466,12 @@ public class DownloadFormsTask extends
                 try {
                     File mediaFile = new File(mediaDir, toDownload.filename);
 
-                    String currentFileHash = FileUtils.getMd5Hash(mediaFile);
-                    String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
-
                     if (!mediaFile.exists()) {
                         downloadFile(mediaFile, toDownload.downloadUrl);
                     } else {
+                        String currentFileHash = FileUtils.getMd5Hash(mediaFile);
+                        String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
+
                         if (!currentFileHash.contentEquals(downloadFileHash)) {
                             // if the hashes match, it's the same file
                             // otherwise delete our current one and replace it with the new one
@@ -481,6 +480,7 @@ public class DownloadFormsTask extends
                         } else {
                             // exists, and the hash is the same
                             // no need to download it again
+                        	Log.i(t, "Skipping media file fetch -- file hashes identical: " + mediaFile.getAbsolutePath());
                         }
                     }
                 } catch (Exception e) {

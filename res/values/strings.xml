@@ -79,6 +79,7 @@
 <string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s).</string>
 <string name="file_deleted_error">Sorry, %1$s of %2$s selected form(s) failed to delete!</string>
 <string name="file_deleted_ok">%s form(s) successfully deleted!</string>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
 <string name="file_invalid">File: %s is invalid.</string>
 <string name="file_missing">File: %s is missing.</string>
 <string name="finished_disk_scan">Finished scanning. All forms loaded.</string>

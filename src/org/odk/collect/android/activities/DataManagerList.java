@@ -14,15 +14,18 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,15 +35,13 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 /**
  * Responsible for displaying and deleting all the valid forms in the forms directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends ListActivity {
+public class DataManagerList extends ListActivity implements DeleteInstancesListener {
     private static final String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
@@ -49,6 +50,8 @@ public class DataManagerList extends ListActivity {
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
 
+    DeleteInstancesTask mDeleteInstancesTask = null;
+    
     private static final String SELECTED = "selected";
 
 
@@ -56,7 +59,7 @@ public class DataManagerList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_manage_list);
-
+        
         mDeleteButton = (Button) findViewById(R.id.delete_button);
         mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
@@ -70,6 +73,11 @@ public class DataManagerList extends ListActivity {
                 }
             }
         });
+
+        mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
+        if ( mDeleteInstancesTask != null ) {
+        	mDeleteInstancesTask.setDeleteListener(this);
+        }
 
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, InstanceColumns.DISPLAY_NAME);
 
@@ -101,9 +109,18 @@ public class DataManagerList extends ListActivity {
             }
             mRestored = false;
         }
+        
+        if ( mDeleteInstancesTask != null && 
+             mDeleteInstancesTask.getStatus() == AsyncTask.Status.FINISHED ) {
+        	deleteComplete( mDeleteInstancesTask.getDeleteCount());
+        }
     }
 
-
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+    	// pass the thread on restart
+    	return mDeleteInstancesTask;
+    }
     /**
      * Create the instance delete dialog
      */
@@ -118,8 +135,6 @@ public class DataManagerList extends ListActivity {
                     switch (i) {
                         case DialogInterface.BUTTON1: // delete files and clear checkboxes
                             deleteSelectedInstances();
-                            mSelected.clear();
-                            getListView().clearChoices();
                             break;
                         case DialogInterface.BUTTON2: // do nothing
                             break;
@@ -137,28 +152,18 @@ public class DataManagerList extends ListActivity {
      * Deletes the selected files. Content provider handles removing the files from the filesystem.
      */
     private void deleteSelectedInstances() {
-        ContentResolver cr = getContentResolver();
-        int deleted = 0;
-        for (int i = 0; i < mSelected.size(); i++) {
-            Uri deleteForm =
-                Uri.withAppendedPath(InstanceColumns.CONTENT_URI, mSelected.get(i).toString());
-            deleted += cr.delete(deleteForm, null, null);
-        }
-
-        if (deleted == mSelected.size()) {
-            // all deletes were successful
-            Toast.makeText(this, getString(R.string.file_deleted_ok, deleted), Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            // had some failures
-            Log.e(t, "Failed to delete " + (mSelected.size() - deleted) + " instances");
+    	if ( mDeleteInstancesTask == null ) {
+    		mDeleteInstancesTask = new DeleteInstancesTask();
+    		mDeleteInstancesTask.setContentResolver(getContentResolver());
+    		mDeleteInstancesTask.setDeleteListener(this);
+    		mDeleteInstancesTask.execute(mSelected.toArray(new Long[mSelected.size()]));
+    	} else {
             Toast.makeText(
-                this,
-                getString(R.string.file_deleted_error, mSelected.size() - deleted, mSelected.size()),
-                Toast.LENGTH_LONG).show();
-        }
+                    this,
+                    getString(R.string.file_delete_in_progress),
+                    Toast.LENGTH_LONG).show();
+    	}
     }
-
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -208,4 +213,24 @@ public class DataManagerList extends ListActivity {
         }
         outState.putLongArray(SELECTED, selectedArray);
     }
+
+	@Override
+	public void deleteComplete(int deletedInstances) {
+        if (deletedInstances == mSelected.size()) {
+            // all deletes were successful
+            Toast.makeText(this, getString(R.string.file_deleted_ok, deletedInstances), Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            // had some failures
+            Log.e(t, "Failed to delete " + (mSelected.size() - deletedInstances) + " instances");
+            Toast.makeText(
+                this,
+                getString(R.string.file_deleted_error, mSelected.size() - deletedInstances, mSelected.size()),
+                Toast.LENGTH_LONG).show();
+        }
+        mDeleteInstancesTask = null;
+        mSelected.clear();
+        getListView().clearChoices();
+        mDeleteButton.setEnabled(false);
+	}
 }
