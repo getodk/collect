@@ -190,11 +190,11 @@ public class DownloadFormsTask extends
         rootName = rootName.trim();
 
         // proposed name of xml file...
-        String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";
+        String path = Collect.FORMS_PATH + "/" + rootName + ".xml";
         int i = 2;
         f = new File(path);
         while (f.exists()) {
-            path = Collect.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
+            path = Collect.FORMS_PATH + "/" + rootName + "_" + i + ".xml";
             f = new File(path);
             i++;
         }

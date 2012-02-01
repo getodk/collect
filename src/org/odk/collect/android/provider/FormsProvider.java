@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.provider;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
@@ -60,7 +59,7 @@ public class FormsProvider extends ContentProvider {
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
         DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+            super("/sdcard/odk/metadata", databaseName, null, DATABASE_VERSION);
         }
 
 
@@ -192,7 +191,7 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.MD5_HASH, md5);
 
             if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
-                String cachePath = Collect.CACHE_PATH + File.separator + md5 + ".formdef";
+                String cachePath = "/sdcard/odk/.cache/" + md5 + ".formdef";
                 values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
             }
             if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
@@ -378,8 +377,8 @@ public class FormsProvider extends ContentProvider {
                                 .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
                         String newMd5 = FileUtils.getMd5Hash(new File(formFile));
                         values.put(FormsColumns.MD5_HASH, newMd5);
-                        values.put(FormsColumns.JRCACHE_FILE_PATH, 
-                        		Collect.CACHE_PATH + File.separator + newMd5 + ".formdef");
+                        values.put(FormsColumns.JRCACHE_FILE_PATH, "/sdcard/odk/.cache" + newMd5
+                                + ".formdef");
                     }
 
                     // Make sure that the necessary fields are all set
