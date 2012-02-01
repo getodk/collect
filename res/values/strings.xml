@@ -179,8 +179,8 @@
 <string name="keep_changes">Save Changes</string>
 <string name="go_to_location">Go to Location</string>
 <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-<string name="protocol">Server Platform</string>
-<string name="change_protocol">Server Platform</string>
+<string name="protocol">Protocol</string>
+<string name="change_protocol">Protocol</string>
 <string name="change_submission_url">Submission Path (appended to Server URL)</string>
 <string name="formlist_url">Form List Path</string>
 <string name="submission_url">Submission Path</string>
