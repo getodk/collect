@@ -36,7 +36,7 @@
 	<string-array name="protocol_entries">
 		<item>ODK Aggregate</item>
 		<item>Google Forms</item>
-		<item>OpenRosa 1.0</item>
+		<item>Kita</item>
 	</string-array>
 	<string-array name="font_size_entry_values">
 		<item>29</item>

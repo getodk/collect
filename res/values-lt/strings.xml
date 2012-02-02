@@ -29,7 +29,7 @@
 <string name="cancel_loading_form">Atšaukti</string>
 <string name="cancel_location">Atšaukti</string>
 <string name="cancel_saving_form">Atšaukti</string>
-<string name="cannot_edit_completed_form">Ši forma daugiau negalės būti redaguojama, jei bus pažymėsite, kad ji baigta.</string>
+<string name="cannot_edit_completed_form">Kai bus pažymėta kaip baigta, ši forma daugiau negalės būti redaguojama. Ji gali būti užšifruota.</string>
 <string name="capture_audio">Įrašyti garsą</string>
 <string name="capture_image">Užfiksuoti kadrą</string>
 <string name="capture_video">Įrašyti video</string>
@@ -180,7 +180,7 @@
 <string name="keep_changes">Išsaugoti pakeitimus</string>
 <string name="go_to_location">Aplankyti vietovę</string>
 <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-<string name="protocol">Protokolas</string>
+<string name="protocol">Serverio platforma</string>
 <string name="change_protocol">Protokolas</string>
 <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
 <string name="formlist_url">Formų sąrašo kelias</string>
@@ -216,4 +216,4 @@
 <string name="google_account">Parinkite Google sąskaitą</string>
 <string name="selected_google_account_text">Google sąskaita</string>
 <string name="google_submission_id_text">Google kolekcijos bandymas</string>
-</resources>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string></resources>
