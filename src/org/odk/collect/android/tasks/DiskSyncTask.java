@@ -42,6 +42,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     DiskSyncListener mListener;
 
+    String statusMessage;
 
     @Override
     protected String doInBackground(Void... params) {
@@ -158,12 +159,17 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             }
         }
         if ( errors.length() != 0 ) {
-        	return errors.toString();
+        	statusMessage = errors.toString();
         } else {
-        	return Collect.getInstance().getString(R.string.finished_disk_scan);
+        	statusMessage = Collect.getInstance().getString(R.string.finished_disk_scan);
         }
+        return statusMessage;
     }
 
+    public String getStatusMessage() {
+    	return statusMessage;
+    }
+    
     /**
      * Attempts to parse the formDefFile as an XForm.
 	 * This is slow because FileUtils.parseXML is slow

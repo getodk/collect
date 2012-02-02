@@ -36,201 +36,198 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 /**
- * Responsible for displaying and deleting all the valid forms in the forms directory.
+ * Responsible for displaying and deleting all the valid forms in the forms
+ * directory.
  * 
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends ListActivity implements DeleteInstancesListener {
-    private static final String t = "DataManagerList";
-    private AlertDialog mAlertDialog;
-    private Button mDeleteButton;
+public class DataManagerList extends ListActivity implements
+		DeleteInstancesListener {
+	private static final String t = "DataManagerList";
+	private AlertDialog mAlertDialog;
+	private Button mDeleteButton;
 
-    private SimpleCursorAdapter mInstances;
-    private ArrayList<Long> mSelected = new ArrayList<Long>();
-    private boolean mRestored = false;
+	private SimpleCursorAdapter mInstances;
+	private ArrayList<Long> mSelected = new ArrayList<Long>();
 
-    DeleteInstancesTask mDeleteInstancesTask = null;
-    
-    private static final String SELECTED = "selected";
+	DeleteInstancesTask mDeleteInstancesTask = null;
 
+	private static final String SELECTED = "selected";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.data_manage_list);
-        
-        mDeleteButton = (Button) findViewById(R.id.delete_button);
-        mDeleteButton.setText(getString(R.string.delete_file));
-        mDeleteButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSelected.size() > 0) {
-                    createDeleteInstanceDialog();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.noselect_error,
-                        Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.data_manage_list);
 
-        mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
-        if ( mDeleteInstancesTask != null ) {
-        	mDeleteInstancesTask.setDeleteListener(this);
-        }
+		mDeleteButton = (Button) findViewById(R.id.delete_button);
+		mDeleteButton.setText(getString(R.string.delete_file));
+		mDeleteButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mSelected.size() > 0) {
+					createDeleteInstancesDialog();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							R.string.noselect_error, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
 
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null, InstanceColumns.DISPLAY_NAME);
+		Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
+				InstanceColumns.DISPLAY_NAME);
 
-        String[] data = new String[] {
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
-        };
-        int[] view = new int[] {
-                R.id.text1, R.id.text2
-        };
+		String[] data = new String[] { InstanceColumns.DISPLAY_NAME,
+				InstanceColumns.DISPLAY_SUBTEXT };
+		int[] view = new int[] { R.id.text1, R.id.text2 };
 
-        mInstances =
-            new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(mInstances);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getListView().setItemsCanFocus(false);
-        mDeleteButton.setEnabled(!(mSelected.size() == 0));
+		mInstances = new SimpleCursorAdapter(this,
+				R.layout.two_item_multiple_choice, c, data, view);
+		setListAdapter(mInstances);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		getListView().setItemsCanFocus(false);
+		mDeleteButton.setEnabled(false);
 
-        // if current activity is being reinitialized due to changing orientation
-        // restore all check marks for ones selected
-        if (mRestored) {
-            ListView ls = getListView();
-            for (long id : mSelected) {
-                for (int pos = 0; pos < ls.getCount(); pos++) {
-                    if (id == ls.getItemIdAtPosition(pos)) {
-                        ls.setItemChecked(pos, true);
-                        break;
-                    }
-                }
-            }
-            mRestored = false;
-        }
-        
-        if ( mDeleteInstancesTask != null && 
-             mDeleteInstancesTask.getStatus() == AsyncTask.Status.FINISHED ) {
-        	deleteComplete( mDeleteInstancesTask.getDeleteCount());
-        }
-    }
+		mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
+	}
 
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-    	// pass the thread on restart
-    	return mDeleteInstancesTask;
-    }
-    /**
-     * Create the instance delete dialog
-     */
-    private void createDeleteInstanceDialog() {
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.delete_file));
-        mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
-        DialogInterface.OnClickListener dialogYesNoListener =
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    switch (i) {
-                        case DialogInterface.BUTTON1: // delete files and clear checkboxes
-                            deleteSelectedInstances();
-                            break;
-                        case DialogInterface.BUTTON2: // do nothing
-                            break;
-                    }
-                }
-            };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.delete_yes), dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.delete_no), dialogYesNoListener);
-        mAlertDialog.show();
-    }
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		// pass the tasks on orientation-change restart
+		return mDeleteInstancesTask;
+	}
 
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		long[] selectedArray = savedInstanceState.getLongArray(SELECTED);
+		for (int i = 0; i < selectedArray.length; i++) {
+			mSelected.add(selectedArray[i]);
+		}
+		mDeleteButton.setEnabled(selectedArray.length > 0);
+	}
 
-    /**
-     * Deletes the selected files. Content provider handles removing the files from the filesystem.
-     */
-    private void deleteSelectedInstances() {
-    	if ( mDeleteInstancesTask == null ) {
-    		mDeleteInstancesTask = new DeleteInstancesTask();
-    		mDeleteInstancesTask.setContentResolver(getContentResolver());
-    		mDeleteInstancesTask.setDeleteListener(this);
-    		mDeleteInstancesTask.execute(mSelected.toArray(new Long[mSelected.size()]));
-    	} else {
-            Toast.makeText(
-                    this,
-                    getString(R.string.file_delete_in_progress),
-                    Toast.LENGTH_LONG).show();
-    	}
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		long[] selectedArray = new long[mSelected.size()];
+		for (int i = 0; i < mSelected.size(); i++) {
+			selectedArray[i] = mSelected.get(i);
+		}
+		outState.putLongArray(SELECTED, selectedArray);
+	}
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+	@Override
+	protected void onResume() {
+		// hook up to receive completion events
+		if (mDeleteInstancesTask != null) {
+			mDeleteInstancesTask.setDeleteListener(this);
+		}
+		super.onResume();
+		// async task may have completed while we were reorienting...
+		if (mDeleteInstancesTask != null
+				&& mDeleteInstancesTask.getStatus() == AsyncTask.Status.FINISHED) {
+			deleteComplete(mDeleteInstancesTask.getDeleteCount());
+		}
+	}
 
-        // get row id from db
-        Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+	@Override
+	protected void onPause() {
+		if (mDeleteInstancesTask != null ) {
+			mDeleteInstancesTask.setDeleteListener(null);
+		}
+		if (mAlertDialog != null && mAlertDialog.isShowing()) {
+			mAlertDialog.dismiss();
+		}
+		super.onPause();
+	}
 
-        // add/remove from selected list
-        if (mSelected.contains(k))
-            mSelected.remove(k);
-        else
-            mSelected.add(k);
+	/**
+	 * Create the instance delete dialog
+	 */
+	private void createDeleteInstancesDialog() {
+		mAlertDialog = new AlertDialog.Builder(this).create();
+		mAlertDialog.setTitle(getString(R.string.delete_file));
+		mAlertDialog.setMessage(getString(R.string.delete_confirm,
+				mSelected.size()));
+		DialogInterface.OnClickListener dialogYesNoListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+				case DialogInterface.BUTTON1: // delete
+					deleteSelectedInstances();
+					break;
+				case DialogInterface.BUTTON2: // do nothing
+					break;
+				}
+			}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.delete_yes),
+				dialogYesNoListener);
+		mAlertDialog.setButton2(getString(R.string.delete_no),
+				dialogYesNoListener);
+		mAlertDialog.show();
+	}
 
-        mDeleteButton.setEnabled(!(mSelected.size() == 0));
-    }
+	/**
+	 * Deletes the selected files. Content provider handles removing the files
+	 * from the filesystem.
+	 */
+	private void deleteSelectedInstances() {
+		if (mDeleteInstancesTask == null) {
+			mDeleteInstancesTask = new DeleteInstancesTask();
+			mDeleteInstancesTask.setContentResolver(getContentResolver());
+			mDeleteInstancesTask.setDeleteListener(this);
+			mDeleteInstancesTask.execute(mSelected.toArray(new Long[mSelected
+					.size()]));
+		} else {
+			Toast.makeText(this, getString(R.string.file_delete_in_progress),
+					Toast.LENGTH_LONG).show();
+		}
+	}
 
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
 
-    @Override
-    protected void onPause() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
-        }
-        super.onPause();
-    }
+		// get row id from db
+		Cursor c = (Cursor) getListAdapter().getItem(position);
+		long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
 
+		// add/remove from selected list
+		if (mSelected.contains(k))
+			mSelected.remove(k);
+		else
+			mSelected.add(k);
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        long[] selectedArray = savedInstanceState.getLongArray(SELECTED);
-        for (int i = 0; i < selectedArray.length; i++) {
-            mSelected.add(selectedArray[i]);
-        }
-        mRestored = true;
-        mDeleteButton.setEnabled(selectedArray.length > 0);
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        long[] selectedArray = new long[mSelected.size()];
-        for (int i = 0; i < mSelected.size(); i++) {
-            selectedArray[i] = mSelected.get(i);
-        }
-        outState.putLongArray(SELECTED, selectedArray);
-    }
+		mDeleteButton.setEnabled(!(mSelected.size() == 0));
+	}
 
 	@Override
 	public void deleteComplete(int deletedInstances) {
-        if (deletedInstances == mSelected.size()) {
-            // all deletes were successful
-            Toast.makeText(this, getString(R.string.file_deleted_ok, deletedInstances), Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            // had some failures
-            Log.e(t, "Failed to delete " + (mSelected.size() - deletedInstances) + " instances");
-            Toast.makeText(
-                this,
-                getString(R.string.file_deleted_error, mSelected.size() - deletedInstances, mSelected.size()),
-                Toast.LENGTH_LONG).show();
-        }
-        mDeleteInstancesTask = null;
-        mSelected.clear();
-        getListView().clearChoices();
-        mDeleteButton.setEnabled(false);
+		Log.i(t, "Delete instances complete");
+		if (deletedInstances == mSelected.size()) {
+			// all deletes were successful
+			Toast.makeText(this,
+					getString(R.string.file_deleted_ok, deletedInstances),
+					Toast.LENGTH_SHORT).show();
+		} else {
+			// had some failures
+			Log.e(t, "Failed to delete "
+					+ (mSelected.size() - deletedInstances) + " instances");
+			Toast.makeText(
+					this,
+					getString(R.string.file_deleted_error, mSelected.size()
+							- deletedInstances, mSelected.size()),
+					Toast.LENGTH_LONG).show();
+		}
+		mDeleteInstancesTask = null;
+		mSelected.clear();
+		getListView().clearChoices(); // doesn't unset the checkboxes
+		for ( int i = 0 ; i < getListView().getCount() ; ++i ) {
+			getListView().setItemChecked(i, false);
+		}
+		mDeleteButton.setEnabled(false);
 	}
 }
