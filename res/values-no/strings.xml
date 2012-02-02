@@ -216,4 +216,4 @@
 <string name="google_account">Velg google-konto</string>
 <string name="selected_google_account_text">Google-konto</string>
 <string name="google_submission_id_text">Google Collection Effort</string>
-</resources>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string></resources>
