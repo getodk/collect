@@ -18,11 +18,6 @@ the License.
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<LinearLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="vertical"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
 		<TextView
 			android:id="@+id/status_text"
 			android:layout_width="fill_parent"
@@ -49,6 +44,5 @@ the License.
 			android:gravity="center"
 			android:background="@drawable/white"
 			android:textColor="@drawable/black" />
-	</LinearLayout>
 </LinearLayout>
  

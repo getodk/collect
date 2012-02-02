@@ -7,7 +7,7 @@
 		android:text="@+id/RadioButton01"
 		android:layout_height="wrap_content"
 		android:layout_weight="0.9"
-		android:layout_width="fill_parent"
+		android:layout_width="0dip"
 		android:id="@+id/radiobuttontemplate"></RadioButton>
 	<ImageButton
 		android:id="@+id/ImageButton01"

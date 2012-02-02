@@ -16,6 +16,7 @@
 <string name="activity_not_found">Fant ingen handling: %s</string>
 <string name="add_another">Legg til gruppe</string>
 <string name="add_another_repeat">Legg til annen \"%s\" gruppe?</string>
+<string name="add_more">Add more</string>
 <string name="add_repeat">Legg til ny \"%s\" gruppe?</string>
 <string name="add_repeat_no">Ikke legg til</string>
 <string name="advance">Gå til neste prompt</string>
@@ -79,6 +80,7 @@
 <string name="fetching_file">Henter %1$s.\n\nSkjema %2$s av %3$s skjema(er).</string>
 <string name="file_deleted_error">Beklager, %1$s av %2$s utvalgte skjema(er) sletting mislyktes!</string>
 <string name="file_deleted_ok">%s skjema(er) er slettet!</string>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
 <string name="file_invalid">Filen: %s er ugyldig.</string>
 <string name="file_missing">Filen: %s mangler.</string>
 <string name="finished_disk_scan">Henting fullført.</string>
@@ -106,7 +108,7 @@
 <string name="location_accuracy">Nøyaktigheten er %1$s m</string>
 <string name="longitude">Breddegrad</string>
 <string name="main_menu">Hovedmeny</string>
-<string name="main_menu_details">Forenklet datainnsamling...</string>
+<string name="main_menu_details">Forenklet datainnsamling&#8230;</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Slett lagret skjema</string>
 <string name="mark_finished">Kryss skjema som ferdig</string>
@@ -187,14 +189,14 @@
 <string name="submission_url">"Bane for innsending"</string>
 <string name="font_size">Fontstørrelse</string>
 <string name="change_font_size">Fontstørrelse</string>
-<string name="form_scan_starting">Søker...</string>
+<string name="form_scan_starting">Søker&#8230;</string>
 <string name="form_scan_finished">Søket fullført</string>
 <string name="powered_by_odk">v1.2 RC1 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Det er oppstått en feil."</string>
 <string name="manifest_server_error">Feil OpenRosa version?</string>
-<string name="root_element_error">Root element is not &amp;lt;manifest\&gt; -- was %s</string>
+<string name="root_element_error">Root element is not &amp;lt;manifest\&gt; &#8212; was %s</string>
 <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
 <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
@@ -216,4 +218,12 @@
 <string name="google_account">Velg google-konto</string>
 <string name="selected_google_account_text">Google-konto</string>
 <string name="google_submission_id_text">Google Collection Effort</string>
+<string name="server_platform_odk_aggregate">ODK Aggregate</string>
+<string name="server_platform_google_forms">Google Forms</string>
+<string name="server_platform_other">Other</string>
+<string name="font_size_extra_large">Ekstra stor</string>
+<string name="font_size_large">Stor</string>
+<string name="font_size_medium">Medium</string>
+<string name="font_size_small">Liten</string>
+<string name="font_size_extra_small">Ekstra liten</string>
 </resources>

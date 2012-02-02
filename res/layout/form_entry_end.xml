@@ -51,6 +51,7 @@
             android:id="@+id/save_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:textSize="21dp" />
 
         <CheckBox

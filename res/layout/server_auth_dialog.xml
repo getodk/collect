@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"
-        android:text="Username"
+        android:text="@string/username"
         android:gravity="left"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff" />
@@ -37,6 +37,7 @@
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"
         android:scrollHorizontally="true"
+        android:inputType="text"
         android:autoText="false"
         android:capitalize="none"
         android:gravity="fill_horizontal"
@@ -48,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"
-        android:text="Password"
+        android:text="@string/password"
         android:gravity="left"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff" />
@@ -60,6 +61,7 @@
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"
         android:scrollHorizontally="true"
+        android:inputType="text"
         android:autoText="false"
         android:capitalize="none"
         android:gravity="fill_horizontal"

@@ -16,6 +16,7 @@
 <string name="activity_not_found">Nenhuma atividade detectada por: %s</string>
 <string name="add_another">Adicionar Grupo</string>
 <string name="add_another_repeat">Add another \"%s\" group?</string>
+<string name="add_more">Add more</string>
 <string name="add_repeat">Adicionar um novo \"%s\" grupo?</string>
 <string name="add_repeat_no">Não Adicionar</string>
 <string name="advance">seguir para o próximo agora</string>
@@ -79,6 +80,7 @@
 <string name="fetching_file">Baixando %1$s.\n\nFormulário(s) %2$s de %3$s</string>
 <string name="file_deleted_error">Desculpe, %1$s de %2$s formulário(s) selecionado falhou ao apagar!</string>
 <string name="file_deleted_ok">%s formulário(s) apagados com sucesso!</string>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
 <string name="file_invalid">Arquivo: %s é inválido.</string>
 <string name="file_missing">Arquivo: %s não encontrado.</string>
 <string name="finished_disk_scan">Finished scanning. All forms loaded.</string>
@@ -106,7 +108,7 @@
 <string name="location_accuracy">Accuracy is %1$s m</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Menu Principal</string>
-<string name="main_menu_details">Coleta de dados facilitada...</string>
+<string name="main_menu_details">Coleta de dados facilitada&#8230;</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Apagar Formulário Salvo</string>
 <string name="mark_finished">Marcar formulário como finalizado</string>
@@ -187,14 +189,14 @@
 <string name="submission_url">Caminho para submeter</string>
 <string name="font_size">Tamanho da Fonte do Texto</string>
 <string name="change_font_size">Tamanho da Fonte do Texto</string>
-<string name="form_scan_starting">Procurando por formulários...</string>
+<string name="form_scan_starting">Procurando por formulários&#8230;</string>
 <string name="form_scan_finished">Completa a varredura de formulários</string>
 <string name="powered_by_odk">v1.2 RC1 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Erro enquanto acessa %s: "</string>
-<string name="manifest_server_error">Manifestar uma resposta quando não ha uma versão do Open Rosa -- servidor ruin?</string>
-<string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; -- foi %s</string>
+<string name="manifest_server_error">Manifestar uma resposta quando não ha uma versão do Open Rosa &#8212; servidor ruin?</string>
+<string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; &#8212; foi %s</string>
 <string name="root_namespace_error">Root element Namespace incorreto: %s</string>
 <string name="manifest_tag_error">Manifesto s% entrada está faltando uma ou mais tags: arquivo, hash, ou downloadURL</string>
 <string name="form_download_progress">%1$s. Acessando arquivos de mídia: %2$s de %3$s</string>
@@ -216,4 +218,12 @@
 <string name="google_account">Selecionar Uma Conta Google</string>
 <string name="selected_google_account_text">Conta Google</string>
 <string name="google_submission_id_text">Esforço de coleta Google</string>
+<string name="server_platform_odk_aggregate">ODK Aggregate</string>
+<string name="server_platform_google_forms">Google Forms</string>
+<string name="server_platform_other">Other</string>
+<string name="font_size_extra_large">Extra Grande</string>
+<string name="font_size_large">Grande</string>
+<string name="font_size_medium">Medio</string>
+<string name="font_size_small">Pequeno</string>
+<string name="font_size_extra_small">Muito Pequeno</string>
 </resources>

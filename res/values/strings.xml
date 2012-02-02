@@ -16,6 +16,7 @@
 <string name="activity_not_found">No activity found to handle: %s</string>
 <string name="add_another">Add Group</string>
 <string name="add_another_repeat">Add another \"%s\" group?</string>
+<string name="add_more">Add more</string>
 <string name="add_repeat">Add a new \"%s\" group?</string>
 <string name="add_repeat_no">Do Not Add</string>
 <string name="advance">forward to\nnext\nprompt</string>
@@ -107,7 +108,7 @@
 <string name="location_accuracy">Accuracy is %1$s m</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
-<string name="main_menu_details">Data collection made easier...</string>
+<string name="main_menu_details">Data collection made easier&#8230;</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Delete Saved Form</string>
 <string name="mark_finished">Mark form as finalized</string>
@@ -188,14 +189,14 @@
 <string name="submission_url">Submission Path</string>
 <string name="font_size">Text Font Size</string>
 <string name="change_font_size">Text Font Size</string>
-<string name="form_scan_starting">Scanning for forms...</string>
+<string name="form_scan_starting">Scanning for forms&#8230;</string>
 <string name="form_scan_finished">Form scanning completed</string>
 <string name="powered_by_odk">v1.2 RC1 - Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">Error while accessing %s: </string>
-<string name="manifest_server_error">Manifest reply does not report an OpenRosa version -- bad server?</string>
-<string name="root_element_error">Root element is not &lt;manifest\&gt; -- was %s</string>
+<string name="manifest_server_error">Manifest reply does not report an OpenRosa version &#8212; bad server?</string>
+<string name="root_element_error">Root element is not &lt;manifest\&gt; &#8212; was %s</string>
 <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
 <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
@@ -217,4 +218,12 @@
 <string name="google_account">Select Google Account</string>
 <string name="selected_google_account_text">Google Account</string>
 <string name="google_submission_id_text">Google Collection Effort</string>
+<string name="server_platform_odk_aggregate">ODK Aggregate</string>
+<string name="server_platform_google_forms">Google Forms</string>
+<string name="server_platform_other">Other</string>
+<string name="font_size_extra_large">Extra Large</string>
+<string name="font_size_large">Large</string>
+<string name="font_size_medium">Medium</string>
+<string name="font_size_small">Small</string>
+<string name="font_size_extra_small">Extra Small</string>
 </resources>

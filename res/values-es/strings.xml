@@ -16,6 +16,7 @@
 <string name="activity_not_found">Ninguna actividad se encontro para manejar: %s</string>
 <string name="add_another">Agregar Grupo</string>
 <string name="add_another_repeat">Agregar otro grupo de \"%s\"?</string>
+<string name="add_more">Add more</string>
 <string name="add_repeat">Agregar un nuevo grupo de \"%s\"?</string>
 <string name="add_repeat_no">No Agregar</string>
 <string name="advance">avanzar a la \nproxima\npregunta</string>
@@ -78,6 +79,7 @@
 <string name="error_occured">Un Error Ocurrio</string>
 <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
 <string name="file_deleted_error">%1$s de %2$s formulario(s) seleccionados no se borraron!</string>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
 <string name="file_deleted_ok">%s formulario(s) se borraron exitosamente!</string>
 <string name="file_invalid">Archivo: %s es invalido.</string>
 <string name="file_missing">Archivo: %s falta.</string>
@@ -106,7 +108,7 @@
 <string name="location_accuracy">Precision es de %1$s m</string>
 <string name="longitude">Longitud</string>
 <string name="main_menu">Menu Principal</string>
-<string name="main_menu_details">Recoleccion de Datos mas facilmente...</string>
+<string name="main_menu_details">Recoleccion de Datos mas facilmente&#8230;</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Borrar el Formulario Guardado</string>
 <string name="mark_finished">Marcar el formulario como finalizado</string>
@@ -187,14 +189,14 @@
 <string name="submission_url">Ubicacion de Envio</string>
 <string name="font_size">Tamaño del Texto</string>
 <string name="change_font_size">Tamaño del Texto</string>
-<string name="form_scan_starting">Escaneando para formularios...</string>
+<string name="form_scan_starting">Escaneando para formularios&#8230;</string>
 <string name="form_scan_finished">Escaneo del formulario completado</string>
 <string name="powered_by_odk">v1.2 RC1 - Desarrollado por Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Error mientras accediendo a %s: "</string>
-<string name="manifest_server_error">Respuesta del manifiesto no reporta una version de OpenRosa -- servidor malo?</string>
-<string name="root_element_error">Elemento root no es &amp;lt;manifiesto\&gt; -- fue %s</string>
+<string name="manifest_server_error">Respuesta del manifiesto no reporta una version de OpenRosa &#8212; servidor malo?</string>
+<string name="root_element_error">Elemento root no es &amp;lt;manifiesto\&gt; &#8212; fue %s</string>
 <string name="root_namespace_error">El elemento de root Namespace esta incorrecto: %s</string>
 <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s of %3$s</string>
@@ -216,4 +218,12 @@
 <string name="google_account">Escoga la Cuenta de Google</string>
 <string name="selected_google_account_text">Cuenta de Google</string>
 <string name="google_submission_id_text">Esfuerzo de Recoleccion de Google</string>
+<string name="server_platform_odk_aggregate">ODK Aggregate</string>
+<string name="server_platform_google_forms">Google Forms</string>
+<string name="server_platform_other">Other</string>
+<string name="font_size_extra_large">Extra Grande</string>
+<string name="font_size_large">Grande</string>
+<string name="font_size_medium">Medio</string>
+<string name="font_size_small">Chico</string>
+<string name="font_size_extra_small">Extra Chico</string>
 </resources>
