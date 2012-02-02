@@ -216,4 +216,4 @@
 <string name="google_account">Select Google Account</string>
 <string name="selected_google_account_text">Google Account</string>
 <string name="google_submission_id_text">Google Collection Effort</string>
-</resources>
+<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string></resources>
