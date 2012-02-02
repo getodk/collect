@@ -212,4 +212,4 @@ License.
 <string name="save_as_error">Le nom ne peut pas être vide!</string> 
 <string name="form_name">Nom du Formulaire :</string> 
 <string name="edit_prompt">Ligne d\'Edition</string> 
-<string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as complete.</string><string name="google_account">Select Google Account</string><string name="selected_google_account_text">Google Account</string><string name="google_submission_id_text">Google Collection Effort</string></resources>
+<string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as complete.</string><string name="google_account">Select Google Account</string><string name="selected_google_account_text">Google Account</string><string name="google_submission_id_text">Google Collection Effort</string><string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string></resources>
