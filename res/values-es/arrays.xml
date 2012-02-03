@@ -7,30 +7,30 @@
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
 	the specific language governing permissions and limitations under the License. -->
 <resources>
-	<!-- DO NOT translate protocol_entry_values - only used internally -->
-	<string-array name="protocol_entry_values">
-		<item>odk_default</item>
-		<item>google</item>
-		<item></item>
-	</string-array>
-	<string-array name="protocol_entries">
-		<item>@string/server_platform_odk_aggregate</item>
-		<item>@string/server_platform_google_forms</item>
-		<item>@string/server_platform_other</item>
-	</string-array>
-	<!-- DO NOT alter font_size_entry_values - used internally in preferences activity -->
-	<string-array name="font_size_entry_values">
-		<item>29</item>
-		<item>25</item>
-		<item>21</item>
-		<item>17</item>
-		<item>13</item>
-	</string-array>
-	<string-array name="font_size_entries">
-		<item>@string/font_size_extra_large</item>
-		<item>@string/font_size_large</item>
-		<item>@string/font_size_medium</item>
-		<item>@string/font_size_small</item>
-		<item>@string/font_size_extra_small</item>
-	</string-array>
+  <!-- DO NOT translate protocol_entry_values - only used internally -->
+  <string-array name="protocol_entry_values">
+    <item>odk_default</item>
+    <item>google</item>
+    <item>" "</item>
+  </string-array>
+  <string-array name="protocol_entries">
+    <item>@string/server_platform_odk_aggregate</item>
+    <item>@string/server_platform_google_forms</item>
+    <item>@string/server_platform_other</item>
+  </string-array>
+  <!-- DO NOT alter font_size_entry_values - used internally in preferences activity -->
+  <string-array name="font_size_entry_values">
+    <item>29</item>
+    <item>25</item>
+    <item>21</item>
+    <item>17</item>
+    <item>13</item>
+  </string-array>
+  <string-array name="font_size_entries">
+    <item>@string/font_size_extra_large</item>
+    <item>@string/font_size_large</item>
+    <item>@string/font_size_medium</item>
+    <item>@string/font_size_small</item>
+    <item>@string/font_size_extra_small</item>
+  </string-array>
 </resources>
