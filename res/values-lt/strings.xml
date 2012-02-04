@@ -80,7 +80,7 @@
 <string name="fetching_file">Atsiunčiama %1$s.\n\nForma %2$s iš %3$s formos(-ų).</string>
 <string name="file_deleted_error">Deja, nepavyko ištrinti %1$s iš %2$s parinktų formų!</string>
 <string name="file_deleted_ok">%s forma(-os) sėkmingai ištrintos!</string>
-<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
+<string name="file_delete_in_progress">Deja, šiuo metu vyksta formos trynimo procesas!</string>
 <string name="file_invalid">Failas: %s yra netinkamas.</string>
 <string name="file_missing">Failas: %s nėra.</string>
 <string name="finished_disk_scan">Skenavimas baigtas. Visos formos įkeltos.</string>
@@ -108,7 +108,7 @@
 <string name="location_accuracy">Tikslumas yra %1$s m</string>
 <string name="longitude">Ilguma</string>
 <string name="main_menu">Pagr. meniu</string>
-<string name="main_menu_details">Duomenų surinkimas tapo lengvesnis&#8230;</string>
+<string name="main_menu_details">Duomenų surinkimas tapo lengvesnis…</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Ištrinti užpildytą formą</string>
 <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
@@ -189,14 +189,14 @@
 <string name="submission_url">Pateikimo kelias</string>
 <string name="font_size">Teksto šrifto dydis</string>
 <string name="change_font_size">Teksto šrifto dydis</string>
-<string name="form_scan_starting">Ieškoma formų&#8230;</string>
+<string name="form_scan_starting">Ieškoma formų…</string>
 <string name="form_scan_finished">Formų paieška baigta</string>
 <string name="powered_by_odk">v1.2 RC1 - variklis Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Klaida bandant pasiekti %s: "</string>
-<string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos &#8212; blogas serveris?</string>
-<string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; &#8212; buvo %s</string>
+<string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos — blogas serveris?</string>
+<string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; — buvo %s</string>
 <string name="root_namespace_error">Šakninio elemento vardų erdvė neteisinga: %s</string>
 <string name="manifest_tag_error">Manifesto įvestyje %s trūksta vienos ar keleto žymų: filename, hash, arba downloadUrl</string>
 <string name="form_download_progress">%1$s. Siunčiami medijos failai: %2$s iš %3$s</string>
