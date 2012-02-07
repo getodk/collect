@@ -11,7 +11,7 @@
 		License.
 	-->
 <resources>
-<string name="accept_location">Gravar Localização</string>
+<string name="accept_location">Salvar Localização</string>
 <string name="accuracy">Precisão</string>
 <string name="activity_not_found">Nenhuma atividade detectada por: %s</string>
 <string name="add_another">Adicionar Grupo</string>
