@@ -44,7 +44,7 @@
 <string name="clear_answer_no">Cancelar</string>
 <string name="completed_data">Completar (%s)</string>
 <string name="data">Formularios Guardados</string>
-<string name="data_saved_error">Guardar el formulario fracaso!</string>
+<string name="data_saved_error">¡Disculpe, el guardado del formulario ha fracasado!</string>
 <string name="data_saved_ok">El formulario se guardo exitosamente!</string>
 <string name="default_completed">"Por defecto que se ponga como finalizado"</string>
 <string name="default_completed_summary">Marcar el formulario como terminado por defecto</string>
@@ -60,7 +60,7 @@
 <string name="discard_answer">Borrar respuesta</string>
 <string name="discard_group">Borrar grupo</string>
 <string name="download">Obtener los Seleccionados</string>
-<string name="download_forms_result">Resultado de la Baja</string>
+<string name="download_forms_result">Resultado de la Descarga</string>
 <string name="downloading_data">Conectandose al Servidor</string>
 <string name="download_all_successful">Todos los formularios fueron bajados existosamente.</string>
 <string name="download_complete">Obtencion de los Formularios Exitosa</string>
@@ -79,7 +79,7 @@
 <string name="error_occured">Un Error Ocurrio</string>
 <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
 <string name="file_deleted_error">%1$s de %2$s formulario(s) seleccionados no se borraron!</string>
-<string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
+<string name="file_delete_in_progress">¡disculpe, una accion de borrado esta todavía en progreso!</string>
 <string name="file_deleted_ok">%s formulario(s) se borraron exitosamente!</string>
 <string name="file_invalid">Archivo: %s es invalido.</string>
 <string name="file_missing">Archivo: %s falta.</string>
@@ -108,7 +108,7 @@
 <string name="location_accuracy">Precision es de %1$s m</string>
 <string name="longitude">Longitud</string>
 <string name="main_menu">Menu Principal</string>
-<string name="main_menu_details">Recoleccion de Datos mas facilmente&#8230;</string>
+<string name="main_menu_details">Recoleccion de Datos mas facilmente…</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Borrar el Formulario Guardado</string>
 <string name="mark_finished">Marcar el formulario como finalizado</string>
@@ -189,14 +189,14 @@
 <string name="submission_url">Ubicacion de Envio</string>
 <string name="font_size">Tamaño del Texto</string>
 <string name="change_font_size">Tamaño del Texto</string>
-<string name="form_scan_starting">Escaneando para formularios&#8230;</string>
+<string name="form_scan_starting">Escaneando para formularios…</string>
 <string name="form_scan_finished">Escaneo del formulario completado</string>
 <string name="powered_by_odk">v1.2 RC1 - Desarrollado por Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Error mientras accediendo a %s: "</string>
-<string name="manifest_server_error">Respuesta del manifiesto no reporta una version de OpenRosa &#8212; servidor malo?</string>
-<string name="root_element_error">Elemento root no es &amp;lt;manifiesto\&gt; &#8212; fue %s</string>
+<string name="manifest_server_error">Respuesta del manifiesto no reporta una version de OpenRosa — servidor malo?</string>
+<string name="root_element_error">Elemento root no es &amp;lt;manifiesto\&gt; — fue %s</string>
 <string name="root_namespace_error">El elemento de root Namespace esta incorrecto: %s</string>
 <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s of %3$s</string>
