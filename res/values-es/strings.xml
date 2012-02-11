@@ -11,12 +11,12 @@
 		License.
 	-->
 <resources>
-<string name="accept_location">Ubicacion de Dato</string>
+<string name="accept_location">Obtener localización</string>
 <string name="accuracy">Precision</string>
 <string name="activity_not_found">Ninguna actividad se encontro para manejar: %s</string>
 <string name="add_another">Agregar Grupo</string>
 <string name="add_another_repeat">Agregar otro grupo de \"%s\"?</string>
-<string name="add_more">Add more</string>
+<string name="add_more">Agregar mas</string>
 <string name="add_repeat">Agregar un nuevo grupo de \"%s\"?</string>
 <string name="add_repeat_no">No Agregar</string>
 <string name="advance">avanzar a la \nproxima\npregunta</string>
@@ -30,7 +30,7 @@
 <string name="cancel_loading_form">Cancelar</string>
 <string name="cancel_location">Cancelar</string>
 <string name="cancel_saving_form">Cancelar</string>
-<string name="cannot_edit_completed_form">Este formulario no puede ser editado despues que se marco terminado.</string>
+<string name="cannot_edit_completed_form">Este formulario no puede ser editado despues que se marco como terminado. Puede que este encriptado</string>
 <string name="capture_audio">Grabar el Sonido</string>
 <string name="capture_image">Tomar la Foto</string>
 <string name="capture_video">Grabar el Video</string>
@@ -90,7 +90,7 @@
 <string name="getting_location">Cargando la Ubicacion</string>
 <string name="get_barcode">Obtener Codigo de Barra</string>
 <string name="get_forms">Obtener el Formulario en Blanco</string>
-<string name="get_location">Ubicacion de Dato</string>
+<string name="get_location">Obtener localización</string>
 <string name="provider_disabled_error">Los proveedores de ubicacion estan deshabilitados!</string>
 <string name="invalid_answer_error">Esta respuesta es invalida!</string>
 <string name="jump_to_beginning">Ir al Inicio</string>
@@ -108,7 +108,7 @@
 <string name="location_accuracy">Precision es de %1$s m</string>
 <string name="longitude">Longitud</string>
 <string name="main_menu">Menu Principal</string>
-<string name="main_menu_details">Recoleccion de Datos mas facilmente…</string>
+<string name="main_menu_details">Recolección de Datos hecha mas fácil…</string>
 <string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Borrar el Formulario Guardado</string>
 <string name="mark_finished">Marcar el formulario como finalizado</string>
@@ -171,7 +171,7 @@
 <string name="first_run">Corra lo primero despues de reiniciar</string>
 <string name="client">Cliente</string>
 <string name="show_splash">Mostar la Pantalla Inicial</string>
-<string name="show_splash_summary">Muestra cuando una aplicacion empieza</string>
+<string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
 <string name="splash_path">Seleccione la Imagen para la Pantalla Inicial</string>
 <string name="default_splash_path">ODK Default</string>
 <string name="select_another_image">Seleccione Otra Imagen</string>
@@ -201,7 +201,7 @@
 <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s of %3$s</string>
 <string name="file_fetch_failed">Error: %2$s (%3$s) en %1$s</string>
-<string name="fetching_manifest">%s. Obteniendo el manifest</string>
+<string name="fetching_manifest">"%s. Obteniendo el manifesto\n"</string>
 <string name="success">Exito</string>
 <string name="no_forms_uploaded">Ningun formulario fue subido.</string>
 <string name="upload_results">Suba los Resultados</string>
