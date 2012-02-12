@@ -13,7 +13,7 @@
 <resources>
 <string name="accept_location">Obtener localización</string>
 <string name="accuracy">Precision</string>
-<string name="activity_not_found">Ninguna actividad se encontro para manejar: %s</string>
+<string name="activity_not_found">No se encontró actividad para manejar: %s</string>
 <string name="add_another">Agregar Grupo</string>
 <string name="add_another_repeat">Agregar otro grupo de \"%s\"?</string>
 <string name="add_more">Agregar mas</string>
