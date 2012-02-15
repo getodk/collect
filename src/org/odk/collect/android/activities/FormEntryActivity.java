@@ -1421,8 +1421,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     protected void onPause() {
         dismissDialogs();
-        if (mCurrentView != null && currentPromptIsQuestion()) {
-            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+        // make sure we're not already saving to disk.  if we are, currentPrompt is getting constantly updated
+        if (mSaveToDiskTask != null && mSaveToDiskTask.getStatus() != AsyncTask.Status.RUNNING) {
+            if (mCurrentView != null && currentPromptIsQuestion()) {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
         }
         super.onPause();
     }
