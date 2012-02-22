@@ -59,10 +59,17 @@ public class DateWidget extends QuestionWidget {
                     Calendar c = Calendar.getInstance();
                     c.set(year, month, 1);
                     int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    // in older versions of android (1.6ish) the datepicker lets you pick bad dats
+                    // in newer versions, calling update.Date() calls onDatechangedListener(), causing an
+                    // endlessl loop.
                     if (day > max) {
-                        mDatePicker.updateDate(year, month, max);
+                        if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
+                            mDatePicker.updateDate(year, month, max);
+                        }
                     } else {
-                        mDatePicker.updateDate(year, month, day);
+                        if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
+                            mDatePicker.updateDate(year, month, day);
+                        }
                     }
                 }
             }
@@ -106,7 +113,7 @@ public class DateWidget extends QuestionWidget {
         DateTime ldt =
             new DateTime(mDatePicker.getYear(), mDatePicker.getMonth() + 1,
                     mDatePicker.getDayOfMonth(), 0, 0);
-       // DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+        // DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
         return new DateData(ldt.toDate());
     }
 
