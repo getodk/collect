@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 /**
  * This class is
@@ -103,8 +104,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     /**
      * @return a HashMap of answers entered by the user for this set of widgets
      */
-    public HashMap<FormIndex, IAnswerData> getAnswers() {
-        HashMap<FormIndex, IAnswerData> answers = new HashMap<FormIndex, IAnswerData>();
+    public LinkedHashMap<FormIndex, IAnswerData> getAnswers() {
+        LinkedHashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<FormIndex, IAnswerData>();
         Iterator<QuestionWidget> i = widgets.iterator();
         while (i.hasNext()) {
             /*
