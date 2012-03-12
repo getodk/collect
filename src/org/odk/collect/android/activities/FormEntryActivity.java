@@ -14,12 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Set;
-
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
@@ -88,6 +82,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -539,9 +539,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mFormController.getEvent() == FormEntryController.EVENT_QUESTION
                 || (mFormController.getEvent() == FormEntryController.EVENT_GROUP && mFormController
                         .indexIsInFieldList())) {
-            HashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView).getAnswers();
-            Set<FormIndex> indexKeys = answers.keySet();
-            for (FormIndex index : indexKeys) {
+            LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView).getAnswers();
+            Iterator<FormIndex> it = answers.keySet().iterator();
+            while (it.hasNext()) {
+                FormIndex index = it.next();
                 // Within a group, you can only save for question events
                 if (mFormController.getEvent(index) == FormEntryController.EVENT_QUESTION) {
                     int saveStatus = saveAnswer(answers.get(index), index, evaluateConstraints);
