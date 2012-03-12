@@ -20,8 +20,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 /**
  * This class is
@@ -31,8 +31,8 @@ import java.util.Iterator;
 public class ODKView extends ScrollView implements OnLongClickListener {
 
     // starter random number for view IDs
-    private final static int VIEW_ID = 12345;  
-    
+    private final static int VIEW_ID = 12345;
+
     private final static String t = "CLASSNAME";
     private final static int TEXTSIZE = 21;
 
@@ -43,16 +43,14 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public final static String FIELD_LIST = "field-list";
 
 
-    public ODKView(Context context, FormEntryPrompt questionPrompt,
-            FormEntryCaption[] groups) {
+    public ODKView(Context context, FormEntryPrompt questionPrompt, FormEntryCaption[] groups) {
         this(context, new FormEntryPrompt[] {
             questionPrompt
         }, groups);
     }
 
 
-    public ODKView(Context context, FormEntryPrompt[] questionPrompts,
-            FormEntryCaption[] groups) {
+    public ODKView(Context context, FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups) {
         super(context);
 
         widgets = new ArrayList<QuestionWidget>();
@@ -83,15 +81,13 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             }
 
             // if question or answer type is not supported, use text widget
-            QuestionWidget qw =
-                WidgetFactory.createWidgetFromPrompt(p, getContext());
+            QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(p, getContext());
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
             qw.setId(VIEW_ID + id++);
 
             widgets.add(qw);
             mView.addView((View) qw, mLayout);
-
 
         }
 
@@ -103,8 +99,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     /**
      * @return a HashMap of answers entered by the user for this set of widgets
      */
-    public HashMap<FormIndex, IAnswerData> getAnswers() {
-        HashMap<FormIndex, IAnswerData> answers = new HashMap<FormIndex, IAnswerData>();
+    public LinkedHashMap<FormIndex, IAnswerData> getAnswers() {
+        LinkedHashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<FormIndex, IAnswerData>();
         Iterator<QuestionWidget> i = widgets.iterator();
         while (i.hasNext()) {
             /*
@@ -214,7 +210,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public boolean onLongClick(View v) {
         return false;
     }
-    
+
 
     @Override
     public void cancelLongPress() {
