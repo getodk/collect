@@ -109,7 +109,6 @@
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Data collection made easier&#8230;</string>
-<string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Delete Saved Form</string>
 <string name="mark_finished">Mark form as finalized</string>
 <string name="no">No</string>
@@ -191,7 +190,7 @@
 <string name="change_font_size">Text Font Size</string>
 <string name="form_scan_starting">Scanning for forms&#8230;</string>
 <string name="form_scan_finished">Form scanning completed</string>
-<string name="powered_by_odk">v1.2 RC1 - Powered by Open Data Kit</string>
+<string name="powered_by_odk">Powered by Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">Error while accessing %s: </string>

@@ -109,7 +109,6 @@
 <string name="longitude">Longitud</string>
 <string name="main_menu">Menu Principal</string>
 <string name="main_menu_details">Recolección de Datos hecha mas fácil…</string>
-<string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Borrar el Formulario Guardado</string>
 <string name="mark_finished">Marcar el formulario como finalizado</string>
 <string name="no">No</string>
@@ -191,7 +190,7 @@
 <string name="change_font_size">Tamaño del Texto</string>
 <string name="form_scan_starting">Escaneando para formularios…</string>
 <string name="form_scan_finished">Escaneo del formulario completado</string>
-<string name="powered_by_odk">v1.2 RC1 - Desarrollado por Open Data Kit</string>
+<string name="powered_by_odk">Desarrollado por Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Error mientras accediendo a %s: "</string>

@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -41,6 +42,7 @@ import org.apache.http.client.params.AuthPolicy;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -71,6 +73,7 @@ public final class WebUtils {
 
     private static final GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 
+    private static ClientConnectionManager httpConnectionManager = null;
 
     public static final List<AuthScope> buildAuthScopes(String host) {
         List<AuthScope> asList = new ArrayList<AuthScope>();
@@ -181,7 +184,15 @@ public final class WebUtils {
     }
 
 
-    public static final HttpClient createHttpClient(int timeout) {
+    /**
+     * Create an httpClient with connection timeouts and other parameters set.
+     * Save and reuse the connection manager across invocations
+     * (this is what requires synchronized access).
+     * 
+     * @param timeout
+     * @return HttpClient properly configured.
+     */
+    public static final synchronized HttpClient createHttpClient(int timeout) {
         // configure connection
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(params, timeout);
@@ -198,14 +209,49 @@ public final class WebUtils {
         params.setParameter("http.auth-target.scheme-pref", authPref);
 
         // setup client
-        HttpClient httpclient = new EnhancedHttpClient(params);
+        HttpClient httpclient;
+        
+        // reuse the connection manager across all clients this ODK Collect creates.
+        if ( httpConnectionManager == null ) {
+        	// let Apache stack create a connection manager.
+        	httpclient = new EnhancedHttpClient(params);
+        	httpConnectionManager = httpclient.getConnectionManager();
+        } else {
+        	// reuse the connection manager we already got.
+        	httpclient = new EnhancedHttpClient(httpConnectionManager, params);
+        }
+        
         httpclient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 1);
         httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
-
         return httpclient;
     }
 
-
+    /**
+     * Utility to ensure that the entity stream of a response is 
+     * drained of bytes.
+     * 
+     * @param response
+     */
+    public static final void discardEntityBytes(HttpResponse response) {
+        // may be a server that does not handle
+        HttpEntity entity = response.getEntity();
+        if ( entity != null ) {
+            try {
+                // have to read the stream in order to reuse the connection
+                InputStream is = response.getEntity().getContent();
+                // read to end of stream...
+                final long count = 1024L;
+                while (is.skip(count) == count)
+                    ;
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     /**
      * Common method for returning a parsed xml document given a url and the http context and client
      * objects involved in the web connection.
@@ -238,23 +284,8 @@ public final class WebUtils {
 
             HttpEntity entity = response.getEntity();
 
-            if (entity != null
-                    && (statusCode != 200 || !entity.getContentType().getValue().toLowerCase()
-                            .contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML))) {
-                try {
-                    // don't really care about the stream...
-                    InputStream is = response.getEntity().getContent();
-                    // read to end of stream...
-                    final long count = 1024L;
-                    while (is.skip(count) == count)
-                        ;
-                    is.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
             if (statusCode != 200) {
+            	WebUtils.discardEntityBytes(response);
                 String webError =
                     response.getStatusLine().getReasonPhrase() + " (" + statusCode + ")";
 
@@ -270,6 +301,7 @@ public final class WebUtils {
 
             if (!entity.getContentType().getValue().toLowerCase()
                     .contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
+            	WebUtils.discardEntityBytes(response);
                 String error =
                     "ContentType: "
                             + entity.getContentType().getValue()
@@ -294,9 +326,18 @@ public final class WebUtils {
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
                     doc.parse(parser);
                     isr.close();
+                    isr = null;
                 } finally {
                     if (isr != null) {
-                        try {
+                    	try {
+                            // ensure stream is consumed...
+                            final long count = 1024L;
+                            while (isr.skip(count) == count)
+                                ;
+                        } catch (Exception e) {
+                            // no-op
+                        }
+                    	try {
                             isr.close();
                         } catch (Exception e) {
                             // no-op

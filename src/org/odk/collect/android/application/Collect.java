@@ -26,6 +26,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
@@ -55,6 +57,20 @@ public class Collect extends Application {
     }
 
 
+    public String getVersionedAppName() {
+        String versionDetail = "";
+		try {
+	        PackageInfo pinfo;
+			pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+	        int versionNumber = pinfo.versionCode;
+	        String versionName = pinfo.versionName;
+	        versionDetail = " " + versionName + "(" + versionNumber + ")";
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return getString(R.string.app_name) + versionDetail;
+    }
     /**
      * Creates required directories on the SDCard (or other external storage)
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory

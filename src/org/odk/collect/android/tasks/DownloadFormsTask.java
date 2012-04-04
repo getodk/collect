@@ -293,6 +293,7 @@ public class DownloadFormsTask extends
             int statusCode = response.getStatusLine().getStatusCode();
 
             if (statusCode != 200) {
+            	WebUtils.discardEntityBytes(response);
                 String errMsg =
                     Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
                         response.getStatusLine().getReasonPhrase(), statusCode);
@@ -320,6 +321,14 @@ public class DownloadFormsTask extends
                     }
                 }
                 if (is != null) {
+                	try {
+                		// ensure stream is consumed...
+                        final long count = 1024L;
+                        while (is.skip(count) == count)
+                            ;
+                	} catch (Exception e) {
+                		// no-op
+                	}
                     try {
                         is.close();
                     } catch (Exception e) {

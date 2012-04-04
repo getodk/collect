@@ -20,12 +20,13 @@
     android:padding="0dp" >
 
     <TextView
+        android:id="@+id/main_menu_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="1dp"
         android:paddingTop="6dp"
-        android:text="@string/main_menu_message"
+        android:text="@string/app_name"
         android:textSize="21dp"
         android:textStyle="bold" />
 

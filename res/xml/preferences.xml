@@ -3,7 +3,7 @@
 	<PreferenceScreen
 		android:id="@+id/info"
 		android:key="info"
-		android:title="@string/main_menu_message"
+		android:title="@string/app_name"
 		android:summary="@string/click_to_web">
 		<intent
 			android:action="android.intent.action.VIEW"

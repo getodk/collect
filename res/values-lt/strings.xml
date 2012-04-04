@@ -109,7 +109,6 @@
 <string name="longitude">Ilguma</string>
 <string name="main_menu">Pagr. meniu</string>
 <string name="main_menu_details">Duomenų surinkimas tapo lengvesnis…</string>
-<string name="main_menu_message">ODK Collect v1.2 RC1</string>
 <string name="manage_files">Ištrinti užpildytą formą</string>
 <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
 <string name="no">Ne</string>
@@ -191,7 +190,7 @@
 <string name="change_font_size">Teksto šrifto dydis</string>
 <string name="form_scan_starting">Ieškoma formų…</string>
 <string name="form_scan_finished">Formų paieška baigta</string>
-<string name="powered_by_odk">v1.2 RC1 - variklis Open Data Kit</string>
+<string name="powered_by_odk">Variklis Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Klaida bandant pasiekti %s: "</string>

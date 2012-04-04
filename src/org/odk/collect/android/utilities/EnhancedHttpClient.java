@@ -16,6 +16,7 @@ package org.odk.collect.android.utilities;
 
 import org.apache.http.auth.AuthSchemeRegistry;
 import org.apache.http.client.params.AuthPolicy;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.auth.BasicSchemeFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
@@ -30,6 +31,10 @@ import org.apache.http.params.HttpParams;
 public class EnhancedHttpClient extends DefaultHttpClient {
 	public EnhancedHttpClient(HttpParams params) {
 		super(params);
+	}
+
+	public EnhancedHttpClient(ClientConnectionManager connManager, HttpParams params) {
+		super(connManager, params);
 	}
 
 	@Override

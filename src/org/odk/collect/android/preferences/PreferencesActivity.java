@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AccountList;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -49,6 +50,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     protected static final int IMAGE_CHOOSER = 0;
 
+    public static String KEY_INFO = "info";
     public static String KEY_LAST_VERSION = "lastVersion";
     public static String KEY_FIRST_RUN = "firstRun";
     public static String KEY_SHOW_SPLASH = "showSplash";
@@ -88,12 +90,13 @@ public class PreferencesActivity extends PreferenceActivity implements
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         mContext = this;
-
+        
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.general_preferences));
 
         setupSplashPathPreference();
         setupSelectedGoogleAccountPreference();
 
+        updateInfo();
         updateServerUrl();
 
         updateUsername();
@@ -109,7 +112,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateSelectedGoogleAccount();
         updateGoogleCollectionEffort();
     }
-
 
     private void setupSplashPathPreference() {
         mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
@@ -190,6 +192,8 @@ public class PreferencesActivity extends PreferenceActivity implements
     protected void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+
+        updateInfo();
         updateServerUrl();
 
         updateUsername();
@@ -293,6 +297,12 @@ public class PreferencesActivity extends PreferenceActivity implements
         }
     }
 
+    private void updateInfo() {
+    	PreferenceScreen ps = (PreferenceScreen) findPreference(KEY_INFO);
+        
+        String fqName = Collect.getInstance().getVersionedAppName();
+        ps.setTitle(fqName);
+    }
 
     private void updateServerUrl() {
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);

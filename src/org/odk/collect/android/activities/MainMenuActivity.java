@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches some activities based
@@ -71,6 +72,13 @@ public class MainMenuActivity extends Activity {
         }
 
         setContentView(R.layout.main_menu);
+
+        {
+        	// dynamically construct the "ODK Collect vA.B" string
+	        TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
+	        mainMenuMessageLabel.setText(Collect.getInstance().getVersionedAppName());
+        }
+        
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.main_menu));
 
         // enter data button. expects a result.

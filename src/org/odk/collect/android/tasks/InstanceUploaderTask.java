@@ -14,8 +14,22 @@
 
 package org.odk.collect.android.tasks;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -42,23 +56,6 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Background task for uploading completed forms.
@@ -142,12 +139,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == 401) {
+                	WebUtils.discardEntityBytes(response);
                     // we need authentication, so stop and return what we've
                     // done so far.
                     mAuthRequestingServer = u;
                     return false;
                 } else if (statusCode == 204) {
-                    Header[] locations = response.getHeaders("Location");
+                	Header[] locations = response.getHeaders("Location");
+                	WebUtils.discardEntityBytes(response);
                     if (locations != null && locations.length == 1) {
                         try {
                             URL url =
@@ -185,22 +184,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                     }
                 } else {
                     // may be a server that does not handle
-                    HttpEntity entity = response.getEntity();
-                    if ( entity != null ) {
-                        try {
-                            // have to read the stream in order to reuse the connection
-                            InputStream is = response.getEntity().getContent();
-                            // read to end of stream...
-                            final long count = 1024L;
-                            while (is.skip(count) == count)
-                                ;
-                            is.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                	WebUtils.discardEntityBytes(response);
 
                     Log.w(t, "Status code on Head request: " + statusCode);
                     if (statusCode >= 200 && statusCode <= 299) {
@@ -327,7 +311,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 
         boolean first = true;
         int j = 0;
+        int lastJ;
         while (j < files.size() || first) {
+        	lastJ = j;
             first = false;
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(u, mAuth);
@@ -412,7 +398,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 
                 // we've added at least one attachment to the request...
                 if (j + 1 < files.size()) {
-                    if (byteCount + files.get(j + 1).length() > 10000000L) {
+                    if ((j-lastJ+1 > 100) || (byteCount + files.get(j + 1).length() > 10000000L)) {
                         // the next file would exceed the 10MB threshold...
                         Log.i(t, "Extremely long post is being split into multiple posts");
                         try {
@@ -434,20 +420,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             try {
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
+                WebUtils.discardEntityBytes(response);
 
-                try {
-                    // have to read the stream in order to reuse the connection
-                    InputStream is = response.getEntity().getContent();
-                    // read to end of stream...
-                    final long count = 1024L;
-                    while (is.skip(count) == count)
-                        ;
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 Log.i(t, "Response code:" + responseCode);
                 // verify that the response was a 201 or 202.
                 // If it wasn't, the submission has failed.
