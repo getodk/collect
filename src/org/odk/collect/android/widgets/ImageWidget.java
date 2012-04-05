@@ -154,6 +154,12 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         addView(mCaptureButton);
         addView(mChooseButton);
         addView(mErrorTextView);
+     
+        // and hide the capture and choose button if read-only
+        if ( prompt.isReadOnly() ) {
+        	mCaptureButton.setVisibility(View.GONE);
+        	mChooseButton.setVisibility(View.GONE);
+        }
         mErrorTextView.setVisibility(View.GONE);
 
         // retrieve answer from data model and update ui
