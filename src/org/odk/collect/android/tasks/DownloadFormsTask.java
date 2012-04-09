@@ -279,66 +279,77 @@ public class DownloadFormsTask extends
             throw e;
         }
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(uri, mAuth);
-
-        HttpResponse response = null;
-        try {
-            response = httpclient.execute(req, localContext);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode != 200) {
-            	WebUtils.discardEntityBytes(response);
-                String errMsg =
-                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-                        response.getStatusLine().getReasonPhrase(), statusCode);
-                Log.e(t, errMsg);
-                throw new Exception(errMsg);
-            }
-
-            // write connection to file
-            InputStream is = null;
-            OutputStream os = null;
-            try {
-                is = response.getEntity().getContent();
-                os = new FileOutputStream(f);
-                byte buf[] = new byte[1024];
-                int len;
-                while ((len = is.read(buf)) > 0) {
-                    os.write(buf, 0, len);
-                }
-                os.flush();
-            } finally {
-                if (os != null) {
-                    try {
-                        os.close();
-                    } catch (Exception e) {
-                    }
-                }
-                if (is != null) {
-                	try {
-                		// ensure stream is consumed...
-                        final long count = 1024L;
-                        while (is.skip(count) == count)
-                            ;
-                	} catch (Exception e) {
-                		// no-op
-                	}
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        // WiFi network connections can be renegotiated during a large form download sequence.
+        // This will cause intermittent download failures.  Silently retry once after each 
+        // failure.  Only if there are two consecutive failures, do we abort.
+        boolean success = false;
+        int attemptCount = 1;
+        while ( !success && attemptCount++ <= 2 ) {
+	        // get shared HttpContext so that authentication and cookies are retained.
+	        HttpContext localContext = Collect.getInstance().getHttpContext();
+	
+	        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+	
+	        // set up request...
+	        HttpGet req = WebUtils.createOpenRosaHttpGet(uri, mAuth);
+	
+	        HttpResponse response = null;
+	        try {
+	            response = httpclient.execute(req, localContext);
+	            int statusCode = response.getStatusLine().getStatusCode();
+	
+	            if (statusCode != 200) {
+	            	WebUtils.discardEntityBytes(response);
+	                String errMsg =
+	                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
+	                        response.getStatusLine().getReasonPhrase(), statusCode);
+	                Log.e(t, errMsg);
+	                throw new Exception(errMsg);
+	            }
+	
+	            // write connection to file
+	            InputStream is = null;
+	            OutputStream os = null;
+	            try {
+	                is = response.getEntity().getContent();
+	                os = new FileOutputStream(f);
+	                byte buf[] = new byte[1024];
+	                int len;
+	                while ((len = is.read(buf)) > 0) {
+	                    os.write(buf, 0, len);
+	                }
+	                os.flush();
+	                success = true;
+	            } finally {
+	                if (os != null) {
+	                    try {
+	                        os.close();
+	                    } catch (Exception e) {
+	                    }
+	                }
+	                if (is != null) {
+	                	try {
+	                		// ensure stream is consumed...
+	                        final long count = 1024L;
+	                        while (is.skip(count) == count)
+	                            ;
+	                	} catch (Exception e) {
+	                		// no-op
+	                	}
+	                    try {
+	                        is.close();
+	                    } catch (Exception e) {
+	                    }
+	                }
+	            }
+	
+	        } catch (Exception e) {
+	        	Log.e(t, e.toString());
+	            e.printStackTrace();
+	            if ( attemptCount != 1 ) {
+	            	throw e;
+	            }
+	        }
         }
     }
 
