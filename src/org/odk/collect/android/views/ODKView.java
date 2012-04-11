@@ -13,6 +13,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.LinearLayout;
@@ -180,6 +181,14 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        for (QuestionWidget q : widgets) {
+        	if ( q.suppressFlingGesture(e1, e2, velocityX, velocityY) ) {
+        		return true;
+        	}
+        }
+        return false;
+    }
 
     /**
      * @return true if the answer was cleared, false otherwise.

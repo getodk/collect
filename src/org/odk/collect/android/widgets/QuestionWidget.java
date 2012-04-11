@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -74,6 +75,17 @@ public abstract class QuestionWidget extends LinearLayout {
 
     public abstract void setOnLongClickListener(OnLongClickListener l);
 
+    /**
+     * Override this to implement fling gesture suppression (e.g. for embedded WebView treatments).
+     * @param e1
+     * @param e2
+     * @param velocityX
+     * @param velocityY
+     * @return true if the fling gesture should be suppressed
+     */
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    	return false;
+    }
 
     /**
      * Add a Views containing the question text, audio (if applicable), and image (if applicable).

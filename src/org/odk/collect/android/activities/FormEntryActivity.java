@@ -1720,6 +1720,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
+    	
         // for all screens a swipe is left/right of at least .25" and up/down of less than .25"
         // OR left/right of > .5"
         DisplayMetrics dm = new DisplayMetrics();
@@ -1727,6 +1728,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         int xPixelLimit = (int) (dm.xdpi * .25);
         int yPixelLimit = (int) (dm.ydpi * .25);
 
+        if ( mCurrentView instanceof ODKView ) {
+        	if ( ((ODKView) mCurrentView).suppressFlingGesture(e1, e2, velocityX, velocityY) ) {
+        		return false;
+        	}
+        }
+        
         if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1.getY() - e2.getY()) < yPixelLimit)
                 || Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
             if (velocityX > 0) {
