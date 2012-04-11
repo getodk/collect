@@ -35,6 +35,11 @@ public class WidgetFactory {
      */
     static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context) {
 
+    	// get appearance hint and clean it up so it is lower case and never null...
+        String appearance = fep.getAppearanceHint();
+        if ( appearance == null ) appearance = "";
+        appearance = appearance.toLowerCase();
+        
         QuestionWidget questionWidget = null;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
@@ -61,8 +66,7 @@ public class WidgetFactory {
                         questionWidget = new BarcodeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_TEXT:
-                        String appearance = fep.getAppearanceHint();
-                        if (appearance != null && appearance.equalsIgnoreCase("numbers")) {
+                        if (appearance.equals("numbers")) {
                             questionWidget = new StringNumberWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep);
@@ -74,7 +78,11 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                questionWidget = new ImageWidget(context, fep);
+            	if (appearance.equals("web")) {
+            		questionWidget = new ImageWebViewWidget(context, fep);
+            	} else {
+            		questionWidget = new ImageWidget(context, fep);
+            	}
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 questionWidget = new AudioWidget(context, fep);
@@ -83,9 +91,7 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                String appearance = fep.getAppearanceHint();
-
-                if (appearance != null && appearance.contains("compact")) {
+                if (appearance.contains("compact")) {
                     int numColumns = -1;
                     try {
                         numColumns =
@@ -100,7 +106,7 @@ public class WidgetFactory {
                     } else {
                         questionWidget = new GridWidget(context, fep, numColumns, false);
                     }
-                } else if (appearance != null && appearance.equals("minimal")) {
+                } else if (appearance.equals("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 }
                 // else if (appearance != null && appearance.contains("autocomplete")) {
@@ -114,22 +120,20 @@ public class WidgetFactory {
                 // questionWidget = new AutoCompleteWidget(context, fep, filterType);
                 //
                 // }
-                else if (appearance != null && appearance.equals("quick")) {
+                else if (appearance.equals("quick")) {
                     questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
-                } else if (appearance != null && appearance.equals("list")) {
+                } else if (appearance.equals("list")) {
                     questionWidget = new ListWidget(context, fep, true);
-                } else if (appearance != null && appearance.equals("list-nolabel")) {
+                } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
-                } else if (appearance != null && appearance.equals("label")) {
+                } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else {
                     questionWidget = new SelectOneWidget(context, fep);
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                appearance = fep.getAppearanceHint();
-
-                if (appearance != null && appearance.contains("compact")) {
+                if (appearance.contains("compact")) {
                     int numColumns = -1;
                     try {
                         numColumns =
@@ -140,13 +144,13 @@ public class WidgetFactory {
                     }
 
                     questionWidget = new GridMultiWidget(context, fep, numColumns);
-                } else if (appearance != null && appearance.equals("minimal")) {
+                } else if (appearance.equals("minimal")) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
-                } else if (appearance != null && appearance.equals("list")) {
+                } else if (appearance.equals("list")) {
                     questionWidget = new ListMultiWidget(context, fep, true);
-                } else if (appearance != null && appearance.equals("list-nolabel")) {
+                } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListMultiWidget(context, fep, false);
-                } else if (appearance != null && appearance.equals("label")) {
+                } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);

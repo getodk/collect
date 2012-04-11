@@ -14,36 +14,38 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+import java.util.Date;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -51,12 +53,12 @@ import java.io.File;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends QuestionWidget implements IBinaryWidget {
+public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget {
     private final static String t = "MediaWidget";
 
     private Button mCaptureButton;
     private Button mChooseButton;
-    private ImageView mImageView;
+    private WebView mImageDisplay;
 
     private String mBinaryName;
 
@@ -65,8 +67,57 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
     private TextView mErrorTextView;
 
+    private String constructImageElement() {
+        File f = new File(mInstanceFolder + File.separator + mBinaryName);
 
-    public ImageWidget(Context context, FormEntryPrompt prompt) {
+        Display display =
+                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+        int screenWidth = display.getWidth();
+        // int screenHeight = display.getHeight();
+
+    	String imgElement = f.exists() ?  
+    		("<img align=\"middle\" src=\"file:///" +
+				f.getAbsolutePath() +
+				// Appending the time stamp to the filename is a hack to prevent caching.
+				"?" + new Date().getTime() + 
+				"\" width=\"" + Integer.toString(screenWidth-10) + "\" >") : "";
+
+    	return imgElement;
+    }
+
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    	if ( mImageDisplay == null || mImageDisplay.getVisibility() != View.VISIBLE ) {
+    		return false;
+    	}
+
+    	Rect rect = new Rect(); 
+    	mImageDisplay.getHitRect(rect);
+    	
+    	// Log.i(t, "hitRect: " + rect.left + "," + rect.top + " : " + rect.right + "," + rect.bottom );
+    	// Log.i(t, "e1 Raw, Clean: " + e1.getRawX() + "," + e1.getRawY() + " : " + e1.getX() + "," + e1.getY());
+    	// Log.i(t, "e2 Raw, Clean: " + e2.getRawX() + "," + e2.getRawY() + " : " + e2.getX() + "," + e2.getY());
+
+    	// starts in WebView
+    	if ( rect.contains((int) e1.getRawX(), (int) e1.getRawY()) ) {
+    		return true;
+    	}
+    	
+    	// ends in WebView
+    	if ( rect.contains((int) e2.getRawX(), (int) e2.getRawY()) ) {
+    		return true;
+    	}
+    	
+    	// transits WebView
+    	if ( rect.contains( (int) ((e1.getRawX() + e2.getRawX())/2.0), 
+    						(int) ((e1.getRawY() + e2.getRawY())/2.0) ) ) {
+    		return true;
+    	}
+    	// Log.i(t, "NOT SUPPRESSED");
+    	return false;
+    }
+    
+    public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         mWaitingForData = false;
@@ -167,71 +218,19 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
         // Only add the imageView if the user has taken a picture
         if (mBinaryName != null) {
-            mImageView = new ImageView(getContext());
-            Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
-
-            File f = new File(mInstanceFolder + File.separator + mBinaryName);
-
-            if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
-                if (bmp == null) {
-                    mErrorTextView.setVisibility(View.VISIBLE);
-                }
-                mImageView.setImageBitmap(bmp);
-            } else {
-                mImageView.setImageBitmap(null);
-            }
-
-            mImageView.setPadding(10, 10, 10, 10);
-            mImageView.setAdjustViewBounds(true);
-            mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent("android.intent.action.VIEW");
-                    String[] projection = {
-                        "_id"
-                    };
-                    Cursor c = null;
-                    try {
-                    	c = getContext().getContentResolver().query(
-                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    projection, "_data='" + mInstanceFolder + mBinaryName + "'",
-                                    null, null);
-	                    if (c.getCount() > 0) {
-	                        c.moveToFirst();
-	                        String id = c.getString(c.getColumnIndex("_id"));
-	
-	                        Log.i(
-	                            t,
-	                            "setting view path to: "
-	                                    + Uri.withAppendedPath(
-	                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-	                                        id));
-	
-	                        i.setDataAndType(Uri.withAppendedPath(
-	                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id),
-	                            "image/*");
-	                        try {
-	                            getContext().startActivity(i);
-	                        } catch (ActivityNotFoundException e) {
-	                            Toast.makeText(getContext(),
-	                                getContext().getString(R.string.activity_not_found, "view image"),
-	                                Toast.LENGTH_SHORT);
-	                        }
-	                    }
-                    } finally {
-                    	if ( c != null ) {
-                    		c.close();
-                    	}
-                    }
-                }
-            });
-
-            addView(mImageView);
+        	mImageDisplay = new WebView(getContext());
+        	mImageDisplay.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        	mImageDisplay.getSettings().setBuiltInZoomControls(true);
+        	mImageDisplay.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        	mImageDisplay.setVisibility(View.VISIBLE);
+        	mImageDisplay.setLayoutParams(params);
+        	
+    		// HTML is used to display the image.
+    		String html =   "<body>" +  constructImageElement() + "</body>";
+    		       
+    		mImageDisplay.loadDataWithBaseURL("file:///" + mInstanceFolder + File.separator,
+    								 html, "text/html", "utf-8", "");
+    		addView(mImageDisplay);
         }
     }
 
@@ -282,7 +281,16 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-        mImageView.setImageBitmap(null);
+        
+        if ( mImageDisplay != null ) {
+	 		// update HTML to not hold image file reference.
+	 		String html =   "<body></body>";
+	 		mImageDisplay.loadDataWithBaseURL("file:///" + mInstanceFolder + File.separator,
+	 								 html, "text/html", "utf-8", "");
+	
+	        mImageDisplay.setVisibility(View.INVISIBLE);
+        }
+        
         mErrorTextView.setVisibility(View.GONE);
 
         // reset buttons
@@ -358,9 +366,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         mCaptureButton.setOnLongClickListener(l);
         mChooseButton.setOnLongClickListener(l);
-        if (mImageView != null) {
-            mImageView.setOnLongClickListener(l);
-        }
     }
 
 
@@ -369,9 +374,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         super.cancelLongPress();
         mCaptureButton.cancelLongPress();
         mChooseButton.cancelLongPress();
-        if (mImageView != null) {
-            mImageView.cancelLongPress();
-        }
     }
 
 }
