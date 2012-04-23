@@ -45,7 +45,6 @@ import java.util.Vector;
 public class ListMultiWidget extends QuestionWidget {
     private final static int CHECKBOX_ID = 100;
     private static final int RANDOM_BUTTON_ID = 4853487;
-    protected final static int TEXTSIZE = 21;
     private static final String t = "ListMultiWidget";
 
     // Layout holds the horizontal list of buttons
@@ -185,7 +184,7 @@ public class ListMultiWidget extends QuestionWidget {
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
                 }
@@ -294,7 +293,7 @@ public class ListMultiWidget extends QuestionWidget {
         // Add the text view. Textview always exists, regardless of whether there's text.
         questionText = new TextView(getContext());
         questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setId(RANDOM_BUTTON_ID); // assign random id

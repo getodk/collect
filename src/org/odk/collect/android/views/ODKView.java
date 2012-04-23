@@ -5,11 +5,15 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -35,7 +39,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     private final static int VIEW_ID = 12345;  
     
     private final static String t = "CLASSNAME";
-    private final static int TEXTSIZE = 21;
 
     private LinearLayout mView;
     private LinearLayout.LayoutParams mLayout;
@@ -145,7 +148,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         if (s.length() > 0) {
             TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, TEXTSIZE - 4);
+            int questionFontsize = Collect.getQuestionFontsize();
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
             tv.setPadding(0, 0, 0, 5);
             mView.addView(tv, mLayout);
         }

@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -37,7 +38,6 @@ public class FileManagerTabs extends TabActivity {
 
     private static final String FORMS_TAB = "forms_tab";
     private static final String DATA_TAB = "data_tab";
-    private static final int FONT_SIZE = 21;
 
 
     @Override
@@ -62,14 +62,16 @@ public class FileManagerTabs extends TabActivity {
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
         TabWidget tw = (TabWidget) ll.getChildAt(0);
 
+        int fontsize = Collect.getQuestionFontsize();
+        
         RelativeLayout rllf = (RelativeLayout) tw.getChildAt(0);
         mTVFF = (TextView) rllf.getChildAt(1);
-        mTVFF.setTextSize(FONT_SIZE);
+        mTVFF.setTextSize(fontsize);
         mTVFF.setPadding(0, 0, 0, 6);
 
         RelativeLayout rlrf = (RelativeLayout) tw.getChildAt(1);
         mTVDF = (TextView) rlrf.getChildAt(1);
-        mTVDF.setTextSize(FONT_SIZE);
+        mTVDF.setTextSize(fontsize);
         mTVDF.setPadding(0, 0, 0, 6);
     }
 

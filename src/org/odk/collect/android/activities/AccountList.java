@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 
 /**
@@ -71,6 +72,7 @@ public class AccountList extends ListActivity {
                     row = convertView;
                 }
                 TextView vw = (TextView) row.findViewById(android.R.id.text1);
+                vw.setTextSize(Collect.getQuestionFontsize());
                 SharedPreferences settings =
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String selected = settings.getString(PreferencesActivity.KEY_ACCOUNT, "");

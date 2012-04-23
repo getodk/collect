@@ -23,9 +23,11 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
@@ -56,6 +58,14 @@ public class Collect extends Application {
         return singleton;
     }
 
+    public static int getQuestionFontsize() {
+        SharedPreferences settings =
+                PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        String question_font =
+                settings.getString(PreferencesActivity.KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
+        int questionFontsize = new Integer(question_font).intValue();
+        return questionFontsize;
+    }
 
     public String getVersionedAppName() {
         String versionDetail = "";
