@@ -150,7 +150,7 @@ public class FormsProvider extends ContentProvider {
 
 
     @Override
-    public Uri insert(Uri uri, ContentValues initialValues) {
+    public synchronized Uri insert(Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -162,6 +162,17 @@ public class FormsProvider extends ContentProvider {
         } else {
             values = new ContentValues();
         }
+        
+        if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+        	throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH + " must be specified.");
+        }
+
+        // Normalize the file path.
+        // (don't trust the requester).
+        String filePath = values.getAsString(FormsColumns.FORM_FILE_PATH);
+        File form = new File(filePath);
+        filePath = form.getAbsolutePath(); // normalized
+        values.put(FormsColumns.FORM_FILE_PATH, filePath);
 
         Long now = Long.valueOf(System.currentTimeMillis());
 
@@ -176,36 +187,48 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
         }
 
-        // if we don't have a path to the file, the rest are irrelevant.
-        // it should fail anyway because you can't have a null file path.
-        if (values.containsKey(FormsColumns.FORM_FILE_PATH) == true) {
-            String filePath = values.getAsString(FormsColumns.FORM_FILE_PATH);
-            File form = new File(filePath);
+        if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
+            values.put(FormsColumns.DISPLAY_NAME, form.getName());
+        }
 
-            if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
-                values.put(FormsColumns.DISPLAY_NAME, form.getName());
-            }
+        // don't let users put in a manual md5 hash
+        if (values.containsKey(FormsColumns.MD5_HASH)) {
+            values.remove(FormsColumns.MD5_HASH);
+        }
+        String md5 = FileUtils.getMd5Hash(form);
+        values.put(FormsColumns.MD5_HASH, md5);
 
-            // don't let users put in a manual md5 hash
-            if (values.containsKey(FormsColumns.MD5_HASH)) {
-                values.remove(FormsColumns.MD5_HASH);
-            }
-            String md5 = FileUtils.getMd5Hash(form);
-            values.put(FormsColumns.MD5_HASH, md5);
-
-            if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
-                String cachePath = Collect.CACHE_PATH + File.separator + md5 + ".formdef";
-                values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
-            }
-            if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
-                String pathNoExtension = filePath.substring(0, filePath.lastIndexOf("."));
-                String mediaPath = pathNoExtension + "-media";
-                values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
-            }
-
+        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
+            String cachePath = Collect.CACHE_PATH + File.separator + md5 + ".formdef";
+            values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
+        }
+        if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
+            String pathNoExtension = filePath.substring(0, filePath.lastIndexOf("."));
+            String mediaPath = pathNoExtension + "-media";
+            values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
         }
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        
+        // first try to see if a record with this filename already exists...
+        String[] projection = {
+                FormsColumns._ID, FormsColumns.FORM_FILE_PATH
+        };
+        String[] selectionArgs = { filePath };
+        String selection = FormsColumns.FORM_FILE_PATH + "=?";
+        Cursor c = null;
+        try {
+        	c = db.query(FORMS_TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+        	if ( c.getCount() > 0 ) {
+        		// already exists
+        		throw new SQLException("FAILED Insert into " + uri + " -- row already exists for form definition file: " + filePath);
+        	}
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
+        }
+        
         long rowId = db.insert(FORMS_TABLE_NAME, null, values);
         if (rowId > 0) {
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, rowId);
