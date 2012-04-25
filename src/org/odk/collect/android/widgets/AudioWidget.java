@@ -213,16 +213,21 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             String[] audioProjection = {
                 Audio.Media.DATA
             };
-            Cursor c =
-                ((Activity) getContext()).managedQuery(uri, audioProjection, null, null, null);
-            ((Activity) getContext()).startManagingCursor(c);
-            int column_index = c.getColumnIndexOrThrow(Audio.Media.DATA);
             String audioPath = null;
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                audioPath = c.getString(column_index);
+            Cursor c = null;
+            try {
+            	c = getContext().getContentResolver().query(uri, audioProjection, null, null, null);
+            	int column_index = c.getColumnIndexOrThrow(Audio.Media.DATA);
+	            if (c.getCount() > 0) {
+	                c.moveToFirst();
+	                audioPath = c.getString(column_index);
+	            }
+	            return audioPath;
+            } finally {
+            	if ( c != null ) {
+            		c.close();
+            	}
             }
-            return audioPath;
         }
     }
 

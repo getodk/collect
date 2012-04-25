@@ -123,7 +123,6 @@ public class InstanceUploaderList extends ListActivity {
         };
 
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
-        startManagingCursor(c);
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT

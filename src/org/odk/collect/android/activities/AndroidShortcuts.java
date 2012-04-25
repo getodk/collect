@@ -65,19 +65,25 @@ public class AndroidShortcuts extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select ODK Shortcut");
 
-        Cursor c = getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
-        startManagingCursor(c);
-
-        if (c.getCount() > 0) {
-            c.moveToPosition(-1);
-            while (c.moveToNext()) {
-                String formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                names.add(formName);
-                Uri uri =
-                    Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                        c.getString(c.getColumnIndex(FormsColumns._ID)));
-                commands.add(uri);
-            }
+        Cursor c = null;
+        try {
+        	c = getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
+        
+	        if (c.getCount() > 0) {
+	            c.moveToPosition(-1);
+	            while (c.moveToNext()) {
+	                String formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+	                names.add(formName);
+	                Uri uri =
+	                    Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+	                        c.getString(c.getColumnIndex(FormsColumns._ID)));
+	                commands.add(uri);
+	            }
+	        }
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
         }
 
         mNames = names.toArray(new String[0]);

@@ -157,20 +157,28 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             }
         }
 
-        Cursor results =
-            managedQuery(InstanceColumns.CONTENT_URI, null, selection.toString(), selectionArgs,
-                null);
         StringBuilder message = new StringBuilder();
-        if (results.getCount() > 0) {
-            results.moveToPosition(-1);
-            while (results.moveToNext()) {
-                String name =
-                    results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                message.append(name + " - " + result.get(id) + "\n\n");
-            }
-        } else {
-            message.append(getString(R.string.no_forms_uploaded));
+        {
+        	Cursor results = null;
+        	try {
+                results = getContentResolver().query(InstanceColumns.CONTENT_URI, 
+                		null, selection.toString(), selectionArgs, null);
+                if (results.getCount() > 0) {
+                    results.moveToPosition(-1);
+                    while (results.moveToNext()) {
+                        String name =
+                            results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
+                        message.append(name + " - " + result.get(id) + "\n\n");
+                    }
+                } else {
+                    message.append(getString(R.string.no_forms_uploaded));
+                }
+        	} finally {
+        		if ( results != null ) {
+        			results.close();
+        		}
+        	}
         }
 
         createAlertDialog(message.toString().trim());

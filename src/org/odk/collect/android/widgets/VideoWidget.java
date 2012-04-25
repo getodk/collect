@@ -215,16 +215,21 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             String[] videoProjection = {
                 Video.Media.DATA
             };
-            Cursor c =
-                ((Activity) getContext()).managedQuery(uri, videoProjection, null, null, null);
-            ((Activity) getContext()).startManagingCursor(c);
-            int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
-            String videoPath = null;
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                videoPath = c.getString(column_index);
+            Cursor c = null;
+            try {
+            	c = getContext().getContentResolver().query(uri, videoProjection, null, null, null);
+            	int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
+            	String videoPath = null;
+            	if (c.getCount() > 0) {
+            		c.moveToFirst();
+            		videoPath = c.getString(column_index);
+            	}
+            	return videoPath;
+            } finally {
+            	if ( c != null ) {
+            		c.close();
+            	}
             }
-            return videoPath;
         }
     }
 

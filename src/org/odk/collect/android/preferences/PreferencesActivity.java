@@ -231,11 +231,17 @@ public class PreferencesActivity extends PreferenceActivity implements
                     String[] projection = {
                         Images.Media.DATA
                     };
-                    Cursor c = managedQuery(uri, projection, null, null, null);
-                    startManagingCursor(c);
-                    int i = c.getColumnIndexOrThrow(Images.Media.DATA);
-                    c.moveToFirst();
-                    sourceImagePath = c.getString(i);
+                    Cursor c = null;
+                    try {
+                    	c = getContentResolver().query(uri, projection, null, null, null);
+                        int i = c.getColumnIndexOrThrow(Images.Media.DATA);
+                        c.moveToFirst();
+                        sourceImagePath = c.getString(i);
+                    } finally {
+                    	if ( c != null ) {
+                    		c.close();
+                    	}
+                    }
                 }
 
                 // setting image path
