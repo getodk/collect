@@ -121,8 +121,8 @@ public class InstanceUploaderList extends ListActivity {
         String selectionArgs[] = {
                 InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED
         };
-
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT

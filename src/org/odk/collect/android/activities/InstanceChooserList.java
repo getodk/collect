@@ -63,7 +63,8 @@ public class InstanceChooserList extends ListActivity {
         
         String selection = InstanceColumns.STATUS + " != ?";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, InstanceColumns.STATUS + " desc");
+        String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT

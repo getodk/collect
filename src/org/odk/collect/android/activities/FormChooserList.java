@@ -83,7 +83,8 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask.setDiskSyncListener(null);
         }
 
-        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, null);
+        String sortOrder = FormsColumns.DISPLAY_NAME + " ASC";
+        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
 
         String[] data = new String[] {
                 FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT
