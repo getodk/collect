@@ -158,7 +158,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private String mErrorMessage;
 
     // used to limit forward/backward swipes to one per question
-    private boolean mBeenSwiped;
+    private boolean mBeenSwiped = false;
 
     private FormLoaderTask mFormLoaderTask;
     private SaveToDiskTask mSaveToDiskTask;
@@ -241,51 +241,75 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 Uri uri = intent.getData();
 
                 if (getContentResolver().getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
-                    Cursor instanceCursor = this.managedQuery(uri, null, null, null, null);
-                    if (instanceCursor.getCount() != 1) {
-                        this.createErrorDialog("Bad URI: " + uri, EXIT);
-                        return;
-                    } else {
-                        instanceCursor.moveToFirst();
-                        mInstancePath =
-                            instanceCursor.getString(instanceCursor
-                                    .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                	// get the formId for this instance...
+                	String jrFormId = null;
+                	{
+                		Cursor instanceCursor = null;
+                		try {
+                			instanceCursor = getContentResolver().query(uri, null, null, null, null);
+		                	if (instanceCursor.getCount() != 1) {
+		                        this.createErrorDialog("Bad URI: " + uri, EXIT);
+		                        return;
+		                    } else {
+		                        instanceCursor.moveToFirst();
+		                        mInstancePath =
+		                            instanceCursor.getString(instanceCursor
+		                                    .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+		                    
+		                        jrFormId =
+		                            instanceCursor.getString(instanceCursor
+		                                    .getColumnIndex(InstanceColumns.JR_FORM_ID));
+		                    }
+                		} finally {
+                			if ( instanceCursor != null ) {
+                				instanceCursor.close();
+                			}
+                		}
+                	}
+                	
+                    String[] selectionArgs = {
+                        jrFormId
+                    };
+                    String selection = FormsColumns.JR_FORM_ID + " like ?";
 
-                        String jrFormId =
-                            instanceCursor.getString(instanceCursor
-                                    .getColumnIndex(InstanceColumns.JR_FORM_ID));
-
-                        String[] selectionArgs = {
-                            jrFormId
-                        };
-                        String selection = FormsColumns.JR_FORM_ID + " like ?";
-
-                        Cursor formCursor =
-                            managedQuery(FormsColumns.CONTENT_URI, null, selection, selectionArgs,
-                                null);
-                        if (formCursor.getCount() == 1) {
-                            formCursor.moveToFirst();
-                            mFormPath =
-                                formCursor.getString(formCursor
-                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                        } else if (formCursor.getCount() < 1) {
-                            this.createErrorDialog("Parent form does not exist", EXIT);
-                            return;
-                        } else if (formCursor.getCount() > 1) {
-                            this.createErrorDialog("More than one possible parent form", EXIT);
-                            return;
+                    {
+                        Cursor formCursor = null;
+                        try {
+                        	formCursor = getContentResolver().query(FormsColumns.CONTENT_URI, 
+                        			null, selection, selectionArgs, null);
+	                        if (formCursor.getCount() == 1) {
+	                            formCursor.moveToFirst();
+	                            mFormPath =
+	                                formCursor.getString(formCursor
+	                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+	                        } else if (formCursor.getCount() < 1) {
+	                            this.createErrorDialog("Parent form does not exist", EXIT);
+	                            return;
+	                        } else if (formCursor.getCount() > 1) {
+	                            this.createErrorDialog("More than one possible parent form", EXIT);
+	                            return;
+	                        }
+                        } finally {
+                        	if ( formCursor != null ) {
+                        		formCursor.close();
+                        	}
                         }
-
                     }
-
                 } else if (getContentResolver().getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
-                    Cursor c = this.managedQuery(uri, null, null, null, null);
-                    if (c.getCount() != 1) {
-                        this.createErrorDialog("Bad URI: " + uri, EXIT);
-                        return;
-                    } else {
-                        c.moveToFirst();
-                        mFormPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                    Cursor c = null;
+                    try {
+                    	c = getContentResolver().query(uri, null, null, null, null);
+                        if (c.getCount() != 1) {
+                            this.createErrorDialog("Bad URI: " + uri, EXIT);
+                            return;
+                        } else {
+                            c.moveToFirst();
+                            mFormPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                        }
+                    } finally {
+                    	if ( c != null ) {
+                    		c.close();
+                    	}
                     }
                 } else {
                     Log.e(t, "unrecognized URI");
@@ -383,11 +407,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     String[] projection = {
                         Images.Media.DATA
                     };
-                    Cursor cursor = managedQuery(selectedImage, projection, null, null, null);
-                    startManagingCursor(cursor);
-                    int column_index = cursor.getColumnIndexOrThrow(Images.Media.DATA);
-                    cursor.moveToFirst();
-                    sourceImagePath = cursor.getString(column_index);
+                    Cursor cursor = null;
+                    try {
+                    	cursor = getContentResolver().query(selectedImage, projection, null, null, null);
+                        int column_index = cursor.getColumnIndexOrThrow(Images.Media.DATA);
+                        cursor.moveToFirst();
+                        sourceImagePath = cursor.getString(column_index);
+                    } finally {
+                    	if ( cursor != null ) {
+                    		cursor.close();
+                    	}
+                    }
                 }
 
                 // Copy file to sdcard
@@ -645,18 +675,26 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 String[] selectionArgs = {
                     mFormPath
                 };
-                Cursor c =
-                    managedQuery(FormsColumns.CONTENT_URI, projection, selection, selectionArgs,
-                        null);
-                String mediaDir = null;
-                if (c.getCount() < 1) {
-                    createErrorDialog("form Doesn't exist", true);
-                    return new View(this);
-                } else {
-                    c.moveToFirst();
-                    mediaDir = c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
-                }
 
+                String mediaDir = null;
+                {
+                	Cursor c = null;
+                	try {
+                		c = getContentResolver().query(FormsColumns.CONTENT_URI, 
+                				projection, selection, selectionArgs, null);
+		                if (c.getCount() < 1) {
+		                    createErrorDialog("form Doesn't exist", true);
+		                    return new View(this);
+		                } else {
+		                    c.moveToFirst();
+		                    mediaDir = c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
+		                }
+                	} finally {
+                		if ( c != null ) {
+                			c.close();
+                		}
+                	}
+                }
                 BitmapDrawable bitImage = null;
                 // attempt to load the form-specific logo...
                 // this is arbitrarily silly
@@ -710,12 +748,19 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 String saveName = mFormController.getFormTitle();
                 if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
                     Uri instanceUri = getIntent().getData();
-                    Cursor instance = managedQuery(instanceUri, null, null, null, null);
-                    if (instance.getCount() == 1) {
-                        instance.moveToFirst();
-                        saveName =
-                            instance.getString(instance
-                                    .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                    Cursor instance = null;
+                    try {
+                    	instance = getContentResolver().query(instanceUri, null, null, null, null);
+                        if (instance.getCount() == 1) {
+                            instance.moveToFirst();
+                            saveName =
+                                instance.getString(instance
+                                        .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                    	if ( instance != null ) {
+                    		instance.close();
+                    	}
                     }
                 }
 
@@ -788,52 +833,53 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * constraints.
      */
     private void showNextView() {
-        if (currentPromptIsQuestion()) {
-            if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-                // A constraint was violated so a dialog should be showing.
-                return;
-            }
-        }
-
-        if (mFormController.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
-            int event;
-            group_skip: do {
-                event = mFormController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                switch (event) {
-                    case FormEntryController.EVENT_QUESTION:
-                    case FormEntryController.EVENT_END_OF_FORM:
-                        View next = createView(event);
-                        showView(next, AnimationType.RIGHT);
-                        break group_skip;
-                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                        createRepeatDialog();
-                        break group_skip;
-                    case FormEntryController.EVENT_GROUP:
-                        if (mFormController.indexIsInFieldList()
-                                && mFormController.getQuestionPrompts().length != 0) {
-                            View nextGroupView = createView(event);
-                            showView(nextGroupView, AnimationType.RIGHT);
-                            break group_skip;
-                        }
-                        // otherwise it's not a field-list group, so just skip it
-                        break;
-                    case FormEntryController.EVENT_REPEAT:
-                        Log.i(t, "repeat: " + mFormController.getFormIndex().getReference());
-                        // skip repeats
-                        break;
-                    case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                        Log.i(t, "repeat juncture: "
-                                + mFormController.getFormIndex().getReference());
-                        // skip repeat junctures until we implement them
-                        break;
-                    default:
-                        Log.w(t,
-                            "JavaRosa added a new EVENT type and didn't tell us... shame on them.");
-                        break;
-                }
-            } while (event != FormEntryController.EVENT_END_OF_FORM);
-
-        } else {
+    	try {
+	        if (currentPromptIsQuestion()) {
+	            if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+	                // A constraint was violated so a dialog should be showing.
+	                return;
+	            }
+	        }
+	
+	        if (mFormController.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
+	            int event;
+	            group_skip: do {
+	                event = mFormController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+	                switch (event) {
+	                    case FormEntryController.EVENT_QUESTION:
+	                    case FormEntryController.EVENT_END_OF_FORM:
+	                        View next = createView(event);
+	                        showView(next, AnimationType.RIGHT);
+	                        break group_skip;
+	                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+	                        createRepeatDialog();
+	                        break group_skip;
+	                    case FormEntryController.EVENT_GROUP:
+	                        if (mFormController.indexIsInFieldList()
+	                                && mFormController.getQuestionPrompts().length != 0) {
+	                            View nextGroupView = createView(event);
+	                            showView(nextGroupView, AnimationType.RIGHT);
+	                            break group_skip;
+	                        }
+	                        // otherwise it's not a field-list group, so just skip it
+	                        break;
+	                    case FormEntryController.EVENT_REPEAT:
+	                        Log.i(t, "repeat: " + mFormController.getFormIndex().getReference());
+	                        // skip repeats
+	                        break;
+	                    case FormEntryController.EVENT_REPEAT_JUNCTURE:
+	                        Log.i(t, "repeat juncture: "
+	                                + mFormController.getFormIndex().getReference());
+	                        // skip repeat junctures until we implement them
+	                        break;
+	                    default:
+	                        Log.w(t,
+	                            "JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+	                        break;
+	                }
+	            } while (event != FormEntryController.EVENT_END_OF_FORM);
+	        }
+    	} finally {
             mBeenSwiped = false;
         }
     }
@@ -844,25 +890,27 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * appropriate view. Also saves answers to the data model without checking constraints.
      */
     private void showPreviousView() {
-        // The answer is saved on a back swipe, but question constraints are ignored.
-        if (currentPromptIsQuestion()) {
-            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-        }
-
-        if (mFormController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-            int event = mFormController.stepToPreviousEvent();
-
-            while (event != FormEntryController.EVENT_BEGINNING_OF_FORM
-                    && event != FormEntryController.EVENT_QUESTION
-                    && !(event == FormEntryController.EVENT_GROUP
-                            && mFormController.indexIsInFieldList() && mFormController
-                            .getQuestionPrompts().length != 0)) {
-                event = mFormController.stepToPreviousEvent();
-            }
-            View next = createView(event);
-            showView(next, AnimationType.LEFT);
-
-        } else {
+    	try {
+	        // The answer is saved on a back swipe, but question constraints are ignored.
+	        if (currentPromptIsQuestion()) {
+	            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+	        }
+	
+	        if (mFormController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+	            int event = mFormController.stepToPreviousEvent();
+	
+	            while (event != FormEntryController.EVENT_BEGINNING_OF_FORM
+	                    && event != FormEntryController.EVENT_QUESTION
+	                    && !(event == FormEntryController.EVENT_GROUP
+	                            && mFormController.indexIsInFieldList() && mFormController
+	                            .getQuestionPrompts().length != 0)) {
+	                event = mFormController.stepToPreviousEvent();
+	            }
+	            View next = createView(event);
+	            showView(next, AnimationType.LEFT);
+	
+	        }
+    	} finally {
             mBeenSwiped = false;
         }
     }
@@ -938,7 +986,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         showCustomToast(constraintText, Toast.LENGTH_SHORT);
-        mBeenSwiped = false;
     }
 
 
@@ -1006,8 +1053,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             mAlertDialog.setButton2(getString(R.string.add_repeat_no), repeatListener);
         }
         mAlertDialog.setCancelable(false);
-        mAlertDialog.show();
         mBeenSwiped = false;
+        mAlertDialog.show();
     }
 
 
@@ -1034,6 +1081,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mBeenSwiped = false;
         mAlertDialog.show();
     }
 
@@ -1127,13 +1175,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     String selection =
                                         InstanceColumns.INSTANCE_FILE_PATH + " like '"
                                                 + mInstancePath + "'";
-                                    Cursor c =
-                                        FormEntryActivity.this.managedQuery(
-                                            InstanceColumns.CONTENT_URI, null, selection, null,
-                                            null);
-
+                                    
+                                    boolean erase = false;
+                                    {
+                                    	Cursor c = null;
+                                    	try {
+                                    		c = FormEntryActivity.this.getContentResolver().query(
+	                                            InstanceColumns.CONTENT_URI, null, selection, null,
+	                                            null);
+                                    		erase = (c.getCount() < 1);
+                                    	} finally {
+                                    		if ( c != null ) {
+                                    			c.close();
+                                    		}
+                                    	}
+                                    }
                                     // if it's not already saved, erase everything
-                                    if (c.getCount() < 1) {
+                                    if (erase) {
                                         int images = 0;
                                         int audio = 0;
                                         int video = 0;
@@ -1559,10 +1617,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             String selectArgs[] = {
                 mFormPath
             };
-            Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, selection, selectArgs, null);
-            if (c.getCount() == 1) {
-                c.moveToFirst();
-                newLanguage = c.getString(c.getColumnIndex(FormsColumns.LANGUAGE));
+            Cursor c = null;
+            try {
+            	c = getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectArgs, null);
+                if (c.getCount() == 1) {
+                    c.moveToFirst();
+                    newLanguage = c.getString(c.getColumnIndex(FormsColumns.LANGUAGE));
+                }
+            } finally {
+            	if ( c != null ) {
+            		c.close();
+            	}
             }
 
             // if somehow we end up with a bad language, set it to the default
@@ -1662,16 +1727,21 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         String[] selectionArgs = {
             mInstancePath
         };
-        Cursor c =
-            getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
-                null);
-        startManagingCursor(c);
-        if (c != null && c.getCount() > 0) {
-            c.moveToFirst();
-            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-            if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
-                complete = true;
-            }
+        Cursor c = null;
+        try {
+        	c = getContentResolver().query(InstanceColumns.CONTENT_URI, 
+        			null, selection, selectionArgs, null);
+	        if (c != null && c.getCount() > 0) {
+	            c.moveToFirst();
+	            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+	            if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
+	                complete = true;
+	            }
+	        }
+        } finally {
+        	if ( c != null ) {
+        		c.close();
+        	}
         }
         return complete;
     }
@@ -1696,14 +1766,20 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             String[] selectionArgs = {
                 mInstancePath
             };
-            Cursor c =
-                managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
-            if (c.getCount() > 0) {
-                // should only be one...
-                c.moveToFirst();
-                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
-                Uri instance = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
-                setResult(RESULT_OK, new Intent().setData(instance));
+            Cursor c = null;
+            try {
+            	c = getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+	            if (c.getCount() > 0) {
+	                // should only be one...
+	                c.moveToFirst();
+	                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
+	                Uri instance = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
+	                setResult(RESULT_OK, new Intent().setData(instance));
+	            }
+            } finally {
+            	if ( c != null ) {
+            		c.close();
+            	}
             }
         }
         finish();
@@ -1736,15 +1812,23 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         
         if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1.getY() - e2.getY()) < yPixelLimit)
                 || Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
+    		mBeenSwiped = true;
             if (velocityX > 0) {
-                mBeenSwiped = true;
-                showPreviousView();
-                return true;
+            	if ( e1.getX() > e2.getX() ) {
+            		Log.e(t,"showNextView VelocityX is bogus! " + e1.getX() + " > " + e2.getX());
+            		showNextView();
+            	} else {
+            		showPreviousView();
+            	}
             } else {
-                mBeenSwiped = true;
-                showNextView();
-                return true;
+            	if ( e1.getX() < e2.getX() ) {
+            		Log.e(t,"showPreviousView VelocityX is bogus! " + e1.getX() + " < " + e2.getX());
+            		showPreviousView();
+            	} else {
+            		showNextView();
+            	}
             }
+            return true;
         }
 
         return false;
