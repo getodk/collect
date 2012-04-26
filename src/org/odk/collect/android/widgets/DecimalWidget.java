@@ -54,7 +54,11 @@ public class DecimalWidget extends StringWidget {
 
         Double d = null;
         if (prompt.getAnswerValue() != null) {
-            d = (Double) prompt.getAnswerValue().getValue();
+            if (prompt.getAnswerValue().getValue() instanceof Integer){
+                d =  new Double(((Integer)prompt.getAnswerValue().getValue()).intValue());
+            } else {
+                d =  (Double) prompt.getAnswerValue().getValue();
+            }
         }
 
         NumberFormat nf = NumberFormat.getNumberInstance();
@@ -62,7 +66,12 @@ public class DecimalWidget extends StringWidget {
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
         if (d != null) {
-            Double dAnswer = (Double) prompt.getAnswerValue().getValue();
+            Double dAnswer;
+            if (prompt.getAnswerValue().getValue() instanceof Integer){
+                dAnswer =  new Double(((Integer)prompt.getAnswerValue().getValue()).intValue());
+            } else {
+                dAnswer =  (Double) prompt.getAnswerValue().getValue();
+            }
             String dString = nf.format(dAnswer);
             d = Double.parseDouble(dString.replace(',', '.'));
             mAnswer.setText(d.toString());
