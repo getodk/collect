@@ -69,20 +69,6 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
-        // DiskSyncTask checks the disk for any forms not already in the content provider
-        // that is, put here by dragging and dropping onto the SDCard
-        mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
-        if (mDiskSyncTask == null) {
-            Log.i(t, "Starting new disk sync task");
-            mDiskSyncTask = new DiskSyncTask();
-            mDiskSyncTask.setDiskSyncListener(this);
-            mDiskSyncTask.execute((Void[]) null);
-        }
-
-        if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            mDiskSyncTask.setDiskSyncListener(null);
-        }
-
         String sortOrder = FormsColumns.DISPLAY_NAME + " ASC";
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
 
@@ -101,6 +87,16 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
             TextView tv = (TextView) findViewById(R.id.status_text);
             tv.setText(savedInstanceState.getString(syncMsgKey));
+        }
+
+        // DiskSyncTask checks the disk for any forms not already in the content provider
+        // that is, put here by dragging and dropping onto the SDCard
+        mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
+        if (mDiskSyncTask == null) {
+            Log.i(t, "Starting new disk sync task");
+            mDiskSyncTask = new DiskSyncTask();
+            mDiskSyncTask.setDiskSyncListener(this);
+            mDiskSyncTask.execute((Void[]) null);
         }
     }
 
@@ -146,6 +142,10 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     protected void onResume() {
         mDiskSyncTask.setDiskSyncListener(this);
         super.onResume();
+
+        if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+        	SyncComplete(mDiskSyncTask.getStatusMessage());
+        }
     }
 
 
