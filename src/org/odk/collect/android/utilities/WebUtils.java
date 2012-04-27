@@ -96,6 +96,7 @@ public final class WebUtils {
         HttpContext localContext = Collect.getInstance().getHttpContext();
         CredentialsProvider credsProvider =
             (CredentialsProvider) localContext.getAttribute(ClientContext.CREDS_PROVIDER);
+        Log.i(t, "clearAllCredentials");
         credsProvider.clear();
     }
 
@@ -117,11 +118,40 @@ public final class WebUtils {
         return hasCreds;
     }
 
-
-    public static final void addCredentials(String userEmail, String password, String host) {
+    /**
+     * Remove all credentials for accessing the specified host.
+     * 
+     * @param host
+     */
+    private static final void clearHostCredentials(String host) {
         HttpContext localContext = Collect.getInstance().getHttpContext();
-        Credentials c = new UsernamePasswordCredentials(userEmail, password);
-        addCredentials(localContext, c, host);
+        CredentialsProvider credsProvider =
+            (CredentialsProvider) localContext.getAttribute(ClientContext.CREDS_PROVIDER);
+        Log.i(t, "clearHostCredentials: " + host);
+        List<AuthScope> asList = buildAuthScopes(host);
+        for (AuthScope a : asList) {
+        	credsProvider.setCredentials(a, null);
+        }
+    }
+
+    /**
+     * Remove all credentials for accessing the specified host and, if
+     * the username is not null or blank then add a (username, password)
+     * credential for accessing this host.
+     * 
+     * @param username
+     * @param password
+     * @param host
+     */
+    public static final void addCredentials(String username, String password, String host) {
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+        // to ensure that this is the only authentication available for this host...
+        clearHostCredentials(host);
+        if ( username != null && username.trim().length() != 0 ) { 
+	        Log.i(t, "adding credential for host: " + host + " username:" + username);
+	        Credentials c = new UsernamePasswordCredentials(username, password);
+	        addCredentials(localContext, c, host);
+        }
     }
 
 
@@ -175,14 +205,12 @@ public final class WebUtils {
         return createOpenRosaHttpPost(uri, "");
     }
 
-
     public static final HttpPost createOpenRosaHttpPost(URI uri, String auth) {
         HttpPost req = new HttpPost(uri);
         setOpenRosaHeaders(req);
         setGoogleHeaders(req, auth);
         return req;
     }
-
 
     /**
      * Create an httpClient with connection timeouts and other parameters set.
@@ -209,7 +237,7 @@ public final class WebUtils {
         params.setParameter("http.auth-target.scheme-pref", authPref);
 
         // setup client
-        HttpClient httpclient;
+        EnhancedHttpClient httpclient;
         
         // reuse the connection manager across all clients this ODK Collect creates.
         if ( httpConnectionManager == null ) {
@@ -223,6 +251,7 @@ public final class WebUtils {
         
         httpclient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 1);
         httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+        
         return httpclient;
     }
 
