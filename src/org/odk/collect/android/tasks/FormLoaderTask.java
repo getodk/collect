@@ -188,7 +188,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         // set paths to /sdcard/odk/forms/formfilename-media/
         String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-
+        File formMediaDir = new File( formXml.getParent(), formFileName + "-media");
+        
         // Remove previous forms
         ReferenceManager._().clearSession();
 
@@ -214,7 +215,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formXml = null;
         formPath = null;
 
-        FormController fc = new FormController(fec);
+        FormController fc = new FormController(formMediaDir, fec);
         data = new FECWrapper(fc);
         return data;
 

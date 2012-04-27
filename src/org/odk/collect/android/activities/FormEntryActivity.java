@@ -667,34 +667,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 ((TextView) startView.findViewById(R.id.description)).setText(getString(
                     R.string.enter_data_description, mFormController.getFormTitle()));
 
-                Drawable image = null;
-                String[] projection = {
-                    FormsColumns.FORM_MEDIA_PATH
-                };
-                String selection = FormsColumns.FORM_FILE_PATH + "=?";
-                String[] selectionArgs = {
-                    mFormPath
-                };
-
-                String mediaDir = null;
-                {
-                	Cursor c = null;
-                	try {
-                		c = getContentResolver().query(FormsColumns.CONTENT_URI, 
-                				projection, selection, selectionArgs, null);
-		                if (c.getCount() < 1) {
-		                    createErrorDialog("form Doesn't exist", true);
-		                    return new View(this);
-		                } else {
-		                    c.moveToFirst();
-		                    mediaDir = c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
-		                }
-                	} finally {
-                		if ( c != null ) {
-                			c.close();
-                		}
-                	}
-                }
+				Drawable image = null;
+                File mediaFolder = mFormController.getMediaFolder();
+                String mediaDir = mediaFolder.getAbsolutePath();
                 BitmapDrawable bitImage = null;
                 // attempt to load the form-specific logo...
                 // this is arbitrarily silly

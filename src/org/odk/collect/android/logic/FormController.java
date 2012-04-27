@@ -33,6 +33,7 @@ import org.odk.collect.android.views.ODKView;
 
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -48,6 +49,7 @@ import java.util.Vector;
 public class FormController {
 
     private static final String t = "FormController";
+    private File mMediaFolder;
     private FormEntryController mFormEntryController;
 
     public static final boolean STEP_INTO_GROUP = true;
@@ -76,10 +78,14 @@ public class FormController {
     };
 
 
-    public FormController(FormEntryController fec) {
+    public FormController(File mediaFolder, FormEntryController fec) {
+    	mMediaFolder = mediaFolder;
         mFormEntryController = fec;
     }
 
+    public File getMediaFolder() {
+    	return mMediaFolder;
+    }
 
     /**
      * returns the event for the current FormIndex.
