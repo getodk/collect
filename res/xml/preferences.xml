@@ -23,16 +23,19 @@
 			android:key="server_url"
 			android:defaultValue="@string/default_server_url"
 			android:title="@string/server_url"
+			android:inputType="textNoSuggestions"
 			android:dialogTitle="@string/change_server_url" />
 		<EditTextPreference
 			android:id="@+id/username"
 			android:key="username"
 			android:title="@string/username"
+			android:inputType="textNoSuggestions"
 			android:dialogTitle="@string/change_username" />
 		<EditTextPreference
 			android:id="@+id/password"
 			android:key="password"
 			android:title="@string/password"
+			android:inputType="textNoSuggestions"
 			android:dialogTitle="@string/change_password" />
 		<!-- android:password="true" -->
 		<PreferenceScreen
@@ -44,18 +47,21 @@
 			android:id="@+id/google_submission_id"
 			android:key="google_submission_id"
 			android:title="@string/google_submission_id_text"
+			android:inputType="textNoSuggestions"
 			android:defaultValue=""
 			android:dialogTitle="@string/google_submission_id_text" />
 		<EditTextPreference
 			android:id="@+id/formlist_url"
 			android:key="formlist_url"
 			android:title="@string/formlist_url"
+			android:inputType="textNoSuggestions"
 			android:defaultValue="@string/default_odk_formlist"
 			android:dialogTitle="@string/change_formlist_url" />
 		<EditTextPreference
 			android:id="@+id/submission_url"
 			android:key="submission_url"
 			android:title="@string/submission_url"
+			android:inputType="textNoSuggestions"
 			android:defaultValue="@string/default_odk_submission"
 			android:dialogTitle="@string/change_submission_url" />
 	</PreferenceCategory>
