@@ -63,7 +63,7 @@ public class Collect extends Application {
                 PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         String question_font =
                 settings.getString(PreferencesActivity.KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
-        int questionFontsize = new Integer(question_font).intValue();
+        int questionFontsize = Integer.valueOf(question_font);
         return questionFontsize;
     }
 

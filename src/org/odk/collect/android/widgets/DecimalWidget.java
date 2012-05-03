@@ -55,7 +55,7 @@ public class DecimalWidget extends StringWidget {
         Double d = null;
         if (prompt.getAnswerValue() != null) {
             if (prompt.getAnswerValue().getValue() instanceof Integer){
-                d =  new Double(((Integer)prompt.getAnswerValue().getValue()).intValue());
+                d =  Double.valueOf(((Integer)prompt.getAnswerValue().getValue()).intValue());
             } else {
                 d =  (Double) prompt.getAnswerValue().getValue();
             }
@@ -68,7 +68,7 @@ public class DecimalWidget extends StringWidget {
         if (d != null) {
             Double dAnswer;
             if (prompt.getAnswerValue().getValue() instanceof Integer){
-                dAnswer =  new Double(((Integer)prompt.getAnswerValue().getValue()).intValue());
+                dAnswer =  Double.valueOf(((Integer)prompt.getAnswerValue().getValue()).intValue());
             } else {
                 dAnswer =  (Double) prompt.getAnswerValue().getValue();
             }

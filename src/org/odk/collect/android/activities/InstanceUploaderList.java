@@ -14,13 +14,17 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -30,12 +34,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -45,7 +48,7 @@ import java.util.ArrayList;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends ListActivity {
+public class InstanceUploaderList extends ListActivity implements OnLongClickListener {
 
     private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
     private static final String BUNDLE_TOGGLED_KEY = "toggled";
@@ -56,17 +59,45 @@ public class InstanceUploaderList extends ListActivity {
     private Button mUploadButton;
     private Button mToggleButton;
 
+    private boolean mShowUnsent = true;
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
     private boolean mToggled = false;
 
+    public Cursor getUnsentCursor() {
+        // get all complete or failed submission instances
+        String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
+        String selectionArgs[] = {
+                InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED
+        };
+        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
+        return c;
+    }
+
+    public Cursor getAllCursor() {
+        // get all complete or failed submission instances
+        String selection = InstanceColumns.STATUS + "=? or " +
+        				   InstanceColumns.STATUS + "=? or " +
+        				   InstanceColumns.STATUS + "=?";
+        String selectionArgs[] = {
+                InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
+                InstanceProviderAPI.STATUS_SUBMITTED
+        };
+        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
+        return c;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
 
+        // set up long click listener
+        
+        
         mUploadButton = (Button) findViewById(R.id.upload_button);
         mUploadButton.setOnClickListener(new OnClickListener() {
 
@@ -97,6 +128,7 @@ public class InstanceUploaderList extends ListActivity {
         });
 
         mToggleButton = (Button) findViewById(R.id.toggle_button);
+        mToggleButton.setLongClickable(true);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,14 +147,9 @@ public class InstanceUploaderList extends ListActivity {
 
             }
         });
+        mToggleButton.setOnLongClickListener(this);
 
-        // get all complete or failed submission instances
-        String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-        String selectionArgs[] = {
-                InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED
-        };
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
+        Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
@@ -132,8 +159,8 @@ public class InstanceUploaderList extends ListActivity {
         };
 
         // render total instance view
-        mInstances =
-            new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
+        mInstances = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, c, data, view);
+
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
@@ -262,5 +289,77 @@ public class InstanceUploaderList extends ListActivity {
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
+
+    private void showUnsent() {
+    	mShowUnsent = true;
+    	Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
+    	Cursor old = mInstances.getCursor();
+    	try {
+    		mInstances.changeCursor(c);
+    	} finally {
+	    	if ( old != null ) {
+	    		old.close();
+	    		this.stopManagingCursor(old);
+	    	}
+    	}
+    	getListView().invalidate();
+    }
+    
+    private void showAll() {
+    	mShowUnsent = false;
+    	Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
+    	Cursor old = mInstances.getCursor();
+    	try {
+    		mInstances.changeCursor(c);
+    	} finally {
+	    	if ( old != null ) {
+	    		old.close();
+	    		this.stopManagingCursor(old);
+	    	}
+    	}
+    	getListView().invalidate();
+    }
+
+	@Override
+	public boolean onLongClick(View v) {
+	    /**
+	     * Create a dialog with options to save and exit, save, or quit without saving
+	     */
+	    String[] items = {
+	                getString(R.string.show_unsent_forms), getString(R.string.show_sent_and_unsent_forms)
+	    };
+
+	    AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(getString(R.string.change_view))
+                .setNeutralButton(getString(R.string.cancel),
+	                        new DialogInterface.OnClickListener() {
+	                            @Override
+	                            public void onClick(DialogInterface dialog, int id) {
+	                                dialog.cancel();
+	                            }
+	                        })
+	            .setItems(items, new DialogInterface.OnClickListener() {
+	                        @Override
+	                        public void onClick(DialogInterface dialog, int which) {
+	                            switch (which) {
+
+	                                case 0: // show unsent
+	                                	InstanceUploaderList.this.showUnsent();
+	                                    break;
+
+	                                case 1: // show all
+	                                	InstanceUploaderList.this.showAll();
+	                                    break;
+
+	                                case 2:// do nothing
+	                                    break;
+	                            }
+	                        }
+	                    })
+	            .create();
+	    alertDialog.show();
+		return true;
+	}
 
 }

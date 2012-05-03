@@ -527,8 +527,9 @@ public class DownloadFormsTask extends
         synchronized (this) {
             if (mStateListener != null) {
                 // update progress and total
-                mStateListener.progressUpdate(values[0], new Integer(values[1]).intValue(),
-                    new Integer(values[2]).intValue());
+                mStateListener.progressUpdate(values[0], 
+                	Integer.valueOf(values[1]),
+                    Integer.valueOf(values[2]));
             }
         }
 

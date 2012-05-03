@@ -225,4 +225,7 @@
 <string name="font_size_medium">Medium</string>
 <string name="font_size_small">Liten</string>
 <string name="font_size_extra_small">Ekstra liten</string>
+<string name="change_view">Change View</string>
+<string name="show_sent_and_unsent_forms">Sent and Unsent Forms</string>
+<string name="show_unsent_forms">Unsent Forms Only</string>
 </resources>

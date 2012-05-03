@@ -225,4 +225,7 @@ License.
   <string name="font_size_medium">Normal</string>
   <string name="font_size_small">Petit</string>
   <string name="font_size_extra_small">Très petit</string>
+  <string name="change_view">Change View</string>
+  <string name="show_sent_and_unsent_forms">Sent and Unsent Forms</string>
+  <string name="show_unsent_forms">Unsent Forms Only</string>
 </resources>
