@@ -195,8 +195,8 @@
   <string name="default_odk_submission">/submission</string>
   <string name="access_error">"Lỗi khi truy cập %s: "</string>
   <string name="manifest_server_error">Manifest không báo cáo về phiên bản của OpenRosa — máy chủ lỗi?</string>
-  <string name="root_element_error">Root element is not &amp;lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
+  <string name="root_element_error">Yếu tố gốc không &amp;lt;manifest\&gt; — was %s</string>
+  <string name="root_namespace_error">Yếu tố gốc Namespace không đúng: %s</string>
   <string name="manifest_tag_error">Mục Manifest %s bị thiếu 1 hoặc nhiều thẻ sau: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Lấy file đa phương tiện: %2$s of %3$s</string>
   <string name="file_fetch_failed">Lỗi: %2$s (%3$s) tại %1$s</string>
@@ -225,7 +225,7 @@
   <string name="font_size_medium">Vừa</string>
   <string name="font_size_small">Nhỏ</string>
   <string name="font_size_extra_small">Cực nhỏ</string>
-  <string name="change_view">Change View</string>
-  <string name="show_sent_and_unsent_forms">Sent and Unsent Forms</string>
-  <string name="show_unsent_forms">Unsent Forms Only</string>
+  <string name="change_view">Đổi hiển thị</string>
+  <string name="show_sent_and_unsent_forms">Biểu mẫu đã gửi và chưa gửi</string>
+  <string name="show_unsent_forms">Chỉ các biểu mẫu chưa gửi</string>
 </resources>
