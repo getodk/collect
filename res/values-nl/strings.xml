@@ -49,8 +49,8 @@
 <string name="default_completed">Standaard definitief</string>
 <string name="default_completed_summary">Formulier standaard als definitief markeren</string>
 <string name="default_server_url">https://opendatakit.appspot.com</string>
-<string name="delete_confirm">Delete %s form(s)?</string>
-<string name="delete_file">Delete Selected</string>
+<string name="delete_confirm">%s formulier(en) verwijderen?</string>
+<string name="delete_file">Verwijder selectie</string>
 <string name="delete_no">Niet verwijderen</string>
 <string name="delete_repeat">"Groep verwijderen\n"</string>
 <string name="delete_repeat_ask">Deze groep verwijderen?</string>
@@ -71,8 +71,8 @@
 <string name="enter">begin</string>
 <string name="entering_repeat">Groep toevoegen</string>
 <string name="entering_repeat_ask">Nieuwe groep toevoegen?</string>
-<string name="enter_data">Leeg Formulier Invullen</string>
-<string name="enter_data_button">Leeg Formulier Invullen</string>
+<string name="enter_data">Nieuw formulier invullen</string>
+<string name="enter_data_button">Nieuw formulier</string>
 <string name="enter_data_description">Je bent aan het begin van formulier \"%s\". Veeg over het scherm zoals op de afbeelding om verder te gaan.</string>
 <string name="enter_data_message">Veeg met je vinger horizontaal over het scherm alsof je de pagina\'s van een boek omslaat om te navigeren. Druk op de Menu knop voor meer mogelijkheden.</string>
 <string name="error_downloading">Fout bij formulier ophalen</string>
@@ -89,7 +89,7 @@
 <string name="form_renamed">%1$s is hernoemd naar %2$s.</string>
 <string name="getting_location">Positie bepalen</string>
 <string name="get_barcode">Scan barcode</string>
-<string name="get_forms">Leeg Formulier Ophalen</string>
+<string name="get_forms">Download formulieren</string>
 <string name="get_location">Positie vastleggen</string>
 <string name="provider_disabled_error">Sorry, GPS is uitgeschakeld!</string>
 <string name="invalid_answer_error">Sorry, dit antwoord is ongeldig!</string>
@@ -109,15 +109,15 @@
 <string name="longitude">Lengtegraad</string>
 <string name="main_menu">Hoofmenu</string>
 <string name="main_menu_details">Data collection made easier…</string>
-<string name="manage_files">Verwijder Opgeslagen Formulier</string>
+<string name="manage_files">Verwijder formulieren</string>
 <string name="mark_finished">Definitief maken</string>
 <string name="no">Nee</string>
 <string name="noselect_error">Sorry, u heeft geen formulier gekozen!</string>
 <string name="no_capture">Nothing recorded yet.</string>
 <string name="no_connection">Geen internet verbinding beschikbaar</string>
-<string name="no_items_display">Nothing available to display.</string>
-<string name="no_items_display_forms">Nothing available to display.\n\nTry getting and filling out a blank form.</string>
-<string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing saved forms before sending.</string>
+<string name="no_items_display">Leeg</string>
+<string name="no_items_display_forms">Leeg\n\nDownload eerst een formulier en vul dat in.</string>
+<string name="no_items_display_instances">Leeg\n\nEen formulier moet als voltooid zijn gemarkeerd voordat u het kunt verzenden.</string>
 <string name="no_items_error">Nothing available to %s!</string>
 <string name="no_sd_error">Sorry, uw SD kaart is niet beschikbaar!</string>
 <string name="ok">OK</string>
@@ -140,8 +140,8 @@
 <string name="replace_video">Vervang video</string>
 <string name="required_answer_error">Sorry, deze vraag is verplicht!</string>
 <string name="review">doorgaan</string>
-<string name="review_data">Bewerk Opgeslagen Formulier</string>
-<string name="review_data_button">Bewerk Opgeslagen Formulier</string>
+<string name="review_data">Wijzig formulier</string>
+<string name="review_data_button">Wijzig formulier</string>
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Formulier opslaan</string>
 <string name="save_data_message">Bewaar het formulier om de antwoorden te behouden.</string>
@@ -150,7 +150,7 @@
 <string name="send">verstuur</string>
 <string name="sending_items">Sending %1$s of %2$s form(s)</string>
 <string name="send_data">Verstuur Afgeronde Formulieren</string>
-<string name="send_data_button">Verstuur afgeronde formulieren</string>
+<string name="send_data_button">Upload formulieren</string>
 <string name="send_selected_data">Verstuur selectie</string>
 <string name="server_auth_credentials">Voer gebruikersnaam en wachtwoord in voor server:\n%s</string>
 <string name="server_requires_auth">Server vereist authenticatie</string>
@@ -225,7 +225,7 @@
 <string name="font_size_medium">Nomaal</string>
 <string name="font_size_small">Klein</string>
 <string name="font_size_extra_small">Extra klein</string>
-<string name="change_view">Change View</string>
-<string name="show_sent_and_unsent_forms">Sent and Unsent Forms</string>
-<string name="show_unsent_forms">Unsent Forms Only</string>
+<string name="change_view">Wijzig weergave</string>
+<string name="show_sent_and_unsent_forms">Verzonden en niet-verzonden formulieren</string>
+<string name="show_unsent_forms">Alleen niet-verzonden formulieren</string>
 </resources>
