@@ -66,6 +66,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         String downloadListUrl =
             settings.getString(PreferencesActivity.KEY_SERVER_URL,
                 Collect.getInstance().getString(R.string.default_server_url));
+        // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String downloadPath = settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formlist");
         downloadListUrl += downloadPath;
         String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
