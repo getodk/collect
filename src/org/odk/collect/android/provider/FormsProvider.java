@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.provider;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -183,8 +184,8 @@ public class FormsProvider extends ContentProvider {
 
         if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
             Date today = new Date();
-            String ts = new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(today);
-            values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
+            String ts = new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(today);
+            values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
         }
 
         if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
@@ -374,8 +375,8 @@ public class FormsProvider extends ContentProvider {
                 // Make sure that the necessary fields are all set
                 if (values.containsKey(FormsColumns.DATE) == true) {
                     Date today = new Date();
-                    String ts = new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(today);
-                    values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
+                    String ts = new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(today);
+                    values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
                 }
 
                 count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
@@ -432,8 +433,8 @@ public class FormsProvider extends ContentProvider {
 	                    if (values.containsKey(FormsColumns.DATE) == true) {
 	                        Date today = new Date();
 	                        String ts =
-	                            new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(today);
-	                        values.put(FormsColumns.DISPLAY_SUBTEXT, "Added on " + ts);
+	                            new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(today);
+	                        values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
 	                    }
 	
 	                    count =

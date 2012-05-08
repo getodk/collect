@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.provider;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -185,19 +186,18 @@ public class InstanceProvider extends ContentProvider {
     }
     
     private String getDisplaySubtext(String state, Date date) {
-        String ts = new SimpleDateFormat("EEE, MMM dd, yyyy 'at' HH:mm").format(date);
         if (state == null) {
-            return "Added on " + ts;
+        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(date);
         } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-            return "Saved on " + ts;
+        	return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time)).format(date);
         } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-            return "Finalized on " + ts;
+        	return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time)).format(date);
         } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-            return "Sent on " + ts;
+        	return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time)).format(date);
         } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-            return "Sending failed on " + ts;
+        	return new SimpleDateFormat(getContext().getString(R.string.sending_failed_on_date_at_time)).format(date);
         } else {
-            return "Added on " + ts;
+        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(date);
         }
     }
     
