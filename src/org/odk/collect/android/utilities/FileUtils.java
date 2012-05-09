@@ -224,8 +224,7 @@ public class FileUtils {
     }
 
     public static String FORMID = "formid";
-    public static String UI = "uiversion";
-    public static String MODEL = "modelversion";
+    public static String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static String TITLE = "title";
     public static String SUBMISSIONURI = "submission";
     public static String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
@@ -287,12 +286,17 @@ public class FileUtils {
                 cur = cur.getElement(i); // this is the first data element
                 String id = cur.getAttributeValue(null, "id");
                 String xmlns = cur.getNamespace();
-                String modelVersion = cur.getAttributeValue(null, "version");
+                
+                String version = cur.getAttributeValue(null, "version");
                 String uiVersion = cur.getAttributeValue(null, "uiVersion");
+                if ( uiVersion != null ) {
+                	// pre-OpenRosa 1.0 variant of spec
+                	version = ((version == null) ? "" : version) + "." + uiVersion;
+                	Log.w(t, "Obsolete use of uiVersion -- consolidated with version -- version is now tracked as: " + version);
+                }
 
                 fields.put(FORMID, (id == null) ? xmlns : id);
-                fields.put(MODEL, (modelVersion == null) ? null : modelVersion);
-                fields.put(UI, (uiVersion == null) ? null : uiVersion);
+                fields.put(VERSION, (version == null) ? null : version);
             } else {
                 throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
             }

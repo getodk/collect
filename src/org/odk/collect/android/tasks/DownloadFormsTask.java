@@ -124,8 +124,7 @@ public class DownloadFormsTask extends
 	
 	                    HashMap<String, String> formInfo = FileUtils.parseXML(dl);
 	                    v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
-	                    v.put(FormsColumns.MODEL_VERSION, formInfo.get(FileUtils.MODEL));
-	                    v.put(FormsColumns.UI_VERSION, formInfo.get(FileUtils.UI));
+	                    v.put(FormsColumns.VERSION, formInfo.get(FileUtils.VERSION));
 	                    v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
 	                    v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
 	                    v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
@@ -170,7 +169,7 @@ public class DownloadFormsTask extends
                         }
                     }
                 } else {
-                    Log.i(t, "No Manifest for: " + fd.formID);
+                    Log.i(t, "No Manifest for: " + fd.formName);
                 }
             } catch (SocketTimeoutException se) {
                 se.printStackTrace();

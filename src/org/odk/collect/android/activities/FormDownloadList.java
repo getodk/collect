@@ -88,7 +88,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     public static final String LIST_URL = "listurl";
 
     private static final String FORMNAME = "formname";
-    private static final String FORMID = "formid";
+    private static final String FORMDETAIL_KEY = "formdetailkey";
     private static final String FORMID_DISPLAY = "formiddisplay";
 
     private String mAlertMsg;
@@ -233,7 +233,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         }
 
         String[] data = new String[] {
-                FORMNAME, FORMID_DISPLAY, FORMID
+                FORMNAME, FORMID_DISPLAY, FORMDETAIL_KEY
         };
         int[] view = new int[] {
                 R.id.text1, R.id.text2
@@ -437,7 +437,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             if (sba.get(i, false)) {
                 HashMap<String, String> item =
                     (HashMap<String, String>) getListAdapter().getItem(i);
-                filesToDownload.add(mFormNamesAndURLs.get(item.get(FORMID)));
+                filesToDownload.add(mFormNamesAndURLs.get(item.get(FORMDETAIL_KEY)));
             }
         }
         totalCount = filesToDownload.size();
@@ -542,10 +542,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
             ArrayList<String> ids = new ArrayList<String>(mFormNamesAndURLs.keySet());
             for (int i = 0; i < result.size(); i++) {
+            	String formDetailsKey = ids.get(i);
+            	FormDetails details = mFormNamesAndURLs.get(formDetailsKey);
                 HashMap<String, String> item = new HashMap<String, String>();
-                item.put(FORMNAME, mFormNamesAndURLs.get(ids.get(i)).formName);
-                item.put(FORMID_DISPLAY, "ID: " + mFormNamesAndURLs.get(ids.get(i)).formID);
-                item.put(FORMID, mFormNamesAndURLs.get(ids.get(i)).formID);
+                item.put(FORMNAME, details.formName);
+                item.put(FORMID_DISPLAY, "ID: " + details.formID + 
+                		((details.formVersion == null) ? "" : (" Version: " + details.formVersion)));
+                item.put(FORMDETAIL_KEY, formDetailsKey);
 
                 // Insert the new form in alphabetical order.
                 if (mFormList.size() == 0) {

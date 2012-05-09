@@ -242,8 +242,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
 
         String title = fields.get(FileUtils.TITLE);
-        String ui = fields.get(FileUtils.UI);
-        String model = fields.get(FileUtils.MODEL);
+        String version = fields.get(FileUtils.VERSION);
         String formid = fields.get(FileUtils.FORMID);
         String submission = fields.get(FileUtils.SUBMISSIONURI);
         String base64RsaPublicKey = fields.get(FileUtils.BASE64_RSA_PUBLIC_KEY);
@@ -264,11 +263,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         	throw new IllegalArgumentException(Collect.getInstance().getString(R.string.xform_parse_error,
         			formDefFile.getName(), "id"));
         }
-        if (ui != null) {
-            updateValues.put(FormsColumns.UI_VERSION, ui);
-        }
-        if (model != null) {
-            updateValues.put(FormsColumns.MODEL_VERSION, model);
+        if (version != null) {
+            updateValues.put(FormsColumns.VERSION, version);
         }
         if (submission != null) {
             updateValues.put(FormsColumns.SUBMISSION_URI, submission);

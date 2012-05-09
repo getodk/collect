@@ -45,7 +45,7 @@ public class FormsProvider extends ContentProvider {
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -59,6 +59,9 @@ public class FormsProvider extends ContentProvider {
      * This class helps open, create, and upgrade the database file.
      */
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+        // These exist in database versions 2 and 3, but not in 4...
+        private static final String MODEL_VERSION = "modelVersion";
+        private static final String UI_VERSION = "uiVersion";
 
         DatabaseHelper(String databaseName) {
             super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
@@ -73,8 +76,7 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.DISPLAY_SUBTEXT + " text not null, " 
                     + FormsColumns.DESCRIPTION + " text, " 
                     + FormsColumns.JR_FORM_ID + " text not null, "
-                    + FormsColumns.MODEL_VERSION + " integer, " 
-                    + FormsColumns.UI_VERSION + " integer, "
+                    + FormsColumns.VERSION + " text, "
                     + FormsColumns.MD5_HASH + " text not null, "
                     + FormsColumns.DATE + " integer not null, " // milliseconds
                     + FormsColumns.FORM_MEDIA_PATH + " text not null, "
@@ -88,10 +90,38 @@ public class FormsProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(t, "Upgrading database from version " + oldVersion + " to " + newVersion
-                    + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS forms");
-            onCreate(db);
+        	int initialVersion = oldVersion;
+        	if ( oldVersion < 2 ) {
+                Log.w(t, "Upgrading database from version " + oldVersion + " to " + newVersion
+                        + ", which will destroy all old data");
+                db.execSQL("DROP TABLE IF EXISTS forms");
+                onCreate(db);
+                return;
+        	} else {
+        		if ( oldVersion == 2 ) {
+        			// 1.1.7 to 1.2 RC1
+	        		db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text;");
+	        		oldVersion = 3;
+	        	}
+        		
+        		if ( oldVersion == 3 ) {
+        			// 1.2 RC1 to 1.2 production (OpenRosa compliance -- version is a string value; uiVersion is non-existent)
+	        		db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " + FormsColumns.VERSION + " text;");
+	        		db.execSQL("UPDATE TABLE " + FORMS_TABLE_NAME + 
+	        				" SET " + FormsColumns.VERSION + " = CAST(" + MODEL_VERSION + " AS TEXT) || '.' || " +
+	        						"CAST(" + UI_VERSION + " AS TEXT) " + 
+	        				" WHERE " + MODEL_VERSION + " IS NOT NULL AND " + UI_VERSION + "IS NOT NULL");
+	        		db.execSQL("UPDATE TABLE " + FORMS_TABLE_NAME + 
+	        				" SET " + FormsColumns.VERSION + " = CAST(" + MODEL_VERSION + " AS TEXT) " + 
+	        				" WHERE " + MODEL_VERSION + " IS NOT NULL AND " + UI_VERSION + "IS NULL");
+	        		db.execSQL("UPDATE TABLE " + FORMS_TABLE_NAME + 
+	        				" SET " + FormsColumns.VERSION + " = " + "'.' || CAST(" + UI_VERSION + " AS TEXT) " + 
+	        				" WHERE " + MODEL_VERSION + " IS NULL AND " + UI_VERSION + "IS NOT NULL");
+        		}
+        	
+	            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to " + newVersion
+	                    + ", without destroying all the old data");
+        	}
         }
     }
 
@@ -470,8 +500,7 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT, FormsColumns.DISPLAY_SUBTEXT);
         sFormsProjectionMap.put(FormsColumns.DESCRIPTION, FormsColumns.DESCRIPTION);
         sFormsProjectionMap.put(FormsColumns.JR_FORM_ID, FormsColumns.JR_FORM_ID);
-        sFormsProjectionMap.put(FormsColumns.MODEL_VERSION, FormsColumns.MODEL_VERSION);
-        sFormsProjectionMap.put(FormsColumns.UI_VERSION, FormsColumns.UI_VERSION);
+        sFormsProjectionMap.put(FormsColumns.VERSION, FormsColumns.VERSION);
         sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI, FormsColumns.SUBMISSION_URI);
         sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, FormsColumns.BASE64_RSA_PUBLIC_KEY);
         sFormsProjectionMap.put(FormsColumns.MD5_HASH, FormsColumns.MD5_HASH);

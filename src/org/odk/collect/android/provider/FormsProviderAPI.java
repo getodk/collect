@@ -56,8 +56,7 @@ public final class FormsProviderAPI {
         public static final String FORM_MEDIA_PATH = "formMediaPath";      
         
         // these are null unless you enter something and aren't currently used
-        public static final String MODEL_VERSION = "modelVersion";
-        public static final String UI_VERSION = "uiVersion";
+        public static final String VERSION = "version";
         
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
