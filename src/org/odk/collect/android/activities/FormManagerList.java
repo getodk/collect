@@ -22,6 +22,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -87,15 +88,15 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 			}
 		});
 
-		String sortOrder = FormsColumns.DISPLAY_NAME + " ASC";
+		String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
 
 		String[] data = new String[] { FormsColumns.DISPLAY_NAME,
-				FormsColumns.DISPLAY_SUBTEXT };
-		int[] view = new int[] { R.id.text1, R.id.text2 };
+				FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION };
+		int[] view = new int[] { R.id.text1, R.id.text2, R.id.text3 };
 
 		// render total instance view
-		mInstances = new SimpleCursorAdapter(this,
+		mInstances = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this,
 				R.layout.two_item_multiple_choice, c, data, view);
 		setListAdapter(mInstances);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);

@@ -44,7 +44,7 @@ public class InstanceProvider extends ContentProvider {
     private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -73,6 +73,7 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
                + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                + InstanceColumns.JR_FORM_ID + " text not null, "
+               + InstanceColumns.JR_VERSION + " text, "
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                + InstanceColumns.DISPLAY_SUBTEXT + " text not null );");   
@@ -81,10 +82,22 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(t, "Upgrading database from version " + oldVersion + " to " + newVersion
-                    + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS instances");
-            onCreate(db);
+        	int initialVersion = oldVersion;
+        	if ( oldVersion == 1 ) {
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + 
+        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+        		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " + 
+        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = true WHERE " +
+        					InstanceColumns.STATUS + " IS NOT NULL AND " +
+        					InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'");
+        		oldVersion = 2;
+        	}
+        	if ( oldVersion == 2 ) {
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + 
+    					InstanceColumns.JR_VERSION + " text;");
+        	}
+            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to " + newVersion
+                    + ", without destroying all the old data");
         }
     }
 
@@ -339,6 +352,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
         sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.INSTANCE_FILE_PATH);
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
+        sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DISPLAY_SUBTEXT);

@@ -264,7 +264,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         			formDefFile.getName(), "id"));
         }
         if (version != null) {
-            updateValues.put(FormsColumns.VERSION, version);
+            updateValues.put(FormsColumns.JR_VERSION, version);
         }
         if (submission != null) {
             updateValues.put(FormsColumns.SUBMISSION_URI, submission);

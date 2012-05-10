@@ -146,6 +146,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 	c = Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
 	                c.moveToFirst();
 	                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+	                String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
 	                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
 	                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
 	
@@ -158,6 +159,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 	                    values.put(InstanceColumns.DISPLAY_NAME, formname);
 	                }
 	                values.put(InstanceColumns.JR_FORM_ID, jrformid);
+	                values.put(InstanceColumns.JR_VERSION, jrversion);
                 } finally {
                 	if ( c != null ) {
                 		c.close();

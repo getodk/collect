@@ -19,6 +19,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -69,19 +70,19 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
 
-        String sortOrder = FormsColumns.DISPLAY_NAME + " ASC";
+        String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
 
         String[] data = new String[] {
-                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT
+                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
         };
         int[] view = new int[] {
-                R.id.text1, R.id.text2
+                R.id.text1, R.id.text2, R.id.text3
         };
 
         // render total instance view
         SimpleCursorAdapter instances =
-            new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
+            new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, c, data, view);
         setListAdapter(instances);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {

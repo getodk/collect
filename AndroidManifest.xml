@@ -10,7 +10,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.odk.collect.android"
 	android:versionName="1.2 RC1"
-	android:versionCode="1007">
+	android:versionCode="1008">
 	<uses-permission
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:name="android.permission.READ_PHONE_STATE" />

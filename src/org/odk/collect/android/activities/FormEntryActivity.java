@@ -27,6 +27,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -241,8 +242,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 Uri uri = intent.getData();
 
                 if (getContentResolver().getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
-                	// get the formId for this instance...
+                	// get the formId and version for this instance...
                 	String jrFormId = null;
+                	String jrVersion = null;
                 	{
                 		Cursor instanceCursor = null;
                 		try {
@@ -259,6 +261,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 		                        jrFormId =
 		                            instanceCursor.getString(instanceCursor
 		                                    .getColumnIndex(InstanceColumns.JR_FORM_ID));
+		                        int idxJrVersion = instanceCursor.getColumnIndex(InstanceColumns.JR_VERSION);
+		                        
+		                        jrVersion = instanceCursor.isNull(idxJrVersion) ? null :
+		                        				instanceCursor.getString(idxJrVersion);
 		                    }
                 		} finally {
                 			if ( instanceCursor != null ) {
@@ -267,10 +273,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 		}
                 	}
                 	
-                    String[] selectionArgs = {
-                        jrFormId
-                    };
-                    String selection = FormsColumns.JR_FORM_ID + " like ?";
+                    String[] selectionArgs;
+                    String selection;
+                    
+                    if ( jrVersion == null ) {
+                    	selectionArgs = new String[]{ jrFormId };
+                    	selection = FormsColumns.JR_FORM_ID + "=? AND " + FormsColumns.JR_VERSION + " IS NULL";
+                    } else {
+                    	selectionArgs = new String[]{ jrFormId, jrVersion };
+                    	selection = FormsColumns.JR_FORM_ID + "=? AND " + FormsColumns.JR_VERSION + "=?";
+                    }
 
                     {
                         Cursor formCursor = null;
@@ -286,8 +298,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 	                            this.createErrorDialog("Parent form does not exist", EXIT);
 	                            return;
 	                        } else if (formCursor.getCount() > 1) {
-	                            this.createErrorDialog("More than one possible parent form", EXIT);
-	                            return;
+	                        	// still take the first entry, but warn that there are multiple rows.
+	                        	// user will need to hand-edit the SQLite database to fix it.
+	                        	formCursor.moveToFirst();
+	                            mFormPath =
+		                                formCursor.getString(formCursor
+		                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+	                            this.createErrorDialog("Multiple matching form definitions exist", DO_NOT_EXIT);
 	                        }
                         } finally {
                         	if ( formCursor != null ) {

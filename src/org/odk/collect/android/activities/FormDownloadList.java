@@ -15,10 +15,13 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.WebUtils;
@@ -31,6 +34,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -255,8 +259,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        mDownloadButton.setEnabled(!(selectedItemCount() == 0));
+		super.onListItemClick(l, v, position, id);
+		mDownloadButton.setEnabled(!(selectedItemCount() == 0));
     }
 
 
@@ -546,8 +550,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             	FormDetails details = mFormNamesAndURLs.get(formDetailsKey);
                 HashMap<String, String> item = new HashMap<String, String>();
                 item.put(FORMNAME, details.formName);
-                item.put(FORMID_DISPLAY, "ID: " + details.formID + 
-                		((details.formVersion == null) ? "" : (" Version: " + details.formVersion)));
+                item.put(FORMID_DISPLAY, 
+                		((details.formVersion == null) ? "" : (getString(R.string.version) + " " + details.formVersion + " ")) +
+                		"ID: " + details.formID );
                 item.put(FORMDETAIL_KEY, formDetailsKey);
 
                 // Insert the new form in alphabetical order.

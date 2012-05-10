@@ -205,7 +205,6 @@ public class EncryptionUtils {
 			//      Assumes this is in the order:
 			//			formId
 			//			version   (omitted if null)
-			// 			uiVersion (omitted if null)
 			//			base64RsaEncryptedSymmetricKey
 			//			instanceId
 			//          for each media file { filename "::" md5Hash }
@@ -292,6 +291,7 @@ public class EncryptionUtils {
 			if (cr.getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
 				// chain back to the Form record...
 				String[] selectionArgs = null;
+				String selection = null;
 				Cursor instanceCursor = null;
 				try {
 					instanceCursor = cr.query(mUri, null, null, null, null);
@@ -301,13 +301,19 @@ public class EncryptionUtils {
 					}
 					instanceCursor.moveToFirst();
 					String jrFormId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
-					selectionArgs = new String[] {jrFormId};
+					int idxJrVersion = instanceCursor.getColumnIndex(InstanceColumns.JR_VERSION);
+					if ( !instanceCursor.isNull(idxJrVersion) ) {
+						selectionArgs = new String[] {jrFormId, instanceCursor.getString(idxJrVersion)};
+						selection = FormsColumns.JR_FORM_ID + " =? AND " + FormsColumns.JR_VERSION + "=?";
+					} else {
+						selectionArgs = new String[] {jrFormId};
+						selection = FormsColumns.JR_FORM_ID + " =? AND " + FormsColumns.JR_VERSION + " IS NULL";
+					}
 				} finally {
 					if ( instanceCursor != null ) {
 						instanceCursor.close();
 					}
 				}
-				String selection = FormsColumns.JR_FORM_ID + " like ?";
 	
 		        formCursor = cr.query(FormsColumns.CONTENT_URI, null, selection, selectionArgs,
 		                null);
@@ -331,7 +337,7 @@ public class EncryptionUtils {
 				Log.e(t, "No FormId specified???");
 				return null;
 			}
-			int idxVersion = formCursor.getColumnIndex(FormsColumns.VERSION);
+			int idxVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
 			int idxBase64RsaPublicKey = formCursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY);
 			formVersion = formCursor.isNull(idxVersion) ? null : formCursor.getString(idxVersion);
 			String base64RsaPublicKey = formCursor.isNull(idxBase64RsaPublicKey) 

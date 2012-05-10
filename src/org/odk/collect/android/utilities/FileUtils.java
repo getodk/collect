@@ -291,8 +291,7 @@ public class FileUtils {
                 String uiVersion = cur.getAttributeValue(null, "uiVersion");
                 if ( uiVersion != null ) {
                 	// pre-OpenRosa 1.0 variant of spec
-                	version = ((version == null) ? "" : version) + "." + uiVersion;
-                	Log.w(t, "Obsolete use of uiVersion -- consolidated with version -- version is now tracked as: " + version);
+                	Log.e(t, "Obsolete use of uiVersion -- IGNORED -- only using version: " + version);
                 }
 
                 fields.put(FORMID, (id == null) ? xmlns : id);
