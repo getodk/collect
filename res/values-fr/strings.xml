@@ -225,12 +225,12 @@ License.
 <string name="font_size_medium">Normal</string>
 <string name="font_size_small">Petit</string>
 <string name="font_size_extra_small">Très petit</string>
-<string name="change_view">Change View</string>
-<string name="show_sent_and_unsent_forms">Sent and Unsent Forms</string>
-<string name="show_unsent_forms">Unsent Forms Only</string>
-<string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="change_view">Changer l\'aspect de l\'affichage</string>
+<string name="show_sent_and_unsent_forms">Formulaires envoyés et non envoyés</string>
+<string name="show_unsent_forms">Que des formulaires non envoyés</string>
+<string name="added_on_date_at_time">\'Ajouté le\' EEE, MMM dd, yyyy \'à\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="saved_on_date_at_time">\'Sauvegardé le\' EEE, MMM dd, yyyy \'à\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="finalized_on_date_at_time">\'Finalisé le\' EEE, MMM dd, yyyy \'à\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sent_on_date_at_time">\'Envoyé le\' EEE, MMM dd, yyyy \'à\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sending_failed_on_date_at_time">\'L\'envoi a échoué le\' EEE, MMM dd, yyyy \'à\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 </resources>
