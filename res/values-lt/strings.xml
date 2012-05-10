@@ -228,9 +228,9 @@
 <string name="change_view">Keisti vaizdą</string>
 <string name="show_sent_and_unsent_forms">Išsiųstos ir neišsiųstos formos</string>
 <string name="show_unsent_forms">Tik neišsiųstos formos</string>
-<string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="added_on_date_at_time">\'Sukurta\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="saved_on_date_at_time">\'Išsaugota\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="finalized_on_date_at_time">\'Užbaigta\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sent_on_date_at_time">\'Išsiųsta\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sending_failed_on_date_at_time">\'Išsiųsti nepavyko\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 </resources>
