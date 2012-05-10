@@ -118,7 +118,7 @@ public class FormsProvider extends ContentProvider {
                         + FormsColumns.LANGUAGE + ", " 
                         + FormsColumns.SUBMISSION_URI + ", "
                         + FormsColumns.JR_VERSION + ", "
-                        + ((oldVersion == 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                        + ((oldVersion != 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
                         + FormsColumns.JRCACHE_FILE_PATH + ") SELECT " 
                 		+ FormsColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
@@ -138,7 +138,7 @@ public class FormsProvider extends ContentProvider {
                                 " WHEN " + MODEL_VERSION + " IS NULL AND " + UI_VERSION + " IS NOT NULL THEN " +
                                     "'.' || CAST(" + UI_VERSION + " AS TEXT)" + 
                                 " ELSE NULL END, "
-                        + ((oldVersion == 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                        + ((oldVersion != 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
                         + FormsColumns.JRCACHE_FILE_PATH + " FROM " + FORMS_TABLE_NAME);
 
         		// risky failures here...

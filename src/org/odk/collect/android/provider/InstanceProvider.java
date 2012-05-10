@@ -87,7 +87,7 @@ public class InstanceProvider extends ContentProvider {
         		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + 
         					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
         		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " + 
-        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = true WHERE " +
+        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true) + "' WHERE " +
         					InstanceColumns.STATUS + " IS NOT NULL AND " +
         					InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'");
         		oldVersion = 2;
