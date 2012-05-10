@@ -18,6 +18,8 @@ import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -65,12 +67,31 @@ public class PropertyManager implements IPropertyManager {
                 Settings.Secure
                         .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         }
+        
+        if ( deviceId == null ) {
+        	// no SIM -- WiFi only
+        	// Retrieve WiFiManager
+        	WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+
+    		// Get WiFi status
+    		WifiInfo info = wifi.getConnectionInfo();
+    		if ( info != null ) {
+    			deviceId = info.getMacAddress();
+    		}
+        }
+        
+        // if it is still null, use ANDROID_ID
+        if ( deviceId == null ) {
+            deviceId =
+                    Settings.Secure
+                            .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        
         mProperties.put(DEVICE_ID_PROPERTY, deviceId);
         mProperties.put(SUBSCRIBER_ID_PROPERTY, mTelephonyManager.getSubscriberId());
         mProperties.put(SIM_SERIAL_PROPERTY, mTelephonyManager.getSimSerialNumber());
         mProperties.put(PHONE_NUMBER_PROPERTY, mTelephonyManager.getLine1Number());
     }
-
 
     @Override
     public Vector<String> getProperty(String propertyName) {
