@@ -11,6 +11,7 @@
 	<ImageView
 		android:id="@+id/splash"
 		android:gravity="center"
+		android:contentDescription="@string/app_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="@android:color/transparent"
@@ -26,6 +27,7 @@
 		<ImageView
 			android:id="@+id/app_icon"
 			android:src="@drawable/notes"
+			android:contentDescription="@string/app_name"
 			android:layout_height="72dip"
 			android:layout_width="72dip" />
 		<LinearLayout

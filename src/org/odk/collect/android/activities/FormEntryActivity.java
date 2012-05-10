@@ -14,6 +14,12 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
@@ -27,7 +33,6 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -83,12 +88,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
@@ -295,7 +294,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 	                                formCursor.getString(formCursor
 	                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH));
 	                        } else if (formCursor.getCount() < 1) {
-	                            this.createErrorDialog("Parent form does not exist", EXIT);
+	                            this.createErrorDialog(getString(R.string.parent_form_not_present, jrFormId) + 
+	                            		((jrVersion == null) ? "" : "\n" + getString(R.string.version) + " " + jrVersion), EXIT);
 	                            return;
 	                        } else if (formCursor.getCount() > 1) {
 	                        	// still take the first entry, but warn that there are multiple rows.
@@ -703,8 +703,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     ((ImageView) startView.findViewById(R.id.form_start_bling))
                             .setVisibility(View.GONE);
                 } else {
-                    ((ImageView) startView.findViewById(R.id.form_start_bling))
-                            .setImageDrawable(image);
+                    ImageView v = ((ImageView) startView.findViewById(R.id.form_start_bling));
+                    v.setImageDrawable(image);
+                    v.setContentDescription(mFormController.getFormTitle());
                 }
 
                 return startView;

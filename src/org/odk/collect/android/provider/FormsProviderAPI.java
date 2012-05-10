@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.provider;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 

@@ -14,16 +14,11 @@
     android:fillViewport="true"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:padding="10dp" >
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
 
         <ImageView
             android:id="@+id/form_start_bling"
@@ -31,7 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingBottom="30dp"
-            android:scaleType="center" />
+            android:scaleType="center"
+            android:contentDescription="@+id/description"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/description"
@@ -42,64 +40,48 @@
             android:lineSpacingMultiplier="1.2"
             android:paddingBottom="20dp"
             android:paddingTop="10dp"
-            android:text="title"
+            android:layout_below="@+id/form_start_bling"
+            android:layout_centerHorizontal="true"
             android:textSize="21dp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/image_backup"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:baselineAligned="false" >
+            android:gravity="left"
+            android:contentDescription="@+string/backup"
+            android:src="@+drawable/backup"
+            android:layout_below="@+id/description"
+            android:layout_alignParentLeft="true" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:src="@+drawable/backup" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="@+string/backup"
-                    android:textSize="21dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:src="@+drawable/advance" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="@+string/advance"
-                    android:textSize="21dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
-    </LinearLayout>
+            android:gravity="left"
+            android:layout_below="@+id/image_backup"
+            android:layout_alignParentLeft="true"
+            android:text="@+string/backup"
+            android:textSize="21dp" />
+
+        <ImageView
+            android:id="@+id/image_advance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:contentDescription="@+string/advance"
+            android:src="@+drawable/advance"
+            android:layout_below="@+id/description"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_below="@+id/image_advance"
+            android:layout_alignParentRight="true"
+            android:text="@+string/advance"
+            android:textSize="21dp" />
+    </RelativeLayout>
 
 </ScrollView>
