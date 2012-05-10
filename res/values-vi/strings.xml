@@ -228,9 +228,9 @@
 <string name="change_view">Đổi hiển thị</string>
 <string name="show_sent_and_unsent_forms">Biểu mẫu đã gửi và chưa gửi</string>
 <string name="show_unsent_forms">Chỉ các biểu mẫu chưa gửi</string>
-<string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="added_on_date_at_time">\'Được thêm vào\' EEE, MMM dd, yyyy \'lúc\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="saved_on_date_at_time">\'Được lưu vào\' EEE, MMM dd, yyyy \'lúc\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="finalized_on_date_at_time">\'Hoàn thành vào\' EEE, MMM dd, yyyy \'lúc\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sent_on_date_at_time">\'Gửi vào\' EEE, MMM dd, yyyy \'lúc\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 </resources>
