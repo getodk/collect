@@ -62,7 +62,6 @@ public class FormsProvider extends ContentProvider {
         // These exist in database versions 2 and 3, but not in 4...
         private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
         private static final String MODEL_VERSION = "modelVersion";
-        private static final String UI_VERSION = "uiVersion";
 
         DatabaseHelper(String databaseName) {
             super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
@@ -102,7 +101,7 @@ public class FormsProvider extends ContentProvider {
                 onCreate(db);
                 return;
         	} else {
-        		// adding BASE64_RSA_PUBLIC_KEY and consolidating MODEL_VERSION and UI_VERSION to VERSION 
+        		// adding BASE64_RSA_PUBLIC_KEY and changing type and name of integer MODEL_VERSION to text VERSION 
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
                 onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
         		db.execSQL("INSERT INTO " + TEMP_FORMS_TABLE_NAME + " ("
@@ -131,13 +130,8 @@ public class FormsProvider extends ContentProvider {
                         + FormsColumns.FORM_FILE_PATH + ", " 
                         + FormsColumns.LANGUAGE + ", " 
                         + FormsColumns.SUBMISSION_URI + ", "
-                        + "CASE WHEN " + MODEL_VERSION + " IS NOT NULL AND " + UI_VERSION + " IS NOT NULL THEN " +
-                        			"CAST(" + MODEL_VERSION + " AS TEXT) || '.' || CAST(" + UI_VERSION + " AS TEXT)" + 
-                                " WHEN " + MODEL_VERSION + " IS NOT NULL AND " + UI_VERSION + " IS NULL THEN " +
-                                    "CAST(" + MODEL_VERSION + " AS TEXT)" + 
-                                " WHEN " + MODEL_VERSION + " IS NULL AND " + UI_VERSION + " IS NOT NULL THEN " +
-                                    "'.' || CAST(" + UI_VERSION + " AS TEXT)" + 
-                                " ELSE NULL END, "
+                        + "CASE WHEN " + MODEL_VERSION + " IS NOT NULL THEN " +
+                        			"CAST(" + MODEL_VERSION + " AS TEXT) ELSE NULL END, "
                         + ((oldVersion != 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
                         + FormsColumns.JRCACHE_FILE_PATH + " FROM " + FORMS_TABLE_NAME);
 
