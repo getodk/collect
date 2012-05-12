@@ -233,6 +233,6 @@
 <string name="finalized_on_date_at_time">\'Užbaigta\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sent_on_date_at_time">\'Išsiųsta\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sending_failed_on_date_at_time">\'Išsiųsti nepavyko\' EEE, MMM dd, yyyy HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="version">Version:</string>
-<string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
+<string name="version">Versija:</string>
+<string name="parent_form_not_present">Neįmanoma redaguoti šios išsaugotos formos, nes nerasta atitinkama tuščia forma.\n\nFormos ID: %1$s</string>
 </resources>
