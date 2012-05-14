@@ -109,13 +109,14 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                     Uri.fromFile(new File(Collect.TMPFILE_PATH)));
                 try {
+                    mWaitingForData = true;
                     ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.IMAGE_CAPTURE);
-                    mWaitingForData = true;
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "image capture"),
                         Toast.LENGTH_SHORT);
+                    mWaitingForData = false;
                 }
 
             }
@@ -138,13 +139,14 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 i.setType("image/*");
 
                 try {
+                    mWaitingForData = true;
                     ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.IMAGE_CHOOSER);
-                    mWaitingForData = true;
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "choose image"),
                         Toast.LENGTH_SHORT);
+                    mWaitingForData = false;
                 }
 
             }
@@ -352,6 +354,12 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
     }
+
+
+    @Override
+	public void cancelWaitingForBinaryData() {
+    	mWaitingForData = false;
+	}
 
 
     @Override

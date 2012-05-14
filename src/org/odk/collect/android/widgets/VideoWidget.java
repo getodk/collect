@@ -88,13 +88,14 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                     Video.Media.EXTERNAL_CONTENT_URI.toString());
                 try {
+                    mWaitingForData = true;
                     ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.VIDEO_CAPTURE);
-                    mWaitingForData = true;
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "capture video"),
                         Toast.LENGTH_SHORT);
+                    mWaitingForData = false;
                 }
 
             }
@@ -125,6 +126,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "choose video "),
                         Toast.LENGTH_SHORT);
+                    mWaitingForData = false;
                 }
 
             }
@@ -283,6 +285,12 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
     }
+
+
+    @Override
+	public void cancelWaitingForBinaryData() {
+    	mWaitingForData = false;
+	}
 
 
     @Override

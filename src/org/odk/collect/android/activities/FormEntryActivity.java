@@ -356,7 +356,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         super.onActivityResult(requestCode, resultCode, intent);
 
         if (resultCode == RESULT_CANCELED) {
-            // request was canceled, so do nothing
+            // request was canceled...
+        	if ( requestCode != HIERARCHY_ACTIVITY ) {
+        		((ODKView) mCurrentView).cancelWaitingForBinaryData();
+        	}
             return;
         }
 

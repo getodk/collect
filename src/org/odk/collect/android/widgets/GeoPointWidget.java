@@ -136,10 +136,9 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 } else {
                     i = new Intent(getContext(), GeoPointActivity.class);
                 }
+                mWaitingForData = true;
                 ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.LOCATION_CAPTURE);
-                mWaitingForData = true;
-
             }
         });
 
@@ -249,6 +248,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
     }
+
+
+    @Override
+	public void cancelWaitingForBinaryData() {
+    	mWaitingForData = false;
+	}
 
 
     @Override

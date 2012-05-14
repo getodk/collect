@@ -139,6 +139,12 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
 
     @Override
+	public void cancelWaitingForBinaryData() {
+    	mWaitingForData = false;
+	}
+
+
+    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         mStringAnswer.setOnLongClickListener(l);
         mGetBarcodeButton.setOnLongClickListener(l);

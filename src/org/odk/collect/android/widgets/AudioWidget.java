@@ -96,6 +96,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "audio capture"),
                         Toast.LENGTH_SHORT);
+                    mWaitingForData = false;
                 }
 
             }
@@ -123,6 +124,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "choose audio"),
                         Toast.LENGTH_SHORT);
+                    mWaitingForData = false;
                 }
 
             }
@@ -281,6 +283,12 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     public boolean isWaitingForBinaryData() {
         return mWaitingForData;
     }
+
+
+    @Override
+	public void cancelWaitingForBinaryData() {
+    	mWaitingForData = false;
+	}
 
 
     @Override

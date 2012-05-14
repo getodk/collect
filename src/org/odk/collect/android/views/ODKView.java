@@ -178,7 +178,23 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         if (!set) {
-            Log.w(t, "Attempting to return data to a widget or set of widgets no looking for data");
+            Log.w(t, "Attempting to return data to a widget or set of widgets not looking for data");
+        }
+    }
+    
+    public void cancelWaitingForBinaryData() {
+        int count = 0;
+        for (QuestionWidget q : widgets) {
+            if (q instanceof IBinaryWidget) {
+                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
+                    ((IBinaryWidget) q).cancelWaitingForBinaryData();
+                    ++count;
+                }
+            }
+        }
+
+        if (count != 1) {
+            Log.w(t, "Attempting to cancel waiting for binary data to a widget or set of widgets not looking for data");
         }
     }
 
