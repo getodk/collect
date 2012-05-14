@@ -1,178 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington Licensed under the Apache 
+<!--
+     Copyright (C) 2009 University of Washington Licensed under the Apache 
 	License, Version 2.0 (the "License"); you may not use this file except in 
 	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
 	Unless required by applicable law or agreed to in writing, software distributed 
 	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
-	the specific language governing permissions and limitations under the License. -->
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.odk.collect.android"
-	android:versionName="1.2 RC2"
-	android:versionCode="1008">
-	<uses-permission
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:name="android.permission.INTERNET" />
-	<uses-permission
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:name="android.permission.ACCESS_SURFACE_FLINGER" />
-	<uses-permission
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:name="android.permission.GET_ACCOUNTS" />
-  <uses-permission
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
-	<uses-sdk
-		android:minSdkVersion="7"></uses-sdk>
-	<supports-screens
-		android:resizeable="true"
-		android:smallScreens="true"
-		android:normalScreens="true"
-		android:largeScreens="true"
-		android:anyDensity="true" />
+	the specific language governing permissions and limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.odk.collect.android"
+    android:versionCode="1008"
+    android:versionName="1.2 RC2" >
 
-	<application
-		android:icon="@drawable/notes"
-		android:label="@string/app_name"
-		android:theme="@style/Collect"
-		android:name="org.odk.collect.android.application.Collect">
-		<provider
-			android:name="org.odk.collect.android.provider.FormsProvider"
-			android:authorities="org.odk.collect.android.provider.odk.forms" />
-		<provider
-			android:name="org.odk.collect.android.provider.InstanceProvider"
-			android:authorities="org.odk.collect.android.provider.odk.instances" />
-		<activity
-			android:label="@string/app_name"
-			android:configChanges="orientation"
-			android:name=".activities.MainMenuActivity">
-		</activity>
-		<activity
-			android:name=".activities.FormEntryActivity"
-			android:label="@string/app_name"
-			android:configChanges="orientation"
-			android:windowSoftInputMode="adjustResize"
-			>
-			<intent-filter>
-				<action
-					android:name="android.intent.action.VIEW" />
-				<action
-					android:name="android.intent.action.EDIT" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-				<data
-					android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
-				<data
-					android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
-			</intent-filter>
-		</activity>
-    <activity
-      android:name=".activities.AccountList"
-      android:label="@string/app_name" />
-    <activity
-      android:name=".activities.AccountInfo"
-      android:label="@string/app_name" />    
-		<activity
-			android:name=".activities.InstanceChooserList"
-			android:label="@string/app_name" />
-		<intent-filter>
-			<action
-				android:name="android.intent.action.VIEW" />
-			<action
-				android:name="android.intent.action.EDIT" />
-			<category
-				android:name="android.intent.category.DEFAULT" />
-			<data
-				android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
-		</intent-filter>
-		<activity
-			android:name=".activities.InstanceChooserTabs"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.FormChooserList"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action
-					android:name="android.intent.action.VIEW" />
-				<action
-					android:name="android.intent.action.EDIT" />
-				<action
-					android:name="android.intent.action.PICK" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-				<data
-					android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".activities.FormManagerList"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.FormDownloadList"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.DataManagerList"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.FileManagerTabs"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.InstanceUploaderList"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.InstanceUploaderActivity"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".preferences.PreferencesActivity"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.FormHierarchyActivity"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.GeoPointActivity"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.GeoPointMapActivity"
-			android:label="@string/app_name" />
-		<activity
-			android:name=".activities.SplashScreenActivity"
-			android:label="@string/app_name"
-			android:theme="@android:style/Theme.Dialog">
-			<intent-filter>
-				<action
-					android:name="android.intent.action.MAIN" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-				<category
-					android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<!-- Enable Shortcuts for Command Actions -->
-		<activity
-			android:name=".activities.AndroidShortcuts"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			android:label="ODK Form">
-			<intent-filter>
-				<action
-					android:name="android.intent.action.CREATE_SHORTCUT" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<uses-library
-			android:name="com.google.android.maps" android:required="false" />
-	</application>
-	
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-sdk android:minSdkVersion="7" >
+    </uses-sdk>
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <application
+        android:name="org.odk.collect.android.application.Collect"
+        android:icon="@drawable/notes"
+        android:label="@string/app_name"
+        android:theme="@style/Collect" >
+        <provider
+            android:name="org.odk.collect.android.provider.FormsProvider"
+            android:authorities="org.odk.collect.android.provider.odk.forms" />
+        <provider
+            android:name="org.odk.collect.android.provider.InstanceProvider"
+            android:authorities="org.odk.collect.android.provider.odk.instances" />
+
+        <activity
+            android:name=".activities.MainMenuActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".activities.FormEntryActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.AccountList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.AccountInfo"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.InstanceChooserList"
+            android:label="@string/app_name" />
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <action android:name="android.intent.action.EDIT" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+
+            <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+        </intent-filter>
+
+        <activity
+            android:name=".activities.InstanceChooserTabs"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.FormChooserList"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.FormManagerList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.FormDownloadList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.DataManagerList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.FileManagerTabs"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.InstanceUploaderList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.InstanceUploaderActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".preferences.PreferencesActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.FormHierarchyActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.GeoPointActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.GeoPointMapActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Enable Shortcuts for Command Actions -->
+        <activity
+            android:name=".activities.AndroidShortcuts"
+            android:label="ODK Form"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="false" />
+    </application>
+
 </manifest>
