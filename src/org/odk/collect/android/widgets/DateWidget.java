@@ -21,9 +21,11 @@ import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,6 +40,8 @@ public class DateWidget extends QuestionWidget {
 
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
+    private boolean hideDay = false;
+    private boolean hideMonth = false;
 
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
@@ -46,7 +50,9 @@ public class DateWidget extends QuestionWidget {
         mDatePicker = new DatePicker(getContext());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
-
+        
+        hideDayFieldIfNotInFormat(prompt);
+        
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
@@ -82,6 +88,45 @@ public class DateWidget extends QuestionWidget {
         addView(mDatePicker);
     }
 
+    private void hideDayFieldIfNotInFormat(FormEntryPrompt prompt) {
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+        if ( appearance == null ) return;
+        
+        if ( "month-year".equals(appearance) ) {
+        	hideDay = true;
+        } else if ( "year".equals(appearance) ) {
+        	hideMonth = true;
+        }
+
+        if ( hideMonth || hideDay ) {
+		    for (Field datePickerDialogField : this.mDatePicker.getClass().getDeclaredFields()) {
+		        if ("mDayPicker".equals(datePickerDialogField.getName()) ||
+		                "mDaySpinner".equals(datePickerDialogField.getName())) {
+		            datePickerDialogField.setAccessible(true);
+		            Object dayPicker = new Object();
+		            try {
+		                dayPicker = datePickerDialogField.get(this.mDatePicker);
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+		            ((View) dayPicker).setVisibility(View.GONE);
+		        }
+		        if ( hideMonth ) {
+			        if ("mMonthPicker".equals(datePickerDialogField.getName()) ||
+			                "mMonthSpinner".equals(datePickerDialogField.getName())) {
+			            datePickerDialogField.setAccessible(true);
+			            Object monthPicker = new Object();
+			            try {
+			            	monthPicker = datePickerDialogField.get(this.mDatePicker);
+			            } catch (Exception e) {
+			                e.printStackTrace();
+			            }
+			            ((View) monthPicker).setVisibility(View.GONE);
+			        }
+		        }
+		    }
+        }
+    }
 
     private void setAnswer() {
 
@@ -111,8 +156,8 @@ public class DateWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         DateTime ldt =
-            new DateTime(mDatePicker.getYear(), mDatePicker.getMonth() + 1,
-                    mDatePicker.getDayOfMonth(), 0, 0);
+            new DateTime(mDatePicker.getYear(), hideMonth ? 1 : mDatePicker.getMonth() + 1,
+                    (hideMonth || hideDay) ? 1 : mDatePicker.getDayOfMonth(), 0, 0);
         // DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
         return new DateData(ldt.toDate());
     }
