@@ -54,10 +54,18 @@ public class WidgetFactory {
                         questionWidget = new TimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        questionWidget = new DecimalWidget(context, fep);
+                    	if ( appearance.startsWith("ex:") ) {
+                    		questionWidget = new ExDecimalWidget(context, fep);
+                    	} else {
+                    		questionWidget = new DecimalWidget(context, fep);
+                    	}
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        questionWidget = new IntegerWidget(context, fep);
+                    	if ( appearance.startsWith("ex:") ) {
+                    		questionWidget = new ExIntegerWidget(context, fep);
+                    	} else {
+                    		questionWidget = new IntegerWidget(context, fep);
+                    	}
                         break;
                     case Constants.DATATYPE_GEOPOINT:
                         questionWidget = new GeoPointWidget(context, fep);
@@ -66,7 +74,9 @@ public class WidgetFactory {
                         questionWidget = new BarcodeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_TEXT:
-                        if (appearance.equals("numbers")) {
+                    	if (appearance.startsWith("ex:")) {
+                            questionWidget = new ExStringWidget(context, fep);
+                    	} else if (appearance.equals("numbers")) {
                             questionWidget = new StringNumberWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep);

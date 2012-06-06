@@ -115,6 +115,9 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int IMAGE_CHOOSER = 7;
     public static final int AUDIO_CHOOSER = 8;
     public static final int VIDEO_CHOOSER = 9;
+    public static final int EX_STRING_CAPTURE = 10;
+    public static final int EX_INT_CAPTURE = 11;
+    public static final int EX_DECIMAL_CAPTURE = 12;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -371,6 +374,21 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 ((ODKView) mCurrentView).setBinaryData(sb);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
+            case EX_STRING_CAPTURE:
+            	String sv = intent.getStringExtra("value");
+                ((ODKView) mCurrentView).setBinaryData(sv);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            	break;
+            case EX_INT_CAPTURE:
+            	Integer iv = intent.getIntExtra("value",0);
+                ((ODKView) mCurrentView).setBinaryData(iv);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            	break;
+            case EX_DECIMAL_CAPTURE:
+            	Double dv = intent.getDoubleExtra("value", 0.0);
+                ((ODKView) mCurrentView).setBinaryData(dv);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            	break;
             case IMAGE_CAPTURE:
                 /*
                  * We saved the image to the tempfile_path, but we really want it to be in:
@@ -1425,8 +1443,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            mFormLoaderTask.setFormLoaderListener(null);
-                            mFormLoaderTask.cancel(true);
+                        	mFormLoaderTask.setFormLoaderListener(null);
+                        	FormLoaderTask t = mFormLoaderTask;
+                        	mFormLoaderTask = null;
+                            t.cancel(true);
+                            t.destroy();
                             finish();
                         }
                     };
@@ -1491,9 +1512,18 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         super.onResume();
         if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(this);
-            if (mFormController != null && mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
-                dismissDialog(PROGRESS_DIALOG);
-                refreshCurrentView();
+            if (mFormController == null && mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
+            	FormController fec = mFormLoaderTask.getFormController();
+            	if ( fec != null ) {
+            		loadingComplete(fec);
+            	} else {
+                    dismissDialog(PROGRESS_DIALOG);
+                	FormLoaderTask t = mFormLoaderTask;
+                	mFormLoaderTask = null;
+                    t.cancel(true);
+                    t.destroy();
+                    refreshCurrentView();
+            	}
             }
         }
         if (mSaveToDiskTask != null) {
@@ -1539,8 +1569,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             // lives on and retains the FEC in memory.
             // but only if it's done, otherwise the thread never returns
             if (mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
-                mFormLoaderTask.cancel(true);
-                mFormLoaderTask.destroy();
+            	mFormLoaderTask.setFormLoaderListener(null);
+            	FormLoaderTask t = mFormLoaderTask;
+            	mFormLoaderTask = null;
+                t.cancel(true);
+                t.destroy();
             }
         }
         if (mSaveToDiskTask != null) {
@@ -1582,6 +1615,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void loadingComplete(FormController fc) {
         dismissDialog(PROGRESS_DIALOG);
 
+        mFormLoaderTask.setFormLoaderListener(null);
+    	FormLoaderTask t = mFormLoaderTask;
+    	mFormLoaderTask = null;
+        t.cancel(true);
+        t.destroy();
         mFormController = fc;
 
         // Set saved answer path
@@ -1598,10 +1636,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mInstancePath = path + File.separator + file + "_" + time + ".xml";
             }
         } else {
-            // we've just loaded a saved form, so start in the hierarchy view
-            Intent i = new Intent(this, FormHierarchyActivity.class);
-            startActivity(i);
-            return; // so we don't show the intro screen before jumping to the hierarchy
+        	Intent reqIntent = getIntent();
+        	boolean showFirst = reqIntent.getBooleanExtra("start", false);
+
+        	if ( !showFirst ) {
+		        // we've just loaded a saved form, so start in the hierarchy view
+		        Intent i = new Intent(this, FormHierarchyActivity.class);
+		        startActivity(i);
+	            return; // so we don't show the intro screen before jumping to the hierarchy
+        	}
         }
 
         // Set the language if one has already been set in the past

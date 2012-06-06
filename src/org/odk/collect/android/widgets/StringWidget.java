@@ -42,6 +42,7 @@ public class StringWidget extends QuestionWidget {
     public StringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mAnswer = new EditText(context);
+        mReadOnly = prompt.isReadOnly();
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 
@@ -56,18 +57,15 @@ public class StringWidget extends QuestionWidget {
         mAnswer.setHorizontallyScrolling(false);
         mAnswer.setSingleLine(false);
 
-        if (prompt != null) {
-            mReadOnly = prompt.isReadOnly();
-            String s = prompt.getAnswerText();
-            if (s != null) {
-                mAnswer.setText(s);
-            }
+        String s = prompt.getAnswerText();
+        if (s != null) {
+            mAnswer.setText(s);
+        }
 
-            if (mReadOnly) {
-                mAnswer.setBackgroundDrawable(null);
-                mAnswer.setFocusable(false);
-                mAnswer.setClickable(false);
-            }
+        if (mReadOnly) {
+            mAnswer.setBackgroundDrawable(null);
+            mAnswer.setFocusable(false);
+            mAnswer.setClickable(false);
         }
 
         addView(mAnswer);

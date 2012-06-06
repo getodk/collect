@@ -348,6 +348,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
+    public FormController getFormController() {
+    	return ( data != null ) ? data.getController() : null;
+    }
 
     public void destroy() {
         if (data != null) {
