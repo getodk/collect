@@ -246,8 +246,10 @@ public class FormHierarchyActivity extends ListActivity {
                     }
 
                     FormEntryPrompt fp = FormEntryActivity.mFormController.getQuestionPrompt();
-                    formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
-                            Color.WHITE, QUESTION, fp.getIndex()));
+                    if ( !fp.isReadOnly() ) {
+	                    formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
+	                            Color.WHITE, QUESTION, fp.getIndex()));
+                    }
                     break;
                 case FormEntryController.EVENT_GROUP:
                     // ignore group events
