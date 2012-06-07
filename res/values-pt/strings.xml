@@ -139,7 +139,7 @@
 <string name="replace_location">Trocar Localização</string>
 <string name="replace_video">Trocar Vídeo</string>
 <string name="required_answer_error">Desculpe, esta resposta é obrigatória!</string>
-<string name="review">continue</string>
+<string name="review">Continuar</string>
 <string name="review_data">Editar Formulário Salvo</string>
 <string name="review_data_button">Editar Formulário Salvo</string>
 <string name="saved_data">Incompleto (%s)</string>
@@ -154,7 +154,7 @@
 <string name="send_selected_data">Enviar selecionado</string>
 <string name="server_auth_credentials">Por favor, entre com nome do usuário e senha para do servidor:\n%s</string>
 <string name="server_requires_auth">Servidor Requer Autenticação</string>
-<string name="server_url">URL</string>
+<string name="server_url">Servidor URL</string>
 <string name="server_preferences">Servidor</string>
 <string name="toggle_selected">Alternar todos</string>
 <string name="trigger">OK. Por favor, continuar.</string>
@@ -190,7 +190,7 @@
 <string name="change_font_size">Tamanho da Fonte do Texto</string>
 <string name="form_scan_starting">Procurando por formulários...</string>
 <string name="form_scan_finished">Completada a varredura de formulários</string>
-<string name="powered_by_odk">Powered by Open Data Kit</string>
+<string name="powered_by_odk">Produzido por Open Data Kit</string>
 <string name="default_odk_formlist">/formList</string>
 <string name="default_odk_submission">/submission</string>
 <string name="access_error">"Erro enquanto acessa %s: "</string>
@@ -219,7 +219,7 @@
 <string name="google_submission_id_text">Esforço de coleta Google</string>
 <string name="server_platform_odk_aggregate">ODK Aggregate</string>
 <string name="server_platform_google_forms">Google Forms</string>
-<string name="server_platform_other">Other</string>
+<string name="server_platform_other">Outro</string>
 <string name="font_size_extra_large">Extra Grande</string>
 <string name="font_size_large">Grande</string>
 <string name="font_size_medium">Medio</string>
