@@ -225,16 +225,16 @@
 <string name="font_size_medium">Medio</string>
 <string name="font_size_small">Chico</string>
 <string name="font_size_extra_small">Extra Chico</string>
-<string name="change_view">Change View</string>
-<string name="show_sent_and_unsent_forms">Sent and Unsent Forms</string>
-<string name="show_unsent_forms">Unsent Forms Only</string>
-<string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="change_view">Cambiar Vista</string>
+<string name="show_sent_and_unsent_forms">Formuladios Enviados y No Enviados</string>
+<string name="show_unsent_forms">Solo Formularios No Enviados</string>
+<string name="added_on_date_at_time">\'Agregado el dia\' EEE, MMM dd, yyyy \'a las\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="saved_on_date_at_time">\'Guardado el dia\' EEE, MMM dd, yyyy \'a las\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="finalized_on_date_at_time">\'Finalizado el dia\' EEE, MMM dd, yyyy \'a las\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sent_on_date_at_time">\'Enviado el dia\' EEE, MMM dd, yyyy \'a las\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sending_failed_on_date_at_time">\'Envio fracaso el dia\' EEE, MMM dd, yyyy \'a las\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="version">Version:</string>
-<string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
-<string name="launch_app">Launch</string>
-<string name="no_app">The requested application is missing. Please manually enter the reading.</string>
+<string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado\n\nID de Formulario: %1$s</string>
+<string name="launch_app">Iniciar</string>
+<string name="no_app">Esta apliacion no esta. Por favor ingrese el dato manualmente.</string>
 </resources>
