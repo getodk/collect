@@ -235,6 +235,6 @@
 <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="version">Phiên bản:</string>
 <string name="parent_form_not_present">Không thể sửa biểu mẫu này vì biểu mẫu mặc định không tồn tại hoặc đã bị xoá.\n\nForm ID: %1$s</string>
-<string name="launch_app">Launch</string>
-<string name="no_app">The requested application is missing. Please manually enter the reading.</string>
+<string name="launch_app">Chạy</string>
+<string name="no_app">Không tìm thấy chương trình yêu cầu. Hãy chỉ rõ chương trình đọc.</string>
 </resources>
