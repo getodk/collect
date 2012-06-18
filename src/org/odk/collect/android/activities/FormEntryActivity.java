@@ -1525,7 +1525,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     refreshCurrentView();
             	}
             }
+        } else { // TODO: Have Mitch review when returns
+        	 refreshCurrentView();
         }
+        
         if (mSaveToDiskTask != null) {
             mSaveToDiskTask.setFormSavedListener(this);
         }
