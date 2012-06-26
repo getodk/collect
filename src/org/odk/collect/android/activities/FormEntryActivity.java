@@ -1525,7 +1525,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     refreshCurrentView();
             	}
             }
-        } else { // TODO: Have Mitch review when returns
+        } else {
         	 refreshCurrentView();
         }
         
@@ -1625,31 +1625,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         t.destroy();
         mFormController = fc;
 
-        // Set saved answer path
-        if (mInstancePath == null) {
-
-            // Create new answer folder.
-            String time =
-                new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
-                        .format(Calendar.getInstance().getTime());
-            String file =
-                mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
-            String path = Collect.INSTANCES_PATH + File.separator + file + "_" + time;
-            if (FileUtils.createFolder(path)) {
-                mInstancePath = path + File.separator + file + "_" + time + ".xml";
-            }
-        } else {
-        	Intent reqIntent = getIntent();
-        	boolean showFirst = reqIntent.getBooleanExtra("start", false);
-
-        	if ( !showFirst ) {
-		        // we've just loaded a saved form, so start in the hierarchy view
-		        Intent i = new Intent(this, FormHierarchyActivity.class);
-		        startActivity(i);
-	            return; // so we don't show the intro screen before jumping to the hierarchy
-        	}
-        }
-
         // Set the language if one has already been set in the past
         String[] languageTest = mFormController.getLanguages();
         if (languageTest != null) {
@@ -1678,6 +1653,31 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             } catch (Exception e) {
                 mFormController.setLanguage(defaultLanguage);
             }
+        }
+
+        // Set saved answer path
+        if (mInstancePath == null) {
+
+            // Create new answer folder.
+            String time =
+                new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                        .format(Calendar.getInstance().getTime());
+            String file =
+                mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.'));
+            String path = Collect.INSTANCES_PATH + File.separator + file + "_" + time;
+            if (FileUtils.createFolder(path)) {
+                mInstancePath = path + File.separator + file + "_" + time + ".xml";
+            }
+        } else {
+        	Intent reqIntent = getIntent();
+        	boolean showFirst = reqIntent.getBooleanExtra("start", false);
+
+        	if ( !showFirst ) {
+		        // we've just loaded a saved form, so start in the hierarchy view
+		        Intent i = new Intent(this, FormHierarchyActivity.class);
+		        startActivity(i);
+	            return; // so we don't show the intro screen before jumping to the hierarchy
+        	}
         }
 
         refreshCurrentView();
