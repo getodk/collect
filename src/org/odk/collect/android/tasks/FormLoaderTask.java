@@ -165,10 +165,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // new evaluation context for function handlers
-        EvaluationContext ec = new EvaluationContext();
-        fd.setEvaluationContext(ec);
+		fd.setEvaluationContext(new EvaluationContext(null));
 
-        // create FormEntryController from formdef
+		// create FormEntryController from formdef
         FormEntryModel fem = new FormEntryModel(fd);
         fec = new FormEntryController(fem);
 

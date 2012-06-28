@@ -74,4 +74,13 @@ public class FileReference implements Reference {
         return getInternalURI();
     }
 
+
+	@Override
+	public Reference[] probeAlternativeReferences() {
+		//We can't poll the JAR for resources, unfortunately. It's possible
+		//we could try to figure out something about the file and poll alternatives
+		//based on type (PNG-> JPG, etc)
+		return new Reference [0];
+	}
+
 }
