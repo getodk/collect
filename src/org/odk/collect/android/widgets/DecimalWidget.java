@@ -33,6 +33,22 @@ import android.util.TypedValue;
  */
 public class DecimalWidget extends StringWidget {
 
+	private Double getDoubleAnswerValue() {
+		IAnswerData dataHolder = mPrompt.getAnswerValue();
+        Double d = null;
+        if (dataHolder != null) {
+        	Object dataValue = dataHolder.getValue();
+        	if ( dataValue != null ) {
+        		if (dataValue instanceof Integer){
+	                d =  Double.valueOf(((Integer)dataValue).intValue());
+	            } else {
+	                d =  (Double) dataValue;
+	            }
+        	}
+        }
+        return d;
+	}
+	
     public DecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -52,27 +68,15 @@ public class DecimalWidget extends StringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         mAnswer.setFilters(fa);
 
-        Double d = null;
-        if (prompt.getAnswerValue() != null) {
-            if (prompt.getAnswerValue().getValue() instanceof Integer){
-                d =  Double.valueOf(((Integer)prompt.getAnswerValue().getValue()).intValue());
-            } else {
-                d =  (Double) prompt.getAnswerValue().getValue();
-            }
-        }
+        Double d = getDoubleAnswerValue();
 
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(15);
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
         if (d != null) {
-            Double dAnswer;
-            if (prompt.getAnswerValue().getValue() instanceof Integer){
-                dAnswer =  Double.valueOf(((Integer)prompt.getAnswerValue().getValue()).intValue());
-            } else {
-                dAnswer =  (Double) prompt.getAnswerValue().getValue();
-            }
-            String dString = nf.format(dAnswer);
+        	// truncate to 15 digits max...
+            String dString = nf.format(d);
             d = Double.parseDouble(dString.replace(',', '.'));
             mAnswer.setText(d.toString());
         }

@@ -39,6 +39,22 @@ import android.text.method.DigitsKeyListener;
  */
 public class ExIntegerWidget extends ExStringWidget {
 
+	private Integer getIntegerAnswerValue() {
+		IAnswerData dataHolder = mPrompt.getAnswerValue();
+		Integer d = null;
+        if (dataHolder != null) {
+        	Object dataValue = dataHolder.getValue();
+        	if ( dataValue != null ) {
+        		if (dataValue instanceof Double){
+	                d =  Integer.valueOf(((Double) dataValue).intValue());
+	            } else {
+	                d =  (Integer)dataValue;
+	            }
+        	}
+        }
+        return d;
+	}
+
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -52,10 +68,7 @@ public class ExIntegerWidget extends ExStringWidget {
         fa[0] = new InputFilter.LengthFilter(9);
         mAnswer.setFilters(fa);
 
-        Integer i = null;
-        if (prompt.getAnswerValue() != null) {
-            i = (Integer) prompt.getAnswerValue().getValue();
-        }
+        Integer i = getIntegerAnswerValue();
 
         if (i != null) {
             mAnswer.setText(i.toString());

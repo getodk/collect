@@ -41,6 +41,22 @@ import android.text.method.DigitsKeyListener;
  */
 public class ExDecimalWidget extends ExStringWidget {
 
+	private Double getDoubleAnswerValue() {
+		IAnswerData dataHolder = mPrompt.getAnswerValue();
+        Double d = null;
+        if (dataHolder != null) {
+        	Object dataValue = dataHolder.getValue();
+        	if ( dataValue != null ) {
+        		if (dataValue instanceof Integer){
+	                d =  Double.valueOf(((Integer)dataValue).intValue());
+	            } else {
+	                d =  (Double) dataValue;
+	            }
+        	}
+        }
+        return d;
+	}
+
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -54,14 +70,7 @@ public class ExDecimalWidget extends ExStringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         mAnswer.setFilters(fa);
 
-        Double d = null;
-        if (prompt.getAnswerValue() != null) {
-            if (prompt.getAnswerValue().getValue() instanceof Integer){
-                d =  Double.valueOf(((Integer)prompt.getAnswerValue().getValue()).intValue());
-            } else {
-                d =  (Double) prompt.getAnswerValue().getValue();
-            }
-        }
+        Double d = getDoubleAnswerValue();
 
         // apparently an attempt at rounding to no more than 15 digit precision???
         NumberFormat nf = NumberFormat.getNumberInstance();
@@ -69,8 +78,8 @@ public class ExDecimalWidget extends ExStringWidget {
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
         if (d != null) {
-            Double dAnswer = d;
-            String dString = nf.format(dAnswer);
+        	// truncate to 15 digits max...
+            String dString = nf.format(d);
             d = Double.parseDouble(dString.replace(',', '.')); // in case , is decimal pt
             mAnswer.setText(d.toString());
         }
