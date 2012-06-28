@@ -443,9 +443,6 @@ public class PreferencesActivity extends PreferenceActivity implements
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(false);
             }
-            if (mSelectedGoogleAccountPreference != null) {
-                mSelectedGoogleAccountPreference.setEnabled(false);
-            }
             if (mServerUrlPreference != null) {
                 mServerUrlPreference.setEnabled(true);
             }
@@ -469,9 +466,6 @@ public class PreferencesActivity extends PreferenceActivity implements
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(true);
             }
-            if (mSelectedGoogleAccountPreference != null) {
-                mSelectedGoogleAccountPreference.setEnabled(true);
-            }
             if (mServerUrlPreference != null) {
                 mServerUrlPreference.setEnabled(false);
             }
@@ -494,9 +488,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         } else {
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(false);
-            }
-            if (mSelectedGoogleAccountPreference != null) {
-                mSelectedGoogleAccountPreference.setEnabled(false);
             }
             if (mServerUrlPreference != null) {
                 mServerUrlPreference.setEnabled(true);

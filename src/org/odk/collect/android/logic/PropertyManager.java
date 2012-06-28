@@ -16,10 +16,13 @@ package org.odk.collect.android.logic;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
+import org.odk.collect.android.preferences.PreferencesActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -46,6 +49,8 @@ public class PropertyManager implements IPropertyManager {
     private final static String SUBSCRIBER_ID_PROPERTY = "subscriberid"; // imsi
     private final static String SIM_SERIAL_PROPERTY = "simserial";
     private final static String PHONE_NUMBER_PROPERTY = "phonenumber";
+    private final static String USERNAME = "username";
+    private final static String EMAIL = "email";
 
 
     public String getName() {
@@ -91,6 +96,11 @@ public class PropertyManager implements IPropertyManager {
         mProperties.put(SUBSCRIBER_ID_PROPERTY, mTelephonyManager.getSubscriberId());
         mProperties.put(SIM_SERIAL_PROPERTY, mTelephonyManager.getSimSerialNumber());
         mProperties.put(PHONE_NUMBER_PROPERTY, mTelephonyManager.getLine1Number());
+        
+        // Get the username from the settings
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mProperties.put(USERNAME, settings.getString(PreferencesActivity.KEY_USERNAME, ""));
+        mProperties.put(EMAIL, settings.getString(PreferencesActivity.KEY_ACCOUNT, ""));
     }
 
     @Override
