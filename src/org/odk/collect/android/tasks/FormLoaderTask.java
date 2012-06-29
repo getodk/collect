@@ -203,6 +203,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         ReferenceManager._().addSessionRootTranslator(
             new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
         ReferenceManager._().addSessionRootTranslator(
+                new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager._().addSessionRootTranslator(
             new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
         ReferenceManager._().addSessionRootTranslator(
             new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
