@@ -1,6 +1,10 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -25,13 +29,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * ListWidget handles select-one fields using radio buttons. The radio buttons are aligned
@@ -98,6 +100,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 ImageView mImageView = null;
                 TextView mMissingImage = null;
 
+                final int labelId = QuestionWidget.newUniqueId();
+                
                 // Now set up the image view
                 String errorMsg = null;
                 if (imageURI != null) {
@@ -125,7 +129,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 mImageView.setPadding(2, 2, 2, 2);
                                 mImageView.setAdjustViewBounds(true);
                                 mImageView.setImageBitmap(b);
-                                mImageView.setId(23423534);
+                                mImageView.setId(labelId);
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
@@ -147,7 +151,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                             mMissingImage.setText(errorMsg);
 
                             mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(234873453);
+                            mMissingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
@@ -162,33 +166,41 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
                 }
 
                 // answer layout holds the label text/image on top and the radio button on bottom
-                LinearLayout answer = new LinearLayout(getContext());
-                answer.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams params =
-                    new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                            LayoutParams.WRAP_CONTENT);
-                params.gravity = Gravity.TOP;
-                answer.setLayoutParams(params);
+                RelativeLayout answer = new RelativeLayout(getContext());
+                RelativeLayout.LayoutParams headerParams =
+                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                headerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                
+                RelativeLayout.LayoutParams buttonParams =
+                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
                 if (mImageView != null) {
+                	mImageView.setScaleType(ScaleType.CENTER);
                     if (!displayLabel) {
                         mImageView.setVisibility(View.GONE);
                     }
-                    answer.addView(mImageView);
+                    answer.addView(mImageView, headerParams);
                 } else if (mMissingImage != null) {
-                    answer.addView(mMissingImage);
+                    answer.addView(mMissingImage, headerParams);
                 } else {
                     if (displayLabel) {
-                        answer.addView(label);
+                    	label.setId(labelId);
+                        answer.addView(label, headerParams);
                     }
 
                 }
-                answer.addView(r);
+                if ( displayLabel ) {
+                	buttonParams.addRule(RelativeLayout.BELOW, labelId );
+                }
+                answer.addView(r, buttonParams);
                 answer.setPadding(4, 0, 4, 0);
 
                 // Each button gets equal weight
@@ -255,10 +267,10 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     public int getCheckedId() {
     	for (int i=0; i < buttons.size(); ++i ) {
     		RadioButton button = buttons.get(i);
-            if (button.isChecked()) {
-                return i;
-            }
-        }
+    		if (button.isChecked()) {
+    			return i;
+    		}
+    	}
         return -1;
     }
 

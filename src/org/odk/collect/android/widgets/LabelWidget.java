@@ -1,6 +1,9 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -20,11 +23,10 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.io.File;
-import java.util.Vector;
 
 /**
  * The Label Widget does not return an answer. The purpose of this widget is to be the top entry in
@@ -67,6 +69,8 @@ public class LabelWidget extends QuestionWidget {
                 mImageView = null;
                 mMissingImage = null;
 
+                final int labelId = QuestionWidget.newUniqueId();
+
                 // Now set up the image view
                 String errorMsg = null;
                 if (imageURI != null) {
@@ -94,7 +98,7 @@ public class LabelWidget extends QuestionWidget {
                                 mImageView.setPadding(2, 2, 2, 2);
                                 mImageView.setAdjustViewBounds(true);
                                 mImageView.setImageBitmap(b);
-                                mImageView.setId(QuestionWidget.newUniqueId());
+                                mImageView.setId(labelId);
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
@@ -116,7 +120,7 @@ public class LabelWidget extends QuestionWidget {
                             mMissingImage.setText(errorMsg);
 
                             mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(QuestionWidget.newUniqueId());
+                            mMissingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
@@ -131,22 +135,23 @@ public class LabelWidget extends QuestionWidget {
                 label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+                label.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 // answer layout holds the label text/image on top and the radio button on bottom
-                LinearLayout answer = new LinearLayout(getContext());
-                answer.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams params =
-                    new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                            LayoutParams.WRAP_CONTENT);
-                params.gravity = Gravity.TOP;
-                answer.setLayoutParams(params);
-
+                RelativeLayout answer = new RelativeLayout(getContext());
+                RelativeLayout.LayoutParams headerParams =
+                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                headerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                
                 if (mImageView != null) {
-                    answer.addView(mImageView);
+                	mImageView.setScaleType(ScaleType.CENTER);
+                    answer.addView(mImageView, headerParams);
                 } else if (mMissingImage != null) {
-                    answer.addView(mMissingImage);
+                    answer.addView(mMissingImage, headerParams);
                 } else {
-                    answer.addView(label);
+                	label.setId(labelId);
+                    answer.addView(label, headerParams);
                 }
                 answer.setPadding(4, 0, 4, 0);
 
