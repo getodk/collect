@@ -30,6 +30,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -40,19 +41,18 @@ import java.util.Vector;
  */
 public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeListener {
 
-    private static final int RANDOM_BUTTON_ID = 4853487;
     Vector<SelectChoice> mItems;
 
-    Vector<RadioButton> buttons;
-    Vector<MediaLayout> layout;
+    ArrayList<RadioButton> buttons;
+    ArrayList<MediaLayout> layout;
 
 
     public SelectOneWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         mItems = prompt.getSelectChoices();
-        buttons = new Vector<RadioButton>();
-        layout = new Vector<MediaLayout>();
+        buttons = new ArrayList<RadioButton>();
+        layout = new ArrayList<MediaLayout>();
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
@@ -65,7 +65,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 r.setOnCheckedChangeListener(this);
                 r.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setId(i + RANDOM_BUTTON_ID);
+                r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
@@ -124,7 +124,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i - RANDOM_BUTTON_ID);
+            SelectChoice sc = mItems.elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -140,9 +140,10 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
 
     public int getCheckedId() {
-        for (RadioButton button : this.buttons) {
+    	for (int i = 0; i < buttons.size() ; ++i ) {
+    		RadioButton button = buttons.get(i);
             if (button.isChecked()) {
-                return button.getId();
+                return i;
             }
         }
         return -1;

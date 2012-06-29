@@ -35,7 +35,6 @@ import java.util.Vector;
  * @author Jeff Beorse
  */
 public class LabelWidget extends QuestionWidget {
-    private static final int RANDOM_BUTTON_ID = 4853487;
     private static final String t = "LabelWidget";
 
     LinearLayout buttonLayout;
@@ -95,7 +94,7 @@ public class LabelWidget extends QuestionWidget {
                                 mImageView.setPadding(2, 2, 2, 2);
                                 mImageView.setAdjustViewBounds(true);
                                 mImageView.setImageBitmap(b);
-                                mImageView.setId(23423534);
+                                mImageView.setId(QuestionWidget.newUniqueId());
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
@@ -117,7 +116,7 @@ public class LabelWidget extends QuestionWidget {
                             mMissingImage.setText(errorMsg);
 
                             mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(234873453);
+                            mMissingImage.setId(QuestionWidget.newUniqueId());
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
@@ -211,7 +210,7 @@ public class LabelWidget extends QuestionWidget {
         mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         mQuestionText.setTypeface(null, Typeface.BOLD);
         mQuestionText.setPadding(0, 0, 0, 7);
-        mQuestionText.setId(RANDOM_BUTTON_ID); // assign random id
+        mQuestionText.setId(QuestionWidget.newUniqueId()); // assign random id
 
         // Wrap to the size of the parent view
         mQuestionText.setHorizontallyScrolling(false);

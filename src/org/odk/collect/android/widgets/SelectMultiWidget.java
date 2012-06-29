@@ -30,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -39,18 +40,17 @@ import java.util.Vector;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SelectMultiWidget extends QuestionWidget {
-    private final static int CHECKBOX_ID = 100;
     private boolean mCheckboxInit = true;
     Vector<SelectChoice> mItems;
 
-    private Vector<CheckBox> mCheckboxes;
+    private ArrayList<CheckBox> mCheckboxes;
 
 
     @SuppressWarnings("unchecked")
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         mPrompt = prompt;
-        mCheckboxes = new Vector<CheckBox>();
+        mCheckboxes = new ArrayList<CheckBox>();
         mItems = prompt.getSelectChoices();
 
         setOrientation(LinearLayout.VERTICAL);
@@ -79,7 +79,7 @@ public class SelectMultiWidget extends QuestionWidget {
                     }
                 });
 
-                c.setId(CHECKBOX_ID + i);
+                c.setId(QuestionWidget.newUniqueId());
                 c.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
@@ -131,27 +131,22 @@ public class SelectMultiWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        int j = mItems.size();
-        for (int i = 0; i < j; i++) {
-
-            // no checkbox group so find by id + offset
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
-            if (c.isChecked()) {
-                c.setChecked(false);
-            }
-        }
+    	for ( CheckBox c : mCheckboxes ) {
+    		if ( c.isChecked() ) {
+    			c.setChecked(false);
+    		}
+    	}
     }
 
 
     @Override
     public IAnswerData getAnswer() {
         Vector<Selection> vc = new Vector<Selection>();
-        for (int i = 0; i < mItems.size(); i++) {
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
-            if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i)));
-            }
-
+        for ( int i = 0; i < mCheckboxes.size() ; ++i ) {
+        	CheckBox c = mCheckboxes.get(i);
+        	if ( c.isChecked() ) {
+        		vc.add(new Selection(mItems.get(i)));
+        	}
         }
 
         if (vc.size() == 0) {

@@ -1,16 +1,20 @@
 
 package org.odk.collect.android.views;
 
+import java.io.File;
+
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.Display;
@@ -18,11 +22,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
@@ -53,14 +56,15 @@ public class MediaLayout extends RelativeLayout {
     public void setAVT(TextView text, String audioURI, String imageURI, final String videoURI,
             final String bigImageURI) {
         mView_Text = text;
+        mView_Text.setId(QuestionWidget.newUniqueId());
 
         // Layout configurations for our elements in the relative layout
         RelativeLayout.LayoutParams textParams =
-            new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams audioParams =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams imageParams =
-            new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams videoParams =
             new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -68,14 +72,15 @@ public class MediaLayout extends RelativeLayout {
         if (audioURI != null) {
             // An audio file is specified
             mAudioButton = new AudioButton(getContext(), audioURI);
-            mAudioButton.setId(3245345); // random ID to be used by the relative layout.
+            mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
+                                                                      // relative layout.
         } else {
             // No audio file specified, so ignore.
         }
 
         // Then set up the video button
         if (videoURI != null) {
-            // An audio file is specified
+            // An video file is specified
             mVideoButton = new ImageButton(getContext());
             mVideoButton.setImageResource(android.R.drawable.ic_media_play);
             mVideoButton.setOnClickListener(new OnClickListener() {
@@ -108,82 +113,37 @@ public class MediaLayout extends RelativeLayout {
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found, "view video"),
-                            Toast.LENGTH_SHORT);
+                            Toast.LENGTH_SHORT).show();
                     }
                 }
 
             });
-            mVideoButton.setId(234982340);
+            mVideoButton.setId(QuestionWidget.newUniqueId());
         } else {
             // No video file specified, so ignore.
         }
 
-        // Add the audioButton and videoButton (if applicable) and view (containing text) to the
-        // relative layout.
-        if (mAudioButton != null && mVideoButton == null) {
-            audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-            addView(mAudioButton, audioParams);
-        } else if (mAudioButton == null && mVideoButton != null) {
-            videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
-            addView(mVideoButton, videoParams);
-        } else if (mAudioButton != null && mVideoButton != null) {
-            audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-            videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-            addView(mAudioButton, audioParams);
-            addView(mVideoButton, videoParams);
-        }
-        boolean textVisible = (text.getVisibility() != GONE);
-        if (textVisible) {
-            textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            addView(text, textParams);
-        }
-
         // Now set up the image view
         String errorMsg = null;
+        final int imageId = QuestionWidget.newUniqueId();
         if (imageURI != null) {
             try {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
-                    Bitmap b = null;
-                    try {
-                        Display display =
-                            ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                                    .getDefaultDisplay();
-                        int screenWidth = display.getWidth();
-                        int screenHeight = display.getHeight();
-                        b =
-                            FileUtils
-                                    .getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
-                    } catch (OutOfMemoryError e) {
-                        errorMsg = "ERROR: " + e.getMessage();
-                    }
-
+                    Display display =
+                        ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                                .getDefaultDisplay();
+                    int screenWidth = display.getWidth();
+                    int screenHeight = display.getHeight();
+                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                     if (b != null) {
                         mImageView = new ImageView(getContext());
-                        mImageView.setPadding(10, 10, 10, 10);
-                        mImageView.setAdjustViewBounds(true);
+                        mImageView.setPadding(2, 2, 2, 2);
+                        mImageView.setBackgroundColor(Color.WHITE);
                         mImageView.setImageBitmap(b);
-                        mImageView.setId(23423534);
-                        imageParams.addRule(RelativeLayout.BELOW, text.getId());
-                        if (mAudioButton != null) {
-                            if (textVisible) {
-                                imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-                            } else {
-                                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-                            }
-                        }
-                        if (mVideoButton != null) {
-                            if (textVisible) {
-                                imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
-                            } else {
-                                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-                            }
-                        }
+                        mImageView.setId(imageId);
+
                         if (bigImageURI != null) {
                             mImageView.setOnClickListener(new OnClickListener() {
                                 String bigImageFilename = ReferenceManager._()
@@ -201,37 +161,27 @@ public class MediaLayout extends RelativeLayout {
                                         Toast.makeText(
                                             getContext(),
                                             getContext().getString(R.string.activity_not_found,
-                                                "view image"), Toast.LENGTH_SHORT);
+                                                "view image"), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         }
-                        addView(mImageView, imageParams);
-                    } else if (errorMsg == null) {
-                        // An error hasn't been logged and loading the image failed, so it's likely
-                        // a bad file.
+                    } else {
+                        // Loading the image failed, so it's likely a bad file.
                         errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-
                     }
-                } else if (errorMsg == null) {
-                    // An error hasn't been logged. We should have an image, but the file doesn't
-                    // exist.
+                } else {
+                    // We should have an image, but the file doesn't exist.
                     errorMsg = getContext().getString(R.string.file_missing, imageFile);
                 }
 
                 if (errorMsg != null) {
-                    // errorMsg is only set when an error has occured
+                    // errorMsg is only set when an error has occurred
                     Log.e(t, errorMsg);
                     mMissingImage = new TextView(getContext());
                     mMissingImage.setText(errorMsg);
-                    imageParams.addRule(RelativeLayout.BELOW, text.getId());
-                    if (mAudioButton != null)
-                        imageParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-                    if (mVideoButton != null)
-                        imageParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
                     mMissingImage.setPadding(10, 10, 10, 10);
-                    mMissingImage.setId(234873453);
-                    addView(mMissingImage, imageParams);
+                    mMissingImage.setId(imageId);
                 }
             } catch (InvalidReferenceException e) {
                 Log.e(t, "image invalid reference exception");
@@ -240,6 +190,94 @@ public class MediaLayout extends RelativeLayout {
         } else {
             // There's no imageURI listed, so just ignore it.
         }
+
+        // Determine the layout constraints...
+        // Assumes LTR, TTB reading bias!
+        if (mView_Text.getText().length() == 0 && (mImageView != null || mMissingImage != null)) {
+            // No text; has image. The image is treated as question/choice icon.
+            // The Text view may just have a radio button or checkbox. It
+            // needs to remain in the layout even though it is blank.
+            //
+            // The image view, as created above, will dynamically resize and
+            // center itself. We want it to resize but left-align itself
+            // in the resized area and we want a white background, as otherwise
+            // it will show a grey bar to the right of the image icon.
+            if (mImageView != null) {
+                mImageView.setScaleType(ScaleType.FIT_START);
+            }
+            //
+            // In this case, we have:
+            // Text upper left; image upper, left edge aligned with text right edge;
+            // audio upper right; video below audio on right.
+            textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            imageParams.addRule(RelativeLayout.RIGHT_OF, mView_Text.getId());
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            if (mAudioButton != null && mVideoButton == null) {
+                audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+            } else if (mAudioButton == null && mVideoButton != null) {
+                videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
+            } else if (mAudioButton != null && mVideoButton != null) {
+                audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+                imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
+            } else {
+                // the image will implicitly scale down to fit within parent...
+                // no need to bound it by the width of the parent...
+                imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            }
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        } else {
+            // We have a non-blank text label -- image is below the text.
+            // In this case, we want the image to be centered...
+            if (mImageView != null) {
+                mImageView.setScaleType(ScaleType.FIT_START);
+            }
+            //
+            // Text upper left; audio upper right; video below audio on right.
+            // image below text, audio and video buttons; left-aligned with text.
+            textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            if (mAudioButton != null && mVideoButton == null) {
+                audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+          } else if (mAudioButton == null && mVideoButton != null) {
+                videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
+            } else if (mAudioButton != null && mVideoButton != null) {
+                audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+            } else {
+                textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            }
+
+            if (mImageView != null || mMissingImage != null) {
+                imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                imageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                imageParams.addRule(RelativeLayout.BELOW, mView_Text.getId());
+            } else {
+                textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            }
+        }
+
+        addView(mView_Text, textParams);
+        if (mAudioButton != null)
+            addView(mAudioButton, audioParams);
+        if (mVideoButton != null)
+            addView(mVideoButton, videoParams);
+        if (mImageView != null)
+            addView(mImageView, imageParams);
+        else if (mMissingImage != null)
+            addView(mMissingImage, imageParams);
     }
 
 

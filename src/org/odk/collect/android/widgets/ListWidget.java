@@ -30,6 +30,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -43,7 +44,6 @@ import java.util.Vector;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-    private static final int RANDOM_BUTTON_ID = 4853487;
     private static final String t = "ListWidget";
 
     // Layout holds the horizontal list of buttons
@@ -56,14 +56,14 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     boolean displayLabel;
 
     Vector<SelectChoice> mItems;
-    Vector<RadioButton> buttons;
+    ArrayList<RadioButton> buttons;
 
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
         mItems = prompt.getSelectChoices();
-        buttons = new Vector<RadioButton>();
+        buttons = new ArrayList<RadioButton>();
 
         this.displayLabel = displayLabel;
 
@@ -79,7 +79,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 RadioButton r = new RadioButton(getContext());
 
                 r.setOnCheckedChangeListener(this);
-                r.setId(i + RANDOM_BUTTON_ID);
+                r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
@@ -237,7 +237,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i - RANDOM_BUTTON_ID);
+            SelectChoice sc = mItems.elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -253,9 +253,10 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
 
     public int getCheckedId() {
-        for (RadioButton button : this.buttons) {
+    	for (int i=0; i < buttons.size(); ++i ) {
+    		RadioButton button = buttons.get(i);
             if (button.isChecked()) {
-                return button.getId();
+                return i;
             }
         }
         return -1;
@@ -287,7 +288,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(RANDOM_BUTTON_ID); // assign random id
+        questionText.setId(QuestionWidget.newUniqueId()); // assign random id
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);

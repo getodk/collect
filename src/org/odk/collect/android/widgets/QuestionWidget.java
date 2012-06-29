@@ -19,6 +19,18 @@ public abstract class QuestionWidget extends LinearLayout {
     @SuppressWarnings("unused")
     private final static String t = "QuestionWidget";
 
+	private static int idGenerator = 1211322;
+	
+	/**
+	 * Generate a unique ID to keep Android UI happy when the screen orientation 
+	 * changes.
+	 * 
+	 * @return
+	 */
+	public static int newUniqueId() {
+		return ++idGenerator;		
+	}
+
     private LinearLayout.LayoutParams mLayout;
     protected FormEntryPrompt mPrompt;
 
@@ -99,7 +111,7 @@ public abstract class QuestionWidget extends LinearLayout {
         mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         mQuestionText.setTypeface(null, Typeface.BOLD);
         mQuestionText.setPadding(0, 0, 0, 7);
-        mQuestionText.setId(38475483); // assign random id
+        mQuestionText.setId(QuestionWidget.newUniqueId()); // assign random id
 
         // Wrap to the size of the parent view
         mQuestionText.setHorizontallyScrolling(false);

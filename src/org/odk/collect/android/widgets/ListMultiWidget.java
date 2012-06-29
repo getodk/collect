@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -43,8 +44,6 @@ import java.util.Vector;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListMultiWidget extends QuestionWidget {
-    private final static int CHECKBOX_ID = 100;
-    private static final int RANDOM_BUTTON_ID = 4853487;
     private static final String t = "ListMultiWidget";
 
     // Layout holds the horizontal list of buttons
@@ -59,7 +58,7 @@ public class ListMultiWidget extends QuestionWidget {
     private boolean mCheckboxInit = true;
     Vector<SelectChoice> mItems;
 
-    private Vector<CheckBox> mCheckboxes;
+    private ArrayList<CheckBox> mCheckboxes;
 
     private TextView questionText;
 
@@ -69,7 +68,7 @@ public class ListMultiWidget extends QuestionWidget {
         super(context, prompt);
 
         mItems = prompt.getSelectChoices();
-        mCheckboxes = new Vector<CheckBox>();
+        mCheckboxes = new ArrayList<CheckBox>();
         mPrompt = prompt;
 
         this.displayLabel = displayLabel;
@@ -99,7 +98,7 @@ public class ListMultiWidget extends QuestionWidget {
                     }
                 });
 
-                c.setId(CHECKBOX_ID + i);
+                c.setId(QuestionWidget.newUniqueId());
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {
@@ -148,7 +147,7 @@ public class ListMultiWidget extends QuestionWidget {
                                 mImageView.setPadding(2, 2, 2, 2);
                                 mImageView.setAdjustViewBounds(true);
                                 mImageView.setImageBitmap(b);
-                                mImageView.setId(23423534);
+                                mImageView.setId(QuestionWidget.newUniqueId());
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
@@ -170,7 +169,7 @@ public class ListMultiWidget extends QuestionWidget {
                             mMissingImage.setText(errorMsg);
 
                             mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(234873453);
+                            mMissingImage.setId(QuestionWidget.newUniqueId());
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
@@ -245,11 +244,8 @@ public class ListMultiWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        int j = mItems.size();
-        for (int i = 0; i < j; i++) {
-
-            // no checkbox group so find by id + offset
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
+        for (int i = 0; i < mCheckboxes.size(); i++) {
+        	CheckBox c = mCheckboxes.get(i);
             if (c.isChecked()) {
                 c.setChecked(false);
             }
@@ -260,12 +256,11 @@ public class ListMultiWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         Vector<Selection> vc = new Vector<Selection>();
-        for (int i = 0; i < mItems.size(); i++) {
-            CheckBox c = ((CheckBox) findViewById(CHECKBOX_ID + i));
+        for (int i = 0; i < mCheckboxes.size(); i++) {
+        	CheckBox c = mCheckboxes.get(i);
             if (c.isChecked()) {
                 vc.add(new Selection(mItems.get(i)));
             }
-
         }
 
         if (vc.size() == 0) {
@@ -296,7 +291,7 @@ public class ListMultiWidget extends QuestionWidget {
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(RANDOM_BUTTON_ID); // assign random id
+        questionText.setId(QuestionWidget.newUniqueId()); // assign random id
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
