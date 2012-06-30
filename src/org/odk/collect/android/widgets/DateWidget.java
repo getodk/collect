@@ -155,6 +155,7 @@ public class DateWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
+    	clearFocus();
         DateTime ldt =
             new DateTime(mDatePicker.getYear(), hideMonth ? 1 : mDatePicker.getMonth() + 1,
                     (hideMonth || hideDay) ? 1 : mDatePicker.getDayOfMonth(), 0, 0);

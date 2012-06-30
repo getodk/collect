@@ -85,6 +85,7 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
+    	clearFocus();
         // use picker time, convert to today's date, store as utc
         DateTime ldt =
             (new DateTime()).withTime(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(),
