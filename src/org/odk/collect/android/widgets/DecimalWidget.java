@@ -92,6 +92,7 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
+    	clearFocus();
         String s = mAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;

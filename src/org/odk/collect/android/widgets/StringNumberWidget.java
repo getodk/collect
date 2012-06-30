@@ -68,7 +68,8 @@ public class StringNumberWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mAnswer.getText().toString();
+    	clearFocus();
+    	String s = mAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

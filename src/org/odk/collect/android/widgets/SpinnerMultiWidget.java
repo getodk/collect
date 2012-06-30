@@ -159,6 +159,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
+    	clearFocus();
         Vector<Selection> vc = new Vector<Selection>();
         for (int i = 0; i < mItems.size(); i++) {
             if (selections[i]) {

@@ -90,7 +90,8 @@ public class AutoCompleteWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String response = autocomplete.getText().toString();
+    	clearFocus();
+    	String response = autocomplete.getText().toString();
         for (SelectChoice sc : mItems) {
             if (response.equals(mPrompt.getSelectChoiceText(sc))) {
                 return new SelectOneData(new Selection(sc));
