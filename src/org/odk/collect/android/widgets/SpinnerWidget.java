@@ -90,6 +90,7 @@ public class SpinnerWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
+    	clearFocus();
         int i = spinner.getSelectedItemPosition();
         if (i == -1) {
             return null;
