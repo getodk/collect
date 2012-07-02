@@ -417,11 +417,11 @@ public final class WebUtils {
         } catch (Exception e) {
             e.printStackTrace();
             String cause;
-            if (e.getCause() != null) {
-                cause = e.getCause().toString();
-            } else {
-                cause = e.toString();
+            Throwable c = e;
+            while ( c.getCause() != null ) {
+            	c = c.getCause();
             }
+            cause = c.toString();
             String error = "Error: " + cause + " while accessing " + u.toString();
 
             Log.w(t, error);
