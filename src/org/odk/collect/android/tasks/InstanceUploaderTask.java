@@ -22,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import org.apache.http.protocol.HttpContext;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -73,8 +75,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 
     private URI mAuthRequestingServer;
     HashMap<String, String> mResults;
-
-
+    
     public void setAuth(String auth) {
         this.mAuth = auth;
     }
@@ -469,6 +470,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             selectionArgs[i] = values[i].toString();
         }
 
+        String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+        						.getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
+        
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
@@ -503,6 +507,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 	                    urlString = urlString + submissionUrl;
 	                }
 	
+	                // add the deviceID to the request...
+	                try {
+						urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						// unreachable...
+					}
+	                
 	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, httpclient, localContext, uriRemap) ) {
 	                	return null; // get credentials...
 	                }

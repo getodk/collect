@@ -52,6 +52,13 @@ public class PropertyManager implements IPropertyManager {
     private final static String USERNAME = "username";
     private final static String EMAIL = "email";
 
+    public final static String OR_DEVICE_ID_PROPERTY = "uri:deviceid"; // imei
+    public final static String OR_SUBSCRIBER_ID_PROPERTY = "uri:subscriberid"; // imsi
+    public final static String OR_SIM_SERIAL_PROPERTY = "uri:simserial";
+    public final static String OR_PHONE_NUMBER_PROPERTY = "uri:phonenumber";
+    public final static String OR_USERNAME = "uri:username";
+    public final static String OR_EMAIL = "uri:email";
+
 
     public String getName() {
         return "Property Manager";
@@ -67,10 +74,16 @@ public class PropertyManager implements IPropertyManager {
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
         String deviceId = mTelephonyManager.getDeviceId();
-        if (deviceId != null && (deviceId.contains("*") || deviceId.contains("000000000000000"))) {
-            deviceId =
-                Settings.Secure
-                        .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String orDeviceId = null;
+        if (deviceId != null ) {
+        	if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
+        		deviceId =
+        				Settings.Secure
+                        	.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        		orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
+        	} else {
+        		orDeviceId = "imei:" + deviceId;
+        	}
         }
         
         if ( deviceId == null ) {
@@ -82,6 +95,7 @@ public class PropertyManager implements IPropertyManager {
     		WifiInfo info = wifi.getConnectionInfo();
     		if ( info != null ) {
     			deviceId = info.getMacAddress();
+    			orDeviceId = "mac:" + deviceId;
     		}
         }
         
@@ -90,17 +104,42 @@ public class PropertyManager implements IPropertyManager {
             deviceId =
                     Settings.Secure
                             .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+    		orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
         }
         
         mProperties.put(DEVICE_ID_PROPERTY, deviceId);
-        mProperties.put(SUBSCRIBER_ID_PROPERTY, mTelephonyManager.getSubscriberId());
-        mProperties.put(SIM_SERIAL_PROPERTY, mTelephonyManager.getSimSerialNumber());
-        mProperties.put(PHONE_NUMBER_PROPERTY, mTelephonyManager.getLine1Number());
+        mProperties.put(OR_DEVICE_ID_PROPERTY, orDeviceId);
+        
+        String value;
+        
+        value = mTelephonyManager.getSubscriberId();
+        if ( value != null ) {
+        	mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
+        	mProperties.put(OR_SUBSCRIBER_ID_PROPERTY, "imsi:" + value);
+        }
+        value = mTelephonyManager.getSimSerialNumber();
+        if ( value != null ) {
+        	mProperties.put(SIM_SERIAL_PROPERTY, value);
+        	mProperties.put(OR_SIM_SERIAL_PROPERTY, "simserial:" + value);
+        }
+        value = mTelephonyManager.getLine1Number();
+        if ( value != null ) {
+        	mProperties.put(PHONE_NUMBER_PROPERTY, value);
+        	mProperties.put(OR_PHONE_NUMBER_PROPERTY, "tel:" + value);
+        }
         
         // Get the username from the settings
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mProperties.put(USERNAME, settings.getString(PreferencesActivity.KEY_USERNAME, ""));
-        mProperties.put(EMAIL, settings.getString(PreferencesActivity.KEY_ACCOUNT, ""));
+        value = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+        if ( value != null ) {
+        	mProperties.put(USERNAME, value);
+        	mProperties.put(OR_USERNAME, "username:" + value);
+        }
+        value = settings.getString(PreferencesActivity.KEY_ACCOUNT, null);
+        if ( value != null ) {
+        	mProperties.put(EMAIL, value);
+        	mProperties.put(OR_EMAIL, "mailto:" + value);
+        }
     }
 
     @Override
