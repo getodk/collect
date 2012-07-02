@@ -418,9 +418,9 @@ public final class WebUtils {
             e.printStackTrace();
             String cause;
             if (e.getCause() != null) {
-                cause = e.getCause().getMessage();
+                cause = e.getCause().toString();
             } else {
-                cause = e.getMessage();
+                cause = e.toString();
             }
             String error = "Error: " + cause + " while accessing " + u.toString();
 
