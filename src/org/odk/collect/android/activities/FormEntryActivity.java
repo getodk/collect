@@ -16,7 +16,9 @@ package org.odk.collect.android.activities;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -27,6 +29,7 @@ import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.Logger;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -223,6 +226,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return;
         }
 
+        Collect.getInstance().getLogger().open();
+        
         // Check to see if this is a screen flip or a new form load.
         Object data = getLastNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
@@ -259,6 +264,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 		                        mInstancePath =
 		                            instanceCursor.getString(instanceCursor
 		                                    .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+		                        Collect.getInstance().getLogger().log("instance loaded", mInstancePath);
 		                    
 		                        jrFormId =
 		                            instanceCursor.getString(instanceCursor
@@ -340,6 +346,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 mFormLoaderTask = new FormLoaderTask();
                 mFormLoaderTask.execute(mFormPath);
                 showDialog(PROGRESS_DIALOG);
+                Collect.getInstance().getLogger().log("form loaded", "", "", mFormPath);
             }
         }
     }
@@ -506,6 +513,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
             case HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so refresh
+            	Collect.getInstance().getLogger().log("returned from hierarchy", mInstancePath);
                 refreshCurrentView();
                 break;
 
@@ -572,6 +580,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
                 return true;
             case MENU_HIERARCHY_VIEW:
+            	Collect.getInstance().getLogger().log("started hierarchy", mInstancePath);
                 if (currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
@@ -729,6 +738,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     v.setContentDescription(mFormController.getFormTitle());
                 }
 
+                Collect.getInstance().getLogger().log("beginning of form", mInstancePath);
                 return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
@@ -964,12 +974,37 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mRelativeLayout.addView(mCurrentView, lp);
 
         mCurrentView.startAnimation(mInAnimation);
-        if (mCurrentView instanceof ODKView)
+        
+        String logString = "";
+        switch (from) {
+        	case RIGHT:
+        		logString = "next";
+        		break;
+        	case LEFT:
+        		logString = "previous";
+        		break;
+        	case FADE:
+        		logString = "refresh";
+        		break;
+        }
+        
+        if (mCurrentView instanceof ODKView) {
             ((ODKView) mCurrentView).setFocus(this);
-        else {
+	        HashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView).getAnswers();
+	        ArrayList<QuestionWidget> widgets = ((ODKView) mCurrentView).getWidgets();
+	        for (int i = 0; i < widgets.size(); i++) {
+	            FormIndex idx = widgets.get(i).getPrompt().getIndex();
+	            IAnswerData ad = answers.get(idx);
+	            Collect.getInstance().getLogger().log(logString,
+	            		mInstancePath,
+	            		widgets.get(i).getXPath(),
+	            		(ad == null) ? null : ad.getDisplayText());
+	        }
+	    } else {
             InputMethodManager inputManager =
                 (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), 0);
+            Collect.getInstance().getLogger().log("non-question screen", mInstancePath);
         }
     }
 
@@ -1087,6 +1122,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 switch (i) {
                     case DialogInterface.BUTTON1:
                         if (shouldExit) {
+                        	Collect.getInstance().getLogger().log("exited from error dialog", mInstancePath);
                             finish();
                         }
                         break;
@@ -1145,6 +1181,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return false;
         }
 
+        Collect.getInstance().getLogger().log("saved data to disk", mInstancePath);
         mSaveToDiskTask =
             new SaveToDiskTask(getIntent().getData(), exit, complete, updatedSaveName);
         mSaveToDiskTask.setFormSavedListener(this);
@@ -1344,6 +1381,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Confirm clear answer dialog
      */
     private void createClearDialog(final QuestionWidget qw) {
+    	Collect.getInstance().getLogger().log("clear dialog created", mInstancePath, qw.getXPath());
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 
@@ -1362,10 +1400,14 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // yes
+                    	Collect.getInstance().getLogger().log(
+                    			"clear confirmed", mInstancePath, qw.getXPath());
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         break;
                     case DialogInterface.BUTTON2: // no
+                    	Collect.getInstance().getLogger().log(
+                    			"clear cancelled", mInstancePath, qw.getXPath());
                         break;
                 }
             }
@@ -1503,6 +1545,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
         }
+        Collect.getInstance().getLogger().close();
         super.onPause();
     }
 
@@ -1510,6 +1553,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     protected void onResume() {
         super.onResume();
+        Collect.getInstance().getLogger().open();
+        
         if (mFormLoaderTask != null) {
             mFormLoaderTask.setFormLoaderListener(this);
             if (mFormController == null && mFormLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -1585,6 +1630,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
 
+        Collect.getInstance().getLogger().close();
         super.onDestroy();
 
     }
@@ -1904,4 +1950,32 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         next();
     }
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("form entry activity started");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    }
+    
+    @Override
+    protected void onStop() {
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("form entry activity stopped");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    	super.onStop();
+    }
+    
 }

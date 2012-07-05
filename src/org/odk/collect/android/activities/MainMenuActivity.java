@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.Logger;
 import org.odk.collect.android.preferences.PreferencesActivity;
 
 import android.app.Activity;
@@ -147,7 +148,35 @@ public class MainMenuActivity extends Activity {
         }
     }
 
-
+    @Override
+    protected void onStart() {
+    	super.onStart();
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("main menu activity started");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    }
+    
+    @Override
+    protected void onStop() {
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("main menu activity stopped");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    	super.onStop();
+    }
+    
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

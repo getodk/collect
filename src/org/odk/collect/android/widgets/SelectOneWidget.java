@@ -20,6 +20,8 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -161,6 +163,8 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 button.setChecked(false);
             }
         }
+        Collect.getInstance().getLogger().log("answer selected", FormEntryActivity.mInstancePath,
+        		getXPath(), ((Selection) getAnswer().getValue()).xmlValue);
     }
 
 

@@ -23,15 +23,18 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
 import org.odk.collect.android.R;
+import org.odk.collect.android.database.Logger;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 
 /**
  * Extends the Application class to implement 
@@ -47,15 +50,21 @@ public class Collect extends Application {
     public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
+    public static final String LOG_PATH = ODK_ROOT + "/log";
     
     public static final String DEFAULT_FONTSIZE = "21";
 
     private HttpContext localContext = null;
+    private Logger mLogger;
     private static Collect singleton = null;
 
 
     public static Collect getInstance() {
         return singleton;
+    }
+    
+    public Logger getLogger() {
+    	return mLogger;
     }
 
     public static int getQuestionFontsize() {
@@ -147,8 +156,15 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         singleton = this;
+        mLogger = new Logger();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
+    }
+
+    
+    public String getId() {
+        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        return String.valueOf(Math.abs(mTelephonyManager.getDeviceId().hashCode()));
     }
 
 }

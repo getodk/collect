@@ -17,6 +17,8 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.Logger;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
@@ -90,6 +92,34 @@ public class DataManagerList extends ListActivity implements
 
 		mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
 	}
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("data manager list started");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    }
+    
+    @Override
+    protected void onStop() {
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("data manager list stopped");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    	super.onStop();
+    }
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {

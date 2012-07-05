@@ -9,6 +9,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -40,6 +41,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     private LinearLayout mView;
     private LinearLayout.LayoutParams mLayout;
     private ArrayList<QuestionWidget> widgets;
+    
+    private String mQuestionTextForLog;
 
     public final static String FIELD_LIST = "field-list";
 
@@ -97,9 +100,19 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         addView(mView);
-
+        
+    	// The question text for logging will be the first question in this group,
+    	// or "" if no question can be found.
+        mQuestionTextForLog = "";
+    	if (!widgets.isEmpty()) {
+    		mQuestionTextForLog = widgets.get(0).getXPath();
+    	}
     }
-
+    
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+    	Collect.getInstance().getLogger().logScrollAction(
+    			FormEntryActivity.mInstancePath, mQuestionTextForLog, t - oldt);
+    }
 
     /**
      * @return a HashMap of answers entered by the user for this set of widgets

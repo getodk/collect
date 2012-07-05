@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.Logger;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -120,6 +121,34 @@ public class InstanceChooserList extends ListActivity {
             startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
         }
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+    	super.onStart();
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("instance chooser list started");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    }
+    
+    @Override
+    protected void onStop() {
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("instance chooser list stopped");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    	super.onStop();
     }
     
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {

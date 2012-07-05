@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.Logger;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
@@ -157,6 +158,35 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     }
 
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("form chooser list started");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    }
+    
+    @Override
+    protected void onStop() {
+        if (Collect.getInstance() != null) {
+    		Logger logger = Collect.getInstance().getLogger(); 
+        	if (logger != null) {
+        		boolean alreadyOpen = logger.isOpen(); 
+        		if (!alreadyOpen) logger.open();
+        		logger.log("form chooser list stopped");
+        		if (!alreadyOpen) logger.close();
+        	}
+        }
+    	super.onStop();
+    }
+    
+    
     /**
      * Called by DiskSyncTask when the task is finished
      */

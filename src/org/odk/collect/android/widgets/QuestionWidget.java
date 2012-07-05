@@ -54,7 +54,10 @@ public abstract class QuestionWidget extends LinearLayout {
     public FormEntryPrompt getPrompt() {
         return mPrompt;
     }
-
+    
+    public String getXPath() {
+    	return getPrompt().getIndex().getReference().toString();
+    }
 
     // Abstract methods
     public abstract IAnswerData getAnswer();
