@@ -48,28 +48,20 @@ import android.widget.TextView;
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
     private static final String t = "ListWidget";
 
-    // Layout holds the horizontal list of buttons
-    LinearLayout buttonLayout;
-
     // Holds the entire question and answers. It is a horizontally aligned linear layout
+    // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
 
-    // Option to keep labels blank
-    boolean displayLabel;
-
-    Vector<SelectChoice> mItems;
     ArrayList<RadioButton> buttons;
-
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
-        mItems = prompt.getSelectChoices();
+        Vector<SelectChoice> mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();
 
-        this.displayLabel = displayLabel;
-
-        buttonLayout = new LinearLayout(context);
+        // Layout holds the horizontal list of buttons
+        LinearLayout buttonLayout = new LinearLayout(context);
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
@@ -226,6 +218,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         buttonParams.weight = 1;
 
+        // questionLayout is created and populated with the question text in the
+        // super() constructor via a call to addQuestionText
         questionLayout.addView(buttonLayout, buttonParams);
         addView(questionLayout);
 
@@ -249,7 +243,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i);
+            SelectChoice sc = mPrompt.getSelectChoices().elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }

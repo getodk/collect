@@ -48,34 +48,26 @@ import android.widget.TextView;
 public class ListMultiWidget extends QuestionWidget {
     private static final String t = "ListMultiWidget";
 
-    // Layout holds the horizontal list of buttons
-    LinearLayout buttonLayout;
-
     // Holds the entire question and answers. It is a horizontally aligned linear layout
+    // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
 
-    // Option to keep labels blank
-    boolean displayLabel;
-
     private boolean mCheckboxInit = true;
-    Vector<SelectChoice> mItems;
+    
 
     private ArrayList<CheckBox> mCheckboxes;
-
-    private TextView questionText;
 
 
     @SuppressWarnings("unchecked")
     public ListMultiWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
-        mItems = prompt.getSelectChoices();
+        Vector<SelectChoice> mItems = prompt.getSelectChoices();
         mCheckboxes = new ArrayList<CheckBox>();
         mPrompt = prompt;
 
-        this.displayLabel = displayLabel;
-
-        buttonLayout = new LinearLayout(context);
+        // Layout holds the horizontal list of buttons
+        LinearLayout buttonLayout = new LinearLayout(context);
 
         Vector<Selection> ve = new Vector<Selection>();
         if (prompt.getAnswerValue() != null) {
@@ -271,7 +263,7 @@ public class ListMultiWidget extends QuestionWidget {
         for (int i = 0; i < mCheckboxes.size(); i++) {
         	CheckBox c = mCheckboxes.get(i);
             if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i)));
+                vc.add(new Selection(mPrompt.getSelectChoices().get(i)));
             }
         }
 
@@ -298,7 +290,7 @@ public class ListMultiWidget extends QuestionWidget {
     protected void addQuestionText(FormEntryPrompt p) {
 
         // Add the text view. Textview always exists, regardless of whether there's text.
-        questionText = new TextView(getContext());
+    	TextView questionText = new TextView(getContext());
         questionText.setText(p.getLongText());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);

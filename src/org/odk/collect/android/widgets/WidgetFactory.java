@@ -104,8 +104,11 @@ public class WidgetFactory {
                 if (appearance.contains("compact")) {
                     int numColumns = -1;
                     try {
-                        numColumns =
-                            Integer.parseInt(appearance.substring(appearance.indexOf('-') + 1));
+                    	int idx = appearance.indexOf("-");
+                    	if ( idx != -1 ) { 
+                    		numColumns =
+                    				Integer.parseInt(appearance.substring(idx + 1));
+                    	}
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
                         Log.e("WidgetFactory", "Exception parsing numColumns");
@@ -146,8 +149,11 @@ public class WidgetFactory {
                 if (appearance.contains("compact")) {
                     int numColumns = -1;
                     try {
-                        numColumns =
-                            Integer.parseInt(appearance.substring(appearance.indexOf('-') + 1));
+                    	int idx = appearance.indexOf("-");
+                    	if ( idx != -1 ) { 
+                    		numColumns =
+                    				Integer.parseInt(appearance.substring(idx + 1));
+                    	}
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
                         Log.e("WidgetFactory", "Exception parsing numColumns");

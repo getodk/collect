@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,11 +52,11 @@ public class SpinnerWidget extends QuestionWidget {
 
         mItems = prompt.getSelectChoices();
         spinner = new Spinner(context);
-        choices = new String[mItems.size()];
-
+        choices = new String[mItems.size()+1];
         for (int i = 0; i < mItems.size(); i++) {
             choices[i] = prompt.getSelectChoiceText(mItems.get(i));
         }
+        choices[mItems.size()] = "";
 
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
@@ -73,13 +74,13 @@ public class SpinnerWidget extends QuestionWidget {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
+        spinner.setSelection(mItems.size());
         if (s != null) {
             for (int i = 0; i < mItems.size(); ++i) {
                 String sMatch = mItems.get(i).getValue();
                 if (sMatch.equals(s)) {
                     spinner.setSelection(i);
                 }
-
             }
         }
 
@@ -92,10 +93,10 @@ public class SpinnerWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
     	clearFocus();
         int i = spinner.getSelectedItemPosition();
-        if (i == -1) {
+        if (i == -1 || i == mItems.size()) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i); // - RANDOM_BUTTON_ID);
+            SelectChoice sc = mItems.elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -105,8 +106,7 @@ public class SpinnerWidget extends QuestionWidget {
     public void clearAnswer() {
         // It seems that spinners cannot return a null answer. This resets the answer
         // to its original value, but it is not null.
-        spinner.setSelection(0);
-
+        spinner.setSelection(mItems.size());
     }
 
 
@@ -150,6 +150,9 @@ public class SpinnerWidget extends QuestionWidget {
             tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(10, 10, 10, 10); // Are these values OK?
+            if (position == items.length-1) {
+            	tv.setText(parent.getContext().getString(R.string.clear_answer));
+            }
             return convertView;
         }
 

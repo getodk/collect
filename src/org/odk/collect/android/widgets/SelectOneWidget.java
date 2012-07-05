@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -28,10 +31,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -41,18 +42,17 @@ import java.util.Vector;
  */
 public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeListener {
 
-    Vector<SelectChoice> mItems;
-
     ArrayList<RadioButton> buttons;
-    ArrayList<MediaLayout> layout;
 
 
     public SelectOneWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mItems = prompt.getSelectChoices();
+        Vector<SelectChoice> mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();
-        layout = new ArrayList<MediaLayout>();
+
+        // Layout holds the vertical list of buttons
+        LinearLayout buttonLayout = new LinearLayout(context);
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
@@ -93,17 +93,23 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
                 mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
-                addView(mediaLayout);
-                layout.add(mediaLayout);
 
-                // Last, add the dividing line (except for the last element)
-                ImageView divider = new ImageView(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 if (i != mItems.size() - 1) {
+                	// Last, add the dividing line (except for the last element)
+                	ImageView divider = new ImageView(getContext());
+                	divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                     mediaLayout.addDivider(divider);
                 }
+                buttonLayout.addView(mediaLayout);
             }
         }
+        buttonLayout.setOrientation(LinearLayout.VERTICAL);
+
+        // The buttons take up the right half of the screen
+        LayoutParams buttonParams =
+            new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+
+        addView(buttonLayout, buttonParams);
     }
 
 
@@ -124,7 +130,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i);
+            SelectChoice sc = mPrompt.getSelectChoices().elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }

@@ -48,12 +48,7 @@ import android.widget.RelativeLayout;
  */
 public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener {
 
-    Vector<SelectChoice> mItems;
-
     ArrayList<RadioButton> buttons;
-    ArrayList<MediaLayout> mediaLayouts;
-    ArrayList<RelativeLayout> parentLayout;
-
     AdvanceToNextListener listener;
 
 
@@ -62,10 +57,8 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        mItems = prompt.getSelectChoices();
+        Vector<SelectChoice> mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();
-        mediaLayouts = new ArrayList<MediaLayout>();
-        parentLayout = new ArrayList<RelativeLayout>();
         listener = (AdvanceToNextListener) context;
 
         String s = null;
@@ -78,7 +71,6 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 RelativeLayout thisParentLayout =
                     (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
-                parentLayout.add(thisParentLayout);
 
                 LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
                 ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
@@ -118,16 +110,14 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
                 mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
-                questionLayout.addView(mediaLayout);
-                mediaLayouts.add(mediaLayout);
 
-                // Last, add the dividing line (except for the last element)
-                ImageView divider = new ImageView(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 if (i != mItems.size() - 1) {
+	                // Last, add the dividing line (except for the last element)
+	                ImageView divider = new ImageView(getContext());
+	                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                     mediaLayout.addDivider(divider);
                 }
-
+                questionLayout.addView(mediaLayout);
                 addView(thisParentLayout);
             }
         }
@@ -151,7 +141,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i);
+            SelectChoice sc = mPrompt.getSelectChoices().elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }
