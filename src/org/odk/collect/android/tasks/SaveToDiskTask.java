@@ -20,15 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
-import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -79,8 +75,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     protected Integer doInBackground(Void... nothing) {
 
         // validation failed, pass specific failure
-        int validateStatus = validateAnswers(mMarkCompleted);
-        if (validateStatus != VALIDATED) {
+        int validateStatus = FormEntryActivity.mFormController.validateAnswers(mMarkCompleted);
+        if (validateStatus != FormEntryController.ANSWER_OK) {
             return validateStatus;
         }
 
@@ -181,12 +177,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private boolean exportData(boolean markCompleted) {
         ByteArrayPayload payload;
         try {
-
-            // assume no binary data inside the model.
-            FormInstance datamodel = FormEntryActivity.mFormController.getInstance();
-            XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-            payload = (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
-
+        	payload = FormEntryActivity.mFormController.getFilledInFormXml();
             // write out xml
             exportXmlFile(payload, FormEntryActivity.mInstancePath);
 
@@ -352,37 +343,5 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         }
     }
 
-
-    /**
-     * Goes through the entire form to make sure all entered answers comply with their constraints.
-     * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
-     * allow saving to disk, though, until all answers conform to their constraints/requirements.
-     * 
-     * @param markCompleted
-     * @return validatedStatus
-     */
-    private int validateAnswers(Boolean markCompleted) {
-        FormIndex i = FormEntryActivity.mFormController.getFormIndex();
-        FormEntryActivity.mFormController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-
-        int event;
-        while ((event =
-            FormEntryActivity.mFormController.stepToNextEvent(FormController.STEP_OVER_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
-            if (event != FormEntryController.EVENT_QUESTION) {
-                continue;
-            } else {
-                int saveStatus =
-                    FormEntryActivity.mFormController
-                            .answerQuestion(FormEntryActivity.mFormController.getQuestionPrompt()
-                                    .getAnswerValue());
-                if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) {
-                    return saveStatus;
-                }
-            }
-        }
-
-        FormEntryActivity.mFormController.jumpToIndex(i);
-        return VALIDATED;
-    }
 
 }

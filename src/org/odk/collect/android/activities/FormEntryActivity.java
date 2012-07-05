@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.javarosa.core.model.FormIndex;
@@ -31,6 +30,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -425,7 +425,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                 ((ODKView) mCurrentView).setBinaryData(imageURI);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
                 break;
             case IMAGE_CHOOSER:
                 /*
@@ -486,7 +485,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 } else {
                     Log.e(t, "NO IMAGE EXISTS at: " + source.getAbsolutePath());
                 }
-                refreshCurrentView();
                 break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
@@ -497,7 +495,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 Uri media = intent.getData();
                 ((ODKView) mCurrentView).setBinaryData(media);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
                 break;
             case LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -506,10 +503,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
             case HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so refresh
-                refreshCurrentView();
                 break;
 
         }
+        refreshCurrentView();
     }
 
 
@@ -526,13 +523,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // group.
         // That is, skip backwards over repeat prompts, groups that are not field-lists,
         // repeat events, and indexes in field-lists that is not the containing group.
-        while (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
-                || (event == FormEntryController.EVENT_GROUP && !mFormController
-                        .indexIsInFieldList())
-                || event == FormEntryController.EVENT_REPEAT
-                || (mFormController.indexIsInFieldList() && !(event == FormEntryController.EVENT_GROUP))) {
-            event = mFormController.stepToPreviousEvent();
-        }
+//        while (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+//                || ((event == FormEntryController.EVENT_REPEAT || event == FormEntryController.EVENT_GROUP)
+//                		&& !mFormController.indexIsInFieldList())
+//                || (event == FormEntryController.EVENT_QUESTION 
+//                		&& mFormController.indexIsInFieldList())) {
+//            event = mFormController.stepToPreviousEvent();
+//        }
         View current = createView(event);
         showView(current, AnimationType.FADE);
 
@@ -572,7 +569,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
                 return true;
             case MENU_HIERARCHY_VIEW:
-                if (currentPromptIsQuestion()) {
+                if (mFormController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -588,15 +585,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
 
     /**
-     * @return true if the current View represents a question in the form
-     */
-    private boolean currentPromptIsQuestion() {
-        return (mFormController.getEvent() == FormEntryController.EVENT_QUESTION || mFormController
-                .getEvent() == FormEntryController.EVENT_GROUP);
-    }
-
-
-    /**
      * Attempt to save the answer(s) in the current screen to into the data model.
      * 
      * @param evaluateConstraints
@@ -604,28 +592,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      */
     private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         // only try to save if the current event is a question or a field-list group
-        if (mFormController.getEvent() == FormEntryController.EVENT_QUESTION
-                || (mFormController.getEvent() == FormEntryController.EVENT_GROUP && mFormController
-                        .indexIsInFieldList())) {
+    	if (mFormController.currentPromptIsQuestion()) {
             LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView).getAnswers();
-            Iterator<FormIndex> it = answers.keySet().iterator();
-            while (it.hasNext()) {
-                FormIndex index = it.next();
-                // Within a group, you can only save for question events
-                if (mFormController.getEvent(index) == FormEntryController.EVENT_QUESTION) {
-                    int saveStatus = saveAnswer(answers.get(index), index, evaluateConstraints);
-                    if (evaluateConstraints && saveStatus != FormEntryController.ANSWER_OK) {
-                        createConstraintToast(mFormController.getQuestionPrompt(index)
-                                .getConstraintText(), saveStatus);
-                        return false;
-                    }
-                } else {
-                    Log.w(t,
-                        "Attempted to save an index referencing something other than a question: "
-                                + index.getReference());
-                }
-            }
-        }
+            FailedConstraint constraint = mFormController.saveAllScreenAnswers(answers, evaluateConstraints);
+    		if ( constraint != null ) {
+                createConstraintToast(mFormController.getQuestionPrompt(constraint.index)
+                        .getConstraintText(), constraint.status);
+                return false;
+    		}
+    	}
         return true;
     }
 
@@ -682,7 +657,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return mSaveToDiskTask;
 
         // mFormEntryController is static so we don't need to pass it.
-        if (mFormController != null && currentPromptIsQuestion()) {
+        if (mFormController != null && mFormController.currentPromptIsQuestion()) {
             saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
         }
         return null;
@@ -799,6 +774,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 return endView;
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
+            case FormEntryController.EVENT_REPEAT:
                 ODKView odkv = null;
                 // should only be a group here if the event_group is a field-list
                 try {
@@ -847,54 +823,39 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * constraints.
      */
     private void showNextView() {
-    	try {
-	        if (currentPromptIsQuestion()) {
-	            if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-	                // A constraint was violated so a dialog should be showing.
-	                return;
-	            }
-	        }
-	
-	        if (mFormController.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
-	            int event;
-	            group_skip: do {
-	                event = mFormController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-	                switch (event) {
-	                    case FormEntryController.EVENT_QUESTION:
-	                    case FormEntryController.EVENT_END_OF_FORM:
-	                        View next = createView(event);
-	                        showView(next, AnimationType.RIGHT);
-	                        break group_skip;
-	                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-	                        createRepeatDialog();
-	                        break group_skip;
-	                    case FormEntryController.EVENT_GROUP:
-	                        if (mFormController.indexIsInFieldList()
-	                                && mFormController.getQuestionPrompts().length != 0) {
-	                            View nextGroupView = createView(event);
-	                            showView(nextGroupView, AnimationType.RIGHT);
-	                            break group_skip;
-	                        }
-	                        // otherwise it's not a field-list group, so just skip it
-	                        break;
-	                    case FormEntryController.EVENT_REPEAT:
-	                        Log.i(t, "repeat: " + mFormController.getFormIndex().getReference());
-	                        // skip repeats
-	                        break;
-	                    case FormEntryController.EVENT_REPEAT_JUNCTURE:
-	                        Log.i(t, "repeat juncture: "
-	                                + mFormController.getFormIndex().getReference());
-	                        // skip repeat junctures until we implement them
-	                        break;
-	                    default:
-	                        Log.w(t,
-	                            "JavaRosa added a new EVENT type and didn't tell us... shame on them.");
-	                        break;
-	                }
-	            } while (event != FormEntryController.EVENT_END_OF_FORM);
-	        }
-    	} finally {
-            mBeenSwiped = false;
+        if (mFormController.currentPromptIsQuestion()) {
+            if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+                // A constraint was violated so a dialog should be showing.
+                mBeenSwiped = false;
+                return;
+            }
+        }
+        
+        View next;
+        int event = mFormController.stepToNextScreenEvent();
+        switch (event) {
+            case FormEntryController.EVENT_QUESTION:
+            case FormEntryController.EVENT_END_OF_FORM:
+                next = createView(event);
+                showView(next, AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                createRepeatDialog();
+                break;
+            case FormEntryController.EVENT_REPEAT:
+            case FormEntryController.EVENT_GROUP:
+                next = createView(event);
+                showView(next, AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_REPEAT_JUNCTURE:
+                Log.i(t, "repeat juncture: "
+                        + mFormController.getFormIndex().getReference());
+                // skip repeat junctures until we implement them
+                break;
+            default:
+                Log.w(t,
+                    "JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                break;
         }
     }
 
@@ -904,28 +865,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * appropriate view. Also saves answers to the data model without checking constraints.
      */
     private void showPreviousView() {
-    	try {
-	        // The answer is saved on a back swipe, but question constraints are ignored.
-	        if (currentPromptIsQuestion()) {
-	            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-	        }
-	
-	        if (mFormController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-	            int event = mFormController.stepToPreviousEvent();
-	
-	            while (event != FormEntryController.EVENT_BEGINNING_OF_FORM
-	                    && event != FormEntryController.EVENT_QUESTION
-	                    && !(event == FormEntryController.EVENT_GROUP
-	                            && mFormController.indexIsInFieldList() && mFormController
-	                            .getQuestionPrompts().length != 0)) {
-	                event = mFormController.stepToPreviousEvent();
-	            }
-	            View next = createView(event);
-	            showView(next, AnimationType.LEFT);
-	
-	        }
-    	} finally {
-            mBeenSwiped = false;
+        // The answer is saved on a back swipe, but question constraints are ignored.
+        if (mFormController.currentPromptIsQuestion()) {
+            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+        }
+
+        if (mFormController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+	        int event = mFormController.stepToPreviousScreenEvent();
+            View next = createView(event);
+            showView(next, AnimationType.LEFT);
+        } else {
+        	mBeenSwiped = false;
         }
     }
 
@@ -1044,7 +994,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             FormEntryActivity.this.createErrorDialog(e.getMessage(), EXIT);
                             return;
                         }
-                        showNextView();
+                        refreshCurrentView();
                         break;
                     case DialogInterface.BUTTON2: // no, no repeat
                         showNextView();
@@ -1413,7 +1363,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
                                 mFormController.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
-                                if (currentPromptIsQuestion()) {
+                                if (mFormController.currentPromptIsQuestion()) {
                                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                                 }
                                 refreshCurrentView();
@@ -1499,7 +1449,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         dismissDialogs();
         // make sure we're not already saving to disk.  if we are, currentPrompt is getting constantly updated
         if (mSaveToDiskTask != null && mSaveToDiskTask.getStatus() != AsyncTask.Status.RUNNING) {
-            if (mCurrentView != null && currentPromptIsQuestion()) {
+            if (mCurrentView != null && mFormController != null && mFormController.currentPromptIsQuestion()) {
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
         }
@@ -1850,6 +1800,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         	if ( ((ODKView) mCurrentView).suppressFlingGesture(e1, e2, velocityX, velocityY) ) {
         		return false;
         	}
+        }
+        
+        if ( mBeenSwiped ) {
+        	return false;
         }
         
         if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1.getY() - e2.getY()) < yPixelLimit)

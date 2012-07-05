@@ -90,7 +90,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         long[] selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         if (selectedInstanceIDs.length == 0) {
             // If we get nothing, toast and quit
-            Toast.makeText(this, R.string.noselect_error, Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.noselect_error, Toast.LENGTH_LONG).show();
             finish();
             return;
         }
@@ -109,7 +109,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         } else {
             mInstancesToSend = new ArrayList<Long>();
             for (int i = 0; i < selectedInstanceIDs.length; i++) {
-                mInstancesToSend.add(new Long(selectedInstanceIDs[i]));
+                mInstancesToSend.add(Long.valueOf(selectedInstanceIDs[i]));
             }
         }
 
@@ -352,7 +352,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             Iterator<String> itr = uploadedInstances.iterator();
 
             while (itr.hasNext()) {
-                Long removeMe = new Long(itr.next());
+                Long removeMe = Long.valueOf(itr.next());
                 boolean removed = mInstancesToSend.remove(removeMe);
                 if (removed) {
                     Log.i(t, removeMe
