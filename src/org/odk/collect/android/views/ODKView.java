@@ -110,7 +110,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
     
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-    	Collect.getInstance().getLogger().logScrollAction(
+    	Collect.getInstance().getActivityLogger().logScrollAction(
     			FormEntryActivity.mInstancePath, mQuestionTextForLog, t - oldt);
     }
 

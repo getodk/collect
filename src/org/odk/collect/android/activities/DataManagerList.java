@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.Logger;
+import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
@@ -97,7 +97,7 @@ public class DataManagerList extends ListActivity implements
     protected void onStart() {
     	super.onStart();
         if (Collect.getInstance() != null) {
-    		Logger logger = Collect.getInstance().getLogger(); 
+    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
         	if (logger != null) {
         		boolean alreadyOpen = logger.isOpen(); 
         		if (!alreadyOpen) logger.open();
@@ -110,7 +110,7 @@ public class DataManagerList extends ListActivity implements
     @Override
     protected void onStop() {
         if (Collect.getInstance() != null) {
-    		Logger logger = Collect.getInstance().getLogger(); 
+    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
         	if (logger != null) {
         		boolean alreadyOpen = logger.isOpen(); 
         		if (!alreadyOpen) logger.open();

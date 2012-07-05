@@ -23,18 +23,17 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.Logger;
+import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.telephony.TelephonyManager;
 
 /**
  * Extends the Application class to implement 
@@ -55,7 +54,8 @@ public class Collect extends Application {
     public static final String DEFAULT_FONTSIZE = "21";
 
     private HttpContext localContext = null;
-    private Logger mLogger;
+    private String mDeviceId;
+    private ActivityLogger mActivityLogger;
     private static Collect singleton = null;
 
 
@@ -63,8 +63,8 @@ public class Collect extends Application {
         return singleton;
     }
     
-    public Logger getLogger() {
-    	return mLogger;
+    public ActivityLogger getActivityLogger() {
+    	return mActivityLogger;
     }
 
     public static int getQuestionFontsize() {
@@ -156,15 +156,18 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         singleton = this;
-        mLogger = new Logger();
+        mActivityLogger = new ActivityLogger();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
+        
+        PropertyManager mgr = new PropertyManager(this);
+        mDeviceId = mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY);
     }
 
     
-    public String getId() {
-        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        return String.valueOf(Math.abs(mTelephonyManager.getDeviceId().hashCode()));
+    public String getDeviceId() {
+        return mDeviceId;
+        // return String.valueOf(Math.abs(mDeviceId.hashCode()));
     }
 
 }

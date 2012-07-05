@@ -78,7 +78,7 @@ public class StringWidget extends QuestionWidget {
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (!s.toString().equals(oldText)) {
-					Collect.getInstance().getLogger().log(
+					Collect.getInstance().getActivityLogger().log(
 							"text changed", FormEntryActivity.mInstancePath, 
 							StringWidget.this.getXPath(), oldText, s.toString());
 				}

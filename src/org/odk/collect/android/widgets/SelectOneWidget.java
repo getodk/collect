@@ -163,7 +163,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 button.setChecked(false);
             }
         }
-        Collect.getInstance().getLogger().log("answer selected", FormEntryActivity.mInstancePath,
+        Collect.getInstance().getActivityLogger().log("answer selected", FormEntryActivity.mInstancePath,
         		getXPath(), ((Selection) getAnswer().getValue()).xmlValue);
     }
 

@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-public class Logger {
+public class ActivityLogger {
 	public static boolean LOGGING_ENABLED = true;
 	
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
@@ -76,14 +76,14 @@ public class Logger {
 	private ArrayList<ContentValues> mScrollActions;
 
     private static String getDBName() {
-    	return Collect.getInstance().getId() + "_log.sqlite";
+    	return Collect.getInstance().getDeviceId() + "_log.sqlite";
     }
     
     private static String getDBPath() {
     	return DATABASE_PATH + "/" + getDBName();
     }
 	
-	public Logger() {
+	public ActivityLogger() {
 		mScrollActions = new ArrayList<ContentValues>();
 	}
 	

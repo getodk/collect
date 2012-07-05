@@ -42,7 +42,7 @@ public class PropertyManager implements IPropertyManager {
     private TelephonyManager mTelephonyManager;
     private HashMap<String, String> mProperties;
 
-    private final static String DEVICE_ID_PROPERTY = "deviceid"; // imei
+    public final static String DEVICE_ID_PROPERTY = "deviceid"; // imei
     private final static String SUBSCRIBER_ID_PROPERTY = "subscriberid"; // imsi
     private final static String SIM_SERIAL_PROPERTY = "simserial";
     private final static String PHONE_NUMBER_PROPERTY = "phonenumber";

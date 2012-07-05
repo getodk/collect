@@ -69,7 +69,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 	            deleted += wasDeleted;
 	            
 	            if (wasDeleted > 0) {
-	            	Collect.getInstance().getLogger().log("form deleted", instancePath);
+	            	Collect.getInstance().getActivityLogger().log("form deleted", instancePath);
 	            }
 			} catch ( Exception ex ) {
 				Log.e(t,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());
