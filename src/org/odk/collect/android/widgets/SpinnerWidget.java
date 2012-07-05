@@ -24,6 +24,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,7 @@ public class SpinnerWidget extends QuestionWidget {
     Vector<SelectChoice> mItems;
     Spinner spinner;
     String[] choices;
+    private static int BROWN = 0xFF936931;
 
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
@@ -146,15 +149,21 @@ public class SpinnerWidget extends QuestionWidget {
             }
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-            tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
-            tv.setPadding(10, 10, 10, 10); // Are these values OK?
+            tv.setBackgroundColor(Color.WHITE);
+        	tv.setPadding(10, 10, 10, 10); // Are these values OK?
             if (position == items.length-1) {
-            	if ( spinner.getSelectedItemPosition() == items.length-1 ) {
-            		tv.setText("");
-            	} else {
-            		tv.setText(parent.getContext().getString(R.string.clear_answer));
+            	tv.setText(parent.getContext().getString(R.string.clear_answer));
+            	tv.setTextColor(BROWN);
+        		tv.setTypeface(null, Typeface.NORMAL);
+            	if (spinner.getSelectedItemPosition() == position) {
+            		tv.setBackgroundColor(Color.LTGRAY);
             	}
+            } else {
+                tv.setText(items[position]);
+                tv.setTextColor(Color.BLACK);
+            	tv.setTypeface(null, (spinner.getSelectedItemPosition() == position) 
+            							? Typeface.BOLD : Typeface.NORMAL);
             }
             return convertView;
         }
@@ -170,6 +179,12 @@ public class SpinnerWidget extends QuestionWidget {
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
+            tv.setTextColor(Color.BLACK);
+        	tv.setTypeface(null, Typeface.BOLD);
+            if (position == items.length-1) {
+            	tv.setTextColor(BROWN);
+            	tv.setTypeface(null, Typeface.NORMAL);
+            }
             return convertView;
         }
 
