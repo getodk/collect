@@ -237,4 +237,5 @@
 <string name="parent_form_not_present">No es pot editar aquest formulari perquè el formulari matriu(buit) no s\'ha trobat.\n\nFormulari: %1$s</string>
 <string name="launch_app">Llançament</string>
 <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
+<string name="select_one">Select One</string>
 </resources>

@@ -237,4 +237,5 @@
 <string name="parent_form_not_present">Neįmanoma redaguoti šios išsaugotos formos, nes nerasta atitinkama tuščia forma.\n\nFormos ID: %1$s</string>
 <string name="launch_app">Paleisti</string>
 <string name="no_app">Nerasta nurodyta programa. Atskaitą įveskite rankiniu būdu.</string>
+<string name="select_one">Select One</string>
 </resources>

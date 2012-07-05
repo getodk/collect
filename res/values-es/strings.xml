@@ -237,4 +237,5 @@
 <string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado\n\nID de Formulario: %1$s</string>
 <string name="launch_app">Iniciar</string>
 <string name="no_app">Esta apliacion no esta. Por favor ingrese el dato manualmente.</string>
+<string name="select_one">Select One</string>
 </resources>

@@ -30,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -56,7 +55,7 @@ public class SpinnerWidget extends QuestionWidget {
         for (int i = 0; i < mItems.size(); i++) {
             choices[i] = prompt.getSelectChoiceText(mItems.get(i));
         }
-        choices[mItems.size()] = "";
+        choices[mItems.size()] = getContext().getString(R.string.select_one);
 
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
@@ -151,7 +150,11 @@ public class SpinnerWidget extends QuestionWidget {
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(10, 10, 10, 10); // Are these values OK?
             if (position == items.length-1) {
-            	tv.setText(parent.getContext().getString(R.string.clear_answer));
+            	if ( spinner.getSelectedItemPosition() == items.length-1 ) {
+            		tv.setText("");
+            	} else {
+            		tv.setText(parent.getContext().getString(R.string.clear_answer));
+            	}
             }
             return convertView;
         }

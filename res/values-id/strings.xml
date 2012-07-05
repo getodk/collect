@@ -237,4 +237,5 @@
 <string name="parent_form_not_present">Tidak dapat mengubah formulir tersimpan, dikarenakan formulir telah dihapus atau tidak sesuai..\n\nForm ID: %1$s</string>
 <string name="launch_app">Buka aplikasi</string>
 <string name="no_app">Aplikasi yang dibutuhkan tidak tersedia. Silahkan pasang secara manual.</string>
+<string name="select_one">Select One</string>
 </resources>
