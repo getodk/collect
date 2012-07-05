@@ -95,7 +95,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "audio capture"),
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_SHORT).show();
                     mWaitingForData = false;
                 }
 
@@ -123,7 +123,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "choose audio"),
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_SHORT).show();
                     mWaitingForData = false;
                 }
 
@@ -149,7 +149,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "play audio"),
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_SHORT).show();
                 }
 
             }

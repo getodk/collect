@@ -8,5 +8,6 @@
                 android:id="@+id/quick_select_question" />
         <ImageView android:layout_height="wrap_content"
                 android:layout_width="wrap_content" android:layout_alignParentRight="true"
+                android:contentDescription="@+string/select_answer"
                 android:id="@+id/quick_select_right_arrow" />
 </RelativeLayout>

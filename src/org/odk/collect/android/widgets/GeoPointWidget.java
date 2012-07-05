@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.text.DecimalFormat;
+
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -33,8 +35,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
-import java.text.DecimalFormat;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.

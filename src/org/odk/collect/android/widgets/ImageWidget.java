@@ -115,7 +115,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "image capture"),
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_SHORT).show();
                     mWaitingForData = false;
                 }
 
@@ -145,7 +145,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "choose image"),
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_SHORT).show();
                     mWaitingForData = false;
                 }
 
@@ -222,7 +222,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 	                        } catch (ActivityNotFoundException e) {
 	                            Toast.makeText(getContext(),
 	                                getContext().getString(R.string.activity_not_found, "view image"),
-	                                Toast.LENGTH_SHORT);
+	                                Toast.LENGTH_SHORT).show();
 	                        }
 	                    }
                     } finally {
