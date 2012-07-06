@@ -106,6 +106,9 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        // must be at the beginning of any activity that can be called from an external intent
+        Collect.createODKDirs();
+
         mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return true;
     }
@@ -192,6 +195,8 @@ public class InstanceProvider extends ContentProvider {
         if (rowId > 0) {
             Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(instanceUri, null);
+        	Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
+        			instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
             return instanceUri;
         }
 
@@ -248,6 +253,7 @@ public class InstanceProvider extends ContentProvider {
 	                del.moveToPosition(-1);
 	                while (del.moveToNext()) {
 	                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
 	                    String instanceDir = (new File(instanceFile)).getParent();
 	                    deleteFileOrDir(instanceDir);
 	                }
@@ -269,6 +275,7 @@ public class InstanceProvider extends ContentProvider {
 	                c.moveToPosition(-1);
 	                while (c.moveToNext()) {
 	                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
 	                    String instanceDir = (new File(instanceFile)).getParent();
 	                    deleteFileOrDir(instanceDir);           
 	                }

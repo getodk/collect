@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -133,6 +134,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         mDownloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	// this is callled in downloadSelectedFiles(): 
+            	//    Collect.getInstance().getActivityLogger().logAction(this, "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
                 mToggled = false;
                 clearChoices();
@@ -147,6 +150,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 ListView ls = getListView();
                 mToggled = !mToggled;
 
+                Collect.getInstance().getActivityLogger().logAction(this, "toggleFormCheckbox", Boolean.toString(mToggled));
+
                 for (int pos = 0; pos < ls.getCount(); pos++) {
                     ls.setItemChecked(pos, mToggled);
                 }
@@ -159,6 +164,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         mRefreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
+
                 mToggled = false;
                 downloadFormList();
                 FormDownloadList.this.getListView().clearChoices();
@@ -246,6 +253,18 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         setListAdapter(mFormListAdapter);
     }
 
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
     private void clearChoices() {
         FormDownloadList.this.getListView().clearChoices();
@@ -257,6 +276,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		mDownloadButton.setEnabled(!(selectedItemCount() == 0));
+		
+		Object o = getListAdapter().getItem(position);
+		@SuppressWarnings("unchecked")
+		HashMap<String, String> item = (HashMap<String, String>) o;
+        FormDetails detail = mFormNamesAndURLs.get(item.get(FORMDETAIL_KEY));
+        
+        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", detail.downloadUrl);
     }
 
 
@@ -319,6 +345,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
+
         menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
             android.R.drawable.ic_menu_preferences);
         return true;
@@ -329,6 +357,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
+                Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
                 Intent i = new Intent(this, PreferencesActivity.class);
                 startActivity(i);
                 return true;
@@ -341,11 +370,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
+                Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
                 mProgressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.PROGRESS_DIALOG", "OK");
                             dialog.dismiss();
                             // we use the same progress dialog for both
                             // so whatever isn't null is running
@@ -367,6 +398,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case AUTH_DIALOG:
+                Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "show");
                 AlertDialog.Builder b = new AlertDialog.Builder(this);
 
                 LayoutInflater factory = LayoutInflater.from(this);
@@ -397,6 +429,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "OK");
+
                         EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
                         EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
 
@@ -412,6 +446,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "Cancel");
                             finish();
                         }
                     });
@@ -441,6 +476,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
         }
         totalCount = filesToDownload.size();
+    	
+        Collect.getInstance().getActivityLogger().logAction(this, "downloadSelectedFiles", Integer.toString(totalCount));
 
         if (totalCount > 0) {
             // show dialog box
@@ -580,6 +617,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      * @param shouldExit
      */
     private void createAlertDialog(String title, String message, final boolean shouldExit) {
+        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(title);
         mAlertDialog.setMessage(message);
@@ -588,6 +626,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
+                        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "OK");
                         // just close the dialog
                         mAlertShowing = false;
                         // successful download, so quit

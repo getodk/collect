@@ -87,6 +87,7 @@ public class DownloadFormsTask extends
 
         int total = toDownload.size();
         int count = 1;
+    	Collect.getInstance().getActivityLogger().logAction(this, "downloadForms", String.valueOf(total));
 
         HashMap<String, String> result = new HashMap<String, String>();
 
@@ -131,11 +132,14 @@ public class DownloadFormsTask extends
 	                    uri =
 	                        Collect.getInstance().getContentResolver()
 	                                .insert(FormsColumns.CONTENT_URI, v);
+	                	Collect.getInstance().getActivityLogger().logAction(this, "insert", dl.getAbsolutePath());
+
 	                } else {
 	                    alreadyExists.moveToFirst();
 	                    uri =
 	                        Uri.withAppendedPath(FormsColumns.CONTENT_URI,
 	                            alreadyExists.getString(alreadyExists.getColumnIndex(FormsColumns._ID)));
+	                	Collect.getInstance().getActivityLogger().logAction(this, "refresh", dl.getAbsolutePath());
 	                }
                 } finally {
                 	if ( alreadyExists != null ) {

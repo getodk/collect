@@ -54,10 +54,6 @@ public abstract class QuestionWidget extends LinearLayout {
     public FormEntryPrompt getPrompt() {
         return mPrompt;
     }
-    
-    public String getXPath() {
-    	return getPrompt().getIndex().getReference().toString();
-    }
 
     // Abstract methods
     public abstract IAnswerData getAnswer();
@@ -113,7 +109,7 @@ public abstract class QuestionWidget extends LinearLayout {
 
         // Create the layout for audio, image, text
         MediaLayout mediaLayout = new MediaLayout(getContext());
-        mediaLayout.setAVT(mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
+        mediaLayout.setAVT(p.getIndex(), mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
 
         addView(mediaLayout, mLayout);
     }

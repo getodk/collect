@@ -70,6 +70,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         String downloadPath = settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formlist");
         downloadListUrl += downloadPath;
         String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
+        
+    	Collect.getInstance().getActivityLogger().logAction(this, "formList", downloadListUrl);
 
         // We populate this with available forms from the specified server.
         // <formname, details>

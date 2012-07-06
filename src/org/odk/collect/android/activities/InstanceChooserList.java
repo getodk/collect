@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -98,6 +97,8 @@ public class InstanceChooserList extends ListActivity {
             ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
                 c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
+        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", instanceUri.toString());
+
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action)) {
             // caller is waiting on a picked form
@@ -122,36 +123,22 @@ public class InstanceChooserList extends ListActivity {
         }
         finish();
     }
-
+	
     @Override
     protected void onStart() {
     	super.onStart();
-        if (Collect.getInstance() != null) {
-    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
-        	if (logger != null) {
-        		boolean alreadyOpen = logger.isOpen(); 
-        		if (!alreadyOpen) logger.open();
-        		logger.log("instance chooser list started");
-        		if (!alreadyOpen) logger.close();
-        	}
-        }
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
     }
     
     @Override
     protected void onStop() {
-        if (Collect.getInstance() != null) {
-    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
-        	if (logger != null) {
-        		boolean alreadyOpen = logger.isOpen(); 
-        		if (!alreadyOpen) logger.open();
-        		logger.log("instance chooser list stopped");
-        		if (!alreadyOpen) logger.close();
-        	}
-        }
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
     	super.onStop();
     }
     
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
+
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertDialog.setMessage(errorMsg);
@@ -160,6 +147,8 @@ public class InstanceChooserList extends ListActivity {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1:
+                        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", 
+                        		shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();
                         }

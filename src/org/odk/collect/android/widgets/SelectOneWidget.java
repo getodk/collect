@@ -14,13 +14,14 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.MediaLayout;
 
@@ -31,8 +32,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-
-import java.util.Vector;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -94,7 +93,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
-                mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
+                mediaLayout.setAVT(prompt.getIndex(), r, audioURI, imageURI, videoURI, bigImageURI);
                 addView(mediaLayout);
                 layout.add(mediaLayout);
 
@@ -158,13 +157,18 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
             return;
         }
 
-        for (RadioButton button : this.buttons) {
+        int selected = -1;
+        for ( int i = 0 ; i < buttons.size() ; ++i ) {
+        	RadioButton button = buttons.get(i);
             if (button.isChecked() && !(buttonView == button)) {
                 button.setChecked(false);
             }
+            if ( buttonView == button) {
+            	selected = i;
+            }
         }
-        Collect.getInstance().getActivityLogger().log("answer selected", FormEntryActivity.mInstancePath,
-        		getXPath(), ((Selection) getAnswer().getValue()).xmlValue);
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
+        		mItems.get(selected).getValue(), mPrompt.getIndex());
     }
 
 

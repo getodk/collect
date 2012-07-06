@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
@@ -78,9 +77,8 @@ public class StringWidget extends QuestionWidget {
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (!s.toString().equals(oldText)) {
-					Collect.getInstance().getActivityLogger().log(
-							"text changed", FormEntryActivity.mInstancePath, 
-							StringWidget.this.getXPath(), oldText, s.toString());
+					Collect.getInstance().getActivityLogger()
+						.logInstanceAction(this, "answerTextChanged", s.toString(),	getPrompt().getIndex());
 				}
 			}
 

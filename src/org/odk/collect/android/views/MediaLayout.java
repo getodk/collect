@@ -1,9 +1,11 @@
 
 package org.odk.collect.android.views;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.app.Activity;
@@ -33,6 +35,7 @@ import java.io.File;
 public class MediaLayout extends RelativeLayout {
     private static final String t = "AVTLayout";
 
+    private FormIndex mIndex;
     private TextView mView_Text;
     private AudioButton mAudioButton;
     private ImageButton mVideoButton;
@@ -47,11 +50,13 @@ public class MediaLayout extends RelativeLayout {
         mImageView = null;
         mMissingImage = null;
         mVideoButton = null;
+        mIndex = null;
     }
 
 
-    public void setAVT(TextView text, String audioURI, String imageURI, final String videoURI,
+    public void setAVT(FormIndex index, TextView text, String audioURI, String imageURI, final String videoURI,
             final String bigImageURI) {
+    	mIndex = index;
         mView_Text = text;
 
         // Layout configurations for our elements in the relative layout
@@ -67,7 +72,7 @@ public class MediaLayout extends RelativeLayout {
         // First set up the audio button
         if (audioURI != null) {
             // An audio file is specified
-            mAudioButton = new AudioButton(getContext(), audioURI);
+            mAudioButton = new AudioButton(getContext(), mIndex, audioURI);
             mAudioButton.setId(3245345); // random ID to be used by the relative layout.
         } else {
             // No audio file specified, so ignore.
@@ -82,6 +87,7 @@ public class MediaLayout extends RelativeLayout {
 
                 @Override
                 public void onClick(View v) {
+                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playVideo", mIndex);
                     String videoFilename = "";
                     try {
                         videoFilename =
@@ -108,7 +114,7 @@ public class MediaLayout extends RelativeLayout {
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found, "view video"),
-                            Toast.LENGTH_SHORT);
+                            Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -186,13 +192,15 @@ public class MediaLayout extends RelativeLayout {
                         }
                         if (bigImageURI != null) {
                             mImageView.setOnClickListener(new OnClickListener() {
-                                String bigImageFilename = ReferenceManager._()
+                            	String bigImageFilename = ReferenceManager._()
                                         .DeriveReference(bigImageURI).getLocalURI();
                                 File bigImage = new File(bigImageFilename);
 
 
                                 @Override
                                 public void onClick(View v) {
+                                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "showBigImage", mIndex);
+
                                     Intent i = new Intent("android.intent.action.VIEW");
                                     i.setDataAndType(Uri.fromFile(bigImage), "image/*");
                                     try {
@@ -201,7 +209,7 @@ public class MediaLayout extends RelativeLayout {
                                         Toast.makeText(
                                             getContext(),
                                             getContext().getString(R.string.activity_not_found,
-                                                "view image"), Toast.LENGTH_SHORT);
+                                                "view image"), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

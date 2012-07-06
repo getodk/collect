@@ -86,7 +86,44 @@ public class FormController {
     public File getMediaFolder() {
     	return mMediaFolder;
     }
-
+    
+    /**
+     * For logging purposes...
+     * 
+     * @param index
+     * @return xpath value for this index
+     */
+    public String getXPath(FormIndex index) {
+    	String value;
+    	switch ( getEvent() ) {
+    	case FormEntryController.EVENT_BEGINNING_OF_FORM:
+    		value = "beginningOfForm";
+    		break;
+    	case FormEntryController.EVENT_END_OF_FORM:
+    		value = "endOfForm";
+    		break;
+    	case FormEntryController.EVENT_GROUP:
+    		value = "group." + index.getReference().toString();
+    		break;
+    	case FormEntryController.EVENT_QUESTION:
+    		value = "question." + index.getReference().toString();
+    		break;
+    	case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+    		value = "promptNewRepeat." + index.getReference().toString();
+    		break;
+    	case FormEntryController.EVENT_REPEAT:
+    		value = "repeat." + index.getReference().toString();
+    		break;
+    	case FormEntryController.EVENT_REPEAT_JUNCTURE:
+    		value = "repeatJuncture." + index.getReference().toString();
+    		break;
+		default:
+			value = "unexpected";
+    		break;
+    	}
+    	return value;
+    }
+    
     /**
      * returns the event for the current FormIndex.
      * 

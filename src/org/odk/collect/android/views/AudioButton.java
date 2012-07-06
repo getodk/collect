@@ -4,9 +4,11 @@
 
 package org.odk.collect.android.views;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,13 +30,15 @@ import java.io.IOException;
  */
 public class AudioButton extends ImageButton implements OnClickListener {
     private final static String t = "AudioButton";
+    private FormIndex index;
     private String URI;
     private MediaPlayer player;
 
 
-    public AudioButton(Context context, String URI) {
+    public AudioButton(Context context, FormIndex index, String URI) {
         super(context);
         this.setOnClickListener(this);
+        this.index = index;
         this.URI = URI;
         Bitmap b =
             BitmapFactory.decodeResource(context.getResources(),
@@ -46,6 +50,7 @@ public class AudioButton extends ImageButton implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playAudio", index);
         if (URI == null) {
             // No audio file specified
             Log.e(t, "No audio file was specified");

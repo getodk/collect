@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -108,8 +109,11 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
                 NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
                 if (ni == null || !ni.isConnected()) {
+                    Collect.getInstance().getActivityLogger().logAction(this, "uploadButton", "noConnection");
+
                     Toast.makeText(InstanceUploaderList.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
                 } else {
+                    Collect.getInstance().getActivityLogger().logAction(this, "uploadButton", Integer.toString(mSelected.size()));
 
                     if (mSelected.size() > 0) {
                         // items selected
@@ -135,6 +139,8 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
                 // toggle selections of items to all or none
                 ListView ls = getListView();
                 mToggled = !mToggled;
+                
+                Collect.getInstance().getActivityLogger().logAction(this, "toggleButton", Boolean.toString(mToggled));
                 // remove all items from selected list
                 mSelected.clear();
                 for (int pos = 0; pos < ls.getCount(); pos++) {
@@ -185,6 +191,18 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
             mRestored = false;
         }
     }
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
 
     private void uploadSelectedFiles() {
@@ -202,6 +220,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
             android.R.drawable.ic_menu_preferences);
@@ -213,6 +232,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
+                Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
                 createPreferencesMenu();
                 return true;
         }
@@ -233,6 +253,8 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
         // get row id from db
         Cursor c = (Cursor) getListAdapter().getItem(position);
         long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+
+        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", Long.toString(k));
 
         // add/remove from selected list
         if (mSelected.contains(k))
@@ -322,12 +344,16 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 
 	@Override
 	public boolean onLongClick(View v) {
-	    /**
+        Collect.getInstance().getActivityLogger().logAction(this, "toggleButton.longClick", Boolean.toString(!mShowUnsent));
+
+        /**
 	     * Create a dialog with options to save and exit, save, or quit without saving
 	     */
 	    String[] items = {
 	                getString(R.string.show_unsent_forms), getString(R.string.show_sent_and_unsent_forms)
 	    };
+
+	    Collect.getInstance().getActivityLogger().logAction(this, "changeView", "show");
 
 	    AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
@@ -336,6 +362,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 	                        new DialogInterface.OnClickListener() {
 	                            @Override
 	                            public void onClick(DialogInterface dialog, int id) {
+	                        	    Collect.getInstance().getActivityLogger().logAction(this, "changeView", "cancel");
 	                                dialog.cancel();
 	                            }
 	                        })
@@ -345,10 +372,12 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 	                            switch (which) {
 
 	                                case 0: // show unsent
+		                        	    Collect.getInstance().getActivityLogger().logAction(this, "changeView", "showUnsent");
 	                                	InstanceUploaderList.this.showUnsent();
 	                                    break;
 
 	                                case 1: // show all
+		                        	    Collect.getInstance().getActivityLogger().logAction(this, "changeView", "showAll");
 	                                	InstanceUploaderList.this.showAll();
 	                                    break;
 

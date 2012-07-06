@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
@@ -127,6 +126,8 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     	long idFormsTable = ((SimpleCursorAdapter) getListAdapter()).getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
+		Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", formUri.toString());
+
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action)) {
             // caller is waiting on a picked form
@@ -157,32 +158,16 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         super.onPause();
     }
 
-
+	
     @Override
     protected void onStart() {
     	super.onStart();
-        if (Collect.getInstance() != null) {
-    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
-        	if (logger != null) {
-        		boolean alreadyOpen = logger.isOpen(); 
-        		if (!alreadyOpen) logger.open();
-        		logger.log("form chooser list started");
-        		if (!alreadyOpen) logger.close();
-        	}
-        }
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
     }
     
     @Override
     protected void onStop() {
-        if (Collect.getInstance() != null) {
-    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
-        	if (logger != null) {
-        		boolean alreadyOpen = logger.isOpen(); 
-        		if (!alreadyOpen) logger.open();
-        		logger.log("form chooser list stopped");
-        		if (!alreadyOpen) logger.close();
-        	}
-        }
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
     	super.onStop();
     }
     
@@ -206,6 +191,9 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
      * @param shouldExit
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+
+    	Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
+
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertDialog.setMessage(errorMsg);
@@ -214,6 +202,8 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1:
+                    	Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", 
+                    			shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();
                         }

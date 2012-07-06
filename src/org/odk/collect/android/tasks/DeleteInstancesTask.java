@@ -19,7 +19,6 @@ import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -55,21 +54,11 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 	            Uri deleteForm =
 	                Uri.withAppendedPath(InstanceColumns.CONTENT_URI, params[i].toString());
 	            
-	            // Try to get instance path for logging.
-	            String instancePath = "";
-	            try {
-	            	Cursor c = cr.query(deleteForm, null, null, null, null);
-	            	c.moveToFirst();
-	            	instancePath = c.getString(c.getColumnIndex("instanceFilePath"));
-	            } catch (Exception e) {
-	            	Log.e("DataManagerList", "Can't get instance path for logging");
-	            }
-	            
 	            int wasDeleted = cr.delete(deleteForm, null, null); 
 	            deleted += wasDeleted;
 	            
 	            if (wasDeleted > 0) {
-	            	Collect.getInstance().getActivityLogger().log("form deleted", instancePath);
+	            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
 	            }
 			} catch ( Exception ex ) {
 				Log.e(t,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());

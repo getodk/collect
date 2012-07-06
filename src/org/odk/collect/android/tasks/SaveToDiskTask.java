@@ -85,6 +85,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         }
 
         FormEntryActivity.mFormController.postProcessInstance();
+        
+    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "save", Boolean.toString(mMarkCompleted));
 
         if (exportData(mMarkCompleted)) {
         	return mSave ? SAVED_AND_EXIT : SAVED;

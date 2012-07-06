@@ -42,19 +42,18 @@ import android.preference.PreferenceManager;
  */
 public class Collect extends Application {
 
-    // Storage paths
+	// Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory() + File.separator + "odk";
     public static final String FORMS_PATH = ODK_ROOT + File.separator + "forms";
     public static final String INSTANCES_PATH = ODK_ROOT + File.separator + "instances";
     public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
-    public static final String LOG_PATH = ODK_ROOT + "/log";
+    public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     
     public static final String DEFAULT_FONTSIZE = "21";
 
     private HttpContext localContext = null;
-    private String mDeviceId;
     private ActivityLogger mActivityLogger;
     private static Collect singleton = null;
 
@@ -156,18 +155,11 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         singleton = this;
-        mActivityLogger = new ActivityLogger();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
         
         PropertyManager mgr = new PropertyManager(this);
-        mDeviceId = mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY);
-    }
-
-    
-    public String getDeviceId() {
-        return mDeviceId;
-        // return String.valueOf(Math.abs(mDeviceId.hashCode()));
+        mActivityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
     }
 
 }

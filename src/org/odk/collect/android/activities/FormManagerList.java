@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -78,6 +79,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 		mDeleteButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+		    	Collect.getInstance().getActivityLogger().logAction(this, "deleteButton", Integer.toString(mSelected.size()));
 
 				if (mSelected.size() > 0) {
 					createDeleteFormsDialog();
@@ -117,6 +119,18 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 			mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
 		}
 	}
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {
@@ -181,6 +195,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 	 * Create the form delete dialog
 	 */
 	private void createDeleteFormsDialog() {
+    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteFormsDialog", "show");
 		mAlertDialog = new AlertDialog.Builder(this).create();
 		mAlertDialog.setTitle(getString(R.string.delete_file));
 		mAlertDialog.setMessage(getString(R.string.delete_confirm,
@@ -190,9 +205,11 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
 				case DialogInterface.BUTTON1: // delete
+			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteFormsDialog", "delete");
 					deleteSelectedForms();
 					break;
 				case DialogInterface.BUTTON2: // do nothing
+			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteFormsDialog", "cancel");
 					break;
 				}
 			}
@@ -237,6 +254,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 			mSelected.remove(k);
 		else
 			mSelected.add(k);
+		
+		Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", Long.toString(k));
 
 		mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
@@ -252,6 +271,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 	@Override
 	public void deleteComplete(int deletedForms) {
 		Log.i(t, "Delete forms complete");
+        Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedForms));
 		if (deletedForms == mSelected.size()) {
 			// all deletes were successful
 			Toast.makeText(getApplicationContext(),

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
@@ -67,6 +66,7 @@ public class DataManagerList extends ListActivity implements
 		mDeleteButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+		    	Collect.getInstance().getActivityLogger().logAction(this, "deleteButton", Integer.toString(mSelected.size()));
 				if (mSelected.size() > 0) {
 					createDeleteInstancesDialog();
 				} else {
@@ -96,28 +96,12 @@ public class DataManagerList extends ListActivity implements
     @Override
     protected void onStart() {
     	super.onStart();
-        if (Collect.getInstance() != null) {
-    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
-        	if (logger != null) {
-        		boolean alreadyOpen = logger.isOpen(); 
-        		if (!alreadyOpen) logger.open();
-        		logger.log("data manager list started");
-        		if (!alreadyOpen) logger.close();
-        	}
-        }
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
     }
     
     @Override
     protected void onStop() {
-        if (Collect.getInstance() != null) {
-    		ActivityLogger logger = Collect.getInstance().getActivityLogger(); 
-        	if (logger != null) {
-        		boolean alreadyOpen = logger.isOpen(); 
-        		if (!alreadyOpen) logger.open();
-        		logger.log("data manager list stopped");
-        		if (!alreadyOpen) logger.close();
-        	}
-        }
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
     	super.onStop();
     }
 
@@ -176,6 +160,8 @@ public class DataManagerList extends ListActivity implements
 	 * Create the instance delete dialog
 	 */
 	private void createDeleteInstancesDialog() {
+        Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "show");
+
 		mAlertDialog = new AlertDialog.Builder(this).create();
 		mAlertDialog.setTitle(getString(R.string.delete_file));
 		mAlertDialog.setMessage(getString(R.string.delete_confirm,
@@ -185,9 +171,11 @@ public class DataManagerList extends ListActivity implements
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
 				case DialogInterface.BUTTON1: // delete
+			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "delete");
 					deleteSelectedInstances();
 					break;
 				case DialogInterface.BUTTON2: // do nothing
+			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "cancel");
 					break;
 				}
 			}
@@ -230,13 +218,16 @@ public class DataManagerList extends ListActivity implements
 			mSelected.remove(k);
 		else
 			mSelected.add(k);
-
+		
+		Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", Long.toString(k));
+		
 		mDeleteButton.setEnabled(!(mSelected.size() == 0));
 	}
 
 	@Override
 	public void deleteComplete(int deletedInstances) {
 		Log.i(t, "Delete instances complete");
+        Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedInstances));
 		if (deletedInstances == mSelected.size()) {
 			// all deletes were successful
 			Toast.makeText(this,

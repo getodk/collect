@@ -75,6 +75,17 @@ public class FileManagerTabs extends TabActivity {
         mTVDF.setPadding(0, 0, 0, 6);
     }
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
     /**
      * Sets the tab header to the specified name

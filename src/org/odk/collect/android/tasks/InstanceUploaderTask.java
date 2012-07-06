@@ -92,6 +92,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath, 
     			Uri toUpdate, HttpClient httpclient, HttpContext localContext, Map<URI, URI> uriRemap) {
+    	
+    	Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
         ContentValues cv = new ContentValues();
         URI u = null;

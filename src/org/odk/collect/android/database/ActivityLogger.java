@@ -1,25 +1,27 @@
 package org.odk.collect.android.database;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 
+import org.javarosa.core.model.FormIndex;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-public class ActivityLogger {
-	public static boolean LOGGING_ENABLED = true;
+public final class ActivityLogger {
 	
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 		
 		DatabaseHelper() {
-			super(DATABASE_PATH, getDBName(), null, DATABASE_VERSION);
-			new File(DATABASE_PATH).mkdirs();
+			super(Collect.LOG_PATH, DATABASE_NAME, null, DATABASE_VERSION);
+			new File(Collect.LOG_PATH).mkdirs();
 		}
 
 		@Override
@@ -37,7 +39,7 @@ public class ActivityLogger {
 	/**
 	 * The minimum delay, in milliseconds, for a scroll action to be considered new. 
 	 */
-	private static final int MIN_SCROLL_DELAY = 200;
+	private static final long MIN_SCROLL_DELAY = 400L;
 	/**
 	 * The maximum size of the scroll action buffer.  After it reaches this size,
 	 * it will be flushed.
@@ -45,12 +47,15 @@ public class ActivityLogger {
 	private static final int MAX_SCROLL_ACTION_BUFFER_SIZE = 8;
 	
 	private static final String DATABASE_TABLE = "log";
+	private static final String ENABLE_LOGGING = "enabled";
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_PATH = Collect.LOG_PATH;
-
+	private static final String DATABASE_NAME = "activityLog.db";
 	// Database columns
 	private static final String ID = "_id";
 	private static final String TIMESTAMP = "timestamp";
+	private static final String DEVICEID = "device_id";
+	private static final String CLASS = "class";
+	private static final String CONTEXT = "context";
 	private static final String ACTION = "action";
 	private static final String INSTANCE_PATH = "instance_path";
 	private static final String QUESTION = "question";
@@ -60,39 +65,38 @@ public class ActivityLogger {
 	private static final String DATABASE_CREATE =
 			"create table " + DATABASE_TABLE + " (" +
 			ID + " integer primary key autoincrement, " +
-			TIMESTAMP + " text not null, " +
-			ACTION + " text not null, " +
+			TIMESTAMP + " integer not null, " +
+			DEVICEID + " text not null, " +
+			CLASS + " text not null, " +
+			CONTEXT + " text not null, " +
+			ACTION + " text, " +
 			INSTANCE_PATH + " text, " +
 			QUESTION + " text, " +
 			PARAM1 + " text, " +
 			PARAM2 + " text);";
 
-	private DatabaseHelper mDbHelper;
-	private SQLiteDatabase mDb;
-	private boolean mIsOpen;
+	private final boolean mLoggingEnabled;
+	private final String mDeviceId;
+	private DatabaseHelper mDbHelper = null;
+	private SQLiteDatabase mDb = null;
+	private boolean mIsOpen = false;
 	// We buffer scroll actions to make sure there aren't too many pauses
 	// during scrolling.  This list is flushed every time any other type of
 	// action is logged.
-	private ArrayList<ContentValues> mScrollActions;
-
-    private static String getDBName() {
-    	return Collect.getInstance().getDeviceId() + "_log.sqlite";
-    }
+	private LinkedList<ContentValues> mScrollActions = new LinkedList<ContentValues>();
     
-    private static String getDBPath() {
-    	return DATABASE_PATH + "/" + getDBName();
-    }
-	
-	public ActivityLogger() {
-		mScrollActions = new ArrayList<ContentValues>();
+	public ActivityLogger(String deviceId) {
+		this.mDeviceId = deviceId;
+		mLoggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
+        open();
 	}
 	
 	public boolean isOpen() {
-		return LOGGING_ENABLED && mIsOpen;
+		return mLoggingEnabled && mIsOpen;
 	}
 	
-    public synchronized void open() throws SQLException {
-    	if (!LOGGING_ENABLED || mIsOpen) return;
+    public void open() throws SQLException {
+    	if (!mLoggingEnabled || mIsOpen) return;
         try {
             mDbHelper = new DatabaseHelper();
             mDb = mDbHelper.getWritableDatabase();
@@ -102,103 +106,134 @@ public class ActivityLogger {
         	mIsOpen = false;
         }
     }
+    
+    // cached to improve logging performance...
+    // only access these through getXPath(FormIndex index);
+    private FormIndex cachedXPathIndex = null;
+    private String cachedXPathValue = null;
 
-    public synchronized void close() {
-    	if (!LOGGING_ENABLED) return;
-    	if (!mIsOpen) return;
-        mDbHelper.close();
-        mDb.close();
-        mIsOpen = false;
+    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
+    private String getXPath(FormIndex index) {
+    	if ( index == cachedXPathIndex ) return cachedXPathValue;
+    	
+    	cachedXPathIndex = index;
+    	cachedXPathValue = FormEntryActivity.mFormController.getXPath(index);
+    	return cachedXPathValue;
     }
 
-    public synchronized void log(String action, String instancePath, String question,
-    		String param1, String param2) {
-    	if (!LOGGING_ENABLED) return;
-    	openAndLogErrorIfNeeded();
-    	if (!mScrollActions.isEmpty()) {
-    		flushScrollActions();
-    	}
+
+    private void log(String object, String context, String action, String instancePath, FormIndex index, String param1, String param2) {
+		if (!isOpen()) return;
+
         ContentValues cv = new ContentValues();
+        cv.put(DEVICEID, mDeviceId);
+        cv.put(CLASS, object);
+        cv.put(CONTEXT, context);
         cv.put(ACTION, action);
-        cv.put(QUESTION, question);
         cv.put(INSTANCE_PATH, instancePath);
         cv.put(PARAM1, param1);
         cv.put(PARAM2, param2);
-        cv.put(TIMESTAMP, "" + Calendar.getInstance().getTimeInMillis());
-        insertContentValues(cv);
+        cv.put(TIMESTAMP, Calendar.getInstance().getTimeInMillis());
+
+        insertContentValues(cv, index);
     }
     
-    public synchronized void logScrollAction(String instancePath, String question, int distance) {
-    	if (!LOGGING_ENABLED) return;
-    	openAndLogErrorIfNeeded();
-    	// Check to see if we can add this scroll action to the previous action.
-    	if (!mScrollActions.isEmpty()) {
-    		ContentValues lastCv = mScrollActions.get(mScrollActions.size() - 1);
+    public void logScrollAction(Object t, int distance) {
+    	if (!isOpen()) return;
+
+    	synchronized(mScrollActions) {
 	    	long timeStamp = Calendar.getInstance().getTimeInMillis();
-	    	long oldTimeStamp = Long.parseLong(lastCv.getAsString(TIMESTAMP));
-	    	int oldDistance = Integer.parseInt(lastCv.getAsString(PARAM1));
-	    	if (Integer.signum(distance) == Integer.signum(oldDistance) &&
-	    			timeStamp - oldTimeStamp < MIN_SCROLL_DELAY) {
-	    		lastCv.put(PARAM1, oldDistance + distance);
-	    		lastCv.put(TIMESTAMP, "" + timeStamp);
-	    		// PARAM2 will hold the time the scroll started.
-	    		if (!lastCv.containsKey(PARAM2)) {
-		    		lastCv.put(PARAM2, "" + oldTimeStamp);
-	    		}
-	    		return;
+	    	
+	    	// Check to see if we can add this scroll action to the previous action.
+	    	if (!mScrollActions.isEmpty()) {
+	    		ContentValues lastCv = mScrollActions.get(mScrollActions.size() - 1);
+		    	long oldTimeStamp = lastCv.getAsLong(TIMESTAMP);
+		    	int oldDistance = Integer.parseInt(lastCv.getAsString(PARAM1));
+		    	if (Integer.signum(distance) == Integer.signum(oldDistance) &&
+		    			timeStamp - oldTimeStamp < MIN_SCROLL_DELAY) {
+		    		lastCv.put(PARAM1, oldDistance + distance);
+		    		lastCv.put(TIMESTAMP, timeStamp);
+		    		return;
+		    	}
 	    	}
-    	}
-    	
-    	if (mScrollActions.size() >= MAX_SCROLL_ACTION_BUFFER_SIZE) {
-    		flushScrollActions();
-    	}
-    	
-    	// Add a new scroll action to the buffer.
-    	ContentValues cv = new ContentValues();
-    	cv.put(ACTION, "scroll");
-    	cv.put(QUESTION, question);
-    	cv.put(INSTANCE_PATH, instancePath);
-    	cv.put(PARAM1, "" + distance);
-        cv.put(TIMESTAMP, "" + Calendar.getInstance().getTimeInMillis());
-    	mScrollActions.add(cv);
-    }
-    
-    private synchronized void flushScrollActions() {
-		for (ContentValues cv : mScrollActions) {
-			insertContentValues(cv);
-		}
-		mScrollActions.clear();
-    }
-    
-    private void openAndLogErrorIfNeeded() {
-    	if (!mIsOpen) {
-    		System.err.println("Logger.log() called without being opened.  Opening...");
-    		open();
+	    	
+	    	if (mScrollActions.size() >= MAX_SCROLL_ACTION_BUFFER_SIZE) {
+	    		insertContentValues(null, null); // flush scroll list...
+	    	}
+	
+	    	String idx = "";
+	    	if ( FormEntryActivity.mFormController != null ) {
+	    		idx = getXPath(FormEntryActivity.mFormController.getFormIndex());
+	    	}
+	    	String instancePath = FormEntryActivity.mInstancePath;
+	    	
+	    	// Add a new scroll action to the buffer.
+	    	ContentValues cv = new ContentValues();
+	    	cv.put(DEVICEID, mDeviceId);
+	    	cv.put(CLASS, t.getClass().getName());
+	    	cv.put(CONTEXT, "scroll");
+	    	cv.put(ACTION, "");
+	    	cv.put(PARAM1, distance);
+	    	cv.put(QUESTION, idx);
+	    	cv.put(INSTANCE_PATH, instancePath);
+	        cv.put(TIMESTAMP, timeStamp);
+	    	cv.put(PARAM2, timeStamp);
+	    	mScrollActions.add(cv);
     	}
     }
     
-    private void insertContentValues(ContentValues cv) {
-        try {
-            mDb.insert(DATABASE_TABLE, null, cv);
-        } catch (SQLiteConstraintException e) {
-            System.err.println("Error: " + e.getMessage());
-        }    	
+    private void insertContentValues(ContentValues cv, FormIndex index) {
+    	synchronized(mScrollActions) {
+	        try {
+	        	while ( !mScrollActions.isEmpty() ) {
+	        		ContentValues scv = mScrollActions.removeFirst();
+	        		mDb.insert(DATABASE_TABLE, null, scv);
+	        	}
+	
+	        	if ( cv != null ) {
+	    	    	String idx = "";
+	    	    	if ( index != null ) {
+	    	    		idx = getXPath(index);
+	    	    	}
+	    	    	cv.put(QUESTION,idx);
+	        		mDb.insert(DATABASE_TABLE, null, cv);
+	        	}
+	        } catch (SQLiteConstraintException e) {
+	            System.err.println("Error: " + e.getMessage());
+	        }
+    	}
     }
 
     // Convenience methods
-    public synchronized void log(String action, String instancePath, String question, String param1) {
-        log(action, instancePath, question, param1, null);
+    
+    public void logOnStart(Activity a) {
+		log( a.getClass().getName(), "onStart", null, null, null, null, null);
     }
 
-    public synchronized void log(String action, String instancePath, String question) {
-        log(action, instancePath, question, null, null);
+    public void logOnStop(Activity a) {
+		log( a.getClass().getName(), "onStop", null, null, null, null, null);
+    }
+    
+    public void logAction(Object t, String context, String action) {
+		log( t.getClass().getName(), context, action, null, null, null, null);
+    }
+    
+    public void logActionParam(Object t, String context, String action, String param1) {
+		log( t.getClass().getName(), context, action, null, null, param1, null);
     }
 
-    public synchronized void log(String action, String instancePath) {
-        log(action, instancePath, null, null, null);
+    public void logInstanceAction(Object t, String context, String action) {
+    	FormIndex index = null;
+    	if ( FormEntryActivity.mFormController != null ) {
+    		index = FormEntryActivity.mFormController.getFormIndex();
+    	}
+    	log( t.getClass().getName(), context, action, FormEntryActivity.mInstancePath, index, null, null);
     }
 
-    public synchronized void log(String action) {
-        log(action, null, null, null, null);
+    public void logInstanceAction(Object t, String context, String action, FormIndex index) {
+    	log( t.getClass().getName(), context, action, FormEntryActivity.mInstancePath, index, null, null);
     }
 }

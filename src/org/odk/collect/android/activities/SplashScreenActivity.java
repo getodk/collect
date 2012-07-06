@@ -185,6 +185,7 @@ public class SplashScreenActivity extends Activity {
 
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+	    Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertDialog.setMessage(errorMsg);
@@ -193,6 +194,7 @@ public class SplashScreenActivity extends Activity {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1:
+                	    Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "OK");
                         if (shouldExit) {
                             finish();
                         }
@@ -203,6 +205,18 @@ public class SplashScreenActivity extends Activity {
         mAlertDialog.setCancelable(false);
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
         mAlertDialog.show();
+    }
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
     }
 
 }
