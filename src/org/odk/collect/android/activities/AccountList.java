@@ -50,6 +50,17 @@ public class AccountList extends ListActivity {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.google_account));
     }
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
     /**
      * Called when the activity is resumed.
@@ -102,6 +113,7 @@ public class AccountList extends ListActivity {
         editor.putString(PreferencesActivity.KEY_ACCOUNT, account.name);
         editor.commit();
 
+        Collect.getInstance().getActivityLogger().logAction(this, "select", account.name);
         Intent intent = new Intent(this, AccountInfo.class);
         intent.putExtra("account", account);
         startActivity(intent);

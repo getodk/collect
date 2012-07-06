@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.provider;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
@@ -31,11 +36,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 
 /**
  * 
@@ -180,6 +180,10 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        
+        // must be at the beginning of any activity that can be called from an external intent
+        Collect.createODKDirs();
+
         mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return true;
     }
@@ -314,6 +318,8 @@ public class FormsProvider extends ContentProvider {
         if (rowId > 0) {
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(formUri, null);
+        	Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
+        			formUri.toString(),  values.getAsString(FormsColumns.FORM_FILE_PATH));
             return formUri;
         }
 
@@ -358,7 +364,9 @@ public class FormsProvider extends ContentProvider {
 	                while (del.moveToNext()) {
 	                    deleteFileOrDir(del.getString(del
 	                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-	                    deleteFileOrDir(del.getString(del.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+	                    String formFilePath = del.getString(del.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", formFilePath);
+	                    deleteFileOrDir(formFilePath);
 	                    deleteFileOrDir(del.getString(del.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
 	                }
                 } finally {
@@ -379,7 +387,9 @@ public class FormsProvider extends ContentProvider {
 	                c.moveToPosition(-1);
 	                while (c.moveToNext()) {
 	                    deleteFileOrDir(c.getString(c.getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-	                    deleteFileOrDir(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+	                    String formFilePath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", formFilePath);
+	                    deleteFileOrDir(formFilePath);
 	                    deleteFileOrDir(c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
 	                }
                 } finally {

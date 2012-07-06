@@ -17,8 +17,11 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -67,7 +70,29 @@ public class StringWidget extends QuestionWidget {
             mAnswer.setFocusable(false);
             mAnswer.setClickable(false);
         }
+        
+        mAnswer.addTextChangedListener(new TextWatcher() {
+        	private String oldText = "";
 
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (!s.toString().equals(oldText)) {
+					Collect.getInstance().getActivityLogger()
+						.logInstanceAction(this, "answerTextChanged", s.toString(),	getPrompt().getIndex());
+				}
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				oldText = s.toString();
+			}
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) { }				
+        });
+        
         addView(mAnswer);
     }
 

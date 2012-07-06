@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import java.io.IOException;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 
 import android.accounts.Account;
@@ -50,7 +51,18 @@ public class AccountInfo extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
     /**
      * When we resume, try to get an auth token.
@@ -111,6 +123,7 @@ public class AccountInfo extends Activity {
         editor.remove(PreferencesActivity.KEY_ACCOUNT);
         editor.remove(PreferencesActivity.KEY_AUTH);
         editor.commit();
+        Collect.getInstance().getActivityLogger().logAction(this, "failedAuthToken", settings.getString(PreferencesActivity.KEY_ACCOUNT,""));
         dismissDialog(WAITING_ID);
         finish();
     }
@@ -129,6 +142,7 @@ public class AccountInfo extends Activity {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(PreferencesActivity.KEY_AUTH, auth_token);
         editor.commit();
+        Collect.getInstance().getActivityLogger().logAction(this, "gotAuthToken", settings.getString(PreferencesActivity.KEY_ACCOUNT,""));
         dismissDialog(WAITING_ID);
         finish();
     }
@@ -142,6 +156,8 @@ public class AccountInfo extends Activity {
         Dialog dialog;
         switch (id) {
             case WAITING_ID:
+                Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.waitingForAuthentication", "show");
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Waiting on authentication").setCancelable(false);
                 AlertDialog alert = builder.create();

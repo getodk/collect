@@ -97,9 +97,11 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         addView(mView);
-
     }
-
+    
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+    	Collect.getInstance().getActivityLogger().logScrollAction(this, t - oldt);
+    }
 
     /**
      * @return a HashMap of answers entered by the user for this set of widgets

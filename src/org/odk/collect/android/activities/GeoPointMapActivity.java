@@ -2,6 +2,7 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import android.content.Context;
@@ -74,6 +75,7 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
             @Override
             public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
                 finish();
             }
         });
@@ -111,6 +113,7 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
                 @Override
                 public void onClick(View v) {
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
                     returnLocation();
                 }
             });
@@ -128,11 +131,24 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
                 @Override
                 public void onClick(View v) {
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "showLocation", "onClick");
                     mMapController.animateTo(mGeoPoint);
                 }
             });
 
         }
+    }
+	
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
     }
 
 

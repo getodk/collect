@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -92,7 +93,7 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
-                mediaLayout.setAVT(r, audioURI, imageURI, videoURI, bigImageURI);
+                mediaLayout.setAVT(prompt.getIndex(), r, audioURI, imageURI, videoURI, bigImageURI);
 
                 if (i != mItems.size() - 1) {
                 	// Last, add the dividing line (except for the last element)
@@ -163,11 +164,18 @@ public class SelectOneWidget extends QuestionWidget implements OnCheckedChangeLi
             return;
         }
 
-        for (RadioButton button : this.buttons) {
+        int selected = -1;
+        for ( int i = 0 ; i < buttons.size() ; ++i ) {
+        	RadioButton button = buttons.get(i);
             if (button.isChecked() && !(buttonView == button)) {
                 button.setChecked(false);
             }
+            if ( buttonView == button) {
+            	selected = i;
+            }
         }
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
+        		mItems.get(selected).getValue(), mPrompt.getIndex());
     }
 
 

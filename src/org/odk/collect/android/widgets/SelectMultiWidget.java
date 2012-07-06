@@ -111,7 +111,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
-                mediaLayout.setAVT(c, audioURI, imageURI, videoURI, bigImageURI);
+                mediaLayout.setAVT(prompt.getIndex(), c, audioURI, imageURI, videoURI, bigImageURI);
                 addView(mediaLayout);
 
                 // Last, add the dividing line between elements (except for the last element)

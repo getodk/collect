@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
@@ -52,7 +53,13 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
 			try {
 	            Uri deleteForm =
 	                Uri.withAppendedPath(FormsColumns.CONTENT_URI, params[i].toString());
-	            deleted += cr.delete(deleteForm, null, null);
+	            
+	            int wasDeleted = cr.delete(deleteForm, null, null); 
+	            deleted += wasDeleted;
+	            
+	            if (wasDeleted > 0) {
+	            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
+	            }
 			} catch ( Exception ex ) {
 				Log.e(t,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());
 			}

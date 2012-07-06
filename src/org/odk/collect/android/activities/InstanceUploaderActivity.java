@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -133,6 +134,17 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
     }
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this); 
+    }
+    
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this); 
+    	super.onStop();
+    }
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
@@ -196,11 +208,14 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
+            	Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
+
                 mProgressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                        	Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.PROGRESS_DIALOG", "cancel");
                             dialog.dismiss();
                             mInstanceUploaderTask.cancel(true);
                             mInstanceUploaderTask.setUploaderListener(null);
@@ -215,6 +230,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case AUTH_DIALOG:
+            	Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "show");
                 AlertDialog.Builder b = new AlertDialog.Builder(this);
 
                 LayoutInflater factory = LayoutInflater.from(this);
@@ -252,6 +268,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 b.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                    	Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "OK");
                         EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
                         EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
 
@@ -274,6 +291,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                    	Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "cancel");
                         finish();
                     }
                 });
@@ -371,6 +389,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     private void createAlertDialog(String message) {
+    	Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
+    	
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(getString(R.string.upload_results));
         mAlertDialog.setMessage(message);
@@ -379,6 +399,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
+                    	Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "OK");
                         // always exit this activity since it has no interface
                         mAlertShowing = false;
                         finish();
