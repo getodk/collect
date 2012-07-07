@@ -18,6 +18,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -65,6 +66,14 @@ public class TimeWidget extends QuestionWidget {
             // create time widget with current time as of right now
             clearAnswer();
         }
+
+        mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+            	Collect.getInstance().getActivityLogger().logInstanceAction(TimeWidget.this, "onTimeChanged", 
+            			String.format("%1$02d:%2$02d",hourOfDay, minute), mPrompt.getIndex());
+			}
+		});
 
         setGravity(Gravity.LEFT);
         addView(mTimePicker);

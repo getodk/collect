@@ -20,6 +20,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -60,30 +61,17 @@ public class SelectMultiWidget extends QuestionWidget {
             ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
         }
 
-        if (prompt.getSelectChoices() != null) {
+        if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
                 // no checkbox group so id by answer + offset
                 CheckBox c = new CheckBox(getContext());
-
-                // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                            } else {
-                                buttonView.setChecked(true);
-                            }
-                        }
-                    }
-                });
-
+                c.setTag(Integer.valueOf(i));
                 c.setId(QuestionWidget.newUniqueId());
                 c.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
+                
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
                     if (mItems.get(i).getValue().equals(ve.elementAt(vi).getValue())) {
@@ -93,6 +81,23 @@ public class SelectMultiWidget extends QuestionWidget {
 
                 }
                 mCheckboxes.add(c);
+                // when clicked, check for readonly before toggling
+                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
+                            if (buttonView.isChecked()) {
+                                buttonView.setChecked(false);
+                               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.deselect", 
+                            			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+                            } else {
+                                buttonView.setChecked(true);
+                               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select", 
+                            			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+                            }
+                        }
+                    }
+                });
 
                 String audioURI = null;
                 audioURI =
@@ -111,7 +116,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
-                mediaLayout.setAVT(prompt.getIndex(), c, audioURI, imageURI, videoURI, bigImageURI);
+                mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), c, audioURI, imageURI, videoURI, bigImageURI);
                 addView(mediaLayout);
 
                 // Last, add the dividing line between elements (except for the last element)

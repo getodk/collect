@@ -22,6 +22,7 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -31,6 +32,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -86,6 +89,25 @@ public class SpinnerWidget extends QuestionWidget {
             }
         }
 
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				if ( position == mItems.size() ) {
+					Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged.clearValue", 
+		    			"", mPrompt.getIndex());
+				} else {
+					Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
+			    			mItems.get(position).getValue(), mPrompt.getIndex());
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				
+			}});
+        
         addView(spinner);
 
     }

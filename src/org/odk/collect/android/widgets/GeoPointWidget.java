@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.content.Context;
@@ -84,6 +85,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "showLocation", 
+            			"click", mPrompt.getIndex());
 
                 String s = mStringAnswer.getText().toString();
                 String[] sa = s.split(" ");
@@ -130,6 +133,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mGetLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "recordLocation", 
+            			"click", mPrompt.getIndex());
                 Intent i = null;
                 if (mUseMaps) {
                     i = new Intent(getContext(), GeoPointMapActivity.class);

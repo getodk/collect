@@ -240,7 +240,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
                 return true;
             case MENU_SHOW_UNSENT:
                 Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
-      		showSentAndUnsentChoices();
+                showSentAndUnsentChoices();
             	return true;
         }
         return super.onMenuItemSelected(featureId, item);
@@ -351,7 +351,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 
 	@Override
 	public boolean onLongClick(View v) {
-            Collect.getInstance().getActivityLogger().logAction(this, "toggleButton.longClick", Boolean.toString(!mShowUnsent));
+            Collect.getInstance().getActivityLogger().logAction(this, "toggleButton.longClick", Boolean.toString(mToggled));
             return showSentAndUnsentChoices();
 	}
 	

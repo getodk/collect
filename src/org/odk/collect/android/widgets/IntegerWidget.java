@@ -48,7 +48,7 @@ public class IntegerWidget extends StringWidget {
 	}
 
     public IntegerWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+        super(context, prompt, true);
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -76,6 +76,8 @@ public class IntegerWidget extends StringWidget {
         if (i != null) {
             mAnswer.setText(i.toString());
         }
+        
+        setupChangeListener();
     }
 
 

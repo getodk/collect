@@ -31,7 +31,7 @@ import android.util.TypedValue;
 public class StringNumberWidget extends StringWidget {
 
     public StringNumberWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+        super(context, prompt, true);
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -63,6 +63,8 @@ public class StringNumberWidget extends StringWidget {
         if (s != null) {
             mAnswer.setText(s);
         }
+        
+        setupChangeListener();
     }
 
 

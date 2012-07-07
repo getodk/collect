@@ -18,6 +18,7 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -53,13 +54,16 @@ public class DateTimeWidget extends QuestionWidget {
         mTimePicker.setFocusable(!prompt.isReadOnly());
         mTimePicker.setEnabled(!prompt.isReadOnly());
         mTimePicker.setPadding(0, 20, 0, 0);
-
+        
         String clockType =
             android.provider.Settings.System.getString(context.getContentResolver(),
                 android.provider.Settings.System.TIME_12_24);
         if (clockType == null || clockType.equalsIgnoreCase("24")) {
             mTimePicker.setIs24HourView(true);
         }
+
+        // If there's an answer, use it.
+        setAnswer();
 
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
@@ -78,10 +82,14 @@ public class DateTimeWidget extends QuestionWidget {
                     int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (day > max) {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
+                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateTimeWidget.this, "onDateChanged", 
+                        			String.format("%1$04d-%2$02d-%3$02d",year, month, max), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, max);
                         }
                     } else {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
+                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateTimeWidget.this, "onDateChanged", 
+                        			String.format("%1$04d-%2$02d-%3$02d",year, month, day), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, day);
                         }
                     }
@@ -89,8 +97,13 @@ public class DateTimeWidget extends QuestionWidget {
             }
         };
 
-        // If there's an answer, use it.
-        setAnswer();
+        mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+            	Collect.getInstance().getActivityLogger().logInstanceAction(DateTimeWidget.this, "onTimeChanged", 
+            			String.format("%1$02d:%2$02d",hourOfDay, minute), mPrompt.getIndex());
+			}
+		});
 
         setGravity(Gravity.LEFT);
         addView(mDatePicker);

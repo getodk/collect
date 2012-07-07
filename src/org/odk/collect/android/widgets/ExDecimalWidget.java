@@ -20,6 +20,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -88,6 +89,8 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
+       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent", 
+    			i.getAction(), mPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_DECIMAL_CAPTURE);
     }

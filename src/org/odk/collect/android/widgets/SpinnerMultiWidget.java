@@ -125,7 +125,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
             boolean first = true;
             for (int i = 0; i < selections.length; ++i) {
 
-                String value = prompt.getSelectChoices().get(i).getValue();
+                String value = mItems.get(i).getValue();
                 boolean found = false;
                 for (Selection s : ve) {
                     if (value.equals(s.getValue())) {

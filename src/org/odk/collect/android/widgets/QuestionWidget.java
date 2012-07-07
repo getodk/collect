@@ -121,7 +121,7 @@ public abstract class QuestionWidget extends LinearLayout {
 
         // Create the layout for audio, image, text
         MediaLayout mediaLayout = new MediaLayout(getContext());
-        mediaLayout.setAVT(p.getIndex(), mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
+        mediaLayout.setAVT(p.getIndex(), "", mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
 
         addView(mediaLayout, mLayout);
     }

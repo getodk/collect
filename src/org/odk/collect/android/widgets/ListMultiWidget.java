@@ -14,6 +14,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.Context;
@@ -54,6 +55,7 @@ public class ListMultiWidget extends QuestionWidget {
 
     private boolean mCheckboxInit = true;
     
+    private Vector<SelectChoice> mItems; // may take a while to compute...
 
     private ArrayList<CheckBox> mCheckboxes;
 
@@ -62,7 +64,7 @@ public class ListMultiWidget extends QuestionWidget {
     public ListMultiWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
-        Vector<SelectChoice> mItems = prompt.getSelectChoices();
+        mItems = prompt.getSelectChoices();
         mCheckboxes = new ArrayList<CheckBox>();
         mPrompt = prompt;
 
@@ -74,24 +76,10 @@ public class ListMultiWidget extends QuestionWidget {
             ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
         }
 
-        if (prompt.getSelectChoices() != null) {
+        if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
                 CheckBox c = new CheckBox(getContext());
-
-                // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                            } else {
-                                buttonView.setChecked(true);
-                            }
-                        }
-                    }
-                });
-
+                c.setTag(Integer.valueOf(i));
                 c.setId(QuestionWidget.newUniqueId());
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
@@ -104,6 +92,24 @@ public class ListMultiWidget extends QuestionWidget {
 
                 }
                 mCheckboxes.add(c);
+
+                // when clicked, check for readonly before toggling
+                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
+                            if (buttonView.isChecked()) {
+                                buttonView.setChecked(false);
+                               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.deselect", 
+                            			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+                            } else {
+                                buttonView.setChecked(true);
+                               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select", 
+                            			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+                            }
+                        }
+                    }
+                });
 
                 String imageURI = null;
                 imageURI =
@@ -263,7 +269,7 @@ public class ListMultiWidget extends QuestionWidget {
         for (int i = 0; i < mCheckboxes.size(); i++) {
         	CheckBox c = mCheckboxes.get(i);
             if (c.isChecked()) {
-                vc.add(new Selection(mPrompt.getSelectChoices().get(i)));
+                vc.add(new Selection(mItems.get(i)));
             }
         }
 

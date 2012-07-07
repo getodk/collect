@@ -10,6 +10,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -151,6 +152,8 @@ public class GridWidget extends QuestionWidget {
                     }
                 }
                 selected[position] = true;
+               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select", 
+            			mItems.get(position).getValue(), mPrompt.getIndex());
                 imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                     orangeBlueVal));
                 if (quickAdvance) {

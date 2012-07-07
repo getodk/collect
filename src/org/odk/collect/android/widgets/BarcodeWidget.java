@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -65,6 +66,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         mGetBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "recordBarcode", "click", mPrompt.getIndex());
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 mWaitingForData = true;
                 try {

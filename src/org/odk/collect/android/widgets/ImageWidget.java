@@ -94,6 +94,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton", 
+            			"click", mPrompt.getIndex());
                 mErrorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 // We give the camera an absolute filename/path where to put the
@@ -134,6 +136,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mChooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton", 
+            			"click", mPrompt.getIndex());
                 mErrorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
@@ -193,6 +197,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton", 
+                			"click", mPrompt.getIndex());
                     Intent i = new Intent("android.intent.action.VIEW");
                     String[] projection = {
                         "_id"

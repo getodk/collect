@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.MediaLayout;
 
@@ -47,7 +48,7 @@ import android.widget.RelativeLayout;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener {
-
+	Vector<SelectChoice> mItems; // may take a while to compute
     ArrayList<RadioButton> buttons;
     AdvanceToNextListener listener;
 
@@ -57,7 +58,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        Vector<SelectChoice> mItems = prompt.getSelectChoices();
+        mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();
         listener = (AdvanceToNextListener) context;
 
@@ -66,7 +67,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (prompt.getSelectChoices() != null) {
+        if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
 
                 RelativeLayout thisParentLayout =
@@ -76,9 +77,9 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
 
                 RadioButton r = new RadioButton(getContext());
-                r.setOnCheckedChangeListener(this);
                 r.setText(prompt.getSelectChoiceText(mItems.get(i)));
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTag(Integer.valueOf(i));
                 r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
@@ -91,6 +92,8 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 if (mItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                 }
+
+                r.setOnCheckedChangeListener(this);
 
                 String audioURI = null;
                 audioURI =
@@ -109,7 +112,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext());
-                mediaLayout.setAVT(prompt.getIndex(), r, audioURI, imageURI, videoURI, bigImageURI);
+                mediaLayout.setAVT(prompt.getIndex(), "", r, audioURI, imageURI, videoURI, bigImageURI);
 
                 if (i != mItems.size() - 1) {
 	                // Last, add the dividing line (except for the last element)
@@ -141,7 +144,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mPrompt.getSelectChoices().elementAt(i);
+            SelectChoice sc = mItems.elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -182,7 +185,10 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 button.setChecked(false);
             }
         }
-        listener.advance();
+       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
+    			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+
+       	listener.advance();
     }
 
 

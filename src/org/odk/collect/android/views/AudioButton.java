@@ -4,6 +4,9 @@
 
 package org.odk.collect.android.views;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -21,9 +24,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * @author ctsims
  * @author carlhartung
@@ -31,14 +31,16 @@ import java.io.IOException;
 public class AudioButton extends ImageButton implements OnClickListener {
     private final static String t = "AudioButton";
     private FormIndex index;
+    private String selectionDesignator;
     private String URI;
     private MediaPlayer player;
 
 
-    public AudioButton(Context context, FormIndex index, String URI) {
+    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI) {
         super(context);
         this.setOnClickListener(this);
         this.index = index;
+        this.selectionDesignator = selectionDesignator;
         this.URI = URI;
         Bitmap b =
             BitmapFactory.decodeResource(context.getResources(),
@@ -50,7 +52,7 @@ public class AudioButton extends ImageButton implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playAudio", index);
+    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playAudioPrompt"+selectionDesignator, index);
         if (URI == null) {
             // No audio file specified
             Log.e(t, "No audio file was specified");

@@ -13,6 +13,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.Context;
@@ -133,14 +134,18 @@ public class GridMultiWidget extends QuestionWidget {
         gridview.setAdapter(ia);
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
                 if (selected[position]) {
                     selected[position] = false;
                     imageViews[position].setBackgroundColor(Color.WHITE);
+                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.deselect", 
+                			mItems.get(position).getValue(), mPrompt.getIndex());
+
                 } else {
                     selected[position] = true;
                     imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
+                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select", 
+                			mItems.get(position).getValue(), mPrompt.getIndex());
                 }
 
             }

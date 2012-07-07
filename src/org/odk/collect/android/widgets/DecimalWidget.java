@@ -50,7 +50,7 @@ public class DecimalWidget extends StringWidget {
 	}
 	
     public DecimalWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+        super(context, prompt, true);
 
         // formatting
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
@@ -87,6 +87,8 @@ public class DecimalWidget extends StringWidget {
             setFocusable(false);
             setClickable(false);
         }
+        
+        setupChangeListener();
     }
 
 

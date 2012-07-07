@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -175,6 +176,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
+       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent", 
+    			i.getAction(), mPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_STRING_CAPTURE);
     }

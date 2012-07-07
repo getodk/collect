@@ -14,6 +14,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.Context;
@@ -52,12 +53,14 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
 
+    Vector<SelectChoice> mItems; // may take a while to compute
+    
     ArrayList<RadioButton> buttons;
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
-        Vector<SelectChoice> mItems = prompt.getSelectChoices();
+        mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();
 
         // Layout holds the horizontal list of buttons
@@ -68,12 +71,12 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (prompt.getSelectChoices() != null) {
+        if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
 
-                r.setOnCheckedChangeListener(this);
                 r.setId(QuestionWidget.newUniqueId());
+                r.setTag(Integer.valueOf(i));
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
@@ -82,6 +85,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 if (mItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                 }
+                r.setOnCheckedChangeListener(this);
 
                 String imageURI = null;
                 imageURI =
@@ -243,7 +247,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mPrompt.getSelectChoices().elementAt(i);
+            SelectChoice sc = mItems.elementAt(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -281,6 +285,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 button.setChecked(false);
             }
         }
+       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
+    			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
     }
 
 

@@ -18,6 +18,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -64,8 +65,12 @@ public class TriggerWidget extends QuestionWidget {
             public void onClick(View v) {
                 if (mTriggerButton.isChecked()) {
                     mStringAnswer.setText(mOK);
+                	Collect.getInstance().getActivityLogger().logInstanceAction(TriggerWidget.this, "triggerButton", 
+                			"OK", mPrompt.getIndex());
                 } else {
                     mStringAnswer.setText(null);
+                	Collect.getInstance().getActivityLogger().logInstanceAction(TriggerWidget.this, "triggerButton", 
+                			"null", mPrompt.getIndex());
                 }
             }
         });

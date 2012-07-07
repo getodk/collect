@@ -41,8 +41,12 @@ public class StringWidget extends QuestionWidget {
     boolean mReadOnly = false;
     protected EditText mAnswer;
 
-
     public StringWidget(Context context, FormEntryPrompt prompt) {
+    	this(context, prompt, true);
+    	setupChangeListener();
+    }
+    
+    protected StringWidget(Context context, FormEntryPrompt prompt, boolean derived) {
         super(context, prompt);
         mAnswer = new EditText(context);
         mReadOnly = prompt.isReadOnly();
@@ -71,6 +75,10 @@ public class StringWidget extends QuestionWidget {
             mAnswer.setClickable(false);
         }
         
+        addView(mAnswer);
+    }
+
+    protected void setupChangeListener() {
         mAnswer.addTextChangedListener(new TextWatcher() {
         	private String oldText = "";
 
@@ -92,10 +100,7 @@ public class StringWidget extends QuestionWidget {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) { }				
         });
-        
-        addView(mAnswer);
     }
-
 
     @Override
     public void clearAnswer() {

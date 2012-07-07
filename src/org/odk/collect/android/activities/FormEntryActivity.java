@@ -575,7 +575,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 return true;
             case MENU_HIERARCHY_VIEW:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onOptionsItemSelected", "MENU_HIERARCHY_VIEW");
-                if (currentPromptIsQuestion()) {
+                if (mFormController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -603,8 +603,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView).getAnswers();
             FailedConstraint constraint = mFormController.saveAllScreenAnswers(answers, evaluateConstraints);
     		if ( constraint != null ) {
-                createConstraintToast(mFormController.getQuestionPrompt(constraint.index)
-                        .getConstraintText(), constraint.status);
+                createConstraintToast(constraint.index, constraint.status);
                 return false;
     		}
     	}

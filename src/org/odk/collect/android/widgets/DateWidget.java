@@ -18,6 +18,7 @@ import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -52,6 +53,9 @@ public class DateWidget extends QuestionWidget {
         mDatePicker.setEnabled(!prompt.isReadOnly());
         
         hideDayFieldIfNotInFormat(prompt);
+
+        // If there's an answer, use it.
+        setAnswer();
         
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
@@ -70,19 +74,20 @@ public class DateWidget extends QuestionWidget {
                     // endless loop.
                     if (day > max) {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
+                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
+                        			String.format("%1$04d-%2$02d-%3$02d",year, month, max), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, max);
                         }
                     } else {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
+                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
+                        			String.format("%1$04d-%2$02d-%3$02d",year, month, day), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, day);
                         }
                     }
                 }
             }
         };
-
-        // If there's an answer, use it.
-        setAnswer();
 
         setGravity(Gravity.LEFT);
         addView(mDatePicker);

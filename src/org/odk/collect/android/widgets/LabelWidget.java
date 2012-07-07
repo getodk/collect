@@ -57,7 +57,7 @@ public class LabelWidget extends QuestionWidget {
 
         buttonLayout = new LinearLayout(context);
 
-        if (prompt.getSelectChoices() != null) {
+        if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
 
                 String imageURI = null;

@@ -38,6 +38,7 @@ import android.widget.Toast;
 public class MediaLayout extends RelativeLayout {
     private static final String t = "AVTLayout";
 
+    private String mSelectionDesignator;
     private FormIndex mIndex;
     private TextView mView_Text;
     private AudioButton mAudioButton;
@@ -57,8 +58,9 @@ public class MediaLayout extends RelativeLayout {
     }
 
 
-    public void setAVT(FormIndex index, TextView text, String audioURI, String imageURI, final String videoURI,
+    public void setAVT(FormIndex index, String selectionDesignator, TextView text, String audioURI, String imageURI, final String videoURI,
             final String bigImageURI) {
+    	mSelectionDesignator = selectionDesignator;
     	mIndex = index;
         mView_Text = text;
         mView_Text.setId(QuestionWidget.newUniqueId());
@@ -76,7 +78,7 @@ public class MediaLayout extends RelativeLayout {
         // First set up the audio button
         if (audioURI != null) {
             // An audio file is specified
-            mAudioButton = new AudioButton(getContext(), mIndex, audioURI);
+            mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI);
             mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
                                                                       // relative layout.
         } else {
@@ -92,7 +94,7 @@ public class MediaLayout extends RelativeLayout {
 
                 @Override
                 public void onClick(View v) {
-                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playVideo", mIndex);
+                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playVideoPrompt"+mSelectionDesignator, mIndex);
                     String videoFilename = "";
                     try {
                         videoFilename =
@@ -159,7 +161,7 @@ public class MediaLayout extends RelativeLayout {
 
                                 @Override
                                 public void onClick(View v) {
-                                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "showBigImage", mIndex);
+                                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "showImagePromptBigImage"+mSelectionDesignator, mIndex);
 
                                     Intent i = new Intent("android.intent.action.VIEW");
                                     i.setDataAndType(Uri.fromFile(bigImage), "image/*");
