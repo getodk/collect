@@ -224,7 +224,8 @@ public class FormController {
 
 
     /**
-     * TODO: We need a good description of what this does, exactly, and why.
+     * This fires off the jr:preload actions and events to save values like the 
+     * end time of a form. 
      * 
      * @return
      */
