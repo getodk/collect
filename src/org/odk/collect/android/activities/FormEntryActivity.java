@@ -1027,7 +1027,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                             FormEntryActivity.this.createErrorDialog(e.getMessage(), EXIT);
                             return;
                         }
-                        refreshCurrentView();
+                        if (!mFormController.indexIsInFieldList()) {
+                        	// we are at a REPEAT event that does not have a field-list appearance
+                        	// step to the next visible field... 
+                        	// which could be the start of a new repeat group...
+                        	showNextView();
+                        } else {
+                        	// we are at a REPEAT event that has a field-list appearance
+                        	// just display this REPEAT event's group.
+                            refreshCurrentView();
+                        }
                         break;
                     case DialogInterface.BUTTON2: // no, no repeat
                     	Collect.getInstance().getActivityLogger().logInstanceAction(this, "createRepeatDialog", "showNext");

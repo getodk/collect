@@ -48,7 +48,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     // starter random number for view IDs
     private final static int VIEW_ID = 12345;  
     
-    private final static String t = "CLASSNAME";
+    private final static String t = "ODKView";
 
     private LinearLayout mView;
     private LinearLayout.LayoutParams mLayout;
