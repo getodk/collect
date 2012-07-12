@@ -90,7 +90,7 @@
 <string name="jump_to_previous">Go Up</string>
 <string name="latitude">Latitude</string>
 <string name="leave_repeat_yes">Do Not Add</string>
-<string name="leaving_repeat_ask">And One More Group?</string>
+<string name="leaving_repeat_ask">Add One More Group?</string>
 <string name="list_failed_with_error">Form listing failed. %s.</string>
 <string name="loading_form">Loading Form</string>
 <string name="load_remote_form_error">Error Getting Form List</string>
