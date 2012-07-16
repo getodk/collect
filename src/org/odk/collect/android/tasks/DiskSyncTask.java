@@ -15,6 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -51,6 +52,16 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     String statusMessage;
 
+    private static class UriFile {
+    	public final Uri uri;
+    	public final File file;
+    	
+    	UriFile(Uri uri, File file) {
+    		this.uri = uri;
+    		this.file = file;
+    	}
+    }
+    
     @Override
     protected String doInBackground(Void... params) {
     	
@@ -85,8 +96,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 	            // Step 2: quickly run through and figure out what files we need to 
 	            // parse and update; this is quick, as we only calculate the md5
 	            // and see if it has changed.
-	            Map<Uri, File> uriToUpdate = new HashMap<Uri, File>();
-	            
+	            List<UriFile> uriToUpdate = new ArrayList<UriFile>();
 		        Cursor mCursor = null;
 		        // open the cursor within a try-catch block so it can always be closed. 
 		        try {
@@ -115,7 +125,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		                        // So re-parse it and update it's information
 		                        String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
 		                        Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
-		                        uriToUpdate.put(updateUri, sqlFile);
+		                        uriToUpdate.add(new UriFile(updateUri, sqlFile));
 		                    }
 		                } else {
 		                	Log.w(t, "["+instance+"] file referenced by content provider does not exist " + sqlFile);
@@ -129,9 +139,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 	            
 		        // Step3: go through uriToUpdate to parse and update each in turn.
 		        // This is slow because buildContentValues(...) is slow.
-		        for ( Map.Entry<Uri, File> entry : uriToUpdate.entrySet() ) {
-		        	Uri updateUri = entry.getKey();
-		        	File formDefFile = entry.getValue();
+		        Collections.shuffle(uriToUpdate); // Big win if multiple DiskSyncTasks running
+		        for ( UriFile entry : uriToUpdate ) {
+		        	Uri updateUri = entry.uri;
+		        	File formDefFile = entry.file;
 	                // Probably someone overwrite the file on the sdcard
 	                // So re-parse it and update it's information
 		        	ContentValues values;
@@ -140,6 +151,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		        		values = buildContentValues(formDefFile);
 		        	} catch ( IllegalArgumentException e) {
 		        		errors.append(e.getMessage()).append("\r\n");
+		        		formDefFile.renameTo(new File(formDefFile.getParentFile(), formDefFile.getName() + ".bad"));
 		        		continue;
 		        	}
 	                
@@ -173,6 +185,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		        		values = buildContentValues(formDefFile);
 		        	} catch ( IllegalArgumentException e) {
 		        		errors.append(e.getMessage()).append("\r\n");
+		        		formDefFile.renameTo(new File(formDefFile.getParentFile(), formDefFile.getName() + ".bad"));
 		        		continue;
 		        	}
 	                
