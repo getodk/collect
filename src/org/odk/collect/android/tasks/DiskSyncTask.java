@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -151,7 +150,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		        		values = buildContentValues(formDefFile);
 		        	} catch ( IllegalArgumentException e) {
 		        		errors.append(e.getMessage()).append("\r\n");
-		        		formDefFile.renameTo(new File(formDefFile.getParentFile(), formDefFile.getName() + ".bad"));
+		        		File badFile = new File(formDefFile.getParentFile(), formDefFile.getName() + ".bad");
+		        		badFile.delete();
+		        		formDefFile.renameTo(badFile);
 		        		continue;
 		        	}
 	                
@@ -185,7 +186,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		        		values = buildContentValues(formDefFile);
 		        	} catch ( IllegalArgumentException e) {
 		        		errors.append(e.getMessage()).append("\r\n");
-		        		formDefFile.renameTo(new File(formDefFile.getParentFile(), formDefFile.getName() + ".bad"));
+		        		File badFile = new File(formDefFile.getParentFile(), formDefFile.getName() + ".bad");
+		        		badFile.delete();
+		        		formDefFile.renameTo(badFile);
 		        		continue;
 		        	}
 	                
