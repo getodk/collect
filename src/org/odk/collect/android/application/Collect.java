@@ -24,6 +24,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
@@ -49,12 +50,15 @@ public class Collect extends Application {
     public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
+    public static final String TMPXML_PATH = CACHE_PATH + File.separator + "tmp.xml";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     
     public static final String DEFAULT_FONTSIZE = "21";
 
     private HttpContext localContext = null;
     private ActivityLogger mActivityLogger;
+    private FormController mFormController = null;
+
     private static Collect singleton = null;
 
 
@@ -64,6 +68,14 @@ public class Collect extends Application {
     
     public ActivityLogger getActivityLogger() {
     	return mActivityLogger;
+    }
+    
+    public FormController getFormController() {
+    	return mFormController;
+    }
+    
+    public void setFormController(FormController controller) {
+    	mFormController = controller;
     }
 
     public static int getQuestionFontsize() {

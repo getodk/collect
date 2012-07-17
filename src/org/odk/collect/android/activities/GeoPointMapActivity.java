@@ -65,7 +65,7 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
     
-    private static double LOCATION_ACCURACY = 5;
+    private static final double LOCATION_ACCURACY = 5;
 
 
     @Override

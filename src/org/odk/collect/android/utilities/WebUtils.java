@@ -71,8 +71,6 @@ public final class WebUtils {
     public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
     public static final int CONNECTION_TIMEOUT = 30000;
 
-    private static final GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-
     private static ClientConnectionManager httpConnectionManager = null;
 
     public static final List<AuthScope> buildAuthScopes(String host) {
@@ -168,6 +166,7 @@ public final class WebUtils {
 
     private static final void setOpenRosaHeaders(HttpRequest req) {
         req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
+        GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         g.setTime(new Date());
         req.setHeader(DATE_HEADER, DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
     }

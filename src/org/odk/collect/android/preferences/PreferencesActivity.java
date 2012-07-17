@@ -50,29 +50,29 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     protected static final int IMAGE_CHOOSER = 0;
 
-    public static String KEY_INFO = "info";
-    public static String KEY_LAST_VERSION = "lastVersion";
-    public static String KEY_FIRST_RUN = "firstRun";
-    public static String KEY_SHOW_SPLASH = "showSplash";
-    public static String KEY_SPLASH_PATH = "splashPath";
-    public static String KEY_FONT_SIZE = "font_size";
-    public static String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
-    public static String KEY_GOOGLE_SUBMISSION = "google_submission_id";
+    public static final String KEY_INFO = "info";
+    public static final String KEY_LAST_VERSION = "lastVersion";
+    public static final String KEY_FIRST_RUN = "firstRun";
+    public static final String KEY_SHOW_SPLASH = "showSplash";
+    public static final String KEY_SPLASH_PATH = "splashPath";
+    public static final String KEY_FONT_SIZE = "font_size";
+    public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
+    public static final String KEY_GOOGLE_SUBMISSION = "google_submission_id";
 
-    public static String KEY_SERVER_URL = "server_url";
-    public static String KEY_USERNAME = "username";
-    public static String KEY_PASSWORD = "password";
+    public static final String KEY_SERVER_URL = "server_url";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
 
-    public static String KEY_PROTOCOL = "protocol";
-    public static String KEY_FORMLIST_URL = "formlist_url";
-    public static String KEY_SUBMISSION_URL = "submission_url";
+    public static final String KEY_PROTOCOL = "protocol";
+    public static final String KEY_FORMLIST_URL = "formlist_url";
+    public static final String KEY_SUBMISSION_URL = "submission_url";
 
-    public static String KEY_COMPLETED_DEFAULT = "default_completed";
+    public static final String KEY_COMPLETED_DEFAULT = "default_completed";
 
-    public static String KEY_AUTH = "auth";
-    public static String KEY_ACCOUNT = "account";
+    public static final String KEY_AUTH = "auth";
+    public static final String KEY_ACCOUNT = "account";
 
-    public static String googleServerBaseUrl = "https://gather.apis.google.com/odk/n/";
+    public static final String googleServerBaseUrl = "https://gather.apis.google.com/odk/n/";
 
     private PreferenceScreen mSplashPathPreference;
     private EditTextPreference mSubmissionUrlPreference;

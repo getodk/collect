@@ -14,12 +14,12 @@
 
 package org.odk.collect.android.listeners;
 
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.tasks.FormLoaderTask;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener {
-    void loadingComplete(FormController fc);
+    void loadingComplete(FormLoaderTask task);
     void loadingError(String errorMsg);
 }

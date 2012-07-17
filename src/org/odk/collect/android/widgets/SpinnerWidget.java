@@ -49,7 +49,7 @@ public class SpinnerWidget extends QuestionWidget {
     Vector<SelectChoice> mItems;
     Spinner spinner;
     String[] choices;
-    private static int BROWN = 0xFF936931;
+    private static final int BROWN = 0xFF936931;
 
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {

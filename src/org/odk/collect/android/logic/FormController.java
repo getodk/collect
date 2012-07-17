@@ -27,10 +27,12 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IDataReference;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.SubmissionProfile;
+import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -53,8 +55,10 @@ public class FormController {
 
     private static final String t = "FormController";
     private File mMediaFolder;
+    private File mInstancePath;
     private FormEntryController mFormEntryController;
-
+    private FormIndex mIndexWaitingForData = null;
+    
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
 
@@ -81,13 +85,30 @@ public class FormController {
     };
 
 
-    public FormController(File mediaFolder, FormEntryController fec) {
+    public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
     	mMediaFolder = mediaFolder;
         mFormEntryController = fec;
+        mInstancePath = instancePath;
     }
 
     public File getMediaFolder() {
     	return mMediaFolder;
+    }
+    
+    public File getInstancePath() {
+    	return mInstancePath;
+    }
+    
+    public void setInstancePath(File instancePath) {
+    	mInstancePath = instancePath;
+    }
+    
+    public void setIndexWaitingForData(FormIndex index) {
+    	mIndexWaitingForData = index;
+    }
+    
+    public FormIndex getIndexWaitingForData() {
+    	return mIndexWaitingForData;
     }
     
     /**
@@ -125,6 +146,35 @@ public class FormController {
     		break;
     	}
     	return value;
+    }
+    
+    public FormIndex getIndexFromXPath(String xPath) {
+    	if ( xPath.equals("beginningOfForm") ) {
+            return FormIndex.createBeginningOfFormIndex();
+    	} else if ( xPath.equals("endOfForm") ) {
+    		return FormIndex.createEndOfFormIndex();
+    	} else if ( xPath.equals("unexpected") ) {
+    		Log.e(t, "Unexpected string from XPath");
+    		throw new IllegalArgumentException("unexpected string from XPath");
+    	} else {
+    		FormIndex returned = null;
+			FormIndex saved = getFormIndex();
+			// the only way I know how to do this is to step through the entire form
+			// until the XPath of a form entry matches that of the supplied XPath
+			try {
+				jumpToIndex(FormIndex.createBeginningOfFormIndex());
+				int event = stepToNextEvent(true);
+				while ( event != FormEntryController.EVENT_END_OF_FORM && !getXPath(getFormIndex()).equals(xPath) ) {
+					event = stepToNextEvent(true);
+				}
+				if ( event != FormEntryController.EVENT_END_OF_FORM ) {
+					returned = getFormIndex();
+				}
+			} finally {
+				jumpToIndex(saved);
+			}
+			return returned;
+    	}
     }
     
     /**

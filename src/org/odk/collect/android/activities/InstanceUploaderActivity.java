@@ -54,13 +54,15 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
 
+    private final static String AUTH_URI = "auth";
+    private static final String ALERT_MSG = "alertmsg";
+    private static final String ALERT_SHOWING = "alertshowing";
+    private static final String TO_SEND = "tosend";
+
     private ProgressDialog mProgressDialog;
     private AlertDialog mAlertDialog;
 
     private String mAlertMsg;
-    private String ALERT_MSG = "alertmsg";
-    private String ALERT_SHOWING = "alertshowing";
-    private static final String TO_SEND = "tosend";
     private boolean mAlertShowing;
 
     private InstanceUploaderTask mInstanceUploaderTask;
@@ -71,9 +73,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     // maintain a list of what we've sent, in case we're interrupted by auth requests
     private HashMap<String, String> mUploadedInstances;
     private String mUrl;
-
-    private final static String AUTH_URI = "auth";
-
 
     @SuppressWarnings("unchecked")
     @Override

@@ -87,12 +87,9 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     private Drawable mTextBackground;
     
     protected EditText mAnswer;
-    protected boolean mWaitingForData;
-
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        mWaitingForData = false;
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -148,8 +145,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
-                mWaitingForData = true;
                 try {
+                	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
                 	fireActivity(i);
                 } catch (ActivityNotFoundException e) {
                     mHasExApp = false;
@@ -161,7 +158,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                     }
                     mLaunchIntentButton.setEnabled(false);
                     mLaunchIntentButton.setFocusable(false);
-                    mWaitingForData = false;
+                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
                     Toast.makeText(getContext(),
                     		errorString, Toast.LENGTH_SHORT)
                             .show();
@@ -205,7 +202,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
     	mAnswer.setText((String) answer);
-        mWaitingForData = false;
+    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
@@ -240,12 +237,12 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mWaitingForData;
+        return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 
 	@Override
 	public void cancelWaitingForBinaryData() {
-		mWaitingForData = false;
+    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
     @Override

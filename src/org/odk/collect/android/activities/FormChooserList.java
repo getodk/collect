@@ -46,14 +46,12 @@ import android.widget.TextView;
 public class FormChooserList extends ListActivity implements DiskSyncListener {
 
     private static final String t = "FormChooserList";
+    private static final boolean EXIT = true;
+    private static final String syncMsgKey = "syncmsgkey";
+
     private DiskSyncTask mDiskSyncTask;
 
-    private static final boolean EXIT = true;
-
     private AlertDialog mAlertDialog;
-
-    private final String syncMsgKey = "syncmsgkey";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

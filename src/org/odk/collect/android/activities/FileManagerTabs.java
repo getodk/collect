@@ -33,8 +33,8 @@ import android.widget.TextView;
  */
 public class FileManagerTabs extends TabActivity {
 
-    private static TextView mTVFF;
-    private static TextView mTVDF;
+    private TextView mTVFF;
+    private TextView mTVDF;
 
     private static final String FORMS_TAB = "forms_tab";
     private static final String DATA_TAB = "data_tab";
@@ -85,20 +85,6 @@ public class FileManagerTabs extends TabActivity {
     protected void onStop() {
 		Collect.getInstance().getActivityLogger().logOnStop(this); 
     	super.onStop();
-    }
-
-    /**
-     * Sets the tab header to the specified name
-     * 
-     * @param name
-     * @param tab
-     */
-    public static void setTabHeader(String name, String tab) {
-        if (tab.equals(FORMS_TAB)) {
-            mTVFF.setText(name);
-        } else if (tab.equals(DATA_TAB)) {
-            mTVDF.setText(name);
-        }
     }
 
 }

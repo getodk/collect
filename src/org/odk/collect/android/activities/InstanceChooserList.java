@@ -40,8 +40,8 @@ import android.widget.TextView;
  */
 public class InstanceChooserList extends ListActivity {
 
-    private static boolean EXIT = true;
-    private static boolean DO_NOT_EXIT = false;
+    private static final boolean EXIT = true;
+    private static final boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
     
     @Override

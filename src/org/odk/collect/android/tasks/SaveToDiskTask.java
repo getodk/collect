@@ -22,13 +22,14 @@ import java.io.InputStream;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.EncryptionUtils;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 
 import android.content.ContentValues;
@@ -74,15 +75,26 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     @Override
     protected Integer doInBackground(Void... nothing) {
 
+        FormController formController = Collect.getInstance().getFormController();
+
         // validation failed, pass specific failure
-        int validateStatus = FormEntryActivity.mFormController.validateAnswers(mMarkCompleted);
+        int validateStatus = formController.validateAnswers(mMarkCompleted);
         if (validateStatus != FormEntryController.ANSWER_OK) {
             return validateStatus;
         }
 
-        FormEntryActivity.mFormController.postProcessInstance();
+        if (mMarkCompleted) {
+        	formController.postProcessInstance();
+        }
         
     	Collect.getInstance().getActivityLogger().logInstanceAction(this, "save", Boolean.toString(mMarkCompleted));
+
+    	// attempt to remove any scratch file
+    	File tempDir = new File(Collect.CACHE_PATH);
+        File temp = new File(tempDir, formController.getInstancePath().getName() + ".save");
+        if ( temp.exists() ) {
+        	temp.delete();
+        }
 
         if (exportData(mMarkCompleted)) {
         	return mSave ? SAVED_AND_EXIT : SAVED;
@@ -93,6 +105,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
+
+        FormController formController = Collect.getInstance().getFormController();
         
         // Update the instance database...
         ContentValues values = new ContentValues();
@@ -123,17 +137,18 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             // However, it could be a not-first time saving if the user has been using the manual
             // 'save data' option from the menu. So try to update first, then make a new one if that
             // fails.
+        	String instancePath = formController.getInstancePath().getAbsolutePath();
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
             String[] whereArgs = {
-                FormEntryActivity.mInstancePath
+            		instancePath
             };
             int updated =
                 Collect.getInstance().getContentResolver()
                         .update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
             if (updated > 1) {
-                Log.w(t, "Updated more than one entry, that's not good: " + FormEntryActivity.mInstancePath);
+                Log.w(t, "Updated more than one entry, that's not good: " + instancePath);
             } else if (updated == 1) {
-                Log.i(t, "Instance found and successfully updated: " + FormEntryActivity.mInstancePath);
+                Log.i(t, "Instance found and successfully updated: " + instancePath);
                 // already existed and updated just fine
             } else {
                 Log.i(t, "No instance found, creating");
@@ -149,7 +164,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 	                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
 	
 	                // add missing fields into values
-	                values.put(InstanceColumns.INSTANCE_FILE_PATH, FormEntryActivity.mInstancePath);
+	                values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
 	                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
 	                if (mInstanceName != null) {
 	                    values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
@@ -170,6 +185,33 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
     /**
+     * Blocking write of the instance data to a temp file. Used to safeguard data
+     * during intent launches for, e.g., taking photos.
+     * 
+     * @param tempPath
+     * @return
+     */
+    public static String blockingExportTempData() {
+        FormController formController = Collect.getInstance().getFormController();
+
+        File tempDir = new File(Collect.CACHE_PATH);
+        File temp = new File(tempDir, formController.getInstancePath().getName() + ".save");
+        ByteArrayPayload payload;
+        try {
+        	payload = formController.getFilledInFormXml();
+            // write out xml
+            if ( exportXmlFile(payload, temp.getAbsolutePath()) ) {
+            	return temp.getAbsolutePath();
+            }
+            return null;
+        } catch (IOException e) {
+            Log.e(t, "Error creating serialized payload");
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
      * Write's the data to the sdcard, and updates the instances content provider.
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
@@ -177,11 +219,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * @return
      */
     private boolean exportData(boolean markCompleted) {
+        FormController formController = Collect.getInstance().getFormController();
+
         ByteArrayPayload payload;
         try {
-        	payload = FormEntryActivity.mFormController.getFilledInFormXml();
+        	payload = formController.getFilledInFormXml();
             // write out xml
-            exportXmlFile(payload, FormEntryActivity.mInstancePath);
+        	String instancePath = formController.getInstancePath().getAbsolutePath();
+            exportXmlFile(payload, instancePath);
 
         } catch (IOException e) {
             Log.e(t, "Error creating serialized payload");
@@ -198,7 +243,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         if ( markCompleted ) {
             // now see if the packaging of the data for the server would make it
         	// non-reopenable (e.g., encryption or send an SMS or other fraction of the form).
-            boolean canEditAfterCompleted = FormEntryActivity.mFormController.isSubmissionEntireForm();
+            boolean canEditAfterCompleted = formController.isSubmissionEntireForm();
             boolean isEncrypted = false;
             
             // build a submission.xml to hold the data being submitted 
@@ -206,21 +251,21 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
             // pay attention to the ref attribute of the submission profile...
             try {
-                payload = FormEntryActivity.mFormController.getSubmissionXml();
+                payload = formController.getSubmissionXml();
             } catch (IOException e) {
                 Log.e(t, "Error creating serialized payload");
                 e.printStackTrace();
                 return false;
             }
-
-            File instanceXml = new File(FormEntryActivity.mInstancePath);
+            
+            File instanceXml = formController.getInstancePath();
             File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
             // write out submission.xml -- the data to actually submit to aggregate
             exportXmlFile(payload, submissionXml.getAbsolutePath());
             
             // see if the form is encrypted and we can encrypt it...
             EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(mUri, 
-            		FormEntryActivity.mFormController.getSubmissionMetadata());
+            		formController.getSubmissionMetadata());
             if ( formInfo != null ) {
                 // if we are encrypting, the form cannot be reopened afterward
                 canEditAfterCompleted = false;
@@ -294,7 +339,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
      * @param path
      * @return
      */
-    private boolean exportXmlFile(ByteArrayPayload payload, String path) {
+    private static boolean exportXmlFile(ByteArrayPayload payload, String path) {
         // create data stream
         InputStream is = payload.getPayloadStream();
         int len = (int) payload.getLength();

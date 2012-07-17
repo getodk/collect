@@ -117,7 +117,7 @@ public class ExDecimalWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
     	mAnswer.setText( answer == null ? null : ((Double) answer).toString());
-        mWaitingForData = false;
+    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
 }

@@ -107,7 +107,7 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
     	mAnswer.setText( answer == null ? null : ((Integer) answer).toString());
-        mWaitingForData = false;
+    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
 }

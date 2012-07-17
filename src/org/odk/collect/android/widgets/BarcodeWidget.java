@@ -41,123 +41,123 @@ import android.widget.Toast;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
-    private Button mGetBarcodeButton;
-    private TextView mStringAnswer;
-    private boolean mWaitingForData;
+	private Button mGetBarcodeButton;
+	private TextView mStringAnswer;
 
+	public BarcodeWidget(Context context, FormEntryPrompt prompt) {
+		super(context, prompt);
+		setOrientation(LinearLayout.VERTICAL);
 
-    public BarcodeWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
-        mWaitingForData = false;
-        setOrientation(LinearLayout.VERTICAL);
+		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+		params.setMargins(7, 5, 7, 5);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-        
-        // set button formatting
-        mGetBarcodeButton = new Button(getContext());
-        mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
-        mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mGetBarcodeButton.setPadding(20, 20, 20, 20);
-        mGetBarcodeButton.setEnabled(!prompt.isReadOnly());
-        mGetBarcodeButton.setLayoutParams(params);
+		// set button formatting
+		mGetBarcodeButton = new Button(getContext());
+		mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
+		mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+				mAnswerFontsize);
+		mGetBarcodeButton.setPadding(20, 20, 20, 20);
+		mGetBarcodeButton.setEnabled(!prompt.isReadOnly());
+		mGetBarcodeButton.setLayoutParams(params);
 
-        // launch barcode capture intent on click
-        mGetBarcodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "recordBarcode", "click", mPrompt.getIndex());
-                Intent i = new Intent("com.google.zxing.client.android.SCAN");
-                mWaitingForData = true;
-                try {
-                    ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.BARCODE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                        getContext().getString(R.string.barcode_scanner_error), Toast.LENGTH_SHORT)
-                            .show();
-                    mWaitingForData = false;
-                }
-            }
-        });
+		// launch barcode capture intent on click
+		mGetBarcodeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Collect.getInstance()
+						.getActivityLogger()
+						.logInstanceAction(this, "recordBarcode", "click",
+								mPrompt.getIndex());
+				Intent i = new Intent("com.google.zxing.client.android.SCAN");
+				try {
+					Collect.getInstance().getFormController()
+							.setIndexWaitingForData(mPrompt.getIndex());
+					((Activity) getContext()).startActivityForResult(i,
+							FormEntryActivity.BARCODE_CAPTURE);
+				} catch (ActivityNotFoundException e) {
+					Toast.makeText(
+							getContext(),
+							getContext().getString(
+									R.string.barcode_scanner_error),
+							Toast.LENGTH_SHORT).show();
+					Collect.getInstance().getFormController()
+							.setIndexWaitingForData(null);
+				}
+			}
+		});
 
-        // set text formatting
-        mStringAnswer = new TextView(getContext());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mStringAnswer.setGravity(Gravity.CENTER);
+		// set text formatting
+		mStringAnswer = new TextView(getContext());
+		mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+		mStringAnswer.setGravity(Gravity.CENTER);
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            mGetBarcodeButton.setText(getContext().getString(R.string.replace_barcode));
-            mStringAnswer.setText(s);
-        }
-        // finish complex layout
-        addView(mGetBarcodeButton);
-        addView(mStringAnswer);
-    }
-
-
-    @Override
-    public void clearAnswer() {
-        mStringAnswer.setText(null);
-        mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
-    }
-
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = mStringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
-    }
-
-
-    /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
-     */
-    @Override
-    public void setBinaryData(Object answer) {
-        mStringAnswer.setText((String) answer);
-        mWaitingForData = false;
-    }
-
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return mWaitingForData;
-    }
-
-
-    @Override
-	public void cancelWaitingForBinaryData() {
-    	mWaitingForData = false;
+		String s = prompt.getAnswerText();
+		if (s != null) {
+			mGetBarcodeButton.setText(getContext().getString(
+					R.string.replace_barcode));
+			mStringAnswer.setText(s);
+		}
+		// finish complex layout
+		addView(mGetBarcodeButton);
+		addView(mStringAnswer);
 	}
 
+	@Override
+	public void clearAnswer() {
+		mStringAnswer.setText(null);
+		mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
+	}
 
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        mStringAnswer.setOnLongClickListener(l);
-        mGetBarcodeButton.setOnLongClickListener(l);
-    }
+	@Override
+	public IAnswerData getAnswer() {
+		String s = mStringAnswer.getText().toString();
+		if (s == null || s.equals("")) {
+			return null;
+		} else {
+			return new StringData(s);
+		}
+	}
 
+	/**
+	 * Allows answer to be set externally in {@Link FormEntryActivity}.
+	 */
+	@Override
+	public void setBinaryData(Object answer) {
+		mStringAnswer.setText((String) answer);
+		Collect.getInstance().getFormController().setIndexWaitingForData(null);
+	}
 
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        mGetBarcodeButton.cancelLongPress();
-        mStringAnswer.cancelLongPress();
-    }
+	@Override
+	public void setFocus(Context context) {
+		// Hide the soft keyboard if it's showing.
+		InputMethodManager inputManager = (InputMethodManager) context
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+	}
+
+	@Override
+	public boolean isWaitingForBinaryData() {
+		return mPrompt.getIndex().equals(
+				Collect.getInstance().getFormController()
+						.getIndexWaitingForData());
+	}
+
+	@Override
+	public void cancelWaitingForBinaryData() {
+		Collect.getInstance().getFormController().setIndexWaitingForData(null);
+	}
+
+	@Override
+	public void setOnLongClickListener(OnLongClickListener l) {
+		mStringAnswer.setOnLongClickListener(l);
+		mGetBarcodeButton.setOnLongClickListener(l);
+	}
+
+	@Override
+	public void cancelLongPress() {
+		super.cancelLongPress();
+		mGetBarcodeButton.cancelLongPress();
+		mStringAnswer.cancelLongPress();
+	}
 
 }

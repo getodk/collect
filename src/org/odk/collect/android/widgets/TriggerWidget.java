@@ -38,7 +38,7 @@ public class TriggerWidget extends QuestionWidget {
 
     private CheckBox mTriggerButton;
     private TextView mStringAnswer;
-    private static String mOK = "OK";
+    private static final String mOK = "OK";
 
     private FormEntryPrompt mPrompt;
 

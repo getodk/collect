@@ -34,11 +34,12 @@ import android.widget.TextView;
  */
 public class InstanceChooserTabs extends TabActivity {
 
-    // count for tab menu bar
-    private static int mSavedCount;
-    private static int mCompletedCount;
     private static final String SAVED_TAB = "saved_tab";
     private static final String COMPLETED_TAB = "completed_tab";
+
+    // count for tab menu bar
+    private int mSavedCount;
+    private int mCompletedCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

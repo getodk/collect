@@ -50,12 +50,14 @@ import android.widget.Toast;
 public class FormManagerList extends ListActivity implements DiskSyncListener,
 		DeleteFormsListener {
 	private static String t = "FormManagerList";
+	private static final String SELECTED = "selected";
+	private static final String syncMsgKey = "syncmsgkey";
+
 	private AlertDialog mAlertDialog;
 	private Button mDeleteButton;
 
 	private SimpleCursorAdapter mInstances;
 	private ArrayList<Long> mSelected = new ArrayList<Long>();
-	private final String SELECTED = "selected";
 
 	static class BackgroundTasks {
 		DiskSyncTask mDiskSyncTask = null;
@@ -66,8 +68,6 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 	}
 
 	BackgroundTasks mBackgroundTasks; // handed across orientation changes
-
-	private final String syncMsgKey = "syncmsgkey";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

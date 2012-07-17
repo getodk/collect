@@ -61,18 +61,15 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private String mBinaryName;
 
     private String mInstanceFolder;
-    private boolean mWaitingForData;
-
+    
     private TextView mErrorTextView;
 
 
     public ImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mWaitingForData = false;
         mInstanceFolder =
-            FormEntryActivity.mInstancePath.substring(0,
-                FormEntryActivity.mInstancePath.lastIndexOf(File.separator) + 1);
+                Collect.getInstance().getFormController().getInstancePath().getParent();
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -111,14 +108,14 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                     Uri.fromFile(new File(Collect.TMPFILE_PATH)));
                 try {
-                    mWaitingForData = true;
+                	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "image capture"),
                         Toast.LENGTH_SHORT).show();
-                    mWaitingForData = false;
+                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
                 }
 
             }
@@ -143,14 +140,15 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 i.setType("image/*");
 
                 try {
-                    mWaitingForData = true;
+					Collect.getInstance().getFormController()
+							.setIndexWaitingForData(mPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "choose image"),
                         Toast.LENGTH_SHORT).show();
-                    mWaitingForData = false;
+                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
                 }
 
             }
@@ -343,7 +341,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         mBinaryName = f.getName();
         Log.i(t, "Setting current answer to " + f.getName());
 
-        mWaitingForData = false;
+    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
 
@@ -358,13 +356,13 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mWaitingForData;
+    	return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 
 
     @Override
 	public void cancelWaitingForBinaryData() {
-    	mWaitingForData = false;
+    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
 

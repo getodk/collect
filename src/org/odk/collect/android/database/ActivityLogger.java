@@ -19,8 +19,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 import org.javarosa.core.model.FormIndex;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -145,7 +145,7 @@ public final class ActivityLogger {
     	if ( index == cachedXPathIndex ) return cachedXPathValue;
     	
     	cachedXPathIndex = index;
-    	cachedXPathValue = FormEntryActivity.mFormController.getXPath(index);
+    	cachedXPathValue = Collect.getInstance().getFormController().getXPath(index);
     	return cachedXPathValue;
     }
 
@@ -190,11 +190,13 @@ public final class ActivityLogger {
 	    	}
 	
 	    	String idx = "";
-	    	if ( FormEntryActivity.mFormController != null ) {
-	    		idx = getXPath(FormEntryActivity.mFormController.getFormIndex());
+	    	String instancePath = "";
+	    	FormController formController = Collect.getInstance().getFormController();
+	    	if ( formController != null ) {
+	    		idx = getXPath(formController.getFormIndex());
+	    		instancePath = formController.getInstancePath().getAbsolutePath();
 	    	}
-	    	String instancePath = FormEntryActivity.mInstancePath;
-	    	
+
 	    	// Add a new scroll action to the buffer.
 	    	ContentValues cv = new ContentValues();
 	    	cv.put(DEVICEID, mDeviceId);
@@ -252,13 +254,22 @@ public final class ActivityLogger {
 
     public void logInstanceAction(Object t, String context, String action) {
     	FormIndex index = null;
-    	if ( FormEntryActivity.mFormController != null ) {
-    		index = FormEntryActivity.mFormController.getFormIndex();
+    	String instancePath = null;
+    	FormController formController = Collect.getInstance().getFormController();
+    	if ( formController != null ) {
+    		index = formController.getFormIndex();
+	    	instancePath = formController.getInstancePath().getAbsolutePath();
     	}
-    	log( t.getClass().getName(), context, action, FormEntryActivity.mInstancePath, index, null, null);
+    	log( t.getClass().getName(), context, action, instancePath, index, null, null);
     }
 
     public void logInstanceAction(Object t, String context, String action, FormIndex index) {
-    	log( t.getClass().getName(), context, action, FormEntryActivity.mInstancePath, index, null, null);
+    	String instancePath = null;
+    	FormController formController = Collect.getInstance().getFormController();
+    	if ( formController != null ) {
+    		index = formController.getFormIndex();
+	    	instancePath = formController.getInstancePath().getAbsolutePath();
+    	}
+    	log( t.getClass().getName(), context, action, instancePath, index, null, null);
     }
 }

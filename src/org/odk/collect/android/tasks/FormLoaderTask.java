@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -36,13 +37,13 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -82,6 +83,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     private FormLoaderListener mStateListener;
     private String mErrorMsg;
+    private final String mInstancePath;
+    private final String mShadowInstancePath;
+    private final String mXPath;
+    private final String mWaitingXPath;
+    private boolean pendingActivityResult = false;
+    private int requestCode = 0;
+    private int resultCode = 0;
+    private Intent intent = null;
 
     protected class FECWrapper {
         FormController controller;
@@ -104,6 +113,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
+    public FormLoaderTask(String instancePath, String shadowInstancePath, String XPath, String waitingXPath) {
+    	mInstancePath = instancePath;
+    	mShadowInstancePath = shadowInstancePath;
+    	mXPath = XPath;
+    	mWaitingXPath = waitingXPath;
+    }
 
     /**
      * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If given
@@ -173,10 +188,21 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         try {
             // import existing data into formdef
-            if (FormEntryActivity.mInstancePath != null) {
-                // This order is important. Import data, then initialize.
-                importData(FormEntryActivity.mInstancePath, fec);
-                fd.initialize(false);
+            if (mInstancePath != null) {
+            	File instance = new File(mInstancePath);
+            	if ( mShadowInstancePath != null ) {
+            		// the temp file of the instance
+            		// only present if restoring
+            		File shadowInstance = new File(mShadowInstancePath);
+            		if ( shadowInstance.exists() ) {
+            			instance = shadowInstance;
+            		}
+            	}
+            	if ( instance.exists() ) {
+	                // This order is important. Import data, then initialize.
+	                importData(instance, fec);
+	                fd.initialize(false);
+            	}
             } else {
                 fd.initialize(true);
             }
@@ -216,16 +242,25 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formXml = null;
         formPath = null;
 
-        FormController fc = new FormController(formMediaDir, fec);
+        FormController fc = new FormController(formMediaDir, fec, mInstancePath == null ? null : new File(mInstancePath));
+        if ( mXPath != null ) {
+        	// we are resuming after having terminated -- set index to this position...
+        	FormIndex idx = fc.getIndexFromXPath(mXPath);
+    		fc.jumpToIndex(idx);
+        }
+        if ( mWaitingXPath != null ) {
+        	FormIndex idx = fc.getIndexFromXPath(mWaitingXPath);
+        	fc.setIndexWaitingForData(idx);
+        }
         data = new FECWrapper(fc);
         return data;
 
     }
 
 
-    public boolean importData(String filePath, FormEntryController fec) {
+    public boolean importData(File instanceFile, FormEntryController fec) {
         // convert files into a byte array
-        byte[] fileBytes = FileUtils.getFileAsBytes(new File(filePath));
+        byte[] fileBytes = FileUtils.getFileAsBytes(instanceFile);
 
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
@@ -336,7 +371,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 if (wrapper == null) {
                     mStateListener.loadingError(mErrorMsg);
                 } else {
-                    mStateListener.loadingComplete(wrapper.getController());
+                    mStateListener.loadingComplete(this);
                 }
             }
         }
@@ -359,5 +394,28 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             data = null;
         }
     }
+    
+    public boolean hasPendingActivityResult() {
+    	return pendingActivityResult;
+    }
+    
+    public int getRequestCode() {
+    	return requestCode;
+    }
+    
+    public int getResultCode() {
+    	return resultCode;
+    }
+    
+    public Intent getIntent() {
+    	return intent;
+    }
+
+	public void setActivityResult(int requestCode, int resultCode, Intent intent) {
+		this.pendingActivityResult = true;
+		this.requestCode = requestCode;
+		this.resultCode = resultCode;
+		this.intent = intent;
+	}
 
 }

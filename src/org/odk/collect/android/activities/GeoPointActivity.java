@@ -41,7 +41,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private boolean mNetworkOn = false;
 
     // default location accuracy
-    private static double LOCATION_ACCURACY = 5;
+    private static final double LOCATION_ACCURACY = 5;
 
 
     @Override

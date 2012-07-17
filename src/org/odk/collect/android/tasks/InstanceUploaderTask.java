@@ -66,11 +66,12 @@ import android.webkit.MimeTypeMap;
  */
 public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<String, String>> {
 
-    private static String t = "InstanceUploaderTask";
-    private InstanceUploaderListener mStateListener;
+    private static final String t = "InstanceUploaderTask";
     // it can take up to 27 seconds to spin up Aggregate
-    private static final int CONNECTION_TIMEOUT = 45000; 
+    private static final int CONNECTION_TIMEOUT = 60000; 
     private static final String fail = "Error: ";
+
+    private InstanceUploaderListener mStateListener;
     private String mAuth = "";
 
     private URI mAuthRequestingServer;
