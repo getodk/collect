@@ -29,7 +29,6 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.EncryptionUtils;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 
 import android.content.ContentValues;

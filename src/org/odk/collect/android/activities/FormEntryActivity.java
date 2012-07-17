@@ -219,12 +219,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
             if (savedInstanceState.containsKey(KEY_SCRATCH_INSTANCEPATH)) {
             	scratchInstancePath = savedInstanceState.getString(KEY_SCRATCH_INSTANCEPATH);
+            	Log.i(t, "scratchInstance is: " + scratchInstancePath);
             }
             if (savedInstanceState.containsKey(KEY_XPATH)) {
             	startingXPath = savedInstanceState.getString(KEY_XPATH);
+            	Log.i(t, "startingXPath is: " + startingXPath);
             }
             if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
             	waitingXPath = savedInstanceState.getString(KEY_XPATH_WAITING_FOR_DATA);
+            	Log.i(t, "waitingXPath is: " + waitingXPath);
             }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
@@ -252,9 +255,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             	if ( Collect.getInstance().getFormController() != null ) {
             		refreshCurrentView();
             	} else {
+            		Log.w(t, "Reloading form and restoring state.");
             		// we need to launch the form loader to load the form controller...
-                    mFormLoaderTask = new FormLoaderTask(instancePath, Collect.TMPXML_PATH, startingXPath, waitingXPath);
-                    Collect.getInstance().getActivityLogger().logAction(this, "formLoaded", mFormPath);
+                    mFormLoaderTask = new FormLoaderTask(instancePath, scratchInstancePath, startingXPath, waitingXPath);
+                    Collect.getInstance().getActivityLogger().logAction(this, "formReloaded", mFormPath);
                     // TODO: this doesn' work (dialog does not get removed):
                     // showDialog(PROGRESS_DIALOG);
                     // show dialog before we execute...

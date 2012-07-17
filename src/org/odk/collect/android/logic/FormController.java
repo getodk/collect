@@ -27,12 +27,10 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IDataReference;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.SubmissionProfile;
-import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -164,11 +162,14 @@ public class FormController {
 			try {
 				jumpToIndex(FormIndex.createBeginningOfFormIndex());
 				int event = stepToNextEvent(true);
-				while ( event != FormEntryController.EVENT_END_OF_FORM && !getXPath(getFormIndex()).equals(xPath) ) {
+				while ( event != FormEntryController.EVENT_END_OF_FORM ) {
+					String candidateXPath = getXPath(getFormIndex());
+					// Log.i(t, "xpath: " + candidateXPath);
+					if ( candidateXPath.equals(xPath) ) {
+						returned = getFormIndex();
+						break; 
+					}
 					event = stepToNextEvent(true);
-				}
-				if ( event != FormEntryController.EVENT_END_OF_FORM ) {
-					returned = getFormIndex();
 				}
 			} finally {
 				jumpToIndex(saved);

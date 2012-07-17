@@ -196,6 +196,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             		File shadowInstance = new File(mShadowInstancePath);
             		if ( shadowInstance.exists() ) {
             			instance = shadowInstance;
+            			Log.w(t,"Loading instance from shadow file: " + shadowInstance.getAbsolutePath());
             		}
             	}
             	if ( instance.exists() ) {
