@@ -99,12 +99,16 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         FormSavedListener, AdvanceToNextListener, OnGestureListener {
     private static final String t = "FormEntryActivity";
 
+    // save with every swipe forward or back. Timings indicate this takes .25 seconds.
+    // if it ever becomes an issue, this value can be changed to save every n'th screen.
+    private static final int SAVEPOINT_INTERVAL = 1;
+    
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
-
+    
     // Request codes for returning data from specified intent.
     public static final int IMAGE_CAPTURE = 1;
     public static final int BARCODE_CAPTURE = 2;
@@ -134,7 +138,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private static final String NEWFORM = "newform";
     // these are only processed if we shut down and are restoring after an external intent fires
     public static final String KEY_INSTANCEPATH = "instancepath";
-    public static final String KEY_SCRATCH_INSTANCEPATH = "scratchpath";
     public static final String KEY_XPATH = "xpath";
     public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
@@ -165,9 +168,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped = false;
 
+    private int viewCount = 0;
+    
     private FormLoaderTask mFormLoaderTask;
     private SaveToDiskTask mSaveToDiskTask;
-
+    
     enum AnimationType {
         LEFT, RIGHT, FADE
     }
@@ -865,6 +870,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
         
+        // create a savepoint
+        if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
+        	SaveToDiskTask.blockingExportTempData();
+        }
+        
         View next;
         int event = formController.stepToNextScreenEvent();
         switch (event) {
@@ -903,6 +913,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // The answer is saved on a back swipe, but question constraints are ignored.
         if (formController.currentPromptIsQuestion()) {
             saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+        }
+        
+        // create savepoint
+        if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
+        	SaveToDiskTask.blockingExportTempData();
         }
 
         if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
@@ -1583,6 +1598,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
         FormController formController = task.getFormController();
         boolean pendingActivityResult = task.hasPendingActivityResult();
+        boolean hasUsedSavepoint = task.hasUsedSavepoint();
         int requestCode = task.getRequestCode(); // these are bogus if pendingActivityResult is false
         int resultCode = task.getResultCode();
         Intent intent = task.getIntent();
@@ -1637,8 +1653,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         // user should be notified, as it means they wandered off doing other things then 
         // returned to ODK Collect and chose Edit Saved Form, but that the savepoint for that 
         // form is newer than the last saved version of their form data.
-        if ( task.hasUsedSavepoint() ) {
-        	Toast.makeText(this, getString(R.string.savepoint_used), Toast.LENGTH_SHORT).show();
+        if ( hasUsedSavepoint ) {
+        	runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(FormEntryActivity.this, getString(R.string.savepoint_used), Toast.LENGTH_LONG).show();
+				}});
         }
 
         // Set saved answer path

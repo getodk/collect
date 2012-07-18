@@ -206,6 +206,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     public static String blockingExportTempData() {
         FormController formController = Collect.getInstance().getFormController();
 
+        long start = System.currentTimeMillis();
         File temp = savepointFile(formController.getInstancePath());
         ByteArrayPayload payload;
         try {
@@ -219,6 +220,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
             Log.e(t, "Error creating serialized payload");
             e.printStackTrace();
             return null;
+        } finally {
+        	long end = System.currentTimeMillis();
+        	Log.i(t, "Savepoint ms: " + Long.toString(end - start));
         }
     }
     

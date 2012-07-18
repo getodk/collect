@@ -213,5 +213,5 @@
 <string name="launch_app">Iniciar</string>
 <string name="no_app">Esta apliacion no esta. Por favor ingrese el dato manualmente.</string>
 <string name="select_one">Select One Answer</string>
-<string name="savepoint_used">Data values within this form were recovered from a savepoint. Quit now to destroy the savepoint and return to the last saved version of this form.</string>
+<string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
 </resources>
