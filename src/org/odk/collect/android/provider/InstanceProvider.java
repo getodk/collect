@@ -18,6 +18,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -219,19 +220,27 @@ public class InstanceProvider extends ContentProvider {
         }
     }
     
-    private void deleteFileOrDir(String fileName ) {
-        File file = new File(fileName);
-        if (file.exists()) {
-            if (file.isDirectory()) {
-                // delete all the containing files
-                File[] files = file.listFiles();
+    private void deleteAllFilesInDirectory(File directory) {
+        if (directory.exists()) {
+            if (directory.isDirectory()) {
+            	// delete any media entries for files in this directory...
+                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(directory);
+                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
+                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
+
+                Log.i(t, "removed from content providers: " + images
+                        + " image files, " + audio + " audio files,"
+                        + " and " + video + " video files.");
+
+                // delete all the files in the directory
+                File[] files = directory.listFiles();
                 for (File f : files) {
                     // should make this recursive if we get worried about
                     // the media directory containing directories
                     f.delete();
                 }
             }
-            file.delete();
+            directory.delete();
         }
     }
 
@@ -254,8 +263,8 @@ public class InstanceProvider extends ContentProvider {
 	                while (del.moveToNext()) {
 	                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
 	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
-	                    String instanceDir = (new File(instanceFile)).getParent();
-	                    deleteFileOrDir(instanceDir);
+	                    File instanceDir = (new File(instanceFile)).getParentFile();
+	                    deleteAllFilesInDirectory(instanceDir);
 	                }
                 } finally {
                 	if ( del != null ) {
@@ -276,8 +285,8 @@ public class InstanceProvider extends ContentProvider {
 	                while (c.moveToNext()) {
 	                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
 	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
-	                    String instanceDir = (new File(instanceFile)).getParent();
-	                    deleteFileOrDir(instanceDir);           
+	                    File instanceDir = (new File(instanceFile)).getParentFile();
+	                    deleteAllFilesInDirectory(instanceDir);           
 	                }
                 } finally {
                 	if ( c != null ) {

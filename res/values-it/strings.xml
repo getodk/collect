@@ -213,4 +213,5 @@
 <string name="launch_app">Launch</string>
 <string name="no_app">The requested application is missing. Please manually enter the reading.</string>
 <string name="select_one">Select One Answer</string>
+<string name="savepoint_used">Data values within this form were recovered from a savepoint. Quit now to destroy the savepoint and return to the last saved version of this form.</string>
 </resources>

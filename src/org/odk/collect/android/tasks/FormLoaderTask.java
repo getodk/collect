@@ -84,7 +84,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private FormLoaderListener mStateListener;
     private String mErrorMsg;
     private final String mInstancePath;
-    private final String mShadowInstancePath;
     private final String mXPath;
     private final String mWaitingXPath;
     private boolean pendingActivityResult = false;
@@ -94,10 +93,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     protected class FECWrapper {
         FormController controller;
+        boolean usedSavepoint;
 
 
-        protected FECWrapper(FormController controller) {
+        protected FECWrapper(FormController controller, boolean usedSavepoint) {
             this.controller = controller;
+            this.usedSavepoint = usedSavepoint;
         }
 
 
@@ -105,6 +106,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             return controller;
         }
 
+        protected boolean hasUsedSavepoint() {
+        	return usedSavepoint;
+        }
 
         protected void free() {
             controller = null;
@@ -113,9 +117,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String shadowInstancePath, String XPath, String waitingXPath) {
+    public FormLoaderTask(String instancePath, String XPath, String waitingXPath) {
     	mInstancePath = instancePath;
-    	mShadowInstancePath = shadowInstancePath;
     	mXPath = XPath;
     	mWaitingXPath = waitingXPath;
     }
@@ -186,18 +189,20 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FormEntryModel fem = new FormEntryModel(fd);
         fec = new FormEntryController(fem);
 
+        boolean usedSavepoint = false;
+        
         try {
             // import existing data into formdef
             if (mInstancePath != null) {
             	File instance = new File(mInstancePath);
-            	if ( mShadowInstancePath != null ) {
-            		// the temp file of the instance
-            		// only present if restoring
-            		File shadowInstance = new File(mShadowInstancePath);
-            		if ( shadowInstance.exists() ) {
-            			instance = shadowInstance;
-            			Log.w(t,"Loading instance from shadow file: " + shadowInstance.getAbsolutePath());
-            		}
+            	File shadowInstance = SaveToDiskTask.savepointFile(instance);
+            	if ( shadowInstance.exists() &&
+            		 ( shadowInstance.lastModified() > instance.lastModified()) ) {
+            		// the savepoint is newer than the saved value of the instance.
+            		// use it.
+            		usedSavepoint = true;
+            		instance = shadowInstance;
+           			Log.w(t,"Loading instance from shadow file: " + shadowInstance.getAbsolutePath());
             	}
             	if ( instance.exists() ) {
 	                // This order is important. Import data, then initialize.
@@ -253,7 +258,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         	FormIndex idx = fc.getIndexFromXPath(mWaitingXPath);
         	fc.setIndexWaitingForData(idx);
         }
-        data = new FECWrapper(fc);
+        data = new FECWrapper(fc, usedSavepoint);
         return data;
 
     }
@@ -387,6 +392,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     public FormController getFormController() {
     	return ( data != null ) ? data.getController() : null;
+    }
+    
+    public boolean hasUsedSavepoint() {
+    	return (data != null ) ? data.hasUsedSavepoint() : false;
     }
 
     public void destroy() {

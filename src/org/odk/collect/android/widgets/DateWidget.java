@@ -49,6 +49,7 @@ public class DateWidget extends QuestionWidget {
         super(context, prompt);
 
         mDatePicker = new DatePicker(getContext());
+        mDatePicker.setId(QuestionWidget.newUniqueId());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
         

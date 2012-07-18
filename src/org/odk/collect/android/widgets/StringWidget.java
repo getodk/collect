@@ -49,6 +49,7 @@ public class StringWidget extends QuestionWidget {
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean derived) {
         super(context, prompt);
         mAnswer = new EditText(context);
+        mAnswer.setId(QuestionWidget.newUniqueId());
         mReadOnly = prompt.isReadOnly();
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);

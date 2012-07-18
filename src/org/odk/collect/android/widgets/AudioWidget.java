@@ -21,6 +21,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -72,6 +73,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
 		// setup capture button
 		mCaptureButton = new Button(getContext());
+		mCaptureButton.setId(QuestionWidget.newUniqueId());
 		mCaptureButton.setText(getContext().getString(R.string.capture_audio));
 		mCaptureButton
 				.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
@@ -113,6 +115,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
 		// setup capture button
 		mChooseButton = new Button(getContext());
+		mChooseButton.setId(QuestionWidget.newUniqueId());
 		mChooseButton.setText(getContext().getString(R.string.choose_sound));
 		mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mChooseButton.setPadding(20, 20, 20, 20);
@@ -148,6 +151,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
 		// setup play button
 		mPlayButton = new Button(getContext());
+		mPlayButton.setId(QuestionWidget.newUniqueId());
 		mPlayButton.setText(getContext().getString(R.string.play_audio));
 		mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mPlayButton.setPadding(20, 20, 20, 20);
@@ -197,16 +201,16 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 		}
 	}
 
-	private void deleteMedia() {
-		// get the file path and delete the file
-		File f = new File(mInstanceFolder + File.separator + mBinaryName);
-		if (!f.delete()) {
-			Log.i(t, "Failed to delete " + f);
-		}
 
-		// clean up variables
-		mBinaryName = null;
-	}
+    private void deleteMedia() {
+        // get the file path and delete the file
+    	String name = mBinaryName;
+        // clean up variables
+    	mBinaryName = null;
+    	// delete from media provider
+        int del = MediaUtils.deleteAudioFileFromMediaProvider(mInstanceFolder + File.separator + name);
+        Log.i(t, "Deleted " + del + " rows from media content provider");
+    }
 
 	@Override
 	public void clearAnswer() {
@@ -278,11 +282,12 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 			Uri AudioURI = getContext().getContentResolver().insert(
 					Audio.Media.EXTERNAL_CONTENT_URI, values);
 			Log.i(t, "Inserting AUDIO returned uri = " + AudioURI.toString());
+			mBinaryName = newAudio.getName();
+            Log.i(t, "Setting current answer to " + newAudio.getName());
 		} else {
 			Log.e(t, "Inserting Audio file FAILED");
 		}
 
-		mBinaryName = newAudio.getName();
 		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 

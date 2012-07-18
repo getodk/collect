@@ -41,6 +41,7 @@ public class TimeWidget extends QuestionWidget {
         super(context, prompt);
 
         mTimePicker = new TimePicker(getContext());
+        mTimePicker.setId(QuestionWidget.newUniqueId());
         mTimePicker.setFocusable(!prompt.isReadOnly());
         mTimePicker.setEnabled(!prompt.isReadOnly());
 

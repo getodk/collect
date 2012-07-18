@@ -47,10 +47,12 @@ public class DateTimeWidget extends QuestionWidget {
         super(context, prompt);
 
         mDatePicker = new DatePicker(getContext());
+        mDatePicker.setId(QuestionWidget.newUniqueId());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
 
         mTimePicker = new TimePicker(getContext());
+        mTimePicker.setId(QuestionWidget.newUniqueId());
         mTimePicker.setFocusable(!prompt.isReadOnly());
         mTimePicker.setEnabled(!prompt.isReadOnly());
         mTimePicker.setPadding(0, 20, 0, 0);

@@ -24,6 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -331,6 +332,15 @@ public class FormsProvider extends ContentProvider {
         File file = new File(fileName);
         if (file.exists()) {
             if (file.isDirectory()) {
+            	// delete any media entries for files in this directory...
+                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
+                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
+                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
+
+                Log.i(t, "removed from content providers: " + images
+                        + " image files, " + audio + " audio files,"
+                        + " and " + video + " video files.");
+
                 // delete all the containing files
                 File[] files = file.listFiles();
                 for (File f : files) {

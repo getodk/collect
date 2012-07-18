@@ -39,6 +39,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -58,10 +59,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Video;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -210,7 +208,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         String startingXPath = null;
         String waitingXPath = null;
         String instancePath = null;
-        String scratchInstancePath = null;
         Boolean newForm = true;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
@@ -218,10 +215,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
             if (savedInstanceState.containsKey(KEY_INSTANCEPATH)) {
             	instancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
-            }
-            if (savedInstanceState.containsKey(KEY_SCRATCH_INSTANCEPATH)) {
-            	scratchInstancePath = savedInstanceState.getString(KEY_SCRATCH_INSTANCEPATH);
-            	Log.i(t, "scratchInstance is: " + scratchInstancePath);
             }
             if (savedInstanceState.containsKey(KEY_XPATH)) {
             	startingXPath = savedInstanceState.getString(KEY_XPATH);
@@ -259,7 +252,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             	} else {
             		Log.w(t, "Reloading form and restoring state.");
             		// we need to launch the form loader to load the form controller...
-                    mFormLoaderTask = new FormLoaderTask(instancePath, scratchInstancePath, startingXPath, waitingXPath);
+                    mFormLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     Collect.getInstance().getActivityLogger().logAction(this, "formReloaded", mFormPath);
                     // TODO: this doesn' work (dialog does not get removed):
                     // showDialog(PROGRESS_DIALOG);
@@ -371,7 +364,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     return;
                 }
 
-                mFormLoaderTask = new FormLoaderTask(instancePath, null, null, null);
+                mFormLoaderTask = new FormLoaderTask(instancePath, null, null);
                 Collect.getInstance().getActivityLogger().logAction(this, "formLoaded", mFormPath);
                 showDialog(PROGRESS_DIALOG);
                 // show dialog before we execute...
@@ -394,10 +387,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         		outState.putString(KEY_XPATH_WAITING_FOR_DATA, formController.getXPath(waiting));
         	}
         	// save the instance to a temp path...
-        	String path = SaveToDiskTask.blockingExportTempData();
-        	if ( path != null ) {
-        		outState.putString(KEY_SCRATCH_INSTANCEPATH, path);
-        	}
+        	SaveToDiskTask.blockingExportTempData();
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, mErrorMessage);
@@ -427,8 +417,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             return;
         }
 
-        ContentValues values;
-        Uri imageURI;
         switch (requestCode) {
             case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
@@ -470,19 +458,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                     Log.i(t, "renamed " + fi.getAbsolutePath() + " to " + nf.getAbsolutePath());
                 }
 
-                // Add the new image to the Media content provider so that the
-                // viewing is fast in Android 2.0+
-                values = new ContentValues(6);
-                values.put(Images.Media.TITLE, nf.getName());
-                values.put(Images.Media.DISPLAY_NAME, nf.getName());
-                values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
-                values.put(Images.Media.MIME_TYPE, "image/jpeg");
-                values.put(Images.Media.DATA, nf.getAbsolutePath());
-
-                imageURI = getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
-                Log.i(t, "Inserting image returned uri = " + imageURI.toString());
-
-                ((ODKView) mCurrentView).setBinaryData(imageURI);
+                ((ODKView) mCurrentView).setBinaryData(nf);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CHOOSER:
@@ -524,25 +500,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 File newImage = new File(destImagePath);
                 FileUtils.copyFile(source, newImage);
 
-                if (newImage.exists()) {
-                    // Add the new image to the Media content provider so that the
-                    // viewing is fast in Android 2.0+
-                    values = new ContentValues(6);
-                    values.put(Images.Media.TITLE, newImage.getName());
-                    values.put(Images.Media.DISPLAY_NAME, newImage.getName());
-                    values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
-                    values.put(Images.Media.MIME_TYPE, "image/jpeg");
-                    values.put(Images.Media.DATA, newImage.getAbsolutePath());
-
-                    imageURI =
-                        getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
-                    Log.i(t, "Inserting image returned uri = " + imageURI.toString());
-
-                    ((ODKView) mCurrentView).setBinaryData(imageURI);
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                } else {
-                    Log.e(t, "NO IMAGE EXISTS at: " + source.getAbsolutePath());
-                }
+                ((ODKView) mCurrentView).setBinaryData(newImage);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
@@ -1263,8 +1222,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                 	Collect.getInstance().getActivityLogger().logInstanceAction(this, "createQuitDialog", "discardAndExit");
                                 	
                                 	// attempt to remove any scratch file
-                                	File tempDir = new File(Collect.CACHE_PATH);
-                                    File temp = new File(tempDir, formController.getInstancePath().getName() + ".save");
+                                    File temp = SaveToDiskTask.savepointFile(formController.getInstancePath());
                                     if ( temp.exists() ) {
                                     	temp.delete();
                                     }
@@ -1288,133 +1246,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                                     }
                                     // if it's not already saved, erase everything
                                     if (erase) {
-                                        int images = 0;
-                                        int audio = 0;
-                                        int video = 0;
                                         // delete media first
                                         String instanceFolder =	formController.getInstancePath().getParent();
                                         Log.i(t, "attempting to delete: " + instanceFolder);
-                                        try {
-                                        {
-	                                        // images
-	                                        Cursor imageCursor = null;
-	                                        try {
-	                                            String where =
-	                                                    Images.Media.DATA + " like '" + instanceFolder + "%'";
-	
-	                                            String[] projection = {
-	                                                Images.ImageColumns._ID
-	                                            };
-	                                            imageCursor = getContentResolver().query(
-	                                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-	                                                        projection, where, null, null);
-		                                        if (imageCursor.getCount() > 0) {
-		                                            imageCursor.moveToFirst();
-		                                            String id =
-		                                                imageCursor.getString(imageCursor
-		                                                        .getColumnIndex(Images.ImageColumns._ID));
-		
-		                                            Log.i(
-		                                                t,
-		                                                "attempting to delete: "
-		                                                        + Uri.withAppendedPath(
-		                                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-		                                                            id));
-		                                            images =
-		                                                getContentResolver()
-		                                                        .delete(
-		                                                            Uri.withAppendedPath(
-		                                                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-		                                                                id), null, null);
-		                                        }
-	                                        } finally {
-	                                        	if ( imageCursor != null ) {
-	                                                imageCursor.close();
-	                                        	}
-	                                        }
-                                        }
-
-                                        {
-	                                        // audio
-	                                        Cursor audioCursor = null;
-	                                        try {
-	                                            String where =
-	                                            		Audio.Media.DATA + " like '" + instanceFolder + "%'";
-	
-	                                            String[] projection = {
-	                                            		Audio.AudioColumns._ID
-	                                            };
-	                                        	audioCursor = getContentResolver().query(
-	                                                Audio.Media.EXTERNAL_CONTENT_URI,
-	                                                projection, where, null, null);
-		                                        if (audioCursor.getCount() > 0) {
-		                                            audioCursor.moveToFirst();
-		                                            String id =
-		                                                audioCursor.getString(audioCursor
-		                                                        .getColumnIndex(Audio.AudioColumns._ID));
-		
-		                                            Log.i(
-		                                                t,
-		                                                "attempting to delete: "
-		                                                        + Uri.withAppendedPath(
-		                                                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-		                                                            id));
-		                                            audio =
-		                                                getContentResolver()
-		                                                        .delete(
-		                                                            Uri.withAppendedPath(
-		                                                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-		                                                                id), null, null);
-		                                        }
-	                                        } finally {
-	                                        	if ( audioCursor != null ) {
-	                                                audioCursor.close();
-	                                        	}
-	                                        }
-                                        }
-                                        
-                                        {
-	                                        // video
-	                                        Cursor videoCursor = null;
-	                                        try {
-	                                            String where =
-	                                            		Video.Media.DATA + " like '" + instanceFolder + "%'";
-	
-	                                            String[] projection = {
-	                                            		Video.VideoColumns._ID
-	                                            };
-	                                        	videoCursor = getContentResolver().query(
-	                                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-	                                                projection, where, null, null);
-		                                        if (videoCursor.getCount() > 0) {
-		                                            videoCursor.moveToFirst();
-		                                            String id =
-		                                                videoCursor.getString(videoCursor
-		                                                        .getColumnIndex(Video.VideoColumns._ID));
-		
-		                                            Log.i(
-		                                                t,
-		                                                "attempting to delete: "
-		                                                        + Uri.withAppendedPath(
-		                                                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-		                                                            id));
-		                                            video =
-		                                                getContentResolver()
-		                                                        .delete(
-		                                                            Uri.withAppendedPath(
-		                                                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-		                                                                id), null, null);
-		                                        }
-	                                        } finally {
-	                                        	if ( videoCursor != null ) {
-	                                        		videoCursor.close();
-	                                        	}
-	                                        }
-                                        }
-                                        
-                                        } catch ( Throwable ex ) {
-                                        	Log.e(t, ex.toString());
-                                        }
+                                        int images = MediaUtils.deleteImagesInFolderFromMediaProvider(formController.getInstancePath().getParentFile());
+                                        int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(formController.getInstancePath().getParentFile());
+                                        int video = MediaUtils.deleteVideoInFolderFromMediaProvider(formController.getInstancePath().getParentFile());
 
                                         Log.i(t, "removed from content providers: " + images
                                                 + " image files, " + audio + " audio files,"
@@ -1793,6 +1630,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         	// process the pending activity request...
         	onActivityResult(requestCode, resultCode, intent);
         	return;
+        }
+
+        // it can be a normal flow for a pending activity result to restore from a savepoint
+        // (the call flow handled by the above if statement).  For all other use cases, the 
+        // user should be notified, as it means they wandered off doing other things then 
+        // returned to ODK Collect and chose Edit Saved Form, but that the savepoint for that 
+        // form is newer than the last saved version of their form data.
+        if ( task.hasUsedSavepoint() ) {
+        	Toast.makeText(this, getString(R.string.savepoint_used), Toast.LENGTH_SHORT).show();
         }
 
         // Set saved answer path

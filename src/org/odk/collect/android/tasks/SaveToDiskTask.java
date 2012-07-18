@@ -88,14 +88,15 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         
     	Collect.getInstance().getActivityLogger().logInstanceAction(this, "save", Boolean.toString(mMarkCompleted));
 
+    	boolean saveOutcome = exportData(mMarkCompleted);
+    	
     	// attempt to remove any scratch file
-    	File tempDir = new File(Collect.CACHE_PATH);
-        File temp = new File(tempDir, formController.getInstancePath().getName() + ".save");
-        if ( temp.exists() ) {
-        	temp.delete();
+        File shadowInstance = savepointFile(formController.getInstancePath());
+        if ( shadowInstance.exists() ) {
+        	shadowInstance.delete();
         }
 
-        if (exportData(mMarkCompleted)) {
+        if (saveOutcome) {
         	return mSave ? SAVED_AND_EXIT : SAVED;
         }
 
@@ -184,6 +185,18 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     }
 
     /**
+     * Return the name of the savepoint file for a given instance.
+     * 
+     * @param instancePath
+     * @return
+     */
+    public static File savepointFile(File instancePath) {
+        File tempDir = new File(Collect.CACHE_PATH);
+        File temp = new File(tempDir, instancePath.getName() + ".save");
+        return temp;
+    }
+    
+    /**
      * Blocking write of the instance data to a temp file. Used to safeguard data
      * during intent launches for, e.g., taking photos.
      * 
@@ -193,8 +206,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     public static String blockingExportTempData() {
         FormController formController = Collect.getInstance().getFormController();
 
-        File tempDir = new File(Collect.CACHE_PATH);
-        File temp = new File(tempDir, formController.getInstancePath().getName() + ".save");
+        File temp = savepointFile(formController.getInstancePath());
         ByteArrayPayload payload;
         try {
         	payload = formController.getFilledInFormXml();

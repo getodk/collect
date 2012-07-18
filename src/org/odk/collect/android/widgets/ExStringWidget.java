@@ -96,7 +96,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
         // set text formatting
         mAnswer = new EditText(context);
-
+        mAnswer.setId(QuestionWidget.newUniqueId());
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setLayoutParams(params);
         mTextBackground = mAnswer.getBackground();
@@ -135,6 +135,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         
         // set button formatting
         mLaunchIntentButton = new Button(getContext());
+        mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
         mLaunchIntentButton.setText(buttonText);
         mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mLaunchIntentButton.setPadding(20, 20, 20, 20);
