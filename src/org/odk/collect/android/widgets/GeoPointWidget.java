@@ -66,6 +66,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		params.setMargins(7, 5, 7, 5);
 
 		mGetLocationButton = new Button(getContext());
+		mGetLocationButton.setId(QuestionWidget.newUniqueId());
 		mGetLocationButton.setPadding(20, 20, 20, 20);
 		mGetLocationButton.setText(getContext()
 				.getString(R.string.get_location));
@@ -76,6 +77,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		// setup play button
 		mViewButton = new Button(getContext());
+		mViewButton.setId(QuestionWidget.newUniqueId());
 		mViewButton.setText(getContext().getString(R.string.show_location));
 		mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mViewButton.setPadding(20, 20, 20, 20);
@@ -105,8 +107,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		});
 
 		mStringAnswer = new TextView(getContext());
+		mStringAnswer.setId(QuestionWidget.newUniqueId());
 
 		mAnswerDisplay = new TextView(getContext());
+		mAnswerDisplay.setId(QuestionWidget.newUniqueId());
 		mAnswerDisplay
 				.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mAnswerDisplay.setGravity(Gravity.CENTER);
