@@ -870,26 +870,25 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             }
         }
         
-        // create a savepoint
-        if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
-        	SaveToDiskTask.blockingExportTempData();
-        }
-        
         View next;
         int event = formController.stepToNextScreenEvent();
         switch (event) {
             case FormEntryController.EVENT_QUESTION:
+            case FormEntryController.EVENT_GROUP:
+                // create a savepoint
+                if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
+                	SaveToDiskTask.blockingExportTempData();
+                }
+                next = createView(event);
+                showView(next, AnimationType.RIGHT);
+                break;
             case FormEntryController.EVENT_END_OF_FORM:
+            case FormEntryController.EVENT_REPEAT:
                 next = createView(event);
                 showView(next, AnimationType.RIGHT);
                 break;
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                 createRepeatDialog();
-                break;
-            case FormEntryController.EVENT_REPEAT:
-            case FormEntryController.EVENT_GROUP:
-                next = createView(event);
-                showView(next, AnimationType.RIGHT);
                 break;
             case FormEntryController.EVENT_REPEAT_JUNCTURE:
                 Log.i(t, "repeat juncture: "
@@ -915,13 +914,17 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
             saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
         }
         
-        // create savepoint
-        if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
-        	SaveToDiskTask.blockingExportTempData();
-        }
-
         if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
 	        int event = formController.stepToPreviousScreenEvent();
+	        
+	        if ( event == FormEntryController.EVENT_BEGINNING_OF_FORM ||
+	        	 event == FormEntryController.EVENT_GROUP ||
+	        	 event == FormEntryController.EVENT_QUESTION ) {
+	            // create savepoint
+	            if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
+	            	SaveToDiskTask.blockingExportTempData();
+	            }
+	        }
             View next = createView(event);
             showView(next, AnimationType.LEFT);
         } else {
