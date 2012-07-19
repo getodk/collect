@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -357,6 +358,34 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                         } else {
                             c.moveToFirst();
                             mFormPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                            // This is the fill-blank-form code path.
+                            // See if there is a savepoint for this form that has never been explicitly saved
+                            // by the user. If there is, open this savepoint (resume this filled-in form).
+                            // Savepoints for forms that were explicitly saved will be recovered when that 
+                            // explicitly saved instance is edited via edit-saved-form.
+                            final String filePrefix =
+                                    mFormPath.substring(mFormPath.lastIndexOf('/') + 1, mFormPath.lastIndexOf('.')) + "_";
+                            final String fileSuffix = ".xml.save";
+                            File cacheDir = new File(Collect.CACHE_PATH);
+                            File[] files = cacheDir.listFiles(new FileFilter() {
+								@Override
+								public boolean accept(File pathname) {
+									String name = pathname.getName();
+									return name.startsWith(filePrefix) && name.endsWith(fileSuffix);
+								}});
+                            // see if any of these savepoints are for a filled-in form that has never been
+                            // explicitly saved by the user...
+                            for ( int i = 0 ; i < files.length ; ++i ) {
+                            	File candidate = files[i];
+                            	String instanceDirName = candidate.getName().substring(0,candidate.getName().length()-fileSuffix.length());
+                            	File instanceDir = new File(Collect.INSTANCES_PATH + File.separator + instanceDirName);
+                            	File instanceFile = new File(instanceDir, instanceDirName + ".xml");
+                            	if ( instanceDir.exists() && instanceDir.isDirectory() && !instanceFile.exists() ) {
+                            		// yes! -- use this savepoint file
+                            		instancePath = instanceFile.getAbsolutePath();
+                            		break;
+                            	}
+                            }
                         }
                     } finally {
                     	if ( c != null ) {
