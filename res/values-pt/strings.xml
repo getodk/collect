@@ -213,5 +213,5 @@
 <string name="launch_app">Play App</string>
 <string name="no_app">Aplicativo perdido. Por favor, inserir manualmente</string>
 <string name="select_one">Selecionar uma resposta</string>
-<string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="savepoint_used">"Alterações não salvas recuperadas"</string>
 </resources>
