@@ -212,6 +212,6 @@
 <string name="parent_form_not_present">Não é possível editar este formulário salvo, porque o formulário correspondente em branco não está presente ou foi excluído.\nFormulário ID: %1$s</string>
 <string name="launch_app">Launch</string>
 <string name="no_app">The requested application is missing. Please manually enter the reading.</string>
-<string name="select_one">Select One Answer</string>
-<string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="select_one">Selecionar uma resposta</string>
+<string name="savepoint_used">"Alterações não salvas recuperadas"</string>
 </resources>
