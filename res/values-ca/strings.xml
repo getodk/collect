@@ -30,7 +30,7 @@
 <string name="cancel_loading_form">Cancel·lar</string>
 <string name="cancel_location">Cancel·lar</string>
 <string name="cancel_saving_form">Cancel·lar</string>
-<string name="cannot_edit_completed_form">Aquest formulari no pot ser re-editat un cop s\'ha marcat com complert.</string>
+<string name="cannot_edit_completed_form">Aquest formulari no pot ser re-editat. S\'ha marcat com complert.</string>
 <string name="capture_audio">Enregistrar so</string>
 <string name="capture_image">Pren foto</string>
 <string name="capture_video">Enregistrar Vídeo</string>
@@ -77,7 +77,7 @@
 <string name="file_delete_in_progress">Ho sentim, s\'está eliminant el formulari!</string>
 <string name="file_invalid">Arxiu: %s és invàlid.</string>
 <string name="file_missing">Arxiu: %s no s\'ha trobat.</string>
-<string name="finished_disk_scan">Exploració finalitzada. Tots els formularis carregats.</string>
+<string name="finished_disk_scan">Exploració finalitzada. Formularis carregats.</string>
 <string name="forms">Formularis buits</string>
 <string name="getting_location">Carregant Localització</string>
 <string name="get_barcode">Llegir Codi de Barres</string>
@@ -90,7 +90,7 @@
 <string name="jump_to_previous">Ves enrera</string>
 <string name="latitude">Latitud</string>
 <string name="leave_repeat_yes">No afegir</string>
-<string name="leaving_repeat_ask">Un altre grup?</string>
+<string name="leaving_repeat_ask">Afegir un altre grup?</string>
 <string name="list_failed_with_error">Error al llistar formularis. %s.</string>
 <string name="loading_form">Carregant formulari</string>
 <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
@@ -106,7 +106,7 @@
 <string name="no_connection">No hi ha connexió a xarxa disponible</string>
 <string name="no_items_display">Res disponible per visualitzar.</string>
 <string name="no_items_display_forms">Res disponible per visualitzar.\n\nProva de seleccionar i omplir un formulari buit.</string>
-<string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva de finalitzar els formularis desats avabs d\'enviar-los.</string>
+<string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva de finalitzar els formularis desats abans d\'enviar-los.</string>
 <string name="ok">D\'acord</string>
 <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
 <string name="parse_legacy_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb Aggregate 0.9.x. : %s</string>
@@ -125,7 +125,7 @@
 <string name="review_data">Editar formulari desat</string>
 <string name="review_data_button">Editar formulari desat</string>
 <string name="saved_data">Incomplert (%s)</string>
-<string name="save_all_answers">"Desa formulari "</string>
+<string name="save_all_answers">"Desar formulari "</string>
 <string name="save_enter_data_description">Formulari \"%s\" finalitzat.</string>
 <string name="saving_form">Desant formulari</string>
 <string name="sending_items">Enviant %1$s de %2$s formulari(s)</string>
@@ -177,7 +177,7 @@
 <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
 <string name="file_fetch_failed">Error: %2$s (%3$s) a %1$s</string>
 <string name="fetching_manifest">"%s. Obtenint manifest"</string>
-<string name="success">Èxit</string>
+<string name="success">Correcte</string>
 <string name="no_forms_uploaded">No s\'ha carregat cap formulari.</string>
 <string name="upload_results">Resultats de la càrrega</string>
 <string name="xform_parse_error">Error d\'analisi XForm. %1$s falta element %2$s</string>
@@ -203,15 +203,15 @@
 <string name="change_view">Canviar vista</string>
 <string name="show_sent_and_unsent_forms">Formularis enviats i pendents</string>
 <string name="show_unsent_forms">Nomes Formularis pendents d\'enviar</string>
-<string name="added_on_date_at_time">\'Afegit el \' EEE, dd MMM, yyyy \'a les\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="saved_on_date_at_time">\'Desat el \' EEE, dd MMM, yyyy \'a les\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="finalized_on_date_at_time">\'Finalitzat el \' EEE, dd MMM, yyyy \'a les\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sent_on_date_at_time">\'Enviat el \' EEE, dd MMM, yyyy \'a les\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
-<string name="sending_failed_on_date_at_time">\'Enviament fallat el \' EEE, dd MMM, yyyy \'a les\' HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="added_on_date_at_time">\'Afegit el\' EEE dd MMM yyyy, HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="saved_on_date_at_time">\'Desat el\' EEE dd MMM yyyy, HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="finalized_on_date_at_time">\'Finalitzat el\' EEE dd MMM yyyy, HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sent_on_date_at_time">\'Enviat el\' EEE dd MMM yyyy, HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="sending_failed_on_date_at_time">\'Enviament fallat el\' EEE dd MMM yyyy, HH:mm</string><!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="version">Versió:</string>
 <string name="parent_form_not_present">No es pot editar aquest formulari perquè el formulari matriu(buit) no s\'ha trobat.\n\nFormulari: %1$s</string>
 <string name="launch_app">Llançament</string>
 <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
 <string name="select_one">Selecciona una resposta</string>
-<string name="savepoint_used">Canvis no desats recuperats del punt de recuperació!</string>
+<string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
 </resources>
