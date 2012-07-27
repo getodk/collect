@@ -213,5 +213,5 @@
 <string name="launch_app">Buka aplikasi</string>
 <string name="no_app">Aplikasi yang dibutuhkan tidak tersedia. Silahkan pasang secara manual.</string>
 <string name="select_one">Pilih salah satu jawaban</string>
-<string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="savepoint_used">Perubahan yang belum tersimpan, diambil dari penyimpanan otomatis terakhir</string>
 </resources>
