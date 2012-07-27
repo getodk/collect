@@ -34,6 +34,7 @@ import org.javarosa.core.util.externalizable.DeserializationException;
 import org.javarosa.core.util.externalizable.ExtUtil;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
@@ -59,26 +60,28 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * Classes needed to serialize objects. Need to put anything from JR in here.
      */
     public final static String[] SERIALIABLE_CLASSES = {
-            "org.javarosa.core.model.FormDef", "org.javarosa.core.model.GroupDef",
-            "org.javarosa.core.model.QuestionDef", "org.javarosa.core.model.data.DateData",
-            "org.javarosa.core.model.data.DateTimeData",
-            "org.javarosa.core.model.data.DecimalData",
-            "org.javarosa.core.model.data.GeoPointData",
-            "org.javarosa.core.model.data.helper.BasicDataPointer",
-            "org.javarosa.core.model.data.IntegerData",
-            "org.javarosa.core.model.data.MultiPointerAnswerData",
-            "org.javarosa.core.model.data.PointerAnswerData",
-            "org.javarosa.core.model.data.SelectMultiData",
-            "org.javarosa.core.model.data.SelectOneData",
-            "org.javarosa.core.model.data.StringData", "org.javarosa.core.model.data.TimeData",
-            "org.javarosa.core.services.locale.TableLocaleSource",
-            "org.javarosa.xpath.expr.XPathArithExpr", "org.javarosa.xpath.expr.XPathBoolExpr",
-            "org.javarosa.xpath.expr.XPathCmpExpr", "org.javarosa.xpath.expr.XPathEqExpr",
-            "org.javarosa.xpath.expr.XPathFilterExpr", "org.javarosa.xpath.expr.XPathFuncExpr",
-            "org.javarosa.xpath.expr.XPathNumericLiteral",
-            "org.javarosa.xpath.expr.XPathNumNegExpr", "org.javarosa.xpath.expr.XPathPathExpr",
-            "org.javarosa.xpath.expr.XPathStringLiteral", "org.javarosa.xpath.expr.XPathUnionExpr",
-            "org.javarosa.xpath.expr.XPathVariableReference"
+    		"org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
+    		"org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
+            "org.javarosa.core.model.FormDef",
+			"org.javarosa.core.model.SubmissionProfile", // CoreModelModule
+			"org.javarosa.core.model.QuestionDef", // CoreModelModule
+			"org.javarosa.core.model.GroupDef", // CoreModelModule
+			"org.javarosa.core.model.instance.FormInstance", // CoreModelModule
+			"org.javarosa.core.model.data.BooleanData", // CoreModelModule
+			"org.javarosa.core.model.data.DateData", // CoreModelModule
+			"org.javarosa.core.model.data.DateTimeData", // CoreModelModule
+			"org.javarosa.core.model.data.DecimalData", // CoreModelModule
+			"org.javarosa.core.model.data.GeoPointData", // CoreModelModule
+			"org.javarosa.core.model.data.IntegerData", // CoreModelModule
+			"org.javarosa.core.model.data.LongData", // CoreModelModule
+			"org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
+			"org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
+			"org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
+			"org.javarosa.core.model.data.SelectOneData", // CoreModelModule
+			"org.javarosa.core.model.data.StringData", // CoreModelModule
+			"org.javarosa.core.model.data.TimeData", // CoreModelModule
+			"org.javarosa.core.model.data.UncastData", // CoreModelModule
+			"org.javarosa.core.model.data.helper.BasicDataPointer" // CoreModelModule
     };
 
     private FormLoaderListener mStateListener;
@@ -183,7 +186,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // new evaluation context for function handlers
-		fd.setEvaluationContext(new EvaluationContext(null));
+        fd.setEvaluationContext(new EvaluationContext(null));
 
 		// create FormEntryController from formdef
         FormEntryModel fem = new FormEntryModel(fd);
@@ -208,6 +211,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 	                // This order is important. Import data, then initialize.
 	                importData(instance, fec);
 	                fd.initialize(false);
+            	} else {
+            		fd.initialize(true);
             	}
             } else {
                 fd.initialize(true);
@@ -311,7 +316,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // TODO: any way to remove reliance on jrsp?
 
         // need a list of classes that formdef uses
-        PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+    	// unfortunately, the JR registerModule() functions do more than this.
+    	// register just the classes that would have been registered by:
+    	// new JavaRosaCoreModule().registerModule();
+    	// new CoreModelModule().registerModule();
+    	// replace with direct call to PrototypeManager
+    	PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+        new XFormsModule().registerModule();
+        
         FileInputStream fis = null;
         FormDef fd = null;
         try {

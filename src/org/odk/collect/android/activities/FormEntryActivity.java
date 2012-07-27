@@ -1529,7 +1529,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 	mFormLoaderTask = null;
                     t.cancel(true);
                     t.destroy();
-                    refreshCurrentView();
+                    // there is no formController -- fire MainMenu activity?
+                    startActivity(new Intent(this, MainMenuActivity.class));
             	}
             }
         } else {
