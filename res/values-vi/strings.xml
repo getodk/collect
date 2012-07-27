@@ -90,7 +90,7 @@
 <string name="jump_to_previous">Về trước</string>
 <string name="latitude">Toạ độ</string>
 <string name="leave_repeat_yes">Không thêm</string>
-<string name="leaving_repeat_ask">Thêm 1 nhóm nữa?</string>
+<string name="leaving_repeat_ask">Thêm một nhóm nữa?</string>
 <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
 <string name="loading_form">Tải biểu mẫu</string>
 <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
@@ -213,5 +213,5 @@
 <string name="launch_app">Chạy</string>
 <string name="no_app">Không tìm thấy chương trình yêu cầu. Hãy chỉ rõ chương trình đọc.</string>
 <string name="select_one">Chọn 1 câu trả lời</string>
-<string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="savepoint_used">Những thay đổi chưa ghi lại được phục hồi từ điểm đã lưu!</string>
 </resources>
