@@ -213,5 +213,5 @@
 <string name="launch_app">Start</string>
 <string name="no_app">Applikasjon mangler. Vennligst tast inn teksten manuelt</string>
 <string name="select_one">Velg ett svaralternativ</string>
-<string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="savepoint_used">Ikke lagret endringer hentet fra lagringspunkt</string>
 </resources>
