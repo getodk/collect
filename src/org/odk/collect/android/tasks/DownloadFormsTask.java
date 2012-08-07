@@ -57,7 +57,7 @@ import android.util.Log;
  * @author carlhartung
  */
 public class DownloadFormsTask extends
-        AsyncTask<ArrayList<FormDetails>, String, HashMap<String, String>> {
+        AsyncTask<ArrayList<FormDetails>, String, HashMap<FormDetails, String>> {
 
     private static final String t = "DownloadFormsTask";
 
@@ -82,14 +82,14 @@ public class DownloadFormsTask extends
 
 
     @Override
-    protected HashMap<String, String> doInBackground(ArrayList<FormDetails>... values) {
+    protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
         ArrayList<FormDetails> toDownload = values[0];
 
         int total = toDownload.size();
         int count = 1;
     	Collect.getInstance().getActivityLogger().logAction(this, "downloadForms", String.valueOf(total));
 
-        HashMap<String, String> result = new HashMap<String, String>();
+        HashMap<FormDetails, String> result = new HashMap<FormDetails, String>();
 
         for (int i = 0; i < total; i++) {
             FormDetails fd = toDownload.get(i);
@@ -190,7 +190,7 @@ public class DownloadFormsTask extends
             if (message.equalsIgnoreCase("")) {
                 message = Collect.getInstance().getString(R.string.success);
             }
-            result.put(fd.formName, message);
+            result.put(fd, message);
         }
 
         return result;
@@ -516,7 +516,7 @@ public class DownloadFormsTask extends
 
 
     @Override
-    protected void onPostExecute(HashMap<String, String> value) {
+    protected void onPostExecute(HashMap<FormDetails, String> value) {
         synchronized (this) {
             if (mStateListener != null) {
                 mStateListener.formsDownloadingComplete(value);

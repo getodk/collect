@@ -656,7 +656,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
 
     @Override
-    public void formsDownloadingComplete(HashMap<String, String> result) {
+    public void formsDownloadingComplete(HashMap<FormDetails, String> result) {
         if (mDownloadFormsTask != null) {
             mDownloadFormsTask.setDownloaderListener(null);
         }
@@ -666,10 +666,16 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             mProgressDialog.dismiss();
         }
 
+        Set<FormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
-        Set<String> keys = result.keySet();
-        for (String k : keys) {
-            b.append(k + " - " + result.get(k));
+        for (FormDetails k : keys) {
+            b.append(k.formName + 
+            	" (" +
+            	((k.formVersion != null) ? 
+            			(this.getString(R.string.version) + ": " + k.formVersion + " ") 
+            			: "") +
+            	"ID: " + k.formID + ") - " +
+            	result.get(k));
             b.append("\n\n");
         }
 
