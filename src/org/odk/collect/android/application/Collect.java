@@ -15,19 +15,18 @@ package org.odk.collect.android.application;
 
 import java.io.File;
 
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.SyncBasicHttpContext;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
+import org.opendatakit.httpclientandroidlib.client.CookieStore;
+import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
+import org.opendatakit.httpclientandroidlib.client.protocol.ClientContext;
+import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
+import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
+import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -55,7 +54,10 @@ public class Collect extends Application {
     
     public static final String DEFAULT_FONTSIZE = "21";
 
-    private HttpContext localContext = null;
+    // share all session cookies across all sessions...
+    private CookieStore cookieStore = new BasicCookieStore();
+    // retain credentials for 7 minutes...
+    private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
     private ActivityLogger mActivityLogger;
     private FormController mFormController = null;
 
@@ -143,30 +145,49 @@ public class Collect extends Application {
 
 
     /**
-     * Shared HttpContext so a user doesn't have to re-enter login information
+     * Construct and return a session context with shared 
+     * cookieStore and credsProvider so a user does not have to 
+     * re-enter login information.
+     * 
      * @return
      */
     public synchronized HttpContext getHttpContext() {
-        if (localContext == null) {
-            // set up one context for all HTTP requests so that authentication
-            // and cookies can be retained.
-            localContext = new SyncBasicHttpContext(new BasicHttpContext());
+    	
+        // context holds authentication state machine, so it cannot be 
+        // shared across independent activities.
+        HttpContext localContext = new BasicHttpContext();
 
-            // establish a local cookie store for this attempt at downloading...
-            CookieStore cookieStore = new BasicCookieStore();
-            localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-
-            // and establish a credentials provider.  Default is 7 minutes.
-            CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
-            localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProvider);
-        }
+        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+        localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProvider);
+        
         return localContext;
     }
 
-
+    public CredentialsProvider getCredentialsProvider() {
+    	return credsProvider;
+    }
+    
+    public CookieStore getCookieStore() {
+    	return cookieStore;
+    }
+    
     @Override
     public void onCreate() {
         singleton = this;
+
+//        // set up logging defaults for apache http component stack
+//        Log log;
+//        log = LogFactory.getLog("org.opendatakit.httpclientandroidlib");
+//        log.enableError(true);
+//        log.enableWarn(true);
+//        log.enableInfo(true);
+//        log.enableDebug(true);
+//        log = LogFactory.getLog("org.opendatakit.httpclientandroidlib.wire");
+//        log.enableError(true);
+//        log.enableWarn(false);
+//        log.enableInfo(false);
+//        log.enableDebug(false);
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
         

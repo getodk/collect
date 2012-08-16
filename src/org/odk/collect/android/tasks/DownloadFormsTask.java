@@ -27,10 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.protocol.HttpContext;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -41,6 +37,11 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
+import org.opendatakit.httpclientandroidlib.HttpResponse;
+import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -301,8 +302,12 @@ public class DownloadFormsTask extends
 	            response = httpclient.execute(req, localContext);
 	            int statusCode = response.getStatusLine().getStatusCode();
 	
-	            if (statusCode != 200) {
+	            if (statusCode != HttpStatus.SC_OK) {
 	            	WebUtils.discardEntityBytes(response);
+	            	if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+	            		// clear the cookies -- should not be necessary?
+	            		Collect.getInstance().getCookieStore().clear();
+	            	}
 	                String errMsg =
 	                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
 	                        response.getStatusLine().getReasonPhrase(), statusCode);

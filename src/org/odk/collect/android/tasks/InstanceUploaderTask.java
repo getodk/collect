@@ -30,17 +30,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.protocol.HttpContext;
+import org.opendatakit.httpclientandroidlib.Header;
+import org.opendatakit.httpclientandroidlib.HttpResponse;
+import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
+import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
+import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
+import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntity;
+import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
+import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
+import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -133,7 +134,19 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             // OpenRosa compliant server.
             openRosaServer = true;
             u = uriRemap.get(u);
+
+            // if https then enable preemptive basic auth...
+            if ( u.getScheme().equals("https") ) {
+            	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            }
+
         } else {
+
+            // if https then enable preemptive basic auth...
+            if ( u.getScheme().equals("https") ) {
+            	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            }
+
             // we need to issue a head request
             HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
 
@@ -142,8 +155,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             try {
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
-                if (statusCode == 401) {
+                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                 	WebUtils.discardEntityBytes(response);
+            		// clear the cookies -- should not be necessary?
+                	Collect.getInstance().getCookieStore().clear();
                     // we need authentication, so stop and return what we've
                     // done so far.
                     mAuthRequestingServer = u;
@@ -191,7 +206,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 	WebUtils.discardEntityBytes(response);
 
                     Log.w(t, "Status code on Head request: " + statusCode);
-                    if (statusCode >= 200 && statusCode <= 299) {
+                    if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
                         mResults.put(
                             id,
                             fail
@@ -429,9 +444,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 Log.i(t, "Response code:" + responseCode);
                 // verify that the response was a 201 or 202.
                 // If it wasn't, the submission has failed.
-                if (responseCode != 201 && responseCode != 202) {
-                    if (responseCode == 200) {
+                if (responseCode != HttpStatus.SC_CREATED && responseCode != HttpStatus.SC_ACCEPTED) {
+                    if (responseCode == HttpStatus.SC_OK) {
                         mResults.put(id, fail + "Network login failure? Again?");
+                    } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+                		// clear the cookies -- should not be necessary?
+                    	Collect.getInstance().getCookieStore().clear();
+                        mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
+                                + " (" + responseCode + ") at " + urlString);
                     } else {
                         mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);

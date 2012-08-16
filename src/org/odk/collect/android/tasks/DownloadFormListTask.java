@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.tasks;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.protocol.HttpContext;
+import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;

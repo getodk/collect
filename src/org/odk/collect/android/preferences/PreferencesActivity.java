@@ -278,8 +278,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         } else if (key.equals(KEY_SUBMISSION_URL)) {
             updateSubmissionUrl();
         } else if (key.equals(KEY_USERNAME)) {
+            WebUtils.clearAllCredentials();
             updateUsername();
         } else if (key.equals(KEY_PASSWORD)) {
+            WebUtils.clearAllCredentials();
             updatePassword();
         } else if (key.equals(KEY_SPLASH_PATH)) {
             updateSplashPath();
@@ -341,8 +343,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         mUsernamePreference.getEditText().setFilters(new InputFilter[] {
             getWhitespaceFilter()
         });
-
-        WebUtils.clearAllCredentials();
     }
 
 
@@ -357,8 +357,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         mPasswordPreference.getEditText().setFilters(new InputFilter[] {
             getWhitespaceFilter()
         });
-
-        WebUtils.clearAllCredentials();
     }
 
 

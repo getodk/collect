@@ -223,16 +223,17 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 } catch (IllegalArgumentException e) {
                     Log.i(t, "Attempting to close a dialog that was not previously opened");
                 }
+                mDownloadFormsTask = null;
             }
         } else if (getLastNonConfigurationInstance() instanceof DownloadFormsTask) {
             mDownloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
-
             if (mDownloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     dismissDialog(PROGRESS_DIALOG);
                 } catch (IllegalArgumentException e) {
                     Log.i(t, "Attempting to close a dialog that was not previously opened");
                 }
+                mDownloadFormsTask = null;
             }
         } else if (getLastNonConfigurationInstance() == null) {
             // first time, so get the formlist
@@ -304,6 +305,15 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 mProgressDialog.setMessage(getString(R.string.please_wait));
             }
             showDialog(PROGRESS_DIALOG);
+            
+            if (mDownloadFormListTask != null &&
+            	mDownloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
+            	return; // we are already doing the download!!!
+            } else if (mDownloadFormListTask != null) {
+            	mDownloadFormListTask.setDownloaderListener(null);
+            	mDownloadFormListTask.cancel(true);
+            	mDownloadFormListTask = null;
+            }
 
             mDownloadFormListTask = new DownloadFormListTask();
             mDownloadFormListTask.setDownloaderListener(this);
@@ -383,10 +393,12 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                             if (mDownloadFormListTask != null) {
                                 mDownloadFormListTask.setDownloaderListener(null);
                                 mDownloadFormListTask.cancel(true);
+                                mDownloadFormListTask = null;
                             }
                             if (mDownloadFormsTask != null) {
-                                mDownloadFormsTask.cancel(true);
                                 mDownloadFormsTask.setDownloaderListener(null);
+                                mDownloadFormsTask.cancel(true);
+                                mDownloadFormsTask = null;
                             }
                         }
                     };
@@ -438,7 +450,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
                         WebUtils.addCredentials(username.getText().toString(), password.getText()
                                 .toString(), u.getHost());
-
                         downloadFormList();
                     }
                 });
@@ -552,7 +563,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
         dismissDialog(PROGRESS_DIALOG);
         mDownloadFormListTask.setDownloaderListener(null);
-
+        mDownloadFormListTask = null;
+ 
         if (result == null) {
             Log.e(t, "Formlist Downloading returned null.  That shouldn't happen");
             // Just displayes "error occured" to the user, but this should never happen.
