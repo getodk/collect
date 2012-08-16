@@ -64,6 +64,11 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static final String KEY_PASSWORD = "password";
 
     public static final String KEY_PROTOCOL = "protocol";
+    
+    public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
+    public static final String PROTOCOL_GOOGLE = "google";
+    public static final String PROTOCOL_OTHER = "";
+    
     public static final String KEY_FORMLIST_URL = "formlist_url";
     public static final String KEY_SUBMISSION_URL = "submission_url";
 
@@ -401,7 +406,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 .getSharedPreferences().getString(KEY_GOOGLE_SUBMISSION, ""));
 
         // We have a fixed URL for using Google's service.
-        if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals("google")) {
+        if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals(PROTOCOL_GOOGLE)) {
             String submissionId =
                 ((EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION)).getText();
             mServerUrlPreference.setText(googleServerBaseUrl + submissionId);
@@ -437,7 +442,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         lp.setSummary(lp.getEntry());
 
         String protocol = lp.getValue();
-        if (protocol.equals("odk_default")) {
+        if (protocol.equals(PROTOCOL_ODK_DEFAULT)) {
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(false);
             }
@@ -460,7 +465,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 mSubmissionUrlPreference.setEnabled(false);
             }
 
-        } else if (protocol.equals("google")) {
+        } else if (protocol.equals(PROTOCOL_GOOGLE)) {
             if (mGoogleCollectionEffortPreference != null) {
                 mGoogleCollectionEffortPreference.setEnabled(true);
             }

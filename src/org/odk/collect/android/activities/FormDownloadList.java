@@ -495,10 +495,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             showDialog(PROGRESS_DIALOG);
 
             mDownloadFormsTask = new DownloadFormsTask();
-            SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-            mDownloadFormsTask.setAuth(auth);
             mDownloadFormsTask.setDownloaderListener(this);
             mDownloadFormsTask.execute(filesToDownload);
         } else {

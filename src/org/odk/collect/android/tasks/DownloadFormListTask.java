@@ -69,7 +69,6 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String downloadPath = settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formlist");
         downloadListUrl += downloadPath;
-        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
         
     	Collect.getInstance().getActivityLogger().logAction(this, "formList", downloadListUrl);
 
@@ -82,7 +81,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-            WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient, auth);
+            WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {

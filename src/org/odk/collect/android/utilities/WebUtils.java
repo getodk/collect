@@ -30,6 +30,7 @@ import org.apache.http.HttpStatus;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -60,6 +61,8 @@ import org.opendatakit.httpclientandroidlib.params.HttpParams;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -198,31 +201,30 @@ public final class WebUtils {
 	}
 
 	public static final HttpGet createOpenRosaHttpGet(URI uri) {
-		return createOpenRosaHttpGet(uri, "");
-	}
-
-	public static final HttpGet createOpenRosaHttpGet(URI uri, String auth) {
 		HttpGet req = new HttpGet();
 		setOpenRosaHeaders(req);
-		setGoogleHeaders(req, auth);
+		setGoogleHeaders(req);
 		req.setURI(uri);
 		return req;
 	}
 
-	public static final void setGoogleHeaders(HttpRequest req, String auth) {
-		if ((auth != null) && (auth.length() > 0)) {
-			req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+	public static final void setGoogleHeaders(HttpRequest req) {
+		SharedPreferences settings =
+                PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
+		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+		
+		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
+	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
+			if ((auth != null) && (auth.length() > 0)) {
+				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+			}
 		}
 	}
 
 	public static final HttpPost createOpenRosaHttpPost(URI uri) {
-		return createOpenRosaHttpPost(uri, "");
-	}
-
-	public static final HttpPost createOpenRosaHttpPost(URI uri, String auth) {
 		HttpPost req = new HttpPost(uri);
 		setOpenRosaHeaders(req);
-		setGoogleHeaders(req, auth);
+		setGoogleHeaders(req);
 		return req;
 	}
 
@@ -307,7 +309,7 @@ public final class WebUtils {
 	 * @return
 	 */
 	public static DocumentFetchResult getXmlDocument(String urlString,
-			HttpContext localContext, HttpClient httpclient, String auth) {
+			HttpContext localContext, HttpClient httpclient) {
 		URI u = null;
 		try {
 			URL url = new URL(URLDecoder.decode(urlString, "utf-8"));
@@ -325,7 +327,7 @@ public final class WebUtils {
 		}
 
 		// set up request...
-		HttpGet req = WebUtils.createOpenRosaHttpGet(u, auth);
+		HttpGet req = WebUtils.createOpenRosaHttpGet(u);
 
 		HttpResponse response = null;
 		try {

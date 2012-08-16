@@ -73,14 +73,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
     private static final String fail = "Error: ";
 
     private InstanceUploaderListener mStateListener;
-    private String mAuth = "";
 
     private URI mAuthRequestingServer;
     HashMap<String, String> mResults;
-    
-    public void setAuth(String auth) {
-        this.mAuth = auth;
-    }
 
     /**
      * Uploads to urlString the submission identified by id with filepath of instance 
@@ -335,7 +330,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
         	lastJ = j;
             first = false;
 
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u, mAuth);
+            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
 
             MimeTypeMap m = MimeTypeMap.getSingleton();
 
