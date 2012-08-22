@@ -232,6 +232,14 @@ public class FormController {
         return mFormEntryController.getModel().getLanguage();
     }
 
+    public String getBindAttribute( String attributeNamespace, String attributeName) {
+    	return getBindAttribute( getFormIndex(), attributeNamespace, attributeName );
+    }
+    
+    public String getBindAttribute(FormIndex idx, String attributeNamespace, String attributeName) {
+        return mFormEntryController.getModel().getForm().getMainInstance().resolveReference(
+                idx.getReference()).getBindAttributeValue(attributeNamespace, attributeName);
+    }
 
     /**
      * @return an array of FormEntryCaptions for the current FormIndex. This is how we get group

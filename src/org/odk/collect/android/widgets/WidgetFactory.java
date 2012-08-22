@@ -90,6 +90,12 @@ public class WidgetFactory {
             case Constants.CONTROL_IMAGE_CHOOSE:
             	if (appearance.equals("web")) {
             		questionWidget = new ImageWebViewWidget(context, fep);
+        		} else if(appearance.equals("signature")) {
+            		questionWidget = new SignatureWidget(context, fep);
+            	} else if(appearance.equals("annotate")) { 
+            		questionWidget = new AnnotateWidget(context, fep);
+            	} else if(appearance.equals("draw")) {
+            		questionWidget = new DrawWidget(context, fep);
             	} else {
             		questionWidget = new ImageWidget(context, fep);
             	}

@@ -214,4 +214,7 @@
 <string name="no_app">The requested application is missing. Please manually enter the reading.</string>
 <string name="select_one">Select One Answer</string>
 <string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="sign_button">Sign</string>
+<string name="markup_image">Markup Image</string>
+<string name="draw_image">Sketch Image</string>
 </resources>

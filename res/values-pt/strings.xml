@@ -214,4 +214,7 @@
 <string name="no_app">Aplicativo perdido. Por favor, inserir manualmente</string>
 <string name="select_one">Selecionar uma resposta</string>
 <string name="savepoint_used">"Alterações não salvas recuperadas"</string>
+<string name="sign_button">Sign</string>
+<string name="markup_image">Markup Image</string>
+<string name="draw_image">Sketch Image</string>
 </resources>

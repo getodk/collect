@@ -123,6 +123,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public static final int EX_STRING_CAPTURE = 10;
     public static final int EX_INT_CAPTURE = 11;
     public static final int EX_DECIMAL_CAPTURE = 12;
+    public static final int DRAW_TOOL = 13;
+	public static final int SIGNATURE_CAPTURE = 14;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -472,6 +474,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 ((ODKView) mCurrentView).setBinaryData(dv);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             	break;
+            case DRAW_TOOL:
+            case SIGNATURE_CAPTURE:
             case IMAGE_CAPTURE:
                 /*
                  * We saved the image to the tempfile_path, but we really want it to be in:

@@ -214,4 +214,7 @@
 <string name="no_app">Applikasjon mangler. Vennligst tast inn teksten manuelt</string>
 <string name="select_one">Velg ett svaralternativ</string>
 <string name="savepoint_used">Ikke lagret endringer hentet fra lagringspunkt</string>
+<string name="sign_button">Sign</string>
+<string name="markup_image">Markup Image</string>
+<string name="draw_image">Sketch Image</string>
 </resources>

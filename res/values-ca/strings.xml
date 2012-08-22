@@ -214,4 +214,7 @@
 <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
 <string name="select_one">Selecciona una resposta</string>
 <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
+<string name="sign_button">Sign</string>
+<string name="markup_image">Markup Image</string>
+<string name="draw_image">Sketch Image</string>
 </resources>
