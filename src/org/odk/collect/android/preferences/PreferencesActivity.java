@@ -116,8 +116,32 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateProtocol();
         updateSelectedGoogleAccount();
         updateGoogleCollectionEffort();
+        
+        disableFeaturesInDevelopment();
     }
 
+    private void disableFeaturesInDevelopment() {
+    	// remove Google Collections from protocol choices in preferences
+    	ListPreference protocols = (ListPreference) findPreference(KEY_PROTOCOL);
+    	int i = protocols.findIndexOfValue(PROTOCOL_GOOGLE);
+    	if ( i != -1 ) {
+        	CharSequence[] entries = protocols.getEntries();
+        	CharSequence[] entryValues = protocols.getEntryValues();
+        	
+    		CharSequence[] newEntries = new CharSequence[entryValues.length-1];
+    		CharSequence[] newEntryValues = new CharSequence[entryValues.length-1];
+    		for ( int k = 0, j = 0 ; j < entryValues.length ; ++j ) {
+    			if ( j == i ) continue;
+    			newEntries[k] = entries[j];
+    			newEntryValues[k] = entries[j];
+    			++k;
+    		}
+    		
+    		protocols.setEntries(newEntries);
+    		protocols.setEntryValues(newEntryValues);
+    	}
+    }
+    
     private void setupSplashPathPreference() {
         mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
 
@@ -213,6 +237,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateProtocol();
         updateSelectedGoogleAccount();
         updateGoogleCollectionEffort();
+        
+        disableFeaturesInDevelopment();
     }
 
 
@@ -402,15 +428,17 @@ public class PreferencesActivity extends PreferenceActivity implements
     private void updateGoogleCollectionEffort() {
         mGoogleCollectionEffortPreference =
             (EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION);
-        mGoogleCollectionEffortPreference.setSummary(mGoogleCollectionEffortPreference
-                .getSharedPreferences().getString(KEY_GOOGLE_SUBMISSION, ""));
-
-        // We have a fixed URL for using Google's service.
-        if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals(PROTOCOL_GOOGLE)) {
-            String submissionId =
-                ((EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION)).getText();
-            mServerUrlPreference.setText(googleServerBaseUrl + submissionId);
-            updateServerUrl();
+        if ( mGoogleCollectionEffortPreference != null ) {
+	        mGoogleCollectionEffortPreference.setSummary(mGoogleCollectionEffortPreference
+	                .getSharedPreferences().getString(KEY_GOOGLE_SUBMISSION, ""));
+	
+	        // We have a fixed URL for using Google's service.
+	        if (((ListPreference) findPreference(KEY_PROTOCOL)).getValue().equals(PROTOCOL_GOOGLE)) {
+	            String submissionId =
+	                ((EditTextPreference) findPreference(KEY_GOOGLE_SUBMISSION)).getText();
+	            mServerUrlPreference.setText(googleServerBaseUrl + submissionId);
+	            updateServerUrl();
+	        }
         }
     }
 

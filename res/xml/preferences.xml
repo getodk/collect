@@ -43,13 +43,14 @@
 			android:key="selected_google_account"
 			android:defaultValue=""
 			android:title="@string/selected_google_account_text" />
+		<!--  disabled for now
 		<EditTextPreference
-			android:id="@+id/google_submission_id"
+		    android:id="@+id/google_submission_id"
 			android:key="google_submission_id"
 			android:title="@string/google_submission_id_text"
 			android:inputType="textNoSuggestions"
 			android:defaultValue=""
-			android:dialogTitle="@string/google_submission_id_text" />
+			android:dialogTitle="@string/google_submission_id_text" />  -->
 		<EditTextPreference
 			android:id="@+id/formlist_url"
 			android:key="formlist_url"
