@@ -214,6 +214,7 @@
 <string name="no_app">Nerasta nurodyta programa. Atskaitą įveskite rankiniu būdu.</string>
 <string name="select_one">Pasirinkite vieną atsakymą</string>
 <string name="savepoint_used">Neišsaugoti pakeitimai atkurti pagal išsaugojimo tašką!</string>
+<string name="save_and_close">Save and Close</string>
 <string name="sign_button">Sign</string>
 <string name="markup_image">Markup Image</string>
 <string name="draw_image">Sketch Image</string>

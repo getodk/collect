@@ -214,6 +214,7 @@
 <string name="no_app">Aplikasi yang dibutuhkan tidak tersedia. Silahkan pasang secara manual.</string>
 <string name="select_one">Pilih salah satu jawaban</string>
 <string name="savepoint_used">Perubahan yang belum tersimpan, diambil dari penyimpanan otomatis terakhir</string>
+<string name="save_and_close">Save and Close</string>
 <string name="sign_button">Sign</string>
 <string name="markup_image">Markup Image</string>
 <string name="draw_image">Sketch Image</string>

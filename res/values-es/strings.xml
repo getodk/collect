@@ -214,6 +214,7 @@
 <string name="no_app">Esta apliacion no esta. Por favor ingrese el dato manualmente.</string>
 <string name="select_one">Select One Answer</string>
 <string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
+<string name="save_and_close">Save and Close</string>
 <string name="sign_button">Sign</string>
 <string name="markup_image">Markup Image</string>
 <string name="draw_image">Sketch Image</string>
