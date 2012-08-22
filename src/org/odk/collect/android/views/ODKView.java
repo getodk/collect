@@ -28,6 +28,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -45,7 +46,7 @@ import android.widget.TextView;
  */
 public class ODKView extends ScrollView implements OnLongClickListener {
 
-    // starter random number for view IDs
+	// starter random number for view IDs
     private final static int VIEW_ID = 12345;  
     
     private final static String t = "ODKView";
@@ -53,20 +54,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     private LinearLayout mView;
     private LinearLayout.LayoutParams mLayout;
     private ArrayList<QuestionWidget> widgets;
-
+    private Handler h = null;
+    
     public final static String FIELD_LIST = "field-list";
 
-
-    public ODKView(Context context, FormEntryPrompt questionPrompt,
-            FormEntryCaption[] groups) {
-        this(context, new FormEntryPrompt[] {
-            questionPrompt
-        }, groups);
-    }
-
-
     public ODKView(Context context, FormEntryPrompt[] questionPrompts,
-            FormEntryCaption[] groups) {
+            FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
 
         widgets = new ArrayList<QuestionWidget>();
@@ -110,6 +103,25 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         addView(mView);
+        
+        // see if there is an autoplay option. 
+        // Only execute it during forward swipes through the form 
+        if ( advancingPage && questionPrompts.length == 1 ) {
+	        final String playOption = widgets.get(0).getPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
+	        if ( playOption != null ) {
+	        	h = new Handler();
+	        	h.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+				        	if ( playOption.equalsIgnoreCase("audio") ) {
+				        		widgets.get(0).playAudio();
+				        	} else if ( playOption.equalsIgnoreCase("video") ) {
+				        		widgets.get(0).playVideo();
+				        	}
+						}
+					}, 150);
+	        }
+        }
     }
     
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {

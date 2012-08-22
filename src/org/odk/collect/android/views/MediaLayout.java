@@ -58,6 +58,8 @@ public class MediaLayout extends RelativeLayout {
     private ImageButton mVideoButton;
     private ImageView mImageView;
     private TextView mMissingImage;
+    
+    private String mVideoURI = null;
 
 
     public MediaLayout(Context c) {
@@ -70,13 +72,52 @@ public class MediaLayout extends RelativeLayout {
         mIndex = null;
     }
 
+    public void playAudio() {
+    	if ( mAudioButton != null ) {
+    		mAudioButton.playAudio();
+    	}
+    }
 
-    public void setAVT(FormIndex index, String selectionDesignator, TextView text, String audioURI, String imageURI, final String videoURI,
+    public void playVideo() {
+    	if ( mVideoURI != null ) {
+            String videoFilename = "";
+            try {
+                videoFilename =
+                    ReferenceManager._().DeriveReference(mVideoURI).getLocalURI();
+            } catch (InvalidReferenceException e) {
+                Log.e(t, "Invalid reference exception");
+                e.printStackTrace();
+            }
+
+            File videoFile = new File(videoFilename);
+            if (!videoFile.exists()) {
+                // We should have a video clip, but the file doesn't exist.
+                String errorMsg =
+                    getContext().getString(R.string.file_missing, videoFilename);
+                Log.e(t, errorMsg);
+                Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Intent i = new Intent("android.intent.action.VIEW");
+            i.setDataAndType(Uri.fromFile(videoFile), "video/*");
+            try {
+                ((Activity) getContext()).startActivity(i);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found, "view video"),
+                    Toast.LENGTH_SHORT).show();
+            }
+    	}
+    }
+
+    public void setAVT(FormIndex index, String selectionDesignator, TextView text, String audioURI, String imageURI, String videoURI,
             final String bigImageURI) {
     	mSelectionDesignator = selectionDesignator;
     	mIndex = index;
         mView_Text = text;
         mView_Text.setId(QuestionWidget.newUniqueId());
+        mVideoURI = videoURI;
 
         // Layout configurations for our elements in the relative layout
         RelativeLayout.LayoutParams textParams =
@@ -108,34 +149,7 @@ public class MediaLayout extends RelativeLayout {
                 @Override
                 public void onClick(View v) {
                 	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playVideoPrompt"+mSelectionDesignator, mIndex);
-                    String videoFilename = "";
-                    try {
-                        videoFilename =
-                            ReferenceManager._().DeriveReference(videoURI).getLocalURI();
-                    } catch (InvalidReferenceException e) {
-                        Log.e(t, "Invalid reference exception");
-                        e.printStackTrace();
-                    }
-
-                    File videoFile = new File(videoFilename);
-                    if (!videoFile.exists()) {
-                        // We should have a video clip, but the file doesn't exist.
-                        String errorMsg =
-                            getContext().getString(R.string.file_missing, videoFilename);
-                        Log.e(t, errorMsg);
-                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    Intent i = new Intent("android.intent.action.VIEW");
-                    i.setDataAndType(Uri.fromFile(videoFile), "video/*");
-                    try {
-                        ((Activity) getContext()).startActivity(i);
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(getContext(),
-                            getContext().getString(R.string.activity_not_found, "view video"),
-                            Toast.LENGTH_SHORT).show();
-                    }
+                	MediaLayout.this.playVideo();
                 }
 
             });

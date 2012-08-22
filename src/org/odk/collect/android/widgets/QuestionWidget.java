@@ -51,6 +51,7 @@ public abstract class QuestionWidget extends LinearLayout {
     protected final int mAnswerFontsize;
 
     private TextView mQuestionText;
+    private MediaLayout mediaLayout;
     private TextView mHelpText;
 
 
@@ -75,6 +76,13 @@ public abstract class QuestionWidget extends LinearLayout {
         addHelpText(p);
     }
 
+    public void playAudio() {
+    	mediaLayout.playAudio();
+    }
+
+    public void playVideo() {
+    	mediaLayout.playVideo();
+    }
 
     public FormEntryPrompt getPrompt() {
         return mPrompt;
@@ -133,7 +141,7 @@ public abstract class QuestionWidget extends LinearLayout {
         }
 
         // Create the layout for audio, image, text
-        MediaLayout mediaLayout = new MediaLayout(getContext());
+        mediaLayout = new MediaLayout(getContext());
         mediaLayout.setAVT(p.getIndex(), "", mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
 
         addView(mediaLayout, mLayout);

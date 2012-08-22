@@ -49,10 +49,7 @@ public class AudioButton extends ImageButton implements OnClickListener {
         player = null;
     }
 
-
-    @Override
-    public void onClick(View v) {
-    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playAudioPrompt"+selectionDesignator, index);
+    public void playAudio() {
         if (URI == null) {
             // No audio file specified
             Log.e(t, "No audio file was specified");
@@ -99,7 +96,13 @@ public class AudioButton extends ImageButton implements OnClickListener {
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+    	
+    }
 
+    @Override
+    public void onClick(View v) {
+    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick", "playAudioPrompt"+selectionDesignator, index);
+    	playAudio();
     }
 
 

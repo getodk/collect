@@ -586,7 +586,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 //                		&& mFormController.indexIsInFieldList())) {
 //            event = mFormController.stepToPreviousEvent();
 //        }
-        View current = createView(event);
+        View current = createView(event, false);
         showView(current, AnimationType.FADE);
 
     }
@@ -736,9 +736,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * Creates a view given the View type and an event
      * 
      * @param event
+     * @param advancingPage -- true if this results from advancing through the form
+     * 
      * @return newly created View
      */
-    private View createView(int event) {
+    private View createView(int event, boolean advancingPage) {
         FormController formController = Collect.getInstance().getFormController();
         setTitle(getString(R.string.app_name) + " > " + formController.getFormTitle());
 
@@ -851,7 +853,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 try {
                     odkv =
                         new ODKView(this, formController.getQuestionPrompts(),
-                        		formController.getGroupsForCurrentIndex());
+                        		formController.getGroupsForCurrentIndex(), advancingPage);
                     Log.i(t, "created view for group");
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
@@ -912,12 +914,12 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 if ( (++viewCount) % SAVEPOINT_INTERVAL == 0 ) {
                 	SaveToDiskTask.blockingExportTempData();
                 }
-                next = createView(event);
+                next = createView(event, true);
                 showView(next, AnimationType.RIGHT);
                 break;
             case FormEntryController.EVENT_END_OF_FORM:
             case FormEntryController.EVENT_REPEAT:
-                next = createView(event);
+                next = createView(event, true);
                 showView(next, AnimationType.RIGHT);
                 break;
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
@@ -958,7 +960,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 	            	SaveToDiskTask.blockingExportTempData();
 	            }
 	        }
-            View next = createView(event);
+            View next = createView(event, false);
             showView(next, AnimationType.LEFT);
         } else {
         	mBeenSwiped = false;
