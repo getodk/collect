@@ -89,24 +89,11 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         mSignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "signButton", 
-            			"click", mPrompt.getIndex());
-                mErrorTextView.setVisibility(View.GONE);
-            	Intent i = new Intent(getContext(), DrawActivity.class);
-            	i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, 
-            			Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-            	i.putExtra("option", "signature");
-            	
-            	try {
-            	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
-            	((Activity) getContext()).startActivityForResult(i, FormEntryActivity.SIGNATURE_CAPTURE);
-            	}
-            	catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found, "signature capture"),
-                        Toast.LENGTH_SHORT).show();
-                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
-                }
+				Collect.getInstance()
+						.getActivityLogger()
+						.logInstanceAction(this, "signButton", "click",
+								mPrompt.getIndex());
+            	launchSignatureActivity();
             }
         });
         
@@ -151,27 +138,39 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton", 
+                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage", 
                 			"click", mPrompt.getIndex());
-                    Intent i = new Intent("android.intent.action.VIEW");
-                    Uri uri = MediaUtils.getImageUriFromMediaProvider(mInstanceFolder + File.separator + mBinaryName);
-                	if ( uri != null ) {
-                        Log.i(t,"setting view path to: " + uri);
-                        i.setDataAndType(uri, "image/*");
-                        try {
-                            getContext().startActivity(i);
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(getContext(),
-                                getContext().getString(R.string.activity_not_found, "view image"),
-                                Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                   	launchSignatureActivity();
                 }
             });
 
             addView(mImageView);
         }
 
+	}
+	
+	private void launchSignatureActivity() {
+        mErrorTextView.setVisibility(View.GONE);
+    	Intent i = new Intent(getContext(), DrawActivity.class);
+    	i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE);
+        // copy...
+        if ( mBinaryName != null ) {
+        	File f = new File(mInstanceFolder + File.separator + mBinaryName);
+        	i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
+        }
+    	i.putExtra(DrawActivity.EXTRA_OUTPUT, 
+    			Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+    	
+    	try {
+	    	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+	    	((Activity) getContext()).startActivityForResult(i, FormEntryActivity.SIGNATURE_CAPTURE);
+    	}
+    	catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                getContext().getString(R.string.activity_not_found, "signature capture"),
+                Toast.LENGTH_SHORT).show();
+        	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        }
 	}
 	
     private void deleteMedia() {

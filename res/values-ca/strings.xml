@@ -215,7 +215,10 @@
 <string name="select_one">Selecciona una resposta</string>
 <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
 <string name="save_and_close">Save and Close</string>
-<string name="sign_button">Sign</string>
+<string name="sign_button">Gather Signature</string>
 <string name="markup_image">Markup Image</string>
 <string name="draw_image">Sketch Image</string>
+<string name="reset_image">Reset</string>
+<string name="set_color">Set Color</string>
+<string name="select_drawing_color">Select Drawing Color</string>
 </resources>
