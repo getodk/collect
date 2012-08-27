@@ -10,9 +10,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.odk.collect.android"
-    android:versionCode="1013"
+    android:versionCode="1014"
     android:versionName="1.2" >
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -70,6 +69,9 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activities.AccountInfo"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.DrawActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.InstanceChooserList"
