@@ -160,6 +160,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     private Animation mInAnimation;
     private Animation mOutAnimation;
+    private View mStaleView = null;
 
     private RelativeLayout mRelativeLayout;
     private View mCurrentView;
@@ -990,6 +991,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
 
         if (mCurrentView != null) {
+        	mStaleView = mCurrentView;
             mCurrentView.startAnimation(mOutAnimation);
             mRelativeLayout.removeView(mCurrentView);
         }
@@ -1613,6 +1615,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     @Override
     public void onAnimationEnd(Animation arg0) {
         mBeenSwiped = false;
+        if ( mStaleView != null && mStaleView instanceof ODKView ) {
+        	// http://code.google.com/p/android/issues/detail?id=8488
+        	((ODKView) mStaleView).recycleDrawables();
+        	mStaleView = null;
+        }
     }
 
 

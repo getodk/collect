@@ -14,16 +14,25 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -88,6 +97,37 @@ public abstract class QuestionWidget extends LinearLayout {
         return mPrompt;
     }
 
+   	// http://code.google.com/p/android/issues/detail?id=8488
+    private void recycleDrawablesRecursive(ViewGroup viewGroup, List<ImageView> images) {
+        
+        int childCount = viewGroup.getChildCount();
+        for(int index = 0; index < childCount; index++)
+        {
+          View child = viewGroup.getChildAt(index);
+          if ( child instanceof ImageView ) {
+        	  images.add((ImageView)child);
+          } else if ( child instanceof ViewGroup ) {
+        	  recycleDrawablesRecursive((ViewGroup) child, images);
+          }
+        }
+    }
+    
+   	// http://code.google.com/p/android/issues/detail?id=8488
+    public void recycleDrawables() {
+    	List<ImageView> images = new ArrayList<ImageView>();
+    	// collect all the image views
+    	recycleDrawablesRecursive(this, images);
+    	for ( ImageView imageView : images ) {
+    		Drawable d = imageView.getDrawable();
+    		if ( d != null && d instanceof BitmapDrawable) {
+    			imageView.setImageDrawable(null);
+    			BitmapDrawable bd = (BitmapDrawable) d;
+    			Bitmap bmp = bd.getBitmap();
+    			bmp.recycle();
+    		}
+    	}
+    }
+    
     // Abstract methods
     public abstract IAnswerData getAnswer();
 

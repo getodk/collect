@@ -196,6 +196,8 @@ public class FileUtils {
 
         // get bitmap with scale ( < 1 is the same as 1)
         BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inInputShareable = true;
+        options.inPurgeable = true;
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
         if (b != null) {

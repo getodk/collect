@@ -124,6 +124,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
     
+    /**
+     * http://code.google.com/p/android/issues/detail?id=8488
+     */
+    public void recycleDrawables() {
+    	for ( QuestionWidget q : widgets ) {
+    		q.recycleDrawables();
+    	}
+    }
+    
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     	Collect.getInstance().getActivityLogger().logScrollAction(this, t - oldt);
     }
