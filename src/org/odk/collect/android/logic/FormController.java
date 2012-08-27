@@ -713,7 +713,35 @@ public class FormController {
             // caption[len-2] == the first group it is contained in.
             FormEntryCaption[] captions = getCaptionHierarchy();
             FormEntryCaption grp = captions[captions.length - 2];
-            return mFormEntryController.jumpToIndex(grp.getIndex());
+            int event = mFormEntryController.jumpToIndex(grp.getIndex());
+            // and test if this group or at least one of its children is relevant...
+            FormIndex idx = grp.getIndex();
+            if ( !mFormEntryController.getModel().isIndexRelevant(idx) ) {
+            	return stepToPreviousEvent(); 
+            }
+            idx = mFormEntryController.getModel().incrementIndex(idx, true);
+            while ( FormIndex.isSubElement(grp.getIndex(), idx) ) {
+            	if ( mFormEntryController.getModel().isIndexRelevant(idx) ) {
+            		return event;
+            	}
+                idx = mFormEntryController.getModel().incrementIndex(idx, true);
+            }
+            return stepToPreviousEvent();
+        } else if ( indexIsInFieldList() && getEvent() == FormEntryController.EVENT_GROUP) {
+            FormIndex grpidx = mFormEntryController.getModel().getFormIndex();
+            int event = mFormEntryController.getModel().getEvent();
+            // and test if this group or at least one of its children is relevant...
+            if ( !mFormEntryController.getModel().isIndexRelevant(grpidx) ) {
+            	return stepToPreviousEvent(); // shouldn't happen?
+            }
+            FormIndex idx = mFormEntryController.getModel().incrementIndex(grpidx, true);
+            while ( FormIndex.isSubElement(grpidx, idx) ) {
+            	if ( mFormEntryController.getModel().isIndexRelevant(idx) ) {
+            		return event;
+            	}
+                idx = mFormEntryController.getModel().incrementIndex(idx, true);
+            }
+            return stepToPreviousEvent();
         }
 
         return getEvent();
