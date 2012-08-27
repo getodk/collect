@@ -123,7 +123,9 @@ public abstract class QuestionWidget extends LinearLayout {
     			imageView.setImageDrawable(null);
     			BitmapDrawable bd = (BitmapDrawable) d;
     			Bitmap bmp = bd.getBitmap();
-    			bmp.recycle();
+    			if ( bmp != null ) {
+    				bmp.recycle();
+    			}
     		}
     	}
     }
