@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * Signature widget.
  * 
  * @author BehrAtherton@gmail.com
  *
@@ -64,15 +65,18 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 	public SignatureWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 		
+		mInstanceFolder = 
+				Collect.getInstance().getFormController().getInstancePath().getParent();
+
+		setOrientation(LinearLayout.VERTICAL);
+		
+		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+		
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
         mErrorTextView.setText("Selected file is not a valid image");
-		
-		mInstanceFolder = Collect.getInstance().getFormController().getInstancePath().getParent();
 
-		setOrientation(LinearLayout.VERTICAL);
-		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
         // setup Blank Image Button
 		mSignButton = new Button(getContext());
 		mSignButton.setId(QuestionWidget.newUniqueId());
@@ -85,10 +89,12 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         mSignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "mSignButton", 
+            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "signButton", 
             			"click", mPrompt.getIndex());
+                mErrorTextView.setVisibility(View.GONE);
             	Intent i = new Intent(getContext(), DrawActivity.class);
-            	i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+            	i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, 
+            			Uri.fromFile(new File(Collect.TMPFILE_PATH)));
             	i.putExtra("option", "signature");
             	
             	try {
@@ -107,6 +113,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         
         // finish complex layout
         addView(mSignButton);
+        addView(mErrorTextView);
      
         // and hide the sign button if read-only
         if ( prompt.isReadOnly() ) {
@@ -177,6 +184,29 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         Log.i(t, "Deleted " + del + " rows from media content provider");
     }
 
+
+	@Override
+	public void clearAnswer() {
+        // remove the file
+        deleteMedia();
+        mImageView.setImageBitmap(null);
+        mErrorTextView.setVisibility(View.GONE);
+
+        // reset buttons
+        mSignButton.setText(getContext().getString(R.string.sign_button));
+	}
+
+	
+	@Override
+	public IAnswerData getAnswer() {
+        if (mBinaryName != null) {
+            return new StringData(mBinaryName.toString());
+        } else {
+            return null;
+        }
+	}
+
+	
 	@Override
 	public void setBinaryData(Object answer) {
         // you are replacing an answer. delete the previous image using the
@@ -210,31 +240,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 	}
 
 	@Override
-	public boolean isWaitingForBinaryData() {
-		return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
-	}
-
-	@Override
-	public IAnswerData getAnswer() {
-        if (mBinaryName != null) {
-            return new StringData(mBinaryName.toString());
-        } else {
-            return null;
-        }
-	}
-
-	@Override
-	public void clearAnswer() {
-        // remove the file
-        deleteMedia();
-        mImageView.setImageBitmap(null);
-        mErrorTextView.setVisibility(View.GONE);
-
-        // reset buttons
-        mSignButton.setText(getContext().getString(R.string.sign_button));
-	}
-
-	@Override
 	public void setFocus(Context context) {
 		// Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
@@ -242,6 +247,17 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
 	}
 
+
+	@Override
+	public boolean isWaitingForBinaryData() {
+		return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
+	}
+
+	@Override
+	public void cancelWaitingForBinaryData() {
+		Collect.getInstance().getFormController().setIndexWaitingForData(null);
+	}
+	
 	@Override
 	public void setOnLongClickListener(OnLongClickListener l) {
         mSignButton.setOnLongClickListener(l);
@@ -250,9 +266,14 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         }
 	}
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mSignButton.cancelLongPress();
+        if (mImageView != null) {
+            mImageView.cancelLongPress();
+        }
+    }
 
 }

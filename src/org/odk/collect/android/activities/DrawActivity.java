@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 University of Washington
+ * Copyright (C) 2007 The Android Open Source Project
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -43,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
+ * Modified from the FingerPaint example found in The Android Open Source Project.
  * 
  * @author BehrAtherton@gmail.com
  *

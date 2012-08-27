@@ -48,8 +48,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * 
+ * Image widget that supports annotations on the image.
+ *  
  * @author BehrAtherton@gmail.com
+ * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Yaw Anokwa (yanokwa@gmail.com)
  *
  */
 public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
@@ -171,9 +174,9 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         mAnnotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "mAnnotateButton", 
+            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "annotateButton", 
             			"click", mPrompt.getIndex());
-            	
+                mErrorTextView.setVisibility(View.GONE);
             	Intent i = new Intent(getContext(), DrawActivity.class);
             	i.putExtra("option", "annotate");
             	i.putExtra("refImage", mInstanceFolder + File.separator + mBinaryName);
@@ -210,8 +213,9 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
 
         // Only add the imageView if the user has taken a picture
         if (mBinaryName != null) {
-        	if(!prompt.isReadOnly())
+        	if(!prompt.isReadOnly()) {
         		mAnnotateButton.setEnabled(true);
+        	}
             mImageView = new ImageView(getContext());
             mImageView.setId(QuestionWidget.newUniqueId());
             Display display =
@@ -277,6 +281,9 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         deleteMedia();
         mImageView.setImageBitmap(null);
         mErrorTextView.setVisibility(View.GONE);
+    	if(!mPrompt.isReadOnly()) {
+    		mAnnotateButton.setEnabled(false);
+    	}
 
         // reset buttons
         mCaptureButton.setText(getContext().getString(R.string.capture_image));
@@ -292,6 +299,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
+    
     @Override
     public void setBinaryData(Object newImageObj) {
         // you are replacing an answer. delete the previous image using the
@@ -349,6 +357,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         mCaptureButton.setOnLongClickListener(l);
         mChooseButton.setOnLongClickListener(l);
+        mAnnotateButton.setOnLongClickListener(l);
         if (mImageView != null) {
             mImageView.setOnLongClickListener(l);
         }
@@ -360,6 +369,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         super.cancelLongPress();
         mCaptureButton.cancelLongPress();
         mChooseButton.cancelLongPress();
+        mAnnotateButton.cancelLongPress();
         if (mImageView != null) {
             mImageView.cancelLongPress();
         }

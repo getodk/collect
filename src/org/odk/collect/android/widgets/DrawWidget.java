@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * Free drawing widget.
  * 
  * @author BehrAtherton@gmail.com
  *
@@ -85,8 +86,9 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         mDrawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "mDrawButton", 
+            	Collect.getInstance().getActivityLogger().logInstanceAction(this, "drawButton", 
             			"click", mPrompt.getIndex());
+                mErrorTextView.setVisibility(View.GONE);
             	Intent i = new Intent(getContext(), DrawActivity.class);
             	i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(new File(Collect.TMPFILE_PATH)));
@@ -105,7 +107,11 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         
         // finish complex layout
         addView(mDrawButton);
-        
+        addView(mErrorTextView);
+
+        if (mPrompt.isReadOnly()) {
+        	mDrawButton.setVisibility(View.GONE);
+        }
         mErrorTextView.setVisibility(View.GONE);
 
         // retrieve answer from data model and update ui
@@ -171,6 +177,29 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         Log.i(t, "Deleted " + del + " rows from media content provider");
     }
 
+    
+	@Override
+	public void clearAnswer() {
+        // remove the file
+        deleteMedia();
+        mImageView.setImageBitmap(null);
+        mErrorTextView.setVisibility(View.GONE);
+
+        // reset buttons
+        mDrawButton.setText(getContext().getString(R.string.draw_image));
+	}
+
+
+	@Override
+	public IAnswerData getAnswer() {
+        if (mBinaryName != null) {
+            return new StringData(mBinaryName.toString());
+        } else {
+            return null;
+        }
+	}
+
+	
 	@Override
 	public void setBinaryData(Object answer) {
         // you are replacing an answer. delete the previous image using the
@@ -204,36 +233,22 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 	}
 
 	@Override
-	public boolean isWaitingForBinaryData() {
-		return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
-	}
-
-	@Override
-	public IAnswerData getAnswer() {
-        if (mBinaryName != null) {
-            return new StringData(mBinaryName.toString());
-        } else {
-            return null;
-        }
-	}
-
-	@Override
-	public void clearAnswer() {
-        // remove the file
-        deleteMedia();
-        mImageView.setImageBitmap(null);
-        mErrorTextView.setVisibility(View.GONE);
-
-        // reset buttons
-        mDrawButton.setText(getContext().getString(R.string.sign_button));
-	}
-
-	@Override
 	public void setFocus(Context context) {
 		// Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+	}
+
+	
+	@Override
+	public boolean isWaitingForBinaryData() {
+		return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
+	}
+
+	@Override
+	public void cancelWaitingForBinaryData() {
+		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
 	@Override
@@ -244,8 +259,14 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         }
 	}
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mDrawButton.cancelLongPress();
+        if (mImageView != null) {
+            mImageView.cancelLongPress();
+        }
+    }
+    
 }
