@@ -86,6 +86,11 @@ public class DrawActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		try {
+			saveFile(savepointImage);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
 	}
 
@@ -276,20 +281,31 @@ public class DrawActivity extends Activity {
 	}
 
 	private void SaveAndClose() {
-		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream(output);
-			Bitmap bitmap = Bitmap.createBitmap(drawView.getWidth(),
-					drawView.getHeight(), Bitmap.Config.ARGB_8888);
-			Canvas canvas = new Canvas(bitmap);
-			drawView.draw(canvas);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+			saveFile(output);
 			setResult(Activity.RESULT_OK);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			setResult(Activity.RESULT_CANCELED);
 		}
 		this.finish();
+	}
+
+	private void saveFile(File f) throws FileNotFoundException {
+		FileOutputStream fos;
+		fos = new FileOutputStream(f);
+		Bitmap bitmap = Bitmap.createBitmap(drawView.getWidth(),
+				drawView.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		drawView.draw(canvas);
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+		try {
+			if ( fos != null ) {
+				fos.flush();
+				fos.close();
+			}
+		} catch ( Exception e) {
+		}
 	}
 
 	private void Reset() {
