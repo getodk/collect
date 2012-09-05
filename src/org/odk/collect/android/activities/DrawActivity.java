@@ -38,6 +38,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -57,6 +58,8 @@ import android.widget.RelativeLayout;
  * 
  */
 public class DrawActivity extends Activity {
+	public static final String t = "DrawActivity";
+	
 	public static final String OPTION = "option";
 	public static final String OPTION_SIGNATURE = "signature";
 	public static final String OPTION_ANNOTATE = "annotate";
@@ -91,7 +94,9 @@ public class DrawActivity extends Activity {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
+		if ( savepointImage.exists() ) {
+			outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
+		}
 	}
 
 	@Override
@@ -292,19 +297,26 @@ public class DrawActivity extends Activity {
 	}
 
 	private void saveFile(File f) throws FileNotFoundException {
-		FileOutputStream fos;
-		fos = new FileOutputStream(f);
-		Bitmap bitmap = Bitmap.createBitmap(drawView.getWidth(),
-				drawView.getHeight(), Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-		drawView.draw(canvas);
-		bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
-		try {
-			if ( fos != null ) {
-				fos.flush();
-				fos.close();
+		if ( drawView.getWidth() == 0 || drawView.getHeight() == 0 ) {
+			// apparently on 4.x, the orientation change notification can occur
+			// sometime before the view is rendered. In that case, the view
+			// dimensions will not be known.
+			Log.e(t,"view has zero width or zero height");
+		} else {
+			FileOutputStream fos;
+			fos = new FileOutputStream(f);
+			Bitmap bitmap = Bitmap.createBitmap(drawView.getWidth(),
+					drawView.getHeight(), Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(bitmap);
+			drawView.draw(canvas);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+			try {
+				if ( fos != null ) {
+					fos.flush();
+					fos.close();
+				}
+			} catch ( Exception e) {
 			}
-		} catch ( Exception e) {
 		}
 	}
 
