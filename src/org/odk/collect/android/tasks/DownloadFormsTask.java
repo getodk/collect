@@ -279,8 +279,9 @@ public class DownloadFormsTask extends
         // This will cause intermittent download failures.  Silently retry once after each 
         // failure.  Only if there are two consecutive failures, do we abort.
         boolean success = false;
-        int attemptCount = 1;
-        while ( !success && attemptCount++ <= 2 ) {
+        int attemptCount = 0;
+        final int MAX_ATTEMPT_COUNT = 2;
+        while ( !success && ++attemptCount <= MAX_ATTEMPT_COUNT ) {
 	        // get shared HttpContext so that authentication and cookies are retained.
 	        HttpContext localContext = Collect.getInstance().getHttpContext();
 	
@@ -346,7 +347,9 @@ public class DownloadFormsTask extends
 	        } catch (Exception e) {
 	        	Log.e(t, e.toString());
 	            e.printStackTrace();
-	            if ( attemptCount != 1 ) {
+	            // silently retry unless this is the last attempt, 
+	            // in which case we rethrow the exception.
+	            if ( attemptCount == MAX_ATTEMPT_COUNT ) {
 	            	throw e;
 	            }
 	        }
