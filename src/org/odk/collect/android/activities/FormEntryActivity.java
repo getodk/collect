@@ -22,7 +22,9 @@ import java.util.LinkedHashMap;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
@@ -854,10 +856,13 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 ODKView odkv = null;
                 // should only be a group here if the event_group is a field-list
                 try {
+                	FormEntryPrompt[] prompts = formController.getQuestionPrompts();
+                	FormEntryCaption[] groups = formController.getGroupsForCurrentIndex();
                     odkv =
-                        new ODKView(this, formController.getQuestionPrompts(),
-                        		formController.getGroupsForCurrentIndex(), advancingPage);
-                    Log.i(t, "created view for group");
+                        new ODKView(this, formController.getQuestionPrompts(), groups, advancingPage);
+                    Log.i(t, "created view for group " + 
+                    		(groups.length > 0 ? groups[groups.length-1].getLongText() : "[top]") + " " +
+                    		(prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     e.printStackTrace();
@@ -992,20 +997,25 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
                 break;
         }
 
-        if (mCurrentView != null) {
-        	mStaleView = mCurrentView;
-            mCurrentView.startAnimation(mOutAnimation);
-            mRelativeLayout.removeView(mCurrentView);
-        }
-
+        // complete setup for animations...
         mInAnimation.setAnimationListener(this);
+        mOutAnimation.setAnimationListener(this);
 
         RelativeLayout.LayoutParams lp =
             new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
+        // adjust which view is in the layout container...
+        mStaleView = mCurrentView;
         mCurrentView = next;
+        if ( mStaleView != null ) {
+        	mRelativeLayout.removeView(mStaleView);
+        }
         mRelativeLayout.addView(mCurrentView, lp);
 
+        // start animations for transition...
+        if (mStaleView != null) {
+        	mStaleView.startAnimation(mOutAnimation);
+        }
         mCurrentView.startAnimation(mInAnimation);
         
         String logString = "";
@@ -1613,27 +1623,34 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     }
 
-
     @Override
-    public void onAnimationEnd(Animation arg0) {
-        mBeenSwiped = false;
-        if ( mStaleView != null && mStaleView instanceof ODKView ) {
-        	// http://code.google.com/p/android/issues/detail?id=8488
-        	((ODKView) mStaleView).recycleDrawables();
-        	mStaleView = null;
-        }
+    public void onAnimationEnd(Animation animation) {
+		Log.i(t, "onAnimationEnd " + ((animation == mInAnimation) ? "in" : ((animation == mOutAnimation) ? "out" : "other")));
+    	if ( mInAnimation == animation) {
+    		mBeenSwiped = false;
+    	} else if ( mOutAnimation == animation ) {
+    		if ( mStaleView != null && mStaleView instanceof ODKView ) {
+        		// http://code.google.com/p/android/issues/detail?id=8488
+    			((ODKView) mStaleView).recycleDrawables();
+    		}
+    		mStaleView = null;
+    	} else {
+    		Log.e(t, "Unexpected animation");
+    	}
     }
 
 
     @Override
     public void onAnimationRepeat(Animation animation) {
         // Added by AnimationListener interface.
+		Log.i(t, "onAnimationRepeat " + ((animation == mInAnimation) ? "in" : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
 
     @Override
     public void onAnimationStart(Animation animation) {
         // Added by AnimationListener interface.
+		Log.i(t, "onAnimationStart " + ((animation == mInAnimation) ? "in" : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
 

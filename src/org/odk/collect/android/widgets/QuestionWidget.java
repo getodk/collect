@@ -110,6 +110,7 @@ public abstract class QuestionWidget extends LinearLayout {
         	  recycleDrawablesRecursive((ViewGroup) child, images);
           }
         }
+        viewGroup.destroyDrawingCache();
     }
     
    	// http://code.google.com/p/android/issues/detail?id=8488
@@ -118,6 +119,7 @@ public abstract class QuestionWidget extends LinearLayout {
     	// collect all the image views
     	recycleDrawablesRecursive(this, images);
     	for ( ImageView imageView : images ) {
+    		imageView.destroyDrawingCache();
     		Drawable d = imageView.getDrawable();
     		if ( d != null && d instanceof BitmapDrawable) {
     			imageView.setImageDrawable(null);
