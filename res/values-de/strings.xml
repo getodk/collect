@@ -19,12 +19,12 @@
 <string name="add_more">Mehr hinzufügen</string>
 <string name="add_repeat">Neue Gruppe \"%s\" hinzufügen?</string>
 <string name="add_repeat_no">Nicht hinzufügen</string>
-<string name="advance">Weiter zu\nnext\nprompt</string>
+<string name="advance">Weiter zur\nnächsten\nSeite</string>
 <string name="altitude">Höhe über Meer</string>
 <string name="app_name">ODK Collect</string>
 <string name="audio_file_error">Verknüpfung zu Audio-File fehlt.</string>
 <string name="audio_file_invalid">File: %s ist kein lesbares Audio-File.</string>
-<string name="backup">Zurück zu\nprevious\nprompt</string>
+<string name="backup">Zurück zur\nvorherigen\nSeite</string>
 <string name="barcode_scanner_error">Barcode Scanner ist nicht installiert!</string>
 <string name="cancel">Löschen</string>
 <string name="cancel_loading_form">Löschen</string>
@@ -163,12 +163,6 @@
 <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
 <string name="formlist_url">Formularlisten-Pfad</string>
 <string name="submission_url">Submissionspfad</string>
-<string name="font_size">Text Font Size</string>
-<string name="change_font_size">Text Font Size</string>
-<string name="form_scan_starting">Scanning for forms&#8230;</string>
-<string name="change_submission_url">Submission Path (appended to Server URL)</string>
-<string name="formlist_url">Form List Path</string>
-<string name="submission_url">Submission Path</string>
 <string name="font_size">Text Schriftgrösse</string>
 <string name="change_font_size">Text Schriftgrösse</string>
 <string name="form_scan_starting">Formulare werden gesucht&#8230;</string>
