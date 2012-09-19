@@ -110,11 +110,7 @@ public class Collect extends Application {
      */
     public static void createODKDirs() throws RuntimeException {
         String cardstatus = Environment.getExternalStorageState();
-        if (cardstatus.equals(Environment.MEDIA_REMOVED)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
-                || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
-                || cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)
-                || cardstatus.equals(Environment.MEDIA_SHARED)) {
+        if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
             RuntimeException e =
                 new RuntimeException("ODK reports :: SDCard error: "
                         + Environment.getExternalStorageState());
