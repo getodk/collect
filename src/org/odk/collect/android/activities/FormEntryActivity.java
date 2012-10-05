@@ -1001,21 +1001,27 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mInAnimation.setAnimationListener(this);
         mOutAnimation.setAnimationListener(this);
 
+        // drop keyboard before transition...
+        if ( mCurrentView != null ) {
+	        InputMethodManager inputManager =
+	                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	        inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), 0);
+        }
+
         RelativeLayout.LayoutParams lp =
             new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
         // adjust which view is in the layout container...
         mStaleView = mCurrentView;
         mCurrentView = next;
-        if ( mStaleView != null ) {
-        	mRelativeLayout.removeView(mStaleView);
-        }
         mRelativeLayout.addView(mCurrentView, lp);
 
-        // start animations for transition...
         if (mStaleView != null) {
-        	mStaleView.startAnimation(mOutAnimation);
+        	mRelativeLayout.removeView(mStaleView);
+        	// start OutAnimation for transition...
+            mStaleView.startAnimation(mOutAnimation);
         }
+        // start InAnimation for transition...
         mCurrentView.startAnimation(mInAnimation);
         
         String logString = "";
@@ -1032,14 +1038,6 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         }
         
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "showView", logString);
-
-        if (mCurrentView instanceof ODKView) {
-            ((ODKView) mCurrentView).setFocus(this);
-	    } else {
-            InputMethodManager inputManager =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(mCurrentView.getWindowToken(), 0);
-        }
     }
 
 
@@ -1627,12 +1625,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     public void onAnimationEnd(Animation animation) {
 		Log.i(t, "onAnimationEnd " + ((animation == mInAnimation) ? "in" : ((animation == mOutAnimation) ? "out" : "other")));
     	if ( mInAnimation == animation) {
-    		mBeenSwiped = false;
+            if (mCurrentView instanceof ODKView) {
+                ((ODKView) mCurrentView).setFocus(this);
+            }
+     		mBeenSwiped = false;
     	} else if ( mOutAnimation == animation ) {
-    		if ( mStaleView != null && mStaleView instanceof ODKView ) {
+            if ( mStaleView != null && mStaleView instanceof ODKView ) {
         		// http://code.google.com/p/android/issues/detail?id=8488
     			((ODKView) mStaleView).recycleDrawables();
-    		}
+            }
     		mStaleView = null;
     	} else {
     		Log.e(t, "Unexpected animation");
