@@ -65,8 +65,8 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
     
-    private static final double LOCATION_ACCURACY = 5;
-
+    private double mLocationAccuracy;
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,10 +76,17 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         setContentView(R.layout.geopoint_layout);
 
         Intent intent = getIntent();
+        
+        mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
-            double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
-            mGeoPoint = new GeoPoint((int) (location[0] * 1E6), (int) (location[1] * 1E6));
-            mCaptureLocation = false;
+        	if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
+        		double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
+            	mGeoPoint = new GeoPoint((int) (location[0] * 1E6), (int) (location[1] * 1E6));
+            	mCaptureLocation = false;
+            }
+        	if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
+        		mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD, GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
+        	}
         }
 
         mMapView = (MapView) findViewById(R.id.mapview);
@@ -226,7 +233,7 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
                 mMapController.animateTo(mGeoPoint);
 
-                if (mLocation.getAccuracy() <= LOCATION_ACCURACY) {
+                if (mLocation.getAccuracy() <= mLocationAccuracy) {
                     returnLocation();
                 }
             }

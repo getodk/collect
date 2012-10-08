@@ -45,6 +45,9 @@ import android.widget.TextView;
  */
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	public static final String LOCATION = "gp";
+	public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
+
+	public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
 	private Button mGetLocationButton;
 	private Button mViewButton;
@@ -53,12 +56,19 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private TextView mAnswerDisplay;
 	private boolean mUseMaps;
 	private String mAppearance;
+	private double mAccuracyThreshold;
 
 	public GeoPointWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 
 		mUseMaps = false;
 		mAppearance = prompt.getAppearanceHint();
+		String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+		if ( acc != null && acc.length() != 0 ) {
+			mAccuracyThreshold = Double.parseDouble(acc);
+		} else {
+			mAccuracyThreshold = DEFAULT_LOCATION_ACCURACY;
+		}
 
 		setOrientation(LinearLayout.VERTICAL);
 
@@ -101,6 +111,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				gp[3] = Double.valueOf(sa[3]).doubleValue();
 				Intent i = new Intent(getContext(), GeoPointMapActivity.class);
 				i.putExtra(LOCATION, gp);
+				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
 				((Activity) getContext()).startActivity(i);
 
 			}
@@ -150,6 +161,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				} else {
 					i = new Intent(getContext(), GeoPointActivity.class);
 				}
+				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
 				Collect.getInstance().getFormController()
 						.setIndexWaitingForData(mPrompt.getIndex());
 				((Activity) getContext()).startActivityForResult(i,
