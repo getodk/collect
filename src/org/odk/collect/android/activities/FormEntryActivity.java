@@ -1017,9 +1017,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mRelativeLayout.addView(mCurrentView, lp);
 
         if (mStaleView != null) {
-        	mRelativeLayout.removeView(mStaleView);
         	// start OutAnimation for transition...
             mStaleView.startAnimation(mOutAnimation);
+            // and remove the old view (MUST occur after start of animation!!!)
+        	mRelativeLayout.removeView(mStaleView);
         }
         // start InAnimation for transition...
         mCurrentView.startAnimation(mInAnimation);
