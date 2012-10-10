@@ -29,6 +29,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
@@ -143,7 +144,10 @@ public class MediaLayout extends RelativeLayout {
         if (videoURI != null) {
             // An video file is specified
             mVideoButton = new ImageButton(getContext());
-            mVideoButton.setImageResource(android.R.drawable.ic_media_play);
+            Bitmap b =
+                    BitmapFactory.decodeResource(getContext().getResources(),
+                        android.R.drawable.ic_media_play);
+            mVideoButton.setImageBitmap(b);
             mVideoButton.setOnClickListener(new OnClickListener() {
 
                 @Override

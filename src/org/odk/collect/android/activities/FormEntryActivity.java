@@ -1015,12 +1015,11 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         mStaleView = mCurrentView;
         mCurrentView = next;
         mRelativeLayout.addView(mCurrentView, lp);
-
+        mAnimationCompletionSet = 0;
+        
         if (mStaleView != null) {
         	// start OutAnimation for transition...
             mStaleView.startAnimation(mOutAnimation);
-            // and remove the old view (MUST occur after start of animation!!!)
-        	mRelativeLayout.removeView(mStaleView);
         }
         // start InAnimation for transition...
         mCurrentView.startAnimation(mInAnimation);
@@ -1622,22 +1621,39 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
 
     }
 
-    @Override
-    public void onAnimationEnd(Animation animation) {
-		Log.i(t, "onAnimationEnd " + ((animation == mInAnimation) ? "in" : ((animation == mOutAnimation) ? "out" : "other")));
-    	if ( mInAnimation == animation) {
-            if (mCurrentView instanceof ODKView) {
-                ((ODKView) mCurrentView).setFocus(this);
-            }
-     		mBeenSwiped = false;
-    	} else if ( mOutAnimation == animation ) {
-            if ( mStaleView != null && mStaleView instanceof ODKView ) {
+    private int mAnimationCompletionSet = 0;
+    
+    private void afterAllAnimations() {
+    	
+        if ( mStaleView != null ) {
+            // and remove the old view (MUST occur after start of animation!!!)
+        	mRelativeLayout.removeView(mStaleView);
+        	if ( mStaleView instanceof ODKView ) {
         		// http://code.google.com/p/android/issues/detail?id=8488
     			((ODKView) mStaleView).recycleDrawables();
             }
     		mStaleView = null;
+        }
+
+        if (mCurrentView instanceof ODKView) {
+            ((ODKView) mCurrentView).setFocus(this);
+        }
+ 		mBeenSwiped = false;
+    }
+    
+    @Override
+    public void onAnimationEnd(Animation animation) {
+		Log.i(t, "onAnimationEnd " + ((animation == mInAnimation) ? "in" : ((animation == mOutAnimation) ? "out" : "other")));
+    	if ( mInAnimation == animation) {
+    		mAnimationCompletionSet |= 1;
+    	} else if ( mOutAnimation == animation ) {
+    		mAnimationCompletionSet |= 2;
     	} else {
     		Log.e(t, "Unexpected animation");
+    	}
+    	
+    	if ( mAnimationCompletionSet == 3 ) {
+    		this.afterAllAnimations();
     	}
     }
 
