@@ -981,6 +981,15 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
      * appropriately given the AnimationType. Also updates the progress bar.
      */
     public void showView(View next, AnimationType from) {
+    	
+    	// disable notifications...
+    	if ( mInAnimation != null ) {
+    		mInAnimation.setAnimationListener(null);
+    	}
+    	if ( mOutAnimation != null ) {
+    		mOutAnimation.setAnimationListener(null);
+    	}
+
     	// logging of the view being shown is already done, as this was handled by createView()
         switch (from) {
             case RIGHT:
@@ -1020,6 +1029,10 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         if (mStaleView != null) {
         	// start OutAnimation for transition...
             mStaleView.startAnimation(mOutAnimation);
+            // and remove the old view (MUST occur after start of animation!!!)
+        	mRelativeLayout.removeView(mStaleView);
+        } else {
+        	mAnimationCompletionSet = 2;
         }
         // start InAnimation for transition...
         mCurrentView.startAnimation(mInAnimation);
@@ -1624,10 +1637,8 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
     private int mAnimationCompletionSet = 0;
     
     private void afterAllAnimations() {
-    	
+		Log.i(t, "afterAllAnimations");
         if ( mStaleView != null ) {
-            // and remove the old view (MUST occur after start of animation!!!)
-        	mRelativeLayout.removeView(mStaleView);
         	if ( mStaleView instanceof ODKView ) {
         		// http://code.google.com/p/android/issues/detail?id=8488
     			((ODKView) mStaleView).recycleDrawables();
