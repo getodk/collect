@@ -14,21 +14,17 @@
 
 package org.odk.collect.android.utilities;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 
 public class UrlUtils {
 
     public static boolean isValidUrl(String url) {
 
         try {
-            new URL(URLDecoder.decode(url, "utf-8"));
+            new URL(url);
             return true;
         } catch (MalformedURLException e) {
-            return false;
-        } catch (UnsupportedEncodingException e) {
             return false;
         }
 

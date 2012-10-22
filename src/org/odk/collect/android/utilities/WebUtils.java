@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -312,7 +311,7 @@ public final class WebUtils {
 			HttpContext localContext, HttpClient httpclient) {
 		URI u = null;
 		try {
-			URL url = new URL(URLDecoder.decode(urlString, "utf-8"));
+			URL url = new URL(urlString);
 			u = url.toURI();
 		} catch (Exception e) {
 			e.printStackTrace();

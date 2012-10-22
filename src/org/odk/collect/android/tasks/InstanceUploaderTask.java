@@ -30,6 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
@@ -42,14 +50,6 @@ import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntity;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.WebUtils;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
@@ -96,7 +96,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
         ContentValues cv = new ContentValues();
         URI u = null;
         try {
-            URL url = new URL(URLDecoder.decode(urlString, "utf-8"));
+            URL url = new URL(urlString);
             u = url.toURI();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -109,13 +109,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             e.printStackTrace();
             mResults.put(id,
                 fail + "invalid uri: " + urlString + " :: details: " + e.toString());
-            cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-            return true;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            mResults.put(id,
-                fail + "invalid url: " + urlString + " :: details: " + e.toString());
             cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
             Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
             return true;
