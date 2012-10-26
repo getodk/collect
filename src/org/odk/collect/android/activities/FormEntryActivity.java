@@ -1532,7 +1532,7 @@ public class FormEntryActivity extends Activity implements AnimationListener, Fo
         FormController formController = Collect.getInstance().getFormController();
         dismissDialogs();
         // make sure we're not already saving to disk.  if we are, currentPrompt is getting constantly updated
-        if (mSaveToDiskTask != null && mSaveToDiskTask.getStatus() != AsyncTask.Status.RUNNING) {
+        if (mSaveToDiskTask == null || mSaveToDiskTask.getStatus() == AsyncTask.Status.FINISHED) {
             if (mCurrentView != null && formController != null && formController.currentPromptIsQuestion()) {
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
