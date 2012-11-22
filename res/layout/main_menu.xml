@@ -77,7 +77,8 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="5dp" />
+                android:layout_height="5dp"
+                android:id="@+id/review_spacer" />
 
             <Button
                 android:id="@+id/send_data"
@@ -99,8 +100,9 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="5dp" />
-
+                android:layout_height="5dp"
+                android:id="@+id/get_forms_spacer" />
+            
             <Button
                 android:id="@+id/manage_forms"
                 android:layout_width="fill_parent"
