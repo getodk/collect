@@ -1,0 +1,127 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <Preference
+        android:key="odk_preferences"
+        android:summary="@string/admin_access_settings"
+        android:title="@string/general_preferences" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="org.odk.collect.android.preferences.PreferencesActivity"
+            android:targetPackage="org.odk.collect.android" >
+            <extra
+                android:name="adminMode"
+                android:value="true" />
+        </intent>
+    </Preference>
+
+    <org.odk.collect.android.preferences.PasswordDialogPreference
+        android:id="@+id/admin_pw"
+        android:defaultValue=""
+        android:dialogTitle="Change Admin Password"
+        android:key="admin_pw"
+        android:title="Admin Password" />
+
+    <PreferenceCategory android:title="@string/user_access_main_menu" >
+        <CheckBoxPreference
+            android:id="@+id/edit_saved"
+            android:defaultValue="true"
+            android:key="edit_saved"
+            android:title="@string/review_data_button" />
+        <CheckBoxPreference
+            android:id="@+id/send_finalized"
+            android:defaultValue="true"
+            android:key="send_finalized"
+            android:title="@string/send_data_button" />
+        <CheckBoxPreference
+            android:id="@+id/get_blank"
+            android:defaultValue="true"
+            android:key="get_blank"
+            android:title="@string/get_forms" />
+        <CheckBoxPreference
+            android:id="@+id/delete_saved"
+            android:defaultValue="true"
+            android:key="delete_saved"
+            android:title="@string/manage_files" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/user_access_preferences" >
+        <CheckBoxPreference
+            android:id="@+id/change_server"
+            android:defaultValue="true"
+            android:key="change_server"
+            android:title="@string/change_server" />
+        <CheckBoxPreference
+            android:id="@+id/change_username"
+            android:defaultValue="true"
+            android:key="change_username"
+            android:title="@string/change_username_default" />
+        <CheckBoxPreference
+            android:id="@+id/change_password"
+            android:defaultValue="true"
+            android:key="change_password"
+            android:title="@string/password" />
+        <CheckBoxPreference
+            android:id="@+id/change_google_account"
+            android:defaultValue="true"
+            android:key="change_google_account"
+            android:title="@string/selected_google_account_text" />
+        <CheckBoxPreference
+            android:id="@+id/change_font_size"
+            android:defaultValue="true"
+            android:key="change_font_size"
+            android:title="@string/font_size" />
+        <CheckBoxPreference
+            android:id="@+id/default_to_finalized"
+            android:defaultValue="true"
+            android:key="default_to_finalized"
+            android:title="@string/default_completed" />
+        <CheckBoxPreference
+            android:id="@+id/show_splash_screen"
+            android:defaultValue="true"
+            android:key="show_splash_screen"
+            android:title="@string/show_splash" />
+        <CheckBoxPreference
+            android:id="@+id/select_splash_screen"
+            android:defaultValue="true"
+            android:key="select_splash_screen"
+            android:title="@string/splash_path" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/user_access_form_entry" >
+        <CheckBoxPreference
+            android:id="@+id/access_settings"
+            android:defaultValue="true"
+            android:key="access_settings"
+            android:summary="@string/found_in_menu"
+            android:title="@string/general_preferences" />
+        <CheckBoxPreference
+            android:id="@+id/change_language"
+            android:defaultValue="true"
+            android:key="change_language"
+            android:summary="@string/found_in_menu"
+            android:title="@string/change_language" />
+        <CheckBoxPreference
+            android:id="@+id/jump_to"
+            android:defaultValue="true"
+            android:key="jump_to"
+            android:summary="@string/found_in_menu"
+            android:title="@string/view_hierarchy" />
+        <CheckBoxPreference
+            android:id="@+id/save_mid"
+            android:defaultValue="true"
+            android:key="save_mid"
+            android:summary="@string/save_mid_summary"
+            android:title="@string/save_mid" />
+        <CheckBoxPreference
+            android:id="@+id/save_as"
+            android:defaultValue="true"
+            android:key="save_as"
+            android:summary="@string/save_as_summary"
+            android:title="@string/save_as" />
+        <CheckBoxPreference
+            android:id="@+id/mark_as_finalized"
+            android:defaultValue="true"
+            android:key="mark_as_finalized"
+            android:summary="@string/mark_as_finalized_summary"
+            android:title="@string/mark_as_finished" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
