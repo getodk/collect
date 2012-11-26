@@ -221,4 +221,32 @@
 <string name="reset_image">Zurücksetzen</string>
 <string name="set_color">Farbe wählen</string>
 <string name="select_drawing_color">Zeichenfarbe wählen</string>
- </resources>
+<string name="mark_as_finished">Finalizing forms</string>
+<string name="user_access_main_menu">User can access Main Menu items:</string>
+<string name="user_access_preferences">User can access Change Settings items:</string>
+<string name="change_server">Server Protocol and URL</string>
+<string name="change_username_default">Username</string>
+<string name="change_password_default">Change default password</string>
+<string name="change_google">Change Google account</string>
+<string name="change_finalized">Change default to finalized</string>
+<string name="change_font">Change font size</string>
+<string name="change_splash">Change splash screen</string>
+<string name="change_show_splash">Change show splash screen</string>
+<string name="admin_preferences">Admin Settings</string>
+<string name="admin_access_settings">Tap for admin access to settings</string>
+<string name="user_access_form_entry">User can access Form Entry items:</string>
+<string name="save_mid">Mid-form saving</string>
+<string name="save_mid_summary">Disable to allow user to save only at end of form</string>
+<string name="jump_to">Jump-to prompt</string>
+<string name="save_as">Saved form renaming</string>
+<string name="save_as_summary">Disable to prevent renaming of forms at end of form entry</string>
+<string name="mark_as_finalized_summary">Disable to save forms based on default status (as selected in Change Settings)</string>
+<string name="enter_new_password">Enter new password</string>
+<string name="verify_new_password">Re-enter new password</string>
+<string name="admin_password_changed">Admin password successfully changed</string>
+<string name="admin_password_disabled">Admin password disabled</string>
+<string name="admin_password_mismatch">Sorry, passwords do not match!</string>
+<string name="admin_password_incorrect">Sorry, password is incorrect!</string>
+<string name="enter_admin_password">Enter Admin Password</string>
+<string name="found_in_menu">Found using Menu button in Form Entry</string>
+</resources>
