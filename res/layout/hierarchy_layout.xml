@@ -21,7 +21,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_margin="4dp" />
-	<!-- would prefer not to use an extra LinearLayout here, but weights don't 
+	<!-- would prefer not to use an extra LinearLayout here, but weights don't
 		seem to work properly in RelativeLayout -->
 	<LinearLayout
 		android:layout_width="fill_parent"
@@ -35,7 +35,7 @@ the License.
 			android:layout_height="wrap_content"
 			android:text="@string/jump_to_previous"
 			android:padding="12dp"
-			android:textSize="16dp"
+			android:textSize="16sp"
 			android:layout_weight="1" />
 		<Button
 			android:id="@+id/jumpBeginningButton"
@@ -43,7 +43,7 @@ the License.
 			android:layout_height="wrap_content"
 			android:text="@string/jump_to_beginning"
 			android:padding="12dp"
-			android:textSize="16dp"
+			android:textSize="16sp"
 			android:layout_weight="1" />
 		<Button
 			android:id="@+id/jumpEndButton"
@@ -51,7 +51,7 @@ the License.
 			android:layout_height="wrap_content"
 			android:text="@string/jump_to_end"
 			android:padding="12dp"
-			android:textSize="16dp"
+			android:textSize="16sp"
 			android:layout_weight="1" />
 	</LinearLayout>
 	<ListView
@@ -65,7 +65,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display"
-		android:textSize="21dp"
+		android:textSize="21sp"
 		android:padding="20dp"
 		android:gravity="center"
 		android:background="@drawable/white" />

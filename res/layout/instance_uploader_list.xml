@@ -30,7 +30,7 @@ the License.
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
-			android:textSize="16dp"
+			android:textSize="16sp"
 			android:layout_weight="1" />
 		<Button
 			android:id="@+id/upload_button"
@@ -38,7 +38,7 @@ the License.
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
-			android:textSize="16dp"
+			android:textSize="16sp"
 			android:layout_weight="1" />
 	</LinearLayout>
 	<ListView
@@ -52,7 +52,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:text="@string/no_items_display_instances"
-		android:textSize="21dp"
+		android:textSize="21sp"
 		android:paddingLeft="20dp"
 		android:paddingRight="20dp"
 		android:gravity="center"

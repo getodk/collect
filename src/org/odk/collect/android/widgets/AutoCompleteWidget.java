@@ -31,6 +31,7 @@ import android.widget.Filterable;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -226,7 +227,7 @@ public class AutoCompleteWidget extends QuestionWidget {
 
                     for (int i = 0; i < count; i++) {
                         final String item = items.get(i);
-                        String item_compare = item.toLowerCase();
+                        String item_compare = item.toLowerCase(Locale.getDefault());
 
                         // Match the strings using the filter specified
                         if (filterType.equals(match_substring)

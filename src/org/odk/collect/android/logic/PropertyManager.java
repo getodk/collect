@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -28,11 +28,12 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Vector;
 
 /**
  * Used to return device properties to JavaRosa
- * 
+ *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
@@ -85,7 +86,7 @@ public class PropertyManager implements IPropertyManager {
         		orDeviceId = "imei:" + deviceId;
         	}
         }
-        
+
         if ( deviceId == null ) {
         	// no SIM -- WiFi only
         	// Retrieve WiFiManager
@@ -98,7 +99,7 @@ public class PropertyManager implements IPropertyManager {
     			orDeviceId = "mac:" + deviceId;
     		}
         }
-        
+
         // if it is still null, use ANDROID_ID
         if ( deviceId == null ) {
             deviceId =
@@ -106,12 +107,12 @@ public class PropertyManager implements IPropertyManager {
                             .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
     		orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
         }
-        
+
         mProperties.put(DEVICE_ID_PROPERTY, deviceId);
         mProperties.put(OR_DEVICE_ID_PROPERTY, orDeviceId);
-        
+
         String value;
-        
+
         value = mTelephonyManager.getSubscriberId();
         if ( value != null ) {
         	mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
@@ -127,7 +128,7 @@ public class PropertyManager implements IPropertyManager {
         	mProperties.put(PHONE_NUMBER_PROPERTY, value);
         	mProperties.put(OR_PHONE_NUMBER_PROPERTY, "tel:" + value);
         }
-        
+
         // Get the username from the settings
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
         value = settings.getString(PreferencesActivity.KEY_USERNAME, null);
@@ -150,7 +151,8 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
-        return mProperties.get(propertyName.toLowerCase());
+    	// for now, all property names are in english...
+        return mProperties.get(propertyName.toLowerCase(Locale.ENGLISH));
     }
 
 
