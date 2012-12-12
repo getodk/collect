@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -16,11 +16,7 @@ package org.odk.collect.android.tasks;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
@@ -62,57 +58,39 @@ import android.webkit.MimeTypeMap;
 
 /**
  * Background task for uploading completed forms.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<String, String>> {
 
     private static final String t = "InstanceUploaderTask";
     // it can take up to 27 seconds to spin up Aggregate
-    private static final int CONNECTION_TIMEOUT = 60000; 
+    private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
 
     private InstanceUploaderListener mStateListener;
 
-    private URI mAuthRequestingServer;
+    private Uri mAuthRequestingServer;
     HashMap<String, String> mResults;
 
     /**
-     * Uploads to urlString the submission identified by id with filepath of instance 
+     * Uploads to urlString the submission identified by id with filepath of instance
      * @param urlString destination URL
-     * @param id 
-     * @param instanceFilePath 
+     * @param id
+     * @param instanceFilePath
      * @param toUpdate - Instance URL for recording status update.
      * @param httpclient - client connection
      * @param localContext - context (e.g., credentials, cookies) for client connection
      * @param uriRemap - mapping of Uris to avoid redirects on subsequent invocations
      * @return false if credentials are required and we should terminate immediately.
      */
-    private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath, 
-    			Uri toUpdate, HttpClient httpclient, HttpContext localContext, Map<URI, URI> uriRemap) {
-    	
+    private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
+    			Uri toUpdate, HttpClient httpclient, HttpContext localContext, Map<Uri, Uri> uriRemap) {
+
     	Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
         ContentValues cv = new ContentValues();
-        URI u = null;
-        try {
-            URL url = new URL(urlString);
-            u = url.toURI();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            mResults.put(id,
-                fail + "invalid url: " + urlString + " :: details: " + e.toString());
-            cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-            return true;
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            mResults.put(id,
-                fail + "invalid uri: " + urlString + " :: details: " + e.toString());
-            cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-            return true;
-        }
+        Uri u = Uri.parse(urlString);
 
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
@@ -145,9 +123,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                 	WebUtils.discardEntityBytes(response);
-            		// clear the cookies -- should not be necessary?
-                	Collect.getInstance().getCookieStore().clear();
-                    // we need authentication, so stop and return what we've
+            		// we need authentication, so stop and return what we've
                     // done so far.
                     mAuthRequestingServer = u;
                     return false;
@@ -156,9 +132,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 	WebUtils.discardEntityBytes(response);
                     if (locations != null && locations.length == 1) {
                         try {
-                            URL url =
-                                new URL(URLDecoder.decode(locations[0].getValue(), "utf-8"));
-                            URI uNew = url.toURI();
+                            Uri uNew = Uri.parse(URLDecoder.decode(locations[0].getValue(), "utf-8"));
                             if (u.getHost().equalsIgnoreCase(uNew.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
@@ -255,15 +229,15 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
         //
         // get instance file
         File instanceFile = new File(instanceFilePath);
-        
-        // Under normal operations, we upload the instanceFile to 
+
+        // Under normal operations, we upload the instanceFile to
         // the server.  However, during the save, there is a failure
         // window that may mark the submission as complete but leave
         // the file-to-be-uploaded with the name "submission.xml" and
         // the plaintext submission files on disk.  In this case,
         // upload the submission.xml and all the files in the directory.
-        // This means the plaintext files and the encrypted files 
-        // will be sent to the server and the server will have to 
+        // This means the plaintext files and the encrypted files
+        // will be sent to the server and the server will have to
         // figure out what to do with them.
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if ( submissionFile.exists() ) {
@@ -471,6 +445,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
     @Override
     protected HashMap<String, String> doInBackground(Long... values) {
         mResults = new HashMap<String, String>();
+        mAuthRequestingServer = null;
 
         String selection = InstanceColumns._ID + "=?";
         String[] selectionArgs = new String[values.length];
@@ -483,12 +458,12 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
         						.getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
-        
+
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
-        Map<URI, URI> uriRemap = new HashMap<URI, URI>();
+        Map<Uri, Uri> uriRemap = new HashMap<Uri, Uri>();
 
         Cursor c = null;
         try {
@@ -505,7 +480,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 	                String instance = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
 	                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
 	                Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
-	
+
 	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
 	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx);
 	                if (urlString == null) {
@@ -517,14 +492,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 	                        settings.getString(PreferencesActivity.KEY_SUBMISSION_URL, "/submission");
 	                    urlString = urlString + submissionUrl;
 	                }
-	
+
 	                // add the deviceID to the request...
 	                try {
 						urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
 					} catch (UnsupportedEncodingException e) {
 						// unreachable...
 					}
-	                
+
 	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, httpclient, localContext, uriRemap) ) {
 	                	return null; // get credentials...
 	                }

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.http.HttpStatus;
@@ -61,6 +62,7 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -69,7 +71,7 @@ import android.util.Log;
  * Common utility methods for managing the credentials associated with the
  * request context and constructing http context, client and request with the
  * proper parameters and OpenRosa headers.
- * 
+ *
  * @author mitchellsundt@gmail.com
  */
 public final class WebUtils {
@@ -124,7 +126,7 @@ public final class WebUtils {
 
 	/**
 	 * Remove all credentials for accessing the specified host.
-	 * 
+	 *
 	 * @param host
 	 */
 	private static final void clearHostCredentials(String host) {
@@ -141,7 +143,7 @@ public final class WebUtils {
 	 * Remove all credentials for accessing the specified host and, if the
 	 * username is not null or blank then add a (username, password) credential
 	 * for accessing this host.
-	 * 
+	 *
 	 * @param username
 	 * @param password
 	 * @param host
@@ -193,8 +195,8 @@ public final class WebUtils {
 				DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
 	}
 
-	public static final HttpHead createOpenRosaHttpHead(URI uri) {
-		HttpHead req = new HttpHead(uri);
+	public static final HttpHead createOpenRosaHttpHead(Uri u) {
+		HttpHead req = new HttpHead(URI.create(u.toString()));
 		setOpenRosaHeaders(req);
 		return req;
 	}
@@ -211,7 +213,7 @@ public final class WebUtils {
 		SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
 		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
-		
+
 		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
 	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
 			if ((auth != null) && (auth.length() > 0)) {
@@ -220,8 +222,8 @@ public final class WebUtils {
 		}
 	}
 
-	public static final HttpPost createOpenRosaHttpPost(URI uri) {
-		HttpPost req = new HttpPost(uri);
+	public static final HttpPost createOpenRosaHttpPost(Uri u) {
+		HttpPost req = new HttpPost(URI.create(u.toString()));
 		setOpenRosaHeaders(req);
 		setGoogleHeaders(req);
 		return req;
@@ -231,7 +233,7 @@ public final class WebUtils {
 	 * Create an httpClient with connection timeouts and other parameters set.
 	 * Save and reuse the connection manager across invocations (this is what
 	 * requires synchronized access).
-	 * 
+	 *
 	 * @param timeout
 	 * @return HttpClient properly configured.
 	 */
@@ -275,7 +277,7 @@ public final class WebUtils {
 	/**
 	 * Utility to ensure that the entity stream of a response is drained of
 	 * bytes.
-	 * 
+	 *
 	 * @param response
 	 */
 	public static final void discardEntityBytes(HttpResponse response) {
@@ -301,7 +303,7 @@ public final class WebUtils {
 	/**
 	 * Common method for returning a parsed xml document given a url and the
 	 * http context and client objects involved in the web connection.
-	 * 
+	 *
 	 * @param urlString
 	 * @param localContext
 	 * @param httpclient
@@ -354,7 +356,7 @@ public final class WebUtils {
 				return new DocumentFetchResult(error, 0);
 			}
 
-			if (!entity.getContentType().getValue().toLowerCase()
+			if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH)
 					.contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
 				WebUtils.discardEntityBytes(response);
 				String error = "ContentType: "
