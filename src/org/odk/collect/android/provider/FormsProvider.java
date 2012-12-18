@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,6 +18,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -39,7 +40,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- * 
+ *
  */
 public class FormsProvider extends ContentProvider {
 
@@ -75,18 +76,18 @@ public class FormsProvider extends ContentProvider {
         }
 
         private void onCreateNamed(SQLiteDatabase db, String tableName) {
-            db.execSQL("CREATE TABLE " + tableName + " (" 
-            		+ FormsColumns._ID + " integer primary key, " 
+            db.execSQL("CREATE TABLE " + tableName + " ("
+            		+ FormsColumns._ID + " integer primary key, "
             		+ FormsColumns.DISPLAY_NAME + " text not null, "
-                    + FormsColumns.DISPLAY_SUBTEXT + " text not null, " 
-                    + FormsColumns.DESCRIPTION + " text, " 
+                    + FormsColumns.DISPLAY_SUBTEXT + " text not null, "
+                    + FormsColumns.DESCRIPTION + " text, "
                     + FormsColumns.JR_FORM_ID + " text not null, "
                     + FormsColumns.JR_VERSION + " text, "
                     + FormsColumns.MD5_HASH + " text not null, "
                     + FormsColumns.DATE + " integer not null, " // milliseconds
                     + FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                    + FormsColumns.FORM_FILE_PATH + " text not null, " 
-                    + FormsColumns.LANGUAGE + " text, " 
+                    + FormsColumns.FORM_FILE_PATH + " text not null, "
+                    + FormsColumns.LANGUAGE + " text, "
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
                     + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
@@ -102,34 +103,34 @@ public class FormsProvider extends ContentProvider {
                 onCreate(db);
                 return;
         	} else {
-        		// adding BASE64_RSA_PUBLIC_KEY and changing type and name of integer MODEL_VERSION to text VERSION 
+        		// adding BASE64_RSA_PUBLIC_KEY and changing type and name of integer MODEL_VERSION to text VERSION
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
                 onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
         		db.execSQL("INSERT INTO " + TEMP_FORMS_TABLE_NAME + " ("
                 		+ FormsColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT + ", " 
-                        + FormsColumns.DESCRIPTION + ", " 
+                        + FormsColumns.DISPLAY_SUBTEXT + ", "
+                        + FormsColumns.DESCRIPTION + ", "
                         + FormsColumns.JR_FORM_ID + ", "
                         + FormsColumns.MD5_HASH + ", "
                         + FormsColumns.DATE + ", " // milliseconds
                         + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", " 
-                        + FormsColumns.LANGUAGE + ", " 
+                        + FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsColumns.LANGUAGE + ", "
                         + FormsColumns.SUBMISSION_URI + ", "
                         + FormsColumns.JR_VERSION + ", "
                         + ((oldVersion != 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT " 
+                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
                 		+ FormsColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT + ", " 
-                        + FormsColumns.DESCRIPTION + ", " 
+                        + FormsColumns.DISPLAY_SUBTEXT + ", "
+                        + FormsColumns.DESCRIPTION + ", "
                         + FormsColumns.JR_FORM_ID + ", "
                         + FormsColumns.MD5_HASH + ", "
                         + FormsColumns.DATE + ", " // milliseconds
                         + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", " 
-                        + FormsColumns.LANGUAGE + ", " 
+                        + FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsColumns.LANGUAGE + ", "
                         + FormsColumns.SUBMISSION_URI + ", "
                         + "CASE WHEN " + MODEL_VERSION + " IS NOT NULL THEN " +
                         			"CAST(" + MODEL_VERSION + " AS TEXT) ELSE NULL END, "
@@ -142,34 +143,34 @@ public class FormsProvider extends ContentProvider {
         		db.execSQL("INSERT INTO " + FORMS_TABLE_NAME + " ("
                 		+ FormsColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT + ", " 
-                        + FormsColumns.DESCRIPTION + ", " 
+                        + FormsColumns.DISPLAY_SUBTEXT + ", "
+                        + FormsColumns.DESCRIPTION + ", "
                         + FormsColumns.JR_FORM_ID + ", "
                         + FormsColumns.MD5_HASH + ", "
                         + FormsColumns.DATE + ", " // milliseconds
                         + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", " 
-                        + FormsColumns.LANGUAGE + ", " 
+                        + FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsColumns.LANGUAGE + ", "
                         + FormsColumns.SUBMISSION_URI + ", "
                         + FormsColumns.JR_VERSION + ", "
                         + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT " 
+                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
                 		+ FormsColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT + ", " 
-                        + FormsColumns.DESCRIPTION + ", " 
+                        + FormsColumns.DISPLAY_SUBTEXT + ", "
+                        + FormsColumns.DESCRIPTION + ", "
                         + FormsColumns.JR_FORM_ID + ", "
                         + FormsColumns.MD5_HASH + ", "
                         + FormsColumns.DATE + ", " // milliseconds
                         + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", " 
-                        + FormsColumns.LANGUAGE + ", " 
+                        + FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsColumns.LANGUAGE + ", "
                         + FormsColumns.SUBMISSION_URI + ", "
                         + FormsColumns.JR_VERSION + ", "
                         + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
                         + FormsColumns.JRCACHE_FILE_PATH + " FROM " + TEMP_FORMS_TABLE_NAME);
         		db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-        		
+
 	            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to " + newVersion
 	                    + ", without destroying all the old data");
         	}
@@ -181,7 +182,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        
+
         // must be at the beginning of any activity that can be called from an external intent
         Collect.createODKDirs();
 
@@ -248,7 +249,7 @@ public class FormsProvider extends ContentProvider {
         } else {
             values = new ContentValues();
         }
-        
+
         if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
         	throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH + " must be specified.");
         }
@@ -269,7 +270,7 @@ public class FormsProvider extends ContentProvider {
 
         if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
             Date today = new Date();
-            String ts = new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(today);
+            String ts = new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(today);
             values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
         }
 
@@ -295,7 +296,7 @@ public class FormsProvider extends ContentProvider {
         }
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        
+
         // first try to see if a record with this filename already exists...
         String[] projection = {
                 FormsColumns._ID, FormsColumns.FORM_FILE_PATH
@@ -314,7 +315,7 @@ public class FormsProvider extends ContentProvider {
         		c.close();
         	}
         }
-        
+
         long rowId = db.insert(FORMS_TABLE_NAME, null, values);
         if (rowId > 0) {
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, rowId);
@@ -444,7 +445,7 @@ public class FormsProvider extends ContentProvider {
                 Cursor c = null;
                 try {
                 	c = this.query(uri, null, where, whereArgs, null);
-	
+
 	                if (c.getCount() > 0) {
 	                    c.moveToPosition(-1);
 	                    while (c.moveToNext()) {
@@ -459,7 +460,7 @@ public class FormsProvider extends ContentProvider {
 	                                // different files, delete the old one
 	                                deleteFileOrDir(delFile);
 	                            }
-	
+
 	                            // either way, delete the old cache because we'll calculate a new one.
 	                            deleteFileOrDir(c.getString(c
 	                                    .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
@@ -475,7 +476,7 @@ public class FormsProvider extends ContentProvider {
                 // Make sure that the necessary fields are all set
                 if (values.containsKey(FormsColumns.DATE) == true) {
                     Date today = new Date();
-                    String ts = new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(today);
+                    String ts = new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(today);
                     values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
                 }
 
@@ -489,28 +490,28 @@ public class FormsProvider extends ContentProvider {
                 Cursor update = null;
                 try {
                 	update = this.query(uri, null, where, whereArgs, null);
-	
+
 	                // This should only ever return 1 record.
 	                if (update.getCount() > 0) {
 	                    update.moveToFirst();
-	
+
 	                    // don't let users manually update md5
 	                    if (values.containsKey(FormsColumns.MD5_HASH)) {
 	                        values.remove(FormsColumns.MD5_HASH);
 	                    }
-	
+
 	                    // the order here is important (jrcache needs to be before form file)
 	                    // because we update the jrcache file if there's a new form file
 	                    if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
 	                        deleteFileOrDir(update.getString(update
 	                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
 	                    }
-	
+
 	                    if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
 	                        String formFile = values.getAsString(FormsColumns.FORM_FILE_PATH);
 	                        String oldFile =
 	                            update.getString(update.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-	
+
 	                        if (formFile != null && formFile.equalsIgnoreCase(oldFile)) {
 	                            // Files are the same, so we may have just copied over something we had
 	                            // already
@@ -518,25 +519,25 @@ public class FormsProvider extends ContentProvider {
 	                            // New file name. This probably won't ever happen, though.
 	                            deleteFileOrDir(oldFile);
 	                        }
-	
+
 	                        // we're updating our file, so update the md5
 	                        // and get rid of the cache (doesn't harm anything)
 	                        deleteFileOrDir(update.getString(update
 	                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
 	                        String newMd5 = FileUtils.getMd5Hash(new File(formFile));
 	                        values.put(FormsColumns.MD5_HASH, newMd5);
-	                        values.put(FormsColumns.JRCACHE_FILE_PATH, 
+	                        values.put(FormsColumns.JRCACHE_FILE_PATH,
 	                        		Collect.CACHE_PATH + File.separator + newMd5 + ".formdef");
 	                    }
-	
+
 	                    // Make sure that the necessary fields are all set
 	                    if (values.containsKey(FormsColumns.DATE) == true) {
 	                        Date today = new Date();
 	                        String ts =
-	                            new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(today);
+	                            new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(today);
 	                        values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
 	                    }
-	
+
 	                    count =
 	                        db.update(FORMS_TABLE_NAME, values, FormsColumns._ID + "=" + formId
 	                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),

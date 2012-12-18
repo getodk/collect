@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -40,7 +40,7 @@ import java.util.Vector;
  * answers is not displayed to the user. The goal is to be more compact; this question type is best
  * suited for select one questions with a large number of possible answers. If images, audio, or
  * video are specified in the select answers they are ignored.
- * 
+ *
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class AutoCompleteWidget extends QuestionWidget {
@@ -218,7 +218,7 @@ public class AutoCompleteWidget extends QuestionWidget {
                     results.count = mItemsArray.size();
                 } else {
                     // Compare lower case strings
-                    String prefixString = prefix.toString().toLowerCase();
+                    String prefixString = prefix.toString().toLowerCase(Locale.getDefault());
 
                     // Local to here so we're not changing actual array
                     final ArrayList<String> items = mItems;

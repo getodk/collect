@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -92,11 +92,12 @@ import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating transitions between
  * questions, and allowing the user to enter data.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntryActivity extends Activity implements AnimationListener,
@@ -716,7 +717,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     /**
      * Attempt to save the answer(s) in the current screen to into the data model.
-     * 
+     *
      * @param evaluateConstraints
      * @return false if any error occurs while saving (constraint violated, etc...), true otherwise.
      */
@@ -806,7 +807,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     /**
      * Creates a view given the View type and an event
-     * 
+     *
      * @param event
      * @param advancingPage -- true if this results from advancing through the form
      * @return newly created View
@@ -1175,7 +1176,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     /**
      * Creates a toast with the specified message.
-     * 
+     *
      * @param message
      */
     private void showCustomToast(String message, int duration) {
@@ -1952,7 +1953,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (formController.getInstancePath() == null) {
 
             // Create new answer folder.
-            String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance()
+            String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH).format(Calendar.getInstance()
                     .getTime());
             String file = mFormPath.substring(mFormPath.lastIndexOf('/') + 1,
                     mFormPath.lastIndexOf('.'));
@@ -2022,7 +2023,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     /**
      * Attempts to save an answer to the specified index.
-     * 
+     *
      * @param answer
      * @param index
      * @param evaluateConstraints
@@ -2041,7 +2042,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Checks the database to determine if the current instance being edited has already been
      * 'marked completed'. A form can be 'unmarked' complete and then resaved.
-     * 
+     *
      * @return true if form has been marked completed, false otherwise.
      */
     private boolean isInstanceComplete(boolean end) {

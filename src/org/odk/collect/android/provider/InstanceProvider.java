@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -36,9 +36,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
- * 
+ *
  */
 public class InstanceProvider extends ContentProvider {
 
@@ -66,18 +67,18 @@ public class InstanceProvider extends ContentProvider {
 
 
         @Override
-        public void onCreate(SQLiteDatabase db) {            
-           db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " (" 
-               + InstanceColumns._ID + " integer primary key, " 
+        public void onCreate(SQLiteDatabase db) {
+           db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
+               + InstanceColumns._ID + " integer primary key, "
                + InstanceColumns.DISPLAY_NAME + " text not null, "
-               + InstanceColumns.SUBMISSION_URI + " text, " 
+               + InstanceColumns.SUBMISSION_URI + " text, "
                + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
                + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                + InstanceColumns.JR_FORM_ID + " text not null, "
                + InstanceColumns.JR_VERSION + " text, "
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-               + InstanceColumns.DISPLAY_SUBTEXT + " text not null );");   
+               + InstanceColumns.DISPLAY_SUBTEXT + " text not null );");
         }
 
 
@@ -85,16 +86,16 @@ public class InstanceProvider extends ContentProvider {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         	int initialVersion = oldVersion;
         	if ( oldVersion == 1 ) {
-        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + 
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
         					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-        		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " + 
+        		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
         					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true) + "' WHERE " +
         					InstanceColumns.STATUS + " IS NOT NULL AND " +
         					InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'");
         		oldVersion = 2;
         	}
         	if ( oldVersion == 2 ) {
-        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + 
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
     					InstanceColumns.JR_VERSION + " text;");
         	}
             Log.w(t, "Successfully upgraded database from version " + initialVersion + " to " + newVersion
@@ -186,7 +187,7 @@ public class InstanceProvider extends ContentProvider {
             String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
             values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
         }
-        
+
         if (values.containsKey(InstanceColumns.STATUS) == false) {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         }
@@ -203,23 +204,23 @@ public class InstanceProvider extends ContentProvider {
 
         throw new SQLException("Failed to insert row into " + uri);
     }
-    
+
     private String getDisplaySubtext(String state, Date date) {
         if (state == null) {
-        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(date);
+        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time)).format(date);
+        	return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time), Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time)).format(date);
+        	return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time), Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time)).format(date);
+        	return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time), Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.sending_failed_on_date_at_time)).format(date);
+        	return new SimpleDateFormat(getContext().getString(R.string.sending_failed_on_date_at_time), Locale.getDefault()).format(date);
         } else {
-        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time)).format(date);
+        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(date);
         }
     }
-    
+
     private void deleteAllFilesInDirectory(File directory) {
         if (directory.exists()) {
             if (directory.isDirectory()) {
@@ -253,9 +254,9 @@ public class InstanceProvider extends ContentProvider {
     public int delete(Uri uri, String where, String[] whereArgs) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         int count;
-        
+
         switch (sUriMatcher.match(uri)) {
-            case INSTANCES:                
+            case INSTANCES:
                 Cursor del = null;
                 try {
                 	del = this.query(uri, null, where, whereArgs, null);
@@ -286,14 +287,14 @@ public class InstanceProvider extends ContentProvider {
 	                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
 	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
 	                    File instanceDir = (new File(instanceFile)).getParentFile();
-	                    deleteAllFilesInDirectory(instanceDir);           
+	                    deleteAllFilesInDirectory(instanceDir);
 	                }
                 } finally {
                 	if ( c != null ) {
                 		c.close();
                 	}
                 }
-                
+
                 count =
                     db.delete(INSTANCES_TABLE_NAME,
                         InstanceColumns._ID + "=" + instanceId
@@ -319,14 +320,14 @@ public class InstanceProvider extends ContentProvider {
             case INSTANCES:
                 if (values.containsKey(InstanceColumns.STATUS)) {
                     status = values.getAsString(InstanceColumns.STATUS);
-                    
+
                     if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
                     }
                 }
-                
+
                 count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
                 break;
 
@@ -335,14 +336,14 @@ public class InstanceProvider extends ContentProvider {
 
                 if (values.containsKey(InstanceColumns.STATUS)) {
                     status = values.getAsString(InstanceColumns.STATUS);
-                    
+
                     if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
                     }
                 }
-               
+
                 count =
                     db.update(INSTANCES_TABLE_NAME, values, InstanceColumns._ID + "=" + instanceId
                             + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""), whereArgs);
