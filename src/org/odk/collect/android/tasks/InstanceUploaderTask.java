@@ -106,6 +106,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
             }
 
+            Log.i(t, "Using Uri remap for submission " + id + ". Now: " + u.toString());
         } else {
 
             // if https then enable preemptive basic auth...
@@ -119,6 +120,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             // prepare response
             HttpResponse response = null;
             try {
+                Log.i(t, "Issuing HEAD request for " + id + " to: " + u.toString());
+
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
@@ -399,6 +402,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             // prepare response and return uploaded
             HttpResponse response = null;
             try {
+                Log.i(t, "Issuing POST request for " + id + " to: " + u.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 WebUtils.discardEntityBytes(response);
@@ -486,10 +490,18 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 	                if (urlString == null) {
 	                    SharedPreferences settings =
 	                        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-	                    urlString = settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
+	                    urlString = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+	                    				Collect.getInstance().getString(R.string.default_server_url));
+	                    if ( urlString.charAt(urlString.length()-1) == '/') {
+	                    	urlString = urlString.substring(0, urlString.length()-1);
+	                    }
 	                    // NOTE: /submission must not be translated! It is the well-known path on the server.
 	                    String submissionUrl =
 	                        settings.getString(PreferencesActivity.KEY_SUBMISSION_URL, "/submission");
+	                    if ( submissionUrl.charAt(0) != '/') {
+	                    	submissionUrl = "/" + submissionUrl;
+	                    }
+
 	                    urlString = urlString + submissionUrl;
 	                }
 

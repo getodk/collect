@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -39,7 +39,7 @@ import android.util.Log;
 
 /**
  * Background task for loading a form.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -85,11 +85,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         if (mMarkCompleted) {
         	formController.postProcessInstance();
         }
-        
+
     	Collect.getInstance().getActivityLogger().logInstanceAction(this, "save", Boolean.toString(mMarkCompleted));
 
     	boolean saveOutcome = exportData(mMarkCompleted);
-    	
+
     	// attempt to remove any scratch file
         File shadowInstance = savepointFile(formController.getInstancePath());
         if ( shadowInstance.exists() ) {
@@ -107,7 +107,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
 
         FormController formController = Collect.getInstance().getFormController();
-        
+
         // Update the instance database...
         ContentValues values = new ContentValues();
         if (mInstanceName != null) {
@@ -161,8 +161,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 	                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
 	                String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
 	                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-	                String submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
-	
+	                String submissionUri = null;
+	                if ( !c.isNull(c.getColumnIndex(FormsColumns.SUBMISSION_URI)) ) {
+	                	submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
+	                }
+
 	                // add missing fields into values
 	                values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
 	                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
@@ -186,7 +189,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
     /**
      * Return the name of the savepoint file for a given instance.
-     * 
+     *
      * @param instancePath
      * @return
      */
@@ -195,11 +198,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         File temp = new File(tempDir, instancePath.getName() + ".save");
         return temp;
     }
-    
+
     /**
      * Blocking write of the instance data to a temp file. Used to safeguard data
      * during intent launches for, e.g., taking photos.
-     * 
+     *
      * @param tempPath
      * @return
      */
@@ -225,7 +228,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         	Log.i(t, "Savepoint ms: " + Long.toString(end - start));
         }
     }
-    
+
     /**
      * Write's the data to the sdcard, and updates the instances content provider.
      * In theory we don't have to write to disk, and this is where you'd add
@@ -250,18 +253,18 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
         }
 
         // update the mUri. We have exported the reloadable instance, so update status...
-        // Since we saved a reloadable instance, it is flagged as re-openable so that if any error 
+        // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
         // occurs during the packaging of the data for the server fails (e.g., encryption),
         // we can still reopen the filled-out form and re-save it at a later time.
         updateInstanceDatabase(true, true);
-        
+
         if ( markCompleted ) {
             // now see if the packaging of the data for the server would make it
         	// non-reopenable (e.g., encryption or send an SMS or other fraction of the form).
             boolean canEditAfterCompleted = formController.isSubmissionEntireForm();
             boolean isEncrypted = false;
-            
-            // build a submission.xml to hold the data being submitted 
+
+            // build a submission.xml to hold the data being submitted
             // and (if appropriate) encrypt the files on the side
 
             // pay attention to the ref attribute of the submission profile...
@@ -272,14 +275,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 e.printStackTrace();
                 return false;
             }
-            
+
             File instanceXml = formController.getInstancePath();
             File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
             // write out submission.xml -- the data to actually submit to aggregate
             exportXmlFile(payload, submissionXml.getAbsolutePath());
-            
+
             // see if the form is encrypted and we can encrypt it...
-            EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(mUri, 
+            EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(mUri,
             		formController.getSubmissionMetadata());
             if ( formInfo != null ) {
                 // if we are encrypting, the form cannot be reopened afterward
@@ -290,52 +293,52 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
                 }
                 isEncrypted = true;
             }
-        	
+
             // At this point, we have:
-            // 1. the saved original instanceXml, 
+            // 1. the saved original instanceXml,
             // 2. all the plaintext attachments
             // 2. the submission.xml that is the completed xml (whether encrypting or not)
             // 3. all the encrypted attachments if encrypting (isEncrypted = true).
             //
             // NEXT:
             // 1. Update the instance database (with status complete).
-            // 2. Overwrite the instanceXml with the submission.xml 
+            // 2. Overwrite the instanceXml with the submission.xml
             //    and remove the plaintext attachments if encrypting
-            
+
             updateInstanceDatabase(false, canEditAfterCompleted);
 
 	        if (  !canEditAfterCompleted ) {
 	            // AT THIS POINT, there is no going back.  We are committed
-	            // to returning "success" (true) whether or not we can 
-	            // rename "submission.xml" to instanceXml and whether or 
+	            // to returning "success" (true) whether or not we can
+	            // rename "submission.xml" to instanceXml and whether or
 	            // not we can delete the plaintext media files.
 	        	//
 	        	// Handle the fall-out for a failed "submission.xml" rename
 	        	// in the InstanceUploader task.  Leftover plaintext media
 	        	// files are handled during form deletion.
-	
+
 	            // delete the restore Xml file.
 	            if ( !instanceXml.delete() ) {
-	                Log.e(t, "Error deleting " + instanceXml.getAbsolutePath() 
+	                Log.e(t, "Error deleting " + instanceXml.getAbsolutePath()
 	                		+ " prior to renaming submission.xml");
 	                return true;
 	            }
-	        	
+
 	            // rename the submission.xml to be the instanceXml
 	            if ( !submissionXml.renameTo(instanceXml) ) {
 	                Log.e(t, "Error renaming submission.xml to " + instanceXml.getAbsolutePath());
 	                return true;
 	            }
 	        } else {
-	        	// try to delete the submissionXml file, since it is 
-	        	// identical to the existing instanceXml file 
+	        	// try to delete the submissionXml file, since it is
+	        	// identical to the existing instanceXml file
 	        	// (we don't need to delete and rename anything).
 	            if ( !submissionXml.delete() ) {
-	                Log.w(t, "Error deleting " + submissionXml.getAbsolutePath() 
+	                Log.w(t, "Error deleting " + submissionXml.getAbsolutePath()
 	                		+ " (instance is re-openable)");
 	            }
 	        }
-        	
+
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if ( isEncrypted ) {
