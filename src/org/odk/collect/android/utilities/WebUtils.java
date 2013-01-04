@@ -322,6 +322,10 @@ public final class WebUtils {
 					+ ("while accessing") + urlString, 0);
 		}
 
+		if (u.getHost() == null ) {
+			return new DocumentFetchResult("Invalid server URL (no hostname): " + urlString, 0);
+		}
+
 		// if https then enable preemptive basic auth...
 		if (u.getScheme().equals("https")) {
 			enablePreemptiveBasicAuth(localContext, u.getHost());

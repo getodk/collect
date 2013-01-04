@@ -640,10 +640,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // group.
         // That is, skip backwards over repeat prompts, groups that are not field-lists,
         // repeat events, and indexes in field-lists that is not the containing group.
-
-        View current = createView(event, false);
-        showView(current, AnimationType.FADE);
-
+    	if ( event == FormEntryController.EVENT_PROMPT_NEW_REPEAT ) {
+    		createRepeatDialog();
+    	} else {
+	        View current = createView(event, false);
+	        showView(current, AnimationType.FADE);
+    	}
     }
 
     @Override
@@ -953,9 +955,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     createErrorDialog(e.getMessage(), EXIT);
                     e.printStackTrace();
                     // this is badness to avoid a crash.
-                    // really a next view should increment the formcontroller, create the view
-                    // if the view is null, then keep the current view and pop an error.
-                    return new View(this);
+                    event = formController.stepToNextScreenEvent();
+                    return createView(event, advancingPage);
                 }
 
                 // Makes a "clear answer" menu pop up on long-click
@@ -967,8 +968,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 return odkv;
             default:
+                createErrorDialog("Internal error: step to prompt failed", EXIT);
                 Log.e(t, "Attempted to create a view that does not exist.");
-                return null;
+                // this is badness to avoid a crash.
+                event = formController.stepToNextScreenEvent();
+                return createView(event, advancingPage);
         }
     }
 
