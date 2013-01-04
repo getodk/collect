@@ -85,12 +85,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-    			Uri toUpdate, HttpClient httpclient, HttpContext localContext, Map<Uri, Uri> uriRemap) {
+    			Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap) {
 
     	Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
         ContentValues cv = new ContentValues();
         Uri u = Uri.parse(urlString);
+        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
@@ -125,6 +126,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+            		// clear the cookies -- should not be necessary?
+            		Collect.getInstance().getCookieStore().clear();
+
                 	WebUtils.discardEntityBytes(response);
             		// we need authentication, so stop and return what we've
                     // done so far.
@@ -186,6 +190,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
                 mResults.put(id, fail + "Client Protocol Exception");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -193,28 +198,32 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
             } catch (ConnectTimeoutException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
                 mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (UnknownHostException e) {
                 e.printStackTrace();
-                mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
                 Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
+                mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (SocketTimeoutException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
                 mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
-                mResults.put(id, fail + "Generic Exception");
                 Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
+                mResults.put(id, fail + "Generic Exception");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
@@ -430,6 +439,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
                 mResults.put(id, fail + "Generic Exception. " + e.toString());
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -465,7 +476,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         Map<Uri, Uri> uriRemap = new HashMap<Uri, Uri>();
 
@@ -512,7 +522,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 						// unreachable...
 					}
 
-	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, httpclient, localContext, uriRemap) ) {
+	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap) ) {
 	                	return null; // get credentials...
 	                }
 	            }

@@ -445,13 +445,7 @@ public final class WebUtils {
 			}
 			return new DocumentFetchResult(doc, isOR);
 		} catch (Exception e) {
-			// If we get an unexpected exception, the safest thing is to close
-			// all connections
-			// so that if there is garbage on the connection we ensure it is
-			// removed. This
-			// is especially important if the connection times out.
-			httpConnectionManager.shutdown();
-			httpConnectionManager = null;
+			clearHttpConnectionManager();
 			e.printStackTrace();
 			String cause;
 			Throwable c = e;
@@ -465,5 +459,15 @@ public final class WebUtils {
 			Log.w(t, error);
 			return new DocumentFetchResult(error, 0);
 		}
+	}
+
+	public static void clearHttpConnectionManager() {
+		// If we get an unexpected exception, the safest thing is to close
+		// all connections
+		// so that if there is garbage on the connection we ensure it is
+		// removed. This
+		// is especially important if the connection times out.
+		httpConnectionManager.shutdown();
+		httpConnectionManager = null;
 	}
 }
