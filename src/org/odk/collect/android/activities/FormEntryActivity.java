@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -868,12 +869,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // edittext to change the displayed name of the instance
                 final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
 
-                if (!mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_AS, true)) {
-                    saveAs.setVisibility(View.GONE);
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
-                    sa.setVisibility(View.GONE);
-                }
-
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -890,25 +885,50 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         returnFilter
                 });
 
-                String saveName = formController.getFormTitle();
-                if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
-                    Uri instanceUri = getIntent().getData();
-                    Cursor instance = null;
-                    try {
-                        instance = getContentResolver().query(instanceUri, null, null, null, null);
-                        if (instance.getCount() == 1) {
-                            instance.moveToFirst();
-                            saveName = instance.getString(instance
-                                    .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        }
-                    } finally {
-                        if (instance != null) {
-                            instance.close();
+                String saveName = formController.getSubmissionMetadata().instanceName;
+                if ( saveName == null ) {
+                	// no meta/instanceName field in the form -- see if we have a
+                	// name for this instance from a previous save attempt...
+                    if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
+                        Uri instanceUri = getIntent().getData();
+                        Cursor instance = null;
+                        try {
+                            instance = getContentResolver().query(instanceUri, null, null, null, null);
+                            if (instance.getCount() == 1) {
+                                instance.moveToFirst();
+                                saveName = instance.getString(instance
+                                        .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                            }
+                        } finally {
+                            if (instance != null) {
+                                instance.close();
+                            }
                         }
                     }
+                	// present the prompt to allow user to name the form
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    sa.setVisibility(View.VISIBLE);
+                	saveName = formController.getFormTitle();
+                    saveAs.setText(saveName);
+                	saveAs.setEnabled(true);
+                    saveAs.setVisibility(View.VISIBLE);
+                } else {
+                	// if instanceName is defined in form, this is the name -- no revisions
+                	// display only the name, not the prompt, and disable edits
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    sa.setVisibility(View.GONE);
+                    saveAs.setText(saveName);
+                	saveAs.setEnabled(false);
+                	saveAs.setBackgroundColor(Color.WHITE);
+                    saveAs.setVisibility(View.VISIBLE);
                 }
 
-                saveAs.setText(saveName);
+                // override the visibility settings based upon admin preferences
+                if (!mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_AS, true)) {
+                    saveAs.setVisibility(View.GONE);
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    sa.setVisibility(View.GONE);
+                }
 
                 // Create 'save' button
                 ((Button) endView.findViewById(R.id.save_exit_button))
@@ -1162,7 +1182,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 "createConstraintToast.ANSWER_CONSTRAINT_VIOLATED",
                                 "show", index);
                 if (constraintText == null) {
-                    constraintText = getString(R.string.invalid_answer_error);
+                    constraintText = formController.getQuestionPrompt(index).getSpecialFormQuestionText("constraintMsg");
+                    if ( constraintText == null) {
+                    	constraintText = getString(R.string.invalid_answer_error);
+                    }
                 }
                 break;
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
@@ -1171,7 +1194,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         .logInstanceAction(this,
                                 "createConstraintToast.ANSWER_REQUIRED_BUT_EMPTY",
                                 "show", index);
-                constraintText = getString(R.string.required_answer_error);
+                constraintText = formController.getQuestionPrompt(index).getSpecialFormQuestionText("requiredMsg");
+                if ( constraintText == null) {
+                	constraintText = getString(R.string.required_answer_error);
+                }
                 break;
         }
 

@@ -88,6 +88,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, Integer> {
 
     	Collect.getInstance().getActivityLogger().logInstanceAction(this, "save", Boolean.toString(mMarkCompleted));
 
+    	// if there is a meta/instanceName field, be sure we are using the latest value
+    	// just in case the validate somehow triggered an update.
+    	String updatedSaveName = formController.getSubmissionMetadata().instanceName;
+    	if ( updatedSaveName != null ) {
+    		mInstanceName = updatedSaveName;
+    	}
+
     	boolean saveOutcome = exportData(mMarkCompleted);
 
     	// attempt to remove any scratch file
