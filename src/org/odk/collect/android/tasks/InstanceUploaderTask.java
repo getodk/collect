@@ -42,6 +42,7 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
+import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
 import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntity;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
@@ -216,6 +217,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                 Log.e(t, e.toString());
                 WebUtils.clearHttpConnectionManager();
                 mResults.put(id, fail + "Connection Timeout");
+                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                return true;
+            } catch (HttpHostConnectException e) {
+                e.printStackTrace();
+                Log.e(t, e.toString());
+                WebUtils.clearHttpConnectionManager();
+                mResults.put(id, fail + "Network Connection Refused");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
