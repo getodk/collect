@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2012 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -24,17 +24,22 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 /**
  * Based heavily upon:
  * http://www.yougli.net/android/a-photoshop-like-color-picker
  * -for-your-android-application/
- * 
+ *
  * @author BehrAtherton@gmail.com
  * @author yougli@yougli.net
- * 
+ *
  */
 public class ColorPickerDialog extends Dialog {
 	public interface OnColorChangedListener {
@@ -44,6 +49,45 @@ public class ColorPickerDialog extends Dialog {
 	private OnColorChangedListener mListener;
 	private int mInitialColor, mDefaultColor;
 	private String mKey;
+
+	/**
+	 * Modified HorizontalScrollView that communicates scroll
+	 * actions to interior Vertical scroll view.
+	 * From: http://stackoverflow.com/questions/3866499/two-directional-scroll-view
+	 *
+	 */
+	public class WScrollView extends HorizontalScrollView
+	{
+	    public ScrollView sv;
+	    public WScrollView(Context context)
+	    {
+	        super(context);
+	    }
+
+	    public WScrollView(Context context, AttributeSet attrs)
+	    {
+	        super(context, attrs);
+	    }
+
+	    public WScrollView(Context context, AttributeSet attrs, int defStyle)
+	    {
+	        super(context, attrs, defStyle);
+	    }
+
+	    @Override public boolean onTouchEvent(MotionEvent event)
+	    {
+	        boolean ret = super.onTouchEvent(event);
+	        ret = ret | sv.onTouchEvent(event);
+	        return ret;
+	  }
+
+	    @Override public boolean onInterceptTouchEvent(MotionEvent event)
+	    {
+	        boolean ret = super.onInterceptTouchEvent(event);
+	        ret = ret | sv.onInterceptTouchEvent(event);
+	        return ret;
+	    }
+	}
 
 	private static class ColorPickerView extends View {
 		private Paint mPaint;
@@ -246,13 +290,46 @@ public class ColorPickerDialog extends Dialog {
 			setMeasuredDimension(276, 366);
 		}
 
+		private boolean afterFirstDown = false;
+		private float startX;
+		private float startY;
+
 		@Override
 		public boolean onTouchEvent(MotionEvent event) {
-			if (event.getAction() != MotionEvent.ACTION_DOWN
-					&& event.getAction() != MotionEvent.ACTION_MOVE)
+			// allow scrolling...
+			boolean ret = super.onTouchEvent(event);
+
+			int action = event.getAction();
+			int pointerCount = event.getPointerCount();
+
+			if ( action == MotionEvent.ACTION_CANCEL ) {
+				afterFirstDown = false;
+			} else if ( pointerCount == 1 && action == MotionEvent.ACTION_DOWN ) {
+				afterFirstDown = true;
+				startX = event.getX();
+				startY = event.getY();
+			} else if ( pointerCount == 1 && action == MotionEvent.ACTION_MOVE && !afterFirstDown ) {
+				afterFirstDown = true;
+				startX = event.getX();
+				startY = event.getY();
+			}
+
+			if ( !afterFirstDown || pointerCount != 1 || action != MotionEvent.ACTION_UP ) {
 				return true;
+			}
+
+			// on an ACTION_UP, we reset the afterFirstDown flag.
+			// processing uses the lifting of the finger to choose
+			// the color...
+			afterFirstDown = false;
 			float x = event.getX();
 			float y = event.getY();
+
+			if ( Math.abs(x - startX) > 10 && Math.abs(y - startY) > 10 ) {
+				// the color location drifted, so it must just be a scrolling action
+				// ignore it...
+				return ret;
+			}
 
 			// If the touch event is located in the hue bar
 			if (x > 10 && x < 266 && y > 0 && y < 40) {
@@ -321,7 +398,17 @@ public class ColorPickerDialog extends Dialog {
 			}
 		};
 
-		setContentView(new ColorPickerView(getContext(), l, mInitialColor,
-				mDefaultColor));
+/*BIDIRECTIONAL SCROLLVIEW*/
+        ScrollView sv = new ScrollView(this.getContext());
+        WScrollView hsv = new WScrollView(this.getContext());
+        hsv.sv = sv;
+/*END OF BIDIRECTIONAL SCROLLVIEW*/
+
+        sv.addView(new ColorPickerView(getContext(), l, mInitialColor,
+				mDefaultColor), new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+        hsv.addView(sv, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        setContentView(hsv, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        setCanceledOnTouchOutside(true);
 	}
 }
