@@ -21,7 +21,6 @@
 <string name="add_repeat_no">Huwag Mag-dagdag</string>
 <string name="advance">Abante sa \nsusunod\n na udyok</string>
 <string name="altitude">Taas</string>
-<string name="app_name">ODK Collect</string>
 <string name="audio_file_error">Walang talaksang-tunog na tinukoy.</string>
 <string name="audio_file_invalid">Talaksa: %s ay hindi wastong talaksang-tunog.</string>
 <string name="backup">balik sa \nnakaraang\nudyok</string>
@@ -48,7 +47,6 @@
 <string name="data_saved_ok">Matagumpay na inimpok ang Form!</string>
 <string name="default_completed">Yari ang paunang \'tukoy</string>
 <string name="default_completed_summary">Markahang Yari ang Form bilang paunang tukoy</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">Burahin ang %s form(s)?</string>
 <string name="delete_file">Burahin ang mga napili</string>
 <string name="delete_no">Huwag burahin</string>
@@ -142,7 +140,6 @@
 <string name="url_error">Paumanhin, may mali sa URL!</string>
 <string name="username">Username</string>
 <string name="view_hierarchy">Pumunta sa Udyok</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">Palitan ang Settings</string>
 <string name="click_to_web">i-Tap para pumunta sa http://opendatakit.org</string>
 <string name="client">Client</string>
@@ -167,8 +164,6 @@
 <string name="change_font_size">Laki ng Tipo ng Teksto</string>
 <string name="form_scan_starting">Nag-i-i-scanning ng mga forms&#8230;</string>
 <string name="powered_by_odk">Pinatatakbo ng Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">May mali habang sa pag-access ng %s: </string>
 <string name="manifest_server_error">Manifest reply does not report an OpenRosa version &#8212; bad server?</string>
 <string name="root_element_error">Root element is not &lt;manifest\&gt; &#8212; was %s</string>

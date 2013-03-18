@@ -21,7 +21,6 @@
 <string name="add_repeat_no">Nekurti</string>
 <string name="advance">pereiti į\nkitą\npuslapį</string>
 <string name="altitude">Altitudė</string>
-<string name="app_name">ODK Collect</string>
 <string name="audio_file_error">Nebuvo nurodytas joks audio failas.</string>
 <string name="audio_file_invalid">Failas: %s nėra tinkamas audio failas.</string>
 <string name="backup">atgal į\nankstesnį\npuslapį</string>
@@ -48,7 +47,6 @@
 <string name="data_saved_ok">Forma sėkmingai išsaugota!</string>
 <string name="default_completed">Numatyta kaip užbaigta</string>
 <string name="default_completed_summary">Numatytuoju atveju pažymėti formą kaip užbaigtą</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">Ištrinti %s formą(-as)?</string>
 <string name="delete_file">Ištrinti pažymėtas</string>
 <string name="delete_no">Neištrinti</string>
@@ -142,7 +140,6 @@
 <string name="url_error">Netinkamas URL!</string>
 <string name="username">Naudotojo vardas</string>
 <string name="view_hierarchy">Atsakymų sąrašas</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">Keisti nuostatas</string>
 <string name="click_to_web">Bakstelėkite, kad aplankytumėte http://opendatakit.org</string>
 <string name="client">Klientas</string>
@@ -167,8 +164,6 @@
 <string name="change_font_size">Teksto šrifto dydis</string>
 <string name="form_scan_starting">Ieškoma formų…</string>
 <string name="powered_by_odk">Variklis Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">"Klaida bandant pasiekti %s: "</string>
 <string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos — blogas serveris?</string>
 <string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; — buvo %s</string>

@@ -29,7 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 /**

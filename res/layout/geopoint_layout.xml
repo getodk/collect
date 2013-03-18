@@ -5,13 +5,10 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<com.google.android.maps.MapView
-		android:id="@+id/mapview"
-		android:layout_width="fill_parent"
+	<FrameLayout android:id="@+id/mapview_placeholder"
+	    android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:clickable="true"
-		android:apiKey="017Xo9E6R7WmcCITvo-lU2V0ERblKPqCcguwxSQ" />
-		<!-- android:apiKey="0wsgFhRvVBLVpgaFzmwaYuqfU898z_2YtlKSlkg"/> debug -->
+		/>
 	<LinearLayout
 		android:id="@+id/location_buttons"
 		android:orientation="vertical"

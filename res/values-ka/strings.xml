@@ -21,7 +21,6 @@
 <string name="add_repeat_no">არ დაამატო</string>
 <string name="advance">forward to\nnext\nprompt</string>
 <string name="altitude">სიმაღლე</string>
-<string name="app_name">ODK Collect-ი</string>
 <string name="audio_file_error">აუდიო-ფაილი არ იყო მითითებული.</string>
 <string name="audio_file_invalid">ფაილი: %s არ წარმოადგენს ვალიდურ აუდიო-ფაილს.</string>
 <string name="backup">დაუბრუნდით \nprevious\nprompt -ს</string>
@@ -48,7 +47,6 @@
 <string name="data_saved_ok">ფორმა წარმატებით შეინახა!</string>
 <string name="default_completed">დეფოლტად დასასრულებლად!</string>
 <string name="default_completed_summary">დეფოლტად აღინიშნოს ფორმა დასრულებოლად</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">წავშალოთ %s ფორმა?</string>
 <string name="delete_file">არჩეულის წაშლა</string>
 <string name="delete_no">არ წაშალოთ</string>
@@ -142,7 +140,6 @@
 <string name="url_error">უკავრავადმ არასწორი ბმული!</string>
 <string name="username">მომხმარებლის სახელი</string>
 <string name="view_hierarchy">მოთხოვნაზე გადასვლა</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">შეცვლა</string>
 <string name="click_to_web">დააჭირეთ ბმულზე გადასასვლელად: http://opendatakit.org</string>
 <string name="client">კლიენტი	</string>
@@ -167,8 +164,6 @@
 <string name="change_font_size">ტექსტის ზომა</string>
 <string name="form_scan_starting">ფორმების მოძიება&#8230;</string>
 <string name="powered_by_odk">Powered by Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">შეცდომა %s-თან დაკავშირებისას </string>
 <string name="manifest_server_error">Manifest reply does not report an OpenRosa version &#8212; bad server?</string>
 <string name="root_element_error">Root element is not &lt;manifest\&gt; &#8212; was %s</string>

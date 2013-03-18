@@ -21,7 +21,6 @@
 <string name="add_repeat_no">Batal</string>
 <string name="advance">lanjut ke\npertanyaan\nselanjutnya</string>
 <string name="altitude">Ketinggian</string>
-<string name="app_name">ODK Collect</string>
 <string name="audio_file_error">Belum ada berkas audio yang dipilih.</string>
 <string name="audio_file_invalid">Berkas: %s bukan termasuk berkas audio.</string>
 <string name="backup">kembali ke\npertanyaan\nsebelumnya</string>
@@ -48,7 +47,6 @@
 <string name="data_saved_ok">Simpan formulir berhasil!</string>
 <string name="default_completed">Siap kirim</string>
 <string name="default_completed_summary">Tandai formulir telah siap kirim secara otomatis</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">Hapus %s formulir?</string>
 <string name="delete_file">Hapus</string>
 <string name="delete_no">Jangan hapus</string>
@@ -142,7 +140,6 @@
 <string name="url_error">Maaf, tautan (URL) tidak valid!</string>
 <string name="username">Nama pengguna</string>
 <string name="view_hierarchy">Risalah</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">Pengaturan</string>
 <string name="click_to_web">Tap untuk berkunjung ke http://opendatakit.org</string>
 <string name="client">Klien</string>
@@ -167,8 +164,6 @@
 <string name="change_font_size">Ukuran teks font</string>
 <string name="form_scan_starting">Sedang memindai formulir…</string>
 <string name="powered_by_odk">Didukung oleh Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">"Terjadi kesalahan ketika mengakses %s: "</string>
 <string name="manifest_server_error">Versi OpenRosa tidak terdeteksi — terjadi kesalahan pada server?</string>
 <string name="root_element_error">Penamaan elemen root bukan &amp;lt;manifest\&gt; — tapi %s</string>

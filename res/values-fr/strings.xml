@@ -21,7 +21,6 @@ License.
 <string name="add_repeat_no">Ne pas ajouter</string>
 <string name="advance">Avancer au\nprochain\nentrée</string>
 <string name="altitude">Altitude</string>
-<string name="app_name">ODK Collect</string>
 <string name="audio_file_error">Aucun fichier audio spécifié.</string>
 <string name="audio_file_invalid">%s n\'est pas un fichier audio valable.</string>
 <string name="backup">retourner à\nprevious\nprompt</string>
@@ -47,7 +46,6 @@ License.
 <string name="data_saved_ok">Le Formulaire a été enregistré avec succès.</string>
 <string name="default_completed">Version finale par défaut</string>
 <string name="default_completed_summary">Marquer comme finalisé par défaut</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">Supprimer %s formulaire(s)?</string>
 <string name="delete_file">Supprimer la sélection</string>
 <string name="delete_no">Ne pas supprimer</string>
@@ -141,7 +139,6 @@ License.
 <string name="url_error">URL non valable!</string>
 <string name="username">Nom d\'utilisateur</string>
 <string name="view_hierarchy">Aller à la ligne de saisie</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">Modifier les Paramètres</string>
 <string name="click_to_web">Sélectionner pour aller à http://opendatakit.org</string>
 <string name="client">Client</string>
@@ -166,8 +163,6 @@ License.
 <string name="change_font_size">Taille de la Police</string>
 <string name="form_scan_starting">Recherche de formulaires…</string>
 <string name="powered_by_odk">Powered by Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">"Erreur lors de l\'accès à %s: "</string>
 <string name="manifest_server_error">Réponse Manifest ne fourni pas une version OpenRosa — Serveur défaillant?</string>
 <string name="root_element_error">L\'élément à la racine n\'est pas &amp;lt;manifest\&gt; — c\'était %s</string>

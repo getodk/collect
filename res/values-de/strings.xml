@@ -21,7 +21,6 @@
 <string name="add_repeat_no">Nicht hinzufügen</string>
 <string name="advance">Weiter zur\nnächsten\nSeite</string>
 <string name="altitude">Höhe über Meer</string>
-<string name="app_name">ODK Collect</string>
 <string name="audio_file_error">Verknüpfung zu Audio-File fehlt.</string>
 <string name="audio_file_invalid">File: %s ist kein lesbares Audio-File.</string>
 <string name="backup">Zurück zur\nvorherigen\nSeite</string>
@@ -48,7 +47,6 @@
 <string name="data_saved_ok">Formular erfolgreich gespeichert!</string>
 <string name="default_completed">Standardmässig als Vollständig markieren</string>
 <string name="default_completed_summary">Formular wird standardmässig als Vollständig markiert</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">%s Formular(e) löschen?</string>
 <string name="delete_file">Auswahl löschen</string>
 <string name="delete_no">Nicht löschen</string>
@@ -142,7 +140,6 @@
 <string name="url_error">Ungültige URL!</string>
 <string name="username">Benutzername</string>
 <string name="view_hierarchy">Zur Eingabeaufforderung</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">Einstellungen ändern</string>
 <string name="click_to_web">Berühren um zu http://opendatakit.org zu gelangen</string>
 <string name="client">Kunde</string>
@@ -167,8 +164,6 @@
 <string name="change_font_size">Text Schriftgrösse</string>
 <string name="form_scan_starting">Formulare werden gesucht&#8230;</string>
 <string name="powered_by_odk">Powered by Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">Fehler beim Zugriff auf %s: </string>
 <string name="manifest_server_error">Manifest Meldung findet keine OpenRosa Version &#8212; Serverfehler?</string>
 <string name="root_element_error">Root element ist nicht &lt;manifest\&gt; &#8212; war %s</string>

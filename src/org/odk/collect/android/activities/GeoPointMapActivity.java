@@ -35,6 +35,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,7 +100,19 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         	}
         }
 
-        mMapView = (MapView) findViewById(R.id.mapview);
+        /**
+         * Add the MapView dynamically to the placeholding frame so as to not
+         * incur the wrath of Android Lint...
+         */
+        FrameLayout frame = (FrameLayout) findViewById(R.id.mapview_placeholder);
+        String apiKey = "017Xo9E6R7WmcCITvo-lU2V0ERblKPqCcguwxSQ";
+        // String apiKey = "0wsgFhRvVBLVpgaFzmwaYuqfU898z_2YtlKSlkg";
+        mMapView = new MapView(this, apiKey);
+        mMapView.setClickable(true);
+        mMapView.setId(R.id.mapview);
+        LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        frame.addView(mMapView, p);
+
         mCancelLocation = (Button) findViewById(R.id.cancel_location);
         mCancelLocation.setOnClickListener(new OnClickListener() {
 

@@ -21,7 +21,6 @@
 <string name="add_repeat_no">Usiongeze</string>
 <string name="advance">Peleka ukurasa mwingine\nIfuatayo\nHimizo</string>
 <string name="altitude">Muinuko</string>
-<string name="app_name">ODK Kusanya</string>
 <string name="audio_file_error">Hakuna faili ya sauti iliyochaguliwa.</string>
 <string name="audio_file_invalid">Faili: %s ya sauti si halali.</string>
 <string name="backup">Rudi kwa\nKabla\nHimizo</string>
@@ -48,7 +47,6 @@
 <string name="data_saved_ok">Umefanikiwa kuweka fomu akibani!</string>
 <string name="default_completed">Kamilisha Faili kuu</string>
 <string name="default_completed_summary">Weka fomu alama ni kamali</string>
-<string name="default_server_url">https://opendatakit.appspot.com</string>
 <string name="delete_confirm">Futa %s fomu(s)?</string>
 <string name="delete_file">Futa iliyochaguliwa</string>
 <string name="delete_no">Usifute</string>
@@ -142,7 +140,6 @@
 <string name="url_error">Pole, URL si sahihi!</string>
 <string name="username">Jina la Mtumiaji </string>
 <string name="view_hierarchy">Nenda kwenye chanzo</string>
-<string name="open_data_kit">Open Data Kit</string>
 <string name="general_preferences">Badili Mpangilio</string>
 <string name="click_to_web">Bonyeza kutembelea http://opendatakit.org</string>
 <string name="client">Client</string>
@@ -167,8 +164,6 @@
 <string name="change_font_size">Text Font Size</string>
 <string name="form_scan_starting">Scanning for forms&#8230;</string>
 <string name="powered_by_odk">Tegemezwa na Open Data Kit</string>
-<string name="default_odk_formlist">/formList</string>
-<string name="default_odk_submission">/submission</string>
 <string name="access_error">Hitilafu inapojaribu kufungua %s: </string>
 <string name="manifest_server_error">Haiwezi kuripoti kwa OpenRosa version &#8212; bad server?</string>
 <string name="root_element_error">Root element is not &lt;manifest\&gt; &#8212; was %s</string>
