@@ -423,8 +423,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     settings.getString(PreferencesActivity.KEY_SERVER_URL,
                         getString(R.string.default_server_url));
 
+                String formListUrl = getString(R.string.default_odk_formlist);
                 final String url =
-                    server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
+                    server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, formListUrl);
                 Log.i(t, "Trying to get formList from: " + url);
 
                 EditText username = (EditText) dialogView.findViewById(R.id.username_edit);

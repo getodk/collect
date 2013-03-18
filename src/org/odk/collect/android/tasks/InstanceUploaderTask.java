@@ -516,7 +516,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
 	                    }
 	                    // NOTE: /submission must not be translated! It is the well-known path on the server.
 	                    String submissionUrl =
-	                        settings.getString(PreferencesActivity.KEY_SUBMISSION_URL, "/submission");
+	                        settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
+	                        		Collect.getInstance().getString(R.string.default_odk_submission));
 	                    if ( submissionUrl.charAt(0) != '/') {
 	                    	submissionUrl = "/" + submissionUrl;
 	                    }

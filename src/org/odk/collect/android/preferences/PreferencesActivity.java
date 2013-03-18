@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AccountList;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.UrlUtils;
 
 public class PreferencesActivity extends PreferenceActivity implements
@@ -101,6 +102,11 @@ public class PreferencesActivity extends PreferenceActivity implements
         boolean serverAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
 
+		SharedPreferences settings =
+                PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
+        String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+        boolean isOdkProtocol = protocol.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+
         PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
 
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
@@ -131,9 +137,53 @@ public class PreferencesActivity extends PreferenceActivity implements
                     getReturnFilter()
                 });
 
+    	Preference protocolPreference = findPreference(KEY_PROTOCOL);
+    	protocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				String protocol = (String) newValue;
+				boolean isOdkProtocol = protocol.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+		        boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
+
+		        if ( isOdkProtocol ) {
+					SharedPreferences settings =
+			                PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+					Editor editor = settings.edit();
+					String formListUrl = preference.getContext().getString(R.string.default_odk_formlist);
+					String submissionUrl = preference.getContext().getString(R.string.default_odk_submission);
+					editor.putString(KEY_FORMLIST_URL, formListUrl);
+					editor.putString(KEY_SUBMISSION_URL, submissionUrl);
+					editor.commit();
+					mFormListUrlPreference.setText(formListUrl);
+					mSubmissionUrlPreference.setText(submissionUrl);
+		        }
+
+				SharedPreferences adminPreferences = getSharedPreferences(
+		                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+		        boolean serverAvailable = adminPreferences.getBoolean(
+		                AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
+
+		        PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
+
+		        if (isOdkProtocol || !(serverAvailable || adminMode)) {
+		            serverCategory.removePreference(mFormListUrlPreference);
+		        } else {
+		            serverCategory.addPreference(mFormListUrlPreference);
+		        }
+
+		        if (isOdkProtocol || !(serverAvailable || adminMode)) {
+		            serverCategory.removePreference(mSubmissionUrlPreference);
+		        } else {
+		            serverCategory.addPreference(mSubmissionUrlPreference);
+		        }
+				return true;
+			}});
+
         if (!(serverAvailable || adminMode)) {
-            Preference protocol = findPreference(KEY_PROTOCOL);
-            serverCategory.removePreference(protocol);
+            serverCategory.removePreference(protocolPreference);
             serverCategory.removePreference(mServerUrlPreference);
 
         } else {
@@ -210,7 +260,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 new InputFilter[] {
                         getReturnFilter(), getWhitespaceFilter()
                 });
-        if (!(serverAvailable || adminMode)) {
+        if (isOdkProtocol || !(serverAvailable || adminMode)) {
             serverCategory.removePreference(mFormListUrlPreference);
         }
 
@@ -221,7 +271,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 new InputFilter[] {
                         getReturnFilter(), getWhitespaceFilter()
                 });
-        if (!(serverAvailable || adminMode)) {
+        if (isOdkProtocol || !(serverAvailable || adminMode)) {
             serverCategory.removePreference(mSubmissionUrlPreference);
         }
 

@@ -301,11 +301,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 if (server == null) {
                     Log.e(t, "onCreateDialog(AUTH_DIALOG): No failing mUrl specified for upload of " + mInstancesToSend.size() + " instances!");
                     // if the bundle is null, we're looking for a formlist
+                    String formListUrl = getString(R.string.default_odk_formlist);
                     server =
                         settings.getString(PreferencesActivity.KEY_SERVER_URL,
                             getString(R.string.default_server_url))
-                                + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
-                                    "/formList");
+                                + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, formListUrl);
                 }
 
                 final String url = server;

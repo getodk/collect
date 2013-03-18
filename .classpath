@@ -5,7 +5,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/httpclientandroidlib-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/apache-mime4j-0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/httpmime-4.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javarosa-libraries.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javarosa-libraries.jar" sourcepath="C:/Users/Administrator/Documents/workspace/collect/javarosa-submit-tree/odk-1.2-javarosa/core/src"/>
 	<classpathentry exported="true" kind="lib" path="lib/regexp-me.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/kxml2-2.3.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/joda-time-2.0.jar"/>

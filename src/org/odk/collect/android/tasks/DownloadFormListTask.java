@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -38,7 +38,7 @@ import java.util.HashMap;
  * bit so that we don't have to keep track of two separate downloading tasks and it simplifies
  * interfaces. If LIST_URL is passed to doInBackground(), we fetch a form list. If a hashmap
  * containing form/url pairs is passed, we download those forms.
- * 
+ *
  * @author carlhartung
  */
 public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String, FormDetails>> {
@@ -67,10 +67,11 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             settings.getString(PreferencesActivity.KEY_SERVER_URL,
                 Collect.getInstance().getString(R.string.default_server_url));
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
-        String downloadPath = settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formlist");
+        String formListUrl = Collect.getInstance().getApplicationContext().getString(R.string.default_odk_formlist);
+        String downloadPath = settings.getString(PreferencesActivity.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
-        
-    	Collect.getInstance().getActivityLogger().logAction(this, "formList", downloadListUrl);
+
+    	Collect.getInstance().getActivityLogger().logAction(this, formListUrl, downloadListUrl);
 
         // We populate this with available forms from the specified server.
         // <formname, details>
@@ -246,7 +247,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         return formList;
                     }
                     formList.put(formName, new FormDetails(formName, downloadUrl, null, formId, null));
-                    
+
                     formId = null;
                 }
             }
