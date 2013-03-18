@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import android.app.Activity;
@@ -35,20 +36,27 @@ import android.widget.Toast;
 
 public class GeoPointActivity extends Activity implements LocationListener {
 
+	private static final String LOCATION_COUNT = "locationCount";
+
     private ProgressDialog mLocationDialog;
     private LocationManager mLocationManager;
     private Location mLocation;
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
     private double mLocationAccuracy;
+    private int mLocationCount = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if ( savedInstanceState != null ) {
+        	mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
+        }
+
         Intent intent = getIntent();
-        
+
         mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
         	if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
@@ -76,10 +84,43 @@ public class GeoPointActivity extends Activity implements LocationListener {
             finish();
         }
 
+        if ( mGPSOn ) {
+        	Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        	if ( loc != null ) {
+            	InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+          			   " lastKnownLocation(GPS) lat: " +
+          			loc.getLatitude() + " long: " +
+          			loc.getLongitude() + " acc: " +
+          			loc.getAccuracy() );
+        	} else {
+            	InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+           			   " lastKnownLocation(GPS) null location");
+        	}
+        }
+
+        if ( mNetworkOn ) {
+        	Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        	if ( loc != null ) {
+            	InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+          			   " lastKnownLocation(Network) lat: " +
+          			loc.getLatitude() + " long: " +
+          			loc.getLongitude() + " acc: " +
+          			loc.getAccuracy() );
+        	} else {
+            	InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+           			   " lastKnownLocation(Network) null location");
+        	}
+        }
+
         setupLocationDialog();
 
     }
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(LOCATION_COUNT, mLocationCount);
+	}
 
     @Override
     protected void onPause() {
@@ -106,16 +147,16 @@ public class GeoPointActivity extends Activity implements LocationListener {
         }
         mLocationDialog.show();
     }
-	
+
     @Override
     protected void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
+		Collect.getInstance().getActivityLogger().logOnStart(this);
     }
-    
+
     @Override
     protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
+		Collect.getInstance().getActivityLogger().logOnStop(this);
     	super.onStop();
     }
 
@@ -172,14 +213,28 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        mLocation = location;
+    	mLocation = location;
         if (mLocation != null) {
-            mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
-                mLocation.getProvider(), truncateDouble(mLocation.getAccuracy())));
+        	// Bug report: cached GeoPoint is being returned as the first value.
+        	// Wait for the 2nd value to be returned, which is hopefully not cached?
+        	++mLocationCount;
+        	InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+     			   " onLocationChanged(" + mLocationCount + ") lat: " +
+         			mLocation.getLatitude() + " long: " +
+         			mLocation.getLongitude() + " acc: " +
+         			mLocation.getAccuracy() );
 
-            if (mLocation.getAccuracy() <= mLocationAccuracy) {
-                returnLocation();
-            }
+        	if (mLocationCount > 1) {
+	            mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
+	                mLocation.getProvider(), truncateDouble(mLocation.getAccuracy())));
+
+	            if (mLocation.getAccuracy() <= mLocationAccuracy) {
+	                returnLocation();
+	            }
+        	}
+        } else {
+        	InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+      			   " onLocationChanged(" + mLocationCount + ") null location");
         }
     }
 

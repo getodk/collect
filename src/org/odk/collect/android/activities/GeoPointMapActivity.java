@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -14,8 +14,12 @@
 
 package org.odk.collect.android.activities;
 
+import java.text.DecimalFormat;
+import java.util.List;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import android.content.Context;
@@ -34,9 +38,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -45,6 +46,8 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
 public class GeoPointMapActivity extends MapActivity implements LocationListener {
+
+	private static final String LOCATION_COUNT = "locationCount";
 
     private MapView mMapView;
     private TextView mLocationStatus;
@@ -64,19 +67,25 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
-    
+
     private double mLocationAccuracy;
-    
+    private int mLocationCount = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if ( savedInstanceState != null ) {
+        	mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geopoint_layout);
 
         Intent intent = getIntent();
-        
+
         mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
         	if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
@@ -108,7 +117,7 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         mMapController.setZoom(16);
 
         // make sure we have a good location provider before continuing
-        List<String> providers = mLocationManager.getProviders(true);        
+        List<String> providers = mLocationManager.getProviders(true);
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
                 mGPSOn = true;
@@ -121,6 +130,34 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
             Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
                 Toast.LENGTH_SHORT).show();
             finish();
+        }
+
+        if ( mGPSOn ) {
+        	Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        	if ( loc != null ) {
+            	InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
+          			   " lastKnownLocation(GPS) lat: " +
+          			loc.getLatitude() + " long: " +
+          			loc.getLongitude() + " acc: " +
+          			loc.getAccuracy() );
+        	} else {
+            	InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
+           			   " lastKnownLocation(GPS) null location");
+        	}
+        }
+
+        if ( mNetworkOn ) {
+        	Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        	if ( loc != null ) {
+            	InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
+          			   " lastKnownLocation(Network) lat: " +
+          			loc.getLatitude() + " long: " +
+          			loc.getLongitude() + " acc: " +
+          			loc.getAccuracy() );
+        	} else {
+            	InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
+           			   " lastKnownLocation(Network) null location");
+        	}
         }
 
         mLocationOverlay = new MyLocationOverlay(this, mMapView);
@@ -158,16 +195,16 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
 
         }
     }
-	
+
     @Override
     protected void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
+		Collect.getInstance().getActivityLogger().logOnStart(this);
     }
-    
+
     @Override
     protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
+		Collect.getInstance().getActivityLogger().logOnStop(this);
     	super.onStop();
     }
 
@@ -225,19 +262,33 @@ public class GeoPointMapActivity extends MapActivity implements LocationListener
         if (mCaptureLocation) {
             mLocation = location;
             if (mLocation != null) {
-                mLocationStatus.setText(getString(R.string.location_provider_accuracy,
-                    mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
-                mGeoPoint =
-                    new GeoPoint((int) (mLocation.getLatitude() * 1E6),
-                            (int) (mLocation.getLongitude() * 1E6));
+            	// Bug report: cached GeoPoint is being returned as the first value.
+            	// Wait for the 2nd value to be returned, which is hopefully not cached?
+            	++mLocationCount;
+            	InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
+          			   " onLocationChanged(" + mLocationCount + ") lat: " +
+              			mLocation.getLatitude() + " long: " +
+              			mLocation.getLongitude() + " acc: " +
+              			mLocation.getAccuracy() );
 
-                mMapController.animateTo(mGeoPoint);
+            	if (mLocationCount > 1) {
+            		mLocationStatus.setText(getString(R.string.location_provider_accuracy,
+            				mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
+	                mGeoPoint =
+	                    new GeoPoint((int) (mLocation.getLatitude() * 1E6),
+	                            (int) (mLocation.getLongitude() * 1E6));
 
-                if (mLocation.getAccuracy() <= mLocationAccuracy) {
-                    returnLocation();
-                }
+	                mMapController.animateTo(mGeoPoint);
+
+	                if (mLocation.getAccuracy() <= mLocationAccuracy) {
+	                    returnLocation();
+	                }
+            	}
+    	    } else {
+    	    	InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
+    	  			   " onLocationChanged(" + mLocationCount + ") null location");
             }
-        }
+	    }
     }
 
 
