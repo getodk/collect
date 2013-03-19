@@ -42,7 +42,7 @@
             android:key="password"
             android:title="@string/password" />
         <!-- android:password="true" -->
-        <PreferenceScreen
+        <ListPreference
             android:id="@+id/selected_google_account"
             android:defaultValue=""
             android:key="selected_google_account"

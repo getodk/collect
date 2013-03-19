@@ -14,6 +14,14 @@
 
 package org.odk.collect.android.preferences;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.UrlUtils;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,11 +44,6 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.AccountList;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.UrlUtils;
 
 public class PreferencesActivity extends PreferenceActivity implements
         OnPreferenceChangeListener {
@@ -77,18 +80,18 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
 	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
-    public static final String googleServerBaseUrl = "https://gather.apis.google.com/odk/n/";
-
     private PreferenceScreen mSplashPathPreference;
     private EditTextPreference mSubmissionUrlPreference;
     private EditTextPreference mFormListUrlPreference;
     private EditTextPreference mServerUrlPreference;
     private EditTextPreference mUsernamePreference;
     private EditTextPreference mPasswordPreference;
-    private PreferenceScreen mSelectedGoogleAccountPreference;
+    private ListPreference mSelectedGoogleAccountPreference;
     private ListPreference mFontSizePreference;
     private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
+	private ListPreference mProtocolPreference;
+	
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +136,22 @@ public class PreferencesActivity extends PreferenceActivity implements
         
         PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
 
+        mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
+		mProtocolPreference.setSummary(mProtocolPreference.getEntry());
+		mProtocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				int index = ((ListPreference) preference)
+						.findIndexOfValue(newValue.toString());
+				String entry = (String) ((ListPreference) preference)
+						.getEntries()[index];
+				((ListPreference) preference).setSummary(entry);
+				return true;
+			}
+		});
+        
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
         mServerUrlPreference
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -259,18 +278,36 @@ public class PreferencesActivity extends PreferenceActivity implements
             serverCategory.removePreference(mPasswordPreference);
         }
 
-        mSelectedGoogleAccountPreference = (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
-        mSelectedGoogleAccountPreference
-                .setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent i = new Intent(getApplicationContext(), AccountList.class);
-                        startActivity(i);
-                        return true;
-                    }
-                });
-        mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference
-                .getSharedPreferences().getString(KEY_ACCOUNT, ""));
+       	// get list of google accounts
+        final Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType("com.google");
+        ArrayList<String> accountEntries = new ArrayList<String>();
+        ArrayList<String> accountValues = new ArrayList<String>();
+        
+        for (int i = 0; i < accounts.length; i++) {
+        	accountEntries.add(accounts[i].name);
+        	accountValues.add(accounts[i].name);
+		}
+        accountEntries.add("No account");
+        accountValues.add("");
+
+		mSelectedGoogleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+		mSelectedGoogleAccountPreference.setEntries(accountEntries.toArray(new String[accountEntries.size()]));
+		mSelectedGoogleAccountPreference.setEntryValues(accountValues.toArray(new String[accountValues.size()]));
+		mSelectedGoogleAccountPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				int index = ((ListPreference) preference)
+						.findIndexOfValue(newValue.toString());
+				String value = (String) ((ListPreference) preference)
+						.getEntryValues()[index];
+				((ListPreference) preference).setSummary(value);
+				return true;
+			}
+		});
+		mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference.getValue());
+		
         boolean googleAccounAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
         if (!(googleAccounAvailable || adminMode)) {

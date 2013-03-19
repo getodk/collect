@@ -255,4 +255,5 @@
 <string name="found_in_main">Disable to hide from Main Menu</string>
 <string name="found_in_settings">Disable to hide from General Settings</string>
 <string name="found_at_end">Disable to hide from end of Form Entry</string>
+<string name="no_account">No account</string>
 </resources>
