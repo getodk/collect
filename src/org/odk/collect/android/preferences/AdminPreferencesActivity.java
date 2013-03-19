@@ -50,6 +50,9 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_ACCESS_SETTINGS = "access_settings";
     public static String KEY_SAVE_AS = "save_as";
     public static String KEY_MARK_AS_FINALIZED = "mark_as_finalized";
+    
+    public static String KEY_AUTOSEND_WIFI = "autosend_wifi";
+    public static String KEY_AUTOSEND_NETWORK = "autosend_network";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

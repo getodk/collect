@@ -73,6 +73,9 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     public static final String KEY_AUTH = "auth";
     public static final String KEY_ACCOUNT = "account";
+    
+	public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
+	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
     public static final String googleServerBaseUrl = "https://gather.apis.google.com/odk/n/";
 
@@ -84,6 +87,8 @@ public class PreferencesActivity extends PreferenceActivity implements
     private EditTextPreference mPasswordPreference;
     private PreferenceScreen mSelectedGoogleAccountPreference;
     private ListPreference mFontSizePreference;
+    private CheckBoxPreference mAutosendWifiPreference;
+	private CheckBoxPreference mAutosendNetworkPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +112,25 @@ public class PreferencesActivity extends PreferenceActivity implements
         String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
         boolean isOdkProtocol = protocol.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
 
+        PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
+		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
+		boolean autosendWifiAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
+		if (!(autosendWifiAvailable || adminMode)) {
+			autosendCategory.removePreference(mAutosendWifiPreference);
+		}
+
+		mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
+		boolean autosendNetworkAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_AUTOSEND_NETWORK, true);
+		if (!(autosendNetworkAvailable || adminMode)) {
+			autosendCategory.removePreference(mAutosendNetworkPreference);
+		}
+
+		if (!(autosendNetworkAvailable || autosendWifiAvailable || adminMode)) {
+			getPreferenceScreen().removePreference(autosendCategory);
+		}
+        
         PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
 
         mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);

@@ -73,6 +73,22 @@
             android:title="@string/submission_url" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="@string/autosend"
+        android:title="@string/autosend" >
+        <CheckBoxPreference
+            android:id="@+id/autosend_wifi"
+            android:defaultValue="false"
+            android:key="autosend_wifi"
+            android:summary="@string/autosend_wifi_summary"
+            android:title="@string/autosend_wifi" />
+        <CheckBoxPreference
+            android:id="@+id/autosend_network"
+            android:defaultValue="false"
+            android:key="autosend_network"
+            android:summary="@string/autosend_network_summary"
+            android:title="@string/autosend_network" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client" >
         <ListPreference

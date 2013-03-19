@@ -121,14 +121,14 @@
 <string name="replace_location">Replace Location</string>
 <string name="required_answer_error">Sorry, this response is required!</string>
 <string name="review_data">Edit Saved Form</string>
-<string name="review_data_button">Edit Saved Form</string>
+<string name="review_data_button">Edit Saved Form (%s)</string>
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Save Form</string>
 <string name="save_enter_data_description">You are at the end of \"%s\".</string>
 <string name="saving_form">Saving Form</string>
 <string name="sending_items">Sending %1$s of %2$s form(s)</string>
 <string name="send_data">Send Finalized Form</string>
-<string name="send_data_button">Send Finalized Form</string>
+<string name="send_data_button">Send Finalized Form (%s)</string>
 <string name="send_selected_data">Send Selected</string>
 <string name="server_auth_credentials">Please enter username and password for server:\n%s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
@@ -244,4 +244,15 @@
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
 <string name="found_in_menu">Found using Menu button in Form Entry</string>
+<string name="autosend">Auto send finalized forms</string>
+<string name="autosend_preferences">Auto send preferences</string>
+<string name="autosend_enabled">Auto send enabled</string>
+<string name="autosend_wifi">Auto send wifi</string>
+<string name="autosend_wifi_summary">Auto send when wifi connection is available</string>
+<string name="autosend_network">Auto send network</string>
+<string name="autosend_network_summary">Auto send when network connection is available</string>
+<string name="user_access_autosend">User can access auto send preference items:</string>
+<string name="found_in_main">Disable to hide from Main Menu</string>
+<string name="found_in_settings">Disable to hide from General Settings</string>
+<string name="found_at_end">Disable to hide from end of Form Entry</string>
 </resources>
