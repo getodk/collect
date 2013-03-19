@@ -14,11 +14,17 @@
 
 package org.odk.collect.android.preferences;
 
+import java.io.File;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-
-import org.odk.collect.android.R;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 public class AdminPreferencesActivity extends PreferenceActivity {
 
@@ -53,6 +59,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     
     public static String KEY_AUTOSEND_WIFI = "autosend_wifi";
     public static String KEY_AUTOSEND_NETWORK = "autosend_network";
+    
+    private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,5 +74,48 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
     }
+    
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, SAVE_PREFS_MENU, 0, getString(R.string.save_preferences))
+				.setIcon(R.drawable.ic_menu_save);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case SAVE_PREFS_MENU:
+			File writeDir = new File(Collect.ODK_ROOT + "/settings");
+			if (!writeDir.exists()) {
+				if (!writeDir.mkdirs()) {
+					Toast.makeText(
+							this,
+							"Error creating directory "
+									+ writeDir.getAbsolutePath(),
+							Toast.LENGTH_SHORT).show();
+					return false;
+				}
+			}
+
+			File dst = new File(writeDir.getAbsolutePath()
+					+ "/collect.settings");
+			boolean success = PreferencesActivity.saveSharedPreferencesToFile(dst, this);
+			if (success) {
+				Toast.makeText(
+						this,
+						"Settings successfully written to "
+								+ dst.getAbsolutePath(), Toast.LENGTH_LONG)
+						.show();
+			} else {
+				Toast.makeText(this,
+						"Error writing settings to " + dst.getAbsolutePath(),
+						Toast.LENGTH_LONG).show();
+			}
+			return true;
+
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 }
