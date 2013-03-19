@@ -48,6 +48,7 @@ public class DataManagerList extends ListActivity implements
 	private static final String t = "DataManagerList";
 	private AlertDialog mAlertDialog;
 	private Button mDeleteButton;
+	private Button mToggleButton;
 
 	private SimpleCursorAdapter mInstances;
 	private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -75,6 +76,33 @@ public class DataManagerList extends ListActivity implements
 				}
 			}
 		});
+		
+		mToggleButton = (Button) findViewById(R.id.toggle_button);
+        mToggleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checkAll = false;
+                // if everything is checked, uncheck
+                if (mSelected.size() == mInstances.getCount()) {
+                    checkAll = false;
+                    mSelected.clear();
+                    mDeleteButton.setEnabled(false);
+                } else {
+                    // otherwise check everything
+                    checkAll = true;
+                    for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
+                        Long id = getListAdapter().getItemId(pos);
+                        if (!mSelected.contains(id)) {
+                            mSelected.add(id);
+                        }
+                    }
+                    mDeleteButton.setEnabled(true);
+                }
+                for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
+                    DataManagerList.this.getListView().setItemChecked(pos, checkAll);
+                }
+            }
+        });
 
 		Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
 				InstanceColumns.DISPLAY_NAME + " ASC");
