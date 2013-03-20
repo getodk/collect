@@ -936,6 +936,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				v.setImageDrawable(image);
 				v.setContentDescription(formController.getFormTitle());
 			}
+			if (mBackButton.isShown()) {
+				mBackButton.setEnabled(false);
+			}
+			if (mNextButton.isShown()) {
+				mNextButton.setEnabled(true);
+			}
 
 			return startView;
 		case FormEntryController.EVENT_END_OF_FORM:
@@ -1048,6 +1054,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							}
 						}
 					});
+			
+			if (mBackButton.isShown()) {
+				mBackButton.setEnabled(true);
+			}
+			if (mNextButton.isShown()) {
+				mNextButton.setEnabled(false);
+			}
 
 			return endView;
 		case FormEntryController.EVENT_QUESTION:
@@ -1083,6 +1096,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				}
 			}
 
+			if (mBackButton.isShown() && mNextButton.isShown()) {
+				mBackButton.setEnabled(true);
+				mNextButton.setEnabled(true);
+			}
 			return odkv;
 		default:
 			createErrorDialog("Internal error: step to prompt failed", EXIT);
