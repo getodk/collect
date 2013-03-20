@@ -62,6 +62,7 @@
             android:dialogTitle="@string/change_formlist_url"
             android:inputType="textNoSuggestions"
             android:key="formlist_url"
+            android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/formlist_url" />
         <EditTextPreference
             android:id="@+id/submission_url"
@@ -69,6 +70,7 @@
             android:dialogTitle="@string/change_submission_url"
             android:inputType="textNoSuggestions"
             android:key="submission_url"
+            android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/submission_url" />
     </PreferenceCategory>
     <PreferenceCategory
@@ -125,6 +127,7 @@
             android:defaultValue="@string/default_splash_path"
             android:dependency="showSplash"
             android:key="splashPath"
+            android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
     </PreferenceCategory>
 

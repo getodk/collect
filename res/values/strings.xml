@@ -67,7 +67,7 @@
 <string name="entering_repeat_ask">Add New Group?</string>
 <string name="enter_data">Fill Blank Form</string>
 <string name="enter_data_button">Fill Blank Form</string>
-<string name="enter_data_description">You are at the start of \"%s\". Swipe the screen as shown below to begin.</string>
+<string name="enter_data_description">You are at the start of %s. Swipe the screen as shown below to begin.</string>
 <string name="error_occured">Error Occurred</string>
 <string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s).</string>
 <string name="file_deleted_error">Sorry, %1$s of %2$s selected form(s) failed to delete!</string>
@@ -124,7 +124,7 @@
 <string name="review_data_button">Edit Saved Form (%s)</string>
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Save Form</string>
-<string name="save_enter_data_description">You are at the end of \"%s\".</string>
+<string name="save_enter_data_description">You are at the end of %s.</string>
 <string name="saving_form">Saving Form</string>
 <string name="sending_items">Sending %1$s of %2$s form(s)</string>
 <string name="send_data">Send Finalized Form</string>
