@@ -219,7 +219,7 @@
 <string name="mark_as_finished">Finalizing forms</string>
 <string name="user_access_main_menu">User can access Main Menu items:</string>
 <string name="user_access_preferences">User can access Change Settings items:</string>
-<string name="change_server">Platform and URL</string>
+<string name="change_server">URL, platform, paths</string>
 <string name="change_username_default">Username</string>
 <string name="change_password_default">Change default password</string>
 <string name="change_google">Change Google account</string>
@@ -231,11 +231,11 @@
 <string name="admin_access_settings">Tap for admin access to settings</string>
 <string name="user_access_form_entry">User can access Form Entry items:</string>
 <string name="save_mid">Save Form</string>
-<string name="save_mid_summary">Disable to allow user to save only at end of form</string>
+<string name="save_mid_summary">Uncheck to allow user to save only at end of form</string>
 <string name="jump_to">Jump-to prompt</string>
 <string name="save_as">Saved form renaming</string>
-<string name="save_as_summary">Disable to prevent renaming of forms at end of form entry</string>
-<string name="mark_as_finalized_summary">Disable to save forms based on default status (as selected in Change Settings)</string>
+<string name="save_as_summary">Uncheck to prevent renaming of forms at end of form entry</string>
+<string name="mark_as_finalized_summary">Uncheck to save forms based on default status (as selected in Change Settings)</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
 <string name="admin_password_changed">Admin password successfully changed</string>
@@ -243,7 +243,7 @@
 <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
-<string name="found_in_menu">Disable to hide from menu in Form Entry</string>
+<string name="found_in_menu">Uncheck to hide from menu in Form Entry</string>
 <string name="autosend">Auto Send</string>
 <string name="autosend_preferences">Auto send preferences</string>
 <string name="autosend_enabled">Auto send enabled</string>
@@ -252,9 +252,9 @@
 <string name="autosend_network">Auto send with network</string>
 <string name="autosend_network_summary">Auto send when network is available</string>
 <string name="user_access_autosend">User can access auto send preference items:</string>
-<string name="found_in_main">Disable to hide from Main Menu</string>
-<string name="found_in_settings">Disable to hide from General Settings</string>
-<string name="found_at_end">Disable to hide from end of Form Entry</string>
+<string name="found_in_main">Uncheck to hide from Main Menu</string>
+<string name="found_in_settings">Uncheck to hide from General Settings</string>
+<string name="found_at_end">Uncheck to hide from end of Form Entry</string>
 <string name="no_account">No account</string>
 <string name="save_preferences">Save Settings to Disk</string>
 <string name="form_forward">Next</string>

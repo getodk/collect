@@ -13,15 +13,6 @@
     <PreferenceCategory
         android:key="@string/server_preferences"
         android:title="@string/server_preferences" >
-        <ListPreference
-            android:id="@+id/protocol"
-            android:defaultValue="odk_default"
-            android:dialogTitle="@string/change_protocol"
-            android:entries="@array/protocol_entries"
-            android:entryValues="@array/protocol_entry_values"
-            android:key="protocol"
-            android:title="@string/protocol" />
-
         <EditTextPreference
             android:id="@+id/server_url"
             android:defaultValue="@string/default_server_url"
@@ -57,6 +48,14 @@
 			android:defaultValue=""
 			android:dialogTitle="@string/google_submission_id_text" />
         -->
+        <ListPreference
+            android:id="@+id/protocol"
+            android:defaultValue="odk_default"
+            android:dialogTitle="@string/change_protocol"
+            android:entries="@array/protocol_entries"
+            android:entryValues="@array/protocol_entry_values"
+            android:key="protocol"
+            android:title="@string/protocol" />
         <EditTextPreference
             android:id="@+id/formlist_url"
             android:defaultValue="@string/default_odk_formlist"
@@ -126,7 +125,6 @@
             android:defaultValue="@string/default_splash_path"
             android:dependency="showSplash"
             android:key="splashPath"
-            android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
     </PreferenceCategory>
 

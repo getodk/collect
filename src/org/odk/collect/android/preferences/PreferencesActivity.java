@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import android.accounts.Account;
@@ -114,14 +113,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 		boolean serverAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
 
-		SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(Collect.getInstance()
-						.getApplicationContext());
-		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
-				PreferencesActivity.PROTOCOL_ODK_DEFAULT);
-		boolean isOdkProtocol = protocol
-				.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
-
 		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
 		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
 		boolean autosendWifiAvailable = adminPreferences.getBoolean(
@@ -143,22 +134,42 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
 
+		// declared early to prevent NPE in toggleServerPaths
+		mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
+		mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
+
 		mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
 		mProtocolPreference.setSummary(mProtocolPreference.getEntry());
-		mProtocolPreference
-				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		if (mProtocolPreference.getValue().equals("odk_default")) {
+			mFormListUrlPreference.setEnabled(false);
+			mSubmissionUrlPreference.setEnabled(false);
+		} else {
+			mFormListUrlPreference.setEnabled(true);
+			mSubmissionUrlPreference.setEnabled(true);
+		}
+		mProtocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-					@Override
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						int index = ((ListPreference) preference)
-								.findIndexOfValue(newValue.toString());
-						String entry = (String) ((ListPreference) preference)
-								.getEntries()[index];
-						((ListPreference) preference).setSummary(entry);
-						return true;
-					}
-				});
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				int index = ((ListPreference) preference)
+						.findIndexOfValue(newValue.toString());
+				String entry = (String) ((ListPreference) preference)
+						.getEntries()[index];
+				String value = (String) ((ListPreference) preference)
+						.getEntryValues()[index];
+				((ListPreference) preference).setSummary(entry);
+				if (value.equals("odk_default")) {
+					mFormListUrlPreference.setEnabled(false);
+					mSubmissionUrlPreference.setEnabled(false);
+				} else {
+					mFormListUrlPreference.setEnabled(true);
+					mSubmissionUrlPreference.setEnabled(true);
+				}
+				
+				return true;
+			}
+		});
 
 		mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
 		mServerUrlPreference
@@ -188,65 +199,11 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mServerUrlPreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
 
-		Preference protocolPreference = findPreference(KEY_PROTOCOL);
-		protocolPreference
-				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-					@Override
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						String protocol = (String) newValue;
-						boolean isOdkProtocol = protocol
-								.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
-						boolean adminMode = getIntent().getBooleanExtra(
-								"adminMode", false);
-
-						if (isOdkProtocol) {
-							SharedPreferences settings = PreferenceManager
-									.getDefaultSharedPreferences(preference
-											.getContext());
-							Editor editor = settings.edit();
-							String formListUrl = preference.getContext()
-									.getString(R.string.default_odk_formlist);
-							String submissionUrl = preference.getContext()
-									.getString(R.string.default_odk_submission);
-							editor.putString(KEY_FORMLIST_URL, formListUrl);
-							editor.putString(KEY_SUBMISSION_URL, submissionUrl);
-							editor.commit();
-							mFormListUrlPreference.setText(formListUrl);
-							mSubmissionUrlPreference.setText(submissionUrl);
-						}
-
-						SharedPreferences adminPreferences = getSharedPreferences(
-								AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-						boolean serverAvailable = adminPreferences.getBoolean(
-								AdminPreferencesActivity.KEY_CHANGE_SERVER,
-								true);
-
-						PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
-
-						if (isOdkProtocol || !(serverAvailable || adminMode)) {
-							serverCategory
-									.removePreference(mFormListUrlPreference);
-						} else {
-							serverCategory
-									.addPreference(mFormListUrlPreference);
-						}
-
-						if (isOdkProtocol || !(serverAvailable || adminMode)) {
-							serverCategory
-									.removePreference(mSubmissionUrlPreference);
-						} else {
-							serverCategory
-									.addPreference(mSubmissionUrlPreference);
-						}
-						return true;
-					}
-				});
+		
 
 		if (!(serverAvailable || adminMode)) {
-			serverCategory.removePreference(protocolPreference);
+			Preference protocol = findPreference(KEY_PROTOCOL);
+			serverCategory.removePreference(protocol);
 			serverCategory.removePreference(mServerUrlPreference);
 
 		} else {
@@ -337,21 +294,19 @@ public class PreferencesActivity extends PreferenceActivity implements
 			serverCategory.removePreference(mSelectedGoogleAccountPreference);
 		}
 
-		mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
 		mFormListUrlPreference.setOnPreferenceChangeListener(this);
 		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
 		mServerUrlPreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
-		if (isOdkProtocol || !(serverAvailable || adminMode)) {
+		if (!(serverAvailable || adminMode)) {
 			serverCategory.removePreference(mFormListUrlPreference);
 		}
 
-		mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
 		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
 		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
 		mServerUrlPreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
-		if (isOdkProtocol || !(serverAvailable || adminMode)) {
+		if (!(serverAvailable || adminMode)) {
 			serverCategory.removePreference(mSubmissionUrlPreference);
 		}
 
@@ -466,7 +421,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 						return true;
 					}
 				});
-
+		
+		mSplashPathPreference.setSummary(mSplashPathPreference
+				.getSharedPreferences().getString(KEY_SPLASH_PATH,
+						getString(R.string.default_splash_path)));
 		if (!(splashAvailable || adminMode)) {
 			clientCategory.removePreference(mSplashPathPreference);
 		}
