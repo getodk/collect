@@ -230,7 +230,7 @@
 <string name="admin_preferences">Admin Settings</string>
 <string name="admin_access_settings">Tap for admin access to settings</string>
 <string name="user_access_form_entry">User can access Form Entry items:</string>
-<string name="save_mid">Mid-form saving</string>
+<string name="save_mid">Save Form</string>
 <string name="save_mid_summary">Disable to allow user to save only at end of form</string>
 <string name="jump_to">Jump-to prompt</string>
 <string name="save_as">Saved form renaming</string>
@@ -243,7 +243,7 @@
 <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
-<string name="found_in_menu">Found using Menu button in Form Entry</string>
+<string name="found_in_menu">Disable to hide from menu in Form Entry</string>
 <string name="autosend">Auto Send</string>
 <string name="autosend_preferences">Auto send preferences</string>
 <string name="autosend_enabled">Auto send enabled</string>
@@ -263,5 +263,4 @@
 <string name="enable_gestures_summary">Use horizontal swipes for navigation</string>
 <string name="enable_navigation_buttons">Button navigation</string>
 <string name="enable_navigation_buttons_summary">Use buttons for navigation</string>
-
 </resources>

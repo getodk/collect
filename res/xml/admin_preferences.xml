@@ -73,6 +73,18 @@
             android:summary="@string/found_in_settings"
             android:title="@string/selected_google_account_text" />
         <CheckBoxPreference
+            android:id="@+id/autosend_wifi"
+            android:defaultValue="true"
+            android:key="autosend_wifi"
+            android:summary="@string/found_in_settings"
+            android:title="@string/autosend_wifi" />
+        <CheckBoxPreference
+            android:id="@+id/autosend_network"
+            android:defaultValue="true"
+            android:key="autosend_network"
+            android:summary="@string/found_in_settings"
+            android:title="@string/autosend_network" />
+        <CheckBoxPreference
             android:id="@+id/change_gesture_settings"
             android:defaultValue="true"
             android:key="change_gesture_settings"
@@ -109,18 +121,6 @@
             android:summary="@string/found_in_settings"
             android:title="@string/splash_path" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/user_access_autosend" >
-        <CheckBoxPreference
-            android:id="@+id/autosend_wifi"
-            android:defaultValue="true"
-            android:key="autosend_wifi"
-            android:title="@string/autosend_wifi" />
-        <CheckBoxPreference
-            android:id="@+id/autosend_network"
-            android:defaultValue="true"
-            android:key="autosend_network"
-            android:title="@string/autosend_network" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_form_entry" >
         <CheckBoxPreference
             android:id="@+id/access_settings"
@@ -144,20 +144,20 @@
             android:id="@+id/save_mid"
             android:defaultValue="true"
             android:key="save_mid"
-            android:summary="@string/save_mid_summary"
+            android:summary="@string/found_in_menu"
             android:title="@string/save_mid" />
         <CheckBoxPreference
             android:id="@+id/save_as"
             android:defaultValue="true"
             android:key="save_as"
-            android:summary="@string/save_as_summary"
-            android:title="@string/save_as" />
+            android:summary="@string/found_at_end"
+            android:title="@string/save_form_as" />
         <CheckBoxPreference
             android:id="@+id/mark_as_finalized"
             android:defaultValue="true"
             android:key="mark_as_finalized"
-            android:summary="@string/mark_as_finalized_summary"
-            android:title="@string/mark_as_finished" />
+            android:summary="@string/found_at_end"
+            android:title="@string/mark_finished" />
     </PreferenceCategory>
 
 </PreferenceScreen>
