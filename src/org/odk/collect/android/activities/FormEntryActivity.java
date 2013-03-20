@@ -14,6 +14,40 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.model.xform.XFormsModule;
+import org.javarosa.xpath.XPathTypeMismatchException;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.QuestionWidget;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -56,44 +90,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryController;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.model.xform.XFormsModule;
-import org.javarosa.xpath.XPathTypeMismatchException;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.views.ODKView;
-import org.odk.collect.android.widgets.QuestionWidget;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.Locale;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -173,7 +175,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private Animation mOutAnimation;
 	private View mStaleView = null;
 
-	private RelativeLayout mRelativeLayout;
+	private LinearLayout mQuestionHolder;
 	private View mCurrentView;
 
 	private AlertDialog mAlertDialog;
@@ -187,6 +189,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	private FormLoaderTask mFormLoaderTask;
 	private SaveToDiskTask mSaveToDiskTask;
+
+	private ImageButton mNextButton;
+	private ImageButton mBackButton;
 
 	enum AnimationType {
 		LEFT, RIGHT, FADE
@@ -212,18 +217,35 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		setTitle(getString(R.string.app_name) + " > "
 				+ getString(R.string.loading_form));
 
-		mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
-
 		mBeenSwiped = false;
 		mAlertDialog = null;
 		mCurrentView = null;
 		mInAnimation = null;
 		mOutAnimation = null;
 		mGestureDetector = new GestureDetector(this);
+		mQuestionHolder = (LinearLayout) findViewById(R.id.questionholder);
 
 		// get admin preference settings
 		mAdminPreferences = getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+		mNextButton = (ImageButton) findViewById(R.id.form_forward_button);
+		mNextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mBeenSwiped = true;
+				showNextView();
+			}
+		});
+
+		mBackButton = (ImageButton) findViewById(R.id.form_back_button);
+		mBackButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mBeenSwiped = true;
+				showPreviousView();
+			}
+		});
 
 		// Load JavaRosa modules. needed to restore forms.
 		new XFormsModule().registerModule();
@@ -1214,14 +1236,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// adjust which view is in the layout container...
 		mStaleView = mCurrentView;
 		mCurrentView = next;
-		mRelativeLayout.addView(mCurrentView, lp);
+		mQuestionHolder.addView(mCurrentView, lp);
 		mAnimationCompletionSet = 0;
 
 		if (mStaleView != null) {
 			// start OutAnimation for transition...
 			mStaleView.startAnimation(mOutAnimation);
 			// and remove the old view (MUST occur after start of animation!!!)
-			mRelativeLayout.removeView(mStaleView);
+			mQuestionHolder.removeView(mStaleView);
 		} else {
 			mAnimationCompletionSet = 2;
 		}
@@ -1917,6 +1939,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			createErrorDialog(mErrorMessage, EXIT);
 			return;
 		}
+
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean showButtons = sharedPreferences.getBoolean(
+				PreferencesActivity.KEY_NAVIGATION_BUTTONS_ENABLED, false);
+		if (showButtons) {
+			mBackButton.setVisibility(View.VISIBLE);
+			mNextButton.setVisibility(View.VISIBLE);
+		} else {
+			mBackButton.setVisibility(View.GONE);
+			mNextButton.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -2308,59 +2342,71 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		// Looks for user swipes. If the user has swiped, move to the
-		// appropriate screen.
+		// only check the swipe if it's enabled in preferences
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean doSwipe = sharedPreferences.getBoolean(
+				PreferencesActivity.KEY_GESTURES_ENABLED, true);
+		if (doSwipe) {
+			// Looks for user swipes. If the user has swiped, move to the
+			// appropriate screen.
 
-		// for all screens a swipe is left/right of at least
-		// .25" and up/down of less than .25"
-		// OR left/right of > .5"
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int xPixelLimit = (int) (dm.xdpi * .25);
-		int yPixelLimit = (int) (dm.ydpi * .25);
+			// for all screens a swipe is left/right of at least
+			// .25" and up/down of less than .25"
+			// OR left/right of > .5"
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
+			int xPixelLimit = (int) (dm.xdpi * .25);
+			int yPixelLimit = (int) (dm.ydpi * .25);
 
-		if (mCurrentView instanceof ODKView) {
-			if (((ODKView) mCurrentView).suppressFlingGesture(e1, e2,
-					velocityX, velocityY)) {
+			if (mCurrentView instanceof ODKView) {
+				if (((ODKView) mCurrentView).suppressFlingGesture(e1, e2,
+						velocityX, velocityY)) {
+					return false;
+				}
+			}
+
+			if (mBeenSwiped) {
 				return false;
 			}
-		}
 
-		if (mBeenSwiped) {
-			return false;
-		}
-
-		if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1
-				.getY() - e2.getY()) < yPixelLimit)
-				|| Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
-			mBeenSwiped = true;
-			if (velocityX > 0) {
-				if (e1.getX() > e2.getX()) {
-					Log.e(t, "showNextView VelocityX is bogus! " + e1.getX()
-							+ " > " + e2.getX());
-					Collect.getInstance().getActivityLogger()
-							.logInstanceAction(this, "onFling", "showNext");
-					showNextView();
+			if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1
+					.getY() - e2.getY()) < yPixelLimit)
+					|| Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
+				mBeenSwiped = true;
+				if (velocityX > 0) {
+					if (e1.getX() > e2.getX()) {
+						Log.e(t,
+								"showNextView VelocityX is bogus! " + e1.getX()
+										+ " > " + e2.getX());
+						Collect.getInstance().getActivityLogger()
+								.logInstanceAction(this, "onFling", "showNext");
+						showNextView();
+					} else {
+						Collect.getInstance()
+								.getActivityLogger()
+								.logInstanceAction(this, "onFling",
+										"showPrevious");
+						showPreviousView();
+					}
 				} else {
-					Collect.getInstance().getActivityLogger()
-							.logInstanceAction(this, "onFling", "showPrevious");
-					showPreviousView();
+					if (e1.getX() < e2.getX()) {
+						Log.e(t,
+								"showPreviousView VelocityX is bogus! "
+										+ e1.getX() + " < " + e2.getX());
+						Collect.getInstance()
+								.getActivityLogger()
+								.logInstanceAction(this, "onFling",
+										"showPrevious");
+						showPreviousView();
+					} else {
+						Collect.getInstance().getActivityLogger()
+								.logInstanceAction(this, "onFling", "showNext");
+						showNextView();
+					}
 				}
-			} else {
-				if (e1.getX() < e2.getX()) {
-					Log.e(t,
-							"showPreviousView VelocityX is bogus! " + e1.getX()
-									+ " < " + e2.getX());
-					Collect.getInstance().getActivityLogger()
-							.logInstanceAction(this, "onFling", "showPrevious");
-					showPreviousView();
-				} else {
-					Collect.getInstance().getActivityLogger()
-							.logInstanceAction(this, "onFling", "showNext");
-					showNextView();
-				}
+				return true;
 			}
-			return true;
 		}
 
 		return false;

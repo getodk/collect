@@ -73,6 +73,18 @@
             android:summary="@string/found_in_settings"
             android:title="@string/selected_google_account_text" />
         <CheckBoxPreference
+            android:id="@+id/change_gesture_settings"
+            android:defaultValue="true"
+            android:key="change_gesture_settings"
+            android:summary="@string/found_in_settings"
+            android:title="@string/enable_gestures" />
+        <CheckBoxPreference
+            android:id="@+id/change_navigation_button_settings"
+            android:defaultValue="true"
+            android:key="change_navigation_button_settings"
+            android:summary="@string/found_in_settings"
+            android:title="@string/enable_navigation_buttons" />
+        <CheckBoxPreference
             android:id="@+id/change_font_size"
             android:defaultValue="true"
             android:key="change_font_size"

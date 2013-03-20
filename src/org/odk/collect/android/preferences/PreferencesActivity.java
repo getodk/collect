@@ -88,6 +88,9 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
 	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
+	public static final String KEY_GESTURES_ENABLED = "gestures_enabled";
+	public static final String KEY_NAVIGATION_BUTTONS_ENABLED = "navigation_buttons_enabled";
+
 	private PreferenceScreen mSplashPathPreference;
 	private EditTextPreference mSubmissionUrlPreference;
 	private EditTextPreference mFormListUrlPreference;
@@ -369,6 +372,22 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
 
+		boolean gestureAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_GESTURE_SETTINGS, true);
+
+		Preference gestureSettings = findPreference(KEY_GESTURES_ENABLED);
+		if (!(gestureAvailable || adminMode)) {
+			clientCategory.removePreference(gestureSettings);
+		}
+
+		boolean buttonsAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_NAVIGATION_BUTTON_SETTINGS, true);
+
+		Preference buttonSettings = findPreference(KEY_NAVIGATION_BUTTONS_ENABLED);
+		if (!(buttonsAvailable || adminMode)) {
+			clientCategory.removePreference(buttonSettings);
+		}
+
 		boolean fontAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
 		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
@@ -472,7 +491,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 
 		if (!(fontAvailable || defaultAvailable || splashAvailable
-				|| showSplashAvailable || adminMode)) {
+				|| showSplashAvailable || gestureAvailable || buttonsAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(clientCategory);
 		}
 

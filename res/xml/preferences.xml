@@ -91,6 +91,17 @@
     <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client" >
+        <CheckBoxPreference
+            android:id="@+id/gestures_enabled"
+            android:defaultValue="true"
+            android:key="gestures_enabled"
+            android:summary="@string/enable_gestures_summary"
+            android:title="@string/enable_gestures" />
+        <CheckBoxPreference
+            android:id="@+id/navigation_buttons_enabled"
+            android:key="navigation_buttons_enabled"
+            android:summary="@string/enable_navigation_buttons_summary"
+            android:title="@string/enable_navigation_buttons" />
         <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"
@@ -99,7 +110,6 @@
             android:entryValues="@array/font_size_entry_values"
             android:key="font_size"
             android:title="@string/font_size" />
-
         <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
@@ -111,7 +121,6 @@
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
-
         <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"

@@ -257,5 +257,11 @@
 <string name="found_at_end">Disable to hide from end of Form Entry</string>
 <string name="no_account">No account</string>
 <string name="save_preferences">Save Settings to Disk</string>
+<string name="form_forward">Next</string>
+<string name="form_backward">Prev</string>
+<string name="enable_gestures">Enable gesture navigation</string>
+<string name="enable_gestures_summary">Check to enable gesture navigation</string>
+<string name="enable_navigation_buttons">Enable next/back form buttons</string>
+<string name="enable_navigation_buttons_summary">Check to enable button navigation</string>
 
 </resources>
