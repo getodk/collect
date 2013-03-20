@@ -85,17 +85,11 @@
             android:summary="@string/found_in_settings"
             android:title="@string/autosend_network" />
         <CheckBoxPreference
-            android:id="@+id/change_gesture_settings"
+            android:id="@+id/navigation"
             android:defaultValue="true"
-            android:key="change_gesture_settings"
+            android:key="navigation"
             android:summary="@string/found_in_settings"
-            android:title="@string/enable_gestures" />
-        <CheckBoxPreference
-            android:id="@+id/change_navigation_button_settings"
-            android:defaultValue="true"
-            android:key="change_navigation_button_settings"
-            android:summary="@string/found_in_settings"
-            android:title="@string/enable_navigation_buttons" />
+            android:title="@string/navigation" />
         <CheckBoxPreference
             android:id="@+id/change_font_size"
             android:defaultValue="true"

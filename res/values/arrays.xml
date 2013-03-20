@@ -37,4 +37,17 @@
 		<item>@string/font_size_small</item>
 		<item>@string/font_size_extra_small</item>
 	</string-array>
+	<!-- DO NOT alter navigation_entry_values - used internally in preferences activity -->
+	<string-array tools:ignore="MissingTranslation"
+		name="navigation_entry_values">
+		<item>swipe</item>
+		<item>buttons</item>
+		<item>swipe_buttons</item>
+	</string-array>
+	<string-array
+		name="navigation_entries">
+		<item>@string/swipe_navigation</item>
+		<item>@string/buttons_navigation</item>
+		<item>@string/swipe_buttons_navigation</item>
+	</string-array>
 </resources>

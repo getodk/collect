@@ -92,17 +92,14 @@
     <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client" >
-        <CheckBoxPreference
-            android:id="@+id/gestures_enabled"
-            android:defaultValue="true"
-            android:key="gestures_enabled"
-            android:summary="@string/enable_gestures_summary"
-            android:title="@string/enable_gestures" />
-        <CheckBoxPreference
-            android:id="@+id/navigation_buttons_enabled"
-            android:key="navigation_buttons_enabled"
-            android:summary="@string/enable_navigation_buttons_summary"
-            android:title="@string/enable_navigation_buttons" />
+       <ListPreference
+            android:id="@+id/navigation"
+            android:defaultValue="swipe"
+            android:dialogTitle="@string/navigation"
+            android:entries="@array/navigation_entries"
+            android:entryValues="@array/navigation_entry_values"
+            android:key="navigation"
+            android:title="@string/navigation" />
         <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"

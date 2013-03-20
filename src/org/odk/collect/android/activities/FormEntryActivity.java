@@ -905,9 +905,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.inflate(this, R.layout.form_entry_start, null);
 			setTitle(getString(R.string.app_name) + " > "
 					+ formController.getFormTitle());
-			((TextView) startView.findViewById(R.id.description))
-					.setText(getString(R.string.enter_data_description,
-							formController.getFormTitle()));
 
 			Drawable image = null;
 			File mediaFolder = formController.getMediaFolder();
@@ -936,6 +933,41 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				v.setImageDrawable(image);
 				v.setContentDescription(formController.getFormTitle());
 			}
+			
+			// change start screen based on navigation prefs
+			String navigationChoice = PreferenceManager.getDefaultSharedPreferences(this).getString(PreferencesActivity.KEY_NAVIGATION, null);
+			Boolean useSwipe = false;
+			Boolean useButtons = false;
+			ImageView ia = ((ImageView) startView.findViewById(R.id.image_advance));
+			ImageView ib = ((ImageView) startView.findViewById(R.id.image_backup));
+			TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
+			TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
+			TextView d = ((TextView) startView.findViewById(R.id.description));
+			
+			if (navigationChoice != null) {
+				if (navigationChoice.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
+					useSwipe = true;
+				}
+				if (navigationChoice.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
+					useButtons = true;
+				}
+			}
+			if (useSwipe && !useButtons) {
+				d.setText(getString(R.string.swipe_instructions,
+						formController.getFormTitle()));
+			} else if (useButtons && !useSwipe) {
+				ia.setVisibility(View.GONE);
+				ib.setVisibility(View.GONE);
+				ta.setVisibility(View.GONE);
+				tb.setVisibility(View.GONE);
+				d.setText(getString(R.string.buttons_instructions,
+						formController.getFormTitle()));
+			} else {
+				d.setText(getString(R.string.swipe_buttons_instructions,
+						formController.getFormTitle()));
+			}
+	
+			
 			if (mBackButton.isShown()) {
 				mBackButton.setEnabled(false);
 			}
@@ -1957,10 +1989,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			return;
 		}
 
+		// only check the buttons if it's enabled in preferences
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		boolean showButtons = sharedPreferences.getBoolean(
-				PreferencesActivity.KEY_NAVIGATION_BUTTONS_ENABLED, false);
+		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, null);
+		Boolean showButtons = false;
+		if (navigation != null && navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
+			showButtons = true;
+		}
+	
 		if (showButtons) {
 			mBackButton.setVisibility(View.VISIBLE);
 			mNextButton.setVisibility(View.VISIBLE);
@@ -2362,8 +2399,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// only check the swipe if it's enabled in preferences
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		boolean doSwipe = sharedPreferences.getBoolean(
-				PreferencesActivity.KEY_GESTURES_ENABLED, true);
+		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, null);
+				Boolean doSwipe = false;
+		if (navigation != null && navigation.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
+			doSwipe = true;
+		}
 		if (doSwipe) {
 			// Looks for user swipes. If the user has swiped, move to the
 			// appropriate screen.

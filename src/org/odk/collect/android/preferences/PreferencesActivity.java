@@ -64,9 +64,14 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	public static final String KEY_PROTOCOL = "protocol";
 
+	// must match /res/arrays.xml
 	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
 	public static final String PROTOCOL_GOOGLE = "google";
 	public static final String PROTOCOL_OTHER = "";
+	
+	public static final String NAVIGATION_SWIPE = "swipe";
+	public static final String NAVIGATION_BUTTONS = "buttons";
+	public static final String NAVIGATION_SWIPE_BUTTONS = "swipe_buttons";
 
 	public static final String KEY_FORMLIST_URL = "formlist_url";
 	public static final String KEY_SUBMISSION_URL = "submission_url";
@@ -78,8 +83,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
 	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
-	public static final String KEY_GESTURES_ENABLED = "gestures_enabled";
-	public static final String KEY_NAVIGATION_BUTTONS_ENABLED = "navigation_buttons_enabled";
+	public static final String KEY_NAVIGATION = "navigation";
 
 	private PreferenceScreen mSplashPathPreference;
 	private EditTextPreference mSubmissionUrlPreference;
@@ -89,6 +93,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 	private EditTextPreference mPasswordPreference;
 	private ListPreference mSelectedGoogleAccountPreference;
 	private ListPreference mFontSizePreference;
+	private ListPreference mNavigationPreference;
+
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
 	private ListPreference mProtocolPreference;
@@ -316,22 +322,28 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
 
-		boolean gestureAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_GESTURE_SETTINGS, true);
+		boolean navigationAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_NAVIGATION, true);
+		mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
+		mNavigationPreference.setSummary(mNavigationPreference.getEntry());
+		mNavigationPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-		Preference gestureSettings = findPreference(KEY_GESTURES_ENABLED);
-		if (!(gestureAvailable || adminMode)) {
-			clientCategory.removePreference(gestureSettings);
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int index = ((ListPreference) preference)
+								.findIndexOfValue(newValue.toString());
+						String entry = (String) ((ListPreference) preference)
+								.getEntries()[index];
+						((ListPreference) preference).setSummary(entry);
+						return true;
+					}
+				});
+		if (!(navigationAvailable || adminMode)) {
+			clientCategory.removePreference(mNavigationPreference);
 		}
-
-		boolean buttonsAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_NAVIGATION_BUTTON_SETTINGS, true);
-
-		Preference buttonSettings = findPreference(KEY_NAVIGATION_BUTTONS_ENABLED);
-		if (!(buttonsAvailable || adminMode)) {
-			clientCategory.removePreference(buttonSettings);
-		}
-
+		
 		boolean fontAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
 		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
@@ -438,7 +450,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 
 		if (!(fontAvailable || defaultAvailable || splashAvailable
-				|| showSplashAvailable || gestureAvailable || buttonsAvailable || adminMode)) {
+				|| showSplashAvailable || navigationAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(clientCategory);
 		}
 

@@ -23,7 +23,7 @@
 <string name="altitude">Altitude</string>
 <string name="audio_file_error">No audio file was specified.</string>
 <string name="audio_file_invalid">File: %s is not a valid audio file.</string>
-<string name="backup">back to\nprevious\nprompt</string>
+<string name="backup">backward to\nprevious\nprompt</string>
 <string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
 <string name="cancel">Cancel</string>
 <string name="cancel_loading_form">Cancel</string>
@@ -67,7 +67,7 @@
 <string name="entering_repeat_ask">Add New Group?</string>
 <string name="enter_data">Fill Blank Form</string>
 <string name="enter_data_button">Fill Blank Form</string>
-<string name="enter_data_description">You are at the start of %s. Swipe the screen as shown below to begin.</string>
+<string name="enter_data_description">You are at the start of %s.</string>
 <string name="error_occured">Error Occurred</string>
 <string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s).</string>
 <string name="file_deleted_error">Sorry, %1$s of %2$s selected form(s) failed to delete!</string>
@@ -259,8 +259,12 @@
 <string name="save_preferences">Save Settings to Disk</string>
 <string name="form_forward">Next</string>
 <string name="form_backward">Prev</string>
-<string name="enable_gestures">Swipe navigation</string>
-<string name="enable_gestures_summary">Use horizontal swipes for navigation</string>
-<string name="enable_navigation_buttons">Button navigation</string>
-<string name="enable_navigation_buttons_summary">Use buttons for navigation</string>
+<string name="navigation">Navigation</string>
+<string name="swipe_navigation">Use horizontal swipes</string>
+<string name="buttons_navigation">Use forward/backward buttons</string>
+<string name="swipe_buttons_navigation">Use swipes and buttons</string>
+<string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
+<string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
+<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward .</string>
+
 </resources>
