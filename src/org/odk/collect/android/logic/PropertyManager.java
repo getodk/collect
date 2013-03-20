@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.logic;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Vector;
+
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -26,10 +30,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Vector;
 
 /**
  * Used to return device properties to JavaRosa
@@ -136,7 +136,7 @@ public class PropertyManager implements IPropertyManager {
         	mProperties.put(USERNAME, value);
         	mProperties.put(OR_USERNAME, "username:" + value);
         }
-        value = settings.getString(PreferencesActivity.KEY_ACCOUNT, null);
+        value = settings.getString(PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
         if ( value != null ) {
         	mProperties.put(EMAIL, value);
         	mProperties.put(OR_EMAIL, "mailto:" + value);

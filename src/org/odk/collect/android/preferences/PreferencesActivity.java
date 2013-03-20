@@ -74,7 +74,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_COMPLETED_DEFAULT = "default_completed";
 
 	public static final String KEY_AUTH = "auth";
-	public static final String KEY_ACCOUNT = "account";
 
 	public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
 	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
@@ -263,7 +262,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 			accountEntries.add(accounts[i].name);
 			accountValues.add(accounts[i].name);
 		}
-		accountEntries.add("No account");
+		accountEntries.add(getString(R.string.no_account));
 		accountValues.add("");
 
 		mSelectedGoogleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
