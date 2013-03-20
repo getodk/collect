@@ -14,11 +14,6 @@
 
 package org.odk.collect.android.preferences;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
@@ -28,7 +23,6 @@ import org.odk.collect.android.utilities.UrlUtils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,8 +43,6 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 public class PreferencesActivity extends PreferenceActivity implements
@@ -102,8 +94,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
 	private ListPreference mProtocolPreference;
-
-	private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -620,81 +610,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		preference.setSummary((CharSequence) newValue);
 		return true;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, SAVE_PREFS_MENU, 0, getString(R.string.save_preferences))
-				.setIcon(R.drawable.ic_menu_save);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case SAVE_PREFS_MENU:
-			File writeDir = new File(Collect.ODK_ROOT + "/settings");
-			if (!writeDir.exists()) {
-				if (!writeDir.mkdirs()) {
-					Toast.makeText(
-							this,
-							"Error creating directory "
-									+ writeDir.getAbsolutePath(),
-							Toast.LENGTH_SHORT).show();
-					return false;
-				}
-			}
-
-			File dst = new File(writeDir.getAbsolutePath()
-					+ "/collect.settings");
-			boolean success = saveSharedPreferencesToFile(dst, this);
-			if (success) {
-				Toast.makeText(
-						this,
-						"Settings successfully written to "
-								+ dst.getAbsolutePath(), Toast.LENGTH_LONG)
-						.show();
-			} else {
-				Toast.makeText(this,
-						"Error writing settings to " + dst.getAbsolutePath(),
-						Toast.LENGTH_LONG).show();
-			}
-			return true;
-
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	public static boolean saveSharedPreferencesToFile(File dst, Context context) {
-		// this should be in a thread if it gets big, but for now it's tiny
-		boolean res = false;
-		ObjectOutputStream output = null;
-		try {
-			output = new ObjectOutputStream(new FileOutputStream(dst));
-			SharedPreferences pref = PreferenceManager
-					.getDefaultSharedPreferences(context);
-			SharedPreferences adminPreferences = context.getSharedPreferences(
-					AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-			output.writeObject(pref.getAll());
-			output.writeObject(adminPreferences.getAll());
-
-			res = true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (output != null) {
-					output.flush();
-					output.close();
-				}
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-		return res;
 	}
 
 }

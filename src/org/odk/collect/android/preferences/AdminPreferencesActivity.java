@@ -15,10 +15,16 @@
 package org.odk.collect.android.preferences;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -103,7 +109,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
 			File dst = new File(writeDir.getAbsolutePath()
 					+ "/collect.settings");
-			boolean success = PreferencesActivity.saveSharedPreferencesToFile(dst, this);
+			boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, this);
 			if (success) {
 				Toast.makeText(
 						this,
@@ -119,6 +125,39 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+
+	public static boolean saveSharedPreferencesToFile(File dst, Context context) {
+		// this should be in a thread if it gets big, but for now it's tiny
+		boolean res = false;
+		ObjectOutputStream output = null;
+		try {
+			output = new ObjectOutputStream(new FileOutputStream(dst));
+			SharedPreferences pref = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			SharedPreferences adminPreferences = context.getSharedPreferences(
+					AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+			output.writeObject(pref.getAll());
+			output.writeObject(adminPreferences.getAll());
+
+			res = true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (output != null) {
+					output.flush();
+					output.close();
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return res;
 	}
 
 }
