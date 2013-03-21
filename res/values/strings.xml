@@ -219,7 +219,7 @@
 <string name="mark_as_finished">Finalizing forms</string>
 <string name="user_access_main_menu">User can access Main Menu items:</string>
 <string name="user_access_preferences">User can access Change Settings items:</string>
-<string name="change_server">URL, platform, paths</string>
+<string name="change_server">Platform</string>
 <string name="change_username_default">Username</string>
 <string name="change_password_default">Change default password</string>
 <string name="change_google">Change Google account</string>
@@ -265,6 +265,7 @@
 <string name="swipe_buttons_navigation">Use swipes and buttons</string>
 <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
 <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
-<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward .</string>
+<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
+<string name="change_url_default">URL</string>
 
 </resources>

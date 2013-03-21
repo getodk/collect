@@ -117,6 +117,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		boolean serverAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
+		boolean urlAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_URL, true);
 
 		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
 		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
@@ -209,13 +211,15 @@ public class PreferencesActivity extends PreferenceActivity implements
 		if (!(serverAvailable || adminMode)) {
 			Preference protocol = findPreference(KEY_PROTOCOL);
 			serverCategory.removePreference(protocol);
-			serverCategory.removePreference(mServerUrlPreference);
-
 		} else {
 			// this just removes the value from protocol, but protocol doesn't
 			// exist if we take away access
 			disableFeaturesInDevelopment();
 		}
+		
+		if (!(urlAvailable || adminMode)) {
+			serverCategory.removePreference(mServerUrlPreference);
+		} 
 
 		mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
 		mUsernamePreference.setOnPreferenceChangeListener(this);
@@ -293,9 +297,9 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mSelectedGoogleAccountPreference
 				.setSummary(mSelectedGoogleAccountPreference.getValue());
 
-		boolean googleAccounAvailable = adminPreferences.getBoolean(
+		boolean googleAccountAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
-		if (!(googleAccounAvailable || adminMode)) {
+		if (!(googleAccountAvailable || adminMode)) {
 			serverCategory.removePreference(mSelectedGoogleAccountPreference);
 		}
 
@@ -315,8 +319,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 			serverCategory.removePreference(mSubmissionUrlPreference);
 		}
 
-		if (!(serverAvailable || usernameAvailable || passwordAvailable
-				|| googleAccounAvailable || adminMode)) {
+		if (!(serverAvailable || urlAvailable || usernameAvailable || passwordAvailable
+				|| googleAccountAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(serverCategory);
 		}
 
@@ -374,8 +378,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 			clientCategory.removePreference(defaultFinalized);
 		}
 
-		boolean splashAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_SELECT_SPLASH_SCREEN, true);
 		mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
 		mSplashPathPreference
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -436,9 +438,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mSplashPathPreference.setSummary(mSplashPathPreference
 				.getSharedPreferences().getString(KEY_SPLASH_PATH,
 						getString(R.string.default_splash_path)));
-		if (!(splashAvailable || adminMode)) {
-			clientCategory.removePreference(mSplashPathPreference);
-		}
 
 		boolean showSplashAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_SHOW_SPLASH_SCREEN, true);
@@ -447,9 +446,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		if (!(showSplashAvailable || adminMode)) {
 			clientCategory.removePreference(showSplashPreference);
+			clientCategory.removePreference(mSplashPathPreference);
 		}
 
-		if (!(fontAvailable || defaultAvailable || splashAvailable
+		if (!(fontAvailable || defaultAvailable
 				|| showSplashAvailable || navigationAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(clientCategory);
 		}

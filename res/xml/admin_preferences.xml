@@ -49,6 +49,12 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_preferences" >
         <CheckBoxPreference
+            android:id="@+id/change_url"
+            android:defaultValue="true"
+            android:key="change_url"
+            android:summary="@string/found_in_settings"
+            android:title="@string/change_url_default" />
+        <CheckBoxPreference
             android:id="@+id/change_username"
             android:defaultValue="true"
             android:key="change_username"
@@ -108,12 +114,6 @@
             android:key="show_splash_screen"
             android:summary="@string/found_in_settings"
             android:title="@string/show_splash" />
-        <CheckBoxPreference
-            android:id="@+id/select_splash_screen"
-            android:defaultValue="true"
-            android:key="select_splash_screen"
-            android:summary="@string/found_in_settings"
-            android:title="@string/splash_path" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_form_entry" >
         <CheckBoxPreference
