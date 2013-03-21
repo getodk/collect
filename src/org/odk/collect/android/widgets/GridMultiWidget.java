@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -29,6 +29,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
+import org.odk.collect.android.views.ExpandedHeightGridView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -45,6 +46,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -52,28 +56,40 @@ import android.widget.TextView;
  * icon and the background changes from black to orange. If text, audio or video are specified in
  * the select answers they are ignored. This is almost identical to GridWidget, except multiple
  * icons can be selected simultaneously.
- * 
+ *
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class GridMultiWidget extends QuestionWidget {
+
+    // The RGB value for the orange background
+    public static final int orangeRedVal = 255;
+    public static final int orangeGreenVal = 140;
+    public static final int orangeBlueVal = 0;
+
+    private static final int HORIZONTAL_PADDING = 7;
+    private static final int VERTICAL_PADDING = 5;
+    private static final int SPACING = 2;
+    private static final int IMAGE_PADDING = 8;
+    private static final int SCROLL_WIDTH = 16;
+
     Vector<SelectChoice> mItems;
 
     // The possible select choices
     String[] choices;
 
-    // The Gridview that will hol the icons
-    GridView gridview;
+    // The Gridview that will hold the icons
+    ExpandedHeightGridView gridview;
 
     // Defines which icon is selected
     boolean[] selected;
 
     // The image views for each of the icons
-    ImageView[] imageViews;
+    View[] imageViews;
     AudioHandler[] audioHandlers;
 
     // need to remember the last click position for audio treatment
     int lastClickPosition = 0;
-    
+
     // The number of columns in the grid, can be user defined
     int numColumns;
 
@@ -82,11 +98,7 @@ public class GridMultiWidget extends QuestionWidget {
     // they are chosen automatically
     int maxColumnWidth;
 
-    // The RGB value for the orange background
-    public static final int orangeRedVal = 255;
-    public static final int orangeGreenVal = 140;
-    public static final int orangeBlueVal = 0;
-
+    int resizeWidth;
 
     @SuppressWarnings("unchecked")
     public GridMultiWidget(Context context, FormEntryPrompt prompt, int numColumns) {
@@ -96,8 +108,8 @@ public class GridMultiWidget extends QuestionWidget {
 
         selected = new boolean[mItems.size()];
         choices = new String[mItems.size()];
-        gridview = new GridView(context);
-        imageViews = new ImageView[mItems.size()];
+        gridview = new ExpandedHeightGridView(context);
+        imageViews = new View[mItems.size()];
         audioHandlers = new AudioHandler[mItems.size()];
         maxColumnWidth = -1;
         this.numColumns = numColumns;
@@ -105,12 +117,29 @@ public class GridMultiWidget extends QuestionWidget {
             imageViews[i] = new ImageView(getContext());
         }
 
+        Display display =
+                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+        int screenWidth = display.getWidth();
+        int screenHeight = display.getHeight();
+
+        if ( display.getOrientation() % 2 == 1 ) {
+        	// rotated 90 degrees...
+        	int temp = screenWidth;
+        	screenWidth = screenHeight;
+        	screenHeight = temp;
+        }
+
+        if ( numColumns > 0 ) {
+        	resizeWidth = ((screenWidth - 2*HORIZONTAL_PADDING - SCROLL_WIDTH - (IMAGE_PADDING+SPACING)*numColumns) / numColumns );
+        }
+
         // Build view
         for (int i = 0; i < mItems.size(); i++) {
             SelectChoice sc = mItems.get(i);
-            
+
             // Create an audioHandler iff there is an audio prompt associated with this selection.
-            String audioURI = 
+            String audioURI =
             		prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if ( audioURI != null) {
             	audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI);
@@ -123,19 +152,15 @@ public class GridMultiWidget extends QuestionWidget {
             String imageURI =
                 prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
 
+            String errorMsg = null;
             if (imageURI != null) {
                 choices[i] = imageURI;
 
                 String imageFilename;
                 try {
-                    imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                	imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                     final File imageFile = new File(imageFilename);
                     if (imageFile.exists()) {
-                        Display display =
-                            ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                                    .getDefaultDisplay();
-                        int screenWidth = display.getWidth();
-                        int screenHeight = display.getHeight();
                         Bitmap b =
                             FileUtils
                                     .getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
@@ -145,74 +170,109 @@ public class GridMultiWidget extends QuestionWidget {
                                 maxColumnWidth = b.getWidth();
                             }
 
+                            ImageView imageView = (ImageView) imageViews[i];
+
+                            imageView.setBackgroundColor(Color.WHITE);
+
+	                        if ( numColumns > 0 ) {
+	                        	int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
+	                        	b = Bitmap.createScaledBitmap(b, resizeWidth, resizeHeight, false);
+	                        }
+
+	                        imageView.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
+	                        imageView.setImageBitmap(b);
+	                        imageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT, ListView.LayoutParams.WRAP_CONTENT));
+	                        imageView.setScaleType(ScaleType.FIT_XY);
+                        } else {
+                            // Loading the image failed, so it's likely a bad file.
+                            errorMsg = getContext().getString(R.string.file_invalid, imageFile);
                         }
+                    } else {
+                        // We should have an image, but the file doesn't exist.
+                        errorMsg = getContext().getString(R.string.file_missing, imageFile);
                     }
                 } catch (InvalidReferenceException e) {
-                    Log.e("GridWidget", "image invalid reference exception");
+                    Log.e("GridMultiWidget", "image invalid reference exception");
                     e.printStackTrace();
                 }
-
             } else {
-                choices[i] = prompt.getSelectChoiceText(sc);
+            	errorMsg = "";
             }
 
+            if (errorMsg != null) {
+                choices[i] = prompt.getSelectChoiceText(sc);
+
+                TextView missingImage = new TextView(getContext());
+                missingImage.setGravity(Gravity.CENTER);
+                missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
+                missingImage.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT, ListView.LayoutParams.WRAP_CONTENT));
+                imageViews[i] = missingImage;
+
+                if ( choices[i] != null && choices[i].length() != 0 ) {
+	                missingImage.setText(choices[i]);
+                } else {
+	                // errorMsg is only set when an error has occurred
+	                Log.e("GridMultiWidget", errorMsg);
+	                missingImage.setText(errorMsg);
+                }
+
+                missingImage.measure(0, 0);
+                int width = missingImage.getMeasuredWidth();
+                if (width > maxColumnWidth) {
+                    maxColumnWidth = width;
+                }
+            }
         }
 
-        // Use the custom image adapter and initialize the grid view
-        ImageAdapter ia = new ImageAdapter(getContext(), choices);
-        gridview.setAdapter(ia);
+        // Read the screen dimensions and fit the grid view to them. It is important that the grid
+        // knows how far out it can stretch.
+
+        if ( numColumns > 0 ) {
+            // gridview.setNumColumns(numColumns);
+            gridview.setNumColumns(GridView.AUTO_FIT);
+        } else {
+        	resizeWidth = maxColumnWidth;
+            gridview.setNumColumns(GridView.AUTO_FIT);
+        }
+
+    	gridview.setColumnWidth(resizeWidth);
+
+    	gridview.setPadding(HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING, VERTICAL_PADDING);
+        gridview.setHorizontalSpacing(SPACING);
+        gridview.setVerticalSpacing(SPACING);
+        gridview.setGravity(Gravity.LEFT);
+        gridview.setScrollContainer(false);
+        gridview.setStretchMode(GridView.NO_STRETCH);
+
+
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (selected[position]) {
                     selected[position] = false;
                 	if ( audioHandlers[position] != null) {
-                		audioHandlers[position].stopPlaying(); 
+                		audioHandlers[position].stopPlaying();
                 	}
                     imageViews[position].setBackgroundColor(Color.WHITE);
-                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.deselect", 
+                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.deselect",
                 			mItems.get(position).getValue(), mPrompt.getIndex());
 
                 } else {
                     selected[position] = true;
                 	if ( audioHandlers[lastClickPosition] != null) {
-                		audioHandlers[lastClickPosition].stopPlaying(); 
+                		audioHandlers[lastClickPosition].stopPlaying();
                 	}
                     imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
-                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select", 
+                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select",
                 			mItems.get(position).getValue(), mPrompt.getIndex());
                 	if ( audioHandlers[position] != null) {
-                		audioHandlers[position].playAudio(getContext()); 
+                		audioHandlers[position].playAudio(getContext());
                 	}
             		lastClickPosition = position;
                 }
 
             }
         });
-
-        // Read the screen dimensions and fit the grid view to them. It is important that the grid
-        // view
-        // knows how far out it can stretch.
-        Display display =
-            ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                    .getDefaultDisplay();
-        int screenWidth = display.getWidth();
-        int screenHeight = display.getHeight();
-        GridView.LayoutParams params = new GridView.LayoutParams(screenWidth - 5, screenHeight - 5);
-        gridview.setLayoutParams(params);
-
-        // Use the user's choice for num columns, otherwise automatically decide.
-        if (numColumns > 0) {
-            gridview.setNumColumns(numColumns);
-        } else {
-            gridview.setNumColumns(GridView.AUTO_FIT);
-        }
-
-        gridview.setColumnWidth(maxColumnWidth);
-        gridview.setHorizontalSpacing(2);
-        gridview.setVerticalSpacing(2);
-        gridview.setGravity(Gravity.LEFT);
-        gridview.setStretchMode(GridView.NO_STRETCH);
 
         // Fill in answer
         IAnswerData answer = prompt.getAnswerValue();
@@ -243,7 +303,10 @@ public class GridMultiWidget extends QuestionWidget {
             }
         }
 
-        addView(gridview);
+        // Use the custom image adapter and initialize the grid view
+        ImageAdapter ia = new ImageAdapter(getContext(), choices);
+        gridview.setAdapter(ia);
+        addView(gridview,  new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
 
@@ -312,73 +375,11 @@ public class GridMultiWidget extends QuestionWidget {
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
-            String imageURI = choices[position];
-
-            // It is possible that an imageview already exists and has been updated
-            // by updateViewAfterAnswer
-            ImageView mImageView = null;
-            if (imageViews[position] != null) {
-                mImageView = imageViews[position];
-            }
-            TextView mMissingImage = null;
-
-            String errorMsg = null;
-            if (imageURI != null) {
-                try {
-                    String imageFilename =
-                        ReferenceManager._().DeriveReference(imageURI).getLocalURI();
-                    final File imageFile = new File(imageFilename);
-                    if (imageFile.exists()) {
-                        Display display =
-                            ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                                    .getDefaultDisplay();
-                        int screenWidth = display.getWidth();
-                        int screenHeight = display.getHeight();
-                        Bitmap b =
-                            FileUtils
-                                    .getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
-                        if (b != null) {
-
-                            if (mImageView == null) {
-                                mImageView = new ImageView(getContext());
-                                mImageView.setBackgroundColor(Color.WHITE);
-                            }
-
-                            mImageView.setPadding(3, 3, 3, 3);
-                            mImageView.setImageBitmap(b);
-
-                            imageViews[position] = mImageView;
-
-                        } else {
-                            // Loading the image failed, so it's likely a bad file.
-                            errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-                        }
-                    } else {
-                        // We should have an image, but the file doesn't exist.
-                        errorMsg = getContext().getString(R.string.file_missing, imageFile);
-                    }
-
-                    if (errorMsg != null) {
-                        // errorMsg is only set when an error has occurred
-                        Log.e("GridWidget", errorMsg);
-                        mMissingImage = new TextView(getContext());
-                        mMissingImage.setText(errorMsg);
-                        mMissingImage.setPadding(10, 10, 10, 10);
-                    }
-                } catch (InvalidReferenceException e) {
-                    Log.e("GridWidget", "image invalid reference exception");
-                    e.printStackTrace();
-                }
-            } else {
-                // There's no imageURI listed, so just ignore it.
-            }
-
-            if (mImageView != null) {
-                mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                return mImageView;
-            } else {
-                return mMissingImage;
-            }
+           	if ( position < imageViews.length ) {
+        		return imageViews[position];
+        	} else {
+        		return convertView;
+        	}
         }
     }
 
