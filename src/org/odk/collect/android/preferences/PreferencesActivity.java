@@ -14,6 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.UrlUtils;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,478 +44,541 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.Toast;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.AccountList;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.UrlUtils;
-
 public class PreferencesActivity extends PreferenceActivity implements
-        OnPreferenceChangeListener {
+		OnPreferenceChangeListener {
 
-    protected static final int IMAGE_CHOOSER = 0;
+	protected static final int IMAGE_CHOOSER = 0;
 
-    public static final String KEY_INFO = "info";
-    public static final String KEY_LAST_VERSION = "lastVersion";
-    public static final String KEY_FIRST_RUN = "firstRun";
-    public static final String KEY_SHOW_SPLASH = "showSplash";
-    public static final String KEY_SPLASH_PATH = "splashPath";
-    public static final String KEY_FONT_SIZE = "font_size";
-    public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
-    public static final String KEY_GOOGLE_SUBMISSION = "google_submission_id";
+	public static final String KEY_INFO = "info";
+	public static final String KEY_LAST_VERSION = "lastVersion";
+	public static final String KEY_FIRST_RUN = "firstRun";
+	public static final String KEY_SHOW_SPLASH = "showSplash";
+	public static final String KEY_SPLASH_PATH = "splashPath";
+	public static final String KEY_FONT_SIZE = "font_size";
+	public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
+	public static final String KEY_GOOGLE_SUBMISSION = "google_submission_id";
 
-    public static final String KEY_SERVER_URL = "server_url";
-    public static final String KEY_USERNAME = "username";
-    public static final String KEY_PASSWORD = "password";
+	public static final String KEY_SERVER_URL = "server_url";
+	public static final String KEY_USERNAME = "username";
+	public static final String KEY_PASSWORD = "password";
 
-    public static final String KEY_PROTOCOL = "protocol";
+	public static final String KEY_PROTOCOL = "protocol";
 
-    public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
-    public static final String PROTOCOL_GOOGLE = "google";
-    public static final String PROTOCOL_OTHER = "";
+	// must match /res/arrays.xml
+	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
+	public static final String PROTOCOL_GOOGLE = "google";
+	public static final String PROTOCOL_OTHER = "";
+	
+	public static final String NAVIGATION_SWIPE = "swipe";
+	public static final String NAVIGATION_BUTTONS = "buttons";
+	public static final String NAVIGATION_SWIPE_BUTTONS = "swipe_buttons";
 
-    public static final String KEY_FORMLIST_URL = "formlist_url";
-    public static final String KEY_SUBMISSION_URL = "submission_url";
+	public static final String KEY_FORMLIST_URL = "formlist_url";
+	public static final String KEY_SUBMISSION_URL = "submission_url";
 
-    public static final String KEY_COMPLETED_DEFAULT = "default_completed";
+	public static final String KEY_COMPLETED_DEFAULT = "default_completed";
 
-    public static final String KEY_AUTH = "auth";
-    public static final String KEY_ACCOUNT = "account";
+	public static final String KEY_AUTH = "auth";
 
-    public static final String googleServerBaseUrl = "https://gather.apis.google.com/odk/n/";
+	public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
+	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
-    private PreferenceScreen mSplashPathPreference;
-    private EditTextPreference mSubmissionUrlPreference;
-    private EditTextPreference mFormListUrlPreference;
-    private EditTextPreference mServerUrlPreference;
-    private EditTextPreference mUsernamePreference;
-    private EditTextPreference mPasswordPreference;
-    private PreferenceScreen mSelectedGoogleAccountPreference;
-    private ListPreference mFontSizePreference;
+	public static final String KEY_NAVIGATION = "navigation";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+	private PreferenceScreen mSplashPathPreference;
+	private EditTextPreference mSubmissionUrlPreference;
+	private EditTextPreference mFormListUrlPreference;
+	private EditTextPreference mServerUrlPreference;
+	private EditTextPreference mUsernamePreference;
+	private EditTextPreference mPasswordPreference;
+	private ListPreference mSelectedGoogleAccountPreference;
+	private ListPreference mFontSizePreference;
+	private ListPreference mNavigationPreference;
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.general_preferences));
+	private CheckBoxPreference mAutosendWifiPreference;
+	private CheckBoxPreference mAutosendNetworkPreference;
+	private ListPreference mProtocolPreference;
 
-        // not super safe, but we're just putting in this mode to help administrate
-        // would require code to access it
-        boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.preferences);
 
-        SharedPreferences adminPreferences = getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+		setTitle(getString(R.string.app_name) + " > "
+				+ getString(R.string.general_preferences));
 
-        boolean serverAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
+		// not super safe, but we're just putting in this mode to help
+		// administrate
+		// would require code to access it
+		boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
 
-		SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
-        String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
-        boolean isOdkProtocol = protocol.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+		SharedPreferences adminPreferences = getSharedPreferences(
+				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
+		boolean serverAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
+		boolean urlAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_URL, true);
 
-        mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
-        mServerUrlPreference
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        String url = newValue.toString();
+		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
+		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
+		boolean autosendWifiAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
+		if (!(autosendWifiAvailable || adminMode)) {
+			autosendCategory.removePreference(mAutosendWifiPreference);
+		}
 
-                        // remove all trailing "/"s
-                        while (url.endsWith("/")) {
-                            url = url.substring(0, url.length() - 1);
-                        }
+		mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
+		boolean autosendNetworkAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_AUTOSEND_NETWORK, true);
+		if (!(autosendNetworkAvailable || adminMode)) {
+			autosendCategory.removePreference(mAutosendNetworkPreference);
+		}
 
-                        if (UrlUtils.isValidUrl(url)) {
-                            preference.setSummary(newValue.toString());
-                            return true;
-                        } else {
-                            Toast.makeText(getApplicationContext(), R.string.url_error,
-                                    Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    }
-                });
-        mServerUrlPreference.setSummary(mServerUrlPreference.getText());
-        mServerUrlPreference.getEditText().setFilters(
-                new InputFilter[] {
-                    getReturnFilter()
-                });
+		if (!(autosendNetworkAvailable || autosendWifiAvailable || adminMode)) {
+			getPreferenceScreen().removePreference(autosendCategory);
+		}
 
-    	Preference protocolPreference = findPreference(KEY_PROTOCOL);
-    	protocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
+
+		// declared early to prevent NPE in toggleServerPaths
+		mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
+		mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
+
+		mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
+		mProtocolPreference.setSummary(mProtocolPreference.getEntry());
+		if (mProtocolPreference.getValue().equals("odk_default")) {
+			mFormListUrlPreference.setEnabled(false);
+			mSubmissionUrlPreference.setEnabled(false);
+		} else {
+			mFormListUrlPreference.setEnabled(true);
+			mSubmissionUrlPreference.setEnabled(true);
+		}
+		mProtocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
-				String protocol = (String) newValue;
-				boolean isOdkProtocol = protocol.equals(PreferencesActivity.PROTOCOL_ODK_DEFAULT);
-		        boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
-
-		        if ( isOdkProtocol ) {
-					SharedPreferences settings =
-			                PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-					Editor editor = settings.edit();
-					String formListUrl = preference.getContext().getString(R.string.default_odk_formlist);
-					String submissionUrl = preference.getContext().getString(R.string.default_odk_submission);
-					editor.putString(KEY_FORMLIST_URL, formListUrl);
-					editor.putString(KEY_SUBMISSION_URL, submissionUrl);
-					editor.commit();
-					mFormListUrlPreference.setText(formListUrl);
-					mSubmissionUrlPreference.setText(submissionUrl);
-		        }
-
-				SharedPreferences adminPreferences = getSharedPreferences(
-		                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-		        boolean serverAvailable = adminPreferences.getBoolean(
-		                AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
-
-		        PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
-
-		        if (isOdkProtocol || !(serverAvailable || adminMode)) {
-		            serverCategory.removePreference(mFormListUrlPreference);
-		        } else {
-		            serverCategory.addPreference(mFormListUrlPreference);
-		        }
-
-		        if (isOdkProtocol || !(serverAvailable || adminMode)) {
-		            serverCategory.removePreference(mSubmissionUrlPreference);
-		        } else {
-		            serverCategory.addPreference(mSubmissionUrlPreference);
-		        }
+				int index = ((ListPreference) preference)
+						.findIndexOfValue(newValue.toString());
+				String entry = (String) ((ListPreference) preference)
+						.getEntries()[index];
+				String value = (String) ((ListPreference) preference)
+						.getEntryValues()[index];
+				((ListPreference) preference).setSummary(entry);
+				if (value.equals("odk_default")) {
+					mFormListUrlPreference.setEnabled(false);
+					mSubmissionUrlPreference.setEnabled(false);
+				} else {
+					mFormListUrlPreference.setEnabled(true);
+					mSubmissionUrlPreference.setEnabled(true);
+				}
+				
 				return true;
-			}});
+			}
+		});
 
-        if (!(serverAvailable || adminMode)) {
-            serverCategory.removePreference(protocolPreference);
-            serverCategory.removePreference(mServerUrlPreference);
+		mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
+		mServerUrlPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						String url = newValue.toString();
 
-        } else {
-            // this just removes the value from protocol, but protocol doesn't
-            // exist if we take away access
-            disableFeaturesInDevelopment();
-        }
+						// remove all trailing "/"s
+						while (url.endsWith("/")) {
+							url = url.substring(0, url.length() - 1);
+						}
 
-        mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
-        mUsernamePreference.setOnPreferenceChangeListener(this);
-        mUsernamePreference.setSummary(mUsernamePreference.getText());
-        mUsernamePreference.getEditText().setFilters(
-                new InputFilter[] {
-                    getReturnFilter()
-                });
+						if (UrlUtils.isValidUrl(url)) {
+							preference.setSummary(newValue.toString());
+							return true;
+						} else {
+							Toast.makeText(getApplicationContext(),
+									R.string.url_error, Toast.LENGTH_SHORT)
+									.show();
+							return false;
+						}
+					}
+				});
+		mServerUrlPreference.setSummary(mServerUrlPreference.getText());
+		mServerUrlPreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter() });
 
-        boolean usernameAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_USERNAME, true);
-        if (!(usernameAvailable || adminMode)) {
-            serverCategory.removePreference(mUsernamePreference);
-        }
+		
 
-        mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
-        mPasswordPreference
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        String pw = newValue.toString();
+		if (!(serverAvailable || adminMode)) {
+			Preference protocol = findPreference(KEY_PROTOCOL);
+			serverCategory.removePreference(protocol);
+		} else {
+			// this just removes the value from protocol, but protocol doesn't
+			// exist if we take away access
+			disableFeaturesInDevelopment();
+		}
+		
+		if (!(urlAvailable || adminMode)) {
+			serverCategory.removePreference(mServerUrlPreference);
+		} 
 
-                        if (pw.length() > 0) {
-                            mPasswordPreference.setSummary("********");
-                        } else {
-                            mPasswordPreference.setSummary("");
-                        }
-                        return true;
-                    }
-                });
-        if (mPasswordPreference.getText() != null && mPasswordPreference.getText().length() > 0) {
-            mPasswordPreference.setSummary("********");
-        }
-        mUsernamePreference.getEditText().setFilters(
-                new InputFilter[] {
-                    getReturnFilter()
-                });
+		mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
+		mUsernamePreference.setOnPreferenceChangeListener(this);
+		mUsernamePreference.setSummary(mUsernamePreference.getText());
+		mUsernamePreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter() });
 
-        boolean passwordAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_PASSWORD, true);
-        if (!(passwordAvailable || adminMode)) {
-            serverCategory.removePreference(mPasswordPreference);
-        }
+		boolean usernameAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_USERNAME, true);
+		if (!(usernameAvailable || adminMode)) {
+			serverCategory.removePreference(mUsernamePreference);
+		}
 
-        mSelectedGoogleAccountPreference = (PreferenceScreen) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
-        mSelectedGoogleAccountPreference
-                .setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent i = new Intent(getApplicationContext(), AccountList.class);
-                        startActivity(i);
-                        return true;
-                    }
-                });
-        mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference
-                .getSharedPreferences().getString(KEY_ACCOUNT, ""));
-        boolean googleAccounAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
-        if (!(googleAccounAvailable || adminMode)) {
-            serverCategory.removePreference(mSelectedGoogleAccountPreference);
-        }
+		mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
+		mPasswordPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						String pw = newValue.toString();
 
-        mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
-        mFormListUrlPreference.setOnPreferenceChangeListener(this);
-        mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-        mServerUrlPreference.getEditText().setFilters(
-                new InputFilter[] {
-                        getReturnFilter(), getWhitespaceFilter()
-                });
-        if (isOdkProtocol || !(serverAvailable || adminMode)) {
-            serverCategory.removePreference(mFormListUrlPreference);
-        }
+						if (pw.length() > 0) {
+							mPasswordPreference.setSummary("********");
+						} else {
+							mPasswordPreference.setSummary("");
+						}
+						return true;
+					}
+				});
+		if (mPasswordPreference.getText() != null
+				&& mPasswordPreference.getText().length() > 0) {
+			mPasswordPreference.setSummary("********");
+		}
+		mUsernamePreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter() });
 
-        mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
-        mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
-        mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-        mServerUrlPreference.getEditText().setFilters(
-                new InputFilter[] {
-                        getReturnFilter(), getWhitespaceFilter()
-                });
-        if (isOdkProtocol || !(serverAvailable || adminMode)) {
-            serverCategory.removePreference(mSubmissionUrlPreference);
-        }
+		boolean passwordAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_PASSWORD, true);
+		if (!(passwordAvailable || adminMode)) {
+			serverCategory.removePreference(mPasswordPreference);
+		}
 
-        if (!(serverAvailable || usernameAvailable || passwordAvailable || googleAccounAvailable || adminMode)) {
-            getPreferenceScreen().removePreference(serverCategory);
-        }
+		// get list of google accounts
+		final Account[] accounts = AccountManager.get(getApplicationContext())
+				.getAccountsByType("com.google");
+		ArrayList<String> accountEntries = new ArrayList<String>();
+		ArrayList<String> accountValues = new ArrayList<String>();
 
-        PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
+		for (int i = 0; i < accounts.length; i++) {
+			accountEntries.add(accounts[i].name);
+			accountValues.add(accounts[i].name);
+		}
+		accountEntries.add(getString(R.string.no_account));
+		accountValues.add("");
 
-        boolean fontAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
-        mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
-        mFontSizePreference.setSummary(mFontSizePreference.getEntry());
-        mFontSizePreference
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		mSelectedGoogleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+		mSelectedGoogleAccountPreference.setEntries(accountEntries
+				.toArray(new String[accountEntries.size()]));
+		mSelectedGoogleAccountPreference.setEntryValues(accountValues
+				.toArray(new String[accountValues.size()]));
+		mSelectedGoogleAccountPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        int index = ((ListPreference) preference).findIndexOfValue(newValue
-                                .toString());
-                        String entry = (String) ((ListPreference) preference).getEntries()[index];
-                        ((ListPreference) preference).setSummary(entry);
-                        return true;
-                    }
-                });
-        if (!(fontAvailable || adminMode)) {
-            clientCategory.removePreference(mFontSizePreference);
-        }
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int index = ((ListPreference) preference)
+								.findIndexOfValue(newValue.toString());
+						String value = (String) ((ListPreference) preference)
+								.getEntryValues()[index];
+						((ListPreference) preference).setSummary(value);
+						return true;
+					}
+				});
+		mSelectedGoogleAccountPreference
+				.setSummary(mSelectedGoogleAccountPreference.getValue());
 
-        boolean defaultAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_DEFAULT_TO_FINALIZED, true);
+		boolean googleAccountAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
+		if (!(googleAccountAvailable || adminMode)) {
+			serverCategory.removePreference(mSelectedGoogleAccountPreference);
+		}
 
-        Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
-        if (!(defaultAvailable || adminMode)) {
-            clientCategory.removePreference(defaultFinalized);
-        }
+		mFormListUrlPreference.setOnPreferenceChangeListener(this);
+		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
+		mServerUrlPreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+		if (!(serverAvailable || adminMode)) {
+			serverCategory.removePreference(mFormListUrlPreference);
+		}
 
-        boolean splashAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SELECT_SPLASH_SCREEN, true);
-        mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-        mSplashPathPreference
-                .setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
+		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
+		mServerUrlPreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+		if (!(serverAvailable || adminMode)) {
+			serverCategory.removePreference(mSubmissionUrlPreference);
+		}
 
-                    private void launchImageChooser() {
-                        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                        i.setType("image/*");
-                        startActivityForResult(i, PreferencesActivity.IMAGE_CHOOSER);
-                    }
+		if (!(serverAvailable || urlAvailable || usernameAvailable || passwordAvailable
+				|| googleAccountAvailable || adminMode)) {
+			getPreferenceScreen().removePreference(serverCategory);
+		}
 
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        // if you have a value, you can clear it or select new.
-                        CharSequence cs = mSplashPathPreference.getSummary();
-                        if (cs != null && cs.toString().contains("/")) {
+		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
 
-                            final CharSequence[] items = {
-                                    getString(R.string.select_another_image),
-                                    getString(R.string.use_odk_default)
-                            };
+		boolean navigationAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_NAVIGATION, true);
+		mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
+		mNavigationPreference.setSummary(mNavigationPreference.getEntry());
+		mNavigationPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(
-                                    PreferencesActivity.this);
-                            builder.setTitle(getString(R.string.change_splash_path));
-                            builder.setNeutralButton(
-                                    getString(R.string.cancel),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(
-                                                DialogInterface dialog, int id) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            builder.setItems(items,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(
-                                                DialogInterface dialog, int item) {
-                                            if (items[item]
-                                                    .equals(getString(R.string.select_another_image))) {
-                                                launchImageChooser();
-                                            } else {
-                                                setSplashPath(getString(R.string.default_splash_path));
-                                            }
-                                        }
-                                    });
-                            AlertDialog alert = builder.create();
-                            alert.show();
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int index = ((ListPreference) preference)
+								.findIndexOfValue(newValue.toString());
+						String entry = (String) ((ListPreference) preference)
+								.getEntries()[index];
+						((ListPreference) preference).setSummary(entry);
+						return true;
+					}
+				});
+		if (!(navigationAvailable || adminMode)) {
+			clientCategory.removePreference(mNavigationPreference);
+		}
+		
+		boolean fontAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
+		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
+		mFontSizePreference.setSummary(mFontSizePreference.getEntry());
+		mFontSizePreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-                        } else {
-                            launchImageChooser();
-                        }
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int index = ((ListPreference) preference)
+								.findIndexOfValue(newValue.toString());
+						String entry = (String) ((ListPreference) preference)
+								.getEntries()[index];
+						((ListPreference) preference).setSummary(entry);
+						return true;
+					}
+				});
+		if (!(fontAvailable || adminMode)) {
+			clientCategory.removePreference(mFontSizePreference);
+		}
 
-                        return true;
-                    }
-                });
+		boolean defaultAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_DEFAULT_TO_FINALIZED, true);
 
-        if (!(splashAvailable || adminMode)) {
-            clientCategory.removePreference(mSplashPathPreference);
-        }
+		Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
+		if (!(defaultAvailable || adminMode)) {
+			clientCategory.removePreference(defaultFinalized);
+		}
 
-        boolean showSplashAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SHOW_SPLASH_SCREEN, true);
+		mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+		mSplashPathPreference
+				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
-        CheckBoxPreference showSplashPreference = (CheckBoxPreference) findPreference(KEY_SHOW_SPLASH);
+					private void launchImageChooser() {
+						Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+						i.setType("image/*");
+						startActivityForResult(i,
+								PreferencesActivity.IMAGE_CHOOSER);
+					}
 
-        if (!(showSplashAvailable || adminMode)) {
-            clientCategory.removePreference(showSplashPreference);
-        }
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						// if you have a value, you can clear it or select new.
+						CharSequence cs = mSplashPathPreference.getSummary();
+						if (cs != null && cs.toString().contains("/")) {
 
-        if (!(fontAvailable || defaultAvailable || splashAvailable || showSplashAvailable || adminMode)) {
-            getPreferenceScreen().removePreference(clientCategory);
-        }
+							final CharSequence[] items = {
+									getString(R.string.select_another_image),
+									getString(R.string.use_odk_default) };
 
-    }
+							AlertDialog.Builder builder = new AlertDialog.Builder(
+									PreferencesActivity.this);
+							builder.setTitle(getString(R.string.change_splash_path));
+							builder.setNeutralButton(
+									getString(R.string.cancel),
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog, int id) {
+											dialog.dismiss();
+										}
+									});
+							builder.setItems(items,
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog, int item) {
+											if (items[item]
+													.equals(getString(R.string.select_another_image))) {
+												launchImageChooser();
+											} else {
+												setSplashPath(getString(R.string.default_splash_path));
+											}
+										}
+									});
+							AlertDialog alert = builder.create();
+							alert.show();
 
-    private void disableFeaturesInDevelopment() {
-        // remove Google Collections from protocol choices in preferences
-        ListPreference protocols = (ListPreference) findPreference(KEY_PROTOCOL);
-        int i = protocols.findIndexOfValue(PROTOCOL_GOOGLE);
-        if (i != -1) {
-            CharSequence[] entries = protocols.getEntries();
-            CharSequence[] entryValues = protocols.getEntryValues();
+						} else {
+							launchImageChooser();
+						}
 
-            CharSequence[] newEntries = new CharSequence[entryValues.length - 1];
-            CharSequence[] newEntryValues = new CharSequence[entryValues.length - 1];
-            for (int k = 0, j = 0; j < entryValues.length; ++j) {
-                if (j == i)
-                    continue;
-                newEntries[k] = entries[j];
-                newEntryValues[k] = entryValues[j];
-                ++k;
-            }
+						return true;
+					}
+				});
+		
+		mSplashPathPreference.setSummary(mSplashPathPreference
+				.getSharedPreferences().getString(KEY_SPLASH_PATH,
+						getString(R.string.default_splash_path)));
 
-            protocols.setEntries(newEntries);
-            protocols.setEntryValues(newEntryValues);
-        }
-    }
+		boolean showSplashAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_SHOW_SPLASH_SCREEN, true);
 
-    private void setSplashPath(String path) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_SPLASH_PATH, path);
-        editor.commit();
+		CheckBoxPreference showSplashPreference = (CheckBoxPreference) findPreference(KEY_SHOW_SPLASH);
 
-        mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-        mSplashPathPreference.setSummary(mSplashPathPreference
-                .getSharedPreferences().getString(KEY_SPLASH_PATH,
-                        getString(R.string.default_splash_path)));
-    }
+		if (!(showSplashAvailable || adminMode)) {
+			clientCategory.removePreference(showSplashPreference);
+			clientCategory.removePreference(mSplashPathPreference);
+		}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled, so do nothing
-            return;
-        }
+		if (!(fontAvailable || defaultAvailable
+				|| showSplashAvailable || navigationAvailable || adminMode)) {
+			getPreferenceScreen().removePreference(clientCategory);
+		}
 
-        switch (requestCode) {
-            case IMAGE_CHOOSER:
-                String sourceImagePath = null;
+	}
 
-                // get gp of chosen file
-                Uri uri = intent.getData();
-                if (uri.toString().startsWith("file")) {
-                    sourceImagePath = uri.toString().substring(6);
-                } else {
-                    String[] projection = {
-                            Images.Media.DATA
-                    };
-                    Cursor c = null;
-                    try {
-                        c = getContentResolver().query(uri, projection, null, null,
-                                null);
-                        int i = c.getColumnIndexOrThrow(Images.Media.DATA);
-                        c.moveToFirst();
-                        sourceImagePath = c.getString(i);
-                    } finally {
-                        if (c != null) {
-                            c.close();
-                        }
-                    }
-                }
+	private void disableFeaturesInDevelopment() {
+		// remove Google Collections from protocol choices in preferences
+		ListPreference protocols = (ListPreference) findPreference(KEY_PROTOCOL);
+		int i = protocols.findIndexOfValue(PROTOCOL_GOOGLE);
+		if (i != -1) {
+			CharSequence[] entries = protocols.getEntries();
+			CharSequence[] entryValues = protocols.getEntryValues();
 
-                // setting image path
-                setSplashPath(sourceImagePath);
-                break;
-        }
-    }
+			CharSequence[] newEntries = new CharSequence[entryValues.length - 1];
+			CharSequence[] newEntryValues = new CharSequence[entryValues.length - 1];
+			for (int k = 0, j = 0; j < entryValues.length; ++j) {
+				if (j == i)
+					continue;
+				newEntries[k] = entries[j];
+				newEntryValues[k] = entryValues[j];
+				++k;
+			}
 
-    /**
-     * Disallows whitespace from user entry
-     *
-     * @return
-     */
-    private InputFilter getWhitespaceFilter() {
-        InputFilter whitespaceFilter = new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end,
-                    Spanned dest, int dstart, int dend) {
-                for (int i = start; i < end; i++) {
-                    if (Character.isWhitespace(source.charAt(i))) {
-                        return "";
-                    }
-                }
-                return null;
-            }
-        };
-        return whitespaceFilter;
-    }
+			protocols.setEntries(newEntries);
+			protocols.setEntryValues(newEntryValues);
+		}
+	}
 
-    /**
-     * Disallows carriage returns from user entry
-     *
-     * @return
-     */
-    private InputFilter getReturnFilter() {
-        InputFilter returnFilter = new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end,
-                    Spanned dest, int dstart, int dend) {
-                for (int i = start; i < end; i++) {
-                    if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-                        return "";
-                    }
-                }
-                return null;
-            }
-        };
-        return returnFilter;
-    }
+	private void setSplashPath(String path) {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		Editor editor = sharedPreferences.edit();
+		editor.putString(KEY_SPLASH_PATH, path);
+		editor.commit();
 
-    /**
-     * Generic listener that sets the summary to the newly selected/entered value
-     */
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        preference.setSummary((CharSequence) newValue);
-        return true;
-    }
+		mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+		mSplashPathPreference.setSummary(mSplashPathPreference
+				.getSharedPreferences().getString(KEY_SPLASH_PATH,
+						getString(R.string.default_splash_path)));
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (resultCode == RESULT_CANCELED) {
+			// request was canceled, so do nothing
+			return;
+		}
+
+		switch (requestCode) {
+		case IMAGE_CHOOSER:
+			String sourceImagePath = null;
+
+			// get gp of chosen file
+			Uri uri = intent.getData();
+			if (uri.toString().startsWith("file")) {
+				sourceImagePath = uri.toString().substring(6);
+			} else {
+				String[] projection = { Images.Media.DATA };
+				Cursor c = null;
+				try {
+					c = getContentResolver().query(uri, projection, null, null,
+							null);
+					int i = c.getColumnIndexOrThrow(Images.Media.DATA);
+					c.moveToFirst();
+					sourceImagePath = c.getString(i);
+				} finally {
+					if (c != null) {
+						c.close();
+					}
+				}
+			}
+
+			// setting image path
+			setSplashPath(sourceImagePath);
+			break;
+		}
+	}
+
+	/**
+	 * Disallows whitespace from user entry
+	 * 
+	 * @return
+	 */
+	private InputFilter getWhitespaceFilter() {
+		InputFilter whitespaceFilter = new InputFilter() {
+			public CharSequence filter(CharSequence source, int start, int end,
+					Spanned dest, int dstart, int dend) {
+				for (int i = start; i < end; i++) {
+					if (Character.isWhitespace(source.charAt(i))) {
+						return "";
+					}
+				}
+				return null;
+			}
+		};
+		return whitespaceFilter;
+	}
+
+	/**
+	 * Disallows carriage returns from user entry
+	 * 
+	 * @return
+	 */
+	private InputFilter getReturnFilter() {
+		InputFilter returnFilter = new InputFilter() {
+			public CharSequence filter(CharSequence source, int start, int end,
+					Spanned dest, int dstart, int dend) {
+				for (int i = start; i < end; i++) {
+					if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+						return "";
+					}
+				}
+				return null;
+			}
+		};
+		return returnFilter;
+	}
+
+	/**
+	 * Generic listener that sets the summary to the newly selected/entered
+	 * value
+	 */
+	@Override
+	public boolean onPreferenceChange(Preference preference, Object newValue) {
+		preference.setSummary((CharSequence) newValue);
+		return true;
+	}
 
 }

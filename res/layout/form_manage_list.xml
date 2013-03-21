@@ -20,12 +20,34 @@ the License.
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_alignParentTop="true" >
-
-    <LinearLayout
+    
+     <LinearLayout
+        android:id="@+id/buttonholder"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/buttonholder"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+        
+        <Button
+            android:id="@+id/toggle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:text="@string/toggle_selected"
+            android:textSize="16sp" />
+         
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:text="@string/delete_file"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+    
 
         <TextView
             android:id="@+id/status_text"
@@ -35,12 +57,16 @@ the License.
             android:padding="5dp"
             android:paddingTop="0dp"
             android:text="@string/form_scan_starting"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_alignParentTop="true" />
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/status_text"
+            android:layout_above="@+id/buttonholder"
+        	 />
 
         <TextView
             android:id="@android:id/empty"
@@ -49,23 +75,9 @@ the License.
             android:gravity="center"
             android:text="@string/no_items_display"
             android:textSize="21sp" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/buttonholder"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:text="@string/delete_file"
-            android:textSize="16sp" />
-    </LinearLayout>
+    
+
 
 </RelativeLayout>

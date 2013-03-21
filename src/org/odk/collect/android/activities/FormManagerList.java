@@ -55,6 +55,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 
 	private AlertDialog mAlertDialog;
 	private Button mDeleteButton;
+	private Button mToggleButton;
 
 	private SimpleCursorAdapter mInstances;
 	private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -89,6 +90,33 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 				}
 			}
 		});
+		
+		mToggleButton = (Button) findViewById(R.id.toggle_button);
+        mToggleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checkAll = false;
+                // if everything is checked, uncheck
+                if (mSelected.size() == mInstances.getCount()) {
+                    checkAll = false;
+                    mSelected.clear();
+                    mDeleteButton.setEnabled(false);
+                } else {
+                    // otherwise check everything
+                    checkAll = true;
+                    for (int pos = 0; pos < FormManagerList.this.getListView().getCount(); pos++) {
+                        Long id = getListAdapter().getItemId(pos);
+                        if (!mSelected.contains(id)) {
+                            mSelected.add(id);
+                        }
+                    }
+                    mDeleteButton.setEnabled(true);
+                }
+                for (int pos = 0; pos < FormManagerList.this.getListView().getCount(); pos++) {
+                    FormManagerList.this.getListView().setItemChecked(pos, checkAll);
+                }
+            }
+        });
 
 		String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);

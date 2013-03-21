@@ -26,64 +26,94 @@
             android:id="@+id/edit_saved"
             android:defaultValue="true"
             android:key="edit_saved"
-            android:title="@string/review_data_button" />
+            android:summary="@string/found_in_main"
+            android:title="@string/review_data" />
         <CheckBoxPreference
             android:id="@+id/send_finalized"
             android:defaultValue="true"
             android:key="send_finalized"
-            android:title="@string/send_data_button" />
+            android:summary="@string/found_in_main"
+            android:title="@string/send_data" />
         <CheckBoxPreference
             android:id="@+id/get_blank"
             android:defaultValue="true"
             android:key="get_blank"
+            android:summary="@string/found_in_main"
             android:title="@string/get_forms" />
         <CheckBoxPreference
             android:id="@+id/delete_saved"
+            android:summary="@string/found_in_main"
             android:defaultValue="true"
             android:key="delete_saved"
             android:title="@string/manage_files" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_preferences" >
         <CheckBoxPreference
-            android:id="@+id/change_server"
+            android:id="@+id/change_url"
             android:defaultValue="true"
-            android:key="change_server"
-            android:title="@string/change_server" />
+            android:key="change_url"
+            android:summary="@string/found_in_settings"
+            android:title="@string/change_url_default" />
         <CheckBoxPreference
             android:id="@+id/change_username"
             android:defaultValue="true"
             android:key="change_username"
+            android:summary="@string/found_in_settings"
             android:title="@string/change_username_default" />
         <CheckBoxPreference
             android:id="@+id/change_password"
             android:defaultValue="true"
             android:key="change_password"
+            android:summary="@string/found_in_settings"
             android:title="@string/password" />
         <CheckBoxPreference
             android:id="@+id/change_google_account"
             android:defaultValue="true"
             android:key="change_google_account"
+            android:summary="@string/found_in_settings"
             android:title="@string/selected_google_account_text" />
+        <CheckBoxPreference
+            android:id="@+id/change_server"
+            android:defaultValue="true"
+            android:key="change_server"
+            android:summary="@string/found_in_settings"
+            android:title="@string/change_server" />
+        <CheckBoxPreference
+            android:id="@+id/autosend_wifi"
+            android:defaultValue="true"
+            android:key="autosend_wifi"
+            android:summary="@string/found_in_settings"
+            android:title="@string/autosend_wifi" />
+        <CheckBoxPreference
+            android:id="@+id/autosend_network"
+            android:defaultValue="true"
+            android:key="autosend_network"
+            android:summary="@string/found_in_settings"
+            android:title="@string/autosend_network" />
+        <CheckBoxPreference
+            android:id="@+id/navigation"
+            android:defaultValue="true"
+            android:key="navigation"
+            android:summary="@string/found_in_settings"
+            android:title="@string/navigation" />
         <CheckBoxPreference
             android:id="@+id/change_font_size"
             android:defaultValue="true"
             android:key="change_font_size"
+            android:summary="@string/found_in_settings"
             android:title="@string/font_size" />
         <CheckBoxPreference
             android:id="@+id/default_to_finalized"
             android:defaultValue="true"
             android:key="default_to_finalized"
+            android:summary="@string/found_in_settings"
             android:title="@string/default_completed" />
         <CheckBoxPreference
             android:id="@+id/show_splash_screen"
             android:defaultValue="true"
             android:key="show_splash_screen"
+            android:summary="@string/found_in_settings"
             android:title="@string/show_splash" />
-        <CheckBoxPreference
-            android:id="@+id/select_splash_screen"
-            android:defaultValue="true"
-            android:key="select_splash_screen"
-            android:title="@string/splash_path" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_form_entry" >
         <CheckBoxPreference
@@ -108,20 +138,20 @@
             android:id="@+id/save_mid"
             android:defaultValue="true"
             android:key="save_mid"
-            android:summary="@string/save_mid_summary"
+            android:summary="@string/found_in_menu"
             android:title="@string/save_mid" />
         <CheckBoxPreference
             android:id="@+id/save_as"
             android:defaultValue="true"
             android:key="save_as"
-            android:summary="@string/save_as_summary"
-            android:title="@string/save_as" />
+            android:summary="@string/found_at_end"
+            android:title="@string/save_form_as" />
         <CheckBoxPreference
             android:id="@+id/mark_as_finalized"
             android:defaultValue="true"
             android:key="mark_as_finalized"
-            android:summary="@string/mark_as_finalized_summary"
-            android:title="@string/mark_as_finished" />
+            android:summary="@string/found_at_end"
+            android:title="@string/mark_finished" />
     </PreferenceCategory>
 
 </PreferenceScreen>

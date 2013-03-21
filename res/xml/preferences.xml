@@ -13,15 +13,6 @@
     <PreferenceCategory
         android:key="@string/server_preferences"
         android:title="@string/server_preferences" >
-        <ListPreference
-            android:id="@+id/protocol"
-            android:defaultValue="odk_default"
-            android:dialogTitle="@string/change_protocol"
-            android:entries="@array/protocol_entries"
-            android:entryValues="@array/protocol_entry_values"
-            android:key="protocol"
-            android:title="@string/protocol" />
-
         <EditTextPreference
             android:id="@+id/server_url"
             android:defaultValue="@string/default_server_url"
@@ -42,7 +33,7 @@
             android:key="password"
             android:title="@string/password" />
         <!-- android:password="true" -->
-        <PreferenceScreen
+        <ListPreference
             android:id="@+id/selected_google_account"
             android:defaultValue=""
             android:key="selected_google_account"
@@ -57,12 +48,21 @@
 			android:defaultValue=""
 			android:dialogTitle="@string/google_submission_id_text" />
         -->
+        <ListPreference
+            android:id="@+id/protocol"
+            android:defaultValue="odk_default"
+            android:dialogTitle="@string/change_protocol"
+            android:entries="@array/protocol_entries"
+            android:entryValues="@array/protocol_entry_values"
+            android:key="protocol"
+            android:title="@string/protocol" />
         <EditTextPreference
             android:id="@+id/formlist_url"
             android:defaultValue="@string/default_odk_formlist"
             android:dialogTitle="@string/change_formlist_url"
             android:inputType="textNoSuggestions"
             android:key="formlist_url"
+            android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/formlist_url" />
         <EditTextPreference
             android:id="@+id/submission_url"
@@ -70,11 +70,36 @@
             android:dialogTitle="@string/change_submission_url"
             android:inputType="textNoSuggestions"
             android:key="submission_url"
+            android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/submission_url" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/autosend"
+        android:title="@string/autosend" >
+        <CheckBoxPreference
+            android:id="@+id/autosend_wifi"
+            android:defaultValue="false"
+            android:key="autosend_wifi"
+            android:summary="@string/autosend_wifi_summary"
+            android:title="@string/autosend_wifi" />
+        <CheckBoxPreference
+            android:id="@+id/autosend_network"
+            android:defaultValue="false"
+            android:key="autosend_network"
+            android:summary="@string/autosend_network_summary"
+            android:title="@string/autosend_network" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client" >
+       <ListPreference
+            android:id="@+id/navigation"
+            android:defaultValue="swipe"
+            android:dialogTitle="@string/navigation"
+            android:entries="@array/navigation_entries"
+            android:entryValues="@array/navigation_entry_values"
+            android:key="navigation"
+            android:title="@string/navigation" />
         <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"
@@ -83,7 +108,6 @@
             android:entryValues="@array/font_size_entry_values"
             android:key="font_size"
             android:title="@string/font_size" />
-
         <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
@@ -95,7 +119,6 @@
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
-
         <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"

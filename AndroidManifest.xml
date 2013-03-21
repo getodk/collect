@@ -12,6 +12,7 @@
     package="org.odk.collect.android"
     android:versionCode="1024"
     android:versionName="1.2.2" >
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -156,6 +157,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".receivers.NetworkReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FormSaved" />
+            </intent-filter>
+        </receiver>
 
         <uses-library
             android:name="com.google.android.maps"

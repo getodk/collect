@@ -8,6 +8,7 @@
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 	the specific language governing permissions and limitations under the License.
 -->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -24,24 +25,24 @@
             android:id="@+id/form_start_bling"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingBottom="30dp"
-            android:scaleType="center"
-            android:contentDescription="@+id/description"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:contentDescription="@+id/description"
+            android:paddingBottom="30dp"
+            android:scaleType="center" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/form_start_bling"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:gravity="center"
             android:lineSpacingMultiplier="1.2"
             android:paddingBottom="20dp"
             android:paddingTop="10dp"
-            android:layout_below="@+id/form_start_bling"
-            android:layout_centerHorizontal="true"
             android:textSize="21sp"
             android:textStyle="bold" />
 
@@ -49,18 +50,19 @@
             android:id="@+id/image_backup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:contentDescription="@+string/backup"
-            android:src="@+drawable/backup"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/description"
-            android:layout_alignParentLeft="true" />
+            android:contentDescription="@+string/backup"
+            android:gravity="left"
+            android:src="@+drawable/backup" />
 
         <TextView
+            android:id="@+id/text_backup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:layout_below="@+id/image_backup"
             android:layout_alignParentLeft="true"
+            android:layout_below="@+id/image_backup"
+            android:gravity="left"
             android:text="@+string/backup"
             android:textSize="21sp" />
 
@@ -68,18 +70,19 @@
             android:id="@+id/image_advance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:contentDescription="@+string/advance"
-            android:src="@+drawable/advance"
+            android:layout_alignParentRight="true"
             android:layout_below="@+id/description"
-            android:layout_alignParentRight="true" />
+            android:contentDescription="@+string/advance"
+            android:gravity="right"
+            android:src="@+drawable/advance" />
 
         <TextView
+            android:id="@+id/text_advance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_below="@+id/image_advance"
             android:layout_alignParentRight="true"
+            android:layout_below="@+id/image_advance"
+            android:gravity="right"
             android:text="@+string/advance"
             android:textSize="21sp" />
     </RelativeLayout>
