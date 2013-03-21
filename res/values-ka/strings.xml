@@ -125,7 +125,7 @@
 <string name="saved_data">არასრული (%s)</string>
 <string name="save_all_answers">ფორმის შენახვა</string>
 <string name="save_enter_data_description">თქვენ ხართ \"%s\"-ს ბოლოში.</string>
-<string name="saving_form">ფორმის შენახვა...</string>
+<string name="saving_form">ფორმის შენახვა&#8230;</string>
 <string name="sending_items">%2$s-დან %1$s ფორმის გაგზავნა</string>
 <string name="send_data">დასრულებული ფორმების გაგზავნა</string>
 <string name="send_data_button">დასრულებული ფორმების გაგზავნა</string>
@@ -244,4 +244,27 @@
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
 <string name="found_in_menu">Found using Menu button in Form Entry</string>
+<string name="autosend">Auto Send</string>
+<string name="autosend_preferences">Auto send preferences</string>
+<string name="autosend_enabled">Auto send enabled</string>
+<string name="autosend_wifi">Auto send with Wi-Fi</string>
+<string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
+<string name="autosend_network">Auto send with network</string>
+<string name="autosend_network_summary">Auto send when network is available</string>
+<string name="user_access_autosend">User can access auto send preference items:</string>
+<string name="found_in_main">Uncheck to hide from Main Menu</string>
+<string name="found_in_settings">Uncheck to hide from General Settings</string>
+<string name="found_at_end">Uncheck to hide from end of Form Entry</string>
+<string name="no_account">No account</string>
+<string name="save_preferences">Save Settings to Disk</string>
+<string name="form_forward">Next</string>
+<string name="form_backward">Prev</string>
+<string name="navigation">Navigation</string>
+<string name="swipe_navigation">Use horizontal swipes</string>
+<string name="buttons_navigation">Use forward/backward buttons</string>
+<string name="swipe_buttons_navigation">Use swipes and buttons</string>
+<string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
+<string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
+<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
+<string name="change_url_default">URL</string>
 </resources>

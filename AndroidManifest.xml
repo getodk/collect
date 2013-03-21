@@ -65,12 +65,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AccountList"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".activities.AccountInfo"
-            android:label="@string/app_name" />
-        <activity
             android:name=".activities.DrawActivity"
             android:label="@string/app_name" />
         <activity

@@ -170,7 +170,7 @@ License.
 <string name="manifest_tag_error">L\'entrée Manifest %s manqué un ou plus tags: nom de fichier, hash, ou telécharger Url</string>
 <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
 <string name="file_fetch_failed">Erreur: %2$s (%3$s) à %1$s</string>
-<string name="fetching_manifest">"%s. Recherche du Manifest ..."</string>
+<string name="fetching_manifest">"%s. Recherche du Manifest &#8230;"</string>
 <string name="success">Succès</string>
 <string name="no_forms_uploaded">Désolé, pas de formulaires téléchargés.</string>
 <string name="upload_results">Résultats du Téléchargement</string>
@@ -216,7 +216,7 @@ License.
 <string name="reset_image">Remise à zero</string>
 <string name="set_color">Sélectionner la couleur</string>
 <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
-<string name="mark_as_finished">Finalisation des formulaires ...</string>
+<string name="mark_as_finished">Finalisation des formulaires &#8230;</string>
 <string name="user_access_main_menu">L\'utilisateur peut accéder aux éléments du menu principal :</string>
 <string name="user_access_preferences">L\'utilisateur peut accéder les paramètres :</string>
 <string name="change_server">Protocole du serveur et URL</string>
@@ -244,4 +244,27 @@ License.
 <string name="admin_password_incorrect">Désolé, le mot de passe n\'est pas correct !</string>
 <string name="enter_admin_password">Saisissez le mot de passe administrateur</string>
 <string name="found_in_menu">Retrouvé avec le bouton Menu du formulaire de saisie</string>
+<string name="autosend">Auto Send</string>
+<string name="autosend_preferences">Auto send preferences</string>
+<string name="autosend_enabled">Auto send enabled</string>
+<string name="autosend_wifi">Auto send with Wi-Fi</string>
+<string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
+<string name="autosend_network">Auto send with network</string>
+<string name="autosend_network_summary">Auto send when network is available</string>
+<string name="user_access_autosend">User can access auto send preference items:</string>
+<string name="found_in_main">Uncheck to hide from Main Menu</string>
+<string name="found_in_settings">Uncheck to hide from General Settings</string>
+<string name="found_at_end">Uncheck to hide from end of Form Entry</string>
+<string name="no_account">No account</string>
+<string name="save_preferences">Save Settings to Disk</string>
+<string name="form_forward">Next</string>
+<string name="form_backward">Prev</string>
+<string name="navigation">Navigation</string>
+<string name="swipe_navigation">Use horizontal swipes</string>
+<string name="buttons_navigation">Use forward/backward buttons</string>
+<string name="swipe_buttons_navigation">Use swipes and buttons</string>
+<string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
+<string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
+<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
+<string name="change_url_default">URL</string>
 </resources>

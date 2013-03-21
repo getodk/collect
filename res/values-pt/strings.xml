@@ -97,7 +97,7 @@
 <string name="location_accuracy">Precisão de %1$s m</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Menu Principal</string>
-<string name="main_menu_details">Coleta de dados facilitada...</string>
+<string name="main_menu_details">Coleta de dados facilitada&#8230;</string>
 <string name="manage_files">Apagar Formulário Salvo</string>
 <string name="mark_finished">Marcar formulário como finalizado</string>
 <string name="noselect_error">Desculpe, você não selecionou nenhum formulário!</string>
@@ -162,7 +162,7 @@
 <string name="submission_url">Caminho para submeter</string>
 <string name="font_size">Tamanho da Fonte do Texto</string>
 <string name="change_font_size">Tamanho da Fonte do Texto</string>
-<string name="form_scan_starting">Procurando por formulários...</string>
+<string name="form_scan_starting">Procurando por formulários&#8230;</string>
 <string name="powered_by_odk">Produzido por Open Data Kit</string>
 <string name="access_error">"Erro enquanto acessa %s:"</string>
 <string name="manifest_server_error">Resposta não retorna uma versão OpenRosa — servidor ruim?</string>
@@ -244,4 +244,27 @@
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
 <string name="found_in_menu">Found using Menu button in Form Entry</string>
+<string name="autosend">Auto Send</string>
+<string name="autosend_preferences">Auto send preferences</string>
+<string name="autosend_enabled">Auto send enabled</string>
+<string name="autosend_wifi">Auto send with Wi-Fi</string>
+<string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
+<string name="autosend_network">Auto send with network</string>
+<string name="autosend_network_summary">Auto send when network is available</string>
+<string name="user_access_autosend">User can access auto send preference items:</string>
+<string name="found_in_main">Uncheck to hide from Main Menu</string>
+<string name="found_in_settings">Uncheck to hide from General Settings</string>
+<string name="found_at_end">Uncheck to hide from end of Form Entry</string>
+<string name="no_account">No account</string>
+<string name="save_preferences">Save Settings to Disk</string>
+<string name="form_forward">Next</string>
+<string name="form_backward">Prev</string>
+<string name="navigation">Navigation</string>
+<string name="swipe_navigation">Use horizontal swipes</string>
+<string name="buttons_navigation">Use forward/backward buttons</string>
+<string name="swipe_buttons_navigation">Use swipes and buttons</string>
+<string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
+<string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
+<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
+<string name="change_url_default">URL</string>
 </resources>
