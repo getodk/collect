@@ -36,6 +36,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -77,7 +78,7 @@ public class GridWidget extends QuestionWidget {
     // The possible select choices
     String[] choices;
 
-    // The Gridview that will hol the icons
+    // The Gridview that will hold the icons
     ExpandedHeightGridView gridview;
 
     // Defines which icon is selected
@@ -87,13 +88,8 @@ public class GridWidget extends QuestionWidget {
     View[] imageViews;
     AudioHandler[] audioHandlers;
 
-    // The number of columns in the grid, can be user defined
+    // The number of columns in the grid, can be user defined (<= 0 if unspecified)
     int numColumns;
-
-    // The max width of an icon in a given column. Used to line
-    // up the columns and automatically fit the columns in when
-    // they are chosen automatically
-    int maxColumnWidth;
 
     // Whether to advance immediately after the image is clicked
     boolean quickAdvance;
@@ -114,7 +110,11 @@ public class GridWidget extends QuestionWidget {
         gridview = new ExpandedHeightGridView(context);
         imageViews = new View[mItems.size()];
         audioHandlers = new AudioHandler[mItems.size()];
-        maxColumnWidth = -1;
+        // The max width of an icon in a given column. Used to line
+        // up the columns and automatically fit the columns in when
+        // they are chosen automatically
+        int maxColumnWidth = -1;
+        int maxCellHeight = -1;
         this.numColumns = numColumns;
         for (int i = 0; i < mItems.size(); i++) {
             imageViews[i] = new ImageView(getContext());
@@ -141,6 +141,8 @@ public class GridWidget extends QuestionWidget {
         // Build view
         for (int i = 0; i < mItems.size(); i++) {
             SelectChoice sc = mItems.get(i);
+
+            int curHeight = -1;
 
             // Create an audioHandler iff there is an audio prompt associated with this selection.
             String audioURI =
@@ -186,6 +188,9 @@ public class GridWidget extends QuestionWidget {
 	                        imageView.setImageBitmap(b);
 	                        imageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT, ListView.LayoutParams.WRAP_CONTENT));
 	                        imageView.setScaleType(ScaleType.FIT_XY);
+
+	                        imageView.measure(0, 0);
+	                        curHeight = imageView.getMeasuredHeight();
                         } else {
                             // Loading the image failed, so it's likely a bad file.
                             errorMsg = getContext().getString(R.string.file_invalid, imageFile);
@@ -206,11 +211,9 @@ public class GridWidget extends QuestionWidget {
                 choices[i] = prompt.getSelectChoiceText(sc);
 
                 TextView missingImage = new TextView(getContext());
-                missingImage.setGravity(Gravity.CENTER);
-
+                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
-                missingImage.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT));
-                imageViews[i] = missingImage;
 
                 if ( choices[i] != null && choices[i].length() != 0 ) {
 	                missingImage.setText(choices[i]);
@@ -220,12 +223,32 @@ public class GridWidget extends QuestionWidget {
 	                missingImage.setText(errorMsg);
                 }
 
-                missingImage.measure(0, 0);
-                int width = missingImage.getMeasuredWidth();
-                if (width > maxColumnWidth) {
-                    maxColumnWidth = width;
+                if ( numColumns > 0 ) {
+                	maxColumnWidth = resizeWidth;
+                	// force max width to find needed height...
+                	missingImage.setMaxWidth(resizeWidth);
+                	missingImage.measure(MeasureSpec.makeMeasureSpec(resizeWidth, MeasureSpec.EXACTLY), 0);
+                	curHeight = missingImage.getMeasuredHeight();
+                } else {
+                	missingImage.measure(0, 0);
+                    int width = missingImage.getMeasuredWidth();
+                    if (width > maxColumnWidth) {
+                        maxColumnWidth = width;
+                    }
+                	curHeight = missingImage.getMeasuredHeight();
                 }
+                imageViews[i] = missingImage;
             }
+
+            // if we get a taller image/text, force all cells to be that height
+            // could also set cell heights on a per-row basis if user feedback requests it.
+            if ( curHeight > maxCellHeight ) {
+            	maxCellHeight = curHeight;
+            	for ( int j = 0 ; j < i ; j++ ) {
+            		imageViews[j].setMinimumHeight(maxCellHeight);
+            	}
+            }
+            imageViews[i].setMinimumHeight(maxCellHeight);
         }
 
         // Read the screen dimensions and fit the grid view to them. It is important that the grid
@@ -244,7 +267,7 @@ public class GridWidget extends QuestionWidget {
     	gridview.setPadding(HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING, VERTICAL_PADDING);
         gridview.setHorizontalSpacing(SPACING);
         gridview.setVerticalSpacing(SPACING);
-        gridview.setGravity(Gravity.LEFT);
+        gridview.setGravity(Gravity.CENTER);
         gridview.setScrollContainer(false);
         gridview.setStretchMode(GridView.NO_STRETCH);
 
