@@ -935,7 +935,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			}
 			
 			// change start screen based on navigation prefs
-			String navigationChoice = PreferenceManager.getDefaultSharedPreferences(this).getString(PreferencesActivity.KEY_NAVIGATION, null);
+			String navigationChoice = PreferenceManager.getDefaultSharedPreferences(this).getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.KEY_NAVIGATION);
 			Boolean useSwipe = false;
 			Boolean useButtons = false;
 			ImageView ia = ((ImageView) startView.findViewById(R.id.image_advance));
@@ -1992,9 +1992,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// only check the buttons if it's enabled in preferences
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, null);
+		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.KEY_NAVIGATION);
 		Boolean showButtons = false;
-		if (navigation != null && navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
+		if (navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
 			showButtons = true;
 		}
 	
@@ -2399,9 +2399,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// only check the swipe if it's enabled in preferences
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, null);
-				Boolean doSwipe = false;
-		if (navigation != null && navigation.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
+		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.NAVIGATION_SWIPE);
+		Boolean doSwipe = false;
+		if (navigation.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
 			doSwipe = true;
 		}
 		if (doSwipe) {
