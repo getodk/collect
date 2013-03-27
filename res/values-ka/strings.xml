@@ -162,7 +162,7 @@
 <string name="change_font_size">ტექსტის ზომა</string>
 <string name="form_scan_starting">ფორმების მოძიება&#8230;</string>
 <string name="access_error">შეცდომა %s-თან დაკავშირებისას </string>
-<string name="manifest_server_error">მანიფესტის პასუხში არ იგულისხმება OpenRosa &#8212 ვერსია; bad server?</string>
+<string name="manifest_server_error">მანიფესტის პასუხში არ იგულისხმება OpenRosa &#8212; ვერსია; bad server?</string>
 <string name="root_element_error">ძირის ელემენტეი არ არის &lt;manifest\&gt; &#8212; იყო %s</string>
 <string name="root_namespace_error">ძირის ელემენტის სახელთა სივრცე არასწორია: %s</string>
 <string name="manifest_tag_error">მანიფესტის ჩანაწერში %s არ არსებობს ერთი ან მეტი ჭდე: filename, hash, or downloadUrl</string>
@@ -243,8 +243,8 @@
 <string name="swipe_navigation">ჰორიზონტალური გასრიალების გამოყენება</string>
 <string name="buttons_navigation">წინა-უკანა ღილაკების გამოყენება</string>
 <string name="swipe_buttons_navigation">გასრიალების და ღილაკის გამოყენება</string>
-<string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
-<string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
-<string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
+<string name="swipe_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. გაასრიალეთ ეკრანი, როგორც მითითებულია, რათა წინ და უკან გადახვიდეთ.</string>
+<string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
+<string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
 <string name="change_url_default">URL/ბმული</string>
 </resources>
