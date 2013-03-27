@@ -100,7 +100,7 @@ import android.widget.Toast;
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntryActivity extends Activity implements AnimationListener,
@@ -788,7 +788,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	/**
 	 * Attempt to save the answer(s) in the current screen to into the data
 	 * model.
-	 * 
+	 *
 	 * @param evaluateConstraints
 	 * @return false if any error occurs while saving (constraint violated,
 	 *         etc...), true otherwise.
@@ -815,7 +815,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * Clears the answer on the screen.
 	 */
 	private void clearAnswer(QuestionWidget qw) {
-		qw.clearAnswer();
+		if ( qw.getAnswer() != null) {
+			qw.clearAnswer();
+		}
 	}
 
 	@Override
@@ -887,7 +889,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	/**
 	 * Creates a view given the View type and an event
-	 * 
+	 *
 	 * @param event
 	 * @param advancingPage
 	 *            -- true if this results from advancing through the form
@@ -933,7 +935,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				v.setImageDrawable(image);
 				v.setContentDescription(formController.getFormTitle());
 			}
-			
+
 			// change start screen based on navigation prefs
 			String navigationChoice = PreferenceManager.getDefaultSharedPreferences(this).getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.KEY_NAVIGATION);
 			Boolean useSwipe = false;
@@ -943,7 +945,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
 			TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
 			TextView d = ((TextView) startView.findViewById(R.id.description));
-			
+
 			if (navigationChoice != null) {
 				if (navigationChoice.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
 					useSwipe = true;
@@ -966,8 +968,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				d.setText(getString(R.string.swipe_buttons_instructions,
 						formController.getFormTitle()));
 			}
-	
-			
+
+
 			if (mBackButton.isShown()) {
 				mBackButton.setEnabled(false);
 			}
@@ -1086,7 +1088,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							}
 						}
 					});
-			
+
 			if (mBackButton.isShown()) {
 				mBackButton.setEnabled(true);
 			}
@@ -1369,7 +1371,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	/**
 	 * Creates a toast with the specified message.
-	 * 
+	 *
 	 * @param message
 	 */
 	private void showCustomToast(String message, int duration) {
@@ -1741,6 +1743,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog.setTitle(getString(R.string.clear_answer_ask));
 
 		String question = qw.getPrompt().getLongText();
+		if (question == null) {
+			question = "";
+		}
 		if (question.length() > 50) {
 			question = question.substring(0, 50) + "...";
 		}
@@ -1997,7 +2002,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		if (navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
 			showButtons = true;
 		}
-	
+
 		if (showButtons) {
 			mBackButton.setVisibility(View.VISIBLE);
 			mNextButton.setVisibility(View.VISIBLE);
@@ -2281,7 +2286,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	/**
 	 * Attempts to save an answer to the specified index.
-	 * 
+	 *
 	 * @param answer
 	 * @param index
 	 * @param evaluateConstraints
@@ -2303,7 +2308,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * Checks the database to determine if the current instance being edited has
 	 * already been 'marked completed'. A form can be 'unmarked' complete and
 	 * then resaved.
-	 * 
+	 *
 	 * @return true if form has been marked completed, false otherwise.
 	 */
 	private boolean isInstanceComplete(boolean end) {
