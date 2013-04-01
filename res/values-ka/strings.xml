@@ -247,4 +247,6 @@
 <string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
 <string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
 <string name="change_url_default">URL/ბმული</string>
+<string name="launch_printer">Initiate Printing</string>
+<string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 </resources>

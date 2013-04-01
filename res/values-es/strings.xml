@@ -247,4 +247,6 @@
 <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
 <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
 <string name="change_url_default">URL</string>
+<string name="launch_printer">Initiate Printing</string>
+<string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 </resources>
