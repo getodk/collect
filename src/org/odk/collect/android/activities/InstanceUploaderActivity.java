@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -67,7 +68,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private InstanceUploaderTask mInstanceUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
-    private ArrayList<Long> mInstancesToSend;
+    private Long[] mInstancesToSend;
 
     // maintain a list of what we've sent, in case we're interrupted by auth requests
     private HashMap<String, String> mUploadedInstances;
@@ -108,17 +109,19 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
 
-        mInstancesToSend = new ArrayList<Long>();
-        for (int i = 0; i < selectedInstanceIDs.length; i++) {
-            mInstancesToSend.add(Long.valueOf(selectedInstanceIDs[i]));
+        mInstancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
+        if ( selectedInstanceIDs != null ) {
+        	for ( int i = 0 ; i < selectedInstanceIDs.length ; ++i ) {
+        		mInstancesToSend[i] = selectedInstanceIDs[i];
+        	}
         }
 
         // at this point, we don't expect this to be empty...
-        if (mInstancesToSend.size() == 0) {
+        if (mInstancesToSend.length == 0) {
             Log.e(t, "onCreate: No instances to upload!");
             // drop through -- everything will process through OK
         } else {
-            Log.i(t, "onCreate: Beginning upload of " + mInstancesToSend.size() + " instances!");
+            Log.i(t, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
@@ -131,9 +134,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // register this activity with the new uploader task
             mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
 
-            Long[] toSendArray = new Long[mInstancesToSend.size()];
-            toSendArray = mInstancesToSend.toArray(toSendArray);
-            mInstanceUploaderTask.execute(toSendArray);
+            mInstanceUploaderTask.execute(mInstancesToSend);
         }
     }
 
@@ -145,7 +146,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onResume() {
-        Log.i(t, "onResume: Resuming upload of " + mInstancesToSend.size() + " instances!");
+        Log.i(t, "onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(this);
         }
@@ -163,9 +164,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         outState.putBoolean(ALERT_SHOWING, mAlertShowing);
         outState.putString(AUTH_URI, mUrl);
 
-        long[] toSend = new long[mInstancesToSend.size()];
-        for ( int i = 0 ; i < mInstancesToSend.size() ; ++i ) {
-        	toSend[i] = mInstancesToSend.get(i);
+        long[] toSend = new long[mInstancesToSend.length];
+        for ( int i = 0 ; i < mInstancesToSend.length ; ++i ) {
+        	toSend[i] = mInstancesToSend[i];
         }
         outState.putLongArray(TO_SEND, toSend);
     }
@@ -178,7 +179,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onPause() {
-        Log.i(t, "onPause: Pausing upload of " + mInstancesToSend.size() + " instances!");
+        Log.i(t, "onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
         super.onPause();
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
@@ -202,7 +203,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        Log.i(t, "uploadingComplete: Processing results (" + result.size() + ") from upload of " + mInstancesToSend.size() + " instances!");
+        Log.i(t, "uploadingComplete: Processing results (" + result.size() + ") from upload of " + mInstancesToSend.length + " instances!");
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -286,7 +287,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case AUTH_DIALOG:
-                Log.i(t, "onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.size() + " instances!");
+                Log.i(t, "onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.length + " instances!");
             	Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "show");
                 AlertDialog.Builder b = new AlertDialog.Builder(this);
 
@@ -299,13 +300,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
                 String server = mUrl;
                 if (server == null) {
-                    Log.e(t, "onCreateDialog(AUTH_DIALOG): No failing mUrl specified for upload of " + mInstancesToSend.size() + " instances!");
+                    Log.e(t, "onCreateDialog(AUTH_DIALOG): No failing mUrl specified for upload of " + mInstancesToSend.length + " instances!");
                     // if the bundle is null, we're looking for a formlist
-                    String formListUrl = getString(R.string.default_odk_formlist);
+                    String submissionUrl = getString(R.string.default_odk_submission);
                     server =
                         settings.getString(PreferencesActivity.KEY_SERVER_URL,
                             getString(R.string.default_server_url))
-                                + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, formListUrl);
+                                + settings.getString(PreferencesActivity.KEY_SUBMISSION_URL, submissionUrl);
                 }
 
                 final String url = server;
@@ -334,15 +335,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                         WebUtils.addCredentials(username.getText().toString(), password.getText()
                                 .toString(), u.getHost());
 
+                        showDialog(PROGRESS_DIALOG);
                         mInstanceUploaderTask = new InstanceUploaderTask();
 
                         // register this activity with the new uploader task
                         mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
 
-                        Long[] toSendArray = new Long[mInstancesToSend.size()];
-                        toSendArray = mInstancesToSend.toArray(toSendArray);
-                        mInstanceUploaderTask.execute(toSendArray);
-                        showDialog(PROGRESS_DIALOG);
+                        mInstanceUploaderTask.execute(mInstancesToSend);
                     }
                 });
                 b.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -370,13 +369,15 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // add our list of completed uploads to "completed"
         // and remove them from our toSend list.
+        ArrayList<Long> workingSet = new ArrayList<Long>();
+        Collections.addAll(workingSet, mInstancesToSend);
         if (doneSoFar != null) {
             Set<String> uploadedInstances = doneSoFar.keySet();
             Iterator<String> itr = uploadedInstances.iterator();
 
             while (itr.hasNext()) {
                 Long removeMe = Long.valueOf(itr.next());
-                boolean removed = mInstancesToSend.remove(removeMe);
+                boolean removed = workingSet.remove(removeMe);
                 if (removed) {
                     Log.i(t, removeMe
                             + " was already sent, removing from queue before restarting task");
@@ -385,9 +386,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             mUploadedInstances.putAll(doneSoFar);
         }
 
-        // Bundle b = new Bundle();
-        // b.putString(AUTH_URI, url.toString());
-        // showDialog(AUTH_DIALOG, b);
+        // and reconstruct the pending set of instances to send
+        Long[] updatedToSend = new Long[workingSet.size()];
+        for ( int i = 0 ; i < workingSet.size() ; ++i ) {
+        	updatedToSend[i] = workingSet.get(i);
+        }
+        mInstancesToSend = updatedToSend;
+
         mUrl = url.toString();
         showDialog(AUTH_DIALOG);
     }
