@@ -168,7 +168,11 @@ public class PreferencesActivity extends PreferenceActivity implements
 				((ListPreference) preference).setSummary(entry);
 				if (value.equals("odk_default")) {
 					mFormListUrlPreference.setEnabled(false);
+					mFormListUrlPreference.setText(getString(R.string.default_odk_formlist));
+					mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
 					mSubmissionUrlPreference.setEnabled(false);
+					mSubmissionUrlPreference.setText(getString(R.string.default_odk_submission));
+					mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
 				} else {
 					mFormListUrlPreference.setEnabled(true);
 					mSubmissionUrlPreference.setEnabled(true);
