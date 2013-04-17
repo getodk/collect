@@ -204,7 +204,7 @@
 <string name="no_app">Die gewünschte Applikation steht nicht zur Verfügung. Bitte tragen sie den Wert manuell ein.</string>
 <string name="select_one">Eine Antwort auswählen</string>
 <string name="savepoint_used">Nicht-gespeicherte Einträge aus dem letzten automatischen Speichern wiederhergestellt!</string>
-<string name="save_and_close">Speichern und schliessen</string>
+<string name="save_and_close">Speichern und schließen</string>
 <string name="sign_button">Unterschrift erfassen</string>
 <string name="markup_image">Zeichnung bearbeiten</string>
 <string name="draw_image">Zeichnung erstellen</string>
