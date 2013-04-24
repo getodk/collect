@@ -467,7 +467,9 @@ public final class WebUtils {
 		// so that if there is garbage on the connection we ensure it is
 		// removed. This
 		// is especially important if the connection times out.
-		httpConnectionManager.shutdown();
-		httpConnectionManager = null;
+		if ( httpConnectionManager != null ) {
+			httpConnectionManager.shutdown();
+			httpConnectionManager = null;
+		}
 	}
 }
