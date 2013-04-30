@@ -3,11 +3,13 @@ package org.odk.collect.android.receivers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.WebUtils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -92,6 +94,21 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
                     toUpload.add(Long.valueOf(l));
                 }
+                
+                // get the username, password, and server from preferences
+                SharedPreferences settings =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+
+                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                        context.getString(R.string.default_server_url));
+                String url = server
+                        + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
+                                context.getString(R.string.default_odk_formlist));
+
+                Uri u = Uri.parse(url);
+                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
                 mInstanceUploaderTask = new InstanceUploaderTask();
                 mInstanceUploaderTask.setUploaderListener(this);
