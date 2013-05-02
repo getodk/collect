@@ -2,6 +2,5 @@ syntax: glob
 .DS_Store
 bin/
 gen/
-.tx/
 .classpath
 .project
