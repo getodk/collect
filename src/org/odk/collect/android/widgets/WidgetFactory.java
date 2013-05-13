@@ -101,6 +101,8 @@ public class WidgetFactory {
             		questionWidget = new AnnotateWidget(context, fep);
             	} else if(appearance.equals("draw")) {
             		questionWidget = new DrawWidget(context, fep);
+            	} else if(appearance.startsWith("align:")) {
+            		questionWidget = new AlignedImageWidget(context, fep);
             	} else {
             		questionWidget = new ImageWidget(context, fep);
             	}
