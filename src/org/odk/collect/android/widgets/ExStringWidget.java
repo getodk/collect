@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2012 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -41,23 +41,23 @@ import android.widget.Toast;
 /**
  * <p>Launch an external app to supply a string value. If the app
  * does not launch, enable the text area for regular data entry.</p>
- * 
+ *
  * <p>The default button text is "Launch"
- * 
- * <p>You may override the button text and the error text that is 
+ *
+ * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values.
- * 
+ *
  * <p>To use this widget, define an appearance on the &lt;input/&gt;
  * tag that begins "ex:" and then contains the intent action to lauch.
- * 
+ *
  * <p>e.g.,
- * 
+ *
  * <pre>
  * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/form/passPhrase" &gt;
  * </pre>
  * <p>or, to customize the button text and error strings with itext:
  * <pre>
- *      ... 
+ *      ...
  *      &lt;bind nodeset="/form/passPhrase" type="string" /&gt;
  *      ...
  *      &lt;itext&gt;
@@ -76,7 +76,7 @@ import android.widget.Toast;
  *      &lt;label ref="jr:itext('textAnswer')"/&gt;
  *    &lt;/input&gt;
  * </pre>
- * 
+ *
  * @author mitchellsundt@gmail.com
  *
  */
@@ -85,7 +85,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     private boolean mHasExApp = true;
     private Button mLaunchIntentButton;
     private Drawable mTextBackground;
-    
+
     protected EditText mAnswer;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
@@ -101,7 +101,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         mAnswer.setLayoutParams(params);
         mTextBackground = mAnswer.getBackground();
         mAnswer.setBackgroundDrawable(null);
-        
+
         // capitalize nothing
         mAnswer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
@@ -122,7 +122,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             mAnswer.setFocusable(false);
             mAnswer.setClickable(false);
         }
-        
+
         String appearance = prompt.getAppearanceHint();
         String[] attrs = appearance.split(":");
         final String intentName = attrs[1];
@@ -132,7 +132,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     	buttonText = (v != null) ? v : context.getString(R.string.launch_app);
     	v = mPrompt.getSpecialFormQuestionText("noAppErrorString");
     	errorString = (v != null) ? v : context.getString(R.string.no_app);
-        
+
         // set button formatting
         mLaunchIntentButton = new Button(getContext());
         mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
@@ -174,7 +174,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent", 
+    	i.putExtra("value", mPrompt.getAnswerText());
+       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
     			i.getAction(), mPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_STRING_CAPTURE);
@@ -223,7 +224,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 	            /*
 	             * If you do a multi-question screen after a "add another group" dialog, this won't
 	             * automatically pop up. It's an Android issue.
-	             * 
+	             *
 	             * That is, if I have an edit text in an activity, and pop a dialog, and in that
 	             * dialog's button's OnClick() I call edittext.requestFocus() and
 	             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
