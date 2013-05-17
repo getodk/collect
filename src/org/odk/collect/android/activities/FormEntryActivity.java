@@ -136,6 +136,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int DRAW_IMAGE = 13;
 	public static final int SIGNATURE_CAPTURE = 14;
 	public static final int ANNOTATE_IMAGE = 15;
+	public static final int ALIGNED_IMAGE = 16;
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -593,6 +594,31 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					+ System.currentTimeMillis() + ".jpg";
 
 			File nf = new File(s);
+			if (!fi.renameTo(nf)) {
+				Log.e(t, "Failed to rename " + fi.getAbsolutePath());
+			} else {
+				Log.i(t,
+						"renamed " + fi.getAbsolutePath() + " to "
+								+ nf.getAbsolutePath());
+			}
+
+			((ODKView) mCurrentView).setBinaryData(nf);
+			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			break;
+		case ALIGNED_IMAGE:
+			/*
+			 * We saved the image to the tempfile_path; the app returns the
+			 * full path to the saved file in the EXTRA_OUTPUT extra. Take
+			 * that file and move it into the instance folder.
+			 */
+			String path = intent.getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
+			fi = new File(path);
+			mInstanceFolder = formController.getInstancePath()
+					.getParent();
+			s = mInstanceFolder + File.separator
+					+ System.currentTimeMillis() + ".jpg";
+
+			nf = new File(s);
 			if (!fi.renameTo(nf)) {
 				Log.e(t, "Failed to rename " + fi.getAbsolutePath());
 			} else {
