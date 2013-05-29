@@ -1060,11 +1060,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						}
 					}
 				}
+				if (saveName == null) {
+                    // last resort, default to the form title
+                    saveName = formController.getFormTitle();
+                }
 				// present the prompt to allow user to name the form
 				TextView sa = (TextView) endView
 						.findViewById(R.id.save_form_as);
 				sa.setVisibility(View.VISIBLE);
-				saveName = formController.getFormTitle();
 				saveAs.setText(saveName);
 				saveAs.setEnabled(true);
 				saveAs.setVisibility(View.VISIBLE);
