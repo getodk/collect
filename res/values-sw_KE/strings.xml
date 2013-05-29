@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="add_another">Ongeza Kikundi</string>
+  <string name="add_another_repeat">Ongeza Kikundi \"%s\" kingine </string>
+  <string name="add_more">Ongeza zingine</string>
+  <string name="add_repeat">Ongeza kikundi \"%s\" kipya?</string>
+  <string name="add_repeat_no">Usiongeze</string>
+  <string name="cancel">Tamatisha</string>
+  <string name="cancel_loading_form">Tamatisha</string>
+  <string name="cancel_location">Tamatisha</string>
+  <string name="cancel_saving_form">Tamatisha</string>
+  <string name="capture_image">Piga Picha</string>
+  <string name="change_language">Badilisha Lugha</string>
+  <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
+  <string name="clear_answer">Ondoa jibu</string>
+  <string name="clear_answer_ask">Ondoa jibu hili?</string>
+  <string name="clear_answer_no">Tamatisha</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+</resources>
