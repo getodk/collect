@@ -1,7 +1,12 @@
 syntax: glob
 .DS_Store
+out/
 bin/
 gen/
-.tx/
+.idea/
+.settings/
 .classpath
 .project
+*.ipr
+*.iws
+*.iml
