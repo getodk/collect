@@ -1364,8 +1364,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private void createConstraintToast(FormIndex index, int saveStatus) {
 		FormController formController = Collect.getInstance()
 				.getFormController();
-		String constraintText = formController.getQuestionPrompt(index)
-				.getConstraintText();
+		String constraintText;
 		switch (saveStatus) {
 		case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
 			Collect.getInstance()
@@ -1373,6 +1372,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.logInstanceAction(this,
 							"createConstraintToast.ANSWER_CONSTRAINT_VIOLATED",
 							"show", index);
+			constraintText = formController.getQuestionPromptConstraintText(index);
 			if (constraintText == null) {
 				constraintText = formController.getQuestionPrompt(index)
 						.getSpecialFormQuestionText("constraintMsg");
@@ -1387,12 +1387,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.logInstanceAction(this,
 							"createConstraintToast.ANSWER_REQUIRED_BUT_EMPTY",
 							"show", index);
-			constraintText = formController.getQuestionPrompt(index)
-					.getSpecialFormQuestionText("requiredMsg");
+			constraintText = formController.getQuestionPromptRequiredText(index);
 			if (constraintText == null) {
-				constraintText = getString(R.string.required_answer_error);
+				constraintText = formController.getQuestionPrompt(index)
+						.getSpecialFormQuestionText("requiredMsg");
+				if (constraintText == null) {
+					constraintText = getString(R.string.required_answer_error);
+				}
 			}
 			break;
+		default:
+			return;
 		}
 
 		showCustomToast(constraintText, Toast.LENGTH_SHORT);

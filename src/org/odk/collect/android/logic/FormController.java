@@ -27,6 +27,7 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IDataReference;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.SubmissionProfile;
+import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
@@ -37,6 +38,8 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XPathReference;
+import org.javarosa.xpath.XPathParseTool;
+import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.views.ODKView;
 
 import android.util.Log;
@@ -875,6 +878,39 @@ public class FormController {
         return mFormEntryController.getModel().getQuestionPrompt();
     }
 
+    public String getQuestionPromptConstraintText(FormIndex index) {
+    	return mFormEntryController.getModel().getQuestionPrompt(index).getConstraintText();
+    }
+
+    public String getQuestionPromptRequiredText(FormIndex index) {
+    	// look for the text under the requiredMsg bind attribute
+		String constraintText = getBindAttribute(index, "jr", "requiredMsg");
+		if (constraintText != null) {
+	    	XPathExpression xPathRequiredMsg = null;
+			try {
+				xPathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
+			} catch(Exception e) {
+				//Expected in probably most cases.
+			}
+
+			if(xPathRequiredMsg != null) {
+				try{
+					FormDef form = mFormEntryController.getModel().getForm();
+					TreeElement mTreeElement = form.getMainInstance().resolveReference(index.getReference());
+					EvaluationContext ec = new EvaluationContext(form.exprEvalContext, mTreeElement.getRef());
+					Object value = xPathRequiredMsg.eval(form.getMainInstance(), ec);
+					if(value != "") {
+						return (String)value;
+					}
+					return null;
+				} catch(Exception e) {
+					Log.e(t,"Error evaluating a valid-looking required xpath ", e);
+					return constraintText;
+				}
+			}
+		}
+		return null;
+    }
 
     /**
      * Returns an array of FormEntryCaptions for current FormIndex.

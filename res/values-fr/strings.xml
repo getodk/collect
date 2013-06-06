@@ -150,10 +150,10 @@
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
   <string name="form_scan_starting">Recherche de formulaires…</string>
-  <string name="access_error">Erreur lors de l\\'accès à %s: </string>
+  <string name="access_error">Erreur lors de l\'accès à %s: </string>
   <string name="manifest_server_error">Réponse Manifest ne fourni pas une version OpenRosa — Serveur défaillant?</string>
   <string name="root_element_error">L\'élément à la racine n\'est pas &amp;lt;manifest\&gt; — c\'était %s</string>
-  <string name="root_namespace_error"> L\\'élément Root de Namespace est incorrect: %s</string>
+  <string name="root_namespace_error"> L\'élément Root de Namespace est incorrect: %s</string>
   <string name="manifest_tag_error">L\'entrée Manifest %s manqué un ou plus tags: nom de fichier, hash, ou telécharger Url</string>
   <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
   <string name="file_fetch_failed">Erreur: %2$s (%3$s) à %1$s</string>
