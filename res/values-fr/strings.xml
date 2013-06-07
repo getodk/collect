@@ -190,12 +190,12 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sent_on_date_at_time">\'Envoyé le\' EEE, MMM dd, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'L\\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'L\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
   <string name="parent_form_not_present">Impossible d\'éditer ce formulaire car son formulaire modèle n\'est plus présent ou a été supprimé.\n\nForm ID: %1$s</string>
   <string name="launch_app">Démarrer</string>
-  <string name="no_app">L\\'application demandée n\'existe pas. Saisissez les informations manuellement.</string>
+  <string name="no_app">L\'application demandée n\'existe pas. Saisissez les informations manuellement.</string>
   <string name="select_one">Sélectionner une seule réponse</string>
   <string name="savepoint_used">Les modifications non sauvegardées ont été récupérés à partir du point de sauvegarde !</string>
   <string name="save_and_close">Sauvegarder et fermer</string>
@@ -206,7 +206,7 @@
   <string name="set_color">Sélectionner la couleur</string>
   <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
   <string name="user_access_main_menu">L\'utilisateur peut accéder aux éléments du menu principal :</string>
-  <string name="user_access_preferences">L\\'utilisateur peut accéder aux paramètres suivant:</string>
+  <string name="user_access_preferences">L\'utilisateur peut accéder aux paramètres suivant:</string>
   <string name="change_server">Protocole du serveur et URL</string>
   <string name="change_username_default">Nom d\'utilisateur</string>
   <string name="admin_preferences">Paramètres administrateur</string>
@@ -242,5 +242,5 @@
   <string name="swipe_buttons_instructions">Vous êtes au début de %s. Faites glisser votre doigt ou utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Lancer l\'impression</string>
-  <string name="no_printer">L\\'imprimante demandée n\\'est pas installée. Merci d\\'installer l\\'imprimante.</string>
+  <string name="no_printer">L\'imprimante demandée n\'est pas installée. Merci d\'installer l\'imprimante.</string>
 </resources>
