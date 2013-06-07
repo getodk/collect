@@ -2,11 +2,13 @@
 <resources>
   <string name="accept_location">ჩანაწერის მდებარეობა</string>
   <string name="accuracy">აკურატულობა</string>
+<string name="activity_not_found">No activity found to handle: %s</string>
   <string name="add_another">ჯგუფის დამატება</string>
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
   <string name="add_more">დამატება</string>
   <string name="add_repeat">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
   <string name="add_repeat_no">არ დაამატო</string>
+<string name="advance">forward to\nnext\nprompt</string>
   <string name="altitude">სიმაღლე</string>
   <string name="audio_file_error">აუდიო-ფაილი არ იყო მითითებული.</string>
   <string name="audio_file_invalid">ფაილი: %s არ წარმოადგენს ვალიდურ აუდიო-ფაილს.</string>
@@ -239,4 +241,6 @@
   <string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="change_url_default">URL/ბმული</string>
+<string name="launch_printer">Initiate Printing</string>
+<string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 </resources>
