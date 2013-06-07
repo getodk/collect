@@ -40,15 +40,15 @@
   <string name="delete_file">Supprimer la sélection</string>
   <string name="delete_no">Ne pas supprimer</string>
   <string name="delete_repeat">Supprimer le groupe</string>
-  <string name="delete_repeat_ask">Supprimer ce groupe?</string>
-  <string name="delete_repeat_confirm">Supprimer le groupe \"%s\" et tous ses sous-groupes?</string>
+  <string name="delete_repeat_ask">Supprimer ce groupe ?</string>
+  <string name="delete_repeat_confirm">Supprimer le groupe \"%s\" et tous ses sous-groupes ?</string>
   <string name="delete_repeat_no">Annuler</string>
   <string name="delete_yes">Supprimer ces formulaires</string>
   <string name="discard_answer">Enlever la réponse</string>
   <string name="discard_group">Enlever le groupe</string>
-  <string name="download">Télécharger celui sélectionné</string>
-  <string name="download_forms_result">Resultat du téléchargement</string>
-  <string name="downloading_data">Connection au serveur…</string>
+  <string name="download">Télécharger la sélection</string>
+  <string name="download_forms_result">Résultat du téléchargement</string>
+  <string name="downloading_data">Connexion au serveur…</string>
   <string name="do_not_change">Annuler</string>
   <string name="do_not_exit">Annuler</string>
   <string name="do_not_save">Ignorer les changements</string>
@@ -57,7 +57,7 @@
   <string name="enter_data">Remplir un formulaire</string>
   <string name="enter_data_button">Remplir un formulaire</string>
   <string name="error_occured">Une erreur s\'est produite</string>
-  <string name="fetching_file">Téléchargement de formulaires : %1$s.\n\nForm %2$s de %3$s .</string>
+  <string name="fetching_file">Téléchargement de(s) formulaire(s) : %1$s.\n\nForm %2$s de %3$s .</string>
   <string name="file_deleted_error">Désolé, %1$s de %2$s formulaires sélectionnés ont échoué la suppression.</string>
   <string name="file_deleted_ok">%s formulaire(s) supprimé(s) avec succès.</string>
   <string name="file_delete_in_progress">Désolé, une action de suppression d\'un formulaire est en cours.</string>
@@ -88,7 +88,7 @@
   <string name="manage_files">Supprimer des Formulaires Sauvegardés</string>
   <string name="mark_finished">Marquer le formulaire comme finalisé</string>
   <string name="noselect_error">Désolé, vous n\'avez pas sélectionné un formulaire.</string>
-  <string name="no_connection">Connection réseau non disponible</string>
+  <string name="no_connection">Pas de connexion réseau disponible</string>
   <string name="no_items_display">Rien à afficher.</string>
   <string name="no_items_display_forms">Rien à afficher.\n\nEssayez d\'obtenir et de remplir un formulaire.</string>
   <string name="no_items_display_instances">Rien à afficher.\n\nEssayez de finalisé vos formulaires avant de les envoyés.</string>
@@ -154,7 +154,7 @@
   <string name="manifest_server_error">Réponse Manifest ne fourni pas une version OpenRosa — Serveur défaillant?</string>
   <string name="root_element_error">L\'élément à la racine n\'est pas &amp;lt;manifest\&gt; — c\'était %s</string>
   <string name="root_namespace_error"> L\'élément Root de Namespace est incorrect: %s</string>
-  <string name="manifest_tag_error">L\'entrée Manifest %s manqué un ou plus tags: nom de fichier, hash, ou telécharger Url</string>
+  <string name="manifest_tag_error">Il manque une ou plusieurs au Manifest %s: nom de fichier, hash, ou URL de téléchargement</string>
   <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
   <string name="file_fetch_failed">Erreur: %2$s (%3$s) à %1$s</string>
   <string name="fetching_manifest">%s. Recherche du Manifest …</string>
@@ -190,12 +190,12 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sent_on_date_at_time">\'Envoyé le\' EEE, MMM dd, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'L\'\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'L\\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
   <string name="parent_form_not_present">Impossible d\'éditer ce formulaire car son formulaire modèle n\'est plus présent ou a été supprimé.\n\nForm ID: %1$s</string>
   <string name="launch_app">Démarrer</string>
-  <string name="no_app">L\'application demandée n\'existe pas. Saisissez les informations manuellement.</string>
+  <string name="no_app">L\\'application demandée n\'existe pas. Saisissez les informations manuellement.</string>
   <string name="select_one">Sélectionner une seule réponse</string>
   <string name="savepoint_used">Les modifications non sauvegardées ont été récupérés à partir du point de sauvegarde !</string>
   <string name="save_and_close">Sauvegarder et fermer</string>
@@ -206,13 +206,13 @@
   <string name="set_color">Sélectionner la couleur</string>
   <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
   <string name="user_access_main_menu">L\'utilisateur peut accéder aux éléments du menu principal :</string>
-  <string name="user_access_preferences">L\'utilisateur peut accéder les paramètres :</string>
+  <string name="user_access_preferences">L\\'utilisateur peut accéder aux paramètres suivant:</string>
   <string name="change_server">Protocole du serveur et URL</string>
   <string name="change_username_default">Nom d\'utilisateur</string>
   <string name="admin_preferences">Paramètres administrateur</string>
   <string name="admin_access_settings">Touchez pour obtenir l\'accès administrateur aux paramètres</string>
   <string name="user_access_form_entry">L\'utilisateur peut accéder aux éléments du formulaire :</string>
-  <string name="save_mid">Sauvegarde à mi-remplissage</string>
+  <string name="save_mid">Sauvegarder le formulaire</string>
   <string name="enter_new_password">Saisissez un nouveau mot de passe</string>
   <string name="verify_new_password">Ressaisissez le nouveau mot de passe</string>
   <string name="admin_password_changed">Mot de passe administrateur modifié avec succès</string>
@@ -226,21 +226,21 @@
   <string name="autosend_wifi_summary">Envoie auto quand Wi-Fi est disponible</string>
   <string name="autosend_network">Auto send with network</string>
   <string name="autosend_network_summary">Envoie auto quand le réseau mobile est disponible</string>
-  <string name="found_in_main">Uncheck to hide from Main Menu</string>
-  <string name="found_in_settings">Uncheck to hide from General Settings</string>
+  <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
+  <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="found_at_end">Décochez pour cacher a la fin du remplissage de formulaire</string>
-  <string name="no_account">No account</string>
+  <string name="no_account">Pas de compte</string>
   <string name="save_preferences">Enregistrer les paramètres sur le disque</string>
   <string name="form_forward">Suiv.</string>
-  <string name="form_backward">Précédent</string>
+  <string name="form_backward">Préc.</string>
   <string name="navigation">Navigation</string>
-  <string name="swipe_navigation">Use horizontal swipes</string>
+  <string name="swipe_navigation">Utiliser le défilement avec le doigt</string>
   <string name="buttons_navigation">Use forward/backward buttons</string>
   <string name="swipe_buttons_navigation">Utiliser le défilement et les boutons</string>
-  <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
-  <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
-  <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
+  <string name="swipe_instructions">Vous êtes au début de %s. Faites glisser votre doigt sur l\'écran pour avancer ou reculer.</string>
+  <string name="buttons_instructions">Vous êtes au début de %s. Utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
+  <string name="swipe_buttons_instructions">Vous êtes au début de %s. Faites glisser votre doigt ou utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="change_url_default">URL</string>
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">L\'imprimante demandée n\'est pas installée. Merci d\'installer l\'imprimante.</string>
+  <string name="launch_printer">Lancer l\'impression</string>
+  <string name="no_printer">L\\'imprimante demandée n\\'est pas installée. Merci d\\'installer l\\'imprimante.</string>
 </resources>
