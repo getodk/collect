@@ -93,7 +93,7 @@
   <string name="no_items_display_forms">Walang maipakita.\n\nSubukang kumuha at punan ang blankong form.</string>
   <string name="no_items_display_instances">Walang maipakita.\n\nSubukang markahang yari ang form bago magpadala.</string>
   <string name="ok">OK</string>
-  <string name="parse_error">Sorry, unable to parse form.Paumanhin, hindi ma-suri ang form</string>
+  <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
   <string name="parse_legacy_formlist_failed">Ang server ay walang maibigay na form na kaugma sa Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Ang server ay walang maibigay na dokumentong form na kaugma sa pamantayan ng OpenRosa version 1.0: %s</string>
   <string name="password">Kontrasenyas</string>
@@ -151,17 +151,11 @@
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>
   <string name="form_scan_starting">Nag-i-i-scanning ng mga forms…</string>
   <string name="access_error">May mali habang sa pag-access ng %s: </string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
   <string name="manifest_tag_error">Manifest entry %s ay kulang ng isa o higit pang mga tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
   <string name="file_fetch_failed">Mali: %2$s (%3$s) sa %1$s</string>
   <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
   <string name="success">Tagumpay</string>
-  <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
-  <string name="upload_results">Upload Results</string>
-  <string name="xform_parse_error">XForm parse error. %1$s is missing element %2$s</string>
   <string name="choose_sound">Pumili ng Tunog</string>
   <string name="choose_video">Pumili ng Bidyo</string>
   <string name="choose_image">Pumili ng Imahe</string>
@@ -173,7 +167,6 @@
   <string name="selected_google_account_text">Google Account</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
   <string name="server_platform_google_forms">Google Forms</string>
-  <string name="server_platform_other">Other</string>
   <string name="font_size_extra_large">Labis na Malaki</string>
   <string name="font_size_large">Malaki</string>
   <string name="font_size_medium">Katamtaman</string>
@@ -182,17 +175,12 @@
   <string name="change_view">Palitan ang Tanaw</string>
   <string name="show_sent_and_unsent_forms">Mga Napadala a at \'di pa napapadalang Forms</string>
   <string name="show_unsent_forms">Mga hindi pa napapadalang Forms  lang</string>
-  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Niyari noong \' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="version">Version:</string>
   <string name="parent_form_not_present">Hindi mapatnugutan ang form dahil wala ang kaukulang blangkong form or ito ay binura.\n\nForm ID: %1$s</string>
   <string name="launch_app">Ilunsad</string>
   <string name="no_app">Ang hiniling na application ay nawawala. Paki-pasok ng mano-mano ang detalye.</string>
@@ -205,42 +193,5 @@
   <string name="reset_image">I-reset</string>
   <string name="set_color">I-set ang Kulay</string>
   <string name="select_drawing_color">Piliian ang Kulay ng pang-guhit</string>
-  <string name="user_access_main_menu">User can access Main Menu items:</string>
-  <string name="user_access_preferences">User can access Change Settings items:</string>
-  <string name="change_server">Server Protocol and URL</string>
-  <string name="change_username_default">Username</string>
-  <string name="admin_preferences">Admin Settings</string>
-  <string name="admin_access_settings">Tap for admin access to settings</string>
-  <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="save_mid">Mid-form saving</string>
-  <string name="enter_new_password">Enter new password</string>
-  <string name="verify_new_password">Re-enter new password</string>
-  <string name="admin_password_changed">Admin password successfully changed</string>
-  <string name="admin_password_disabled">Admin password disabled</string>
-  <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
-  <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
-  <string name="enter_admin_password">Enter Admin Password</string>
-  <string name="found_in_menu">Found using Menu button in Form Entry</string>
-  <string name="autosend">Auto Send</string>
-  <string name="autosend_wifi">Auto send with Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
-  <string name="autosend_network">Auto send with network</string>
-  <string name="autosend_network_summary">Auto send when network is available</string>
-  <string name="found_in_main">Uncheck to hide from Main Menu</string>
-  <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="found_at_end">Uncheck to hide from end of Form Entry</string>
-  <string name="no_account">No account</string>
-  <string name="save_preferences">Save Settings to Disk</string>
-  <string name="form_forward">Next</string>
-  <string name="form_backward">Prev</string>
-  <string name="navigation">Navigation</string>
-  <string name="swipe_navigation">Use horizontal swipes</string>
-  <string name="buttons_navigation">Use forward/backward buttons</string>
-  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
-  <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
-  <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
-  <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
   <string name="change_url_default">URL</string>
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 </resources>
