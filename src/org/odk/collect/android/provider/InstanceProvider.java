@@ -109,7 +109,11 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-        Collect.createODKDirs();
+        try {
+            Collect.createODKDirs();
+        } catch (RuntimeException e) {
+            return false;
+        }
 
         mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return true;

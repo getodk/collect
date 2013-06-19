@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
@@ -30,6 +31,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
    @Override
 	public void onReceive(Context context, Intent intent) {
+        // make sure sd card is ready, if not don't try to send
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return;
+        }
+        
 		String action = intent.getAction();
 
 		NetworkInfo currentNetworkInfo = (NetworkInfo) intent
