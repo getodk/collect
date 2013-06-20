@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -38,7 +38,7 @@ import java.io.File;
 
 /**
  * Extends the Application class to implement
- * 
+ *
  * @author carlhartung
  */
 public class Collect extends Application {
@@ -108,7 +108,7 @@ public class Collect extends Application {
 
     /**
      * Creates required directories on the SDCard (or other external storage)
-     * 
+     *
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
      */
     public static void createODKDirs() throws RuntimeException {
@@ -145,9 +145,33 @@ public class Collect extends Application {
     }
 
     /**
+     * Predicate that tests whether a directory path might refer to an
+     * ODK Tables instance data directory (e.g., for media attachments).
+     *
+     * @param directory
+     * @return
+     */
+    public static boolean isODKTablesInstanceDataDirectory(File directory) {
+		/**
+		 * Special check to prevent deletion of files that
+		 * could be in use by ODK Tables.
+		 */
+    	String dirPath = directory.getAbsolutePath();
+    	if ( dirPath.startsWith(Collect.ODK_ROOT) ) {
+    		dirPath = dirPath.substring(Collect.ODK_ROOT.length());
+    		String[] parts = dirPath.split(File.separator);
+    		// [appName, instances, tableId, instanceId ]
+    		if ( parts.length == 4 && parts[1].equals("instances") ) {
+    			return true;
+    		}
+    	}
+    	return false;
+	}
+
+    /**
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
-     * 
+     *
      * @return
      */
     public synchronized HttpContext getHttpContext() {

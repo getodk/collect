@@ -223,7 +223,11 @@ public class InstanceProvider extends ContentProvider {
 
     private void deleteAllFilesInDirectory(File directory) {
         if (directory.exists()) {
-            if (directory.isDirectory()) {
+        	// do not delete the directory if it might be an
+        	// ODK Tables instance data directory. Let ODK Tables
+        	// manage the lifetimes of its filled-in form data
+        	// media attachments.
+            if (directory.isDirectory() && !Collect.isODKTablesInstanceDataDirectory(directory)) {
             	// delete any media entries for files in this directory...
                 int images = MediaUtils.deleteImagesInFolderFromMediaProvider(directory);
                 int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
