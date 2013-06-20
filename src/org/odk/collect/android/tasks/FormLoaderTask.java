@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -50,7 +50,7 @@ import android.util.Log;
 
 /**
  * Background task for loading a form.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -193,7 +193,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         fec = new FormEntryController(fem);
 
         boolean usedSavepoint = false;
-        
+
         try {
             // import existing data into formdef
             if (mInstancePath != null) {
@@ -225,7 +225,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // set paths to /sdcard/odk/forms/formfilename-media/
         String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
         File formMediaDir = new File( formXml.getParent(), formFileName + "-media");
-        
+
         // Remove previous forms
         ReferenceManager._().clearSession();
 
@@ -307,7 +307,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     /**
      * Read serialized {@link FormDef} from file and recreate as object.
-     * 
+     *
      * @param formDef serialized FormDef file
      * @return {@link FormDef} object
      */
@@ -323,7 +323,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     	// replace with direct call to PrototypeManager
     	PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
         new XFormsModule().registerModule();
-        
+
         FileInputStream fis = null;
         FormDef fd = null;
         try {
@@ -356,7 +356,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     /**
      * Write the FormDef to the file system as a binary blog.
-     * 
+     *
      * @param filepath path to the form file
      */
     public void serializeFormDef(FormDef fd, String filepath) {
@@ -385,13 +385,17 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     @Override
     protected void onPostExecute(FECWrapper wrapper) {
         synchronized (this) {
-            if (mStateListener != null) {
-                if (wrapper == null) {
-                    mStateListener.loadingError(mErrorMsg);
-                } else {
-                    mStateListener.loadingComplete(this);
-                }
-            }
+        	try {
+	            if (mStateListener != null) {
+	                if (wrapper == null) {
+	                    mStateListener.loadingError(mErrorMsg);
+	                } else {
+	                    mStateListener.loadingComplete(this);
+	                }
+	            }
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
         }
     }
 
@@ -405,7 +409,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     public FormController getFormController() {
     	return ( data != null ) ? data.getController() : null;
     }
-    
+
     public boolean hasUsedSavepoint() {
     	return (data != null ) ? data.hasUsedSavepoint() : false;
     }
@@ -416,19 +420,19 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             data = null;
         }
     }
-    
+
     public boolean hasPendingActivityResult() {
     	return pendingActivityResult;
     }
-    
+
     public int getRequestCode() {
     	return requestCode;
     }
-    
+
     public int getResultCode() {
     	return resultCode;
     }
-    
+
     public Intent getIntent() {
     	return intent;
     }

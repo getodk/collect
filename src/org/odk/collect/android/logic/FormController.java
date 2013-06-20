@@ -1151,14 +1151,18 @@ public class FormController {
             v = e.getChildrenWithName(INSTANCE_ID);
             if ( v.size() == 1 ) {
                 StringData sa = (StringData) v.get(0).getValue();
-                instanceId = (String) sa.getValue();
+                if ( sa != null ) {
+                	instanceId = (String) sa.getValue();
+                }
             }
 
             // instance name...
             v = e.getChildrenWithName(INSTANCE_NAME);
             if ( v.size() == 1 ) {
                 StringData sa = (StringData) v.get(0).getValue();
-                instanceName = (String) sa.getValue();
+                if ( sa != null ) {
+                    instanceName = (String) sa.getValue();
+                }
             }
         }
 

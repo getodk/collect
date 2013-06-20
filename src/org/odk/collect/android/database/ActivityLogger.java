@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2012 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -31,19 +31,19 @@ import android.database.sqlite.SQLiteException;
 
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
- * 
+ *
  * The logging database will be "/sdcard/odk/log/activityLog.db"
- * 
- * Logging is enabled if the file "/sdcard/odk/log/enabled" exists.  
- * 
+ *
+ * Logging is enabled if the file "/sdcard/odk/log/enabled" exists.
+ *
  * @author mitchellsundt@gmail.com
  * @author Carl Hartung (carlhartung@gmail.com)
  *
  */
 public final class ActivityLogger {
-	
+
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
-		
+
 		DatabaseHelper() {
 			super(Collect.LOG_PATH, DATABASE_NAME, null, DATABASE_VERSION);
 			new File(Collect.LOG_PATH).mkdirs();
@@ -60,9 +60,9 @@ public final class ActivityLogger {
 			onCreate(db);
 		}
 	}
-	
+
 	/**
-	 * The minimum delay, in milliseconds, for a scroll action to be considered new. 
+	 * The minimum delay, in milliseconds, for a scroll action to be considered new.
 	 */
 	private static final long MIN_SCROLL_DELAY = 400L;
 	/**
@@ -70,7 +70,7 @@ public final class ActivityLogger {
 	 * it will be flushed.
 	 */
 	private static final int MAX_SCROLL_ACTION_BUFFER_SIZE = 8;
-	
+
 	private static final String DATABASE_TABLE = "log";
 	private static final String ENABLE_LOGGING = "enabled";
 	private static final int DATABASE_VERSION = 1;
@@ -86,7 +86,7 @@ public final class ActivityLogger {
 	private static final String QUESTION = "question";
 	private static final String PARAM1 = "param1";
 	private static final String PARAM2 = "param2";
-	
+
 	private static final String DATABASE_CREATE =
 			"create table " + DATABASE_TABLE + " (" +
 			ID + " integer primary key autoincrement, " +
@@ -109,17 +109,17 @@ public final class ActivityLogger {
 	// during scrolling.  This list is flushed every time any other type of
 	// action is logged.
 	private LinkedList<ContentValues> mScrollActions = new LinkedList<ContentValues>();
-    
+
 	public ActivityLogger(String deviceId) {
 		this.mDeviceId = deviceId;
 		mLoggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
         open();
 	}
-	
+
 	public boolean isOpen() {
 		return mLoggingEnabled && mIsOpen;
 	}
-	
+
     public void open() throws SQLException {
     	if (!mLoggingEnabled || mIsOpen) return;
         try {
@@ -131,7 +131,7 @@ public final class ActivityLogger {
         	mIsOpen = false;
         }
     }
-    
+
     // cached to improve logging performance...
     // only access these through getXPath(FormIndex index);
     private FormIndex cachedXPathIndex = null;
@@ -143,7 +143,7 @@ public final class ActivityLogger {
     // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
     private String getXPath(FormIndex index) {
     	if ( index == cachedXPathIndex ) return cachedXPathValue;
-    	
+
     	cachedXPathIndex = index;
     	cachedXPathValue = Collect.getInstance().getFormController().getXPath(index);
     	return cachedXPathValue;
@@ -165,13 +165,13 @@ public final class ActivityLogger {
 
         insertContentValues(cv, index);
     }
-    
+
     public void logScrollAction(Object t, int distance) {
     	if (!isOpen()) return;
 
     	synchronized(mScrollActions) {
 	    	long timeStamp = Calendar.getInstance().getTimeInMillis();
-	    	
+
 	    	// Check to see if we can add this scroll action to the previous action.
 	    	if (!mScrollActions.isEmpty()) {
 	    		ContentValues lastCv = mScrollActions.get(mScrollActions.size() - 1);
@@ -184,11 +184,11 @@ public final class ActivityLogger {
 		    		return;
 		    	}
 	    	}
-	    	
+
 	    	if (mScrollActions.size() >= MAX_SCROLL_ACTION_BUFFER_SIZE) {
 	    		insertContentValues(null, null); // flush scroll list...
 	    	}
-	
+
 	    	String idx = "";
 	    	String instancePath = "";
 	    	FormController formController = Collect.getInstance().getFormController();
@@ -211,7 +211,7 @@ public final class ActivityLogger {
 	    	mScrollActions.add(cv);
     	}
     }
-    
+
     private void insertContentValues(ContentValues cv, FormIndex index) {
     	synchronized(mScrollActions) {
 	        try {
@@ -219,7 +219,7 @@ public final class ActivityLogger {
 	        		ContentValues scv = mScrollActions.removeFirst();
 	        		mDb.insert(DATABASE_TABLE, null, scv);
 	        	}
-	
+
 	        	if ( cv != null ) {
 	    	    	String idx = "";
 	    	    	if ( index != null ) {
@@ -235,7 +235,7 @@ public final class ActivityLogger {
     }
 
     // Convenience methods
-    
+
     public void logOnStart(Activity a) {
 		log( a.getClass().getName(), "onStart", null, null, null, null, null);
     }
@@ -243,11 +243,11 @@ public final class ActivityLogger {
     public void logOnStop(Activity a) {
 		log( a.getClass().getName(), "onStop", null, null, null, null, null);
     }
-    
+
     public void logAction(Object t, String context, String action) {
 		log( t.getClass().getName(), context, action, null, null, null, null);
     }
-    
+
     public void logActionParam(Object t, String context, String action, String param1) {
 		log( t.getClass().getName(), context, action, null, null, param1, null);
     }
@@ -258,7 +258,10 @@ public final class ActivityLogger {
     	FormController formController = Collect.getInstance().getFormController();
     	if ( formController != null ) {
     		index = formController.getFormIndex();
-	    	instancePath = formController.getInstancePath().getAbsolutePath();
+    		File instanceFile = formController.getInstancePath();
+    		if ( instanceFile != null ) {
+    			instancePath = instanceFile.getAbsolutePath();
+    		}
     	}
     	log( t.getClass().getName(), context, action, instancePath, index, null, null);
     }
