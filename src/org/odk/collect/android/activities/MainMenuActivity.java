@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -29,6 +29,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -59,7 +60,7 @@ import android.widget.Toast;
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
  * some activities based on returns of others.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -123,7 +124,7 @@ public class MainMenuActivity extends Activity {
 
 		setTitle(getString(R.string.app_name) + " > "
 				+ getString(R.string.main_menu));
-		
+
 		File f = new File(Collect.ODK_ROOT + "/collect.settings");
 		if (f.exists()) {
 			boolean success = loadSharedPreferencesFromFile(f);
@@ -311,11 +312,15 @@ public class MainMenuActivity extends Activity {
 		Collect.getInstance().getActivityLogger()
 				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_PREFERENCES, 0,
-				getString(R.string.general_preferences)).setIcon(
-				android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_ADMIN, 0, getString(R.string.admin_preferences))
-				.setIcon(R.drawable.ic_menu_login);
+
+		CompatibilityUtils.setShowAsAction(
+    		menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+				.setIcon(android.R.drawable.ic_menu_preferences),
+			MenuItem.SHOW_AS_ACTION_NEVER);
+		CompatibilityUtils.setShowAsAction(
+    		menu.add(0, MENU_ADMIN, 0, R.string.admin_preferences)
+				.setIcon(R.drawable.ic_menu_login),
+			MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
 
@@ -463,7 +468,7 @@ public class MainMenuActivity extends Activity {
 
 	/**
 	 * notifies us that something changed
-	 * 
+	 *
 	 */
 	private class MyContentObserver extends ContentObserver {
 
@@ -496,7 +501,7 @@ public class MainMenuActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private boolean loadSharedPreferencesFromFile(File src) {
 		// this should probably be in a thread if it ever gets big
 		boolean res = false;
@@ -524,7 +529,7 @@ public class MainMenuActivity extends Activity {
 					prefEdit.putString(key, ((String) v));
 			}
 			prefEdit.commit();
-			
+
 			// second object is admin options
 			Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0).edit();
 			adminEdit.clear();
@@ -546,7 +551,7 @@ public class MainMenuActivity extends Activity {
 					adminEdit.putString(key, ((String) v));
 			}
 			adminEdit.commit();
-			
+
 			res = true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

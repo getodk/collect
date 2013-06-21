@@ -43,6 +43,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.views.ODKView;
@@ -63,6 +64,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
@@ -318,6 +320,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 			// Not a restart from a screen orientation change (or other).
 			Collect.getInstance().setFormController(null);
+			CompatibilityUtils.invalidateOptionsMenu(this);
 
 			Intent intent = getIntent();
 			if (intent != null) {
@@ -607,16 +610,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			break;
 		case ALIGNED_IMAGE:
 			/*
-			 * We saved the image to the tempfile_path; the app returns the
-			 * full path to the saved file in the EXTRA_OUTPUT extra. Take
-			 * that file and move it into the instance folder.
+			 * We saved the image to the tempfile_path; the app returns the full
+			 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+			 * and move it into the instance folder.
 			 */
-			String path = intent.getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
+			String path = intent
+					.getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
 			fi = new File(path);
-			mInstanceFolder = formController.getInstancePath()
-					.getParent();
-			s = mInstanceFolder + File.separator
-					+ System.currentTimeMillis() + ".jpg";
+			mInstanceFolder = formController.getInstancePath().getParent();
+			s = mInstanceFolder + File.separator + System.currentTimeMillis()
+					+ ".jpg";
 
 			nf = new File(s);
 			if (!fi.renameTo(nf)) {
@@ -729,42 +732,66 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) {
 		Collect.getInstance().getActivityLogger()
-				.logInstanceAction(this, "onPrepareOptionsMenu", "show");
+				.logInstanceAction(this, "onCreateOptionsMenu", "show");
+		super.onCreateOptionsMenu(menu);
+
+		CompatibilityUtils.setShowAsAction(
+				menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
+						android.R.drawable.ic_menu_save),
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+		CompatibilityUtils.setShowAsAction(
+				menu.add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
+						.setIcon(R.drawable.ic_menu_goto),
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+		CompatibilityUtils.setShowAsAction(
+				menu.add(0, MENU_LANGUAGES, 0, R.string.change_language)
+						.setIcon(R.drawable.ic_menu_start_conversation),
+				MenuItem.SHOW_AS_ACTION_NEVER);
+
+		CompatibilityUtils.setShowAsAction(
+				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+						.setIcon(android.R.drawable.ic_menu_preferences),
+				MenuItem.SHOW_AS_ACTION_NEVER);
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+
 		FormController formController = Collect.getInstance()
 				.getFormController();
 
-		menu.removeItem(MENU_LANGUAGES);
-		menu.removeItem(MENU_HIERARCHY_VIEW);
-		menu.removeItem(MENU_SAVE);
-		menu.removeItem(MENU_PREFERENCES);
+		boolean useability;
+		useability = mAdminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_SAVE_MID, true);
 
-		if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_MID,
-				true)) {
-			menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
-					android.R.drawable.ic_menu_save);
-		}
-		if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_JUMP_TO,
-				true)) {
-			menu.add(0, MENU_HIERARCHY_VIEW, 0,
-					getString(R.string.view_hierarchy)).setIcon(
-					R.drawable.ic_menu_goto);
-		}
-		if (mAdminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_LANGUAGE, true)) {
-			menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language))
-					.setIcon(R.drawable.ic_menu_start_conversation)
-					.setEnabled(
-							(formController.getLanguages() == null || formController
-									.getLanguages().length == 1) ? false : true);
-		}
-		if (mAdminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true)) {
-			menu.add(0, MENU_PREFERENCES, 0,
-					getString(R.string.general_preferences)).setIcon(
-					android.R.drawable.ic_menu_preferences);
-		}
+		menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
+
+		useability = mAdminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_JUMP_TO, true);
+
+		menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
+				.setEnabled(useability);
+
+		useability = mAdminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_LANGUAGE, true)
+				&& (formController != null)
+				&& formController.getLanguages() != null
+				&& formController.getLanguages().length > 1;
+
+		menu.findItem(MENU_LANGUAGES).setVisible(useability)
+				.setEnabled(useability);
+
+		useability = mAdminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true);
+
+		menu.findItem(MENU_PREFERENCES).setVisible(useability)
+				.setEnabled(useability);
 		return true;
 	}
 
@@ -841,7 +868,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * Clears the answer on the screen.
 	 */
 	private void clearAnswer(QuestionWidget qw) {
-		if ( qw.getAnswer() != null) {
+		if (qw.getAnswer() != null) {
 			qw.clearAnswer();
 		}
 	}
@@ -963,20 +990,27 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			}
 
 			// change start screen based on navigation prefs
-			String navigationChoice = PreferenceManager.getDefaultSharedPreferences(this).getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.KEY_NAVIGATION);
+			String navigationChoice = PreferenceManager
+					.getDefaultSharedPreferences(this).getString(
+							PreferencesActivity.KEY_NAVIGATION,
+							PreferencesActivity.KEY_NAVIGATION);
 			Boolean useSwipe = false;
 			Boolean useButtons = false;
-			ImageView ia = ((ImageView) startView.findViewById(R.id.image_advance));
-			ImageView ib = ((ImageView) startView.findViewById(R.id.image_backup));
+			ImageView ia = ((ImageView) startView
+					.findViewById(R.id.image_advance));
+			ImageView ib = ((ImageView) startView
+					.findViewById(R.id.image_backup));
 			TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
 			TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
 			TextView d = ((TextView) startView.findViewById(R.id.description));
 
 			if (navigationChoice != null) {
-				if (navigationChoice.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
+				if (navigationChoice
+						.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
 					useSwipe = true;
 				}
-				if (navigationChoice.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
+				if (navigationChoice
+						.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
 					useButtons = true;
 				}
 			}
@@ -994,7 +1028,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				d.setText(getString(R.string.swipe_buttons_instructions,
 						formController.getFormTitle()));
 			}
-
 
 			if (mBackButton.isShown()) {
 				mBackButton.setEnabled(false);
@@ -1061,9 +1094,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					}
 				}
 				if (saveName == null) {
-                    // last resort, default to the form title
-                    saveName = formController.getFormTitle();
-                }
+					// last resort, default to the form title
+					saveName = formController.getFormTitle();
+				}
 				// present the prompt to allow user to name the form
 				TextView sa = (TextView) endView
 						.findViewById(R.id.save_form_as);
@@ -1372,7 +1405,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.logInstanceAction(this,
 							"createConstraintToast.ANSWER_CONSTRAINT_VIOLATED",
 							"show", index);
-			constraintText = formController.getQuestionPromptConstraintText(index);
+			constraintText = formController
+					.getQuestionPromptConstraintText(index);
 			if (constraintText == null) {
 				constraintText = formController.getQuestionPrompt(index)
 						.getSpecialFormQuestionText("constraintMsg");
@@ -1387,7 +1421,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.logInstanceAction(this,
 							"createConstraintToast.ANSWER_REQUIRED_BUT_EMPTY",
 							"show", index);
-			constraintText = formController.getQuestionPromptRequiredText(index);
+			constraintText = formController
+					.getQuestionPromptRequiredText(index);
 			if (constraintText == null) {
 				constraintText = formController.getQuestionPrompt(index)
 						.getSpecialFormQuestionText("requiredMsg");
@@ -2031,7 +2066,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// only check the buttons if it's enabled in preferences
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.KEY_NAVIGATION);
+		String navigation = sharedPreferences.getString(
+				PreferencesActivity.KEY_NAVIGATION,
+				PreferencesActivity.KEY_NAVIGATION);
 		Boolean showButtons = false;
 		if (navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
 			showButtons = true;
@@ -2183,6 +2220,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		t.cancel(true);
 		t.destroy();
 		Collect.getInstance().setFormController(formController);
+		CompatibilityUtils.invalidateOptionsMenu(this);
 
 		// Set the language if one has already been set in the past
 		String[] languageTest = formController.getLanguages();
@@ -2438,7 +2476,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// only check the swipe if it's enabled in preferences
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String navigation = sharedPreferences.getString(PreferencesActivity.KEY_NAVIGATION, PreferencesActivity.NAVIGATION_SWIPE);
+		String navigation = sharedPreferences.getString(
+				PreferencesActivity.KEY_NAVIGATION,
+				PreferencesActivity.NAVIGATION_SWIPE);
 		Boolean doSwipe = false;
 		if (navigation.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
 			doSwipe = true;

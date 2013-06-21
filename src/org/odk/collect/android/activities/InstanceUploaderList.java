@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -22,6 +22,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -45,7 +46,7 @@ import android.widget.Toast;
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenuActivity}.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -237,11 +238,14 @@ public class InstanceUploaderList extends ListActivity implements
 		Collect.getInstance().getActivityLogger()
 				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_PREFERENCES, 0,
-				getString(R.string.general_preferences)).setIcon(
-				android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_SHOW_UNSENT, 1, getString(R.string.change_view))
-				.setIcon(android.R.drawable.ic_menu_preferences);
+
+		CompatibilityUtils.setShowAsAction(
+				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+						.setIcon(android.R.drawable.ic_menu_preferences),
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		CompatibilityUtils.setShowAsAction(
+				menu.add(0, MENU_SHOW_UNSENT, 1, R.string.change_view),
+				MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
 

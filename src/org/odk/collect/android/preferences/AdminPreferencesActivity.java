@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -63,12 +64,12 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_ACCESS_SETTINGS = "access_settings";
     public static String KEY_SAVE_AS = "save_as";
     public static String KEY_MARK_AS_FINALIZED = "mark_as_finalized";
-    
+
     public static String KEY_AUTOSEND_WIFI = "autosend_wifi";
     public static String KEY_AUTOSEND_NETWORK = "autosend_network";
-    
+
     public static String KEY_NAVIGATION = "navigation";
-    
+
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     @Override
@@ -83,12 +84,18 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
     }
-    
+
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, SAVE_PREFS_MENU, 0, getString(R.string.save_preferences))
-				.setIcon(R.drawable.ic_menu_save);
-		return super.onCreateOptionsMenu(menu);
+		Collect.getInstance().getActivityLogger()
+			.logAction(this, "onCreateOptionsMenu", "show");
+		super.onCreateOptionsMenu(menu);
+
+		CompatibilityUtils.setShowAsAction(
+    		menu.add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
+				.setIcon(R.drawable.ic_menu_save),
+			MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		return true;
 	}
 
 	@Override
@@ -126,7 +133,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 
 	public static boolean saveSharedPreferencesToFile(File dst, Context context) {
 		// this should be in a thread if it gets big, but for now it's tiny

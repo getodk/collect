@@ -26,6 +26,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
+import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
 import android.app.AlertDialog;
@@ -356,9 +357,12 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
+    	super.onCreateOptionsMenu(menu);
 
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
-            android.R.drawable.ic_menu_preferences);
+        CompatibilityUtils.setShowAsAction(
+    		menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+        		.setIcon(android.R.drawable.ic_menu_preferences),
+        	MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
 
