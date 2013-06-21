@@ -38,6 +38,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XPathReference;
+import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.views.ODKView;
@@ -884,7 +885,7 @@ public class FormController {
 
     public String getQuestionPromptRequiredText(FormIndex index) {
     	// look for the text under the requiredMsg bind attribute
-		String constraintText = getBindAttribute(index, "jr", "requiredMsg");
+		String constraintText = getBindAttribute(index, XFormParser.NAMESPACE_JAVAROSA, "requiredMsg");
 		if (constraintText != null) {
 	    	XPathExpression xPathRequiredMsg = null;
 			try {
@@ -907,6 +908,8 @@ public class FormController {
 					Log.e(t,"Error evaluating a valid-looking required xpath ", e);
 					return constraintText;
 				}
+			} else {
+				return constraintText;
 			}
 		}
 		return null;
