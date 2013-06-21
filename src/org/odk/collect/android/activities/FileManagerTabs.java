@@ -35,60 +35,74 @@ import android.widget.TextView;
  */
 public class FileManagerTabs extends TabActivity {
 
-    private TextView mTVFF;
-    private TextView mTVDF;
+	private TextView mTVFF;
+	private TextView mTVDF;
 
-    private static final String FORMS_TAB = "forms_tab";
-    private static final String DATA_TAB = "data_tab";
+	private static final String FORMS_TAB = "forms_tab";
+	private static final String DATA_TAB = "data_tab";
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		setTitle(getString(R.string.app_name) + " > "
+				+ getString(R.string.manage_files));
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_files));
+		final TabHost tabHost = getTabHost();
+		tabHost.setBackgroundColor(Color.WHITE);
+		tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
 
-        final TabHost tabHost = getTabHost();
-        tabHost.setBackgroundColor(Color.WHITE);
-        tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
+		Intent remote = new Intent(this, DataManagerList.class);
+		tabHost.addTab(tabHost.newTabSpec(DATA_TAB)
+				.setIndicator(getString(R.string.data)).setContent(remote));
 
-        Intent remote = new Intent(this, DataManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec(DATA_TAB).setIndicator(getString(R.string.data))
-                .setContent(remote));
+		Intent local = new Intent(this, FormManagerList.class);
+		tabHost.addTab(tabHost.newTabSpec(FORMS_TAB)
+				.setIndicator(getString(R.string.forms)).setContent(local));
 
-        Intent local = new Intent(this, FormManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec(FORMS_TAB).setIndicator(getString(R.string.forms))
-                .setContent(local));
+		// hack to set font size
+		LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
+		TabWidget tw = (TabWidget) ll.getChildAt(0);
 
-        // hack to set font size
-        LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
-        TabWidget tw = (TabWidget) ll.getChildAt(0);
+		int fontsize = Collect.getQuestionFontsize();
 
-        int fontsize = Collect.getQuestionFontsize();
+		ViewGroup rllf = (ViewGroup) tw.getChildAt(0);
+		mTVFF = getTextViewChild(rllf);
+		if (mTVFF != null) {
+			mTVFF.setTextSize(fontsize);
+			mTVFF.setTextColor(Color.WHITE);
+			mTVFF.setPadding(0, 0, 0, 6);
+		}
 
-        ViewGroup rllf = (ViewGroup) tw.getChildAt(0);
-        mTVFF = (TextView) rllf.getChildAt(1);
-        mTVFF.setTextSize(fontsize);
-        mTVFF.setTextColor(Color.WHITE);
-        mTVFF.setPadding(0, 0, 0, 6);
+		ViewGroup rlrf = (ViewGroup) tw.getChildAt(1);
+		mTVDF = getTextViewChild(rlrf);
+		if (mTVDF != null) {
+			mTVDF.setTextSize(fontsize);
+			mTVDF.setTextColor(Color.WHITE);
+			mTVDF.setPadding(0, 0, 0, 6);
+		}
+	}
 
-        ViewGroup rlrf = (ViewGroup) tw.getChildAt(1);
-        mTVDF = (TextView) rlrf.getChildAt(1);
-        mTVDF.setTextSize(fontsize);
-        mTVDF.setTextColor(Color.WHITE);
-        mTVDF.setPadding(0, 0, 0, 6);
-    }
+	private TextView getTextViewChild(ViewGroup viewGroup) {
+		for (int i = 0; i < viewGroup.getChildCount(); i++) {
+			View view = viewGroup.getChildAt(i);
+			if (view instanceof TextView) {
+				return (TextView) view;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    protected void onStart() {
-    	super.onStart();
+	@Override
+	protected void onStart() {
+		super.onStart();
 		Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
+	}
 
-    @Override
-    protected void onStop() {
+	@Override
+	protected void onStop() {
 		Collect.getInstance().getActivityLogger().logOnStop(this);
-    	super.onStop();
-    }
+		super.onStop();
+	}
 
 }
