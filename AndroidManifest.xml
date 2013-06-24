@@ -48,9 +48,11 @@
         android:label="@string/app_name"
         android:theme="@style/Collect" >
         <provider
+            android:exported="true"
             android:name="org.odk.collect.android.provider.FormsProvider"
             android:authorities="org.odk.collect.android.provider.odk.forms" />
         <provider
+            android:exported="true"
             android:name="org.odk.collect.android.provider.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances" />
 
