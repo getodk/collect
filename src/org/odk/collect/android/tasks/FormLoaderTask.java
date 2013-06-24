@@ -84,6 +84,28 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 			"org.javarosa.core.model.data.helper.BasicDataPointer" // CoreModelModule
     };
 
+    private static boolean isJavaRosaInitialized = false;
+    /**
+     * The JR implementation here does not look thread-safe or
+     * like something to be invoked more than once.
+     * Moving it within a critical section and a do-once guard.
+     */
+    private static final void initializeJavaRosa() {
+    	synchronized (t) {
+    		if ( !isJavaRosaInitialized ) {
+	            // need a list of classes that formdef uses
+	            // unfortunately, the JR registerModule() functions do more than this.
+	            // register just the classes that would have been registered by:
+	            // new JavaRosaCoreModule().registerModule();
+	            // new CoreModelModule().registerModule();
+	            // replace with direct call to PrototypeManager
+	            PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+	            new XFormsModule().registerModule();
+	            isJavaRosaInitialized = true;
+    		}
+    	}
+    }
+
     private FormLoaderListener mStateListener;
     private String mErrorMsg;
     private final String mInstancePath;
@@ -142,6 +164,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         File formXml = new File(formPath);
         String formHash = FileUtils.getMd5Hash(formXml);
         File formBin = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
+
+        initializeJavaRosa();
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -304,7 +328,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-
     /**
      * Read serialized {@link FormDef} from file and recreate as object.
      *
@@ -314,16 +337,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     public FormDef deserializeFormDef(File formDef) {
 
         // TODO: any way to remove reliance on jrsp?
-
-        // need a list of classes that formdef uses
-    	// unfortunately, the JR registerModule() functions do more than this.
-    	// register just the classes that would have been registered by:
-    	// new JavaRosaCoreModule().registerModule();
-    	// new CoreModelModule().registerModule();
-    	// replace with direct call to PrototypeManager
-    	PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
-        new XFormsModule().registerModule();
-
         FileInputStream fis = null;
         FormDef fd = null;
         try {
