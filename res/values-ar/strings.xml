@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="accept_location">سجل الموقع</string>
+  <string name="add_another">إضافة مجموعة</string>
+  <string name="add_more">إضافة المزيد</string>
+  <string name="add_repeat_no">عدم إضافة</string>
+  <string name="altitude">ارتفاع</string>
+  <string name="audio_file_error">تم تعيين أي ملف الصوت.</string>
+  <string name="cancel">إلغاء</string>
+  <string name="cancel_loading_form">إلغاء</string>
+  <string name="cancel_location">إلغاء</string>
+  <string name="cancel_saving_form">إلغاء</string>
+  <string name="cannot_edit_completed_form">يتعذر تحرير هذا النموذج مرة واحدة تم وضع علامة على أنها كاملة. قد تكون مشفرة.</string>
+  <string name="change_password">ODK كلمة المرور</string>
+  <string name="server_preferences">إعدادات الخادم</string>
+  <string name="client">واجهة المستخدم</string>
+  <string name="show_splash">عرض شاشة البداية</string>
+  <string name="splash_path">اختيار صورة البداية</string>
+  <string name="select_another_image">حدد صورة أخرى</string>
+  <string name="change_splash_path">تغيير الصورة</string>
+  <string name="show_sent_and_unsent_forms">عرض أشكال المرسلة وغير المرسلة</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="save_mid">حفظ نموذج</string>
+</resources>
