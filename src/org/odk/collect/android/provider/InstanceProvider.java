@@ -325,6 +325,14 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        Long now = Long.valueOf(System.currentTimeMillis());
+
+        // Make sure that the fields are all set
+        if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
+            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+        }
+
         int count;
         String status = null;
         switch (sUriMatcher.match(uri)) {
