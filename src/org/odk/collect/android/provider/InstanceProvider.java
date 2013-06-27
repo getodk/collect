@@ -268,12 +268,14 @@ public class InstanceProvider extends ContentProvider {
                 Cursor del = null;
                 try {
                 	del = this.query(uri, null, where, whereArgs, null);
-	                del.moveToPosition(-1);
-	                while (del.moveToNext()) {
-	                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
-	                    File instanceDir = (new File(instanceFile)).getParentFile();
-	                    deleteAllFilesInDirectory(instanceDir);
+                	if (del.getCount() > 0) {
+                		del.moveToFirst();
+                		do {
+		                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+		                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
+		                    File instanceDir = (new File(instanceFile)).getParentFile();
+		                    deleteAllFilesInDirectory(instanceDir);
+                		} while (del.moveToNext());
 	                }
                 } finally {
                 	if ( del != null ) {
@@ -289,13 +291,14 @@ public class InstanceProvider extends ContentProvider {
                 Cursor c = null;
                 try {
                 	c = this.query(uri, null, where, whereArgs, null);
-	                // This should only ever return 1 record.  I hope.
-	                c.moveToPosition(-1);
-	                while (c.moveToNext()) {
-	                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-	                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
-	                    File instanceDir = (new File(instanceFile)).getParentFile();
-	                    deleteAllFilesInDirectory(instanceDir);
+                	if (c.getCount() > 0) {
+                		c.moveToFirst();
+                		do {
+		                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+		                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
+		                    File instanceDir = (new File(instanceFile)).getParentFile();
+		                    deleteAllFilesInDirectory(instanceDir);
+                		} while (c.moveToNext());
 	                }
                 } finally {
                 	if ( c != null ) {
