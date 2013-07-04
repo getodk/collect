@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/mainlayout"
-	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<FrameLayout android:id="@+id/mapview_placeholder"
-	    android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		/>
 	<LinearLayout
 		android:id="@+id/location_buttons"
 		android:orientation="vertical"
@@ -17,38 +12,62 @@
 		android:gravity="center_horizontal"
 		android:padding="5dip"
 		android:background="#BF000000">
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_horizontal"
-			android:paddingTop="2dip"
-			android:paddingBottom="2dip">
-			<Button
-				android:id="@+id/show_location"
-				android:text="@string/go_to_location"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1"
-				android:visibility="gone" />
-			<Button
-				android:id="@+id/accept_location"
-				android:text="@string/accept_location"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1" />
-			<Button
-				android:id="@+id/cancel_location"
-				android:text="@string/cancel"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1" />
-		</LinearLayout>
+		
 		<TextView
 			android:id="@+id/location_status"
 			android:text="@string/please_wait_long"
 			android:textColor="#FFFFFF"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
+		<fragment
+        	android:id="@+id/map"
+        	android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+        	class="com.google.android.gms.maps.SupportMapFragment" />
 	</LinearLayout>
-</RelativeLayout>
+	<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right"
+			android:paddingTop="40dip"
+			android:paddingBottom="60dip">
+			<Button
+				android:id="@+id/cancel_location"
+				android:drawableRight="@drawable/ic_menu_back"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1" />
+			<Button
+				android:id="@+id/accept_location"
+				android:drawableRight="@android:drawable/ic_menu_save"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1" />
+			<Button
+				android:id="@+id/show_location"
+				android:drawableRight="@drawable/ic_menu_mylocation"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:visibility="gone" />
+			<Button
+				android:id="@+id/refresh_location"
+				android:drawableRight="@drawable/ic_menu_refresh"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:visibility="gone" />
+		</LinearLayout>
+</FrameLayout>
+<!-- android:text="@string/cancel"
+android:text="@string/accept_location" 
+android:text="@string/go_to_location" -->
