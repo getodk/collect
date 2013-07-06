@@ -111,7 +111,7 @@
   <string name="review_data_button">Editer un Formulaire Sauvegardé</string>
   <string name="saved_data">Incomplet (%s)</string>
   <string name="save_all_answers">Sauvegarder le formulaire</string>
-  <string name="save_enter_data_description">Vouse êtes à la fin de \"%s\".</string>
+  <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <string name="saving_form">Sauvegarde du Formulaire…</string>
   <string name="sending_items">Envoi de %1$s sur %2$s formulaire(s)</string>
   <string name="send_data">Envoyer un Formulaire Finalisé</string>
