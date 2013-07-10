@@ -25,6 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.http.HttpStatus;
 import org.kxml2.io.KXmlParser;
@@ -83,6 +84,9 @@ public final class WebUtils {
 
 	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 	public static final int CONNECTION_TIMEOUT = 30000;
+
+	public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
+	public static final String GZIP_CONTENT_ENCODING = "gzip";
 
 	private static ClientConnectionManager httpConnectionManager = null;
 
@@ -333,6 +337,7 @@ public final class WebUtils {
 
 		// set up request...
 		HttpGet req = WebUtils.createOpenRosaHttpGet(u);
+		req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
 
 		HttpResponse response = null;
 		try {
@@ -378,6 +383,10 @@ public final class WebUtils {
 				InputStreamReader isr = null;
 				try {
 					is = entity.getContent();
+	                Header contentEncoding = entity.getContentEncoding();
+	                if ( contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING) ) {
+	                	is = new GZIPInputStream(is);
+	                }
 					isr = new InputStreamReader(is, "UTF-8");
 					doc = new Document();
 					KXmlParser parser = new KXmlParser();

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -37,6 +38,8 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
+import org.opendatakit.httpclientandroidlib.Header;
+import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
@@ -53,7 +56,7 @@ import android.util.Log;
  * Background task for downloading a given list of forms. We assume right now that the forms are
  * coming from the same server that presented the form list, but theoretically that won't always be
  * true.
- * 
+ *
  * @author msundt
  * @author carlhartung
  */
@@ -110,12 +113,12 @@ public class DownloadFormsTask extends
                             .getContentResolver()
                             .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs,
                                 null);
-	
+
 	                if (alreadyExists.getCount() <= 0) {
 	                    // doesn't exist, so insert it
 	                    ContentValues v = new ContentValues();
 	                    v.put(FormsColumns.FORM_FILE_PATH, dl.getAbsolutePath());
-	
+
 	                    HashMap<String, String> formInfo = FileUtils.parseXML(dl);
 	                    v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
 	                    v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
@@ -156,7 +159,7 @@ public class DownloadFormsTask extends
                 			c.close();
                 		}
                 	}
-                	
+
                 	if ( formMediaPath != null ) {
                         String error =
                             downloadManifestAndMediaFiles(formMediaPath, fd,
@@ -193,7 +196,7 @@ public class DownloadFormsTask extends
     /**
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
-     * 
+     *
      * @param formName
      * @param url
      * @return
@@ -236,10 +239,10 @@ public class DownloadFormsTask extends
 	        if (c.getCount() > 0) {
 	            // Should be at most, 1
 	            c.moveToFirst();
-	
+
 	            // delete the file we just downloaded, because it's a duplicate
 	            f.delete();
-	
+
 	            // set the file returned to the file we already had
 	            f = new File(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
 	        }
@@ -256,7 +259,7 @@ public class DownloadFormsTask extends
     /**
      * Common routine to download a document from the downloadUrl and save the contents in the file
      * 'f'. Shared by media file download and form file download.
-     * 
+     *
      * @param f
      * @param downloadUrl
      * @throws Exception
@@ -276,7 +279,7 @@ public class DownloadFormsTask extends
         }
 
         // WiFi network connections can be renegotiated during a large form download sequence.
-        // This will cause intermittent download failures.  Silently retry once after each 
+        // This will cause intermittent download failures.  Silently retry once after each
         // failure.  Only if there are two consecutive failures, do we abort.
         boolean success = false;
         int attemptCount = 0;
@@ -284,17 +287,18 @@ public class DownloadFormsTask extends
         while ( !success && ++attemptCount <= MAX_ATTEMPT_COUNT ) {
 	        // get shared HttpContext so that authentication and cookies are retained.
 	        HttpContext localContext = Collect.getInstance().getHttpContext();
-	
+
 	        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-	
+
 	        // set up request...
 	        HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-	
+	        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
+
 	        HttpResponse response = null;
 	        try {
 	            response = httpclient.execute(req, localContext);
 	            int statusCode = response.getStatusLine().getStatusCode();
-	
+
 	            if (statusCode != HttpStatus.SC_OK) {
 	            	WebUtils.discardEntityBytes(response);
 	            	if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
@@ -307,12 +311,17 @@ public class DownloadFormsTask extends
 	                Log.e(t, errMsg);
 	                throw new Exception(errMsg);
 	            }
-	
+
 	            // write connection to file
 	            InputStream is = null;
 	            OutputStream os = null;
 	            try {
-	                is = response.getEntity().getContent();
+	            	HttpEntity entity = response.getEntity();
+	                is = entity.getContent();
+	                Header contentEncoding = entity.getContentEncoding();
+	                if ( contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING) ) {
+	                	is = new GZIPInputStream(is);
+	                }
 	                os = new FileOutputStream(f);
 	                byte buf[] = new byte[1024];
 	                int len;
@@ -343,11 +352,11 @@ public class DownloadFormsTask extends
 	                    }
 	                }
 	            }
-	
+
 	        } catch (Exception e) {
 	        	Log.e(t, e.toString());
 	            e.printStackTrace();
-	            // silently retry unless this is the last attempt, 
+	            // silently retry unless this is the last attempt,
 	            // in which case we rethrow the exception.
 	            if ( attemptCount == MAX_ATTEMPT_COUNT ) {
 	            	throw e;
@@ -530,7 +539,7 @@ public class DownloadFormsTask extends
         synchronized (this) {
             if (mStateListener != null) {
                 // update progress and total
-                mStateListener.progressUpdate(values[0], 
+                mStateListener.progressUpdate(values[0],
                 	Integer.valueOf(values[1]),
                     Integer.valueOf(values[2]));
             }
