@@ -44,6 +44,11 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.Toast;
 
+/**
+ * Handles general preferences.
+ * 
+ * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior option)
+ */
 public class PreferencesActivity extends PreferenceActivity implements
 		OnPreferenceChangeListener {
 
@@ -73,6 +78,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String NAVIGATION_BUTTONS = "buttons";
 	public static final String NAVIGATION_SWIPE_BUTTONS = "swipe_buttons";
 
+	public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
+	public static final String CONSTRAINT_BEHAVIOR_ON_FINALIZE = "on_finalize";
+	public static final String CONSTRAINT_BEHAVIOR_DEFAULT = "on_swipe";
+
 	public static final String KEY_FORMLIST_URL = "formlist_url";
 	public static final String KEY_SUBMISSION_URL = "submission_url";
 
@@ -84,6 +93,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
 	public static final String KEY_NAVIGATION = "navigation";
+	public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
 	private PreferenceScreen mSplashPathPreference;
 	private EditTextPreference mSubmissionUrlPreference;
@@ -94,6 +104,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	private ListPreference mSelectedGoogleAccountPreference;
 	private ListPreference mFontSizePreference;
 	private ListPreference mNavigationPreference;
+	private ListPreference mConstraintBehaviorPreference;
 
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
@@ -350,6 +361,28 @@ public class PreferencesActivity extends PreferenceActivity implements
 				});
 		if (!(navigationAvailable || adminMode)) {
 			clientCategory.removePreference(mNavigationPreference);
+		}
+		
+		boolean constraintBehaviorAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, true);
+		mConstraintBehaviorPreference = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
+		mConstraintBehaviorPreference.setSummary(mConstraintBehaviorPreference.getEntry());
+		mConstraintBehaviorPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int index = ((ListPreference) preference)
+								.findIndexOfValue(newValue.toString());
+						String entry = (String) ((ListPreference) preference)
+								.getEntries()[index];
+						((ListPreference) preference).setSummary(entry);
+						return true;
+					}
+				});
+		if (!(constraintBehaviorAvailable || adminMode)) {
+			clientCategory.removePreference(mConstraintBehaviorPreference);
 		}
 		
 		boolean fontAvailable = adminPreferences.getBoolean(

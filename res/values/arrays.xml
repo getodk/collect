@@ -50,4 +50,14 @@
 		<item>@string/buttons_navigation</item>
 		<item>@string/swipe_buttons_navigation</item>
 	</string-array>
+	<string-array
+		name="constraint_behavior_entry_values">
+		<item>on_swipe</item>
+		<item>on_finalize</item>
+	</string-array>
+	<string-array
+		name="constraint_behavior_entries">
+		<item>@string/constraint_behavior_on_swipe</item>
+		<item>@string/constraint_behavior_on_finalize</item>
+	</string-array>
 </resources>

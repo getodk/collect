@@ -103,6 +103,7 @@ import android.widget.Toast;
  * transitions between questions, and allowing the user to enter data.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
+ * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior option)
  */
 public class FormEntryActivity extends Activity implements AnimationListener,
 		FormLoaderListener, FormSavedListener, AdvanceToNextListener,
@@ -1223,12 +1224,25 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private void showNextView() {
 		FormController formController = Collect.getInstance()
 				.getFormController();
+			
+		// get constraint behavior preference value with appropriate default
+		String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+			.getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, 
+				PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
+		
 		if (formController.currentPromptIsQuestion()) {
-			if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-				// A constraint was violated so a dialog should be showing.
-				mBeenSwiped = false;
-				return;
-			}
+
+			// if constraint behavior says we should validate on swipe, do so
+			if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+				if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+					// A constraint was violated so a dialog should be showing.
+					mBeenSwiped = false;
+					return;
+				}
+				
+			// otherwise, just save without validating (constraints will be validated on finalize)
+			} else
+				saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 		}
 
 		View next;
@@ -2348,9 +2362,20 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
 		case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
 			refreshCurrentView();
-			// an answer constraint was violated, so do a 'swipe' to the next
-			// question to display the proper toast(s)
-			next();
+			
+			// get constraint behavior preference value with appropriate default
+			String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+				.getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, 
+					PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
+			
+			// an answer constraint was violated, so we need to display the proper toast(s)
+			// if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the next question
+			if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE))
+				next();
+			// otherwise, we can get the proper toast(s) by saving with constraint check
+			else
+				saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
+				
 			break;
 		}
 	}

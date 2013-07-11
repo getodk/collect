@@ -251,5 +251,8 @@
 <string name="change_url_default">URL</string>
 <string name="launch_printer">Initiate Printing</string>
 <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+<string name="constraint_behavior">Constraint processing behavior</string>
+<string name="constraint_behavior_on_swipe">Validate upon forward swipe</string>
+<string name="constraint_behavior_on_finalize">Defer validation until finalized</string>
 <string name="view_change_location">View or Change Location</string>
 </resources>

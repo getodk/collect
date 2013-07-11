@@ -243,4 +243,7 @@
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Lancer l\'impression</string>
   <string name="no_printer">L\'imprimante demandée n\'est pas installée. Merci d\'installer l\'imprimante.</string>
+  <string name="constraint_behavior">Comportement pour traitement des contraintes</string>
+  <string name="constraint_behavior_on_swipe">Valider avec défilement en avant</string>
+  <string name="constraint_behavior_on_finalize">Valider avec finalisation</string>
 </resources>

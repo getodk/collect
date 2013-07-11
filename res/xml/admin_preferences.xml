@@ -97,6 +97,12 @@
             android:summary="@string/found_in_settings"
             android:title="@string/navigation" />
         <CheckBoxPreference
+            android:id="@+id/constraint_behavior"
+            android:defaultValue="true"
+            android:key="constraint_behavior"
+            android:summary="@string/found_in_settings"
+            android:title="@string/constraint_behavior" />
+        <CheckBoxPreference
             android:id="@+id/change_font_size"
             android:defaultValue="true"
             android:key="change_font_size"

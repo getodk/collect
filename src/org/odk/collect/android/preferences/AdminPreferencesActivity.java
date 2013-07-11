@@ -33,6 +33,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+/**
+ * Handles admin preferences, which are password-protectable and govern which app features and 
+ * general preferences the end user of the app will be able to see.
+ * 
+ * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior option)
+ */
 public class AdminPreferencesActivity extends PreferenceActivity {
 
     public static String ADMIN_PREFERENCES = "admin_prefs";
@@ -69,6 +75,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_AUTOSEND_NETWORK = "autosend_network";
 
     public static String KEY_NAVIGATION = "navigation";
+    public static String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
