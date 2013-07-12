@@ -60,6 +60,7 @@ public class FormController {
     private File mInstancePath;
     private FormEntryController mFormEntryController;
     private FormIndex mIndexWaitingForData = null;
+    private String mItemsetHash = null;
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
@@ -94,6 +95,18 @@ public class FormController {
     	mMediaFolder = mediaFolder;
         mFormEntryController = fec;
         mInstancePath = instancePath;
+    }
+    
+    public FormDef getFormDef() {
+        return mFormEntryController.getModel().getForm();
+    }
+    
+    public void setItemsetHash(String hash) {
+        mItemsetHash = hash;
+    }
+    
+    public String getItemsetHash() {
+    	return mItemsetHash;
     }
 
     public File getMediaFolder() {

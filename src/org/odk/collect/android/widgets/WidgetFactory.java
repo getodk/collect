@@ -77,11 +77,14 @@ public class WidgetFactory {
                         questionWidget = new BarcodeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_TEXT:
-                    	if (appearance.startsWith("printer")) {
+                    	String query = fep.getQuestion().getAdditionalAttribute(null, "query");
+                        if (query != null) {
+                            questionWidget = new ItemsetWidget(context, fep);
+                        } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
-                    	} else if (appearance.startsWith("ex:")) {
+                        } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
-                    	} else if (appearance.equals("numbers")) {
+                        } else if (appearance.equals("numbers")) {
                             questionWidget = new StringNumberWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep);

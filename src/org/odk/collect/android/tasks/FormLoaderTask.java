@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.javarosa.core.model.FormDef;
@@ -39,14 +40,17 @@ import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Background task for loading a form.
@@ -253,6 +257,42 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // Remove previous forms
         ReferenceManager._().clearSession();
 
+        // for itemsets.csv, we only check to see if the itemset file has been
+        // updated
+        File csv = new File(formMediaDir.getAbsolutePath() + "/itemsets.csv");
+        String csvmd5 = null;
+        if (csv.exists()) {
+            csvmd5 = FileUtils.getMd5Hash(csv);
+            boolean readFile = false;
+            ItemsetDbAdapter ida = new ItemsetDbAdapter();
+            ida.open();
+            // get the database entry (if exists) for this itemsets.csv, based
+            // on the path
+            Cursor c = ida.getItemsets(csv.getAbsolutePath());
+            if (c != null) {
+                if (c.getCount() == 1) {
+                    c.moveToFirst(); // should be only one, ever, if any
+                    String oldmd5 = c.getString(c.getColumnIndex("hash"));
+                    if (oldmd5.equals(csvmd5)) {
+                        // they're equal, do nothing
+                    } else {
+                        // the csv has been updated, delete the old entries
+                        ida.dropTable(oldmd5);
+                        // and read the new
+                        readFile = true;
+                    }
+                } else {
+                    // new csv, add it
+                    readFile = true;
+                }
+                c.close();
+            }
+            ida.close();
+            if (readFile) {
+                readCSV(csv, csvmd5);
+            }
+        }
+        
         // This should get moved to the Application Class
         if (ReferenceManager._().getFactories().length == 0) {
             // this is /sdcard/odk
@@ -278,6 +318,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formPath = null;
 
         FormController fc = new FormController(formMediaDir, fec, mInstancePath == null ? null : new File(mInstancePath));
+        if (csvmd5 != null) {
+            fc.setItemsetHash(csvmd5);
+        }
         if ( mXPath != null ) {
         	// we are resuming after having terminated -- set index to this position...
         	FormIndex idx = fc.getIndexFromXPath(mXPath);
@@ -456,5 +499,44 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 		this.resultCode = resultCode;
 		this.intent = intent;
 	}
+	
+	private void readCSV(File csv, String formHash) {
+
+        CSVReader reader;
+        ItemsetDbAdapter ida = new ItemsetDbAdapter();
+        ida.open();
+
+        try {
+            reader = new CSVReader(new FileReader(csv));
+
+            String[] nextLine;
+            String[] columnHeaders = null;
+            int lineNumber = 0;
+            while ((nextLine = reader.readNext()) != null) {
+                lineNumber++;
+                if (lineNumber == 1) {
+                    // first line of csv is column headers
+                    columnHeaders = nextLine;
+                    ida.createTable(formHash, columnHeaders,
+                            csv.getAbsolutePath());
+                    continue;
+                }
+                // add the rest of the lines to the specified database
+                // nextLine[] is an array of values from the line
+                // System.out.println(nextLine[4] + "etc...");
+                if (lineNumber == 2) {
+                    // start a transaction for the inserts
+                    ida.beginTransaction();
+                }
+                ida.addRow(formHash, columnHeaders, nextLine);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            ida.commit();
+            ida.close();
+        }
+    }
 
 }
