@@ -12,7 +12,7 @@
 		android:gravity="center_horizontal"
 		android:padding="5dip"
 		android:background="#BF000000">
-		
+
 		<TextView
 			android:id="@+id/location_status"
 			android:text="@string/please_wait_long"
@@ -21,8 +21,8 @@
 			android:layout_height="wrap_content" />
 		<fragment
         	android:id="@+id/map"
-        	android:layout_width="match_parent"
-        	android:layout_height="match_parent"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
         	class="com.google.android.gms.maps.SupportMapFragment" />
 	</LinearLayout>
 	<LinearLayout
@@ -34,7 +34,7 @@
 			android:paddingBottom="60dip">
 			<Button
 				android:id="@+id/cancel_location"
-				android:drawableRight="@drawable/ic_menu_back"
+				android:drawableRight="@+drawable/ic_menu_close_clear_cancel"
 				android:padding="15dp"
 				android:layout_margin="5dp"
 				android:layout_width="wrap_content"
@@ -42,13 +42,21 @@
 				android:layout_weight="1" />
 			<Button
 				android:id="@+id/accept_location"
-				android:drawableRight="@android:drawable/ic_menu_save"
+				android:drawableRight="@+drawable/ic_menu_save"
 				android:padding="15dp"
 				android:layout_margin="5dp"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
 				android:layout_weight="1" />
 			<Button
+				android:id="@+id/reload_location"
+				android:drawableRight="@+drawable/ic_menu_refresh"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1" />
+						<Button
 				android:id="@+id/show_location"
 				android:drawableRight="@drawable/ic_menu_mylocation"
 				android:padding="15dp"
@@ -59,7 +67,7 @@
 				android:visibility="gone" />
 			<Button
 				android:id="@+id/refresh_location"
-				android:drawableRight="@drawable/ic_menu_refresh"
+				android:drawableRight="@+drawable/ic_menu_refresh"
 				android:padding="15dp"
 				android:layout_margin="5dp"
 				android:layout_width="wrap_content"
@@ -69,5 +77,5 @@
 		</LinearLayout>
 </FrameLayout>
 <!-- android:text="@string/cancel"
-android:text="@string/accept_location" 
+android:text="@string/accept_location"
 android:text="@string/go_to_location" -->
