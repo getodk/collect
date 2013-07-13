@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -34,7 +34,7 @@ import android.widget.TextView;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
- * 
+ *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
@@ -43,11 +43,11 @@ public class InstanceChooserList extends ListActivity {
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // must be at the beginning of any activity that can be called from an external intent
         try {
             Collect.createODKDirs();
@@ -55,12 +55,12 @@ public class InstanceChooserList extends ListActivity {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
-        
+
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
-        
+
         String selection = InstanceColumns.STATUS + " != ?";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
         String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
@@ -78,7 +78,7 @@ public class InstanceChooserList extends ListActivity {
             new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
         setListAdapter(instances);
     }
-    
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -108,7 +108,7 @@ public class InstanceChooserList extends ListActivity {
             // marked as complete, it was determined that it could be edited
             // later.
             String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-            String strCanEditWhenComplete = 
+            String strCanEditWhenComplete =
                 c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
 
             boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
@@ -123,19 +123,19 @@ public class InstanceChooserList extends ListActivity {
         }
         finish();
     }
-	
+
     @Override
     protected void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
+		Collect.getInstance().getActivityLogger().logOnStart(this);
     }
-    
+
     @Override
     protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
+		Collect.getInstance().getActivityLogger().logOnStop(this);
     	super.onStop();
     }
-    
+
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
 
@@ -146,8 +146,8 @@ public class InstanceChooserList extends ListActivity {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON1:
-                        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", 
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog",
                         		shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();

@@ -315,7 +315,7 @@ public class MainMenuActivity extends Activity {
 
 		CompatibilityUtils.setShowAsAction(
     		menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-				.setIcon(android.R.drawable.ic_menu_preferences),
+				.setIcon(R.drawable.ic_menu_preferences),
 			MenuItem.SHOW_AS_ACTION_NEVER);
 		CompatibilityUtils.setShowAsAction(
     		menu.add(0, MENU_ADMIN, 0, R.string.admin_preferences)
@@ -364,7 +364,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
-				case DialogInterface.BUTTON1:
+				case DialogInterface.BUTTON_POSITIVE:
 					Collect.getInstance()
 							.getActivityLogger()
 							.logAction(this, "createErrorDialog",

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -39,7 +39,7 @@ import android.widget.Toast;
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
  * directory.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -76,7 +76,7 @@ public class DataManagerList extends ListActivity implements
 				}
 			}
 		});
-		
+
 		mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -120,16 +120,16 @@ public class DataManagerList extends ListActivity implements
 
 		mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
 	}
-	
+
     @Override
     protected void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
+		Collect.getInstance().getActivityLogger().logOnStart(this);
     }
-    
+
     @Override
     protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
+		Collect.getInstance().getActivityLogger().logOnStop(this);
     	super.onStop();
     }
 
@@ -198,11 +198,11 @@ public class DataManagerList extends ListActivity implements
 			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
-				case DialogInterface.BUTTON1: // delete
+				case DialogInterface.BUTTON_POSITIVE: // delete
 			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "delete");
 					deleteSelectedInstances();
 					break;
-				case DialogInterface.BUTTON2: // do nothing
+				case DialogInterface. BUTTON_NEGATIVE: // do nothing
 			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "cancel");
 					break;
 				}
@@ -246,9 +246,9 @@ public class DataManagerList extends ListActivity implements
 			mSelected.remove(k);
 		else
 			mSelected.add(k);
-		
+
 		Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", Long.toString(k));
-		
+
 		mDeleteButton.setEnabled(!(mSelected.size() == 0));
 	}
 

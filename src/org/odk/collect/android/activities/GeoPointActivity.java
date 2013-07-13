@@ -172,11 +172,11 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
-                        case DialogInterface.BUTTON1:
+                        case DialogInterface.BUTTON_POSITIVE:
                             Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
                             returnLocation();
                             break;
-                        case DialogInterface.BUTTON2:
+                        case DialogInterface. BUTTON_NEGATIVE:
                             Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
                             mLocation = null;
                             finish();
@@ -191,9 +191,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
         mLocationDialog.setIcon(android.R.drawable.ic_dialog_info);
         mLocationDialog.setTitle(getString(R.string.getting_location));
         mLocationDialog.setMessage(getString(R.string.please_wait_long));
-        mLocationDialog.setButton(DialogInterface.BUTTON1, getString(R.string.accept_location),
+        mLocationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.accept_location),
             geopointButtonListener);
-        mLocationDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel_location),
+        mLocationDialog.setButton(DialogInterface. BUTTON_NEGATIVE, getString(R.string.cancel_location),
             geopointButtonListener);
     }
 

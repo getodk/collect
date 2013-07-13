@@ -408,7 +408,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON1: // ok
+                    case DialogInterface.BUTTON_POSITIVE: // ok
                     	Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "OK");
                         // always exit this activity since it has no interface
                         mAlertShowing = false;

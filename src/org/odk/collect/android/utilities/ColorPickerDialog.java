@@ -405,7 +405,7 @@ public class ColorPickerDialog extends Dialog {
 
         sv.addView(new ColorPickerView(getContext(), l, mInitialColor,
 				mDefaultColor), new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-        hsv.addView(sv, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        hsv.addView(sv, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
         setContentView(hsv, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
         setCanceledOnTouchOutside(true);

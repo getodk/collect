@@ -64,7 +64,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
@@ -754,7 +753,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 		CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-						.setIcon(android.R.drawable.ic_menu_preferences),
+						.setIcon(R.drawable.ic_menu_preferences),
 				MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
@@ -1476,7 +1475,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				FormController formController = Collect.getInstance()
 						.getFormController();
 				switch (i) {
-				case DialogInterface.BUTTON1: // yes, repeat
+				case DialogInterface.BUTTON_POSITIVE: // yes, repeat
 					Collect.getInstance()
 							.getActivityLogger()
 							.logInstanceAction(this, "createRepeatDialog",
@@ -1501,7 +1500,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						refreshCurrentView();
 					}
 					break;
-				case DialogInterface.BUTTON2: // no, no repeat
+				case DialogInterface. BUTTON_NEGATIVE: // no, no repeat
 					Collect.getInstance()
 							.getActivityLogger()
 							.logInstanceAction(this, "createRepeatDialog",
@@ -1551,7 +1550,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
-				case DialogInterface.BUTTON1:
+				case DialogInterface.BUTTON_POSITIVE:
 					Collect.getInstance().getActivityLogger()
 							.logInstanceAction(this, "createErrorDialog", "OK");
 					if (shouldExit) {
@@ -1593,7 +1592,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				FormController formController = Collect.getInstance()
 						.getFormController();
 				switch (i) {
-				case DialogInterface.BUTTON1: // yes
+				case DialogInterface.BUTTON_POSITIVE: // yes
 					Collect.getInstance()
 							.getActivityLogger()
 							.logInstanceAction(this,
@@ -1601,7 +1600,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					formController.deleteRepeat();
 					showPreviousView();
 					break;
-				case DialogInterface.BUTTON2: // no
+				case DialogInterface. BUTTON_NEGATIVE: // no
 					Collect.getInstance()
 							.getActivityLogger()
 							.logInstanceAction(this,
@@ -1827,7 +1826,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			@Override
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
-				case DialogInterface.BUTTON1: // yes
+				case DialogInterface.BUTTON_POSITIVE: // yes
 					Collect.getInstance()
 							.getActivityLogger()
 							.logInstanceAction(this, "createClearDialog",
@@ -1835,7 +1834,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					clearAnswer(qw);
 					saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 					break;
-				case DialogInterface.BUTTON2: // no
+				case DialogInterface. BUTTON_NEGATIVE: // no
 					Collect.getInstance()
 							.getActivityLogger()
 							.logInstanceAction(this, "createClearDialog",

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -39,7 +39,7 @@ import android.widget.TextView;
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
  * selected form for use by {@link MainMenuActivity}.
- * 
+ *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
@@ -156,20 +156,20 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         super.onPause();
     }
 
-	
+
     @Override
     protected void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
+		Collect.getInstance().getActivityLogger().logOnStart(this);
     }
-    
+
     @Override
     protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
+		Collect.getInstance().getActivityLogger().logOnStop(this);
     	super.onStop();
     }
-    
-    
+
+
     /**
      * Called by DiskSyncTask when the task is finished
      */
@@ -184,7 +184,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     /**
      * Creates a dialog with the given message. Will exit the activity when the user preses "ok" if
      * shouldExit is set to true.
-     * 
+     *
      * @param errorMsg
      * @param shouldExit
      */
@@ -199,8 +199,8 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON1:
-                    	Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", 
+                    case DialogInterface.BUTTON_POSITIVE:
+                    	Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog",
                     			shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();

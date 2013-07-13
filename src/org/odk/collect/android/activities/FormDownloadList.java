@@ -361,7 +361,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
         CompatibilityUtils.setShowAsAction(
     		menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-        		.setIcon(android.R.drawable.ic_menu_preferences),
+        		.setIcon(R.drawable.ic_menu_preferences),
         	MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
@@ -638,7 +638,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON1: // ok
+                    case DialogInterface.BUTTON_POSITIVE: // ok
                         Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "OK");
                         // just close the dialog
                         mAlertShowing = false;

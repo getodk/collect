@@ -241,11 +241,11 @@ public class InstanceUploaderList extends ListActivity implements
 
 		CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-						.setIcon(android.R.drawable.ic_menu_preferences),
+						.setIcon(R.drawable.ic_menu_preferences),
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-						.setIcon(android.R.drawable.ic_menu_manage),
+						.setIcon(R.drawable.ic_menu_manage),
 				MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
