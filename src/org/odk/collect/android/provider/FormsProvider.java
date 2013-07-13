@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
@@ -484,6 +485,20 @@ public class FormsProvider extends ContentProvider {
 						deleteFileOrDir(formFilePath);
 						deleteFileOrDir(c.getString(c
 							.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+						
+						try {
+                            // get rid of the old tables
+                            ItemsetDbAdapter ida = new ItemsetDbAdapter();
+                            ida.open();
+                            ida.delete(c.getString(c
+                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
+                                    + "/itemsets.csv");
+                            ida.close();
+                        } catch (Exception e) {
+                            // if something else is accessing the provider this may not exist
+                            // so catch it and move on.
+                        }
+						 
 					} while (c.moveToNext());
 				}
 			} finally {
