@@ -19,18 +19,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
-import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -38,7 +34,6 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -48,7 +43,7 @@ import android.widget.TextView;
 
 /**
  * The most basic widget that allows for entry of any text.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -171,7 +166,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 error.setText("XPathParser Exception:  \"" + arguments.get(i) + "\"");
                 addView(error);
                 break;
-            } 
+            }
 
             if (xpr != null) {
                 FormDef form = Collect.getInstance().getFormController().getFormDef();
@@ -179,7 +174,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 EvaluationContext ec = new EvaluationContext(form.exprEvalContext,
                         mTreeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
-                
+
                 if (value instanceof XPathNodeset) {
                     XPathNodeset xpn = (XPathNodeset) value;
                     value = xpn.getValAt(0);
