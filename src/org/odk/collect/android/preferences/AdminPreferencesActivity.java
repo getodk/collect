@@ -34,9 +34,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 /**
- * Handles admin preferences, which are password-protectable and govern which app features and 
+ * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
- * 
+ *
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior option)
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
@@ -101,7 +101,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 		CompatibilityUtils.setShowAsAction(
     		menu.add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
 				.setIcon(R.drawable.ic_menu_save),
-			MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
 
