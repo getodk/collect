@@ -79,7 +79,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		boolean requestV2 = false;
 		boolean requestMaps = false;
-		if ( mAppearance != null && mAppearance.equalsIgnoreCase("mapsV2") ) {
+		if ( mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") ) {
 			requestV2 = true;
 			requestMaps = true;
 		}
