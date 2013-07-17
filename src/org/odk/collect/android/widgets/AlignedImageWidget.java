@@ -54,6 +54,7 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author mitchellsundt@gmail.com
+ * @author Mitchell Tyler Lee
  */
 public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget {
     private static final String ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT = "org.opendatakit.camera.TakePicture";
