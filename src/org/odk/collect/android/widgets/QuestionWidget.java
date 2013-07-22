@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -42,15 +42,15 @@ public abstract class QuestionWidget extends LinearLayout {
     private final static String t = "QuestionWidget";
 
 	private static int idGenerator = 1211322;
-	
+
 	/**
-	 * Generate a unique ID to keep Android UI happy when the screen orientation 
+	 * Generate a unique ID to keep Android UI happy when the screen orientation
 	 * changes.
-	 * 
+	 *
 	 * @return
 	 */
 	public static int newUniqueId() {
-		return ++idGenerator;		
+		return ++idGenerator;
 	}
 
     private LinearLayout.LayoutParams mLayout;
@@ -99,7 +99,7 @@ public abstract class QuestionWidget extends LinearLayout {
 
    	// http://code.google.com/p/android/issues/detail?id=8488
     private void recycleDrawablesRecursive(ViewGroup viewGroup, List<ImageView> images) {
-        
+
         int childCount = viewGroup.getChildCount();
         for(int index = 0; index < childCount; index++)
         {
@@ -112,7 +112,7 @@ public abstract class QuestionWidget extends LinearLayout {
         }
         viewGroup.destroyDrawingCache();
     }
-    
+
    	// http://code.google.com/p/android/issues/detail?id=8488
     public void recycleDrawables() {
     	List<ImageView> images = new ArrayList<ImageView>();
@@ -131,7 +131,7 @@ public abstract class QuestionWidget extends LinearLayout {
     		}
     	}
     }
-    
+
     // Abstract methods
     public abstract IAnswerData getAnswer();
 
@@ -180,7 +180,7 @@ public abstract class QuestionWidget extends LinearLayout {
         // Wrap to the size of the parent view
         mQuestionText.setHorizontallyScrolling(false);
 
-        if (p.getLongText() == null) {
+        if (p.getLongText() == null || p.getLongText().length() == 0) {
             mQuestionText.setVisibility(GONE);
         }
 

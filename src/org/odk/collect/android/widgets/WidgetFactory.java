@@ -151,10 +151,10 @@ public class WidgetFactory {
                 // }
                 else if (appearance.equals("quick")) {
                     questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
-                } else if (appearance.equals("list")) {
-                    questionWidget = new ListWidget(context, fep, true);
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
+                } else if (appearance.equals("list")) {
+                    questionWidget = new ListWidget(context, fep, true);
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else {
