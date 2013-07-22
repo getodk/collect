@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -20,11 +20,19 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.application.Collect;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
@@ -33,7 +41,7 @@ import java.util.Date;
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
  * exist.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -43,6 +51,8 @@ public class DateWidget extends QuestionWidget {
     private DatePicker.OnDateChangedListener mDateListener;
     private boolean hideDay = false;
     private boolean hideMonth = false;
+    private boolean showCalendar = false;
+	private HorizontalScrollView scrollView = null;
 
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
@@ -52,12 +62,9 @@ public class DateWidget extends QuestionWidget {
         mDatePicker.setId(QuestionWidget.newUniqueId());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
-        
+
         hideDayFieldIfNotInFormat(prompt);
 
-        // If there's an answer, use it.
-        setAnswer();
-        
         mDateListener = new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
@@ -75,13 +82,13 @@ public class DateWidget extends QuestionWidget {
                     // endless loop.
                     if (day > max) {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
-                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
+                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged",
                         			String.format("%1$04d-%2$02d-%3$02d",year, month, max), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, max);
                         }
                     } else {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
-                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
+                        	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged",
                         			String.format("%1$04d-%2$02d-%3$02d",year, month, day), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, day);
                         }
@@ -91,17 +98,74 @@ public class DateWidget extends QuestionWidget {
         };
 
         setGravity(Gravity.LEFT);
-        addView(mDatePicker);
+        if ( showCalendar ) {
+        	scrollView = new HorizontalScrollView(context);
+        	LinearLayout ll = new LinearLayout(context);
+        	ll.addView(mDatePicker);
+        	ll.setPadding(10, 10, 10, 10);
+        	scrollView.addView(ll);
+        	addView(scrollView);
+        } else {
+        	addView(mDatePicker);
+        }
+
+        // If there's an answer, use it.
+        setAnswer();
     }
 
-    private void hideDayFieldIfNotInFormat(FormEntryPrompt prompt) {
+    /**
+     * Shared between DateWidget and DateTimeWidget.
+     * There are extra appearance settings that do not apply for dateTime...
+     * TODO: move this into utilities or base class?
+     *
+     * @param prompt
+     */
+	@SuppressLint("NewApi")
+	private void hideDayFieldIfNotInFormat(FormEntryPrompt prompt) {
         String appearance = prompt.getQuestion().getAppearanceAttr();
-        if ( appearance == null ) return;
-        
-        if ( "month-year".equals(appearance) ) {
+        if ( appearance == null ) {
+        	if ( Build.VERSION.SDK_INT >= 11 ) {
+        		showCalendar = true;
+	        	this.mDatePicker.setCalendarViewShown(true);
+	        	if ( Build.VERSION.SDK_INT >= 12 ) {
+	        		CalendarView cv = this.mDatePicker.getCalendarView();
+		        	cv.setShowWeekNumber(false);
+	        	}
+	        	this.mDatePicker.setSpinnersShown(true);
+	        	hideDay = true;
+	        	hideMonth = false;
+        	} else {
+        		return;
+        	}
+        } else if ( "month-year".equals(appearance) ) {
         	hideDay = true;
+        	if ( Build.VERSION.SDK_INT >= 11 ) {
+	        	this.mDatePicker.setCalendarViewShown(false);
+	        	this.mDatePicker.setSpinnersShown(true);
+        	}
         } else if ( "year".equals(appearance) ) {
         	hideMonth = true;
+        	if ( Build.VERSION.SDK_INT >= 11 ) {
+	        	this.mDatePicker.setCalendarViewShown(false);
+	        	this.mDatePicker.setSpinnersShown(true);
+        	}
+        } else if ("no-calendar".equals(appearance) ) {
+        	if ( Build.VERSION.SDK_INT >= 11 ) {
+	        	this.mDatePicker.setCalendarViewShown(false);
+	        	this.mDatePicker.setSpinnersShown(true);
+        	}
+        } else {
+        	if ( Build.VERSION.SDK_INT >= 11 ) {
+        		showCalendar = true;
+	        	this.mDatePicker.setCalendarViewShown(true);
+	        	if ( Build.VERSION.SDK_INT >= 12 ) {
+	        		CalendarView cv = this.mDatePicker.getCalendarView();
+	        		cv.setShowWeekNumber(false);
+	        	}
+	        	this.mDatePicker.setSpinnersShown(true);
+	        	hideDay = true;
+	        	hideMonth = false;
+        	}
         }
 
         if ( hideMonth || hideDay ) {
@@ -161,10 +225,13 @@ public class DateWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
+    	if ( showCalendar ) {
+    		scrollView.clearChildFocus(mDatePicker);
+    	}
     	clearFocus();
         DateTime ldt =
-            new DateTime(mDatePicker.getYear(), hideMonth ? 1 : mDatePicker.getMonth() + 1,
-                    (hideMonth || hideDay) ? 1 : mDatePicker.getDayOfMonth(), 0, 0);
+            new DateTime(mDatePicker.getYear(), (!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1,
+                    (!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth(), 0, 0);
         // DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
         return new DateData(ldt.toDate());
     }
