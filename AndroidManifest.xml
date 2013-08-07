@@ -10,7 +10,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.odk.collect.android"
-    android:versionCode="1033"
+    android:versionCode="1034"
     android:versionName="1.4" >
 
     <uses-feature android:name="android.hardware.location" android:required="false" />
