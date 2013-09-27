@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -39,7 +39,7 @@ import java.util.HashMap;
 
 /**
  * Static methods used for common file operations.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FileUtils {
@@ -54,7 +54,7 @@ public class FileUtils {
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
 
-    
+
     public static boolean createFolder(String path) {
         boolean made = true;
         File dir = new File(path);
@@ -217,6 +217,7 @@ public class FileUtils {
                 FileChannel dst = new FileOutputStream(destFile).getChannel();
                 dst.transferFrom(src, 0, src.size());
                 src.close();
+                dst.force(false);
                 dst.close();
             } catch (FileNotFoundException e) {
                 Log.e(t, "FileNotFoundExeception while copying audio");
@@ -230,7 +231,7 @@ public class FileUtils {
         }
 
     }
-    
+
     public static HashMap<String, String> parseXML(File xmlFile) {
         HashMap<String, String> fields = new HashMap<String, String>();
         InputStream is;
@@ -264,16 +265,16 @@ public class FileUtils {
 
             String xforms = "http://www.w3.org/2002/xforms";
             String html = doc.getRootElement().getNamespace();
-            
+
             Element head = doc.getRootElement().getElement(html, "head");
             Element title = head.getElement(html, "title");
             if (title != null) {
                 fields.put(TITLE, XFormParser.getXMLText(title, true));
-            } 
-            
+            }
+
             Element model = getChildElement(head, "model");
             Element cur = getChildElement(model,"instance");
-            
+
             int idx = cur.getChildCount();
             int i;
             for (i = 0; i < idx; ++i) {
@@ -288,7 +289,7 @@ public class FileUtils {
                 cur = cur.getElement(i); // this is the first data element
                 String id = cur.getAttributeValue(null, "id");
                 String xmlns = cur.getNamespace();
-                
+
                 String version = cur.getAttributeValue(null, "version");
                 String uiVersion = cur.getAttributeValue(null, "uiVersion");
                 if ( uiVersion != null ) {
@@ -307,7 +308,7 @@ public class FileUtils {
                 fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
                 String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
                 fields.put(BASE64_RSA_PUBLIC_KEY,
-                  (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0) 
+                  (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
                   ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
                 Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
