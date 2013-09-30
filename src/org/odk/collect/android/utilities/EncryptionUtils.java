@@ -21,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -29,6 +28,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -105,6 +105,7 @@ public class EncryptionUtils {
 		private int ivCounter = 0;
 		public final StringBuilder elementSignatureSource = new StringBuilder();
 		public final Base64Wrapper wrapper;
+		private boolean isNotBouncyCastle = false;
 
 		EncryptedFormInformation(String formId, String formVersion,
 				InstanceMetadata instanceMetadata, PublicKey rsaPublicKey, Base64Wrapper wrapper) {
@@ -264,9 +265,22 @@ public class EncryptionUtils {
 			++ivSeedArray[ivCounter % ivSeedArray.length];
 			++ivCounter;
 			IvParameterSpec baseIv = new IvParameterSpec(ivSeedArray);
-			Cipher c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
+			Cipher c = null;
+			try {
+				c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
+				isNotBouncyCastle = false;
+			} catch (NoSuchProviderException e) {
+				Log.e(t, "Unable to obtain BouncyCastle provider! Decryption may fail!");
+				e.printStackTrace();
+				isNotBouncyCastle = true;
+				c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
+			}
 			c.init(Cipher.ENCRYPT_MODE, symmetricKey, baseIv);
 			return c;
+		}
+
+		public boolean isNotBouncyCastle() {
+			return isNotBouncyCastle;
 		}
 	}
 
@@ -396,6 +410,24 @@ public class EncryptionUtils {
 			return null;
 		}
 
+		// For now, prevent encryption if the BouncyCastle implementation is not present.
+		// https://code.google.com/p/opendatakit/issues/detail?id=918
+		try {
+			Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			Log.e(t, "No BouncyCastle implementation of symmetric algorithm!");
+			return null;
+		} catch (NoSuchProviderException e) {
+			e.printStackTrace();
+			Log.e(t, "No BouncyCastle provider for implementation of symmetric algorithm!");
+			return null;
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+			Log.e(t, "No BouncyCastle provider for padding implementation of symmetric algorithm!");
+			return null;
+		}
+
 		return new EncryptedFormInformation(formId, formVersion, instanceMetadata,
 				pk, wrapper);
 	}
@@ -427,7 +459,7 @@ public class EncryptionUtils {
 				len = fin.read(buffer);
 			}
 			fin.close(); fin = null;
-			cout.close(); fout = null;
+			cout.flush(); cout.close(); fout = null;
 			Log.i(t,
 					"Encrpyted:" + file.getName() + " -> "
 							+ encryptedFile.getName());
