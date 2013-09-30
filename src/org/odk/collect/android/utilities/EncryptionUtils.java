@@ -270,7 +270,7 @@ public class EncryptionUtils {
 				c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
 				isNotBouncyCastle = false;
 			} catch (NoSuchProviderException e) {
-				Log.e(t, "Unable to obtain BouncyCastle provider! Decryption may fail!");
+				Log.w(t, "Unable to obtain BouncyCastle provider! Decryption may fail!");
 				e.printStackTrace();
 				isNotBouncyCastle = true;
 				c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
