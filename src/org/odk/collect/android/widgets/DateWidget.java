@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
+import java.lang.reflect.Field;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -24,19 +28,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-
-import java.lang.reflect.Field;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
