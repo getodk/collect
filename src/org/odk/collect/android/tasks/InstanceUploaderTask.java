@@ -114,7 +114,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         } else {
 
             // if https then enable preemptive basic auth...
-            if ( u.getScheme().equals("https") ) {
+            if ( u.getScheme() != null && u.getScheme().equals("https") ) {
             	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
             }
 
