@@ -226,9 +226,14 @@ public class MainMenuActivity extends Activity {
 
 		mFinalizedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
 				selection, selectionArgs, null);
+		if ( mFinalizedCursor == null ) {
+			createErrorDialog("ODK reports :: unable to access InstanceProvider", EXIT);
+			return;
+		}
 		startManagingCursor(mFinalizedCursor);
 		mCompletedCount = mFinalizedCursor.getCount();
 		mFinalizedCursor.registerContentObserver(mContentObserver);
+
 
 		// count for finalized instances
 		String selectionSaved = InstanceColumns.STATUS + "=?";
@@ -236,8 +241,12 @@ public class MainMenuActivity extends Activity {
 
 		mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
 				selectionSaved, selectionArgsSaved, null);
+		if ( mSavedCursor == null ) {
+			createErrorDialog("ODK reports :: unable to access InstanceProvider", EXIT);
+			return;
+		}
 		startManagingCursor(mSavedCursor);
-		mSavedCount = mFinalizedCursor.getCount();
+		mSavedCount = mSavedCursor.getCount();
 		// don't need to set a content observer because it can't change in the
 		// background
 
