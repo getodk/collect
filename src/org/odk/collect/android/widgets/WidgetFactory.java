@@ -58,10 +58,12 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_DECIMAL:
                     	if ( appearance.startsWith("ex:") ) {
-                    		questionWidget = new ExDecimalWidget(context, fep);
-                    	} else {
-                    		questionWidget = new DecimalWidget(context, fep);
-                    	}
+                            questionWidget = new ExDecimalWidget(context, fep);
+                        } else if (appearance.equals("bearing")) {
+                            questionWidget = new BearingWidget(context, fep);
+                        } else {
+                            questionWidget = new DecimalWidget(context, fep);
+                        }
                         break;
                     case Constants.DATATYPE_INTEGER:
                     	if ( appearance.startsWith("ex:") ) {
@@ -86,6 +88,8 @@ public class WidgetFactory {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.equals("numbers")) {
                             questionWidget = new StringNumberWidget(context, fep);
+                        } else if (appearance.equals("url")) {
+                            questionWidget = new UrlWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep);
                         }
