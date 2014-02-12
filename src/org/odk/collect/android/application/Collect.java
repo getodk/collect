@@ -23,6 +23,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -63,6 +64,7 @@ public class Collect extends Application {
     private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
     private ActivityLogger mActivityLogger;
     private FormController mFormController = null;
+    private ExternalDataManager externalDataManager;
 
     private static Collect singleton = null;
 
@@ -80,6 +82,14 @@ public class Collect extends Application {
 
     public void setFormController(FormController controller) {
         mFormController = controller;
+    }
+
+    public ExternalDataManager getExternalDataManager() {
+        return externalDataManager;
+    }
+
+    public void setExternalDataManager(ExternalDataManager externalDataManager) {
+        this.externalDataManager = externalDataManager;
     }
 
     public static int getQuestionFontsize() {

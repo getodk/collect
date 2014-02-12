@@ -25,8 +25,11 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
@@ -99,7 +102,14 @@ public class GridMultiWidget extends QuestionWidget {
     @SuppressWarnings("unchecked")
     public GridMultiWidget(Context context, FormEntryPrompt prompt, int numColumns) {
         super(context, prompt);
-        mItems = prompt.getSelectChoices();
+
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
         mPrompt = prompt;
 
         selected = new boolean[mItems.size()];
@@ -150,8 +160,12 @@ public class GridMultiWidget extends QuestionWidget {
             }
             // Read the image sizes and set maxColumnWidth. This allows us to make sure all of our
             // columns are going to fit
-            String imageURI =
-                prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
+            String imageURI;
+            if (mItems.get(i) instanceof ExternalSelectChoice) {
+                imageURI = ((ExternalSelectChoice) sc).getImage();
+            } else {
+                imageURI = prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
+            }
 
             String errorMsg = null;
             if (imageURI != null) {

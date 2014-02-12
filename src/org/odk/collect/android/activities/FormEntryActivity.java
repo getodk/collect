@@ -198,6 +198,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private ImageButton mNextButton;
 	private ImageButton mBackButton;
 
+    private String stepMessage = "";
+
 	enum AnimationType {
 		LEFT, RIGHT, FADE
 	}
@@ -1738,6 +1740,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 									.logInstanceAction(this,
 											"createQuitDialog",
 											"discardAndExit");
+
+                            // close all open databases of external data.
+                            Collect.getInstance().getExternalDataManager().close();
+
 							removeTempInstance();
 							finishReturnInstance();
 							break;
@@ -2241,6 +2247,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		Collect.getInstance().setFormController(formController);
 		CompatibilityUtils.invalidateOptionsMenu(this);
 
+        Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
+
 		// Set the language if one has already been set in the past
 		String[] languageTest = formController.getLanguages();
 		if (languageTest != null) {
@@ -2385,6 +2393,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			break;
 		}
 	}
+
+    @Override
+    public void onProgressStep(String stepMessage) {
+        this.stepMessage = stepMessage;
+        if (mProgressDialog != null) {
+            mProgressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        }
+    }
 
 	/**
 	 * Attempts to save an answer to the specified index.

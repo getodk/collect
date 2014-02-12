@@ -23,7 +23,10 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -50,7 +53,13 @@ public class SelectOneWidget extends QuestionWidget implements
 	public SelectOneWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 
-		mItems = prompt.getSelectChoices();
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
 		buttons = new ArrayList<RadioButton>();
 
 		// Layout holds the vertical list of buttons
@@ -83,9 +92,12 @@ public class SelectOneWidget extends QuestionWidget implements
 				audioURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
 						FormEntryCaption.TEXT_FORM_AUDIO);
 
-				String imageURI = null;
-				imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-						FormEntryCaption.TEXT_FORM_IMAGE);
+                String imageURI;
+                if (mItems.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                } else {
+                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                }
 
 				String videoURI = null;
 				videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),

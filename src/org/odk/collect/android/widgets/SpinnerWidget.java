@@ -21,6 +21,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
@@ -37,6 +38,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 /**
  * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a spinner, wherein
@@ -55,7 +57,14 @@ public class SpinnerWidget extends QuestionWidget {
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mItems = prompt.getSelectChoices();
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
+
         spinner = new Spinner(context);
         choices = new String[mItems.size()+1];
         for (int i = 0; i < mItems.size(); i++) {
