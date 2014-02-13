@@ -276,6 +276,11 @@
     <string name="ext_import_csv_missing_error">External data for %1$s has not been imported. Perhaps you forgot to include the %2$s.csv file with your form?</string>
     <string name="ext_search_generic_error">Syntax error in search() function: %s</string>
     <string name="ext_assign_value_error">Cannot assign the value at \'%s\'.</string>
+    <string name="fs_delete_media_path_if_file_error">Could not delete \'%s\'. Please delete the file manually and re-download the form.</string>
+    <string name="fs_create_media_folder_error">Could not create media folder \'%s\'.</string>
+    <string name="fs_create_folder_error">Collect reports: Cannot create directory: %s</string>
+    <string name="fs_create_folder_is_file_error">Collect reports: \'%s\' exists, but is not a directory.</string>
+    <string name="fs_file_copy_error">Could not copy \'%1$s\' over \'%2$s\'. Reason: %3$s</string>
     <string name="survey_loading_reading_form_message">Reading form definition…</string>
     <string name="survey_loading_reading_data_message">Reading survey data…</string>
     <string name="survey_loading_reading_csv_message">Reading CSV files…</string>
