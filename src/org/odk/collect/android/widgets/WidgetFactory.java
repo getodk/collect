@@ -122,25 +122,28 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                if (appearance.contains("compact")) {
+								// SurveyCTO-revised support for dynamic select content (from .csv files)
+								// consider traditional ODK appearance to be first word in appearance string
+                if (appearance.startsWith("compact") || appearance.startsWith("quickcompact")) {
                     int numColumns = -1;
                     try {
-                    	int idx = appearance.indexOf("-");
+                    	String firstWord = appearance.split("\\s+")[0];
+                    	int idx = firstWord.indexOf("-");
                     	if ( idx != -1 ) {
                     		numColumns =
-                    				Integer.parseInt(appearance.substring(idx + 1));
+                    				Integer.parseInt(firstWord.substring(idx + 1));
                     	}
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
                         Log.e("WidgetFactory", "Exception parsing numColumns");
                     }
 
-                    if (appearance.contains("quick")) {
+                    if (appearance.startsWith("quick")) {
                         questionWidget = new GridWidget(context, fep, numColumns, true);
                     } else {
                         questionWidget = new GridWidget(context, fep, numColumns, false);
                     }
-                } else if (appearance.equals("minimal")) {
+                } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 }
                 // else if (appearance != null && appearance.contains("autocomplete")) {
@@ -154,7 +157,7 @@ public class WidgetFactory {
                 // questionWidget = new AutoCompleteWidget(context, fep, filterType);
                 //
                 // }
-                else if (appearance.equals("quick")) {
+                else if (appearance.startsWith("quick")) {
                     questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
@@ -167,13 +170,16 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                if (appearance.contains("compact")) {
+								// SurveyCTO-revised support for dynamic select content (from .csv files)
+								// consider traditional ODK appearance to be first word in appearance string
+                if (appearance.startsWith("compact")) {
                     int numColumns = -1;
                     try {
-                    	int idx = appearance.indexOf("-");
+                    	String firstWord = appearance.split("\\s+")[0];
+                    	int idx = firstWord.indexOf("-");
                     	if ( idx != -1 ) {
                     		numColumns =
-                    				Integer.parseInt(appearance.substring(idx + 1));
+                    				Integer.parseInt(firstWord.substring(idx + 1));
                     	}
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
@@ -181,13 +187,13 @@ public class WidgetFactory {
                     }
 
                     questionWidget = new GridMultiWidget(context, fep, numColumns);
-                } else if (appearance.equals("minimal")) {
+                } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
-                } else if (appearance.equals("list")) {
-                    questionWidget = new ListMultiWidget(context, fep, true);
-                } else if (appearance.equals("list-nolabel")) {
+                } else if (appearance.startsWith("list-nolabel")) {
                     questionWidget = new ListMultiWidget(context, fep, false);
-                } else if (appearance.equals("label")) {
+                } else if (appearance.startsWith("list")) {
+                    questionWidget = new ListMultiWidget(context, fep, true);
+                } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
