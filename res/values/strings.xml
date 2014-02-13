@@ -282,6 +282,8 @@
     <string name="fs_create_folder_error">Collect reports: Cannot create directory: %s</string>
     <string name="fs_create_folder_is_file_error">Collect reports: \'%s\' exists, but is not a directory.</string>
     <string name="fs_file_copy_error">Could not copy \'%1$s\' over \'%2$s\'. Reason: %3$s</string>
+    <string name="survey_internal_error">Internal error: step to prompt failed.</string>
+    <string name="survey_multiple_forms_error">You have downloaded two different forms with the same form ID and version. Maybe they were the same form uploaded at different times or to different servers. In any case, you should delete one.</string>
     <string name="survey_loading_reading_form_message">Reading form definition…</string>
     <string name="survey_loading_reading_data_message">Reading survey data…</string>
     <string name="survey_loading_reading_csv_message">Reading CSV files…</string>

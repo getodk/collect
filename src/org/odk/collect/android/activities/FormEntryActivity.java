@@ -227,7 +227,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		setTitle(getString(R.string.app_name) + " > "
 				+ getString(R.string.loading_form));
 
-		mBeenSwiped = false;
+        mErrorMessage = null;
+		
+        mBeenSwiped = false;
 		mAlertDialog = null;
 		mCurrentView = null;
 		mInAnimation = null;
@@ -333,7 +335,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			if (intent != null) {
 				Uri uri = intent.getData();
 
-				if (getContentResolver().getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
+				if (getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
 					// get the formId and version for this instance...
 					String jrFormId = null;
 					String jrVersion = null;
@@ -414,12 +416,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 								// user will need to hand-edit the SQLite
 								// database to fix it.
 								formCursor.moveToFirst();
-								mFormPath = formCursor
-										.getString(formCursor
-												.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-								this.createErrorDialog(
-										"Multiple matching form definitions exist",
-										DO_NOT_EXIT);
+								mFormPath = formCursor.getString(formCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+								this.createErrorDialog(getString(R.string.survey_multiple_forms_error),	EXIT);
+                                return;
 							}
 						} finally {
 							if (formCursor != null) {
@@ -427,7 +426,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							}
 						}
 					}
-				} else if (getContentResolver().getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
+				} else if (getContentResolver().getType(uri).equals(FormsColumns.CONTENT_ITEM_TYPE)) {
 					Cursor c = null;
 					try {
 						c = getContentResolver().query(uri, null, null, null,
@@ -437,9 +436,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							return;
 						} else {
 							c.moveToFirst();
-							mFormPath = c
-									.getString(c
-											.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+							mFormPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
 							// This is the fill-blank-form code path.
 							// See if there is a savepoint for this form that
 							// has never been
@@ -498,7 +495,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					}
 				} else {
 					Log.e(t, "unrecognized URI");
-					this.createErrorDialog("unrecognized URI: " + uri, EXIT);
+					this.createErrorDialog("Unrecognized URI: " + uri, EXIT);
 					return;
 				}
 
@@ -871,12 +868,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		if (formController.currentPromptIsQuestion()) {
 			LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView)
 					.getAnswers();
-			FailedConstraint constraint = formController.saveAllScreenAnswers(
-					answers, evaluateConstraints);
-			if (constraint != null) {
-				createConstraintToast(constraint.index, constraint.status);
-				return false;
-			}
+            try {
+                FailedConstraint constraint = formController.saveAllScreenAnswers(answers, evaluateConstraints);
+                if (constraint != null) {
+                    createConstraintToast(constraint.index, constraint.status);
+                    return false;
+                }
+            } catch (JavaRosaException e) {
+                Log.e(t, e.getMessage(), e);
+                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+                return false;
+            }
 		}
 		return true;
 	}
@@ -1195,12 +1197,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 								+ (prompts.length > 0 ? prompts[0]
 										.getQuestionText() : "[no question]"));
 			} catch (RuntimeException e) {
-				createErrorDialog(e.getMessage(), EXIT);
-				e.printStackTrace();
+				Log.e(t, e.getMessage(), e);
 				// this is badness to avoid a crash.
-				event = formController.stepToNextScreenEvent();
-				return createView(event, advancingPage);
-			}
+                try {
+                    event = formController.stepToNextScreenEvent();
+                    createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                } catch (JavaRosaException e1) {
+                    Log.e(t, e1.getMessage(), e1);
+                    createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(), DO_NOT_EXIT);
+                }
+                return createView(event, advancingPage);
+            }
 
 			// Makes a "clear answer" menu pop up on long-click
 			for (QuestionWidget qw : odkv.getWidgets()) {
@@ -1215,11 +1222,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			}
 			return odkv;
 		default:
-			createErrorDialog("Internal error: step to prompt failed", EXIT);
 			Log.e(t, "Attempted to create a view that does not exist.");
 			// this is badness to avoid a crash.
-			event = formController.stepToNextScreenEvent();
-			return createView(event, advancingPage);
+            try {
+                event = formController.stepToNextScreenEvent();
+                createErrorDialog(getString(R.string.survey_internal_error), EXIT);
+            } catch (JavaRosaException e) {
+                Log.e(t, e.getMessage(), e);
+                createErrorDialog(e.getCause().getMessage(), EXIT);
+            }
+            return createView(event, advancingPage);
 		}
 	}
 
@@ -1239,60 +1251,67 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * answers to the data model after checking constraints.
 	 */
 	private void showNextView() {
-		FormController formController = Collect.getInstance()
-				.getFormController();
-			
-		// get constraint behavior preference value with appropriate default
-		String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
-			.getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, 
-				PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
-		
-		if (formController.currentPromptIsQuestion()) {
+		try {
+            FormController formController = Collect.getInstance()
+                    .getFormController();
 
-			// if constraint behavior says we should validate on swipe, do so
-			if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-				if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-					// A constraint was violated so a dialog should be showing.
-					mBeenSwiped = false;
-					return;
-				}
-				
-			// otherwise, just save without validating (constraints will be validated on finalize)
-			} else
-				saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-		}
+            // get constraint behavior preference value with appropriate default
+            String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR,
+                            PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
 
-		View next;
-		int event = formController.stepToNextScreenEvent();
-		switch (event) {
-		case FormEntryController.EVENT_QUESTION:
-		case FormEntryController.EVENT_GROUP:
-			// create a savepoint
-			if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-				SaveToDiskTask.blockingExportTempData();
-			}
-			next = createView(event, true);
-			showView(next, AnimationType.RIGHT);
-			break;
-		case FormEntryController.EVENT_END_OF_FORM:
-		case FormEntryController.EVENT_REPEAT:
-			next = createView(event, true);
-			showView(next, AnimationType.RIGHT);
-			break;
-		case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-			createRepeatDialog();
-			break;
-		case FormEntryController.EVENT_REPEAT_JUNCTURE:
-			Log.i(t, "repeat juncture: "
-					+ formController.getFormIndex().getReference());
-			// skip repeat junctures until we implement them
-			break;
-		default:
-			Log.w(t,
-					"JavaRosa added a new EVENT type and didn't tell us... shame on them.");
-			break;
-		}
-	}
+            if (formController.currentPromptIsQuestion()) {
+
+                // if constraint behavior says we should validate on swipe, do so
+                if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                    if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+                        // A constraint was violated so a dialog should be showing.
+                        mBeenSwiped = false;
+                        return;
+                    }
+
+                    // otherwise, just save without validating (constraints will be validated on finalize)
+                } else
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+
+            View next;
+            int event = formController.stepToNextScreenEvent();
+
+
+            switch (event) {
+                case FormEntryController.EVENT_QUESTION:
+                case FormEntryController.EVENT_GROUP:
+                    // create a savepoint
+                    if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+                        SaveToDiskTask.blockingExportTempData();
+                    }
+                    next = createView(event, true);
+                    showView(next, AnimationType.RIGHT);
+                    break;
+                case FormEntryController.EVENT_END_OF_FORM:
+                case FormEntryController.EVENT_REPEAT:
+                    next = createView(event, true);
+                    showView(next, AnimationType.RIGHT);
+                    break;
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                    createRepeatDialog();
+                    break;
+                case FormEntryController.EVENT_REPEAT_JUNCTURE:
+                    Log.i(t, "repeat juncture: "
+                            + formController.getFormIndex().getReference());
+                    // skip repeat junctures until we implement them
+                    break;
+                default:
+                    Log.w(t,
+                            "JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                    break;
+            }
+        } catch (JavaRosaException e) {
+            Log.e(t, e.getMessage(), e);
+            createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+        }
+    }
 
 	/**
 	 * Determines what should be displayed between a question, or the start
@@ -1300,31 +1319,36 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * model without checking constraints.
 	 */
 	private void showPreviousView() {
-		FormController formController = Collect.getInstance()
-				.getFormController();
-		// The answer is saved on a back swipe, but question constraints are
-		// ignored.
-		if (formController.currentPromptIsQuestion()) {
-			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-		}
+        try {
+            FormController formController = Collect.getInstance()
+                    .getFormController();
+            // The answer is saved on a back swipe, but question constraints are
+            // ignored.
+            if (formController.currentPromptIsQuestion()) {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
 
-		if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-			int event = formController.stepToPreviousScreenEvent();
+            if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                int event = formController.stepToPreviousScreenEvent();
 
-			if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
-					|| event == FormEntryController.EVENT_GROUP
-					|| event == FormEntryController.EVENT_QUESTION) {
-				// create savepoint
-				if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-					SaveToDiskTask.blockingExportTempData();
-				}
-			}
-			View next = createView(event, false);
-			showView(next, AnimationType.LEFT);
-		} else {
-			mBeenSwiped = false;
-		}
-	}
+                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
+                        || event == FormEntryController.EVENT_GROUP
+                        || event == FormEntryController.EVENT_QUESTION) {
+                    // create savepoint
+                    if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+                        SaveToDiskTask.blockingExportTempData();
+                    }
+                }
+                View next = createView(event, false);
+                showView(next, AnimationType.LEFT);
+            } else {
+                mBeenSwiped = false;
+            }
+        } catch (JavaRosaException e) {
+            Log.e(t, e.getMessage(), e);
+            createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+        }
+    }
 
 	/**
 	 * Displays the View specified by the parameter 'next', animating both the
@@ -1513,9 +1537,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 									"addRepeat");
 					try {
 						formController.newRepeat();
-					} catch (XPathTypeMismatchException e) {
+					} catch (Exception e) {
 						FormEntryActivity.this.createErrorDialog(
-								e.getMessage(), EXIT);
+								e.getMessage(), DO_NOT_EXIT);
 						return;
 					}
 					if (!formController.indexIsInFieldList()) {
@@ -1536,7 +1560,33 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							.getActivityLogger()
 							.logInstanceAction(this, "createRepeatDialog",
 									"showNext");
-					showNextView();
+
+                    //
+                    // Make sure the error dialog will not disappear.
+                    //
+                    // When showNextView() popups an error dialog (because of a JavaRosaException)
+                    // the issue is that the "add new repeat dialog" is referenced by mAlertDialog
+                    // like the error dialog. When the "no repeat" is clicked, the error dialog
+                    // is shown. Android by default dismisses the dialogs when a button is clicked,
+                    // so instead of closing the first dialog, it closes the second.
+                    new Thread() {
+
+                        @Override
+                        public void run() {
+                            FormEntryActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    showNextView();
+                                }
+                            });
+                        }
+                    }.start();
+
 					break;
 				}
 			}
@@ -1572,8 +1622,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				.getActivityLogger()
 				.logInstanceAction(this, "createErrorDialog",
 						"show." + Boolean.toString(shouldExit));
-		mErrorMessage = errorMsg;
-		mAlertDialog = new AlertDialog.Builder(this).create();
+
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            errorMsg = mErrorMessage + "\n\n" + errorMsg;
+            mErrorMessage = errorMsg;
+        } else {
+            mAlertDialog = new AlertDialog.Builder(this).create();
+            mErrorMessage = errorMsg;
+        }
+
 		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 		mAlertDialog.setTitle(getString(R.string.error_occured));
 		mAlertDialog.setMessage(errorMsg);
@@ -1585,6 +1642,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					Collect.getInstance().getActivityLogger()
 							.logInstanceAction(this, "createErrorDialog", "OK");
 					if (shouldExit) {
+                        mErrorMessage = null;
 						finish();
 					}
 					break;
@@ -2083,9 +2141,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		FormController formController = Collect.getInstance()
-				.getFormController();
-		Collect.getInstance().getActivityLogger().open();
+
+        if (mErrorMessage != null) {
+            if (mAlertDialog != null && !mAlertDialog.isShowing()) {
+                createErrorDialog(mErrorMessage, EXIT);
+            } else {
+                return;
+            }
+        }
+
+        FormController formController = Collect.getInstance().getFormController();
+        Collect.getInstance().getActivityLogger().open();
 
 		if (mFormLoaderTask != null) {
 			mFormLoaderTask.setFormLoaderListener(this);
@@ -2105,16 +2171,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				}
 			}
 		} else {
-			refreshCurrentView();
+            if (formController == null) {
+                // there is no formController -- fire MainMenu activity?
+                startActivity(new Intent(this, MainMenuActivity.class));
+                return;
+            } else {
+                refreshCurrentView();
+            }
 		}
 
 		if (mSaveToDiskTask != null) {
 			mSaveToDiskTask.setFormSavedListener(this);
-		}
-		if (mErrorMessage != null
-				&& (mAlertDialog != null && !mAlertDialog.isShowing())) {
-			createErrorDialog(mErrorMessage, EXIT);
-			return;
 		}
 
 		// only check the buttons if it's enabled in preferences
@@ -2440,7 +2507,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * @return status as determined in FormEntryController
 	 */
 	public int saveAnswer(IAnswerData answer, FormIndex index,
-			boolean evaluateConstraints) {
+			boolean evaluateConstraints) throws JavaRosaException {
 		FormController formController = Collect.getInstance()
 				.getFormController();
 		if (evaluateConstraints) {
