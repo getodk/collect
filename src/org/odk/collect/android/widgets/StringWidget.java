@@ -44,16 +44,16 @@ public class StringWidget extends QuestionWidget {
     boolean mReadOnly = false;
     protected EditText mAnswer;
 
-    public StringWidget(Context context, FormEntryPrompt prompt) {
-    	this(context, prompt, true);
+    public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    	this(context, prompt, readOnlyOverride, true);
     	setupChangeListener();
     }
 
-    protected StringWidget(Context context, FormEntryPrompt prompt, boolean derived) {
+    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean derived) {
         super(context, prompt);
         mAnswer = new EditText(context);
         mAnswer.setId(QuestionWidget.newUniqueId());
-        mReadOnly = prompt.isReadOnly();
+        mReadOnly = prompt.isReadOnly() || readOnlyOverride;
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 

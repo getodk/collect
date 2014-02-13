@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import android.util.Log;
+import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.exception.ExternalParamsException;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,6 +39,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
+import org.odk.collect.android.exception.ExternalParamsException;
+import org.odk.collect.android.external.ExternalAppsUtils;
+
+import java.util.Map;
 
 
 /**
@@ -82,6 +89,8 @@ import android.widget.Toast;
  */
 public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
+    private final String t = getClass().getName();
+
     private boolean mHasExApp = true;
     private Button mLaunchIntentButton;
     private Drawable mTextBackground;
@@ -125,7 +134,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
         String appearance = prompt.getAppearanceHint();
         String[] attrs = appearance.split(":");
-        final String intentName = attrs[1];
+        final String intentName = ExternalAppsUtils.extractIntentName(attrs[1]);
+        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(attrs[1]);
         final String buttonText;
         final String errorString;
     	String v = mPrompt.getSpecialFormQuestionText("buttonText");
@@ -147,24 +157,34 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
                 try {
-                	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                    ExternalAppsUtils.populateParameters(i, exParams, mPrompt.getIndex().getReference());
+
+                    Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
                 	fireActivity(i);
+                } catch (ExternalParamsException e) {
+                    Log.e(t, e.getMessage(), e);
+                    onException(e.getMessage());
                 } catch (ActivityNotFoundException e) {
-                    mHasExApp = false;
-                    if ( !mPrompt.isReadOnly() ) {
-                    	mAnswer.setBackgroundDrawable(mTextBackground);
-                        mAnswer.setFocusable(true);
-                        mAnswer.setFocusableInTouchMode(true);
-                        mAnswer.setClickable(true);
-                    }
-                    mLaunchIntentButton.setEnabled(false);
-                    mLaunchIntentButton.setFocusable(false);
-                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
-                    Toast.makeText(getContext(),
-                    		errorString, Toast.LENGTH_SHORT)
-                            .show();
-                    ExStringWidget.this.mAnswer.requestFocus();
+                    Log.e(t, e.getMessage(), e);
+                    onException(errorString);
                 }
+            }
+
+            private void onException(String toastText) {
+                mHasExApp = false;
+                if ( !mPrompt.isReadOnly() ) {
+                    mAnswer.setBackgroundDrawable(mTextBackground);
+                    mAnswer.setFocusable(true);
+                    mAnswer.setFocusableInTouchMode(true);
+                    mAnswer.setClickable(true);
+                }
+                mLaunchIntentButton.setEnabled(false);
+                mLaunchIntentButton.setFocusable(false);
+                Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                Toast.makeText(getContext(),
+                        toastText, Toast.LENGTH_SHORT)
+                        .show();
+                ExStringWidget.this.mAnswer.requestFocus();
             }
         });
 
@@ -203,7 +223,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-    	mAnswer.setText((String) answer);
+        StringData stringData = ExternalAppsUtils.asStringData(answer);
+        mAnswer.setText(stringData == null ? null : stringData.getValue().toString());
     	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 

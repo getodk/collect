@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import org.odk.collect.android.external.ExternalAppsUtils;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -107,7 +108,8 @@ public class ExIntegerWidget extends ExStringWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-    	mAnswer.setText( answer == null ? null : ((Integer) answer).toString());
+        IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
+    	mAnswer.setText( integerData == null ? null : integerData.getValue().toString());
     	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 

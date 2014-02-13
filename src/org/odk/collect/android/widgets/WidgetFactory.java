@@ -34,8 +34,9 @@ public class WidgetFactory {
      *
      * @param fep prompt element to be rendered
      * @param context Android context
+     * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context) {
+    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context, boolean readOnlyOverride) {
 
     	// get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
@@ -43,7 +44,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget = null;
+        QuestionWidget questionWidget;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -62,14 +63,14 @@ public class WidgetFactory {
                         } else if (appearance.equals("bearing")) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                            questionWidget = new DecimalWidget(context, fep);
+                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                     	if ( appearance.startsWith("ex:") ) {
                     		questionWidget = new ExIntegerWidget(context, fep);
                     	} else {
-                    		questionWidget = new IntegerWidget(context, fep);
+                    		questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
                     	}
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -81,21 +82,21 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                     	String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            questionWidget = new ItemsetWidget(context, fep);
+                            questionWidget = new ItemsetWidget(context, fep, readOnlyOverride);
                         } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.equals("numbers")) {
-                            questionWidget = new StringNumberWidget(context, fep);
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
-                            questionWidget = new StringWidget(context, fep);
+                            questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }
                         break;
                     default:
-                        questionWidget = new StringWidget(context, fep);
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
                 break;
@@ -196,7 +197,7 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             default:
-                questionWidget = new StringWidget(context, fep);
+                questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
         }
         return questionWidget;

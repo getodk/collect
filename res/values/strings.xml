@@ -70,6 +70,7 @@
 <string name="enter_data">Fill Blank Form</string>
 <string name="enter_data_button">Fill Blank Form</string>
 <string name="error_occured">Error Occurred</string>
+<string name="error_attaching_binary_file">An error occurred while attaching the media: %s</string>
 <string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s).</string>
 <string name="file_deleted_error">Sorry, %1$s of %2$s selected form(s) failed to delete!</string>
 <string name="file_deleted_ok">%s form(s) successfully deleted!</string>

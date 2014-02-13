@@ -58,11 +58,11 @@ public class ItemsetWidget extends QuestionWidget implements
     // Hashmap linking label:value
     private HashMap<String, String> mAnswers;
 
-    public ItemsetWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, true);
+    public ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+        this(context, prompt, readOnlyOverride, true);
     }
 
-    protected ItemsetWidget(Context context, FormEntryPrompt prompt,
+    protected ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
             boolean derived) {
         super(context, prompt);
         mButtons = new RadioGroup(context);

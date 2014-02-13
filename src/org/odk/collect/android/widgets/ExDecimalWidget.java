@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import java.text.NumberFormat;
 
+import org.odk.collect.android.external.ExternalAppsUtils;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -117,7 +118,8 @@ public class ExDecimalWidget extends ExStringWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-    	mAnswer.setText( answer == null ? null : ((Double) answer).toString());
+        DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
+        mAnswer.setText( decimalData == null ? null : decimalData.getValue().toString());
     	Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
