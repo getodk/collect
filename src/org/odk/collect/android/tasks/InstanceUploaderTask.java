@@ -234,7 +234,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 WebUtils.clearHttpConnectionManager();
-                outcome.mResults.put(id, fail + "Generic Exception");
+                outcome.mResults.put(id, fail + "Generic Exception: " + e.getMessage());
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
@@ -452,7 +452,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 WebUtils.clearHttpConnectionManager();
-                outcome.mResults.put(id, fail + "Generic Exception. " + e.toString());
+                outcome.mResults.put(id, fail + "Generic Exception. " + e.getMessage());
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
