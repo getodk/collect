@@ -16,6 +16,7 @@ package org.odk.collect.android.views;
 
 import java.io.File;
 
+import android.widget.*;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -36,12 +37,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
@@ -232,6 +228,9 @@ public class MediaLayout extends RelativeLayout {
             // There's no imageURI listed, so just ignore it.
         }
 
+        // e.g., for TextView that flag will be true
+        boolean isNotAMultipleChoiceField = !RadioButton.class.isAssignableFrom(text.getClass()) && !CheckBox.class.isAssignableFrom(text.getClass());
+
         // Determine the layout constraints...
         // Assumes LTR, TTB reading bias!
         if (mView_Text.getText().length() == 0 && (mImageView != null || mMissingImage != null)) {
@@ -252,7 +251,11 @@ public class MediaLayout extends RelativeLayout {
             // audio upper right; video below audio on right.
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            imageParams.addRule(RelativeLayout.RIGHT_OF, mView_Text.getId());
+            if (isNotAMultipleChoiceField) {
+                imageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            } else {
+                imageParams.addRule(RelativeLayout.RIGHT_OF, mView_Text.getId());
+            }
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -272,7 +275,9 @@ public class MediaLayout extends RelativeLayout {
             } else {
                 // the image will implicitly scale down to fit within parent...
                 // no need to bound it by the width of the parent...
-                imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                if (!isNotAMultipleChoiceField) {
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                }
             }
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         } else {
