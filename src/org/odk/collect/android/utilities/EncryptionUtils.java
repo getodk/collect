@@ -14,15 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -44,11 +36,13 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.logic.FormController.InstanceMetadata;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -90,9 +84,10 @@ public class EncryptionUtils {
 	private static final String FILE = "file";
 	private static final String BASE64_ENCRYPTED_ELEMENT_SIGNATURE = "base64EncryptedElementSignature";
 	private static final String NEW_LINE = "\n";
+    private static final String ENCRYPTION_PROVIDER = "BC";
 
-	private EncryptionUtils() {
-	};
+    private EncryptionUtils() {
+	}
 
 	public static final class EncryptedFormInformation {
 		public final String formId;
@@ -413,7 +408,7 @@ public class EncryptionUtils {
 		// For now, prevent encryption if the BouncyCastle implementation is not present.
 		// https://code.google.com/p/opendatakit/issues/detail?id=918
 		try {
-			Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
+			Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			Log.e(t, "No BouncyCastle implementation of symmetric algorithm!");
@@ -433,78 +428,55 @@ public class EncryptionUtils {
 	}
 
 	private static void encryptFile(File file, EncryptedFormInformation formInfo)
-			throws IOException, NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException,
-			InvalidAlgorithmParameterException {
+            throws IOException, EncryptionException {
 		File encryptedFile = new File(file.getParentFile(), file.getName()
 				+ ".enc");
+
+        if (encryptedFile.exists() && !encryptedFile.delete()) {
+            throw new IOException("Cannot overwrite " + encryptedFile.getAbsolutePath() + ". Perhaps the file is locked?");
+        }
 
 		// add elementSignatureSource for this file...
 		formInfo.appendFileSignatureSource(file);
 
-		InputStream fin = null;
-		FileOutputStream fout = null;
-		try {
-			Cipher c = formInfo.getCipher();
-			CipherOutputStream  cout = null;
-			BufferedOutputStream bout = null;
-			fout = new FileOutputStream(encryptedFile);
-			bout = new BufferedOutputStream(fout);
-			cout = new CipherOutputStream(bout, c);
-			fin = new FileInputStream(file);
+        RandomAccessFile randomAccessFile = null;
+        CipherOutputStream cipherOutputStream = null;
+        try {
+            Cipher c = formInfo.getCipher();
+
+            randomAccessFile = new RandomAccessFile(encryptedFile, "rws");
+            ByteArrayOutputStream encryptedData = new ByteArrayOutputStream();
+            cipherOutputStream = new CipherOutputStream(encryptedData, c);
+			InputStream fin = new FileInputStream(file);
 			byte[] buffer = new byte[2048];
 			int len = fin.read(buffer);
 			while (len != -1) {
-				cout.write(buffer, 0, len);
+				cipherOutputStream.write(buffer, 0, len);
 				len = fin.read(buffer);
 			}
-			fin.close(); fin = null;
-			cout.flush(); cout.close(); fout = null;
+			fin.close();
+			cipherOutputStream.flush();
+			cipherOutputStream.close();
+
+            randomAccessFile.write(encryptedData.toByteArray());
+
 			Log.i(t,
 					"Encrpyted:" + file.getName() + " -> "
 							+ encryptedFile.getName());
-		} catch (IOException e) {
-			Log.e(t, "Error encrypting: " + file.getName() + " -> "
-					+ encryptedFile.getName());
+		} catch (Exception e) {
+            String msg = "Error encrypting: " + file.getName() + " -> "
+                    + encryptedFile.getName();
+            Log.e(t, msg, e);
 			e.printStackTrace();
-			throw e;
-		} catch (NoSuchAlgorithmException e) {
-			Log.e(t, "Error encrypting: " + file.getName() + " -> "
-					+ encryptedFile.getName());
-			e.printStackTrace();
-			throw e;
-		} catch (NoSuchPaddingException e) {
-			Log.e(t, "Error encrypting: " + file.getName() + " -> "
-					+ encryptedFile.getName());
-			e.printStackTrace();
-			throw e;
-		} catch (InvalidKeyException e) {
-			Log.e(t, "Error encrypting: " + file.getName() + " -> "
-					+ encryptedFile.getName());
-			e.printStackTrace();
-			throw e;
-		} catch (InvalidAlgorithmParameterException e) {
-			Log.e(t, "Error encrypting: " + file.getName() + " -> "
-					+ encryptedFile.getName());
-			e.printStackTrace();
-			throw e;
+			throw new EncryptionException(msg, e);
 		} finally {
-			if ( fin != null ) {
-				try {
-					fin.close();
-				} catch ( IOException e ) {
-					// ignored
-				}
-			}
-			if ( fout != null ) {
-				try {
-					fout.close();
-				} catch ( IOException e ) {
-					// ignored
-				}
-			}
-		}
-	}
+            IOUtils.closeQuietly(cipherOutputStream);
+
+            if (randomAccessFile != null) {
+                randomAccessFile.close();
+            }
+        }
+    }
 
 	public static boolean deletePlaintextFiles(File instanceXml) {
 		// NOTE: assume the directory containing the instanceXml contains ONLY
@@ -530,7 +502,7 @@ public class EncryptionUtils {
 	}
 
 	private static List<File> encryptSubmissionFiles(File instanceXml,
-			File submissionXml, EncryptedFormInformation formInfo) {
+			File submissionXml, EncryptedFormInformation formInfo) throws IOException, EncryptionException {
 		// NOTE: assume the directory containing the instanceXml contains ONLY
 		// files related to this one instance.
 		File instanceDir = instanceXml.getParentFile();
@@ -556,37 +528,13 @@ public class EncryptionUtils {
 		}
 		// encrypt here...
 		for (File f : filesToProcess) {
-			try {
-				encryptFile(f, formInfo);
-			} catch (IOException e) {
-				return null;
-			} catch (InvalidKeyException e) {
-				return null;
-			} catch (NoSuchAlgorithmException e) {
-				return null;
-			} catch (NoSuchPaddingException e) {
-				return null;
-			} catch (InvalidAlgorithmParameterException e) {
-				return null;
-			}
-		}
+		    encryptFile(f, formInfo);
+        }
 
 		// encrypt the submission.xml as the last file...
-		try {
-			encryptFile(submissionXml, formInfo);
-		} catch (IOException e) {
-			return null;
-		} catch (InvalidKeyException e) {
-			return null;
-		} catch (NoSuchAlgorithmException e) {
-			return null;
-		} catch (NoSuchPaddingException e) {
-			return null;
-		} catch (InvalidAlgorithmParameterException e) {
-			return null;
-		}
+	    encryptFile(submissionXml, formInfo);
 
-		return filesToProcess;
+        return filesToProcess;
 	}
 
 	/**
@@ -597,16 +545,14 @@ public class EncryptionUtils {
 	 *
 	 * @param instanceXml
 	 * @param submissionXml
-	 * @param metadata
 	 * @param formInfo
 	 * @return
 	 */
-	public static boolean generateEncryptedSubmission(File instanceXml,
-			File submissionXml, EncryptedFormInformation formInfo) {
+	public static void generateEncryptedSubmission(File instanceXml,
+			File submissionXml, EncryptedFormInformation formInfo) throws IOException, EncryptionException {
 		// submissionXml is the submission data to be published to Aggregate
 		if (!submissionXml.exists() || !submissionXml.isFile()) {
-			Log.e(t, "No submission.xml found");
-			return false;
+			throw new IOException("No submission.xml found");
 		}
 
 		// TODO: confirm that this xml is not already encrypted...
@@ -614,21 +560,15 @@ public class EncryptionUtils {
 		// Step 1: encrypt the submission and all the media files...
 		List<File> mediaFiles = encryptSubmissionFiles(instanceXml,
 				submissionXml, formInfo);
-		if (mediaFiles == null) {
-			return false; // something failed...
-		}
 
 		// Step 2: build the encrypted-submission manifest (overwrites
 		// submission.xml)...
-		if (!writeSubmissionManifest(formInfo, submissionXml, mediaFiles)) {
-			return false;
-		}
-		return true;
+		writeSubmissionManifest(formInfo, submissionXml, mediaFiles);
 	}
-
-	private static boolean writeSubmissionManifest(
+	
+	private static void writeSubmissionManifest(
 			EncryptedFormInformation formInfo,
-			File submissionXml, List<File> mediaFiles) {
+			File submissionXml, List<File> mediaFiles) throws EncryptionException {
 
 		Document d = new Document();
 		d.setStandalone(true);
@@ -658,15 +598,17 @@ public class EncryptionUtils {
 		e.addChild(idx++, Node.ELEMENT, c);
 		e.addChild(idx++, Node.IGNORABLE_WHITESPACE, NEW_LINE);
 
-		for (File file : mediaFiles) {
-			c = d.createElement(XML_ENCRYPTED_TAG_NAMESPACE,  MEDIA);
-			Element fileTag = d.createElement(XML_ENCRYPTED_TAG_NAMESPACE,  FILE);
-			fileTag.addChild(0,  Node.TEXT, file.getName() + ".enc");
-			c.addChild(0, Node.ELEMENT, fileTag);
-			e.addChild(idx++, Node.ELEMENT, c);
-			e.addChild(idx++, Node.IGNORABLE_WHITESPACE, NEW_LINE);
-		}
-
+        if (mediaFiles != null) {
+            for (File file : mediaFiles) {
+                c = d.createElement(XML_ENCRYPTED_TAG_NAMESPACE, MEDIA);
+                Element fileTag = d.createElement(XML_ENCRYPTED_TAG_NAMESPACE, FILE);
+                fileTag.addChild(0, Node.TEXT, file.getName() + ".enc");
+                c.addChild(0, Node.ELEMENT, fileTag);
+                e.addChild(idx++, Node.ELEMENT, c);
+                e.addChild(idx++, Node.IGNORABLE_WHITESPACE, NEW_LINE);
+            }
+        }
+		
 		c = d.createElement(XML_ENCRYPTED_TAG_NAMESPACE, ENCRYPTED_XML_FILE);
 		c.addChild(0, Node.TEXT, submissionXml.getName() + ".enc");
 		e.addChild(idx++, Node.ELEMENT, c);
@@ -676,47 +618,29 @@ public class EncryptionUtils {
 		e.addChild(idx++, Node.ELEMENT, c);
 
 		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(submissionXml);
-			BufferedOutputStream out = new BufferedOutputStream(fout);
-			OutputStreamWriter writer = new OutputStreamWriter(out, UTF_8);
+        OutputStreamWriter writer = null;
+        try {
+            fout = new FileOutputStream(submissionXml);
+            writer = new OutputStreamWriter(fout, UTF_8);
 
-			KXmlSerializer serializer = new KXmlSerializer();
+            KXmlSerializer serializer = new KXmlSerializer();
 			serializer.setOutput(writer);
 			// setting the response content type emits the xml header.
 			// just write the body here...
 			d.writeChildren(serializer);
 			serializer.flush();
 			writer.flush();
-			fout.getChannel().force(false);
+            fout.getChannel().force(true);
 			writer.close();
-			fout = null;
-		} catch (FileNotFoundException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			Log.e(t, "Error writing submission.xml for encrypted submission: "
-					+ submissionXml.getParentFile().getName());
-			return false;
-		} catch (UnsupportedEncodingException ex) {
-			ex.printStackTrace();
-			Log.e(t, "Error writing submission.xml for encrypted submission: "
-					+ submissionXml.getParentFile().getName());
-			return false;
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			Log.e(t, "Error writing submission.xml for encrypted submission: "
-					+ submissionXml.getParentFile().getName());
-			return false;
+            String msg = "Error writing submission.xml for encrypted submission: "
+                    + submissionXml.getParentFile().getName();
+            Log.e(t, msg);
+			throw new EncryptionException(msg, ex);
 		} finally {
-			if ( fout != null ) {
-				try {
-					fout.close();
-				} catch ( IOException ex) {
-					ex.printStackTrace();
-					Log.i(t, "Failure during flush or close");
-				}
-			}
-		}
-
-		return true;
-	}
+            IOUtils.closeQuietly(writer);
+            IOUtils.closeQuietly(fout);
+        }
+    }
 }

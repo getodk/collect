@@ -27,7 +27,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormsModule;
-import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -43,6 +42,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.FileUtils;
@@ -2451,9 +2451,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * Called by SavetoDiskTask if everything saves correctly.
 	 */
 	@Override
-	public void savingComplete(int saveStatus) {
+	public void savingComplete(SaveResult saveResult) {
 		dismissDialog(SAVING_DIALOG);
-		switch (saveStatus) {
+
+        int saveStatus = saveResult.getSaveResult();
+        switch (saveStatus) {
 		case SaveToDiskTask.SAVED:
 			Toast.makeText(this, getString(R.string.data_saved_ok),
 					Toast.LENGTH_SHORT).show();
@@ -2466,8 +2468,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			finishReturnInstance();
 			break;
 		case SaveToDiskTask.SAVE_ERROR:
-			Toast.makeText(this, getString(R.string.data_saved_error),
-					Toast.LENGTH_LONG).show();
+            String message;
+            if (saveResult.getSaveErrorMessage() != null) {
+                message = getString(R.string.data_saved_error) + ": " + saveResult.getSaveErrorMessage();
+            } else {
+                message = getString(R.string.data_saved_error);
+            }
+            Toast.makeText(this, message,
+                    Toast.LENGTH_LONG).show();
 			break;
 		case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
 		case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
