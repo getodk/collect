@@ -190,6 +190,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	// used to limit forward/backward swipes to one per question
 	private boolean mBeenSwiped = false;
 
+    private final Object saveDialogLock = new Object();
 	private int viewCount = 0;
 
 	private FormLoaderTask mFormLoaderTask;
@@ -1653,12 +1654,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			return false;
 		}
 
-		mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit,
+        synchronized (saveDialogLock) {
+		    mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit,
 				complete, updatedSaveName);
-		mSaveToDiskTask.setFormSavedListener(this);
-		showDialog(SAVING_DIALOG);
-		// show dialog before we execute...
-		mSaveToDiskTask.execute();
+	    	mSaveToDiskTask.setFormSavedListener(this);
+		    showDialog(SAVING_DIALOG);
+            // show dialog before we execute...
+		    mSaveToDiskTask.execute();
+        }
 
 		return true;
 	}
@@ -1990,6 +1993,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					loadingButtonListener);
 			return mProgressDialog;
 		case SAVING_DIALOG:
+            Log.e(t, "Creating SAVING_DIALOG");
 			Collect.getInstance()
 					.getActivityLogger()
 					.logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
@@ -2003,10 +2007,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							.logInstanceAction(this,
 									"onCreateDialog.SAVING_DIALOG", "cancel");
 					dialog.dismiss();
-					mSaveToDiskTask.setFormSavedListener(null);
-					SaveToDiskTask t = mSaveToDiskTask;
-					mSaveToDiskTask = null;
-					t.cancel(true);
+                    cancelSaveToDiskTask();
 				}
 			};
 			mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -2015,14 +2016,34 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			mProgressDialog.setIndeterminate(true);
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.setButton(getString(R.string.cancel),
-					savingButtonListener);
+                    savingButtonListener);
 			mProgressDialog.setButton(getString(R.string.cancel_saving_form),
 					savingButtonListener);
+            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    cancelSaveToDiskTask();
+                }
+            });
+            mProgressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    cancelSaveToDiskTask();
+                }
+            });
 			return mProgressDialog;
 		}
 		return null;
 	}
 
+    private void cancelSaveToDiskTask() {
+        synchronized (saveDialogLock) {
+            mSaveToDiskTask.setFormSavedListener(null);
+            boolean cancelled = mSaveToDiskTask.cancel(true);
+            Log.w(t, "Cancelled SaveToDiskTask! (" + cancelled + ")");
+            mSaveToDiskTask = null;
+        }
+    }
 	/**
 	 * Dismiss any showing dialogs that we manually manage.
 	 */
