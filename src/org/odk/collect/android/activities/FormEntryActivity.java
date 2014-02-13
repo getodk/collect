@@ -2604,7 +2604,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		// The onFling() captures the 'up' event so our view thinks it gets long
 		// pressed.
 		// We don't wnat that, so cancel it.
-		mCurrentView.cancelLongPress();
+        if (mCurrentView != null) {
+            mCurrentView.cancelLongPress();
+        }
 		return false;
 	}
 
