@@ -19,8 +19,10 @@ import java.io.File;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
+import android.os.Environment;
 import android.util.Log;
-
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 
 /**
@@ -186,7 +188,18 @@ public abstract class ODKSQLiteOpenHelper {
             mIsInitializing = true;
             String path = mPath + File.separator + mName;
             // mContext.getDatabasePath(mName).getPath();
-            db = SQLiteDatabase.openDatabase(path, mFactory, SQLiteDatabase.OPEN_READONLY);
+            try {
+                db = SQLiteDatabase.openDatabase(path, mFactory, SQLiteDatabase.OPEN_READONLY);
+            } catch (RuntimeException e) {
+                Log.e(t, e.getMessage(), e);
+                String cardstatus = Environment.getExternalStorageState();
+                if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
+                    throw new RuntimeException(Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
+                } else {
+                    throw e;
+                }
+            }
+
             if (db.getVersion() != mNewVersion) {
                 throw new SQLiteException("Can't upgrade read-only database from version "
                         + db.getVersion() + " to " + mNewVersion + ": " + path);

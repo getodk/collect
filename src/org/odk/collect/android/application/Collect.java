@@ -124,10 +124,7 @@ public class Collect extends Application {
     public static void createODKDirs() throws RuntimeException {
         String cardstatus = Environment.getExternalStorageState();
         if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
-            RuntimeException e =
-                    new RuntimeException("ODK reports :: SDCard error: "
-                            + Environment.getExternalStorageState());
-            throw e;
+            throw new RuntimeException(Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
         }
 
         String[] dirs = {

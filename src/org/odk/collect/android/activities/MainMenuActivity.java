@@ -224,9 +224,15 @@ public class MainMenuActivity extends Activity {
 		String selectionArgs[] = { InstanceProviderAPI.STATUS_COMPLETE,
 				InstanceProviderAPI.STATUS_SUBMISSION_FAILED };
 
-		mFinalizedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-				selection, selectionArgs, null);
-		startManagingCursor(mFinalizedCursor);
+        try {
+            mFinalizedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
+                    selection, selectionArgs, null);
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        startManagingCursor(mFinalizedCursor);
 		mCompletedCount = mFinalizedCursor.getCount();
 		mFinalizedCursor.registerContentObserver(mContentObserver);
 
@@ -234,9 +240,15 @@ public class MainMenuActivity extends Activity {
 		String selectionSaved = InstanceColumns.STATUS + "=?";
 		String selectionArgsSaved[] = { InstanceProviderAPI.STATUS_INCOMPLETE };
 
-		mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-				selectionSaved, selectionArgsSaved, null);
-		startManagingCursor(mSavedCursor);
+        try {
+            mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
+                    selectionSaved, selectionArgsSaved, null);
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        startManagingCursor(mSavedCursor);
 		mSavedCount = mFinalizedCursor.getCount();
 		// don't need to set a content observer because it can't change in the
 		// background
