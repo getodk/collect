@@ -933,11 +933,13 @@ public class FormController {
     	// look for the text under the requiredMsg bind attribute
 		String constraintText = getBindAttribute(index, XFormParser.NAMESPACE_JAVAROSA, "requiredMsg");
 		if (constraintText != null) {
-	    	XPathExpression xPathRequiredMsg = null;
+	    	XPathExpression xPathRequiredMsg;
 			try {
 				xPathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
 			} catch(Exception e) {
-				//Expected in probably most cases.
+				// Expected in probably most cases.
+                // This is a string literal, so no need to evaluate anything.
+                return constraintText;
 			}
 
 			if(xPathRequiredMsg != null) {
