@@ -42,7 +42,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 				.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			if (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+			if (currentNetworkInfo != null && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
 				if (interfaceIsEnabled(context, currentNetworkInfo)) {
 					uploadForms(context);
 				}
