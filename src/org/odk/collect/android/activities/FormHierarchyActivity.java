@@ -238,6 +238,21 @@ public class FormHierarchyActivity extends ListActivity {
             event_search: while (event != FormEntryController.EVENT_END_OF_FORM) {
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION:
+                        // because we may not see an EVENT_PROMPT_NEW_REPEAT for all repeat groups,
+                        // first see if we've exited the context of a repeat
+                        String currentRef = formController.getFormIndex().getReference().toString(false);
+                        if (!enclosingGroupRef.equalsIgnoreCase("") && !currentRef.startsWith(enclosingGroupRef)) {
+                            // We were displaying a set of questions inside of a repeated group. We
+                            // passed the end of that group, so we want to stop.
+                            break event_search;
+                        }
+
+                        if (!repeatedGroupRef.equalsIgnoreCase("") && !currentRef.startsWith(repeatedGroupRef)) {
+                            // We passed the end of the current repeating group, so we reset the
+                            // repeatedGroupName variable
+                            repeatedGroupRef = "";
+                        }
+
                         if (!repeatedGroupRef.equalsIgnoreCase("")) {
                             // We're in a repeating group, so skip this question and move to the next
                             // index.
