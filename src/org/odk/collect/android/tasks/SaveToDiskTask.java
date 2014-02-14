@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -229,30 +230,24 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      */
     public static File savepointFile(File instancePath) {
         File tempDir = new File(Collect.CACHE_PATH);
-        File temp = new File(tempDir, instancePath.getName() + ".save");
-        return temp;
+        return new File(tempDir, instancePath.getName() + ".save");
     }
 
     /**
-     * Blocking write of the instance data to a temp file. Used to safeguard data
+     * (Blocking) write of the instance data to a temp file. Used to safeguard data
      * during intent launches for, e.g., taking photos.
+     *
+     * SurveyCTO performance improvement: Create save-points asynchronously in order not
+     * to affect swiping performance.
+     *
+     * @param savePointListener savePointListener
      */
-    public static void blockingExportTempData() {
-        FormController formController = Collect.getInstance().getFormController();
-
-        long start = System.currentTimeMillis();
-        File temp = savepointFile(formController.getInstancePath());
-        ByteArrayPayload payload;
+    public static void blockingExportTempData(SavePointListener savePointListener) {
         try {
-        	payload = formController.getFilledInFormXml();
-            // write out xml
-            exportXmlFile(payload, temp.getAbsolutePath());
-        } catch (IOException e) {
-            Log.e(t, "Error creating serialized payload");
-            e.printStackTrace();
-        } finally {
-        	long end = System.currentTimeMillis();
-        	Log.i(t, "Savepoint ms: " + Long.toString(end - start));
+            SavePointTask savePointTask = new SavePointTask(savePointListener);
+            savePointTask.execute();
+        } catch (Exception e) {
+            Log.e(t, "Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
         }
     }
 
