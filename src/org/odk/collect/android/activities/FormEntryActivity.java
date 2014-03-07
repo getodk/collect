@@ -139,9 +139,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int SIGNATURE_CAPTURE = 14;
 	public static final int ANNOTATE_IMAGE = 15;
 	public static final int ALIGNED_IMAGE = 16;
+	public static final int BEARING_CAPTURE = 17;
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";
+	public static final String BEARING_RESULT = "BEARING_RESULT";
 
 	public static final String KEY_INSTANCES = "instances";
 	public static final String KEY_SUCCESS = "success";
@@ -694,6 +696,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			((ODKView) mCurrentView).setBinaryData(sl);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			break;
+		case BEARING_CAPTURE:
+            String bearing = intent.getStringExtra(BEARING_RESULT);
+            ((ODKView) mCurrentView).setBinaryData(bearing);
+            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 		case HIERARCHY_ACTIVITY:
 			// We may have jumped to a new index in hierarchy activity, so
 			// refresh
