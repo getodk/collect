@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.views;
 
+import java.io.Serializable;
 import java.util.*;
 
 import android.app.Activity;
@@ -132,12 +133,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 if (formElement instanceof QuestionDef) {
                                     TreeReference reference = (TreeReference) formElement.getBind().getReference();
                                     IAnswerData answerValue = p.getAnswerValue();
-                                    String value = answerValue == null ? null : String.valueOf(answerValue.getValue());
+                                    Object value = answerValue == null ? null : answerValue.getValue();
                                     switch (p.getDataType()) {
                                         case Constants.DATATYPE_TEXT:
                                         case Constants.DATATYPE_INTEGER:
                                         case Constants.DATATYPE_DECIMAL:
-                                            i.putExtra(reference.getNameLast(), value);
+                                            i.putExtra(reference.getNameLast(), (Serializable) value);
                                             break;
                                     }
                                 }
