@@ -237,7 +237,7 @@ public class MainMenuActivity extends Activity {
 		mFinalizedCursor.registerContentObserver(mContentObserver);
 
 
-		// count for finalized instances
+		// count for incomplete instances
 		String selectionSaved = InstanceColumns.STATUS + "=?";
 		String selectionArgsSaved[] = { InstanceProviderAPI.STATUS_INCOMPLETE };
 
