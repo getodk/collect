@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 
 import android.app.AlertDialog;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.Vector;
 
@@ -66,7 +68,15 @@ public class SpinnerMultiWidget extends QuestionWidget {
     @SuppressWarnings("unchecked")
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        mItems = prompt.getSelectChoices();
+
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
+
         mPrompt = prompt;
 
         selections = new boolean[mItems.size()];

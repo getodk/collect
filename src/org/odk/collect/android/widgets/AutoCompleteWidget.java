@@ -29,6 +29,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
+import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -61,7 +63,15 @@ public class AutoCompleteWidget extends QuestionWidget {
 
     public AutoCompleteWidget(Context context, FormEntryPrompt prompt, String filterType) {
         super(context, prompt);
-        mItems = prompt.getSelectChoices();
+
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
+
         mPrompt = prompt;
 
         choices = new AutoCompleteAdapter(getContext(), android.R.layout.simple_list_item_1);

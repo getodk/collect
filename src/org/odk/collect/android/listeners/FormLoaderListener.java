@@ -15,11 +15,12 @@
 package org.odk.collect.android.listeners;
 
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.ProgressNotifier;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface FormLoaderListener {
+public interface FormLoaderListener extends ProgressNotifier {
     void loadingComplete(FormLoaderTask task);
     void loadingError(String errorMsg);
 }

@@ -20,7 +20,10 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -52,7 +55,14 @@ public class SelectMultiWidget extends QuestionWidget {
         super(context, prompt);
         mPrompt = prompt;
         mCheckboxes = new ArrayList<CheckBox>();
-        mItems = prompt.getSelectChoices();
+
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
 
         setOrientation(LinearLayout.VERTICAL);
 
@@ -104,10 +114,12 @@ public class SelectMultiWidget extends QuestionWidget {
                     prompt.getSpecialFormSelectChoiceText(mItems.get(i),
                         FormEntryCaption.TEXT_FORM_AUDIO);
 
-                String imageURI = null;
-                imageURI =
-                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-                        FormEntryCaption.TEXT_FORM_IMAGE);
+                String imageURI;
+                if (mItems.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                } else {
+                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                }
 
                 String videoURI = null;
                 videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");

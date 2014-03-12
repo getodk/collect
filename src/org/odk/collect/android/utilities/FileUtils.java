@@ -333,4 +333,16 @@ public class FileUtils {
         }
         return e;
     }
+
+    public static void deleteAndReport(File file) {
+        if (file != null && file.exists()) {
+            // remove garbage
+            if (!file.delete()) {
+                Log.w(t, file.getAbsolutePath() + " will be deleted upon exit.");
+                file.deleteOnExit();
+            } else {
+                Log.w(t, file.getAbsolutePath() + " has been deleted.");
+            }
+        }
+    }
 }

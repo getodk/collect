@@ -26,8 +26,11 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.Context;
@@ -77,7 +80,13 @@ public class ListMultiWidget extends QuestionWidget {
     public ListMultiWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
-        mItems = prompt.getSelectChoices();
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        if (xPathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        } else {
+            mItems = prompt.getSelectChoices();
+        }
         mCheckboxes = new ArrayList<CheckBox>();
         mPrompt = prompt;
 
@@ -124,10 +133,12 @@ public class ListMultiWidget extends QuestionWidget {
                     }
                 });
 
-                String imageURI = null;
-                imageURI =
-                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-                        FormEntryCaption.TEXT_FORM_IMAGE);
+                String imageURI;
+                if (mItems.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                } else {
+                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                }
 
                 // build image view (if an image is provided)
                 ImageView mImageView = null;
