@@ -14,9 +14,12 @@
 
 package org.odk.collect.android.listeners;
 
+import org.odk.collect.android.tasks.ProgressNotifier;
+import org.odk.collect.android.tasks.SaveResult;
+
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface FormSavedListener {
-    void savingComplete(int saveStatus);
+public interface FormSavedListener extends ProgressNotifier {
+    void savingComplete(SaveResult saveStatus);
 }

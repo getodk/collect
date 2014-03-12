@@ -32,15 +32,18 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.views.ODKView;
 
@@ -438,23 +441,32 @@ public class FormController {
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error type.
      */
     public int validateAnswers(Boolean markCompleted) {
-        FormIndex i = getFormIndex();
-        jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        FormEntryController formEntryController = this.mFormEntryController;
+        FormEntryModel formEntryModel = formEntryController.getModel();
+
+        FormEntryModel formEntryModelToBeValidated = new FormEntryModel(formEntryModel.getForm());
+        FormEntryController formEntryControllerToBeValidated = new FormEntryController(formEntryModelToBeValidated);
+        FormController formControllerToBeValidated = new FormController(this.getMediaFolder(), formEntryControllerToBeValidated, this.getInstancePath());
+
+        formControllerToBeValidated.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
         int event;
         while ((event =
-            stepToNextEvent(FormController.STEP_INTO_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
+                formControllerToBeValidated.stepToNextEvent(FormController.STEP_INTO_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
             if (event != FormEntryController.EVENT_QUESTION) {
                 continue;
             } else {
-                int saveStatus = answerQuestion(getQuestionPrompt().getAnswerValue());
+                FormIndex formControllerToBeValidatedFormIndex = formControllerToBeValidated.getFormIndex();
+
+                int saveStatus = formControllerToBeValidated.answerQuestion(formControllerToBeValidated.getQuestionPrompt().getAnswerValue());
                 if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) {
+                    // jump to the error
+                    this.jumpToIndex(formControllerToBeValidatedFormIndex);
                     return saveStatus;
                 }
             }
         }
 
-        jumpToIndex(i);
         return FormEntryController.ANSWER_OK;
     }
 
