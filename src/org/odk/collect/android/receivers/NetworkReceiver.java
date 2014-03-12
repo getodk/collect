@@ -35,14 +35,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return;
         }
-        
+
 		String action = intent.getAction();
 
 		NetworkInfo currentNetworkInfo = (NetworkInfo) intent
 				.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			if (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+			if (currentNetworkInfo != null && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
 				if (interfaceIsEnabled(context, currentNetworkInfo)) {
 					uploadForms(context);
 				}
@@ -89,41 +89,47 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED
                 };
 
-            Cursor c =
-                context.getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection,
+            Cursor c = null;
+            try {
+                c = context.getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection,
                     selectionArgs, null);
 
-            ArrayList<Long> toUpload = new ArrayList<Long>();
-            if (c != null && c.getCount() > 0) {
-                c.move(-1);
-                while (c.moveToNext()) {
-                    Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                    toUpload.add(Long.valueOf(l));
-                }
-                
-                // get the username, password, and server from preferences
-                SharedPreferences settings =
-                        PreferenceManager.getDefaultSharedPreferences(context);
+	            ArrayList<Long> toUpload = new ArrayList<Long>();
+	            if (c != null && c.getCount() > 0) {
+	                c.move(-1);
+	                while (c.moveToNext()) {
+	                    Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+	                    toUpload.add(Long.valueOf(l));
+	                }
 
-                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                        context.getString(R.string.default_server_url));
-                String url = server
-                        + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
-                                context.getString(R.string.default_odk_formlist));
+	                // get the username, password, and server from preferences
+	                SharedPreferences settings =
+	                        PreferenceManager.getDefaultSharedPreferences(context);
 
-                Uri u = Uri.parse(url);
-                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
+	                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+	                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+	                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+	                        context.getString(R.string.default_server_url));
+	                String url = server
+	                        + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
+	                                context.getString(R.string.default_odk_formlist));
 
-                mInstanceUploaderTask = new InstanceUploaderTask();
-                mInstanceUploaderTask.setUploaderListener(this);
+	                Uri u = Uri.parse(url);
+	                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
-                Long[] toSendArray = new Long[toUpload.size()];
-                toUpload.toArray(toSendArray);
-                mInstanceUploaderTask.execute(toSendArray);
-            } else {
-                running = false;
+	                mInstanceUploaderTask = new InstanceUploaderTask();
+	                mInstanceUploaderTask.setUploaderListener(this);
+
+	                Long[] toSendArray = new Long[toUpload.size()];
+	                toUpload.toArray(toSendArray);
+	                mInstanceUploaderTask.execute(toSendArray);
+	            } else {
+	                running = false;
+	            }
+	        } finally {
+	            if (c != null) {
+	                c.close();
+	            }
             }
         }
     }
