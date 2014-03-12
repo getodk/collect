@@ -1,0 +1,90 @@
+(1) Being able to pass other field values in, as other extras and
+(2) Being able to have the external app update multiple fields
+
+The key points are:
+
+(1). A text/decimal/integer field with an "ex:intentString" appearance can hold a number of parameters that
+     are passed to the external app as a bundle. The names of the parameters are user defined and there are no reserved names.
+     The number of parameters are also not limited (should they?). The parameter values can be four different things:
+
+      1a. An xpath expression to an other field.
+      1b. A string literal defined in single quotes.
+      1c. A raw number (integer or decimal)
+      1d. Any JavaRosa function.
+
+(2). A group of questions can also have an "intent" attribute.
+
+      2a. This intent is ONLY used when the group has an "appearance" of "field-list".
+      2b. The format and the functionality of the "intent" value is the same as above.
+      2c. The external app is launched with the parameters that are defined in the intent string PLUS
+          the values of all the sub-fields that are either TEXT, DECIMAL, or INTEGER.
+      2d. Any other sub-field is invisible to the external app.
+      2e. If the returned bundle of values contains values whose keys match the type and the name of the sub-fields,
+          then these values overwrite the current values of those sub-fields.
+
+
+A sample SurveyCTO form that can be used is the following (assuming that there is an external app that handles the intent "org.myapp.COLLECT".
+
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>External Intent Test</h:title>
+    <model>
+      <instance>
+        <externaltest id="externaltest" version="2013032217">
+          <starttime/>
+          <endtime/>
+          <deviceid/>
+          <subscriberid/>
+          <simid/>
+          <devicephonenum/>
+          <noteField/>
+          <consented>
+            <textFieldInGroup/>
+            <integerFieldInGroup/>
+            <decimalFieldInGroup/>
+          </consented>
+          <textField/>
+          <integerField/>
+          <decimalField/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </externaltest>
+      </instance>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/externaltest/starttime" type="dateTime"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/externaltest/endtime" type="dateTime"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/externaltest/deviceid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="subscriberid" nodeset="/externaltest/subscriberid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="simserial" nodeset="/externaltest/simid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/externaltest/devicephonenum" type="string"/>
+      <bind nodeset="/externaltest/noteField" type="string" readonly="true()"/>
+      <bind nodeset="/externaltest/consented"/>
+      <bind nodeset="/externaltest/consented/textFieldInGroup" required="true()" type="string"/>
+      <bind nodeset="/externaltest/consented/integerFieldInGroup" required="true()" type="integer"/>
+      <bind nodeset="/externaltest/consented/decimalFieldInGroup" required="true()" type="decimal"/>
+      <bind nodeset="/externaltest/textField" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/externaltest/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/externaltest/noteField" >
+       <label>Welcome again!</label>
+    </input>
+    <group ref="/externaltest/consented" appearance="field-list" intent="org.myapp.COLLECT(uuid=/externaltest/meta/instanceID, deviceid=/externaltest/deviceid)">
+      <label>Please populate these:</label>
+      <input ref="/externaltest/consented/textFieldInGroup">
+        <label>A text</label>
+      </input>
+      <input ref="/externaltest/consented/integerFieldInGroup">
+        <label>An integer</label>
+      </input>
+      <input ref="/externaltest/consented/decimalFieldInGroup">
+        <label>A decimal</label>
+      </input>
+    </group>
+    <input appearance="ex:org.myapp.COLLECT(started= /externaltest/starttime , constant='----', randomNumber=random())" ref="/externaltest/textField" >
+       <label>Click launch to see an external-fetched string</label>
+    </input>
+  </h:body>
+</h:html>

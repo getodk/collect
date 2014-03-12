@@ -30,8 +30,8 @@ import android.util.TypedValue;
  */
 public class StringNumberWidget extends StringWidget {
 
-    public StringNumberWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, true);
+    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+        super(context, prompt, readOnlyOverride, true);
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);

@@ -49,8 +49,8 @@ public class DecimalWidget extends StringWidget {
         return d;
 	}
 	
-    public DecimalWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, true);
+    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+        super(context, prompt, readOnlyOverride, true);
 
         // formatting
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);

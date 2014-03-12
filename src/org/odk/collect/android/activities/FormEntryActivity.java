@@ -30,6 +30,7 @@ import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -140,6 +141,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int ANNOTATE_IMAGE = 15;
 	public static final int ALIGNED_IMAGE = 16;
 	public static final int BEARING_CAPTURE = 17;
+    public static final int EX_GROUP_CAPTURE = 18;
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -568,20 +570,26 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			break;
 		case EX_STRING_CAPTURE:
-			String sv = intent.getStringExtra("value");
-			((ODKView) mCurrentView).setBinaryData(sv);
-			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-			break;
 		case EX_INT_CAPTURE:
-			Integer iv = intent.getIntExtra("value", 0);
-			((ODKView) mCurrentView).setBinaryData(iv);
-			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-			break;
 		case EX_DECIMAL_CAPTURE:
-			Double dv = intent.getDoubleExtra("value", 0.0);
-			((ODKView) mCurrentView).setBinaryData(dv);
-			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-			break;
+            String key = "value";
+            boolean exists = intent.getExtras().containsKey(key);
+            if (exists) {
+                Object externalValue = intent.getExtras().get(key);
+                ((ODKView) mCurrentView).setBinaryData(externalValue);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+            break;
+        case EX_GROUP_CAPTURE:
+            try {
+                Bundle extras = intent.getExtras();
+                ((ODKView) mCurrentView).setDataForFields(extras);
+			    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            } catch (JavaRosaException e) {
+                Log.e(t, e.getMessage(), e);
+                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+            }
+            break;
 		case DRAW_IMAGE:
 		case ANNOTATE_IMAGE:
 		case SIGNATURE_CAPTURE:
