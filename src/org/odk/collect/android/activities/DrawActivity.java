@@ -160,6 +160,7 @@ public class DrawActivity extends Activity {
 			alertTitleString = getString(R.string.quit_application,
 					getString(R.string.sign_button));
 		} else if (OPTION_ANNOTATE.equals(loadOption)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			alertTitleString = getString(R.string.quit_application,
 					getString(R.string.markup_image));
 		} else {
