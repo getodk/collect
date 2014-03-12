@@ -262,6 +262,7 @@
 <string name="replace_bearing">Replace Bearing</string>
 <string name="getting_bearing">Loading Bearing</string>
 <string name="accept_bearing">Record Bearing</string>
+    <string name="sdcard_unmounted">Collect cannot access the SD card. Perhaps it is mounted via USB? (Current state: %s)</string>
     <string name="ext_file_no_data_error">The file contains no data!</string>
     <string name="ext_conflicting_columns_error">Columns %s match!</string>
     <string name="ext_sortBy_numeric_error">Your sortby column should contain only numeric values. Conflicting value was \'%s\'.</string>
