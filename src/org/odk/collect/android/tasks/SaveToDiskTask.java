@@ -14,7 +14,10 @@
 
 package org.odk.collect.android.tasks;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
@@ -23,20 +26,19 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
+import org.odk.collect.android.utilities.FileUtils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import org.odk.collect.android.utilities.FileUtils;
 
 /**
  * Background task for loading a form.
@@ -234,25 +236,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     /**
-     * (Blocking) write of the instance data to a temp file. Used to safeguard data
-     * during intent launches for, e.g., taking photos.
-     *
-     * SurveyCTO performance improvement: Create save-points asynchronously in order not
-     * to affect swiping performance.
-     *
-     * @param savePointListener savePointListener
-     */
-    public static void blockingExportTempData(SavePointListener savePointListener) {
-        try {
-            SavePointTask savePointTask = new SavePointTask(savePointListener);
-            savePointTask.execute();
-        } catch (Exception e) {
-            Log.e(t, "Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
-        }
-    }
-
-
-    /**
      * Write's the data to the sdcard, and updates the instances content provider.
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
@@ -285,7 +268,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             boolean canEditAfterCompleted = formController.isSubmissionEntireForm();
             boolean isEncrypted = false;
 
-            // build a submission.xml to hold the data being submitted 
+            // build a submission.xml to hold the data being submitted
             // and (if appropriate) encrypt the files on the side
 
             // pay attention to the ref attribute of the submission profile...

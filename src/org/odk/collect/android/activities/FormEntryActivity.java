@@ -43,6 +43,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
@@ -229,7 +230,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				+ getString(R.string.loading_form));
 
         mErrorMessage = null;
-		
+
         mBeenSwiped = false;
 		mAlertDialog = null;
 		mCurrentView = null;
@@ -510,6 +511,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 	}
 
+    /**
+     * Create save-points asynchronously in order to not affect swiping performance
+     * on larger forms.
+     */
+    private void nonblockingCreateSavePointData() {
+        try {
+            SavePointTask savePointTask = new SavePointTask(this);
+            savePointTask.execute();
+        } catch (Exception e) {
+            Log.e(t, "Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
+        }
+    }
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -527,7 +541,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						formController.getXPath(waiting));
 			}
 			// save the instance to a temp path...
-			SaveToDiskTask.blockingExportTempData(this);
+			nonblockingCreateSavePointData();
 		}
 		outState.putBoolean(NEWFORM, false);
 		outState.putString(KEY_ERROR, mErrorMessage);
@@ -1285,7 +1299,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 case FormEntryController.EVENT_GROUP:
                     // create a savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        SaveToDiskTask.blockingExportTempData(this);
+                        nonblockingCreateSavePointData();
                     }
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
@@ -1337,7 +1351,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         || event == FormEntryController.EVENT_QUESTION) {
                     // create savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        SaveToDiskTask.blockingExportTempData(this);
+                        nonblockingCreateSavePointData();
                     }
                 }
                 View next = createView(event, false);
