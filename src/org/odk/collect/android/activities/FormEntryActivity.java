@@ -33,6 +33,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.PropertyManager;
@@ -108,7 +109,7 @@ import android.widget.Toast;
  */
 public class FormEntryActivity extends Activity implements AnimationListener,
 		FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-		OnGestureListener {
+		OnGestureListener, SavePointListener {
 	private static final String t = "FormEntryActivity";
 
 	// save with every swipe forward or back. Timings indicate this takes .25
@@ -526,7 +527,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						formController.getXPath(waiting));
 			}
 			// save the instance to a temp path...
-			SaveToDiskTask.blockingExportTempData();
+			SaveToDiskTask.blockingExportTempData(this);
 		}
 		outState.putBoolean(NEWFORM, false);
 		outState.putString(KEY_ERROR, mErrorMessage);
@@ -1284,7 +1285,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 case FormEntryController.EVENT_GROUP:
                     // create a savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        SaveToDiskTask.blockingExportTempData();
+                        SaveToDiskTask.blockingExportTempData(this);
                     }
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
@@ -1336,7 +1337,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         || event == FormEntryController.EVENT_QUESTION) {
                     // create savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        SaveToDiskTask.blockingExportTempData();
+                        SaveToDiskTask.blockingExportTempData(this);
                     }
                 }
                 View next = createView(event, false);
@@ -2754,4 +2755,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		this.sendBroadcast(i);
 	}
 
+    @Override
+    public void onSavePointError(String errorMessage) {
+        if (errorMessage != null && errorMessage.trim().length() > 0) {
+            Toast.makeText(this, getString(R.string.save_point_error, errorMessage), Toast.LENGTH_LONG).show();
+        }
+    }
 }

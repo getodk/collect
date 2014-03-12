@@ -47,6 +47,7 @@
 <string name="data">Saved Forms</string>
 <string name="data_saved_error">Sorry, form save failed!</string>
 <string name="data_saved_ok">Form successfully saved!</string>
+<string name="save_point_error">Error saving recovery point: %s</string>
 <string name="default_completed">Default to finalized</string>
 <string name="default_completed_summary">Mark form as finalized by default</string>
 <string name="delete_confirm">Delete %s form(s)?</string>
