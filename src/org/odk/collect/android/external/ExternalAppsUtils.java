@@ -34,6 +34,7 @@ import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -111,15 +112,14 @@ public class ExternalAppsUtils {
                         // treat this is an xpath
                         XPathPathExpr pathExpr = XPathReference.getPathExpr(paramEntryValue);
                         XPathNodeset xPathNodeset = pathExpr.eval(formInstance, evaluationContext);
-                        result = XPathFuncExpr.toString(xPathNodeset);
+                        result = XPathFuncExpr.unpack(xPathNodeset);
                     } else {
                         // treat this is a function
                         XPathExpression xPathExpression = XPathParseTool.parseXPath(paramEntryValue);
                         result = xPathExpression.eval(formInstance, evaluationContext);
-                        result = XPathFuncExpr.toString(result);
                     }
-                    if (result != null) {
-                        intent.putExtra(paramEntry.getKey(), (String) result);
+                    if (result != null && result instanceof Serializable) {
+                        intent.putExtra(paramEntry.getKey(), (Serializable) result);
                     }
                 } catch (Exception e) {
                     throw new ExternalParamsException("Could not evaluate '" + paramEntryValue + "'", e);
