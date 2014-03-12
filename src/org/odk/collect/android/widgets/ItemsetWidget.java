@@ -67,7 +67,7 @@ public class ItemsetWidget extends QuestionWidget implements
         super(context, prompt);
         mButtons = new RadioGroup(context);
         mButtons.setId(QuestionWidget.newUniqueId());
-        mReadOnly = prompt.isReadOnly();
+        mReadOnly = prompt.isReadOnly() || readOnlyOverride;
         mAnswers = new HashMap<String, String>();
 
         String currentAnswer = prompt.getAnswerText();
