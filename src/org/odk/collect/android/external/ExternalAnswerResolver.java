@@ -46,7 +46,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
     @Override
     @SuppressWarnings("unchecked")
     public IAnswerData resolveAnswer(String textVal, TreeElement treeElement, FormDef formDef) {
-        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.dataType, formDef, treeElement.getRef());
+        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(), formDef, treeElement.getRef());
         if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
             boolean containsSearchExpression = false;
 
@@ -146,7 +146,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
     }
 
     private RuntimeException createBugRuntimeException(TreeElement treeElement, String textVal) {
-        return new RuntimeException("The appearance column of the field " + treeElement.getName() + " contains a search() call and the field type is " + treeElement.dataType + " and the saved answer is " + textVal);
+        return new RuntimeException("The appearance column of the field " + treeElement.getName() + " contains a search() call and the field type is " + treeElement.getDataType() + " and the saved answer is " + textVal);
     }
 
     @SuppressWarnings("unchecked")

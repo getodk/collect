@@ -169,9 +169,10 @@ public abstract class QuestionWidget extends LinearLayout {
         // shown when image is clicked
         String bigImageURI = p.getSpecialFormQuestionText("big-image");
 
+        String promptText = p.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         mQuestionText = new TextView(getContext());
-        mQuestionText.setText(p.getLongText());
+        mQuestionText.setText(promptText == null ? "" : promptText);
         mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         mQuestionText.setTypeface(null, Typeface.BOLD);
         mQuestionText.setPadding(0, 0, 0, 7);
@@ -180,7 +181,7 @@ public abstract class QuestionWidget extends LinearLayout {
         // Wrap to the size of the parent view
         mQuestionText.setHorizontallyScrolling(false);
 
-        if (p.getLongText() == null || p.getLongText().length() == 0) {
+        if (promptText == null || promptText.length() == 0) {
             mQuestionText.setVisibility(GONE);
         }
 

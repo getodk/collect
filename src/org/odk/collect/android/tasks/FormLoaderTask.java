@@ -22,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.instance.InstanceInitializationFactory;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
@@ -78,6 +79,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 			"org.javarosa.core.model.data.DateTimeData", // CoreModelModule
 			"org.javarosa.core.model.data.DecimalData", // CoreModelModule
 			"org.javarosa.core.model.data.GeoPointData", // CoreModelModule
+			"org.javarosa.core.model.data.GeoShapeData", // CoreModelModule
+			"org.javarosa.core.model.data.GeoTraceData", // CoreModelModule
 			"org.javarosa.core.model.data.IntegerData", // CoreModelModule
 			"org.javarosa.core.model.data.LongData", // CoreModelModule
 			"org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
@@ -87,7 +90,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 			"org.javarosa.core.model.data.StringData", // CoreModelModule
 			"org.javarosa.core.model.data.TimeData", // CoreModelModule
 			"org.javarosa.core.model.data.UncastData", // CoreModelModule
-			"org.javarosa.core.model.data.helper.BasicDataPointer" // CoreModelModule
+			"org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
+			"org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
+			"org.javarosa.core.model.Action", // CoreModelModule
+			"org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
     };
     private static final String ITEMSETS_CSV = "itemsets.csv";
 
@@ -270,7 +276,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 	                // This order is important. Import data, then initialize.
                     try {
                         importData(instance, fec);
-                        fd.initialize(false);
+                        fd.initialize(false, new InstanceInitializationFactory());
                     } catch (RuntimeException e) {
                         Log.e(t, e.getMessage(), e);
 
@@ -279,17 +285,17 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                             // this means that the .save file is corrupted or 0-sized, so don't use it.
                             usedSavepoint = false;
                             mInstancePath = null;
-                            fd.initialize(true);
+                            fd.initialize(true, new InstanceInitializationFactory());
                         } else {
                             // this means that the saved instance is corrupted.
                             throw e;
                         }
                     }
                 } else {
-            		fd.initialize(true);
+            		fd.initialize(true, new InstanceInitializationFactory());
             	}
             } else {
-                fd.initialize(true);
+                fd.initialize(true, new InstanceInitializationFactory());
             }
         } catch (RuntimeException e) {
             Log.e(t, e.getMessage(), e);
@@ -343,7 +349,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 readCSV(csv, csvmd5);
             }
         }
-        
+
         // This should get moved to the Application Class
         if (ReferenceManager._().getFactories().length == 0) {
             // this is /sdcard/odk
@@ -630,7 +636,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 		this.resultCode = resultCode;
 		this.intent = intent;
 	}
-	
+
 	private void readCSV(File csv, String formHash) {
 
         CSVReader reader;
