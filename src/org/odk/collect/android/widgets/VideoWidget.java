@@ -35,6 +35,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import android.util.TypedValue;
@@ -245,30 +246,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		}
 	}
 
-	private String getPathFromUri(Uri uri) {
-		if (uri.toString().startsWith("file")) {
-			return uri.toString().substring(6);
-		} else {
-			String[] videoProjection = { Video.Media.DATA };
-			Cursor c = null;
-			try {
-				c = getContext().getContentResolver().query(uri,
-						videoProjection, null, null, null);
-				int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
-				String videoPath = null;
-				if (c.getCount() > 0) {
-					c.moveToFirst();
-					videoPath = c.getString(column_index);
-				}
-				return videoPath;
-			} finally {
-				if (c != null) {
-					c.close();
-				}
-			}
-		}
-	}
-
 	@Override
 	public void setBinaryData(Object binaryuri) {
 		// you are replacing an answer. remove the media.
@@ -277,7 +254,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		}
 
 		// get the file path and create a copy in the instance folder
-		String binaryPath = getPathFromUri((Uri) binaryuri);
+		String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri, Video.Media.DATA);
 		String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
 		String destVideoPath = mInstanceFolder + File.separator
 				+ System.currentTimeMillis() + extension;

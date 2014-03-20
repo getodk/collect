@@ -65,10 +65,12 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -668,26 +670,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			 */
 
 			// get gp of chosen file
-			String sourceImagePath = null;
 			Uri selectedImage = intent.getData();
-			if (selectedImage.toString().startsWith("file")) {
-				sourceImagePath = selectedImage.toString().substring(6);
-			} else {
-				String[] projection = { Images.Media.DATA };
-				Cursor cursor = null;
-				try {
-					cursor = getContentResolver().query(selectedImage,
-							projection, null, null, null);
-					int column_index = cursor
-							.getColumnIndexOrThrow(Images.Media.DATA);
-					cursor.moveToFirst();
-					sourceImagePath = cursor.getString(column_index);
-				} finally {
-					if (cursor != null) {
-						cursor.close();
-					}
-				}
-			}
+			String sourceImagePath = MediaUtils.getPathFromUri(this, selectedImage, Images.Media.DATA);
 
 			// Copy file to sdcard
 			String mInstanceFolder1 = formController.getInstancePath()
