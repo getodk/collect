@@ -61,6 +61,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     // client
     public static String KEY_CHANGE_FONT_SIZE = "change_font_size";
     public static String KEY_DEFAULT_TO_FINALIZED = "default_to_finalized";
+    public static String KEY_HIGH_RESOLUTION = "high_resolution";
     public static String KEY_SHOW_SPLASH_SCREEN = "show_splash_screen";
     public static String KEY_SELECT_SPLASH_SCREEN = "select_splash_screen";
     // form entry

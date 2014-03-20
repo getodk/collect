@@ -32,7 +32,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -43,7 +42,6 @@ import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.views.ODKView;
 
@@ -100,15 +98,15 @@ public class FormController {
         mFormEntryController = fec;
         mInstancePath = instancePath;
     }
-    
+
     public FormDef getFormDef() {
         return mFormEntryController.getModel().getForm();
     }
-    
+
     public void setItemsetHash(String hash) {
         mItemsetHash = hash;
     }
-    
+
     public String getItemsetHash() {
     	return mItemsetHash;
     }
@@ -493,7 +491,7 @@ public class FormController {
      * saveAnswer attempts to save the current answer into the data model without doing any
      * constraint checking. Only use this if you know what you're doing. For normal form filling you
      * should always use answerQuestion().
-     * 
+     *
      * @param data
      * @return true if saved successfully, false otherwise.
      */

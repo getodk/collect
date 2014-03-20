@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Gravar Localização</string>
   <string name="accuracy">Precisão</string>
   <string name="activity_not_found">Nenhuma atividade detectada por: %s</string>
@@ -243,4 +243,13 @@
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Impressão Inicializada</string>
   <string name="no_printer">A impressora solicitada não está instalada. Por favor, instale a impressora</string>
+  <string name="constraint_behavior">Comportamento de processamento da regra</string>
+  <string name="constraint_behavior_on_swipe">Valide após passar</string>
+  <string name="constraint_behavior_on_finalize">Adiar validação até finalizar</string>
+  <string name="view_change_location">Ver ou modificar localização</string>
+  <string name="open_url">Abrir Url</string>
+  <string name="get_bearing">Gravar mensagem de suporte</string>
+  <string name="replace_bearing">Substituir mensagem de suporte</string>
+  <string name="getting_bearing">Carregar mensagem de suporte</string>
+  <string name="accept_bearing">Gravar Mensagem de Suporte</string>
 </resources>

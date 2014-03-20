@@ -11,8 +11,7 @@
 		License.
 -->
 <resources
-  xmlns:tools="http://schemas.android.com/tools"
-  tools:ignore="MissingTranslation">
+  xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
@@ -294,4 +293,6 @@
     <string name="survey_saving_saving_message">Saving to SD card…</string>
     <string name="survey_saving_finalizing_message">Finalizing to SD card…</string>
     <string name="survey_saving_encrypting_message">Encrypting data…</string>
+    <string name="high_resolution_summary">Enable high-resolution video recordings</string>
+    <string name="high_resolution">Enable hi-res video</string>
 </resources>

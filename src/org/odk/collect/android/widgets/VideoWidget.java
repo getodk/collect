@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -23,6 +23,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
+import android.content.SharedPreferences;
+
+import org.odk.collect.android.preferences.PreferencesActivity;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -30,6 +34,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import android.util.TypedValue;
@@ -45,7 +50,7 @@ import java.io.File;
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -59,6 +64,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 	private String mBinaryName;
 
 	private String mInstanceFolder;
+
+	public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
 	public VideoWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
@@ -84,6 +91,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		mCaptureButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+			                .getInstance());
 				Collect.getInstance()
 						.getActivityLogger()
 						.logInstanceAction(VideoWidget.this, "captureButton",
@@ -92,6 +101,12 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 						android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 				i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
 						Video.Media.EXTERNAL_CONTENT_URI.toString());
+				// request high resolution if configured for that...
+				boolean high_resolution = settings.getBoolean(PreferencesActivity.KEY_HIGH_RESOLUTION,
+		                VideoWidget.DEFAULT_HIGH_RESOLUTION);
+				if(high_resolution) {
+					i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY,1);
+				}
 				try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());

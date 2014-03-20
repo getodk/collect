@@ -92,6 +92,13 @@
     <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client" >
+       <ListPreference android:id="@+id/constraint_behavior"
+            android:defaultValue="on_swipe"
+            android:dialogTitle="@string/constraint_behavior"
+            android:entries="@array/constraint_behavior_entries"
+            android:entryValues="@array/constraint_behavior_entry_values"
+            android:key="constraint_behavior"
+            android:title="@string/constraint_behavior" />
        <ListPreference
             android:id="@+id/navigation"
             android:defaultValue="swipe"
@@ -100,14 +107,6 @@
             android:entryValues="@array/navigation_entry_values"
             android:key="navigation"
             android:title="@string/navigation" />
-        <ListPreference
-            android:id="@+id/constraint_behavior"
-            android:defaultValue="on_swipe"
-            android:dialogTitle="@string/constraint_behavior"
-            android:entries="@array/constraint_behavior_entries"
-            android:entryValues="@array/constraint_behavior_entry_values"
-            android:key="constraint_behavior"
-            android:title="@string/constraint_behavior" />
         <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"
@@ -122,6 +121,12 @@
             android:key="default_completed"
             android:summary="@string/default_completed_summary"
             android:title="@string/default_completed" />
+        <CheckBoxPreference
+            android:id="@+id/high_resolution"
+            android:defaultValue="true"
+            android:key="high_resolution"
+            android:summary="@string/high_resolution_summary"
+            android:title="@string/high_resolution" />
         <CheckBoxPreference
             android:id="@+id/show_splash"
             android:key="showSplash"

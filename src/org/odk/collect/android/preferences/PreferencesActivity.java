@@ -46,7 +46,7 @@ import android.widget.Toast;
 
 /**
  * Handles general preferences.
- * 
+ *
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior option)
  */
 public class PreferencesActivity extends PreferenceActivity implements
@@ -73,7 +73,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
 	public static final String PROTOCOL_GOOGLE = "google";
 	public static final String PROTOCOL_OTHER = "";
-	
+
 	public static final String NAVIGATION_SWIPE = "swipe";
 	public static final String NAVIGATION_BUTTONS = "buttons";
 	public static final String NAVIGATION_SWIPE_BUTTONS = "swipe_buttons";
@@ -86,6 +86,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_SUBMISSION_URL = "submission_url";
 
 	public static final String KEY_COMPLETED_DEFAULT = "default_completed";
+
+	public static final String KEY_HIGH_RESOLUTION = "high_resolution";
 
 	public static final String KEY_AUTH = "auth";
 
@@ -188,7 +190,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 					mFormListUrlPreference.setEnabled(true);
 					mSubmissionUrlPreference.setEnabled(true);
 				}
-				
+
 				return true;
 			}
 		});
@@ -221,7 +223,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mServerUrlPreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
 
-		
+
 
 		if (!(serverAvailable || adminMode)) {
 			Preference protocol = findPreference(KEY_PROTOCOL);
@@ -231,10 +233,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 			// exist if we take away access
 			disableFeaturesInDevelopment();
 		}
-		
+
 		if (!(urlAvailable || adminMode)) {
 			serverCategory.removePreference(mServerUrlPreference);
-		} 
+		}
 
 		mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
 		mUsernamePreference.setOnPreferenceChangeListener(this);
@@ -362,7 +364,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		if (!(navigationAvailable || adminMode)) {
 			clientCategory.removePreference(mNavigationPreference);
 		}
-		
+
 		boolean constraintBehaviorAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, true);
 		mConstraintBehaviorPreference = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
@@ -384,7 +386,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		if (!(constraintBehaviorAvailable || adminMode)) {
 			clientCategory.removePreference(mConstraintBehaviorPreference);
 		}
-		
+
 		boolean fontAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
 		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
@@ -413,6 +415,14 @@ public class PreferencesActivity extends PreferenceActivity implements
 		Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
 		if (!(defaultAvailable || adminMode)) {
 			clientCategory.removePreference(defaultFinalized);
+		}
+
+		boolean resolutionAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_HIGH_RESOLUTION, true);
+
+		Preference highResolution = findPreference(KEY_HIGH_RESOLUTION);
+		if (!(resolutionAvailable || adminMode)) {
+			clientCategory.removePreference(highResolution);
 		}
 
 		mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
@@ -471,7 +481,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 						return true;
 					}
 				});
-		
+
 		mSplashPathPreference.setSummary(mSplashPathPreference
 				.getSharedPreferences().getString(KEY_SPLASH_PATH,
 						getString(R.string.default_splash_path)));
@@ -487,7 +497,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 
 		if (!(fontAvailable || defaultAvailable
-				|| showSplashAvailable || navigationAvailable || adminMode)) {
+				|| showSplashAvailable || navigationAvailable || adminMode || resolutionAvailable)) {
 			getPreferenceScreen().removePreference(clientCategory);
 		}
 
@@ -570,7 +580,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	/**
 	 * Disallows whitespace from user entry
-	 * 
+	 *
 	 * @return
 	 */
 	private InputFilter getWhitespaceFilter() {
@@ -590,7 +600,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	/**
 	 * Disallows carriage returns from user entry
-	 * 
+	 *
 	 * @return
 	 */
 	private InputFilter getReturnFilter() {
