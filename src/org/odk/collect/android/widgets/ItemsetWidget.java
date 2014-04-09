@@ -106,7 +106,7 @@ public class ItemsetWidget extends QuestionWidget implements
         ArrayList<String> arguments = new ArrayList<String>();
         while ((andIndex = queryString.indexOf(" and ")) != -1
                 || (orIndex = queryString.indexOf(" or ")) != -1) {
-            if (andIndex != 1) {
+            if (andIndex != -1) {
                 String subString = queryString.substring(0, andIndex);
                 String pair[] = subString.split("=");
                 if (pair.length == 2) {
@@ -118,7 +118,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 // move string forward to after " and "
                 queryString = queryString.substring(andIndex + 5, queryString.length());
                 andIndex = -1;
-            } else if (orIndex != 1) {
+            } else if (orIndex != -1) {
                 String subString = queryString.substring(0, orIndex);
                 String pair[] = subString.split("=");
                 if (pair.length == 2) {
