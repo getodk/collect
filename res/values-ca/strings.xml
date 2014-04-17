@@ -228,7 +228,7 @@
   <string name="autosend_network_summary">Auto-enviament quan xarxa disponible</string>
   <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
-  <string name="found_at_end">Desmarcar per amagar en final de'entrada de formulari</string>
+  <string name="found_at_end">Desmarcar per amagar en final de\'entrada de formulari</string>
   <string name="no_account">Sense compte</string>
   <string name="save_preferences">Salve Configuració a disc</string>
   <string name="form_forward">Següent</string>
@@ -237,9 +237,9 @@
   <string name="swipe_navigation">Usar desplaçament horizontal</string>
   <string name="buttons_navigation">Usar botons avança/enrere</string>
   <string name="swipe_buttons_navigation">Usar desplaçaments i botons</string>
-  <string name="swipe_instructions">Ets a l'inici de %s. Desplaça la pantalla com l'exemple de sota per anar endavant i enrere.</string>
-  <string name="buttons_instructions">Ets a l'inici de %s. Prem les fletxes de sota per anar endavant i enrere.</string>
-  <string name="swipe_buttons_instructions">Ets a l'inici de %s. Desplaça la pantalla com l'exemple o prem les fletxes per anar endavant i enrere.</string>
+  <string name="swipe_instructions">Ets a l\'inici de %s. Desplaça la pantalla com l\'exemple de sota per anar endavant i enrere.</string>
+  <string name="buttons_instructions">Ets a l\'inici de %s. Prem les fletxes de sota per anar endavant i enrere.</string>
+  <string name="swipe_buttons_instructions">Ets a l\'inici de %s. Desplaça la pantalla com l\'exemple o prem les fletxes per anar endavant i enrere.</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Inicia la impressió</string>
   <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>

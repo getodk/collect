@@ -150,7 +150,7 @@
   <string name="manifest_server_error">دکھایا گیا جواب OpenRosa ورژن کو رپورت نہیں کرتا ۔ خراب سرور</string>
   <string name="root_namespace_error">بنیادی عنصر کے نام کا خانہ غلط ہے</string>
   <string name="manifest_tag_error">دکھایا گیا %s  کے اندراج سے ایک یا ذیادہ  tagsغائب ہیں ۔ فائل کا نام، ہیش، یا ڈاون لوڈ </string>
-  <string name="form_download_progress">غلطی: میڈیا فائل حاصل کیا جا رہ&#x200e;%1$s&#x200f;ا ہے: &#x200e;%3$s&#x200f; کا &#x200e;%2$&#x200f;</string>
+  <string name="form_download_progress">غلطی: میڈیا فائل حاصل کیا جا رہ&#x200e;%1$s&#x200f;ا ہے: &#x200e;%3$s&#x200f; کا &#x200e;%2$s&#x200f;</string>
   <string name="success">کامیابی</string>
   <string name="no_forms_uploaded">معافی، کوئی فارم اپ لوڈ نہیں کیا گیا</string>
   <string name="upload_results">نتیجہ اپ لوڈ کریں</string>
