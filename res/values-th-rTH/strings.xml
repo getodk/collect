@@ -57,6 +57,7 @@
   <string name="enter_data">กรอกแบบสำรวจใหม่</string>
   <string name="enter_data_button">กรอกแบบสำรวจใหม่</string>
   <string name="error_occured">มีข้อผิดพลาดเกิดขึ้น</string>
+  <string name="error_attaching_binary_file">เกิดข้อผิดพลาดระหว่างแนบไฟล์มีเดีย: %s</string>
   <string name="fetching_file">กำลังดาวน์โหลด %1$s.⏎\n⏎\nจาก %2$s ของ %3$s แบบสำรวจ</string>
   <string name="file_deleted_error">ขออภัย ไม่สามารถลบแบบสำรวจ %1$s จาก %2$s ที่เลือกไว้ได้</string>
   <string name="file_deleted_ok">ลบแบบสำรวจ %s เรียบร้อยแล้ว</string>
@@ -252,4 +253,17 @@
   <string name="replace_bearing">แทนที่ทิศทาง</string>
   <string name="getting_bearing">กำลังแสดงทิศทาง</string>
   <string name="accept_bearing">บันทึกทิศทาง</string>
+  <string name="ext_file_no_data_error">ไม่มีข้อมูลในไฟล์</string>
+  <string name="ext_import_generic_error">ไม่สามารถนำเข้าข้อมูลจาก %1$s. เนื่องจาก: %2$s</string>
+  <string name="ext_import_progress_message">กำลังโหลดข้อมูลล่วงหน้าจาก \'%1$s\', กรุณารอสักครู่... %2$s</string>
+  <string name="ext_import_cancelled_message">การอ่านข้อมูลถูกยกเลิก</string>
+  <string name="ext_import_completed_message">การอ่านข้อมูลเสร็จสมบูรณ์</string>
+  <string name="survey_loading_reading_data_message">กำลังอ่านข้อมูลการสำรวจ</string>
+  <string name="survey_loading_reading_csv_message">กำลังอ่านไฟล์ CSV</string>
+  <string name="survey_saving_validating_message">กำลังตรวจความถูกต้องของคำตอบ</string>
+  <string name="survey_saving_collecting_message">กำลังรวบรวมข้อมูล</string>
+  <string name="survey_saving_saving_message">กำลังบันทึกลงใน SD card</string>
+  <string name="survey_saving_encrypting_message">กำลังเข้ารหัสข้อมูล</string>
+  <string name="high_resolution_summary">เปิดใช้งานการบันทึกวีดีโอความละเอียดสูง</string>
+  <string name="high_resolution">เปิดใช้งานวีดีโอความละเอียดสูง</string>
 </resources>

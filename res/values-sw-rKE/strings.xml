@@ -34,6 +34,8 @@
   <string name="data">Fomu zilizo hifadhiwa</string>
   <string name="data_saved_error">Samahani, fomu haikuhifadhiwa!</string>
   <string name="data_saved_ok">Fomu imehifadhiwa!</string>
+  <string name="save_point_error">Hitilafu imetokea kwa ncha ya urejesho: %s</string>
+  <string name="default_completed">sahihisha kama  fomu iliyo kamilika</string>
   <string name="default_completed_summary">sahihisha fomu kama iliyo kamilika</string>
   <string name="delete_confirm">Futa/Ondoa %s Fomu (nyingi)?</string>
   <string name="delete_file">Futa/Ondoa zilizochaguliwa</string>
@@ -56,7 +58,7 @@
   <string name="enter_data">Jaza fomu tupu</string>
   <string name="enter_data_button">Jaza fomu</string>
   <string name="error_occured">Hitilifau ilitokea</string>
-  <string name="fetching_file">inachukua %1$s.\n\n Fomu %2$s kati ya fomu() %3$s. </string>
+  <string name="fetching_file">inachukua %1$s.⏎ ⏎ Fomu %2$s kati ya fomu() %3$s. </string>
   <string name="file_deleted_error">Samahani, %1$s kati ya fomu() %2$s zilizochaguliwa hazikufutwa!</string>
   <string name="file_deleted_ok">Fomu() %s zimefutwa vilivyo!</string>
   <string name="file_delete_in_progress">samahani, kuna fomu tayari inafutwa!</string>
@@ -73,6 +75,7 @@
   <string name="jump_to_beginning">Enda Mwanzo</string>
   <string name="jump_to_end">Enda Mwisho</string>
   <string name="jump_to_previous">Enda Juu</string>
+  <string name="latitude">Latitudo</string>
   <string name="leave_repeat_yes">Usiongeze</string>
   <string name="leaving_repeat_ask">Ongeza kundi lingine moja!</string>
   <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
@@ -80,6 +83,7 @@
   <string name="load_remote_form_error">Tatizo katika kuchukua fomu!</string>
   <string name="location_provider_accuracy">Ukitumia %1$s. Usahihi ni %2$s m.</string>
   <string name="location_accuracy">Usahihi ni %1$s m</string>
+  <string name="longitude">Longitude</string>
   <string name="main_menu">Menu kuu</string>
   <string name="main_menu_details">Ukusanyaji wa data umefanywa rahisi....</string>
   <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>
@@ -114,7 +118,7 @@
   <string name="send_data">Tuma fomu iliyo kamilika</string>
   <string name="send_data_button">Tuma fomu (%s) iliyo kamilika</string>
   <string name="send_selected_data">Tuma iliyochaguliwa</string>
-  <string name="server_auth_credentials">Tafadhali sajili jina na thibitisho kwa server: \n%s</string>
+  <string name="server_auth_credentials">Tafadhali sajili jina na thibitisho kwa server: ⏎% s</string>
   <string name="server_requires_auth">Server inahitaji uthibitishaji</string>
   <string name="server_url">anwani ya wavuti</string>
   <string name="server_preferences">Mazingira ya Server</string>
@@ -130,6 +134,7 @@
   <string name="show_splash">Onyesha kioo</string>
   <string name="show_splash_summary">Huonyesha ala linapoanza</string>
   <string name="splash_path">Picha iliyochaguliwa</string>
+  <string name="default_splash_path">Chaguo-msingi ya ODK</string>
   <string name="select_another_image">Chagua Picha nyingine</string>
   <string name="use_odk_default">Tumia picha ya kawaida</string>
   <string name="change_splash_path">Badilisha picha</string>
@@ -148,8 +153,8 @@
   <string name="form_scan_starting">Inatafuta fomu.....</string>
   <string name="access_error">Hitilafu wakati wa kupata %s:</string>
   <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
-  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>
-  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi: %s</string>
+  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa% s</string>
+  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi:% s</string>
   <string name="manifest_tag_error">Wasilisho la Manifest %s linakosa vitambulisho moja au zaidi: jina la faili, hash, au downloadUrl</string>
   <string name="form_download_progress">%1$s. Kupata faili za vyombo vya habari: %2$s kati ya %3$s</string>
   <string name="file_fetch_failed">Hitilafu: %2$s (%3$s) katika %1$s</string>
@@ -205,6 +210,7 @@
   <string name="change_server">Jukwaa</string>
   <string name="change_username_default">Jina la mtumiaji</string>
   <string name="admin_preferences">Settings za admin</string>
+  <string name="admin_access_settings">bonyeza ili upenye kama admin</string>
   <string name="user_access_form_entry">Mtumiaji anaweza kupata vitu vya kujaza fomu:</string>
   <string name="save_mid">Hifadhi Fomu</string>
   <string name="enter_new_password">Weka password mpya</string>
@@ -219,6 +225,7 @@
   <string name="autosend_wifi_summary">Kutuma moja kwa moja ukitumia Wi-Fi ipo</string>
   <string name="autosend_network">Tuma moja kwa moja na mtandao</string>
   <string name="autosend_network_summary">Kutuma moja kwa moja na mtandao ipo</string>
+  <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
   <string name="no_account">Hakuna akaunti</string>
   <string name="save_preferences">Hifadhi mazingira kwa diski</string>
   <string name="form_forward">Ijayo</string>
@@ -226,12 +233,39 @@
   <string name="navigation">uelekezaji</string>
   <string name="swipe_navigation">Teleza kwa upande</string>
   <string name="buttons_navigation">Tumia vibonyezo vya mbele na nyuma</string>
+  <string name="swipe_buttons_navigation">Telezesha ama tumia vibonyezo</string>
   <string name="change_url_default">anwani ya wavuti</string>
   <string name="launch_printer">Anzisha uchapishaji</string>
   <string name="no_printer">Printer utakayo haipo. Tafadhali weka Printer</string>
+  <string name="constraint_behavior">Uchakatishi wa dhibitisho</string>
+  <string name="constraint_behavior_on_swipe">Dhibitisha ukisonga mbele</string>
+  <string name="constraint_behavior_on_finalize">Chelewesha fomu hadi itamatishwe</string>
   <string name="view_change_location">Tazama au badilisha Eneo/Mahali</string>
   <string name="open_url">Url wazi</string>
   <string name="get_bearing">Rekodi Eneo/Mahali</string>
   <string name="replace_bearing">Badilisha Eneo/Mahali</string>
+  <string name="getting_bearing">Inapakia eneo</string>
   <string name="accept_bearing">Rekodi Eneo/Mahali</string>
+  <string name="ext_file_no_data_error">Faili haina ujumbe</string>
+  <string name="ext_conflicting_columns_error">Safuwima %s zinalingana!</string>
+  <string name="ext_import_generic_error">Data haingeagizwa kutoka %1$s. Sababu: %2$s</string>
+  <string name="ext_import_progress_message">Data inapakia kutoka \'%1$s\', tafadhali ngoja... %2$s</string>
+  <string name="ext_import_cancelled_message">Usomaji wa takwimu umekatizwa</string>
+  <string name="ext_import_finalizing_message">Takwimu ya pakio inatamatishwa...</string>
+  <string name="ext_import_completed_message">Usomaji wa takwimu umemalizika</string>
+  <string name="ext_assign_value_error">Safuwima %s zinalingana!</string>
+  <string name="fs_create_media_folder_error">Faili \'%s\' la midia halitengenezeki.</string>
+  <string name="fs_create_folder_error">Ripoti za Collect: Kabrasha haingetengenezeki: %s</string>
+  <string name="survey_internal_error">Hitilafu ya ndani: hatua ya amri ina kasoro.</string>
+  <string name="survey_multiple_forms_error">Umepakua fomu mbili tofauti zinayo ID na version moja. Labda ilikuwa fomu moja ikipakiwa</string>
+  <string name="survey_loading_reading_form_message">Fomu inasomwa taarifa</string>
+  <string name="survey_loading_reading_data_message">Takwimu ya utafiti inasomwa...</string>
+  <string name="survey_loading_reading_csv_message">Faili za CSV zinasomwa...</string>
+  <string name="survey_saving_validating_message">Majibu yanadhibitishwa...</string>
+  <string name="survey_saving_collecting_message">Takwimu inakusanywa...</string>
+  <string name="survey_saving_saving_message">Takwimu inahifadhiwa kwa kadi ya SD...</string>
+  <string name="survey_saving_finalizing_message">Tamatisho la takwimu kwa kadi ya SD...</string>
+  <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu...</string>
+  <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
+  <string name="high_resolution">Ezesha video za mwonekano wa hali ya juu...</string>
 </resources>

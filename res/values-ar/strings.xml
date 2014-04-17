@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">سجل الموقع</string>
+  <string name="accept_location">سجل احداثيات الموقع </string>
   <string name="accuracy">الدقة</string>
   <string name="add_another">إضافة مجموعة</string>
   <string name="add_another_repeat">إضافة مجموعة أخرى \"%s\"؟</string>
@@ -8,7 +8,7 @@
   <string name="add_repeat">إضافة مجموعة جديدة \'%s\"؟</string>
   <string name="add_repeat_no">عدم الإضافة</string>
   <string name="altitude">ارتفاع</string>
-  <string name="audio_file_error">لم يتمّ تحديد أي ملف صوتي.</string>
+  <string name="audio_file_error">لم يتم تحديد ملف الصوت</string>
   <string name="audio_file_invalid">الملف: %s ملف صوتي غير صالح</string>
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
@@ -16,10 +16,11 @@
   <string name="cancel_saving_form">إلغاء</string>
   <string name="cannot_edit_completed_form">يتعذر تحرير هذا النموذج مرة واحدة تم وضع علامة على أنها كاملة. قد تكون مشفرة.</string>
   <string name="capture_audio">تسجيل صوتي</string>
-  <string name="capture_image">التقاط صورة</string>
-  <string name="capture_video">تسجيل فيديو</string>
+  <string name="capture_image">التقط صورة</string>
+  <string name="capture_video">سجل فيديو</string>
   <string name="change_language">تغيير اللغة</string>
   <string name="change_password">ODK كلمة المرور</string>
+  <string name="change_username">إسم المستخدم</string>
   <string name="clear_answer">حذف الإجابة</string>
   <string name="clear_answer_ask">حذف الإجابة؟</string>
   <string name="clear_answer_no">إلغاء</string>

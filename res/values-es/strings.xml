@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Obtener localización</string>
+  <string name="accept_location">Registrar localización</string>
   <string name="accuracy">Precisión</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
@@ -34,6 +34,7 @@
   <string name="data">Formularios Guardados</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
+  <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
   <string name="default_completed">Considerar finalizado por defecto</string>
   <string name="default_completed_summary">Marcar el formulario como terminado por defecto</string>
   <string name="delete_confirm">Borrar %s formulario(s)?</string>
@@ -57,6 +58,7 @@
   <string name="enter_data">Llenar nuevo formulario</string>
   <string name="enter_data_button">Llenar nuevo formulario</string>
   <string name="error_occured">Se ha producido un error</string>
+  <string name="error_attaching_binary_file">Error detectado al conectar medio: %s</string>
   <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
   <string name="file_deleted_error">%1$s de %2$s formulario(s) seleccionados no se borraron!</string>
   <string name="file_deleted_ok">%s formulario(s) se borraron correctamente!</string>
@@ -243,6 +245,7 @@
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="constraint_behavior">Comportamiento del proceso de restricciones</string>
   <string name="constraint_behavior_on_swipe">Validar con swipe hacia delante.</string>
   <string name="constraint_behavior_on_finalize">Postponer validación hasta el final</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
@@ -251,4 +254,38 @@
   <string name="replace_bearing">Cambiar Rumbo</string>
   <string name="getting_bearing">Cargando Rumbo</string>
   <string name="accept_bearing">Guardar Rumbo</string>
+  <string name="sdcard_unmounted">Collect no puede acceder tarjeta SD. ¿Esta conectada via USB? (estado actual: %s)</string>
+  <string name="ext_file_no_data_error">El archivo no contiene datos!</string>
+  <string name="ext_conflicting_columns_error">Columnas %s coinciden !</string>
+  <string name="ext_sortBy_numeric_error">Su columna de clasificación debe contener solo valores numéricos. El valor conflictivo fue \'%s\'.</string>
+  <string name="ext_search_wrong_arguments_error">Error sintáctico en función search(): La función necesita 1, 4 o 6 argumentos.</string>
+  <string name="ext_search_wrong_function_error">Error sintáctico en función search(): Función \'%s\' desconocida.</string>
+  <string name="ext_search_bad_function_error">Error sintáctico en función search(): \'%s\' no fue evaluada como una función.</string>
+  <string name="ext_search_return_error">El gestor de búsqueda ha devuelto unn objeto de tipo \'%s\'.</string>
+  <string name="ext_import_generic_error">No puede importar datos desde %1$s. Razón: %2$s</string>
+  <string name="ext_import_progress_message">Precarga datos desde \'%1$s\'. Por favor espere... %2$s</string>
+  <string name="ext_import_cancelled_message">Lectura de datos cancelada.</string>
+  <string name="ext_import_finalizing_message">Acabando datos precargados...</string>
+  <string name="ext_import_completed_message">Lectura de datos completada!</string>
+  <string name="ext_not_initialized_error">El ExternalDataManager no ha sido inicializado.</string>
+  <string name="ext_import_csv_missing_error">Los datos externos para %1$s no ha sido importados. Ha olvidado incluir el archivo %2$s.csv con su formulario?</string>
+  <string name="ext_search_generic_error">Error sintáctico en función search(): %s</string>
+  <string name="ext_assign_value_error">No puede asignar el valor a \'%s\'.</string>
+  <string name="fs_delete_media_path_if_file_error">No puede borrar \'%s\'. Por favor, borre manualmente el archivo y recargue el formulario.</string>
+  <string name="fs_create_media_folder_error">No pudo crear la carpeta de medios \'%s\'</string>
+  <string name="fs_create_folder_error">Collect reports: No puede crear directorio: %s</string>
+  <string name="fs_create_folder_is_file_error">Collect reports: \'%s\' existe, pero no es un directorio.</string>
+  <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>
+  <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
+  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.\n</string>
+  <string name="survey_loading_reading_form_message">Leyendo definición de formulario...</string>
+  <string name="survey_loading_reading_data_message">Leyendo datos sondeo...</string>
+  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV...</string>
+  <string name="survey_saving_validating_message">Validando respuestas...</string>
+  <string name="survey_saving_collecting_message">Colectando datos...</string>
+  <string name="survey_saving_saving_message">Salvando en targeta SD </string>
+  <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
+  <string name="survey_saving_encrypting_message">Encriptando datos...</string>
+  <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
+  <string name="high_resolution">Activa vídeo HD</string>
 </resources>
