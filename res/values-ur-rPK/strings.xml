@@ -174,11 +174,16 @@
   <string name="change_view">نظارہ بدلیں</string>
   <string name="show_sent_and_unsent_forms">بھیجے گئے اور نہ بھیجے گئے فارم دکھائیں</string>
   <string name="show_unsent_forms">نہ بھیجے گئے فارم دکھایٰیں</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">&#x200e;\'&#x200f;Added on&#x200e;\' EEE, MMM dd, yyyy \'&#x200f;at&#x200e;\' HH:mm&#x200f;</string>
+  <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+  <string name="saved_on_date_at_time">&#x200e;\'&#x200f;Saved on&#x200e;\' EEE, MMM dd, yyyy \'&#x200f;at&#x200e;\' HH:mm&#x200f;</string>
+  <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+  <string name="finalized_on_date_at_time">&#x200e;\'&#x200f;Finalized on&#x200e;\' EEE, MMM dd, yyyy \'&#x200f;at&#x200e;\' HH:mm&#x200f;</string>
+  <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+  <string name="sent_on_date_at_time">&#x200e;\'&#x200f;Sent on&#x200e;\' EEE, MMM dd, yyyy \'&#x200f;at&#x200e;\' HH:mm&#x200f;</string>
+  <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+  <string name="sending_failed_on_date_at_time">&#x200e;\'&#x200f;Sending failed on&#x200e;\' EEE, MMM dd, yyyy \'&#x200f;at&#x200e;\' HH:mm&#x200f;</string>
+  <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
   <string name="version">ورژن</string>
   <string name="parent_form_not_present">اس محفوظ شدہ فارم کی تدوین نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر مٹا یا گیا ہے، ِِ؟؟؟؟ فارم کی شناخت: &#x200e;%1$s&#x200f;</string>
   <string name="launch_app">آغاز</string>
