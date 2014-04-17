@@ -37,9 +37,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
 
 		String action = intent.getAction();
-
-		NetworkInfo currentNetworkInfo = (NetworkInfo) intent
-				.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 			if (currentNetworkInfo != null && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {

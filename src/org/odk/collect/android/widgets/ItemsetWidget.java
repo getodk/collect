@@ -175,14 +175,15 @@ public class ItemsetWidget extends QuestionWidget implements
                         mTreeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
 
-                if (value instanceof XPathNodeset) {
-                    XPathNodeset xpn = (XPathNodeset) value;
-                    value = xpn.getValAt(0);
-                }
-
-                selectionArgs[i + 1] = value.toString();
                 if (value == null) {
                     nullArgs = true;
+                } else {
+	                if (value instanceof XPathNodeset) {
+	                    XPathNodeset xpn = (XPathNodeset) value;
+	                    value = xpn.getValAt(0);
+	                }
+
+	                selectionArgs[i + 1] = value.toString();
                 }
             }
         }

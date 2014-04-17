@@ -65,12 +65,10 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -238,7 +236,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mCurrentView = null;
 		mInAnimation = null;
 		mOutAnimation = null;
-		mGestureDetector = new GestureDetector(this);
+		mGestureDetector = new GestureDetector(this, this);
 		mQuestionHolder = (LinearLayout) findViewById(R.id.questionholder);
 
 		// get admin preference settings
@@ -985,7 +983,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			BitmapDrawable bitImage = null;
 			// attempt to load the form-specific logo...
 			// this is arbitrarily silly
-			bitImage = new BitmapDrawable(mediaDir + File.separator
+			bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
 					+ "form_logo.png");
 
 			if (bitImage != null && bitImage.getBitmap() != null
