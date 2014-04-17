@@ -94,7 +94,7 @@
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے؟؟ْ۔ محفوظ شدہ فارم (ز) کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="ok">ٹھیک ہے</string>
   <string name="parse_error">معافی، فارم کا تجزیہ نہیں ہو سکا</string>
-  <string name="parse_legacy_formlist_failed">سرور نے     &#x200e;Aggregate 0.9.x:%1$s&#x200f; کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے</string>
+  <string name="parse_legacy_formlist_failed">سرور نے     &#x200e;Aggregate 0.9.x: %1$s&#x200f; کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے</string>
   <string name="parse_openrosa_formlist_failed">سرور نے &#x200e;Open rosa standard 1.0&#x200f; کے صورت کے ساتھ موافق فارموں کی دستاویز مہیانہیں کی ہے</string>
   <string name="password">شناختی لفظ (Password)</string>
   <string name="play_video">وڈیو لگا دیں</string>
