@@ -582,7 +582,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             try {
                 Bundle extras = intent.getExtras();
                 ((ODKView) mCurrentView).setDataForFields(extras);
-			    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             } catch (JavaRosaException e) {
                 Log.e(t, e.getMessage(), e);
                 createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
