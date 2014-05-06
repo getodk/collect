@@ -234,7 +234,8 @@ public class MainMenuActivity extends Activity {
 
         startManagingCursor(mFinalizedCursor);
 		mCompletedCount = mFinalizedCursor.getCount();
-		mFinalizedCursor.registerContentObserver(mContentObserver);
+    getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, mContentObserver);
+//		mFinalizedCursor.registerContentObserver(mContentObserver);
 
 		// count for finalized instances
 		String selectionSaved = InstanceColumns.STATUS + "=?";
