@@ -233,8 +233,9 @@ public class MainMenuActivity extends Activity {
         }
 
         startManagingCursor(mFinalizedCursor);
-		mCompletedCount = mFinalizedCursor.getCount();
-		mFinalizedCursor.registerContentObserver(mContentObserver);
+	mCompletedCount = mFinalizedCursor.getCount();
+        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, mContentObserver);
+//		mFinalizedCursor.registerContentObserver(mContentObserver);
 
 
 		// count for incomplete instances
