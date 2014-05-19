@@ -421,7 +421,7 @@ public class MediaUtils {
 	@SuppressLint("NewApi")
 	public static String getPathFromUri(Context ctxt, Uri uri, String pathKey) {
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+		if (Build.VERSION.SDK_INT >= 19) {
 			return getPath(ctxt, uri);
 		} else {
 			if (uri.toString().startsWith("file")) {
@@ -465,7 +465,7 @@ public class MediaUtils {
 	 */
 	public static String getPath(final Context context, final Uri uri) {
 
-		final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+		final boolean isKitKat = Build.VERSION.SDK_INT >= 19;
 
 		// DocumentProvider
 		if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
