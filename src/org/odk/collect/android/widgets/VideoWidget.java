@@ -15,6 +15,9 @@
 package org.odk.collect.android.widgets;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -33,6 +36,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import android.util.Log;
@@ -63,6 +68,12 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 	private String mInstanceFolder;
 
 	public static final boolean DEFAULT_HIGH_RESOLUTION = true;
+	
+	private static final String NEXUS7 = "Nexus 7";
+	private static final String DIRECTORY_PICTURES = "Pictures";
+	public static final int MEDIA_TYPE_IMAGE = 1;
+	public static final int MEDIA_TYPE_VIDEO = 2;
+	private Uri nexus7Uri;
 
 	public VideoWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
@@ -96,8 +107,21 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 								"click", mPrompt.getIndex());
 				Intent i = new Intent(
 						android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-				i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+				
+				// Need to have this ugly code to account for 
+				// a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+				// of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
+				// Have it saving to an intermediate location instead of final destination
+				// to allow the current location to catch issues with the intermediate file
+				Log.i(t, "The build of this device is " + android.os.Build.MODEL);
+				if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+					nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);  
+					i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
+				} else {
+					i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
 						Video.Media.EXTERNAL_CONTENT_URI.toString());
+				}
+				
 				// request high resolution if configured for that...
 				boolean high_resolution = settings.getBoolean(PreferencesActivity.KEY_HIGH_RESOLUTION,
 		                VideoWidget.DEFAULT_HIGH_RESOLUTION);
@@ -276,6 +300,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
 		mBinaryName = newVideo.getName();
 		Collect.getInstance().getFormController().setIndexWaitingForData(null);
+		
+		// Need to have this ugly code to account for 
+		// a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+		// of the intent - uri in this case is a file 
+		if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+			Uri mediaUri = (Uri)binaryuri;
+			File fileToDelete = new File(mediaUri.getPath());
+			int delCount = fileToDelete.delete() ? 1 : 0;
+			Log.i(t, "Deleting original capture of file: " + mediaUri.toString() + " count: " + delCount);
+		} 
 	}
 
 	@Override
@@ -311,6 +345,52 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		mCaptureButton.cancelLongPress();
 		mChooseButton.cancelLongPress();
 		mPlayButton.cancelLongPress();
+	}
+	
+	/*
+	 * Create a file Uri for saving an image or video 
+	 * For Nexus 7 fix ... 
+	 * See http://developer.android.com/guide/topics/media/camera.html for more info
+	 */
+	private static Uri getOutputMediaFileUri(int type){
+		return Uri.fromFile(getOutputMediaFile(type));
+	}
+
+	/*
+	 *  Create a File for saving an image or video 
+	 *  For Nexus 7 fix ... 
+	 *  See http://developer.android.com/guide/topics/media/camera.html for more info
+	 */
+	private static File getOutputMediaFile(int type){
+		// To be safe, you should check that the SDCard is mounted
+		// using Environment.getExternalStorageState() before doing this.
+
+		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), DIRECTORY_PICTURES);
+		// This location works best if you want the created images to be shared
+		// between applications and persist after your app has been uninstalled.
+
+		// Create the storage directory if it does not exist
+		if (! mediaStorageDir.exists()){
+			if (! mediaStorageDir.mkdirs()){
+				Log.d(t, "failed to create directory");
+				return null;
+			}
+		}
+
+		// Create a media file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(new Date());
+		File mediaFile;
+		if (type == MEDIA_TYPE_IMAGE){
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+					"IMG_"+ timeStamp + ".jpg");
+		} else if(type == MEDIA_TYPE_VIDEO) {
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+					"VID_"+ timeStamp + ".mp4");
+		} else {
+			return null;
+		}
+
+		return mediaFile;
 	}
 
 }
