@@ -96,6 +96,7 @@ public class DownloadFormsTask extends
             }
 
             String tempMediaPath = null;
+            String finalMediaPath = null;
             FileResult fileResult = null;
             try {
                 // get the xml file
@@ -105,7 +106,8 @@ public class DownloadFormsTask extends
                 if (fd.manifestUrl != null) {
                     // use a temporary media path until everything is ok.
                     tempMediaPath = new File(Collect.CACHE_PATH, String.valueOf(System.currentTimeMillis())).getAbsolutePath();
-                    String error = downloadManifestAndMediaFiles(tempMediaPath, fd, count, total);
+                    finalMediaPath = FileUtils.constructMediaPath(fileResult.getFile().getAbsolutePath());
+                    String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd, count, total);
                     if (error != null) {
                         message += error;
                     }
@@ -539,7 +541,7 @@ public class DownloadFormsTask extends
     }
 
 
-    private String downloadManifestAndMediaFiles(String mediaPath, FormDetails fd, int count,
+    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath, FormDetails fd, int count,
             int total) throws Exception {
         if (fd.manifestUrl == null)
             return null;
@@ -644,9 +646,11 @@ public class DownloadFormsTask extends
         Log.i(t, "Downloading " + files.size() + " media files.");
         int mediaCount = 0;
         if (files.size() > 0) {
-            File mediaDir = new File(mediaPath);
+            File tempMediaDir = new File(tempMediaPath);
+            File finalMediaDir = new File(finalMediaPath);
 
-            FileUtils.checkMediaPath(mediaDir);
+            FileUtils.checkMediaPath(tempMediaDir);
+            FileUtils.checkMediaPath(finalMediaDir);
 
             for (MediaFile toDownload : files) {
                 ++mediaCount;
@@ -655,23 +659,24 @@ public class DownloadFormsTask extends
                         mediaCount, files.size()), Integer.valueOf(count).toString(), Integer
                             .valueOf(total).toString());
 //                try {
-                    File mediaFile = new File(mediaDir, toDownload.filename);
+                    File finalMediaFile = new File(finalMediaDir, toDownload.filename);
+                    File tempMediaFile = new File(tempMediaDir, toDownload.filename);
 
-                    if (!mediaFile.exists()) {
-                        downloadFile(mediaFile, toDownload.downloadUrl);
+                    if (!finalMediaFile.exists()) {
+                        downloadFile(tempMediaFile, toDownload.downloadUrl);
                     } else {
-                        String currentFileHash = FileUtils.getMd5Hash(mediaFile);
+                        String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                         String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
 
                         if (!currentFileHash.contentEquals(downloadFileHash)) {
                             // if the hashes match, it's the same file
                             // otherwise delete our current one and replace it with the new one
-                            FileUtils.deleteAndReport(mediaFile);
-                            downloadFile(mediaFile, toDownload.downloadUrl);
+                            FileUtils.deleteAndReport(finalMediaFile);
+                            downloadFile(tempMediaFile, toDownload.downloadUrl);
                         } else {
                             // exists, and the hash is the same
                             // no need to download it again
-                        	Log.i(t, "Skipping media file fetch -- file hashes identical: " + mediaFile.getAbsolutePath());
+                        	Log.i(t, "Skipping media file fetch -- file hashes identical: " + finalMediaFile.getAbsolutePath());
                         }
                     }
 //                } catch (Exception e) {
