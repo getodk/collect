@@ -192,7 +192,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sent_on_date_at_time">\'Envoyé le\' EEE, MMM dd, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'L\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'L\'\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
   <string name="parent_form_not_present">Impossible d\'éditer ce formulaire car son formulaire modèle n\'est plus présent ou a été supprimé.\n\nForm ID: %1$s</string>
