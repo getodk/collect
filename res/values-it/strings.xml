@@ -55,8 +55,8 @@
   <string name="do_not_save">Ignorare i cambiamenti</string>
   <string name="entering_repeat">Aggiungi gruppo</string>
   <string name="entering_repeat_ask">Aggiungere un nuovo gruppo ?</string>
-  <string name="enter_data">Compila Modulo Vuoto.</string>
-  <string name="enter_data_button">Compila Modulo Vuoto.</string>
+  <string name="enter_data">Compila Modulo Vuoto</string>
+  <string name="enter_data_button">Compila Modulo Vuoto</string>
   <string name="error_occured">Si è verificato un errore.</string>
   <string name="error_attaching_binary_file">Si è verificato un errore mentre allegavi: %s</string>
   <string name="fetching_file">Sto scaricando %1$s.\n\nModulo %2$s di %3$s moduli.</string>
@@ -117,7 +117,7 @@
   <string name="saving_form">Salvataggio Modulo</string>
   <string name="sending_items">Invio di %1$s di %2$s moduli</string>
   <string name="send_data">Invia Modulo Completato</string>
-  <string name="send_data_button">Invio Modulo Completato (%s)</string>
+  <string name="send_data_button">Invia Modulo Completato (%s)</string>
   <string name="send_selected_data">Invia selezionato</string>
   <string name="server_auth_credentials">Si prega di inserire Username e Password per il Server:\n%s</string>
   <string name="server_requires_auth">Server richiede l\'autenticazione</string>
@@ -246,8 +246,8 @@
   <string name="launch_printer">Inizio Stampa</string>
   <string name="no_printer">La stampante richiesta non è installata. Per piacere installa la stampante.</string>
   <string name="constraint_behavior">Comportamento sui vincoli</string>
-  <string name="constraint_behavior_on_swipe">Convalida sopra scorrendo il dito in avanti</string>
-  <string name="constraint_behavior_on_finalize">Ritarda la convalida fino a quando Finalizzato</string>
+  <string name="constraint_behavior_on_swipe">Convalida scorrendo il dito in avanti</string>
+  <string name="constraint_behavior_on_finalize">Ritarda Convalida fino a quando Completato</string>
   <string name="view_change_location">Vedi o Cambia Posizione</string>
   <string name="open_url">Apri URL</string>
   <string name="get_bearing">Registra Bussola</string>
