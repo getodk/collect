@@ -32,12 +32,15 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.services.IPropertyManager;
+import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
+import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
@@ -58,11 +61,6 @@ import android.util.Log;
 public class FormController {
 
     private static final String t = "FormController";
-    private File mMediaFolder;
-    private File mInstancePath;
-    private FormEntryController mFormEntryController;
-    private FormIndex mIndexWaitingForData = null;
-    private String mItemsetHash = null;
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
@@ -91,7 +89,72 @@ public class FormController {
             this.instanceName = instanceName;
         }
     };
+    
+    /**
+     * Classes needed to serialize objects. Need to put anything from JR in here.
+     */
+    private final static String[] SERIALIABLE_CLASSES = {
+    		"org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
+    		"org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
+            "org.javarosa.core.model.FormDef",
+			"org.javarosa.core.model.SubmissionProfile", // CoreModelModule
+			"org.javarosa.core.model.QuestionDef", // CoreModelModule
+			"org.javarosa.core.model.GroupDef", // CoreModelModule
+			"org.javarosa.core.model.instance.FormInstance", // CoreModelModule
+			"org.javarosa.core.model.data.BooleanData", // CoreModelModule
+			"org.javarosa.core.model.data.DateData", // CoreModelModule
+			"org.javarosa.core.model.data.DateTimeData", // CoreModelModule
+			"org.javarosa.core.model.data.DecimalData", // CoreModelModule
+			"org.javarosa.core.model.data.GeoPointData", // CoreModelModule
+			"org.javarosa.core.model.data.GeoShapeData", // CoreModelModule
+			"org.javarosa.core.model.data.GeoTraceData", // CoreModelModule
+			"org.javarosa.core.model.data.IntegerData", // CoreModelModule
+			"org.javarosa.core.model.data.LongData", // CoreModelModule
+			"org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
+			"org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
+			"org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
+			"org.javarosa.core.model.data.SelectOneData", // CoreModelModule
+			"org.javarosa.core.model.data.StringData", // CoreModelModule
+			"org.javarosa.core.model.data.TimeData", // CoreModelModule
+			"org.javarosa.core.model.data.UncastData", // CoreModelModule
+			"org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
+			"org.javarosa.core.model.Action", // CoreModelModule
+			"org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
+    };
 
+    private static boolean isJavaRosaInitialized = false;
+    
+    /**
+     * Isolate the initialization of JavaRosa into one method, called first 
+     * by the Collect Application.  Called subsequently whenever the Preferences
+     * dialogs are exited (to potentially update username and email fields).
+     * 
+     * @param mgr
+     */
+    public static synchronized void initializeJavaRosa(IPropertyManager mgr) {
+		if ( !isJavaRosaInitialized ) {
+            // need a list of classes that formdef uses
+            // unfortunately, the JR registerModule() functions do more than this.
+            // register just the classes that would have been registered by:
+            // new JavaRosaCoreModule().registerModule();
+            // new CoreModelModule().registerModule();
+            // replace with direct call to PrototypeManager
+            PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+            new XFormsModule().registerModule();
+
+            isJavaRosaInitialized = true;
+		}
+        
+		// needed to override rms property manager
+		org.javarosa.core.services.PropertyManager
+				.setPropertyManager(mgr);
+    }
+
+    private File mMediaFolder;
+    private File mInstancePath;
+    private FormEntryController mFormEntryController;
+    private FormIndex mIndexWaitingForData = null;
+    private String mItemsetHash = null;
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
     	mMediaFolder = mediaFolder;

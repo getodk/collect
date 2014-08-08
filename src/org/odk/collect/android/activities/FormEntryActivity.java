@@ -26,7 +26,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -36,7 +35,6 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -260,13 +258,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				showPreviousView();
 			}
 		});
-
-		// Load JavaRosa modules. needed to restore forms.
-		new XFormsModule().registerModule();
-
-		// needed to override rms property manager
-		org.javarosa.core.services.PropertyManager
-				.setPropertyManager(new PropertyManager(getApplicationContext()));
 
 		String startingXPath = null;
 		String waitingXPath = null;

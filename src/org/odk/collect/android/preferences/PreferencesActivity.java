@@ -17,6 +17,8 @@ package org.odk.collect.android.preferences;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import android.accounts.Account;
@@ -501,6 +503,16 @@ public class PreferencesActivity extends PreferenceActivity implements
 			getPreferenceScreen().removePreference(clientCategory);
 		}
 
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		// the property manager should be re-assigned, as properties 
+		// may have changed.
+        PropertyManager mgr = new PropertyManager(this);
+        FormController.initializeJavaRosa(mgr);
 	}
 
 	private void disableFeaturesInDevelopment() {
