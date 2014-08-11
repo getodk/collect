@@ -115,6 +115,12 @@
             android:summary="@string/found_in_settings"
             android:title="@string/default_completed" />
         <CheckBoxPreference
+            android:id="@+id/high_resolution"
+            android:defaultValue="true"
+            android:key="high_resolution"
+            android:summary="@string/found_in_settings"
+            android:title="@string/high_resolution" />
+        <CheckBoxPreference
             android:id="@+id/show_splash_screen"
             android:defaultValue="true"
             android:key="show_splash_screen"

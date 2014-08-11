@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -13,6 +13,8 @@
  */
 
 package org.odk.collect.android.widgets;
+
+import java.io.File;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -28,7 +30,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.Log;
@@ -40,12 +41,10 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
-import java.io.File;
-
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -230,30 +229,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 		}
 	}
 
-	private String getPathFromUri(Uri uri) {
-		if (uri.toString().startsWith("file")) {
-			return uri.toString().substring(6);
-		} else {
-			String[] audioProjection = { Audio.Media.DATA };
-			String audioPath = null;
-			Cursor c = null;
-			try {
-				c = getContext().getContentResolver().query(uri,
-						audioProjection, null, null, null);
-				int column_index = c.getColumnIndexOrThrow(Audio.Media.DATA);
-				if (c.getCount() > 0) {
-					c.moveToFirst();
-					audioPath = c.getString(column_index);
-				}
-				return audioPath;
-			} finally {
-				if (c != null) {
-					c.close();
-				}
-			}
-		}
-	}
-
 	@Override
 	public void setBinaryData(Object binaryuri) {
 		// when replacing an answer. remove the current media.
@@ -262,7 +237,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 		}
 
 		// get the file path and create a copy in the instance folder
-		String binaryPath = getPathFromUri((Uri) binaryuri);
+		String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri, Audio.Media.DATA);
 		String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
 		String destAudioPath = mInstanceFolder + File.separator
 				+ System.currentTimeMillis() + extension;

@@ -96,12 +96,12 @@ public class BearingActivity extends Activity implements SensorEventListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case DialogInterface.BUTTON1:
+                            case DialogInterface.BUTTON_POSITIVE:
                                 Collect.getInstance().getActivityLogger()
                                         .logInstanceAction(this, "acceptBearing", "OK");
                                 returnBearing();
                                 break;
-                            case DialogInterface.BUTTON2:
+                            case DialogInterface.BUTTON_NEGATIVE:
                                 Collect.getInstance().getActivityLogger()
                                         .logInstanceAction(this, "cancelBearing", "cancel");
                                 mBearing = null;
@@ -117,9 +117,9 @@ public class BearingActivity extends Activity implements SensorEventListener {
         mBearingDialog.setIcon(android.R.drawable.ic_dialog_info);
         mBearingDialog.setTitle(getString(R.string.getting_bearing));
         mBearingDialog.setMessage(getString(R.string.please_wait_long));
-        mBearingDialog.setButton(DialogInterface.BUTTON1, getString(R.string.accept_bearing),
+        mBearingDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.accept_bearing),
                 geopointButtonListener);
-        mBearingDialog.setButton(DialogInterface.BUTTON2, getString(R.string.cancel_location),
+        mBearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel_location),
                 geopointButtonListener);
     }
 

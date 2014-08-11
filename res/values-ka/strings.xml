@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">ჩანაწერის მდებარეობა</string>
   <string name="accuracy">აკურატულობა</string>
-  <string name="activity_not_found">No activity found to handle: %s</string>
+  <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
   <string name="add_another">ჯგუფის დამატება</string>
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
   <string name="add_more">დამატება</string>
   <string name="add_repeat">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
   <string name="add_repeat_no">არ დაამატო</string>
-  <string name="advance">forward to\nnext\nprompt</string>
+  <string name="advance">გადასვლა\nმომდევნო\nმოთხოვნაზე</string>
   <string name="altitude">სიმაღლე</string>
   <string name="audio_file_error">აუდიო-ფაილი არ იყო მითითებული.</string>
   <string name="audio_file_invalid">ფაილი: %s არ წარმოადგენს ვალიდურ აუდიო-ფაილს.</string>
@@ -18,7 +18,7 @@
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
   <string name="cancel_saving_form">გაუქმება</string>
-  <string name="cannot_edit_completed_form">ამ ფორმის რედაქტირება შეუძლებელია მანამ, სანამ არ დასრულდება. იგი შეიძლება კოდირებული იყოს.</string>
+  <string name="cannot_edit_completed_form">ამ ფორმის რედაქტირება  დასრულების შემდეგ შეუძლებელია. იგი შეიძლება კოდირებული იყოს.</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
   <string name="capture_video">ვიდეოგადაღება</string>
@@ -57,7 +57,7 @@
   <string name="enter_data">ცარიელი ფორმის შევსება</string>
   <string name="enter_data_button">შეავსეთ ცარიელი ფორმა</string>
   <string name="error_occured">მოხდა შეცდომა</string>
-  <string name="fetching_file">%1$s.\n\nForm %2$s-დან %3$s ფორმის მიღება.</string>
+  <string name="fetching_file">%1$s.\n\n%2$s-დან %3$s ფორმის მიღება.</string>
   <string name="file_deleted_error">უკაცრავად, არჩეული %2$s ფორმიდან %1$s ვერ წაიშალა</string>
   <string name="file_deleted_ok">%s ფორმა წარმატებით წაიშალა</string>
   <string name="file_delete_in_progress">უკაცრავად, ფორმის წაშლის პროცესი ამჟამად მიმდინარეობს!</string>
@@ -70,7 +70,7 @@
   <string name="get_forms">ცარიელი ფორმის მიღება</string>
   <string name="get_location">ადგილმდებარეობის ჩანიშვნა</string>
   <string name="provider_disabled_error">უკაცრავად, მდებარეობის მიმღები არ არის გააქტიურებული!</string>
-  <string name="invalid_answer_error">უკაცრავად, აღნიშნული პასუხი არ არის ვალიდური!</string>
+  <string name="invalid_answer_error">უკაცრავად, აღნიშნული პასუხი არ არის დაშვებული!</string>
   <string name="jump_to_beginning">დასაწყისში გადასვლა</string>
   <string name="jump_to_end">ბოლოში გადასვლა</string>
   <string name="jump_to_previous">ზევით ასვლა</string>
@@ -80,12 +80,12 @@
   <string name="list_failed_with_error">ფორმების ჩამონათვალის ჩვენება ვერ მოხერხდა. %s.</string>
   <string name="loading_form">ფორმის ჩატვირთვა</string>
   <string name="load_remote_form_error">შეცდომა ფორმების ჩამონათვლის ჩვენებისას</string>
-  <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
+  <string name="location_provider_accuracy">მდებარეობის მიღება %1$s-ით. აკურატულობა შეადგენს %2$s მეტრს.</string>
   <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="longitude">განედი</string>
   <string name="main_menu">მთავარი მენიუ</string>
-  <string name="main_menu_details">Data collection made easier…</string>
-  <string name="manage_files">შენახული ფორმების წაშლ</string>
+  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა...</string>
+  <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>
   <string name="no_connection">ქსელი არ არის ხელმისაწვდომი!</string>
@@ -93,14 +93,14 @@
   <string name="no_items_display_forms">საჩვენებლად ხელმისაწვდომი არაფერია.\n\nგთხოვთ, სცადოთ ახალი ფორმის ჩამოტვირთვა და თავიდან შევსება.</string>
   <string name="no_items_display_instances">საჩვენებლად ხელმისაწვდომი არაფერია.\n\nგთხოვთ, სცადოთ შენახული ფორმების დასრულება გაგზავნამდე!</string>
   <string name="ok">OK</string>
-  <string name="parse_error">უკაცრავად, ფორმის ჩატვირთვა შეუძლებელია.</string>
+  <string name="parse_error">უკაცრავად, ფორმის დამუშავება შეუძლებელია.</string>
   <string name="parse_legacy_formlist_failed">შეუძლებელია სერვერიდან Aggregate 0.9.x. : %s-ის თანხვედრი ფორმის მოპოვება</string>
   <string name="parse_openrosa_formlist_failed">სერვერზე არ მოიპოვება ფორმა, რომელიც OpenRosa version 1.0 სტანდარტის თანხვედრია: %s</string>
   <string name="password">პაროლი</string>
   <string name="play_audio">ხმის დაკვრა</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
-  <string name="please_wait_long">გთხოვთ, დაიცადოთ რამდენიმე ხანი.</string>
+  <string name="please_wait_long">გთხოვთ, დაიცადოთ; ოპერაციის შესრულებას შეიძლება რამდენიმე წუთი დაჭირდეს</string>
   <string name="quit_application">%s-დან გამოსვლა</string>
   <string name="quit_entry">ფორმის შენახვა და გამოსვლა</string>
   <string name="refresh">განახლება</string>
@@ -243,4 +243,8 @@
   <string name="change_url_default">URL/ბმული</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>
+  <string name="constraint_behavior_on_swipe">სანდოობის შემოწმება წინ გადასვლისას</string>
+  <string name="constraint_behavior_on_finalize">სანდოობის შემოწმების გადადება ფორმის დასრულებამდე</string>
+  <string name="view_change_location">მდებარეობის ნახვა ან შეცვლა</string>
 </resources>

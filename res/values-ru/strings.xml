@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="accept_location">Записать местоположение</string>
+  <string name="accuracy">Точность</string>
+  <string name="add_another">Добавить группу</string>
+  <string name="add_another_repeat">Добавить еще одну \"%s\" группу?</string>
+  <string name="add_more">Добавить</string>
+  <string name="add_repeat">Добавить новую \"%s\" группу?</string>
+  <string name="add_repeat_no">Не добавлять</string>
+  <string name="advance">Перейти к\nследующей\nподсказке</string>
+  <string name="altitude">Высота над уровнем моря</string>
+  <string name="audio_file_error">Не был указан аудио файл.</string>
+  <string name="audio_file_invalid">Файл: %s не является допустимым аудио файлом</string>
+  <string name="backup">Перейти к\nпредыдущей\nподсказке</string>
+  <string name="barcode_scanner_error">Сканер штрих-кодов не установлен.</string>
+  <string name="cancel">Отменить</string>
+  <string name="cancel_loading_form">Отменить</string>
+  <string name="cancel_location">Отменить</string>
+  <string name="cancel_saving_form">Отменить</string>
+  <string name="cannot_edit_completed_form">Эту форму нельзя редактировать, так как она была отмечена как завершенная. Форма может быть зашифрована.</string>
+  <string name="capture_audio">Записать звук</string>
+  <string name="capture_image">Сделать фотографию </string>
+  <string name="capture_video">Записать видео</string>
+  <string name="change_language">Сменить язык</string>
+  <string name="change_password">Пароль ODK</string>
+  <string name="change_server_url">URL</string>
+  <string name="change_username">Логин ODK</string>
+  <string name="clearanswer_confirm">Удалить ответ на \"%s\"?</string>
+  <string name="clear_answer">Удалить ответ?</string>
+  <string name="clear_answer_ask">Удалить этот ответ?</string>
+  <string name="clear_answer_no">Оменить</string>
+  <string name="completed_data">Завершен (%s)</string>
+  <string name="data">Сохраненные формы</string>
+  <string name="data_saved_error">Не удалось сохранить форму!</string>
+  <string name="data_saved_ok">Форма сохранена!</string>
+  <string name="default_completed_summary">По умолчанию отметить форму как завершенную</string>
+  <string name="delete_confirm">Удалить %s форму(ы)?</string>
+  <string name="delete_file">Удалить выбранное</string>
+  <string name="delete_no">Не удалять</string>
+  <string name="delete_repeat">Удалить группу</string>
+  <string name="delete_repeat_ask">Удалить эту группу?</string>
+  <string name="delete_repeat_confirm">Удалить группу \"%s\" и все её под-группы?</string>
+  <string name="delete_repeat_no">Отменить</string>
+  <string name="delete_yes">Удалить формы</string>
+  <string name="discard_answer">Удалить ответ</string>
+  <string name="discard_group">Удалить группу</string>
+  <string name="download">Получить выбранные</string>
+  <string name="download_forms_result">Скачать результаты</string>
+  <string name="downloading_data">Подключение к серверу</string>
+  <string name="do_not_change">Отменить</string>
+  <string name="do_not_exit">Отменить</string>
+  <string name="do_not_save">Игнорировать изменения</string>
+  <string name="entering_repeat">Добавить группу</string>
+  <string name="entering_repeat_ask">Добавить новую группу?</string>
+  <string name="enter_data">Заполнить пустую форму</string>
+  <string name="enter_data_button">Заполнить пустую форму</string>
+  <string name="error_occured">Ошибка</string>
+  <string name="fetching_file">Получаем %1$s.\n\nФорма %2$s из %3$s форм(ы).</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+</resources>

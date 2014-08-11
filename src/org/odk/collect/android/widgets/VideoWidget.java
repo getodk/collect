@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -14,12 +14,18 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -28,8 +34,11 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import android.util.TypedValue;
@@ -40,12 +49,10 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
-import java.io.File;
-
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -59,6 +66,14 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 	private String mBinaryName;
 
 	private String mInstanceFolder;
+
+	public static final boolean DEFAULT_HIGH_RESOLUTION = true;
+	
+	private static final String NEXUS7 = "Nexus 7";
+	private static final String DIRECTORY_PICTURES = "Pictures";
+	public static final int MEDIA_TYPE_IMAGE = 1;
+	public static final int MEDIA_TYPE_VIDEO = 2;
+	private Uri nexus7Uri;
 
 	public VideoWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
@@ -84,14 +99,35 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		mCaptureButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+			                .getInstance());
 				Collect.getInstance()
 						.getActivityLogger()
 						.logInstanceAction(VideoWidget.this, "captureButton",
 								"click", mPrompt.getIndex());
 				Intent i = new Intent(
 						android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-				i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+				
+				// Need to have this ugly code to account for 
+				// a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+				// of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
+				// Have it saving to an intermediate location instead of final destination
+				// to allow the current location to catch issues with the intermediate file
+				Log.i(t, "The build of this device is " + android.os.Build.MODEL);
+				if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+					nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);  
+					i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
+				} else {
+					i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
 						Video.Media.EXTERNAL_CONTENT_URI.toString());
+				}
+				
+				// request high resolution if configured for that...
+				boolean high_resolution = settings.getBoolean(PreferencesActivity.KEY_HIGH_RESOLUTION,
+		                VideoWidget.DEFAULT_HIGH_RESOLUTION);
+				if(high_resolution) {
+					i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY,1);
+				}
 				try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());
@@ -230,30 +266,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		}
 	}
 
-	private String getPathFromUri(Uri uri) {
-		if (uri.toString().startsWith("file")) {
-			return uri.toString().substring(6);
-		} else {
-			String[] videoProjection = { Video.Media.DATA };
-			Cursor c = null;
-			try {
-				c = getContext().getContentResolver().query(uri,
-						videoProjection, null, null, null);
-				int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
-				String videoPath = null;
-				if (c.getCount() > 0) {
-					c.moveToFirst();
-					videoPath = c.getString(column_index);
-				}
-				return videoPath;
-			} finally {
-				if (c != null) {
-					c.close();
-				}
-			}
-		}
-	}
-
 	@Override
 	public void setBinaryData(Object binaryuri) {
 		// you are replacing an answer. remove the media.
@@ -262,7 +274,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		}
 
 		// get the file path and create a copy in the instance folder
-		String binaryPath = getPathFromUri((Uri) binaryuri);
+		String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri, Video.Media.DATA);
 		String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
 		String destVideoPath = mInstanceFolder + File.separator
 				+ System.currentTimeMillis() + extension;
@@ -288,6 +300,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
 		mBinaryName = newVideo.getName();
 		Collect.getInstance().getFormController().setIndexWaitingForData(null);
+		
+		// Need to have this ugly code to account for 
+		// a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+		// of the intent - uri in this case is a file 
+		if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+			Uri mediaUri = (Uri)binaryuri;
+			File fileToDelete = new File(mediaUri.getPath());
+			int delCount = fileToDelete.delete() ? 1 : 0;
+			Log.i(t, "Deleting original capture of file: " + mediaUri.toString() + " count: " + delCount);
+		} 
 	}
 
 	@Override
@@ -323,6 +345,52 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		mCaptureButton.cancelLongPress();
 		mChooseButton.cancelLongPress();
 		mPlayButton.cancelLongPress();
+	}
+	
+	/*
+	 * Create a file Uri for saving an image or video 
+	 * For Nexus 7 fix ... 
+	 * See http://developer.android.com/guide/topics/media/camera.html for more info
+	 */
+	private static Uri getOutputMediaFileUri(int type){
+		return Uri.fromFile(getOutputMediaFile(type));
+	}
+
+	/*
+	 *  Create a File for saving an image or video 
+	 *  For Nexus 7 fix ... 
+	 *  See http://developer.android.com/guide/topics/media/camera.html for more info
+	 */
+	private static File getOutputMediaFile(int type){
+		// To be safe, you should check that the SDCard is mounted
+		// using Environment.getExternalStorageState() before doing this.
+
+		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), DIRECTORY_PICTURES);
+		// This location works best if you want the created images to be shared
+		// between applications and persist after your app has been uninstalled.
+
+		// Create the storage directory if it does not exist
+		if (! mediaStorageDir.exists()){
+			if (! mediaStorageDir.mkdirs()){
+				Log.d(t, "failed to create directory");
+				return null;
+			}
+		}
+
+		// Create a media file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(new Date());
+		File mediaFile;
+		if (type == MEDIA_TYPE_IMAGE){
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+					"IMG_"+ timeStamp + ".jpg");
+		} else if(type == MEDIA_TYPE_VIDEO) {
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+					"VID_"+ timeStamp + ".mp4");
+		} else {
+			return null;
+		}
+
+		return mediaFile;
 	}
 
 }

@@ -26,7 +26,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -36,13 +35,13 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
@@ -229,13 +228,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				+ getString(R.string.loading_form));
 
         mErrorMessage = null;
-		
+
         mBeenSwiped = false;
 		mAlertDialog = null;
 		mCurrentView = null;
 		mInAnimation = null;
 		mOutAnimation = null;
-		mGestureDetector = new GestureDetector(this);
+		mGestureDetector = new GestureDetector(this, this);
 		mQuestionHolder = (LinearLayout) findViewById(R.id.questionholder);
 
 		// get admin preference settings
@@ -259,13 +258,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				showPreviousView();
 			}
 		});
-
-		// Load JavaRosa modules. needed to restore forms.
-		new XFormsModule().registerModule();
-
-		// needed to override rms property manager
-		org.javarosa.core.services.PropertyManager
-				.setPropertyManager(new PropertyManager(getApplicationContext()));
 
 		String startingXPath = null;
 		String waitingXPath = null;
@@ -510,6 +502,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 	}
 
+    /**
+     * Create save-points asynchronously in order to not affect swiping performance
+     * on larger forms.
+     */
+    private void nonblockingCreateSavePointData() {
+        try {
+            SavePointTask savePointTask = new SavePointTask(this);
+            savePointTask.execute();
+        } catch (Exception e) {
+            Log.e(t, "Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
+        }
+    }
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -527,7 +532,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						formController.getXPath(waiting));
 			}
 			// save the instance to a temp path...
-			SaveToDiskTask.blockingExportTempData(this);
+			nonblockingCreateSavePointData();
 		}
 		outState.putBoolean(NEWFORM, false);
 		outState.putString(KEY_ERROR, mErrorMessage);
@@ -653,26 +658,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			 */
 
 			// get gp of chosen file
-			String sourceImagePath = null;
 			Uri selectedImage = intent.getData();
-			if (selectedImage.toString().startsWith("file")) {
-				sourceImagePath = selectedImage.toString().substring(6);
-			} else {
-				String[] projection = { Images.Media.DATA };
-				Cursor cursor = null;
-				try {
-					cursor = getContentResolver().query(selectedImage,
-							projection, null, null, null);
-					int column_index = cursor
-							.getColumnIndexOrThrow(Images.Media.DATA);
-					cursor.moveToFirst();
-					sourceImagePath = cursor.getString(column_index);
-				} finally {
-					if (cursor != null) {
-						cursor.close();
-					}
-				}
-			}
+			String sourceImagePath = MediaUtils.getPathFromUri(this, selectedImage, Images.Media.DATA);
 
 			// Copy file to sdcard
 			String mInstanceFolder1 = formController.getInstancePath()
@@ -986,7 +973,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			BitmapDrawable bitImage = null;
 			// attempt to load the form-specific logo...
 			// this is arbitrarily silly
-			bitImage = new BitmapDrawable(mediaDir + File.separator
+			bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
 					+ "form_logo.png");
 
 			if (bitImage != null && bitImage.getBitmap() != null
@@ -1284,7 +1271,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 case FormEntryController.EVENT_GROUP:
                     // create a savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        SaveToDiskTask.blockingExportTempData(this);
+                        nonblockingCreateSavePointData();
                     }
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
@@ -1336,7 +1323,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         || event == FormEntryController.EVENT_QUESTION) {
                     // create savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        SaveToDiskTask.blockingExportTempData(this);
+                        nonblockingCreateSavePointData();
                     }
                 }
                 View next = createView(event, false);
@@ -2065,7 +2052,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
 							"show");
 			mProgressDialog = new ProgressDialog(this);
-			DialogInterface.OnClickListener savingButtonListener = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener cancelSavingButtonListener = new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Collect.getInstance()
@@ -2082,18 +2069,26 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			mProgressDialog.setIndeterminate(true);
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.setButton(getString(R.string.cancel),
-                    savingButtonListener);
+					cancelSavingButtonListener);
 			mProgressDialog.setButton(getString(R.string.cancel_saving_form),
-					savingButtonListener);
+					cancelSavingButtonListener);
             mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
+					Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this,
+							"onCreateDialog.SAVING_DIALOG", "OnCancelListener");
                     cancelSaveToDiskTask();
                 }
             });
             mProgressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
+					Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this,
+							"onCreateDialog.SAVING_DIALOG", "OnDismissListener");
                     cancelSaveToDiskTask();
                 }
             });
@@ -2480,12 +2475,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
 		case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
 			refreshCurrentView();
-			
+
 			// get constraint behavior preference value with appropriate default
 			String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
-				.getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, 
+				.getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR,
 					PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
-			
+
 			// an answer constraint was violated, so we need to display the proper toast(s)
 			// if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the next question
 			if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE))
@@ -2493,7 +2488,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			// otherwise, we can get the proper toast(s) by saving with constraint check
 			else
 				saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
-				
+
 			break;
 		}
 	}

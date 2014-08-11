@@ -14,7 +14,15 @@
 
 package org.odk.collect.android.tasks;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,17 +30,16 @@ import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.instance.InstanceInitializationFactory;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
-import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.util.externalizable.DeserializationException;
 import org.javarosa.core.util.externalizable.ExtUtil;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
-import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
@@ -40,19 +47,24 @@ import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.external.*;
+import org.odk.collect.android.external.ExternalAnswerResolver;
+import org.odk.collect.android.external.ExternalDataHandler;
+import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.external.ExternalDataManagerImpl;
+import org.odk.collect.android.external.ExternalDataReader;
+import org.odk.collect.android.external.ExternalDataReaderImpl;
+import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
+import org.odk.collect.android.utilities.ZipUtils;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
-import org.odk.collect.android.utilities.ZipUtils;
 
 /**
  * Background task for loading a form.
@@ -62,56 +74,7 @@ import org.odk.collect.android.utilities.ZipUtils;
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private final static String t = "FormLoaderTask";
-    /**
-     * Classes needed to serialize objects. Need to put anything from JR in here.
-     */
-    public final static String[] SERIALIABLE_CLASSES = {
-    		"org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
-    		"org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
-            "org.javarosa.core.model.FormDef",
-			"org.javarosa.core.model.SubmissionProfile", // CoreModelModule
-			"org.javarosa.core.model.QuestionDef", // CoreModelModule
-			"org.javarosa.core.model.GroupDef", // CoreModelModule
-			"org.javarosa.core.model.instance.FormInstance", // CoreModelModule
-			"org.javarosa.core.model.data.BooleanData", // CoreModelModule
-			"org.javarosa.core.model.data.DateData", // CoreModelModule
-			"org.javarosa.core.model.data.DateTimeData", // CoreModelModule
-			"org.javarosa.core.model.data.DecimalData", // CoreModelModule
-			"org.javarosa.core.model.data.GeoPointData", // CoreModelModule
-			"org.javarosa.core.model.data.IntegerData", // CoreModelModule
-			"org.javarosa.core.model.data.LongData", // CoreModelModule
-			"org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
-			"org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
-			"org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
-			"org.javarosa.core.model.data.SelectOneData", // CoreModelModule
-			"org.javarosa.core.model.data.StringData", // CoreModelModule
-			"org.javarosa.core.model.data.TimeData", // CoreModelModule
-			"org.javarosa.core.model.data.UncastData", // CoreModelModule
-			"org.javarosa.core.model.data.helper.BasicDataPointer" // CoreModelModule
-    };
     private static final String ITEMSETS_CSV = "itemsets.csv";
-
-    private static boolean isJavaRosaInitialized = false;
-    /**
-     * The JR implementation here does not look thread-safe or
-     * like something to be invoked more than once.
-     * Moving it within a critical section and a do-once guard.
-     */
-    private static final void initializeJavaRosa() {
-    	synchronized (t) {
-    		if ( !isJavaRosaInitialized ) {
-	            // need a list of classes that formdef uses
-	            // unfortunately, the JR registerModule() functions do more than this.
-	            // register just the classes that would have been registered by:
-	            // new JavaRosaCoreModule().registerModule();
-	            // new CoreModelModule().registerModule();
-	            // replace with direct call to PrototypeManager
-	            PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
-	            new XFormsModule().registerModule();
-	            isJavaRosaInitialized = true;
-    		}
-    	}
-    }
 
     private FormLoaderListener mStateListener;
     private String mErrorMsg;
@@ -172,8 +135,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         File formXml = new File(formPath);
         String formHash = FileUtils.getMd5Hash(formXml);
         File formBin = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
-
-        initializeJavaRosa();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
@@ -270,7 +231,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 	                // This order is important. Import data, then initialize.
                     try {
                         importData(instance, fec);
-                        fd.initialize(false);
+                        fd.initialize(false, new InstanceInitializationFactory());
                     } catch (RuntimeException e) {
                         Log.e(t, e.getMessage(), e);
 
@@ -279,17 +240,17 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                             // this means that the .save file is corrupted or 0-sized, so don't use it.
                             usedSavepoint = false;
                             mInstancePath = null;
-                            fd.initialize(true);
+                            fd.initialize(true, new InstanceInitializationFactory());
                         } else {
                             // this means that the saved instance is corrupted.
                             throw e;
                         }
                     }
                 } else {
-            		fd.initialize(true);
+            		fd.initialize(true, new InstanceInitializationFactory());
             	}
             } else {
-                fd.initialize(true);
+                fd.initialize(true, new InstanceInitializationFactory());
             }
         } catch (RuntimeException e) {
             Log.e(t, e.getMessage(), e);
@@ -343,7 +304,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 readCSV(csv, csvmd5);
             }
         }
-        
+
         // This should get moved to the Application Class
         if (ReferenceManager._().getFactories().length == 0) {
             // this is /sdcard/odk
@@ -630,7 +591,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 		this.resultCode = resultCode;
 		this.intent = intent;
 	}
-	
+
 	private void readCSV(File csv, String formHash) {
 
         CSVReader reader;

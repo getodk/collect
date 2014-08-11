@@ -105,17 +105,29 @@ public class InstanceProvider extends ContentProvider {
 
     private DatabaseHelper mDbHelper;
 
+    private DatabaseHelper getDbHelper() {
+        // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
+        try {
+            Collect.createODKDirs();
+        } catch (RuntimeException e) {
+        	mDbHelper = null;
+            return null;
+        }
+
+        if (mDbHelper != null) {
+        	return mDbHelper;
+        }
+        mDbHelper = new DatabaseHelper(DATABASE_NAME);
+        return mDbHelper;
+    }
 
     @Override
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            return false;
+        DatabaseHelper h = getDbHelper();
+        if ( h == null ) {
+        	return false;
         }
-
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return true;
     }
 
@@ -141,7 +153,7 @@ public class InstanceProvider extends ContentProvider {
         }
 
         // Get the database and run the query
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = getDbHelper().getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
         // Tell the cursor what uri to watch, so it knows when its source data changes
@@ -196,7 +208,7 @@ public class InstanceProvider extends ContentProvider {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         }
 
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
         long rowId = db.insert(INSTANCES_TABLE_NAME, null, values);
         if (rowId > 0) {
             Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
@@ -260,7 +272,7 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
         switch (sUriMatcher.match(uri)) {
@@ -324,7 +336,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
         Long now = Long.valueOf(System.currentTimeMillis());
 

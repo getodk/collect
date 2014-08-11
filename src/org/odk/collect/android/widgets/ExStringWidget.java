@@ -14,15 +14,16 @@
 
 package org.odk.collect.android.widgets;
 
-import android.util.Log;
-import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.exception.ExternalParamsException;
+import java.util.Map;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.ExternalParamsException;
+import org.odk.collect.android.external.ExternalAppsUtils;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,10 +41,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
-import org.odk.collect.android.exception.ExternalParamsException;
-import org.odk.collect.android.external.ExternalAppsUtils;
-
-import java.util.Map;
 
 
 /**
