@@ -131,9 +131,9 @@ public final class WebUtils {
 	/**
 	 * Remove all credentials for accessing the specified host.
 	 *
-	 * @param host
+	 * @param host host
 	 */
-	private static final void clearHostCredentials(String host) {
+	public static final void clearHostCredentials(String host) {
 		CredentialsProvider credsProvider = Collect.getInstance()
 				.getCredentialsProvider();
 		Log.i(t, "clearHostCredentials: " + host);

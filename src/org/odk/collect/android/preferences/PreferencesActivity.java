@@ -45,6 +45,8 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.Toast;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.WebUtils;
 
 /**
  * Handles general preferences.
@@ -241,7 +243,20 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 
 		mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
-		mUsernamePreference.setOnPreferenceChangeListener(this);
+		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((CharSequence) newValue);
+
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url));
+                Uri u = Uri.parse(server);
+                WebUtils.clearHostCredentials(u.getHost());
+                Collect.getInstance().getCookieStore().clear();
+
+                return true;
+            }
+        });
 		mUsernamePreference.setSummary(mUsernamePreference.getText());
 		mUsernamePreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
@@ -253,21 +268,27 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 
 		mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
-		mPasswordPreference
-				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-					@Override
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						String pw = newValue.toString();
+		mPasswordPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String pw = newValue.toString();
 
-						if (pw.length() > 0) {
-							mPasswordPreference.setSummary("********");
-						} else {
-							mPasswordPreference.setSummary("");
-						}
-						return true;
-					}
-				});
+                if (pw.length() > 0) {
+                    mPasswordPreference.setSummary("********");
+                } else {
+                    mPasswordPreference.setSummary("");
+                }
+
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url));
+                Uri u = Uri.parse(server);
+                WebUtils.clearHostCredentials(u.getHost());
+                Collect.getInstance().getCookieStore().clear();
+
+                return true;
+            }
+        });
+
 		if (mPasswordPreference.getText() != null
 				&& mPasswordPreference.getText().length() > 0) {
 			mPasswordPreference.setSummary("********");
