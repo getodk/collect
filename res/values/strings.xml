@@ -10,8 +10,7 @@
 		the specific language governing permissions and limitations under the
 		License.
 -->
-<resources
-  xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
@@ -36,7 +35,7 @@
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">ODK Password</string>
-<string name="change_server_url">URL</string>
+<string name="change_protocol_settings_default">Platform Settings</string>
 <string name="change_username">ODK Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 <string name="clear_answer">Remove response</string>
@@ -114,6 +113,7 @@
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
 <string name="please_wait">Please wait a few moments.</string>
+<string name="please_wait_google_drive">Please wait. Accessing Google Drive.</string>
 <string name="please_wait_long">Please wait. This could take a few minutes.</string>
 <string name="quit_application">Exit %s</string>
 <string name="quit_entry">Save Form and Exit</string>
@@ -295,4 +295,36 @@
     <string name="survey_saving_encrypting_message">Encrypting data…</string>
     <string name="high_resolution_summary">Enable high-resolution video recordings</string>
     <string name="high_resolution">Enable hi-res video</string>
+        <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
+<string name="gme_project_id">Project ID</string>
+<string name="draft_access_list">Draft access list</string>
+<string name="map_editors">Map Editors</string>
+<string name="google_drive">Google Drive</string>
+<string name="go_drive">My Drive</string>
+<string name="go_shared">Shared with Me</string>
+<string name="modified_on_date_at_time">\'Modified on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+<string name="protocol_settings">Configure platform settings</string>
+<string name="aggregate_preferences">ODK Aggregate settings</string>
+<string name="other_preferences">Other platform settings</string>
+<string name="gme_preferences">Google Maps Engine settings</string>
+<string name="no_coordinates">Instance has no coordinates. Unable to upload.</string>
+<string name="drive_get_file">Getting %1$s and media files.</string>
+<string name="no_google_account">No Google Account Selected!</string>
+<string name="gme_set_account">You have selected Google Maps Engine as your server, please select a corresponding Google account in the General Settings before continuing</string>
+<string name="invalid_oauth">Invalid OAuth 2 token</string>
+<string name="gme_repeat_error">Repeats are not supported by Google Maps Engine at this time.</string>
+<string name="gme_project_id_error">No project ID found. Must declare project ID in either Google Maps Engine settings or in the form.</string>
+<string name="gme_table_error">Unable to find or create a Google Maps Engine table</string>
+<string name="gme_create_400">Received 400 BAD REQUEST. This is a known bug with Google Maps Engine after a table is newly created, please try submitting again in a few seconds.</string>
+<string name="picasa_upload_error">Failed to upload photo that does not exist: %1$s</string>
+<string name="odk_auth_auth_fail">ODK Autosend authentication failure, please make sure your settings are correct</string>
+<string name="odk_auto_note">ODK Autosend Notification</string>
+<string name="notification_error">Error displaying notification text</string>
+<string name="delete_after_send">Delete after send</string>
+<string name="delete_after_send_summary">Deletes finalized forms and media after sending to server</string>
+<string name="change_server_url">Server URL</string>
+<string name="gme_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
+<string name="no_blank_search">Search field cannot be blank.</string>
+<string name="select_maps_account">You have selected Google Maps Engine as your server, please select a corresponding Google Account in the General Settings before continuing</string>
+<string name="get_project_IDs">Getting Project IDs</string>
 </resources>

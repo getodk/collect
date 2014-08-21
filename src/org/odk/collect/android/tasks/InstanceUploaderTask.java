@@ -15,6 +15,9 @@
 package org.odk.collect.android.tasks;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
@@ -23,8 +26,10 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -92,6 +97,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
     	Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
+        File instanceFile = new File(instanceFilePath);
         ContentValues cv = new ContentValues();
         Uri u = Uri.parse(urlString);
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
@@ -235,7 +241,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 Log.e(t, e.toString());
                 WebUtils.clearHttpConnectionManager();
                 String msg = e.getMessage();
-                if ( msg == null ) msg = e.toString();
+                if (msg == null) {
+                    msg = e.toString();
+                }
                 outcome.mResults.put(id, fail + "Generic Exception: " + msg);
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -253,7 +261,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         // authenticated publication to the server.
         //
         // get instance file
-        File instanceFile = new File(instanceFilePath);
 
         // Under normal operations, we upload the instanceFile to
         // the server.  However, during the save, there is a failure
@@ -455,8 +462,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 Log.e(t, e.toString());
                 WebUtils.clearHttpConnectionManager();
                 String msg = e.getMessage();
-                if ( msg == null ) msg = e.toString();
-                outcome.mResults.put(id, fail + "Generic Exception. " + msg);
+                if (msg == null) {
+                    msg = e.toString();
+                }
+                outcome.mResults.put(id, fail + "Generic Exception: " + msg);
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
@@ -561,6 +570,57 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     mStateListener.authRequest(outcome.mAuthRequestingServer, outcome.mResults);
                 } else {
                     mStateListener.uploadingComplete(outcome.mResults);
+                    
+                    StringBuilder selection = new StringBuilder();
+                    Set<String> keys = outcome.mResults.keySet();
+                    Iterator<String> it = keys.iterator();
+
+                    String[] selectionArgs = new String[keys.size()+1];
+                    int i = 0;
+                    while (it.hasNext()) {
+                        String id = it.next();
+                        selection.append(InstanceColumns._ID + "=?");
+                        selectionArgs[i++] = id;
+                        if (i != keys.size()) {
+                            selection.append(" or ");
+                        }
+                    }
+                    selection.append(" and status=?");
+                    selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
+
+                    Cursor results = null;
+                    try {
+                        results = Collect
+                                .getInstance()
+                                .getContentResolver()
+                                .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
+                                        selectionArgs, null);
+                        if (results.getCount() > 0) {
+                            Long[] toDelete = new Long[results.getCount()];
+                            results.moveToPosition(-1);
+
+                            int cnt = 0;
+                            while (results.moveToNext()) {
+                                toDelete[cnt] = results.getLong(results
+                                        .getColumnIndex(InstanceColumns._ID));
+                                cnt++;
+                            }
+
+                            boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
+                                    Collect.getInstance().getApplicationContext()).getBoolean(
+                                    PreferencesActivity.KEY_DELETE_AFTER_SEND, false);
+                            if (deleteFlag) {
+                                DeleteInstancesTask dit = new DeleteInstancesTask();
+                                dit.setContentResolver(Collect.getInstance().getContentResolver());
+                                dit.execute(toDelete);
+                            }
+
+                        }
+                    } finally {
+                        if (results != null) {
+                            results.close();
+                        }
+                    }
                 }
             }
         }
@@ -583,4 +643,17 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             mStateListener = sl;
         }
     }
+    
+    
+    public static void copyToBytes(InputStream input, OutputStream output,
+            int bufferSize) throws IOException {
+        byte[] buf = new byte[bufferSize];
+        int bytesRead = input.read(buf);
+        while (bytesRead != -1) {
+            output.write(buf, 0, bytesRead);
+            bytesRead = input.read(buf);
+        }
+        output.flush();
+    }
+    
 }

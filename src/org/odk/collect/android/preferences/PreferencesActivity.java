@@ -56,25 +56,41 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	protected static final int IMAGE_CHOOSER = 0;
 
+	// PUT ALL PREFERENCE KEYS HERE
 	public static final String KEY_INFO = "info";
 	public static final String KEY_LAST_VERSION = "lastVersion";
 	public static final String KEY_FIRST_RUN = "firstRun";
 	public static final String KEY_SHOW_SPLASH = "showSplash";
 	public static final String KEY_SPLASH_PATH = "splashPath";
 	public static final String KEY_FONT_SIZE = "font_size";
-	public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
-	public static final String KEY_GOOGLE_SUBMISSION = "google_submission_id";
+	public static final String KEY_DELETE_AFTER_SEND = "delete_send";
 
-	public static final String KEY_SERVER_URL = "server_url";
+	public static final String KEY_PROTOCOL = "protocol";
+	public static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
+
+	// leaving these in the main screen because username can be used as a
+	// pre-fill
+	// value in a form
+	public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
 	public static final String KEY_USERNAME = "username";
 	public static final String KEY_PASSWORD = "password";
 
-	public static final String KEY_PROTOCOL = "protocol";
+	// AGGREGATE SPECIFIC
+	public static final String KEY_SERVER_URL = "server_url";
+
+	// GME SPECIFIC
+	public static final String KEY_GME_PROJECT_ID = "gme_project_id";
+	public static final String KEY_GME_DRAFTACCESSLIST = "gme_draftaccesslist";
+	public static final String KEY_GME_ID_HASHMAP = "gme_id_hashmap";
+
+	// OTHER SPECIFIC
+	public static final String KEY_FORMLIST_URL = "formlist_url";
+	public static final String KEY_SUBMISSION_URL = "submission_url";
 
 	// must match /res/arrays.xml
 	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
-	public static final String PROTOCOL_GOOGLE = "google";
-	public static final String PROTOCOL_OTHER = "";
+	public static final String PROTOCOL_GOOGLE_MAPS_ENGINE = "google_maps_engine";
+	public static final String PROTOCOL_OTHER = "other_protocol";
 
 	public static final String NAVIGATION_SWIPE = "swipe";
 	public static final String NAVIGATION_BUTTONS = "buttons";
@@ -83,9 +99,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
 	public static final String CONSTRAINT_BEHAVIOR_ON_FINALIZE = "on_finalize";
 	public static final String CONSTRAINT_BEHAVIOR_DEFAULT = "on_swipe";
-
-	public static final String KEY_FORMLIST_URL = "formlist_url";
-	public static final String KEY_SUBMISSION_URL = "submission_url";
 
 	public static final String KEY_COMPLETED_DEFAULT = "default_completed";
 
@@ -100,11 +113,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
 	private PreferenceScreen mSplashPathPreference;
-	private EditTextPreference mSubmissionUrlPreference;
-	private EditTextPreference mFormListUrlPreference;
-	private EditTextPreference mServerUrlPreference;
-	private EditTextPreference mUsernamePreference;
-	private EditTextPreference mPasswordPreference;
+
 	private ListPreference mSelectedGoogleAccountPreference;
 	private ListPreference mFontSizePreference;
 	private ListPreference mNavigationPreference;
@@ -113,6 +122,11 @@ public class PreferencesActivity extends PreferenceActivity implements
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
 	private ListPreference mProtocolPreference;
+
+	private PreferenceScreen mProtocolSettings;
+
+	protected EditTextPreference mUsernamePreference;
+	protected EditTextPreference mPasswordPreference;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,25 +139,41 @@ public class PreferencesActivity extends PreferenceActivity implements
 		// not super safe, but we're just putting in this mode to help
 		// administrate
 		// would require code to access it
-		boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
+		final boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
 
 		SharedPreferences adminPreferences = getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-		boolean serverAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
-		boolean urlAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_URL, true);
-
+		// assign all the preferences in advance because changing one often
+		// affects another
+		// also avoids npe
 		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
 		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
+		mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
+		PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
+
+		mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
+
+		mSelectedGoogleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
+		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
+		mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
+		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
+		Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
+		Preference deleteAfterSend = findPreference(KEY_DELETE_AFTER_SEND);
+		mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+		mConstraintBehaviorPreference = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
+
+		mUsernamePreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_USERNAME);
+		mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
+
+		mProtocolSettings = (PreferenceScreen) findPreference(KEY_PROTOCOL_SETTINGS);
+
 		boolean autosendWifiAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
 		if (!(autosendWifiAvailable || adminMode)) {
 			autosendCategory.removePreference(mAutosendWifiPreference);
 		}
 
-		mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
 		boolean autosendNetworkAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_AUTOSEND_NETWORK, true);
 		if (!(autosendNetworkAvailable || adminMode)) {
@@ -154,26 +184,29 @@ public class PreferencesActivity extends PreferenceActivity implements
 			getPreferenceScreen().removePreference(autosendCategory);
 		}
 
-		PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
-
-		// declared early to prevent NPE in toggleServerPaths
-		mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
-		mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
-
 		mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
 		mProtocolPreference.setSummary(mProtocolPreference.getEntry());
-		if (mProtocolPreference.getValue().equals("odk_default")) {
-			mFormListUrlPreference.setEnabled(false);
-			mSubmissionUrlPreference.setEnabled(false);
+		Intent prefIntent = null;
+
+		if (mProtocolPreference.getValue().equals(PROTOCOL_ODK_DEFAULT)) {
+			setDefaultAggregatePaths();
+			prefIntent = new Intent(this, AggregatePreferencesActivity.class);
+		} else if (mProtocolPreference.getValue().equals(
+				PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+			prefIntent = new Intent(this, GMEPreferencesActivity.class);
 		} else {
-			mFormListUrlPreference.setEnabled(true);
-			mSubmissionUrlPreference.setEnabled(true);
+			// other
+			prefIntent = new Intent(this, OtherPreferencesActivity.class);
 		}
+		prefIntent.putExtra("adminMode", adminMode);
+		mProtocolSettings.setIntent(prefIntent);
+
 		mProtocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
+				String oldValue = ((ListPreference) preference).getValue();
 				int index = ((ListPreference) preference)
 						.findIndexOfValue(newValue.toString());
 				String entry = (String) ((ListPreference) preference)
@@ -181,104 +214,37 @@ public class PreferencesActivity extends PreferenceActivity implements
 				String value = (String) ((ListPreference) preference)
 						.getEntryValues()[index];
 				((ListPreference) preference).setSummary(entry);
-				if (value.equals("odk_default")) {
-					mFormListUrlPreference.setEnabled(false);
-					mFormListUrlPreference.setText(getString(R.string.default_odk_formlist));
-					mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-					mSubmissionUrlPreference.setEnabled(false);
-					mSubmissionUrlPreference.setText(getString(R.string.default_odk_submission));
-					mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
+
+				Intent prefIntent = null;
+				if (value.equals(PROTOCOL_ODK_DEFAULT)) {
+					setDefaultAggregatePaths();
+					prefIntent = new Intent(PreferencesActivity.this, AggregatePreferencesActivity.class);
+				} else if (value.equals(PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+					prefIntent = new Intent(PreferencesActivity.this, GMEPreferencesActivity.class);
 				} else {
-					mFormListUrlPreference.setEnabled(true);
-					mSubmissionUrlPreference.setEnabled(true);
+					// other
+					prefIntent = new Intent(PreferencesActivity.this, OtherPreferencesActivity.class);
+				}
+				prefIntent.putExtra("adminMode", adminMode);
+				mProtocolSettings.setIntent(prefIntent);
+
+				if (!((String) newValue).equals(oldValue)) {
+					startActivity(prefIntent);
 				}
 
 				return true;
 			}
 		});
 
-		mServerUrlPreference = (EditTextPreference) findPreference(KEY_SERVER_URL);
-		mServerUrlPreference
-				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-					@Override
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						String url = newValue.toString();
-
-						// remove all trailing "/"s
-						while (url.endsWith("/")) {
-							url = url.substring(0, url.length() - 1);
-						}
-
-						if (UrlUtils.isValidUrl(url)) {
-							preference.setSummary(newValue.toString());
-							return true;
-						} else {
-							Toast.makeText(getApplicationContext(),
-									R.string.url_error, Toast.LENGTH_SHORT)
-									.show();
-							return false;
-						}
-					}
-				});
-		mServerUrlPreference.setSummary(mServerUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
-
-
-
-		if (!(serverAvailable || adminMode)) {
-			Preference protocol = findPreference(KEY_PROTOCOL);
-			serverCategory.removePreference(protocol);
-		} else {
-			// this just removes the value from protocol, but protocol doesn't
-			// exist if we take away access
-			disableFeaturesInDevelopment();
+		boolean changeProtocol = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
+		if (!(changeProtocol || adminMode)) {
+			serverCategory.removePreference(mProtocolPreference);
 		}
-
-		if (!(urlAvailable || adminMode)) {
-			serverCategory.removePreference(mServerUrlPreference);
-		}
-
-		mUsernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
-		mUsernamePreference.setOnPreferenceChangeListener(this);
-		mUsernamePreference.setSummary(mUsernamePreference.getText());
-		mUsernamePreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
-
-		boolean usernameAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_USERNAME, true);
-		if (!(usernameAvailable || adminMode)) {
-			serverCategory.removePreference(mUsernamePreference);
-		}
-
-		mPasswordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
-		mPasswordPreference
-				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-					@Override
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						String pw = newValue.toString();
-
-						if (pw.length() > 0) {
-							mPasswordPreference.setSummary("********");
-						} else {
-							mPasswordPreference.setSummary("");
-						}
-						return true;
-					}
-				});
-		if (mPasswordPreference.getText() != null
-				&& mPasswordPreference.getText().length() > 0) {
-			mPasswordPreference.setSummary("********");
-		}
-		mUsernamePreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
-
-		boolean passwordAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_PASSWORD, true);
-		if (!(passwordAvailable || adminMode)) {
-			serverCategory.removePreference(mPasswordPreference);
+		boolean changeProtocolSettings = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_PROTOCOL_SETTINGS, true);
+		if (!(changeProtocolSettings || adminMode)) {
+			serverCategory.removePreference(mProtocolSettings);
 		}
 
 		// get list of google accounts
@@ -294,7 +260,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 		accountEntries.add(getString(R.string.no_account));
 		accountValues.add("");
 
-		mSelectedGoogleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
 		mSelectedGoogleAccountPreference.setEntries(accountEntries
 				.toArray(new String[accountEntries.size()]));
 		mSelectedGoogleAccountPreference.setEntryValues(accountValues
@@ -322,32 +287,47 @@ public class PreferencesActivity extends PreferenceActivity implements
 			serverCategory.removePreference(mSelectedGoogleAccountPreference);
 		}
 
-		mFormListUrlPreference.setOnPreferenceChangeListener(this);
-		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
-		if (!(serverAvailable || adminMode)) {
-			serverCategory.removePreference(mFormListUrlPreference);
+		mUsernamePreference.setOnPreferenceChangeListener(this);
+		mUsernamePreference.setSummary(mUsernamePreference.getText());
+		mUsernamePreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter() });
+
+		boolean usernameAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_USERNAME, true);
+		if (!(usernameAvailable || adminMode)) {
+			serverCategory.removePreference(mUsernamePreference);
 		}
 
-		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
-		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
-		if (!(serverAvailable || adminMode)) {
-			serverCategory.removePreference(mSubmissionUrlPreference);
-		}
+		mPasswordPreference
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						String pw = newValue.toString();
 
-		if (!(serverAvailable || urlAvailable || usernameAvailable || passwordAvailable
-				|| googleAccountAvailable || adminMode)) {
-			getPreferenceScreen().removePreference(serverCategory);
+						if (pw.length() > 0) {
+							mPasswordPreference.setSummary("********");
+						} else {
+							mPasswordPreference.setSummary("");
+						}
+						return true;
+					}
+				});
+		if (mPasswordPreference.getText() != null
+				&& mPasswordPreference.getText().length() > 0) {
+			mPasswordPreference.setSummary("********");
 		}
+		mPasswordPreference.getEditText().setFilters(
+				new InputFilter[] { getReturnFilter() });
 
-		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
+		boolean passwordAvailable = adminPreferences.getBoolean(
+				AdminPreferencesActivity.KEY_CHANGE_PASSWORD, true);
+		if (!(passwordAvailable || adminMode)) {
+			serverCategory.removePreference(mPasswordPreference);
+		}
 
 		boolean navigationAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_NAVIGATION, true);
-		mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
 		mNavigationPreference.setSummary(mNavigationPreference.getEntry());
 		mNavigationPreference
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -369,7 +349,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		boolean constraintBehaviorAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CONSTRAINT_BEHAVIOR, true);
-		mConstraintBehaviorPreference = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
 		mConstraintBehaviorPreference.setSummary(mConstraintBehaviorPreference.getEntry());
 		mConstraintBehaviorPreference
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -391,7 +370,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		boolean fontAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
-		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
 		mFontSizePreference.setSummary(mFontSizePreference.getEntry());
 		mFontSizePreference
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -414,10 +392,16 @@ public class PreferencesActivity extends PreferenceActivity implements
 		boolean defaultAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_DEFAULT_TO_FINALIZED, true);
 
-		Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
 		if (!(defaultAvailable || adminMode)) {
 			clientCategory.removePreference(defaultFinalized);
 		}
+		
+		boolean deleteAfterAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_DELETE_AFTER_SEND, true);
+		if(!(deleteAfterAvailable || adminMode)) {
+		    clientCategory.removePreference(deleteAfterSend);
+		}
+		
 
 		boolean resolutionAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_HIGH_RESOLUTION, true);
@@ -427,7 +411,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 			clientCategory.removePreference(highResolution);
 		}
 
-		mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
 		mSplashPathPreference
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
@@ -515,27 +498,28 @@ public class PreferencesActivity extends PreferenceActivity implements
         FormController.initializeJavaRosa(mgr);
 	}
 
-	private void disableFeaturesInDevelopment() {
-		// remove Google Collections from protocol choices in preferences
-		ListPreference protocols = (ListPreference) findPreference(KEY_PROTOCOL);
-		int i = protocols.findIndexOfValue(PROTOCOL_GOOGLE);
-		if (i != -1) {
-			CharSequence[] entries = protocols.getEntries();
-			CharSequence[] entryValues = protocols.getEntryValues();
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-			CharSequence[] newEntries = new CharSequence[entryValues.length - 1];
-			CharSequence[] newEntryValues = new CharSequence[entryValues.length - 1];
-			for (int k = 0, j = 0; j < entryValues.length; ++j) {
-				if (j == i)
-					continue;
-				newEntries[k] = entries[j];
-				newEntryValues[k] = entryValues[j];
-				++k;
-			}
+		// has to go in onResume because it may get updated by
+		// a sub-preference screen
+		// this just keeps the widgets in sync
+		SharedPreferences sp = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String account = sp.getString(KEY_SELECTED_GOOGLE_ACCOUNT, "");
+		mSelectedGoogleAccountPreference.setSummary(account);
+		mSelectedGoogleAccountPreference.setValue(account);
 
-			protocols.setEntries(newEntries);
-			protocols.setEntryValues(newEntryValues);
+		String user = sp.getString(KEY_USERNAME, "");
+		String pw = sp.getString(KEY_PASSWORD, "");
+		mUsernamePreference.setSummary(user);
+		mUsernamePreference.setText(user);
+		if (pw != null && pw.length() > 0) {
+			mPasswordPreference.setSummary("********");
+			mPasswordPreference.setText(pw);
 		}
+
 	}
 
 	private void setSplashPath(String path) {
@@ -590,24 +574,15 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 	}
 
-	/**
-	 * Disallows whitespace from user entry
-	 *
-	 * @return
-	 */
-	private InputFilter getWhitespaceFilter() {
-		InputFilter whitespaceFilter = new InputFilter() {
-			public CharSequence filter(CharSequence source, int start, int end,
-					Spanned dest, int dstart, int dend) {
-				for (int i = start; i < end; i++) {
-					if (Character.isWhitespace(source.charAt(i))) {
-						return "";
-					}
-				}
-				return null;
-			}
-		};
-		return whitespaceFilter;
+	private void setDefaultAggregatePaths() {
+		SharedPreferences sp = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		Editor editor = sp.edit();
+		editor.putString(KEY_FORMLIST_URL,
+				getString(R.string.default_odk_formlist));
+		editor.putString(KEY_SUBMISSION_URL,
+				getString(R.string.default_odk_submission));
+		editor.commit();
 	}
 
 	/**
@@ -615,7 +590,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	 *
 	 * @return
 	 */
-	private InputFilter getReturnFilter() {
+	protected InputFilter getReturnFilter() {
 		InputFilter returnFilter = new InputFilter() {
 			public CharSequence filter(CharSequence source, int start, int end,
 					Spanned dest, int dstart, int dend) {

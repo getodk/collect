@@ -218,12 +218,13 @@ public final class WebUtils {
                 PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
 		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
 
-		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
-	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-			if ((auth != null) && (auth.length() > 0)) {
-				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-			}
-		}
+		// TODO:  this doesn't exist....
+//		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
+//	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
+//			if ((auth != null) && (auth.length() > 0)) {
+//				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+//			}
+//		}
 	}
 
 	public static final HttpPost createOpenRosaHttpPost(Uri u) {

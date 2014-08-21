@@ -25,14 +25,17 @@ import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +63,8 @@ public class InstanceUploaderList extends ListActivity implements
 	private static final int MENU_PREFERENCES = Menu.FIRST;
 	private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
 	private static final int INSTANCE_UPLOADER = 0;
+	
+	private static final int GOOGLE_USER_DIALOG = 1;
 
 	private Button mUploadButton;
 	private Button mToggleButton;
@@ -222,16 +227,34 @@ public class InstanceUploaderList extends ListActivity implements
 	}
 
 	private void uploadSelectedFiles() {
-		// send list of _IDs.
-		long[] instanceIDs = new long[mSelected.size()];
-		for (int i = 0; i < mSelected.size(); i++) {
-			instanceIDs[i] = mSelected.get(i);
-		}
+        // send list of _IDs.
+        long[] instanceIDs = new long[mSelected.size()];
+        for (int i = 0; i < mSelected.size(); i++) {
+            instanceIDs[i] = mSelected.get(i);
+        }
 
-		Intent i = new Intent(this, InstanceUploaderActivity.class);
-		i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
-		startActivityForResult(i, INSTANCE_UPLOADER);
-	}
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
+        if (server.equalsIgnoreCase(PreferencesActivity.PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+            // if it's maps engine, start the maps-engine uploader
+            // first make sure we have a google account selected
+
+            String googleUsername = prefs.getString(
+                    PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+            if (googleUsername == null || googleUsername.equals("")) {
+                showDialog(GOOGLE_USER_DIALOG);
+                return;
+            }
+            Intent i = new Intent(this, GoogleMapsEngineUploaderActivity.class);
+            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
+            startActivityForResult(i, INSTANCE_UPLOADER);
+        } else {
+            // otherwise, do the normal agregate/other thing.
+            Intent i = new Intent(this, InstanceUploaderActivity.class);
+            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
+            startActivityForResult(i, INSTANCE_UPLOADER);
+        }
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -427,5 +450,25 @@ public class InstanceUploaderList extends ListActivity implements
 		alertDialog.show();
 		return true;
 	}
+	
+	@Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case GOOGLE_USER_DIALOG:
+                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
+
+                gudBuilder.setTitle(R.string.no_google_account);
+                gudBuilder
+                        .setMessage("You have selected Google Maps Engine as your server, please select a corresponding Google Account in the General Settings before continuing");
+                gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                gudBuilder.setCancelable(false);
+                return gudBuilder.create();
+        }
+        return null;
+    }
 
 }

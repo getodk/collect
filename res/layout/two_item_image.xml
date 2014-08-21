@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dip"
+        android:paddingLeft="8dip"
+        android:paddingTop="4dip"
+        android:paddingBottom="8dip"
+        android:minHeight="?android:attr/listPreferredItemHeight">
+
+    <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_forward"
+            android:paddingTop="6dip"
+            android:paddingRight="8dip"/>
+    <TextView
+            android:id="@+id/text1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/image"
+            android:layout_toRightOf="@+id/image"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="text1"/>
+    <TextView
+            android:id="@+id/text2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text1"
+            android:layout_alignLeft="@+id/text1"
+            android:layout_alignRight="@+id/text1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="text2"/>
+
+    <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:focusable="false"
+            android:clickable="false"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+</RelativeLayout>
