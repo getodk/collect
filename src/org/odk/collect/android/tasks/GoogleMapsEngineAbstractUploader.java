@@ -87,8 +87,24 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
 	private final static String PROJECT_ID = "projectid";
 	private final static String GME_ACCESS_LIST = "draftAccessList";
 
+	/*
+	 * By default, GME has a rate limit of 1 request/sec, so we've added GME_SLEEP_TIME
+	 * to make sure we stay within that limit
+	 * The production version of ODK Collect is not rate limited by GME, and is reflected
+	 * in the code below.  
+	 * You should change this if working on a non Google Play version of Collect.
+	 */
+	// dev
 	//private static final int GME_SLEEP_TIME = 1100;
+
+	// prod
 	private static final int GME_SLEEP_TIME = 1;
+	
+	// As of August 2014 there was a known issue in GME that returns an error 
+	// if a request comes in too soon after creating a table.
+	// This delay prevents that error
+	// see "known issues at the bottom of this page:
+	// https://developers.google.com/maps-engine/documentation/table-create
 	private static final int GME_CREATE_TABLE_DELAY = 4000;
 
 	/**
