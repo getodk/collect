@@ -577,6 +577,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     String[] selectionArgs = new String[keys.size()+1];
                     int i = 0;
+                    selection.append("(");
                     while (it.hasNext()) {
                         String id = it.next();
                         selection.append(InstanceColumns._ID + "=?");
@@ -585,7 +586,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                             selection.append(" or ");
                         }
                     }
-                    selection.append(" and status=?");
+                    selection.append(") and status=?");
                     selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
                     Cursor results = null;

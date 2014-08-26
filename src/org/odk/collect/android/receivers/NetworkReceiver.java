@@ -107,16 +107,22 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             ArrayList<Long> toUpload = new ArrayList<Long>();
             Cursor c = context.getContentResolver().query(InstanceColumns.CONTENT_URI, null,
                     selection, selectionArgs, null);
-            if (c != null && c.getCount() > 0) {
-                c.move(-1);
-                while (c.moveToNext()) {
-                    Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                    toUpload.add(Long.valueOf(l));
+            try {
+                if (c != null && c.getCount() > 0) {
+                    c.move(-1);
+                    while (c.moveToNext()) {
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(Long.valueOf(l));
+                    }
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
                 }
             }
 
-            if (c == null || c.getCount() < 1) {
-                running = false;
+            if (toUpload.size() < 1) {
+                running = false; 
                 return;
             }
 

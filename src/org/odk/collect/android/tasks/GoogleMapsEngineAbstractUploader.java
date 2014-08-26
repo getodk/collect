@@ -980,6 +980,7 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
 
                 String[] selectionArgs = new String[keys.size() + 1];
                 int i = 0;
+                selection.append("(");
                 while (it.hasNext()) {
                     String id = it.next();
                     selection.append(InstanceColumns._ID + "=?");
@@ -988,7 +989,8 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
                         selection.append(" or ");
                     }
                 }
-                selection.append(" and status=?");
+                
+                selection.append(") and status=?");
                 selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
                 Cursor uploadResults = null;
