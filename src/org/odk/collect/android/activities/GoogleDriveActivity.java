@@ -58,7 +58,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -77,8 +76,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -351,8 +350,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
             dl.add((DriveListItem)getListView().getItemAtPosition(i));
         }
         outState.putParcelableArrayList(DRIVE_ITEMS_KEY, dl);
-        outState.putStringArray(PATH_KEY, Arrays.copyOf(mCurrentPath.toArray(),
-                mCurrentPath.toArray().length, String[].class));
+        outState.putStringArray(PATH_KEY, mCurrentPath.toArray(new String[mCurrentPath.size()]));
         outState.putString(PARENT_KEY, mParentId);
         outState.putBoolean(ALERT_SHOWING_KEY, mAlertShowing);
         outState.putString(ALERT_MSG_KEY, mAlertMsg);
