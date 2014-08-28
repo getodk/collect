@@ -200,9 +200,9 @@ public class MainMenuActivity extends Activity {
 				SharedPreferences sharedPreferences = PreferenceManager
 						.getDefaultSharedPreferences(MainMenuActivity.this);
 				String protocol = sharedPreferences.getString(
-						PreferencesActivity.KEY_PROTOCOL, "odk_default");
+						PreferencesActivity.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
 				Intent i = null;
-				if (protocol.equalsIgnoreCase("google_maps_engine")) {
+				if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_maps_engine))) {
 					i = new Intent(getApplicationContext(),
 							GoogleDriveActivity.class);
 				} else {

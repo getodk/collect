@@ -99,7 +99,7 @@ public class GMEPreferencesActivity extends PreferenceActivity implements
 		mAlertMsg = getString(R.string.please_wait);
 		mAlertShowing = false;
 
-		boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
+		boolean adminMode = getIntent().getBooleanExtra(PreferencesActivity.INTENT_KEY_ADMIN_MODE, false);
 
 		SharedPreferences adminPreferences = getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);

@@ -52,6 +52,7 @@ import android.text.Spanned;
 public class PreferencesActivity extends PreferenceActivity implements
 		OnPreferenceChangeListener {
 
+	public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
 	protected static final int IMAGE_CHOOSER = 0;
 
 	// PUT ALL PREFERENCE KEYS HERE
@@ -84,11 +85,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 	// OTHER SPECIFIC
 	public static final String KEY_FORMLIST_URL = "formlist_url";
 	public static final String KEY_SUBMISSION_URL = "submission_url";
-
-	// must match /res/arrays.xml
-	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
-	public static final String PROTOCOL_GOOGLE_MAPS_ENGINE = "google_maps_engine";
-	public static final String PROTOCOL_OTHER = "other_protocol";
 
 	public static final String NAVIGATION_SWIPE = "swipe";
 	public static final String NAVIGATION_BUTTONS = "buttons";
@@ -137,7 +133,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		// not super safe, but we're just putting in this mode to help
 		// administrate
 		// would require code to access it
-		final boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
+		final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
 
 		SharedPreferences adminPreferences = getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
@@ -186,17 +182,17 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mProtocolPreference.setSummary(mProtocolPreference.getEntry());
 		Intent prefIntent = null;
 
-		if (mProtocolPreference.getValue().equals(PROTOCOL_ODK_DEFAULT)) {
+		if (mProtocolPreference.getValue().equals(getString(R.string.protocol_odk_default))) {
 			setDefaultAggregatePaths();
 			prefIntent = new Intent(this, AggregatePreferencesActivity.class);
 		} else if (mProtocolPreference.getValue().equals(
-				PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+				getString(R.string.protocol_google_maps_engine))) {
 			prefIntent = new Intent(this, GMEPreferencesActivity.class);
 		} else {
 			// other
 			prefIntent = new Intent(this, OtherPreferencesActivity.class);
 		}
-		prefIntent.putExtra("adminMode", adminMode);
+		prefIntent.putExtra(INTENT_KEY_ADMIN_MODE, adminMode);
 		mProtocolSettings.setIntent(prefIntent);
 
 		mProtocolPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -214,16 +210,16 @@ public class PreferencesActivity extends PreferenceActivity implements
 				((ListPreference) preference).setSummary(entry);
 
 				Intent prefIntent = null;
-				if (value.equals(PROTOCOL_ODK_DEFAULT)) {
+				if (value.equals(getString(R.string.protocol_odk_default))) {
 					setDefaultAggregatePaths();
 					prefIntent = new Intent(PreferencesActivity.this, AggregatePreferencesActivity.class);
-				} else if (value.equals(PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+				} else if (value.equals(getString(R.string.protocol_google_maps_engine))) {
 					prefIntent = new Intent(PreferencesActivity.this, GMEPreferencesActivity.class);
 				} else {
 					// other
 					prefIntent = new Intent(PreferencesActivity.this, OtherPreferencesActivity.class);
 				}
-				prefIntent.putExtra("adminMode", adminMode);
+				prefIntent.putExtra(INTENT_KEY_ADMIN_MODE, adminMode);
 				mProtocolSettings.setIntent(prefIntent);
 
 				if (!((String) newValue).equals(oldValue)) {

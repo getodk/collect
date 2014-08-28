@@ -30,6 +30,7 @@ import java.util.zip.GZIPInputStream;
 import org.apache.http.HttpStatus;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.opendatakit.httpclientandroidlib.Header;
@@ -216,7 +217,8 @@ public final class WebUtils {
 	public static final void setGoogleHeaders(HttpRequest req) {
 		SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
-		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, 
+				Collect.getInstance().getString(R.string.protocol_odk_default));
 
 		// TODO:  this doesn't exist....
 //		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {

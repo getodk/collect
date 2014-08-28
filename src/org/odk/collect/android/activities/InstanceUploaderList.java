@@ -235,7 +235,7 @@ public class InstanceUploaderList extends ListActivity implements
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
-        if (server.equalsIgnoreCase(PreferencesActivity.PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+        if (server.equalsIgnoreCase(getString(R.string.protocol_google_maps_engine))) {
             // if it's maps engine, start the maps-engine uploader
             // first make sure we have a google account selected
 

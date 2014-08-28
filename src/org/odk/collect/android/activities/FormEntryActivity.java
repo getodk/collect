@@ -166,6 +166,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final String KEY_XPATH = "xpath";
 	public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
+	// Tracks whether we are autosaving
+	public static final String KEY_AUTO_SAVED = "autosaved";
+	
 	private static final int MENU_LANGUAGES = Menu.FIRST;
 	private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
 	private static final int MENU_SAVE = Menu.FIRST + 2;
@@ -290,8 +293,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			if (savedInstanceState.containsKey(KEY_ERROR)) {
 				mErrorMessage = savedInstanceState.getString(KEY_ERROR);
 			}
-			if (savedInstanceState.containsKey(KEY_FORMPATH)) {
-			    mAutoSaved = savedInstanceState.getBoolean("saved");
+			if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
+			    mAutoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
 			}
 		}
 
@@ -544,7 +547,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		outState.putBoolean(NEWFORM, false);
 		outState.putString(KEY_ERROR, mErrorMessage);
-		outState.putBoolean("saved", mAutoSaved);
+		outState.putBoolean(KEY_AUTO_SAVED, mAutoSaved);
 	}
 
 	@Override

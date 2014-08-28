@@ -132,9 +132,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
             String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
-                    PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+            		context.getString(R.string.protocol_odk_default));
 
-            if (protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE_MAPS_ENGINE)) {
+            if (protocol.equals(context.getString(R.string.protocol_google_maps_engine))) {
                 mGoogleMapsEngineUploadTask = new GoogleMapsEngineAutoUploadTask(context);
                 String googleUsername = settings.getString(
                         PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
