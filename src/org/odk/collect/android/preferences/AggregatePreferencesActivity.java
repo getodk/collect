@@ -15,14 +15,19 @@
 package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.WebUtils;
 
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.Toast;
@@ -32,8 +37,7 @@ import android.widget.Toast;
  * 
  * @author Carl Hartung (chartung@nafundi.com)
  */
-public class AggregatePreferencesActivity extends PreferenceActivity implements
-		OnPreferenceChangeListener {
+public class AggregatePreferencesActivity extends PreferenceActivity {
 
 	protected EditTextPreference mServerUrlPreference;
 	protected EditTextPreference mUsernamePreference;
@@ -78,7 +82,20 @@ public class AggregatePreferencesActivity extends PreferenceActivity implements
 		mServerUrlPreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
 
-		mUsernamePreference.setOnPreferenceChangeListener(this);
+		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((CharSequence) newValue);
+
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url));
+                Uri u = Uri.parse(server);
+                WebUtils.clearHostCredentials(u.getHost());
+                Collect.getInstance().getCookieStore().clear();
+
+                return true;
+            }
+        });
 		mUsernamePreference.setSummary(mUsernamePreference.getText());
 		mUsernamePreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
@@ -95,6 +112,13 @@ public class AggregatePreferencesActivity extends PreferenceActivity implements
 						} else {
 							mPasswordPreference.setSummary("");
 						}
+
+		                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url));
+		                Uri u = Uri.parse(server);
+		                WebUtils.clearHostCredentials(u.getHost());
+		                Collect.getInstance().getCookieStore().clear();
+
 						return true;
 					}
 				});
@@ -139,16 +163,6 @@ public class AggregatePreferencesActivity extends PreferenceActivity implements
 			}
 		};
 		return whitespaceFilter;
-	}
-
-	/**
-	 * Generic listener that sets the summary to the newly selected/entered
-	 * value
-	 */
-	@Override
-	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		preference.setSummary((CharSequence) newValue);
-		return true;
 	}
 
 }
