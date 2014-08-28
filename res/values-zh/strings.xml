@@ -8,11 +8,9 @@
   <string name="add_more">添加更多</string>
   <string name="add_repeat">添加新组\"%s\"?</string>
   <string name="add_repeat_no">不添加</string>
-  <string name="advance">继续下一页</string>
   <string name="altitude">海拔</string>
   <string name="audio_file_error">缺少音频文件.</string>
   <string name="audio_file_invalid">文件: %s 不是有效的音频文件.</string>
-  <string name="backup">返回上一页</string>
   <string name="barcode_scanner_error">条码扫描器未安装!</string>
   <string name="cancel">取消</string>
   <string name="cancel_loading_form">取消</string>
@@ -24,7 +22,6 @@
   <string name="capture_video">拍摄视频</string>
   <string name="change_language">更改语言</string>
   <string name="change_password">密码</string>
-  <string name="change_server_url">服务器地址</string>
   <string name="change_username">用户名</string>
   <string name="clearanswer_confirm">删除针对\"%s\"的回答?</string>
   <string name="clear_answer">删除回答</string>
@@ -57,7 +54,6 @@
   <string name="enter_data">填写空表表格</string>
   <string name="enter_data_button">填写空表表格</string>
   <string name="error_occured">错误</string>
-  <string name="fetching_file">获取 %1$s.\n\n%3$s 中的 %2$s 个表格.</string>
   <string name="file_deleted_error">%2$s 中的 %1$s 个选定的表格不能被删除!</string>
   <string name="file_deleted_ok">%s 表格被成功删除!</string>
   <string name="file_delete_in_progress">正在删除表格!</string>
@@ -90,8 +86,6 @@
   <string name="noselect_error">没有选定表格!</string>
   <string name="no_connection">没有可用网络</string>
   <string name="no_items_display">没有可显示内容.</string>
-  <string name="no_items_display_forms">没有可显示内容.\n\n请尝试下载并填写空白表格.</string>
-  <string name="no_items_display_instances">没有可显示内容.\n\n请尝试在发送之前标记表格为完成.</string>
   <string name="ok">好</string>
   <string name="parse_error">无法读取表格.</string>
   <string name="parse_legacy_formlist_failed">服务器没有提供与 Aggregate 0.9.x.兼容的表格 : %s</string>
@@ -117,7 +111,6 @@
   <string name="send_data">上传完成的表格</string>
   <string name="send_data_button">上传完成的表格 (%s)</string>
   <string name="send_selected_data">上传选定项</string>
-  <string name="server_auth_credentials">请输入服务器: %s 上的用户名和密码</string>
   <string name="server_requires_auth">服务器要求验证身份</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">服务器设置</string>
@@ -193,7 +186,6 @@
   <string name="sending_failed_on_date_at_time">\'发送失败于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">版本:</string>
-  <string name="parent_form_not_present">不能修改此已保存表格，因为相应空白表格不可用或已删除.\n\n表格ID: %1$s</string>
   <string name="launch_app">运行</string>
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
   <string name="select_one">选择一个回答</string>

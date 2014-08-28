@@ -8,11 +8,9 @@
   <string name="add_more">Afegir mes</string>
   <string name="add_repeat">Afegir un nou grup \"%s\"?</string>
   <string name="add_repeat_no">No afegir</string>
-  <string name="advance">passa a la \nsegüent\nentrada</string>
   <string name="altitude">Altitud</string>
   <string name="audio_file_error">No s\'ha especificat cap arxiu de so.</string>
   <string name="audio_file_invalid">Arxiu: %s és un arxiu d\'audio invàlid.</string>
-  <string name="backup">recula a\nl\'anterior\nentrada</string>
   <string name="barcode_scanner_error">Ho sentim, lector de codi de barres no instal·lat!</string>
   <string name="cancel">Cancel·lar</string>
   <string name="cancel_loading_form">Cancel·lar</string>
@@ -24,7 +22,6 @@
   <string name="capture_video">Enregistrar Vídeo</string>
   <string name="change_language">Canvia idioma</string>
   <string name="change_password">Clau d\'accés ODK</string>
-  <string name="change_server_url">URL Servidor</string>
   <string name="change_username">nom d\'usuari ODK</string>
   <string name="clearanswer_confirm">Eliminar la resposta a \"%s\"?</string>
   <string name="clear_answer">Eliminar resposta</string>
@@ -59,7 +56,6 @@
   <string name="enter_data_button">Omplir nou formulari</string>
   <string name="error_occured">S\'ha produït un error</string>
   <string name="error_attaching_binary_file">Error detectat al connectar medi: %s</string>
-  <string name="fetching_file">Carregant %1$s.\n\nFormulari %2$s de %3$s formulari(s).</string>
   <string name="file_deleted_error">Ho sentim, %1$s de %2$s formulari(s) seleccionat(s) no s\'han pogut eliminar!</string>
   <string name="file_deleted_ok">%s formularis(s) eliminats correctament!</string>
   <string name="file_delete_in_progress">Ho sentim, s\'está eliminant el formulari!</string>
@@ -92,8 +88,6 @@
   <string name="noselect_error">Atenció, no hi ha cap formulari seleccionat!</string>
   <string name="no_connection">No hi ha connexió a xarxa disponible</string>
   <string name="no_items_display">Res disponible per visualitzar.</string>
-  <string name="no_items_display_forms">Res disponible per visualitzar.\n\nProva de seleccionar i omplir un formulari buit.</string>
-  <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva de finalitzar els formularis desats abans d\'enviar-los.</string>
   <string name="ok">D\'acord</string>
   <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
   <string name="parse_legacy_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb Aggregate 0.9.x. : %s</string>
@@ -119,7 +113,6 @@
   <string name="send_data">Enviar formulari finalitzat</string>
   <string name="send_data_button">Enviar formulari finalitzat</string>
   <string name="send_selected_data">Enviar seleccionats</string>
-  <string name="server_auth_credentials">Entrar nom d\'usuari i clau d\'accés al servidor:\n%s</string>
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servidor</string>
@@ -195,7 +188,6 @@
   <string name="sending_failed_on_date_at_time">\'Enviament fallat el\' EEE dd MMM yyyy, HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Versió:</string>
-  <string name="parent_form_not_present">No es pot editar aquest formulari perquè el formulari matriu(buit) no s\'ha trobat.\n\nFormulari: %1$s</string>
   <string name="launch_app">Llançament</string>
   <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
   <string name="select_one">Selecciona una resposta</string>
@@ -288,4 +280,5 @@
   <string name="survey_saving_encrypting_message">Encriptant dades...</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
   <string name="high_resolution">Activar vídeo HD</string>
+  <string name="change_server_url">URL Servidor</string>
 </resources>

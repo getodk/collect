@@ -22,7 +22,6 @@
   <string name="capture_video">Video Kayit</string>
   <string name="change_language">Dil Değiştir</string>
   <string name="change_password">ODK Şifresi</string>
-  <string name="change_server_url">URL</string>
   <string name="change_username">ODK Kullanici Adi</string>
   <string name="clearanswer_confirm">Bu yanıt kaldırılsın mı \"%s\"?</string>
   <string name="clear_answer">Yanıtları kaldır</string>
@@ -94,7 +93,6 @@
   <string name="send_data">Dolu Formu gönder</string>
   <string name="send_data_button">Dolu Formu gönder (%s)</string>
   <string name="send_selected_data">Seçili olanı gönder</string>
-  <string name="server_auth_credentials">Sunucu için kullanıcı adı ve şifre giriniz :\n%s</string>
   <string name="server_requires_auth">Server kimlik doğrulaması gerektirir</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Sunucu Ayarlari</string>

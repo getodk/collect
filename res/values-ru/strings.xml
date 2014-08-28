@@ -7,11 +7,9 @@
   <string name="add_more">Добавить</string>
   <string name="add_repeat">Добавить новую \"%s\" группу?</string>
   <string name="add_repeat_no">Не добавлять</string>
-  <string name="advance">Перейти к\nследующей\nподсказке</string>
   <string name="altitude">Высота над уровнем моря</string>
   <string name="audio_file_error">Не был указан аудио файл.</string>
   <string name="audio_file_invalid">Файл: %s не является допустимым аудио файлом</string>
-  <string name="backup">Перейти к\nпредыдущей\nподсказке</string>
   <string name="barcode_scanner_error">Сканер штрих-кодов не установлен.</string>
   <string name="cancel">Отменить</string>
   <string name="cancel_loading_form">Отменить</string>
@@ -23,7 +21,6 @@
   <string name="capture_video">Записать видео</string>
   <string name="change_language">Сменить язык</string>
   <string name="change_password">Пароль ODK</string>
-  <string name="change_server_url">URL</string>
   <string name="change_username">Логин ODK</string>
   <string name="clearanswer_confirm">Удалить ответ на \"%s\"?</string>
   <string name="clear_answer">Удалить ответ?</string>
@@ -55,10 +52,13 @@
   <string name="enter_data">Заполнить пустую форму</string>
   <string name="enter_data_button">Заполнить пустую форму</string>
   <string name="error_occured">Ошибка</string>
-  <string name="fetching_file">Получаем %1$s.\n\nФорма %2$s из %3$s форм(ы).</string>
+  <string name="get_location">Записать местоположение</string>
+  <string name="leave_repeat_yes">Не добавлять</string>
+  <string name="server_url">URL</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="change_url_default">URL</string>
 </resources>

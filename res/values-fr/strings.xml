@@ -8,11 +8,9 @@
   <string name="add_more">Ajouter plus</string>
   <string name="add_repeat">Ajouter un nouveau groupe \"%s\" ?</string>
   <string name="add_repeat_no">Ne pas ajouter</string>
-  <string name="advance">Avancer à la\nprochaine\nentrée</string>
   <string name="altitude">Altitude</string>
   <string name="audio_file_error">Aucun fichier audio spécifié.</string>
   <string name="audio_file_invalid">%s n\'est pas un fichier audio valable.</string>
-  <string name="backup">retourner à\nla précédente\nentrée</string>
   <string name="barcode_scanner_error">Désolé, Barcode Scanner n\'est pas installé.</string>
   <string name="cancel">Annuler</string>
   <string name="cancel_loading_form">Annuler</string>
@@ -24,7 +22,6 @@
   <string name="capture_video">Enregistrer une vidéo</string>
   <string name="change_language">Changer la Langue</string>
   <string name="change_password">Mot de passe</string>
-  <string name="change_server_url">URL du serveur</string>
   <string name="change_username">Nom d\'utilisateur ODK</string>
   <string name="clearanswer_confirm">Enlever la réponse à \"%s\" ?</string>
   <string name="clear_answer">Enlever la réponse</string>
@@ -59,7 +56,6 @@
   <string name="enter_data_button">Remplir un Formulaire</string>
   <string name="error_occured">Une erreur s\'est produite</string>
   <string name="error_attaching_binary_file">Erreur pendant l\'attachement du média: %s</string>
-  <string name="fetching_file">Téléchargement de(s) formulaire(s) : %1$s.\n\nForm %2$s de %3$s .</string>
   <string name="file_deleted_error">Désolé, %1$s de %2$s formulaires sélectionnés ont échoué la suppression.</string>
   <string name="file_deleted_ok">%s formulaire(s) supprimé(s) avec succès.</string>
   <string name="file_delete_in_progress">Désolé, une action de suppression d\'un formulaire est en cours.</string>
@@ -92,8 +88,6 @@
   <string name="noselect_error">Désolé, vous n\'avez pas sélectionné un formulaire.</string>
   <string name="no_connection">Pas de connexion réseau disponible</string>
   <string name="no_items_display">Rien à afficher.</string>
-  <string name="no_items_display_forms">Rien à afficher.\n\nEssayez d\'obtenir et de remplir un formulaire.</string>
-  <string name="no_items_display_instances">Rien à afficher.\n\nEssayez de finalisé vos formulaires avant de les envoyés.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Désolé. Impossible d\'analyser le formulaire.</string>
   <string name="parse_legacy_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec Aggregate 0.9.x. : %s</string>
@@ -119,7 +113,6 @@
   <string name="send_data">Envoyer un Formulaire Finalisé</string>
   <string name="send_data_button">Envoyer un Formulaire Finalisé</string>
   <string name="send_selected_data">Envoyer Eléments Sélectionnés</string>
-  <string name="server_auth_credentials">Saisir le nom d\'utilisateur et le mot de passe, pour connexion au serveur :\n%s</string>
   <string name="server_requires_auth">Le Serveur requiert une authentification</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Serveur</string>
@@ -195,7 +188,6 @@
   <string name="sending_failed_on_date_at_time">\'L\'\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
-  <string name="parent_form_not_present">Impossible d\'éditer ce formulaire car son formulaire modèle n\'est plus présent ou a été supprimé.\n\nForm ID: %1$s</string>
   <string name="launch_app">Démarrer</string>
   <string name="no_app">L\'application demandée n\'existe pas. Saisissez les informations manuellement.</string>
   <string name="select_one">Sélectionner une seule réponse</string>
@@ -288,4 +280,5 @@
   <string name="survey_saving_encrypting_message">Chiffrement des données...</string>
   <string name="high_resolution_summary">Activer l\'option vidéos en haute résolution</string>
   <string name="high_resolution">Activer l\'option vidéo HD</string>
+  <string name="change_server_url">URL du serveur</string>
 </resources>

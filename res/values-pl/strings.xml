@@ -8,11 +8,9 @@
   <string name="add_more">Dodaj więcej</string>
   <string name="add_repeat">Czy dodać nową grupę \"%s\"?</string>
   <string name="add_repeat_no">Nie Dodawaj</string>
-  <string name="advance">przejdź do\nkolejnego\npytania</string>
   <string name="altitude">Wysokość</string>
   <string name="audio_file_error">Nie został wskazany plik audio.</string>
   <string name="audio_file_invalid">Plik: %s nie jest poprawnym plikiem audio.</string>
-  <string name="backup">cofnij do\npoprzedniego\npytania</string>
   <string name="barcode_scanner_error">Przepraszam, skaner kodu kreskowego nie jest zainstalowany!</string>
   <string name="cancel">Anuluj</string>
   <string name="cancel_loading_form">Anuluj</string>
@@ -24,7 +22,6 @@
   <string name="capture_video">Nagraj Wideo</string>
   <string name="change_language">Zmień Język</string>
   <string name="change_password">Hasło ODK</string>
-  <string name="change_server_url">URL</string>
   <string name="change_username">Nazwa użytkownika ODK</string>
   <string name="clearanswer_confirm">Czy usunąć odpowiedź na \"%s\"?</string>
   <string name="clear_answer">Usuń odpowiedź</string>
@@ -59,7 +56,6 @@
   <string name="enter_data_button">Wypełnij Pusty Formularz</string>
   <string name="error_occured">Wystąpił Błąd</string>
   <string name="error_attaching_binary_file">Wystąpił błąd w momencie dołączania mediów: %s</string>
-  <string name="fetching_file">Pobieram %1$s.\n\nFormularz %2$s z %3$s formularza/y.</string>
   <string name="file_deleted_error">Przykro mi, %1$s z %2$s wybranego/ych formularza/y nie udało się skasować!</string>
   <string name="file_deleted_ok">%s formularz/y zostało skasowanych!</string>
   <string name="file_delete_in_progress">Przykro mi, trwa kasowanie formularzy!</string>
@@ -92,8 +88,6 @@
   <string name="noselect_error">Przykro mi, nie zaznaczyłeś żadnego formularza!</string>
   <string name="no_connection">Brak połączenia do sieci</string>
   <string name="no_items_display">Brak informacji do wyświetlenia.</string>
-  <string name="no_items_display_forms">Brak informacji do wyświetlenia.\n\nSpróbuj pobrać i wypełnić pusty formularz.</string>
-  <string name="no_items_display_instances">Brak informacji do wyświetlenia.\n\nSpróbuj zakończyć zapisane formularze przed wysłaniem.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Przykro mi, nie mogę zanalizować formularza.</string>
   <string name="parse_legacy_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego z Aggregate 0.9.x: %s</string>
@@ -119,7 +113,6 @@
   <string name="send_data">Wyślij Zakończony Formularz</string>
   <string name="send_data_button">Wyślij Zakończony Formularz (%s)</string>
   <string name="send_selected_data">Wyślij Wybrane</string>
-  <string name="server_auth_credentials">Wprowadź, proszę, nazwę użytkownika i hasło dla serwera:\n%s</string>
   <string name="server_requires_auth">Serwer Wymaga Uwierzytelnienia</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Ustawienia Serwera</string>
@@ -195,7 +188,6 @@
   <string name="sending_failed_on_date_at_time">\'Wysyłanie nie powiodło się\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Wersja:</string>
-  <string name="parent_form_not_present">Nie mogę edytować tego zapisanego formularza ponieważ powiązany czysty formularz jest niedostępny lub został skasowany.\n\nID Formularza: %1$s</string>
   <string name="launch_app">Uruchom</string>
   <string name="no_app">Brakuje żądanej aplikacji. Proszę, wprowadź ręcznie odczytane wartości.</string>
   <string name="select_one">Wybierz Jedną Odpowiedź</string>
