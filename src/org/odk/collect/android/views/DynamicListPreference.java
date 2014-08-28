@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 
 public class DynamicListPreference extends ListPreference {
 

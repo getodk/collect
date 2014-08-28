@@ -19,7 +19,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.api.client.util.DateTime;
-import com.google.api.services.drive.model.User;
 
 public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     private String name;

@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.utilities.UrlUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -44,7 +43,6 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.widget.Toast;
 
 /**
  * Handles general preferences.
