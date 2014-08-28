@@ -207,12 +207,16 @@ public class ItemsetWidget extends QuestionWidget implements
                         String val = "";
                         // try to get the value associated with the label:lang
                         // string if that doen't exist, then just use label
-                        String lang = Collect.getInstance().getFormController().getLanguage();
+                        String lang = "";
+                        if (Collect.getInstance().getFormController().getLanguages() != null
+                                && Collect.getInstance().getFormController().getLanguages().length > 0) {
+                            lang = Collect.getInstance().getFormController().getLanguage();
+                        }
 
                         // apparently you only need the double quotes in the
                         // column name when creating the column with a :
                         // included
-                        String labelLang = "label" + ":" + lang;
+                        String labelLang = "label" + "::" + lang;
                         int langCol = c.getColumnIndex(labelLang);
                         if (langCol == -1) {
                             label = c.getString(c.getColumnIndex("label"));
