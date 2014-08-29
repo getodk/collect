@@ -1,6 +1,10 @@
 
 package org.odk.collect.android.database;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.odk.collect.android.application.Collect;
 
 import android.content.ContentValues;
@@ -89,9 +93,13 @@ public class ItemsetDbAdapter {
         mDbHelper.close();
     }
 
-    public boolean createTable(String formHash, String[] columns, String path) {
+    public boolean createTable(String formHash, String pathHash, String[] columns, String path) {
         StringBuilder sb = new StringBuilder();
-        sb.append("create table " + DATABASE_TABLE + formHash
+        
+        // get md5 of the path to itemset.csv, which is unique per form
+        // the md5 is easier to use because it doesn't have chars like '/'
+                
+        sb.append("create table " + DATABASE_TABLE + pathHash
                 + " (_id integer primary key autoincrement ");
         for (int j = 0; j < columns.length; j++) {
             // add double quotes in case the column is of label:lang
@@ -155,12 +163,14 @@ public class ItemsetDbAdapter {
         return mCursor;
     }
 
-    public void dropTable(String formHash) {
-        mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + formHash);
+    public void dropTable(String pathHash, String path) {
+        // drop the table
+        mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
 
-        String where = KEY_ITEMSET_HASH + "=?";
+        // and remove the entry from the itemsets table
+        String where = KEY_PATH + "=?";
         String[] whereArgs = {
-            formHash
+            path
         };
         mDb.delete(ITEMSET_TABLE, where, whereArgs);
     }
@@ -190,6 +200,21 @@ public class ItemsetDbAdapter {
             path
         };
         mDb.delete(ITEMSET_TABLE, where, whereArgs);
+    }
+    
+    public static String getMd5FromString(String toEncode) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            Log.e("MD5", e.getMessage());
+        }
+        md.update(toEncode.getBytes());
+        byte[] digest = md.digest();
+        BigInteger bigInt = new BigInteger(1,digest);
+        String hashtext = bigInt.toString(16);
+        return hashtext;
     }
 
 }

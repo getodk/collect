@@ -154,7 +154,6 @@ public class FormController {
     private File mInstancePath;
     private FormEntryController mFormEntryController;
     private FormIndex mIndexWaitingForData = null;
-    private String mItemsetHash = null;
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
     	mMediaFolder = mediaFolder;
@@ -164,14 +163,6 @@ public class FormController {
 
     public FormDef getFormDef() {
         return mFormEntryController.getModel().getForm();
-    }
-
-    public void setItemsetHash(String hash) {
-        mItemsetHash = hash;
-    }
-
-    public String getItemsetHash() {
-    	return mItemsetHash;
     }
 
     public File getMediaFolder() {

@@ -289,7 +289,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                         // they're equal, do nothing
                     } else {
                         // the csv has been updated, delete the old entries
-                        ida.dropTable(oldmd5);
+                        ida.dropTable(ItemsetDbAdapter.getMd5FromString(csv.getAbsolutePath()), csv.getAbsolutePath());
                         // and read the new
                         readFile = true;
                     }
@@ -301,7 +301,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
             ida.close();
             if (readFile) {
-                readCSV(csv, csvmd5);
+                readCSV(csv, csvmd5, ItemsetDbAdapter.getMd5FromString(csv.getAbsolutePath()));
             }
         }
 
@@ -330,9 +330,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formPath = null;
 
         FormController fc = new FormController(formMediaDir, fec, mInstancePath == null ? null : new File(mInstancePath));
-        if (csvmd5 != null) {
-            fc.setItemsetHash(csvmd5);
-        }
         if ( mXPath != null ) {
         	// we are resuming after having terminated -- set index to this position...
         	FormIndex idx = fc.getIndexFromXPath(mXPath);
@@ -592,7 +589,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 		this.intent = intent;
 	}
 
-	private void readCSV(File csv, String formHash) {
+	private void readCSV(File csv, String formHash, String pathHash) {
 
         CSVReader reader;
         ItemsetDbAdapter ida = new ItemsetDbAdapter();
@@ -609,7 +606,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 if (lineNumber == 1) {
                     // first line of csv is column headers
                     columnHeaders = nextLine;
-                    ida.createTable(formHash, columnHeaders,
+                    ida.createTable(formHash, pathHash, columnHeaders,
                             csv.getAbsolutePath());
                     continue;
                 }
@@ -620,7 +617,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     // start a transaction for the inserts
                     ida.beginTransaction();
                 }
-                ida.addRow(formHash, columnHeaders, nextLine);
+                ida.addRow(pathHash, columnHeaders, nextLine);
 
             }
         } catch (IOException e) {
