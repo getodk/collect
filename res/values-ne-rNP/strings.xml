@@ -1,8 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="accept_location">स्थान रेकर्ड गर्नुहोस् </string>
+  <string name="add_another">ग्रुप थप्नुहोस् </string>
+  <string name="add_more">अर्को थप्नुहोस् </string>
+  <string name="add_repeat">नयाँ \"%s\" ग्रुप थप्न चाहनु हुन्छ ?</string>
+  <string name="add_repeat_no">नथप्नु होला !</string>
+  <string name="altitude">उचाइ</string>
+  <string name="barcode_scanner_error">माफ गर्नुहोला, बारकोड स्क्यानर इन्स्टल गरिएको छैन ! </string>
+  <string name="cancel">रद्द गर्नुहोस् </string>
+  <string name="cancel_loading_form">रद्द गर्नुहोस् </string>
+  <string name="cancel_location">रद्द गर्नुहोस् </string>
+  <string name="cancel_saving_form">रद्द गर्नुहोस् </string>
+  <string name="cannot_edit_completed_form">एक पटक कम्प्लिट भनी मार्क गरिएको फारमलाई सम्पादन गर्न मिल्दैन । यो इन्क्रिप्टेड हुन सक्छ । </string>
+  <string name="capture_audio">साउन्ड रेकर्ड गर्नुहोस् </string>
+  <string name="capture_image">फोटो लिनुहोस् </string>
+  <string name="capture_video">भिडियो रेकर्ड गर्नुहोस् </string>
+  <string name="change_language">भाषा परिवर्तन</string>
+  <string name="change_password">ODK पासवर्ड </string>
+  <string name="change_protocol_settings_default">प्लेटफर्म सेटिङस् </string>
+  <string name="change_username">ODK युजरनेम </string>
+  <string name="clear_answer">उत्तर हटाउनुहोस् </string>
+  <string name="clear_answer_ask">यो उत्तर हटाउनु हुन्छ ?</string>
+  <string name="clear_answer_no">रद्द गर्नुहोस्</string>
+  <string name="completed_data">पूर्ण (%s)</string>
+  <string name="data">संचित फारमहरू </string>
+  <string name="data_saved_error">माफ गर्नुहोला , फारम संचित हुन सकेन !</string>
+  <string name="data_saved_ok">फारम सफलतापूर्वक संचित भयो !</string>
+  <string name="delete_repeat_no">रद्द गर्नुहोस् </string>
+  <string name="discard_answer">उत्तर हटाउनुहोस् </string>
+  <string name="do_not_change">रद्द गर्नुहोस् </string>
+  <string name="do_not_exit">रद्द गर्नुहोस् </string>
+  <string name="entering_repeat">ग्रुप थप्नुहोस् </string>
+  <string name="get_location">स्थान रेकर्ड गर्नुहोस् </string>
+  <string name="leave_repeat_yes">नथप्नु होला !</string>
+  <string name="no_connection">नेटवर्क कनेक्सन छैन</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="change_server_url">सर्भर URL</string>
 </resources>

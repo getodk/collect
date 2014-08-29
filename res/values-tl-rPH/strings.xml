@@ -185,5 +185,8 @@
   <string name="reset_image">I-reset</string>
   <string name="set_color">I-set ang Kulay</string>
   <string name="select_drawing_color">Piliian ang Kulay ng pang-guhit</string>
+  <string name="change_server">Server Platform</string>
+  <string name="change_username_default">Username</string>
+  <string name="save_mid">Impukin ang mga sagot sa Form</string>
   <string name="change_url_default">URL</string>
 </resources>

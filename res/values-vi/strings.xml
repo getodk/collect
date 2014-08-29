@@ -54,6 +54,7 @@
   <string name="enter_data">Điền biểu mẫu</string>
   <string name="enter_data_button">Điền biểu mẫu</string>
   <string name="error_occured">Lỗi xuất hiện</string>
+  <string name="fetching_file">Tải %1$s.\n\nForm %2$s trong số %3$s biểu mẫu.</string>
   <string name="file_deleted_error">Xin lỗi, %1$s của %2$s các biểu mẫu được chọn bị lỗi khi xoá!</string>
   <string name="file_deleted_ok">Biểu mẫu %s đã bị xoá!</string>
   <string name="file_delete_in_progress">Xin lỗi, file này đang được xoá!</string>
