@@ -189,7 +189,7 @@ public class ItemsetDbAdapter {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = c.getString(c.getColumnIndex(KEY_ITEMSET_HASH));
+                String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
                 mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
