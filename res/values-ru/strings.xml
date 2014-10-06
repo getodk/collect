@@ -10,6 +10,7 @@
   <string name="altitude">Высота над уровнем моря</string>
   <string name="audio_file_error">Не был указан аудио файл.</string>
   <string name="audio_file_invalid">Файл: %s не является допустимым аудио файлом</string>
+  <string name="backup">Вернуться к\nprevious\nprompt</string>
   <string name="barcode_scanner_error">Сканер штрих-кодов не установлен.</string>
   <string name="cancel">Отменить</string>
   <string name="cancel_loading_form">Отменить</string>
