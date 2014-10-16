@@ -79,7 +79,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	// GME SPECIFIC
 	public static final String KEY_GME_PROJECT_ID = "gme_project_id";
-	public static final String KEY_GME_DRAFTACCESSLIST = "gme_draftaccesslist";
 	public static final String KEY_GME_ID_HASHMAP = "gme_id_hashmap";
 
 	// OTHER SPECIFIC

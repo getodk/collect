@@ -8,13 +8,6 @@
 	            android:dialogTitle="@string/gme_project_id"
 	            android:key="gme_project_id"
 	            android:title="@string/gme_project_id" />
-        	<EditTextPreference
-	            android:id="@+id/draft_access_list"
-	            android:defaultValue="@string/map_editors"
-	            android:dialogTitle="@string/draft_access_list"
-	            android:inputType="textNoSuggestions"
-	            android:key="gme_draftaccesslist"
-	            android:title="@string/draft_access_list" />
         	<ListPreference
             android:id="@+id/selected_google_account"
             android:defaultValue=""

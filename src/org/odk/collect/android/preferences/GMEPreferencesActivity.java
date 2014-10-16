@@ -68,7 +68,6 @@ public class GMEPreferencesActivity extends PreferenceActivity implements
 		InstanceUploaderListener {
 
 	private DynamicListPreference mGMEProjectIDPreference;
-	private EditTextPreference mGMEDraftAccessListPreference;
 
 	private static String GME_ERROR = "gme_error";
 
@@ -122,7 +121,6 @@ public class GMEPreferencesActivity extends PreferenceActivity implements
 			}
 		}
 
-		mGMEDraftAccessListPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_GME_DRAFTACCESSLIST);
 		mGMEProjectIDPreference = (DynamicListPreference) findPreference(PreferencesActivity.KEY_GME_PROJECT_ID);
 		mGMEProjectIDPreference.setShowDialog(partnerListDialogShowing);
 		mGMEProjectIDPreference
@@ -199,20 +197,6 @@ public class GMEPreferencesActivity extends PreferenceActivity implements
 			mGMEProjectIDPreference.setSummary(mGMEProjectIDPreference
 					.getEntry());
 		}
-
-		mGMEDraftAccessListPreference.setSummary(mGMEDraftAccessListPreference
-				.getText());
-		mGMEDraftAccessListPreference
-				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-					@Override
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						mGMEDraftAccessListPreference
-								.setSummary((String) newValue);
-						return false;
-					}
-				});
 
 		// get list of google accounts
 		final Account[] accounts = AccountManager.get(getApplicationContext())
