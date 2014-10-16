@@ -8,11 +8,11 @@
   <string name="add_more">Aggiungi un altro</string>
   <string name="add_repeat">Aggiungere un nuovo \"%s\" gruppo ?</string>
   <string name="add_repeat_no">Non aggiungere</string>
-  <string name="advance">avanti al\n prossimo\n input</string>
+  <string name="advance">avanti</string>
   <string name="altitude">Altitudine</string>
   <string name="audio_file_error">Nessun file audio è stato specificato.</string>
   <string name="audio_file_invalid">File: %s non è un file di audio valido.</string>
-  <string name="backup">indietro al\nprecedente\ninput</string>
+  <string name="backup">indietro</string>
   <string name="barcode_scanner_error">Spiacenti, Barcode Scanner non è installato!</string>
   <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
@@ -47,7 +47,7 @@
   <string name="delete_yes">Elimina moduli</string>
   <string name="discard_answer">Rimuovere la risposta</string>
   <string name="discard_group">Rimuovere il gruppo</string>
-  <string name="download">Prendi Selezionato</string>
+  <string name="download">Scarica Selezionato</string>
   <string name="download_forms_result">Risultato del Download</string>
   <string name="downloading_data">Si sta connettendo al server</string>
   <string name="do_not_change">Annulla</string>

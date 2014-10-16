@@ -210,7 +210,7 @@
   <string name="set_color">Seleccionar Color</string>
   <string name="select_drawing_color">Seleccionar Color</string>
   <string name="user_access_main_menu">Opciones de Usuario en Menú Principal:</string>
-  <string name="user_access_preferences">Opciones de Usuario en Configuració:</string>
+  <string name="user_access_preferences">Opciones de Usuario en Configuración:</string>
   <string name="change_server">Server Protocol y URL</string>
   <string name="change_username_default">Nombre de usuario</string>
   <string name="admin_preferences">Opciones de administrador</string>
