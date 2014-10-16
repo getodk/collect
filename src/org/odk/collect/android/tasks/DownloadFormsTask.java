@@ -199,7 +199,9 @@ public class DownloadFormsTask extends
             FileUtils.deleteAndReport(fileOnCancel);
         }
 
-        FileUtils.purgeMediaPath(tempMediaPath);
+        if ( tempMediaPath != null ) {
+        	FileUtils.purgeMediaPath(tempMediaPath);
+        }
     }
 
     /**
