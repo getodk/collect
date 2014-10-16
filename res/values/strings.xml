@@ -297,8 +297,6 @@
     <string name="high_resolution">Enable hi-res video</string>
         <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
 <string name="gme_project_id">Project ID</string>
-<string name="draft_access_list">Draft access list</string>
-<string name="map_editors">Map Editors</string>
 <string name="google_drive">Google Drive</string>
 <string name="go_drive">My Drive</string>
 <string name="go_shared">Shared with Me</string>

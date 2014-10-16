@@ -134,14 +134,37 @@ public abstract class GoogleMapsEngineTask<Params, Progress, Result> extends
 	protected String getErrorMesssage(InputStream is) {
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
-
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		StringBuilder jsonResponseBuilder = new StringBuilder();
 
-		GMEError err = gson.fromJson(br, GMEError.class);
+	    String line = null;
+	    try {
+	      while ((line = br.readLine()) != null) {
+	          jsonResponseBuilder.append(line + "\n");
+	      }
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    } finally {
+	      try {
+	        is.close();
+	      } catch (IOException e) {
+	        e.printStackTrace();
+	      }
+	    }
+	    String jsonResponse = jsonResponseBuilder.toString();
+	    Log.i(tag, "GME json response : " + jsonResponse);
+
+		GMEErrorResponse errResp = gson.fromJson(jsonResponse, GMEErrorResponse.class);
 		StringBuilder sb = new StringBuilder();
 		sb.append(gme_fail + "\n");
-		for (int i = 0; i < err.errors.length; i++) {
-			sb.append(err.errors[i].message + "\n");
+		
+		if (errResp.error.errors != null) {
+    		for (int i = 0; i < errResp.error.errors.length; i++) {
+    			sb.append(errResp.error.errors[i].message + "\n");
+    		}
+		} else {
+		    sb.append(errResp.error.message + "\n");
 		}
 		return sb.toString();
 	}
@@ -172,11 +195,17 @@ public abstract class GoogleMapsEngineTask<Params, Progress, Result> extends
 		}
 	}
 
+	
+	
+	public class GMEErrorResponse {
+	    public GMEError error;
+	}
+	
 	public class GMEError {
-		public GMEInnerError[] errors;
-		public String code;
-		public String message;
-		public String extendedHelp;
+	    public GMEInnerError[] errors;
+        public String code;
+        public String message;
+        public String extendedHelp;
 	}
 
 	public class GMEInnerError {

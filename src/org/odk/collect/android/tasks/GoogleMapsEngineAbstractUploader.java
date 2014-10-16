@@ -85,7 +85,6 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
 	protected static final String form_fail = "Form Error: ";
 
 	private final static String PROJECT_ID = "projectid";
-	private final static String GME_ACCESS_LIST = "draftAccessList";
 
 	/*
 	 * By default, GME has a rate limit of 1 request/sec, so we've added GME_SLEEP_TIME
@@ -172,10 +171,7 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
 					HashMap<String, String> gmeFormValues = new HashMap<String, String>();
 					String projectid = appSharedPrefs.getString(
 							PreferencesActivity.KEY_GME_PROJECT_ID, null);
-					String draftAccessList = appSharedPrefs.getString(
-							PreferencesActivity.KEY_GME_DRAFTACCESSLIST, null);
 					gmeFormValues.put(PROJECT_ID, projectid);
-					gmeFormValues.put(GME_ACCESS_LIST, draftAccessList);
 
 					publishProgress(c.getPosition() + 1, c.getCount());
 					if (!uploadOneSubmission(id, instance, jrformid, token,
@@ -765,9 +761,7 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
 		t.schema = s;
 		String[] tags = { md5 };
 		t.tags = tags;
-		t.draftAccessList = "Map Editors";
 		t.description = "auto-created by ODK Collect for formid " + jrformid;
-		t.publishedAccessList = "Map Viewers";
 
 		URL createTableUrl = new URL(
 				"https://www.googleapis.com/mapsengine/v1/tables");
@@ -923,16 +917,11 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
 				} else {
 					repeatCheck.add(getPath(path));
 				}
-				// check the start tag for project ID and/or draftaccess
-				// list
+				// check the start tag for project ID
 				for (int i = 0; i < parser.getAttributeCount(); i++) {
 					String attr = parser.getAttributeName(i);
 					if ("projectId".equals(attr)) {
 						gmeFormValues.put("projectId",
-								parser.getAttributeValue(i));
-						break;
-					} else if (GME_ACCESS_LIST.equals(attr)) {
-						gmeFormValues.put(GME_ACCESS_LIST,
 								parser.getAttributeValue(i));
 						break;
 					}
@@ -1026,7 +1015,6 @@ public abstract class GoogleMapsEngineAbstractUploader<Params, Progress, Result>
                         uploadResults.close();
                     }
                 }
-
             }
         }
     }
