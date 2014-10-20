@@ -285,8 +285,6 @@ Escolher Imagem</string>
   <string name="high_resolution">Acionar video em alta resolução</string>
   <string name="server_platform_google_maps_engine">Google Drive, Ferramenta Google Maps</string>
   <string name="gme_project_id">Identificação do projeto</string>
-  <string name="draft_access_list">Lista preliminar de acesso</string>
-  <string name="map_editors">Editores de mapas</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>

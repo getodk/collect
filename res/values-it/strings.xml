@@ -292,8 +292,6 @@
   <string name="high_resolution">Abilita video HD</string>
   <string name="server_platform_google_maps_engine">Google Drive, Motore Google Maps</string>
   <string name="gme_project_id">Ident. Progetto</string>
-  <string name="draft_access_list">Bozza lista d\'accesso</string>
-  <string name="map_editors">Editor Mappe</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>

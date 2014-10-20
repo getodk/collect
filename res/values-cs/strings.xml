@@ -292,8 +292,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="high_resolution">Vysoké rozlišení videa</string>
   <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
   <string name="gme_project_id">ID projektu</string>
-  <string name="draft_access_list">Návrh vstupního seznamu</string>
-  <string name="map_editors">Úprava map</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Můj disk</string>
   <string name="go_shared">Sdíleno se mnou</string>

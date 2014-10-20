@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Înregistreză locația</string>
+  <string name="accept_location">Înregistrează locația</string>
   <string name="accuracy">Precizie</string>
   <string name="activity_not_found">Nu s-a găsit nici o activitate care să se ocupe de : %s</string>
   <string name="add_another">Adăugați grupul</string>
@@ -291,8 +291,6 @@
   <string name="high_resolution">Activați video hi-res</string>
   <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
   <string name="gme_project_id">ID Proiect</string>
-  <string name="draft_access_list">Proiect de lista de acces</string>
-  <string name="map_editors">Editori hartă</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>

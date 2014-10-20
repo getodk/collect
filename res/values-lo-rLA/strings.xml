@@ -292,8 +292,6 @@
   <string name="high_resolution">​ເປີດ​ການ​ນຳ​ໃຊ້ ວີ​ດີ​ໂອ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
   <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
   <string name="gme_project_id">ເລກທີໂຄງການ</string>
-  <string name="draft_access_list">ຮ່າງລາຍການເຂົ້າຫາ</string>
-  <string name="map_editors">ໂຕດັດແກ້ແຜນທີ່</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
   <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
