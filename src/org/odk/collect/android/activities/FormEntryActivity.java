@@ -1764,8 +1764,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * saving
 	 */
 	private void createQuitDialog() {
-		FormController formController = Collect.getInstance()
-				.getFormController();
+	   String title;
+	   {
+		   FormController formController = Collect.getInstance().getFormController();
+		   title = (formController == null) ? null : formController.getFormTitle();
+		   if ( title == null ) {
+		      title = "<no form loaded>";
+		   }
+	   }
+
 		String[] items;
 		if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_MID,
 				true)) {
@@ -1782,8 +1789,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(
-						getString(R.string.quit_application,
-								formController.getFormTitle()))
+						getString(R.string.quit_application, title))
 				.setNeutralButton(getString(R.string.do_not_exit),
 						new DialogInterface.OnClickListener() {
 							@Override
