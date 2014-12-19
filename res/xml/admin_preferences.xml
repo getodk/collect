@@ -21,6 +21,15 @@
         android:key="admin_pw"
         android:title="Admin Password" />
 
+    <ListPreference
+            android:id="@+id/form_processing_logic"
+            android:defaultValue="@string/default_form_processing_logic"
+            android:dialogTitle="@string/form_processing_logic"
+            android:entries="@array/form_processing_logic_entries"
+            android:entryValues="@array/form_processing_logic_entry_values"
+            android:key="form_processing_logic"
+            android:title="@string/form_processing_logic" />
+
     <PreferenceCategory android:title="@string/user_access_main_menu" >
         <CheckBoxPreference
             android:id="@+id/edit_saved"
