@@ -282,9 +282,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 		Object o = getListAdapter().getItem(position);
 		@SuppressWarnings("unchecked")
 		HashMap<String, String> item = (HashMap<String, String>) o;
-        FormDetails detail = mFormNamesAndURLs.get(item.get(FORMDETAIL_KEY));
+      FormDetails detail = mFormNamesAndURLs.get(item.get(FORMDETAIL_KEY));
 
+      if ( detail != null ) {
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", detail.downloadUrl);
+      } else {
+        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", "<missing form detail>");
+      }
     }
 
 

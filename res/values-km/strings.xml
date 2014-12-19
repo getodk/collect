@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="accept_location">ចាប់​យក​ទីតាំង</string>
+  <string name="accuracy">ភាព​ត្រឹមត្រូវ</string>
+  <string name="add_another">បន្ថែម​ក្រុម</string>
+  <string name="add_another_repeat">បន្ថែម​ក្រុម \"%s\" មួយ​ទៀត?</string>
+  <string name="add_more">បន្ថែម​ទៀត</string>
+  <string name="add_repeat">បន្ថែម​ក្រុម \"%s\" ថ្មី​មួយ?</string>
+  <string name="add_repeat_no">កុំ​បន្ថែម</string>
+  <string name="cancel">បោះបង់</string>
+  <string name="cancel_loading_form">បោះបង់</string>
+  <string name="cancel_location">បោះបង់</string>
+  <string name="cancel_saving_form">បោះបង់</string>
+  <string name="capture_audio">ថត​សំឡេង</string>
+  <string name="capture_image">ថត​រូបភាព</string>
+  <string name="capture_video">ថត​វីដេអូ</string>
+  <string name="change_language">ប្ដូរ​ភាសា</string>
+  <string name="change_password">ពាក្យ​សម្ងាត់ ODK</string>
+  <string name="change_protocol_settings_default">ការ​កំណត់​ប្រព័ន្ធ​កម្មវិធី</string>
+  <string name="change_username">ឈ្មោះ​អ្នកប្រើ ODK</string>
+  <string name="clear_answer_no">បោះបង់</string>
+  <string name="completed_data">បញ្ចប់ (%s)</string>
+  <string name="data">កម្រង​សំណួរ​ដែល​បាន​រក្សា​ទុក</string>
+  <string name="data_saved_error">សូមទោស, រក្សា​ទុក​បែបបទ​មិន​បាន​សម្រេច!</string>
+  <string name="data_saved_ok">បាន​រក្សាទុក​បែបបទ​ដោយ​ជោគជ័យ!</string>
+  <string name="delete_confirm">លុប​កម្រង​សំណួរ %s?</string>
+  <string name="delete_file">លុប​អ្វី​ដែល​បាន​ជ្រើស</string>
+  <string name="delete_no">កុំ​លុប</string>
+  <string name="delete_repeat">ដក​ក្រុម​ចេញ</string>
+  <string name="delete_repeat_ask">ដក​ក្រុម​នេះ​ចេញ?</string>
+  <string name="delete_repeat_confirm">ដក​ក្រុម \"%s\" និង​កូន​ក្រុម​នានា​ចេញ?</string>
+  <string name="delete_repeat_no">បោះបង់</string>
+  <string name="delete_yes">លុប​កម្រង​សំណួរ</string>
+  <string name="discard_group">ដក​ក្រុម​ចេញ</string>
+  <string name="do_not_change">បោះបង់</string>
+  <string name="do_not_exit">បោះបង់</string>
+  <string name="entering_repeat">បន្ថែម​ក្រុម</string>
+  <string name="get_location">ចាប់​យក​ទីតាំង</string>
+  <string name="leave_repeat_yes">កុំ​បន្ថែម</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="change_server_url">URL ម៉ាស៊ីន​បម្រើ</string>
+</resources>

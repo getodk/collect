@@ -30,6 +30,7 @@ import java.util.zip.GZIPInputStream;
 import org.apache.http.HttpStatus;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.opendatakit.httpclientandroidlib.Header;
@@ -131,7 +132,7 @@ public final class WebUtils {
 	/**
 	 * Remove all credentials for accessing the specified host.
 	 *
-	 * @param host host
+	 * @param host
 	 */
 	public static final void clearHostCredentials(String host) {
 		CredentialsProvider credsProvider = Collect.getInstance()
@@ -216,14 +217,16 @@ public final class WebUtils {
 	public static final void setGoogleHeaders(HttpRequest req) {
 		SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getApplicationContext());
-		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, PreferencesActivity.PROTOCOL_ODK_DEFAULT);
+		String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL, 
+				Collect.getInstance().getString(R.string.protocol_odk_default));
 
-		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
-	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-			if ((auth != null) && (auth.length() > 0)) {
-				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-			}
-		}
+		// TODO:  this doesn't exist....
+//		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
+//	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
+//			if ((auth != null) && (auth.length() > 0)) {
+//				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+//			}
+//		}
 	}
 
 	public static final HttpPost createOpenRosaHttpPost(Uri u) {

@@ -8,11 +8,11 @@
   <string name="add_more">Agregar mas</string>
   <string name="add_repeat">¿Agregar un nuevo grupo de \"%s\"?</string>
   <string name="add_repeat_no">No Agregar</string>
-  <string name="advance">avanzar a la \nproxima\npregunta</string>
+  <string name="advance">avanzar a la\nproxima\npregunta</string>
   <string name="altitude">Altitud</string>
   <string name="audio_file_error">Ningún archivo de audio fue especificado.</string>
   <string name="audio_file_invalid">Archivo: %s no es un archivo de audio válido.</string>
-  <string name="backup">de vuelta a la \npregunta\nprevia</string>
+  <string name="backup">de vuelta a la\npregunta\nprevia</string>
   <string name="barcode_scanner_error">¡El lector de codigo de barra no esta instalado!</string>
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
@@ -24,7 +24,7 @@
   <string name="capture_video">Grabar el Video</string>
   <string name="change_language">Cambiar el Idioma</string>
   <string name="change_password">Contraseña</string>
-  <string name="change_server_url">URL del Servidor</string>
+  <string name="change_protocol_settings_default">Configuración de Plataforma.</string>
   <string name="change_username">Nombre de Usuario ODK</string>
   <string name="clearanswer_confirm">¿Borrar la respuesta a \"%s\"?</string>
   <string name="clear_answer">Borrar respuesta</string>
@@ -92,8 +92,8 @@
   <string name="noselect_error">¡No ha escogido ningún formulario!</string>
   <string name="no_connection">No hay conexión a internet</string>
   <string name="no_items_display">No hay nada que mostrar.</string>
-  <string name="no_items_display_forms">No hay nada que mostrar.\n\nIntente descargar y llenar un formulario.</string>
-  <string name="no_items_display_instances">No hay nada que mostrar.\n\nPruebe finalizar los formularios antes de enviarlos.</string>
+  <string name="no_items_display_forms">No hay nada que mostrar.\n\nIntente tomando y llenando un formulario en blanco.</string>
+  <string name="no_items_display_instances">No hay nada que mostrar.\n\nPruebe finalizar los formularios antes de mandarlos.</string>
   <string name="ok">De acuerdo</string>
   <string name="parse_error">No se pudo interpretar el formulario.</string>
   <string name="parse_legacy_formlist_failed">El servidor no ha servido un formulario compatible con Aggregate 0.9.x  : %s</string>
@@ -102,6 +102,7 @@
   <string name="play_audio">Reproducir el Sonido</string>
   <string name="play_video">Reproducir el Video</string>
   <string name="please_wait">Por favor, espere un momento.</string>
+  <string name="please_wait_google_drive">Por favor espere. Accediendo a Google Drive</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
   <string name="quit_application">Salir %s</string>
   <string name="quit_entry">Guardar Formulario y Salir</string>
@@ -119,7 +120,7 @@
   <string name="send_data">Enviar Formulario Finalizado</string>
   <string name="send_data_button">Enviar Formulario Finalizado (%s)</string>
   <string name="send_selected_data">Enviar seleccionado</string>
-  <string name="server_auth_credentials">Por favor introducir nombre de usuario y contraseña para el servidor:\n%s</string>
+  <string name="server_auth_credentials">Por favor ingrese el nombre del usuario y contraseña para el servidor:\n%s</string>
   <string name="server_requires_auth">El servidor requiere autenticacion</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Configuración del Servidor</string>
@@ -159,7 +160,8 @@
   <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
   <string name="file_fetch_failed">Error: %2$s (%3$s) en %1$s</string>
-  <string name="fetching_manifest">%s. Obteniendo el manifesto\n</string>
+  <string name="fetching_manifest">%s. Obteniendo el manifesto
+</string>
   <string name="success">Correcto</string>
   <string name="no_forms_uploaded">No se ha cargado ningún formulario.</string>
   <string name="upload_results">Resultados de la carga</string>
@@ -195,7 +197,7 @@
   <string name="sending_failed_on_date_at_time">\'Envio fallado:\' EEE, dd MMM, yyyy \'a las\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
-  <string name="parent_form_not_present">No se pudo editar este formulario por que su formulario matriz (en blanco) no se ha encontrado\n\nID de formulario: %1$s</string>
+  <string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
   <string name="launch_app">Iniciar</string>
   <string name="no_app">Esta apliación no esta. Por favor ingrese el dato manualmente.</string>
   <string name="select_one">Seleccione una respuesta</string>
@@ -208,7 +210,7 @@
   <string name="set_color">Seleccionar Color</string>
   <string name="select_drawing_color">Seleccionar Color</string>
   <string name="user_access_main_menu">Opciones de Usuario en Menú Principal:</string>
-  <string name="user_access_preferences">Opciones de Usuario en Configuració:</string>
+  <string name="user_access_preferences">Opciones de Usuario en Configuración:</string>
   <string name="change_server">Server Protocol y URL</string>
   <string name="change_username_default">Nombre de usuario</string>
   <string name="admin_preferences">Opciones de administrador</string>
@@ -277,7 +279,8 @@
   <string name="fs_create_folder_is_file_error">Collect reports: \'%s\' existe, pero no es un directorio.</string>
   <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
-  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.\n</string>
+  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
+</string>
   <string name="survey_loading_reading_form_message">Leyendo definición de formulario...</string>
   <string name="survey_loading_reading_data_message">Leyendo datos sondeo...</string>
   <string name="survey_loading_reading_csv_message">Leyendo archivos CSV...</string>
@@ -288,4 +291,34 @@
   <string name="survey_saving_encrypting_message">Encriptando datos...</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
   <string name="high_resolution">Activa vídeo HD</string>
+  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
+  <string name="gme_project_id">ID de Proyecto</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="go_drive">Mi Drive</string>
+  <string name="go_shared">Compartido conmigo</string>
+  <string name="modified_on_date_at_time">\'Modificado el\' EEE, MMM dd, yyyy \'a las\' HH:mm</string>
+  <string name="protocol_settings">Configurar Ajustes de Plataforma</string>
+  <string name="aggregate_preferences">Ajustes de ODK Aggregate</string>
+  <string name="other_preferences">Ajustes de Otras Plataformas</string>
+  <string name="gme_preferences">Ajustes de Google Maps Engine</string>
+  <string name="no_coordinates">Instancia no tiene coordenadas. No se puede cargar.</string>
+  <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
+  <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
+  <string name="gme_set_account">Ha seleccionado Google Maps Engine como su servidor, por favor seleccione una cuenta de Google correspondiente en los ajustes generales antes de continuar.</string>
+  <string name="invalid_oauth">OAuth 2 token Invalido.</string>
+  <string name="gme_repeat_error">Las Repeticiones no son soportadas por Google Maps Engine en este momento.</string>
+  <string name="gme_project_id_error">ID de proyecto no encontrado. Debe declarar el ID del Proyecto ya sea en la configuración de Google Maps Engine o en el Formulario. </string>
+  <string name="gme_table_error">No se puede encontrar o crear una tabla Google Maps Engine.</string>
+  <string name="gme_create_400">Recibido 400 BAD REQUEST. Es un problema conocido de Google Maps Engine después de que una tabla se crea nuevamente. Por favor intente enviarlo de nuevo en unos segundos.</string>
+  <string name="picasa_upload_error">Error al cargar la foto que no existe: %1$s</string>
+  <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
+  <string name="odk_auto_note">Notificación de ODK Autosend</string>
+  <string name="notification_error">Error al mostrar texto de la notificación</string>
+  <string name="delete_after_send">Eliminar después de enviar</string>
+  <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
+  <string name="change_server_url">URL del Servidor</string>
+  <string name="gme_search_browse">Búsqueda de formularios. O Seleccione \'My Drive\' abajo para navegar.</string>
+  <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
+  <string name="select_maps_account">Ha seleccionado Google Maps Engine como su servidor, por favor, seleccione una cuenta de Google correspondiente en los ajustes generales antes de continuar</string>
+  <string name="get_project_IDs">Obtener IDs de Proyectos</string>
 </resources>

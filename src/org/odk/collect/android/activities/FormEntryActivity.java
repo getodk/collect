@@ -20,9 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -164,6 +166,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final String KEY_XPATH = "xpath";
 	public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
+	// Tracks whether we are autosaving
+	public static final String KEY_AUTO_SAVED = "autosaved";
+	
 	private static final int MENU_LANGUAGES = Menu.FIRST;
 	private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
 	private static final int MENU_SAVE = Menu.FIRST + 2;
@@ -171,6 +176,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	private static final int PROGRESS_DIALOG = 1;
 	private static final int SAVING_DIALOG = 2;
+	
+	private boolean mAutoSaved;
 
 	// Random ID
 	private static final int DELETE_REPEAT = 654321;
@@ -263,6 +270,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		String waitingXPath = null;
 		String instancePath = null;
 		Boolean newForm = true;
+		mAutoSaved = false;
 		if (savedInstanceState != null) {
 			if (savedInstanceState.containsKey(KEY_FORMPATH)) {
 				mFormPath = savedInstanceState.getString(KEY_FORMPATH);
@@ -284,6 +292,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			}
 			if (savedInstanceState.containsKey(KEY_ERROR)) {
 				mErrorMessage = savedInstanceState.getString(KEY_ERROR);
+			}
+			if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
+			    mAutoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
 			}
 		}
 
@@ -536,6 +547,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		outState.putBoolean(NEWFORM, false);
 		outState.putString(KEY_ERROR, mErrorMessage);
+		outState.putBoolean(KEY_AUTO_SAVED, mAutoSaved);
 	}
 
 	@Override
@@ -1360,12 +1372,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					R.anim.push_left_in);
 			mOutAnimation = AnimationUtils.loadAnimation(this,
 					R.anim.push_left_out);
+			// if animation is left or right then it was a swipe, and we want to re-save on entry
+			mAutoSaved = false;
 			break;
 		case LEFT:
 			mInAnimation = AnimationUtils.loadAnimation(this,
 					R.anim.push_right_in);
 			mOutAnimation = AnimationUtils.loadAnimation(this,
 					R.anim.push_right_out);
+			mAutoSaved = false;
 			break;
 		case FADE:
 			mInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
@@ -1417,8 +1432,24 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			break;
 		}
 
-		Collect.getInstance().getActivityLogger()
-				.logInstanceAction(this, "showView", logString);
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "showView", logString);
+
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController.getEvent() == FormEntryController.EVENT_QUESTION
+                || formController.getEvent() == FormEntryController.EVENT_GROUP
+                || formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+            FormEntryPrompt[] prompts = Collect.getInstance().getFormController()
+                    .getQuestionPrompts();
+            for (FormEntryPrompt p : prompts) {
+                Vector<TreeElement> attrs = p.getBindAttributes();
+                for (int i = 0; i < attrs.size(); i++) {
+                    if (!mAutoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
+                        saveDataToDisk(false, false, null, false);
+                        mAutoSaved = true;
+                    }
+                }
+            }
+        }
 	}
 
 	// Hopefully someday we can use managed dialogs when the bugs are fixed
@@ -1698,34 +1729,50 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * isntancs as complete. If updatedSaveName is non-null, the instances
 	 * content provider is updated with the new name
 	 */
-	private boolean saveDataToDisk(boolean exit, boolean complete,
-			String updatedSaveName) {
-		// save current answer
-		if (!saveAnswersForCurrentScreen(complete)) {
-			Toast.makeText(this, getString(R.string.data_saved_error),
-					Toast.LENGTH_SHORT).show();
-			return false;
-		}
+    // by default, save the current screen
+    private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
+        return saveDataToDisk(exit, complete, updatedSaveName, true);
+    }
 
-        synchronized (saveDialogLock) {
-		    mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit,
-				complete, updatedSaveName);
-	    	mSaveToDiskTask.setFormSavedListener(this);
-		    showDialog(SAVING_DIALOG);
-            // show dialog before we execute...
-		    mSaveToDiskTask.execute();
+    // but if you want save in the background, can't be current screen
+    private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
+            boolean current) {
+        // save current answer
+        if (current) {
+            if (!saveAnswersForCurrentScreen(complete)) {
+                Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT)
+                        .show();
+                return false;
+            }
         }
 
-		return true;
-	}
+        synchronized (saveDialogLock) {
+            mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
+                    updatedSaveName);
+            mSaveToDiskTask.setFormSavedListener(this);
+            mAutoSaved = true;
+            showDialog(SAVING_DIALOG);
+            // show dialog before we execute...
+            mSaveToDiskTask.execute();
+        }
+
+        return true;
+    }
 
 	/**
 	 * Create a dialog with options to save and exit, save, or quit without
 	 * saving
 	 */
 	private void createQuitDialog() {
-		FormController formController = Collect.getInstance()
-				.getFormController();
+	   String title;
+	   {
+		   FormController formController = Collect.getInstance().getFormController();
+		   title = (formController == null) ? null : formController.getFormTitle();
+		   if ( title == null ) {
+		      title = "<no form loaded>";
+		   }
+	   }
+
 		String[] items;
 		if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_MID,
 				true)) {
@@ -1742,8 +1789,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		mAlertDialog = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(
-						getString(R.string.quit_application,
-								formController.getFormTitle()))
+						getString(R.string.quit_application, title))
 				.setNeutralButton(getString(R.string.do_not_exit),
 						new DialogInterface.OnClickListener() {
 							@Override
@@ -2067,21 +2113,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			mProgressDialog.setTitle(getString(R.string.saving_form));
 			mProgressDialog.setMessage(getString(R.string.please_wait));
 			mProgressDialog.setIndeterminate(true);
-			mProgressDialog.setCancelable(false);
-			mProgressDialog.setButton(getString(R.string.cancel),
-					cancelSavingButtonListener);
-			mProgressDialog.setButton(getString(R.string.cancel_saving_form),
-					cancelSavingButtonListener);
-            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-					Collect.getInstance()
-					.getActivityLogger()
-					.logInstanceAction(this,
-							"onCreateDialog.SAVING_DIALOG", "OnCancelListener");
-                    cancelSaveToDiskTask();
-                }
-            });
             mProgressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {

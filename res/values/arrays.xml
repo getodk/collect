@@ -11,13 +11,13 @@
 	<string-array
 		name="protocol_entry_values">
 		<item>@string/protocol_odk_default</item>
-		<item>@string/protocol_google</item>
+		<item>@string/protocol_google_maps_engine</item>
 		<item>@string/protocol_other</item>
 	</string-array>
 	<string-array
 		name="protocol_entries">
 		<item>@string/server_platform_odk_aggregate</item>
-		<item>@string/server_platform_google_forms</item>
+		<item>@string/server_platform_google_maps_engine</item>
 		<item>@string/server_platform_other</item>
 	</string-array>
 	<!-- DO NOT alter font_size_entry_values - used internally in preferences activity -->

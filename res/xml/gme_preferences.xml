@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="@string/gme_preferences"
+        android:title="@string/gme_preferences" >
+    <org.odk.collect.android.views.DynamicListPreference
+	            android:id="@+id/gme_projectid"
+	            android:dialogTitle="@string/gme_project_id"
+	            android:key="gme_project_id"
+	            android:title="@string/gme_project_id" />
+        	<ListPreference
+            android:id="@+id/selected_google_account"
+            android:defaultValue=""
+            android:key="selected_google_account"
+            android:title="@string/selected_google_account_text" />
+        	</PreferenceCategory>
+
+</PreferenceScreen>

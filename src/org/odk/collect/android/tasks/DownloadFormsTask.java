@@ -122,13 +122,19 @@ public class DownloadFormsTask extends
                 // do not download additional forms.
                 break;
             } catch (Exception e) {
-                Log.e(t, e.getMessage());
+                String msg = e.getMessage();
+                if ( msg == null ) {
+                  msg = e.toString();
+                }
+                Log.e(t, msg);
 
                 if (e.getCause() != null) {
-                    message += e.getCause().getMessage();
-                } else {
-                    message += e.getMessage();
+                  msg = e.getCause().getMessage();
+                  if ( msg == null ) {
+                    msg = e.getCause().toString();
+                  }
                 }
+                message += msg;
             }
 
             if (!isCancelled() && message.length() == 0 && fileResult != null) {
@@ -199,7 +205,9 @@ public class DownloadFormsTask extends
             FileUtils.deleteAndReport(fileOnCancel);
         }
 
-        FileUtils.purgeMediaPath(tempMediaPath);
+        if ( tempMediaPath != null ) {
+        	FileUtils.purgeMediaPath(tempMediaPath);
+        }
     }
 
     /**

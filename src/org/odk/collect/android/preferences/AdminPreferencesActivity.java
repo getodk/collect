@@ -53,17 +53,18 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_GET_BLANK = "get_blank";
     public static String KEY_DELETE_SAVED = "delete_saved";
     // server
-    public static String KEY_CHANGE_URL = "change_url";
     public static String KEY_CHANGE_SERVER = "change_server";
     public static String KEY_CHANGE_USERNAME = "change_username";
     public static String KEY_CHANGE_PASSWORD = "change_password";
     public static String KEY_CHANGE_GOOGLE_ACCOUNT = "change_google_account";
+    public static String KEY_CHANGE_PROTOCOL_SETTINGS = "change_protocol_settings";
     // client
     public static String KEY_CHANGE_FONT_SIZE = "change_font_size";
     public static String KEY_DEFAULT_TO_FINALIZED = "default_to_finalized";
     public static String KEY_HIGH_RESOLUTION = "high_resolution";
     public static String KEY_SHOW_SPLASH_SCREEN = "show_splash_screen";
     public static String KEY_SELECT_SPLASH_SCREEN = "select_splash_screen";
+    public static String KEY_DELETE_AFTER_SEND = "delete_after_send";
     // form entry
     public static String KEY_SAVE_MID = "save_mid";
     public static String KEY_JUMP_TO = "jump_to";

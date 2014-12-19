@@ -8,11 +8,9 @@
   <string name="add_more">Ongeza zingine</string>
   <string name="add_repeat">Ongeza kikundi \"%s\" kipya?</string>
   <string name="add_repeat_no">Usiongeze</string>
-  <string name="advance">songa mbele</string>
   <string name="altitude">Urefu</string>
   <string name="audio_file_error">hakuna faili ya sauti bayana</string>
   <string name="audio_file_invalid">faili: %s sio faili halali ya sauti</string>
-  <string name="backup">rudi nyuma</string>
   <string name="barcode_scanner_error">Samahani, Barcode Scanner haipo</string>
   <string name="cancel">Tamatisha</string>
   <string name="cancel_loading_form">Tamatisha</string>
@@ -24,7 +22,6 @@
   <string name="capture_video">Rekodi kanda</string>
   <string name="change_language">Badilisha Lugha</string>
   <string name="change_password">thibitisho la ODK</string>
-  <string name="change_server_url">anwani ya wavuti</string>
   <string name="change_username">Jina la mtumiaji</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
   <string name="clear_answer">Ondoa jibu</string>
@@ -58,7 +55,6 @@
   <string name="enter_data">Jaza fomu tupu</string>
   <string name="enter_data_button">Jaza fomu</string>
   <string name="error_occured">Hitilifau ilitokea</string>
-  <string name="fetching_file">inachukua %1$s.⏎ ⏎ Fomu %2$s kati ya fomu() %3$s. </string>
   <string name="file_deleted_error">Samahani, %1$s kati ya fomu() %2$s zilizochaguliwa hazikufutwa!</string>
   <string name="file_deleted_ok">Fomu() %s zimefutwa vilivyo!</string>
   <string name="file_delete_in_progress">samahani, kuna fomu tayari inafutwa!</string>
@@ -91,8 +87,6 @@
   <string name="noselect_error">Samahani, hujachagua fomu yoyote!</string>
   <string name="no_connection">Hakuna mtandao unapatikana!</string>
   <string name="no_items_display">Hamna cha kuonyesha!</string>
-  <string name="no_items_display_forms">Hamna cha kuonyesha.⏎\n⏎\nJaribu kujaza fomu mpya</string>
-  <string name="no_items_display_instances">Hamna cha kuonyesha.⏎\n⏎\nJaribu kukamilisha fomu zilizohifadhiwa kabla ya kutuma.</string>
   <string name="ok">Sawa</string>
   <string name="parse_error">Samahani, haiwezi kuchanganua fomu</string>
   <string name="parse_legacy_formlist_failed">server haijatoa aina ya fomu sambamba na Aggregate 0.9.x.:%s</string>
@@ -118,7 +112,6 @@
   <string name="send_data">Tuma fomu iliyo kamilika</string>
   <string name="send_data_button">Tuma fomu (%s) iliyo kamilika</string>
   <string name="send_selected_data">Tuma iliyochaguliwa</string>
-  <string name="server_auth_credentials">Tafadhali sajili jina na thibitisho kwa server: ⏎% s</string>
   <string name="server_requires_auth">Server inahitaji uthibitishaji</string>
   <string name="server_url">anwani ya wavuti</string>
   <string name="server_preferences">Mazingira ya Server</string>
@@ -193,7 +186,6 @@
   <string name="sending_failed_on_date_at_time">ilishindwa kutumwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Toleo:</string>
-  <string name="parent_form_not_present">Haiwezi hariri fomu hii iliyohifadhiwa kwa sababu  fomu tupu sambamba haipo  au ilifutwa. ⏎\n⏎\nID ya Fomu: %1$s</string>
   <string name="launch_app">zindua</string>
   <string name="no_app">Application unayotaka haipo. Tafadhali wasilisha matokeo</string>
   <string name="select_one">Chagua jubu moja</string>

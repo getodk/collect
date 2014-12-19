@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="@string/other_preferences"
+        android:title="@string/other_preferences" >
+        <EditTextPreference
+            android:id="@+id/formlist_url"
+            android:defaultValue="@string/default_odk_formlist"
+            android:dialogTitle="@string/change_formlist_url"
+            android:inputType="textNoSuggestions"
+            android:key="formlist_url"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/formlist_url" />
+        <EditTextPreference
+            android:id="@+id/submission_url"
+            android:defaultValue="@string/default_odk_submission"
+            android:dialogTitle="@string/change_submission_url"
+            android:inputType="textNoSuggestions"
+            android:key="submission_url"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/submission_url" />
+    </PreferenceCategory>
+   
+</PreferenceScreen>

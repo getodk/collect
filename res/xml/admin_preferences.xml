@@ -49,11 +49,17 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_preferences" >
         <CheckBoxPreference
-            android:id="@+id/change_url"
+            android:id="@+id/change_server"
             android:defaultValue="true"
-            android:key="change_url"
+            android:key="change_server"
             android:summary="@string/found_in_settings"
-            android:title="@string/change_url_default" />
+            android:title="@string/change_server" />
+        <CheckBoxPreference
+            android:id="@+id/change_protocol_settings"
+            android:defaultValue="true"
+            android:key="change_protocol_settings"
+            android:summary="@string/found_in_settings"
+            android:title="@string/change_protocol_settings_default" />
         <CheckBoxPreference
             android:id="@+id/change_username"
             android:defaultValue="true"
@@ -72,12 +78,6 @@
             android:key="change_google_account"
             android:summary="@string/found_in_settings"
             android:title="@string/selected_google_account_text" />
-        <CheckBoxPreference
-            android:id="@+id/change_server"
-            android:defaultValue="true"
-            android:key="change_server"
-            android:summary="@string/found_in_settings"
-            android:title="@string/change_server" />
         <CheckBoxPreference
             android:id="@+id/autosend_wifi"
             android:defaultValue="true"
@@ -114,6 +114,12 @@
             android:key="default_to_finalized"
             android:summary="@string/found_in_settings"
             android:title="@string/default_completed" />
+        <CheckBoxPreference
+            android:id="@+id/admin_delete_after_send"
+            android:defaultValue="true"
+            android:key="delete_after_send"
+            android:summary="@string/found_in_settings"
+            android:title="@string/delete_after_send" />
         <CheckBoxPreference
             android:id="@+id/high_resolution"
             android:defaultValue="true"

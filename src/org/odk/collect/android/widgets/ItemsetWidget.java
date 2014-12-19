@@ -34,6 +34,7 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -188,18 +189,19 @@ public class ItemsetWidget extends QuestionWidget implements
             }
         }
 
+        File itemsetFile = new File(Collect.getInstance().getFormController().getMediaFolder().getAbsolutePath() + "/itemsets.csv");
         if (nullArgs) {
             // we can't try to query with null values else it blows up
             // so just leave the screen blank
             // TODO: put an error?
-        } else if (Collect.getInstance().getFormController().getItemsetHash() != null) {
-
+        } else if (itemsetFile.exists()) {
             ItemsetDbAdapter ida = new ItemsetDbAdapter();
             ida.open();
 
+            // name of the itemset table for this form
+            String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath()); 
             try {
-                Cursor c = ida.query(Collect.getInstance().getFormController()
-                        .getItemsetHash(), selection.toString(), selectionArgs);
+                Cursor c = ida.query(pathHash, selection.toString(), selectionArgs);
                 if (c != null) {
                     c.move(-1);
                     while (c.moveToNext()) {
@@ -207,12 +209,16 @@ public class ItemsetWidget extends QuestionWidget implements
                         String val = "";
                         // try to get the value associated with the label:lang
                         // string if that doen't exist, then just use label
-                        String lang = Collect.getInstance().getFormController().getLanguage();
+                        String lang = "";
+                        if (Collect.getInstance().getFormController().getLanguages() != null
+                                && Collect.getInstance().getFormController().getLanguages().length > 0) {
+                            lang = Collect.getInstance().getFormController().getLanguage();
+                        }
 
                         // apparently you only need the double quotes in the
                         // column name when creating the column with a :
                         // included
-                        String labelLang = "label" + ":" + lang;
+                        String labelLang = "label" + "::" + lang;
                         int langCol = c.getColumnIndex(labelLang);
                         if (langCol == -1) {
                             label = c.getString(c.getColumnIndex("label"));
@@ -245,9 +251,7 @@ public class ItemsetWidget extends QuestionWidget implements
             addView(mButtons);
         } else {
             TextView error = new TextView(context);
-            File csv = new File(Collect.getInstance().getFormController().getMediaFolder()
-                    + "/itemsets.csv");
-            error.setText(getContext().getString(R.string.file_missing, csv.getAbsolutePath()));
+            error.setText(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
             addView(error);
         }
 

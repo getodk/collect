@@ -181,8 +181,15 @@ public class SelectOneWidget extends QuestionWidget implements
 			}
 		}
 		
+		SelectChoice choice = mItems.get((Integer)buttonView.getTag());
+		
+		if ( choice != null ) {
        	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
-    			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+     	      choice.getValue(), mPrompt.getIndex());
+		} else {
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
+            "<no matching choice>", mPrompt.getIndex());
+		}
 	}
 
 	@Override
