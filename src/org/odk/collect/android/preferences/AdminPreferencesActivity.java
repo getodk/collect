@@ -20,6 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import android.preference.ListPreference;
+import android.preference.Preference;
+import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CompatibilityUtils;
@@ -79,6 +82,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_NAVIGATION = "navigation";
     public static String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
+    public static String KEY_FORM_PROCESSING_LOGIC = "form_processing_logic";
+
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     @Override
@@ -92,6 +97,19 @@ public class AdminPreferencesActivity extends PreferenceActivity {
         prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
         addPreferencesFromResource(R.xml.admin_preferences);
+
+        ListPreference mFormProcessingLogicPreference = (ListPreference) findPreference(KEY_FORM_PROCESSING_LOGIC);
+        mFormProcessingLogicPreference.setSummary(mFormProcessingLogicPreference.getEntry());
+        mFormProcessingLogicPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -176,4 +194,24 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 		return res;
 	}
 
+    public static FormDef.EvalBehavior getConfiguredFormProcessingLogic(Context context) {
+        FormDef.EvalBehavior mode;
+
+        SharedPreferences adminPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
+        String formProcessingLoginIndex = adminPreferences.getString(KEY_FORM_PROCESSING_LOGIC, context.getString(R.string.default_form_processing_logic));
+        try {
+            if ("-1".equals(formProcessingLoginIndex)) {
+                mode = FormDef.recommendedMode;
+            } else {
+                int preferredModeIndex = Integer.parseInt(formProcessingLoginIndex);
+                mode = FormDef.EvalBehavior.values()[preferredModeIndex];
+            }
+        } catch (Exception e) {
+            SCTOUncaughtExceptionHandler.appendToErrorsTxt(e, null);
+            e.printStackTrace();
+            mode = FormDef.recommendedMode;
+        }
+
+        return mode;
+    }
 }
