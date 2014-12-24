@@ -15,7 +15,8 @@
 package org.odk.collect.android.widgets;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -76,7 +77,7 @@ public class GridMultiWidget extends QuestionWidget {
     private static final int IMAGE_PADDING = 8;
     private static final int SCROLL_WIDTH = 16;
 
-    Vector<SelectChoice> mItems;
+    List<SelectChoice> mItems;
 
     // The possible select choices
     String[] choices;
@@ -312,11 +313,11 @@ public class GridMultiWidget extends QuestionWidget {
 
         // Fill in answer
         IAnswerData answer = prompt.getAnswerValue();
-        Vector<Selection> ve;
+        List<Selection> ve;
         if ((answer == null) || (answer.getValue() == null)) {
-            ve = new Vector<Selection>();
+            ve = new ArrayList<Selection>();
         } else {
-            ve = (Vector<Selection>) answer.getValue();
+            ve = (List<Selection>) answer.getValue();
         }
 
         for (int i = 0; i < choices.length; ++i) {
@@ -348,7 +349,7 @@ public class GridMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        Vector<Selection> vc = new Vector<Selection>();
+        List<Selection> vc = new ArrayList<Selection>();
         for (int i = 0; i < mItems.size(); i++) {
             if (selected[i]) {
                 SelectChoice sc = mItems.get(i);

@@ -19,8 +19,8 @@ import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -1441,7 +1441,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormEntryPrompt[] prompts = Collect.getInstance().getFormController()
                     .getQuestionPrompts();
             for (FormEntryPrompt p : prompts) {
-                Vector<TreeElement> attrs = p.getBindAttributes();
+                List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!mAutoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         saveDataToDisk(false, false, null, false);

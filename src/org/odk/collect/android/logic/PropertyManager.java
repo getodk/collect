@@ -15,6 +15,7 @@
 package org.odk.collect.android.logic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -162,7 +163,7 @@ public class PropertyManager implements IPropertyManager {
 
 
     @Override
-    public void setProperty(String propertyName, @SuppressWarnings("rawtypes") Vector propertyValue) {
+    public void setProperty(String propertyName, List<String> propertyValue) {
 
     }
 

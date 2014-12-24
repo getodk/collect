@@ -29,7 +29,6 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.InstanceInitializationFactory;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -191,12 +190,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     externalDataManager = new ExternalDataManagerImpl(formMediaDir);
 
-    // new evaluation context for function handlers
-    EvaluationContext ec = new EvaluationContext(null);
+    // add external data function handlers
     ExternalDataHandler externalDataHandlerPull = new ExternalDataHandlerPull(externalDataManager);
-    ec.addFunctionHandler(externalDataHandlerPull);
-
-    fd.setEvaluationContext(ec);
+    fd.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
 
     try {
       loadExternalData(formMediaDir);

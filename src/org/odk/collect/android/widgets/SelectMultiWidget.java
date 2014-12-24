@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -34,9 +37,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.Vector;
-
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
  * 
@@ -45,7 +45,7 @@ import java.util.Vector;
  */
 public class SelectMultiWidget extends QuestionWidget {
     private boolean mCheckboxInit = true;
-    Vector<SelectChoice> mItems;
+    List<SelectChoice> mItems;
 
     private ArrayList<CheckBox> mCheckboxes;
 
@@ -66,9 +66,9 @@ public class SelectMultiWidget extends QuestionWidget {
 
         setOrientation(LinearLayout.VERTICAL);
 
-        Vector<Selection> ve = new Vector<Selection>();
+        List<Selection> ve = new ArrayList<Selection>();
         if (prompt.getAnswerValue() != null) {
-            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
+            ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
 
         if (mItems != null) {
@@ -84,7 +84,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
-                    if (mItems.get(i).getValue().equals(ve.elementAt(vi).getValue())) {
+                    if (mItems.get(i).getValue().equals(ve.get(vi).getValue())) {
                         c.setChecked(true);
                         break;
                     }
@@ -158,7 +158,7 @@ public class SelectMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        Vector<Selection> vc = new Vector<Selection>();
+        List<Selection> vc = new ArrayList<Selection>();
         for ( int i = 0; i < mCheckboxes.size() ; ++i ) {
         	CheckBox c = mCheckboxes.get(i);
         	if ( c.isChecked() ) {

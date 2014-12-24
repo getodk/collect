@@ -18,6 +18,17 @@
 
 package org.odk.collect.android.external;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -32,10 +43,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.InvalidSyntaxException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
-
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Author: Meletis Margaritis
@@ -67,7 +74,7 @@ public final class ExternalDataUtil {
     public static String toSafeColumnName(String columnName) {
         // SCTO-567 - begin all column names with "c_" to avoid possible conflicts with
         // reserved keywords; also, escape any potentially-illegal characters
-        return "c_" + columnName.trim().replaceAll("[^A-Za-z0-9_]", "_").toLowerCase();
+        return "c_" + columnName.trim().replaceAll("[^A-Za-z0-9_]", "_").toLowerCase(Locale.ENGLISH);
     }
 
     public static List<String> findMatchingColumnsAfterSafeningNames(String[] columnNames) {
@@ -122,11 +129,10 @@ public final class ExternalDataUtil {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static Vector<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt, XPathFuncExpr xPathFuncExpr) {
+    public static List<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt, XPathFuncExpr xPathFuncExpr) {
         try {
-            Vector<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
-            Vector<SelectChoice> returnedChoices = new Vector<SelectChoice>();
+            List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
+            List<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {
@@ -150,8 +156,9 @@ public final class ExternalDataUtil {
                     evaluationContext.addFunctionHandler(new ExternalDataHandlerSearch(externalDataManager, displayColumns, value, imageColumn));
 
                     Object eval = xPathFuncExpr.eval(formInstance, evaluationContext);
-                    if (eval.getClass().isAssignableFrom(Vector.class)) {
-                        Vector<SelectChoice> dynamicChoices = (Vector<SelectChoice>) eval;
+                    if (eval.getClass().isAssignableFrom(ArrayList.class)) {
+                       @SuppressWarnings("unchecked")
+                     List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
                         for (SelectChoice dynamicChoice : dynamicChoices) {
                             returnedChoices.add(dynamicChoice);
                         }
