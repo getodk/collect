@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -71,7 +71,7 @@ public class ListMultiWidget extends QuestionWidget {
 
     private boolean mCheckboxInit = true;
     
-    private Vector<SelectChoice> mItems; // may take a while to compute...
+    private List<SelectChoice> mItems; // may take a while to compute...
 
     private ArrayList<CheckBox> mCheckboxes;
 
@@ -93,9 +93,9 @@ public class ListMultiWidget extends QuestionWidget {
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
 
-        Vector<Selection> ve = new Vector<Selection>();
+        List<Selection> ve = new ArrayList<Selection>();
         if (prompt.getAnswerValue() != null) {
-            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
+            ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
 
         if (mItems != null) {
@@ -107,7 +107,7 @@ public class ListMultiWidget extends QuestionWidget {
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
-                    if (mItems.get(i).getValue().equals(ve.elementAt(vi).getValue())) {
+                    if (mItems.get(i).getValue().equals(ve.get(vi).getValue())) {
                         c.setChecked(true);
                         break;
                     }
@@ -289,7 +289,7 @@ public class ListMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        Vector<Selection> vc = new Vector<Selection>();
+        List<Selection> vc = new ArrayList<Selection>();
         for (int i = 0; i < mCheckboxes.size(); i++) {
         	CheckBox c = mCheckboxes.get(i);
             if (c.isChecked()) {

@@ -14,11 +14,17 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -29,12 +35,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.external.ExternalDataUtil;
-
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Vector;
 
 /**
  * AutoCompleteWidget handles select-one fields using an autocomplete text box. The user types part
@@ -50,7 +50,7 @@ public class AutoCompleteWidget extends QuestionWidget {
     AutoCompleteAdapter choices;
     AutoCompleteTextView autocomplete;
 
-    Vector<SelectChoice> mItems;
+    List<SelectChoice> mItems;
 
     // Defines which filter to use to display autocomplete possibilities
     String filterType;

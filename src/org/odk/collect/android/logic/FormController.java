@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Vector;
+import java.util.List;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -27,6 +27,7 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IDataReference;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.SubmissionProfile;
+import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -37,7 +38,6 @@ import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
-import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
@@ -458,17 +458,6 @@ public class FormController {
 
 
     /**
-     * Attempts to save answer at the current FormIndex into the data model.
-     *
-     * @param data
-     * @return
-     */
-    private int answerQuestion(IAnswerData data) {
-        return mFormEntryController.answerQuestion(data);
-    }
-
-
-    /**
      * Attempts to save answer into the given FormIndex into the data model.
      *
      * @param index
@@ -476,11 +465,11 @@ public class FormController {
      * @return
      */
     public int answerQuestion(FormIndex index, IAnswerData data) throws JavaRosaException {
-        try {
-            return mFormEntryController.answerQuestion(index, data);
-        } catch (Exception e) {
-           throw new JavaRosaException(e);
-        }
+       try {
+          return mFormEntryController.answerQuestion(index, data, false, true);
+      } catch (Exception e) {
+         throw new JavaRosaException(e);
+      }
     }
 
     /**
@@ -491,35 +480,15 @@ public class FormController {
      *
      * @param markCompleted
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error type.
+    * @throws JavaRosaException 
      */
-    public int validateAnswers(Boolean markCompleted) {
-        FormEntryController formEntryController = this.mFormEntryController;
-        FormEntryModel formEntryModel = formEntryController.getModel();
-
-        FormEntryModel formEntryModelToBeValidated = new FormEntryModel(formEntryModel.getForm());
-        FormEntryController formEntryControllerToBeValidated = new FormEntryController(formEntryModelToBeValidated);
-        FormController formControllerToBeValidated = new FormController(this.getMediaFolder(), formEntryControllerToBeValidated, this.getInstancePath());
-
-        formControllerToBeValidated.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-
-        int event;
-        while ((event =
-                formControllerToBeValidated.stepToNextEvent(FormController.STEP_INTO_GROUP)) != FormEntryController.EVENT_END_OF_FORM) {
-            if (event != FormEntryController.EVENT_QUESTION) {
-                continue;
-            } else {
-                FormIndex formControllerToBeValidatedFormIndex = formControllerToBeValidated.getFormIndex();
-
-                int saveStatus = formControllerToBeValidated.answerQuestion(formControllerToBeValidated.getQuestionPrompt().getAnswerValue());
-                if (markCompleted && saveStatus != FormEntryController.ANSWER_OK) {
-                    // jump to the error
-                    this.jumpToIndex(formControllerToBeValidatedFormIndex);
-                    return saveStatus;
-                }
-            }
-        }
-
-        return FormEntryController.ANSWER_OK;
+    public int validateAnswers(Boolean markCompleted) throws JavaRosaException {
+       ValidateOutcome outcome = getFormDef().validate(markCompleted);
+       if ( outcome != null ) {
+          this.jumpToIndex(outcome.failedPrompt);
+          return outcome.outcome;
+       }
+       return FormEntryController.ANSWER_OK;
     }
 
 
@@ -534,28 +503,12 @@ public class FormController {
      */
     public boolean saveAnswer(FormIndex index, IAnswerData data) throws JavaRosaException {
         try {
-            return mFormEntryController.saveAnswer(index, data);
+            return mFormEntryController.saveAnswer(index, data, false, true);
         } catch (Exception e) {
             throw new JavaRosaException(e);
         }
     }
 
-
-    /**
-     * saveAnswer attempts to save the current answer into the data model without doing any
-     * constraint checking. Only use this if you know what you're doing. For normal form filling you
-     * should always use answerQuestion().
-     *
-     * @param data
-     * @return true if saved successfully, false otherwise.
-     */
-    public boolean saveAnswer(IAnswerData data) throws JavaRosaException {
-        try {
-            return mFormEntryController.saveAnswer(data);
-        } catch (Exception e) {
-            throw new JavaRosaException(e);
-        }
-    }
 
 
     /**
@@ -998,7 +951,7 @@ public class FormController {
 				try{
 					FormDef form = mFormEntryController.getModel().getForm();
 					TreeElement mTreeElement = form.getMainInstance().resolveReference(index.getReference());
-					EvaluationContext ec = new EvaluationContext(form.exprEvalContext, mTreeElement.getRef());
+					EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(), mTreeElement.getRef());
 					Object value = xPathRequiredMsg.eval(form.getMainInstance(), ec);
 					if(value != "") {
 						return (String)value;
@@ -1248,7 +1201,7 @@ public class FormController {
         String instanceName = null;
 
         if ( e != null ) {
-            Vector<TreeElement> v;
+            List<TreeElement> v;
 
             // instance id...
             v = e.getChildrenWithName(INSTANCE_ID);

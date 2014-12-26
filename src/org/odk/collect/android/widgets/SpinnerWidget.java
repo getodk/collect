@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -24,6 +24,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -38,7 +39,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import org.odk.collect.android.external.ExternalDataUtil;
 
 /**
  * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a spinner, wherein
@@ -48,7 +48,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SpinnerWidget extends QuestionWidget {
-    Vector<SelectChoice> mItems;
+    List<SelectChoice> mItems;
     Spinner spinner;
     String[] choices;
     private static final int BROWN = 0xFF936931;
@@ -129,7 +129,7 @@ public class SpinnerWidget extends QuestionWidget {
         if (i == -1 || i == mItems.size()) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i);
+            SelectChoice sc = mItems.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }

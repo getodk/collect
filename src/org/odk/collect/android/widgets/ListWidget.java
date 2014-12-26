@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -69,7 +69,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
 
-    Vector<SelectChoice> mItems; // may take a while to compute
+    List<SelectChoice> mItems; // may take a while to compute
     
     ArrayList<RadioButton> buttons;
 
@@ -271,7 +271,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i);
+            SelectChoice sc = mItems.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }

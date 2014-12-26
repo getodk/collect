@@ -18,7 +18,9 @@
 
 package org.odk.collect.android.external;
 
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.QuestionDef;
@@ -34,7 +36,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormAnswerDataSerializer;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 
-import java.util.Vector;
+import android.util.Log;
 
 /**
  * Author: Meletis Margaritis
@@ -44,7 +46,6 @@ import java.util.Vector;
 public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
     @Override
-    @SuppressWarnings("unchecked")
     public IAnswerData resolveAnswer(String textVal, TreeElement treeElement, FormDef formDef) {
         QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(), formDef, treeElement.getRef());
         if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
@@ -63,9 +64,9 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 // that means that we have dynamic selects
 
                 // read the static choices from the options sheet
-                Vector<SelectChoice> staticChoices = questionDef.getChoices();
+                List<SelectChoice> staticChoices = questionDef.getChoices();
                 for (int index = 0; index < staticChoices.size(); index++) {
-                    SelectChoice selectChoice = staticChoices.elementAt(index);
+                    SelectChoice selectChoice = staticChoices.get(index);
                     String selectChoiceValue = selectChoice.getValue();
                     if (ExternalDataUtil.isAnInteger(selectChoiceValue)) {
 
@@ -88,12 +89,12 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                             case Constants.CONTROL_SELECT_MULTI: {
                                 // we should search in a potential comma-separated string of values for a match
                                 // copied from org.javarosa.xform.util.XFormAnswerDataParser.getSelections()
-                                Vector<String> textValues = DateUtils.split(textVal, XFormAnswerDataSerializer.DELIMITER, true);
+                                List<String> textValues = DateUtils.split(textVal, XFormAnswerDataSerializer.DELIMITER, true);
                                 if (textValues.contains(textVal)) {
                                     // this means that the user has selected AT LEAST the static choice.
                                     if (selectChoiceValue.equals(textVal)) {
                                         // this means that the user selected ONLY the static answer, so just return that
-                                        Vector<Selection> customSelections = new Vector<Selection>();
+                                        List<Selection> customSelections = new ArrayList<Selection>();
                                         customSelections.add(selection);
                                         return new SelectMultiData(customSelections);
                                     } else {
@@ -121,8 +122,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
                                 // we should create multiple selections and add them to the pile
-                                Vector<SelectChoice> customSelectChoices = createCustomSelectChoices(textVal);
-                                Vector<Selection> customSelections = new Vector<Selection>();
+                                List<SelectChoice> customSelectChoices = createCustomSelectChoices(textVal);
+                                List<Selection> customSelections = new ArrayList<Selection>();
                                 for (SelectChoice customSelectChoice : customSelectChoices) {
                                     customSelections.add(customSelectChoice.selection());
                                 }
@@ -149,13 +150,12 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
         return new RuntimeException("The appearance column of the field " + treeElement.getName() + " contains a search() call and the field type is " + treeElement.getDataType() + " and the saved answer is " + textVal);
     }
 
-    @SuppressWarnings("unchecked")
-    protected Vector<SelectChoice> createCustomSelectChoices(String completeTextValue) {
+    protected List<SelectChoice> createCustomSelectChoices(String completeTextValue) {
         // copied from org.javarosa.xform.util.XFormAnswerDataParser.getSelections()
-        Vector<String> textValues = DateUtils.split(completeTextValue, XFormAnswerDataSerializer.DELIMITER, true);
+        List<String> textValues = DateUtils.split(completeTextValue, XFormAnswerDataSerializer.DELIMITER, true);
 
         int index = 0;
-        Vector<SelectChoice> customSelectChoices = new Vector<SelectChoice>();
+        List<SelectChoice> customSelectChoices = new ArrayList<SelectChoice>();
         for (String textValue : textValues) {
             SelectChoice selectChoice = new SelectChoice(textValue, textValue, false);
             selectChoice.setIndex(index++);

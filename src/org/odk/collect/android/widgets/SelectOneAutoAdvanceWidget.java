@@ -15,7 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -52,7 +52,7 @@ import android.widget.RelativeLayout;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener {
-	Vector<SelectChoice> mItems; // may take a while to compute
+	 List<SelectChoice> mItems; // may take a while to compute
     ArrayList<RadioButton> buttons;
     AdvanceToNextListener listener;
 
@@ -160,7 +160,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.elementAt(i);
+            SelectChoice sc = mItems.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }

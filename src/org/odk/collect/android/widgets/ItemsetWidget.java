@@ -172,7 +172,7 @@ public class ItemsetWidget extends QuestionWidget implements
             if (xpr != null) {
                 FormDef form = Collect.getInstance().getFormController().getFormDef();
                 TreeElement mTreeElement = form.getMainInstance().resolveReference(prompt.getIndex().getReference());
-                EvaluationContext ec = new EvaluationContext(form.exprEvalContext,
+                EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                         mTreeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
 

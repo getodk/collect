@@ -15,7 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.List;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -76,7 +76,7 @@ public class GridWidget extends QuestionWidget {
     private static final int IMAGE_PADDING = 8;
     private static final int SCROLL_WIDTH = 16;
 
-    Vector<SelectChoice> mItems;
+    List<SelectChoice> mItems;
 
     // The possible select choices
     String[] choices;
@@ -343,7 +343,7 @@ public class GridWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         for (int i = 0; i < choices.length; ++i) {
             if (selected[i]) {
-                SelectChoice sc = mItems.elementAt(i);
+                SelectChoice sc = mItems.get(i);
                 return new SelectOneData(new Selection(sc));
             }
         }

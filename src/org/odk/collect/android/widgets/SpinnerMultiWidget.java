@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -21,6 +24,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,9 +34,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
-import org.odk.collect.android.external.ExternalDataUtil;
-
-import java.util.Vector;
 
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
@@ -47,7 +48,7 @@ import java.util.Vector;
  */
 public class SpinnerMultiWidget extends QuestionWidget {
 
-    Vector<SelectChoice> mItems;
+    List<SelectChoice> mItems;
 
     // The possible select answers
     CharSequence[] answer_items;
@@ -139,9 +140,9 @@ public class SpinnerMultiWidget extends QuestionWidget {
         });
 
         // Fill in previous answers
-        Vector<Selection> ve = new Vector<Selection>();
+        List<Selection> ve = new ArrayList<Selection>();
         if (prompt.getAnswerValue() != null) {
-            ve = (Vector<Selection>) prompt.getAnswerValue().getValue();
+            ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
 
         if (ve != null) {
@@ -183,7 +184,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
     	clearFocus();
-        Vector<Selection> vc = new Vector<Selection>();
+        List<Selection> vc = new ArrayList<Selection>();
         for (int i = 0; i < mItems.size(); i++) {
             if (selections[i]) {
                 SelectChoice sc = mItems.get(i);

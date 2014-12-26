@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
 
 import android.preference.ListPreference;
 import android.preference.Preference;
+
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -32,6 +33,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -207,8 +209,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 mode = FormDef.EvalBehavior.values()[preferredModeIndex];
             }
         } catch (Exception e) {
-            SCTOUncaughtExceptionHandler.appendToErrorsTxt(e, null);
             e.printStackTrace();
+            Log.w("AdminPreferencesActivity", "Unable to get EvalBehavior -- defaulting to recommended mode");
             mode = FormDef.recommendedMode;
         }
 
