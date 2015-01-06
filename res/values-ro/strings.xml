@@ -243,6 +243,12 @@
   <string name="swipe_instructions">Sunteți la startul %s. Trageți ecranul cum este afișat mai jos pentru a naviga înainte și înapoi.</string>
   <string name="buttons_instructions">Sunteți la startul %s. Atingeți butoanele-săgeată cum este afișat mai jos pentru a naviga înainte și înapoi.</string>
   <string name="swipe_buttons_instructions">Sunteți la startul %s. Trageți ecranul cum este afișat mai jos sau atingeți butoanele săgeată pentru a naviga înainte și înapoi.</string>
+  <string name="form_processing_logic">Logica procesării formularului</string>
+  <string name="form_processing_logic_recommended">Recomandat (implicit)</string>
+  <string name="form_processing_logic_0">Ultimul (cel mai rapid)</string>
+  <string name="form_processing_logic_1">Ultimul (cel mai sigur)</string>
+  <string name="form_processing_logic_2">Mijlocul lui 2014 (încet)</string>
+  <string name="form_processing_logic_3">Începutul lui 2014 (cel mai rapid)</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Printare inițializată</string>
   <string name="no_printer">Imprimanta specificată nu este instalată. Vă rugăm să instalați implimanta.</string>

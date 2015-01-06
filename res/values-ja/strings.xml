@@ -243,6 +243,12 @@
   <string name="swipe_instructions">%s の最初です。次へ/前へ移動するには、次のように画面をスワイプしてください。</string>
   <string name="buttons_instructions">%s の最初です。次へ/前へ移動するには、次のように矢印ボタンをタップしてください。</string>
   <string name="swipe_buttons_instructions">%s の最初です。次へ/前へ移動するには、次のように画面をスワイプするか、矢印ボタンをタップしてください。</string>
+  <string name="form_processing_logic">フォーム処理ロジック</string>
+  <string name="form_processing_logic_recommended">推奨 (デフォルト)</string>
+  <string name="form_processing_logic_0">最新 (最速)</string>
+  <string name="form_processing_logic_1">最新 (最も安全)</string>
+  <string name="form_processing_logic_2">2014年中期 (遅い)</string>
+  <string name="form_processing_logic_3">2014年初期 (速い)</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">印刷を開始</string>
   <string name="no_printer">要求されたプリンターがインストールされていません。プリンターをインストールしてください。</string>

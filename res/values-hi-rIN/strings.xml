@@ -1,8 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="accept_location">जगह  रिकार्ड करे </string>
+  <string name="accuracy"> परिशुद्धता</string>
+  <string name="cancel">रद्ध करे</string>
+  <string name="cancel_loading_form">रद्ध करे</string>
+  <string name="cancel_location">रद्ध करे</string>
+  <string name="cancel_saving_form">रद्ध करे</string>
+  <string name="capture_audio">ध्वनी रिकार्ड करे </string>
+  <string name="capture_video">विडियो रिकार्ड करे</string>
+  <string name="change_language">भाषा परिवर्तन करे</string>
+  <string name="clear_answer_no">रद्ध करे</string>
+  <string name="delete_repeat_no">रद्ध करे</string>
+  <string name="do_not_change">रद्ध करे</string>
+  <string name="do_not_exit">रद्ध करे</string>
+  <string name="get_location">जगह  रिकार्ड करे </string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="change_server_url">सर्भर URL</string>
 </resources>

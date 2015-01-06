@@ -244,6 +244,12 @@
   <string name="swipe_instructions">Usted está en el inicio de %s. Deslice la pantalla como se muestra a continuación para ir hacia atrás y hacia adelante.</string>
   <string name="buttons_instructions">Usted está en el inicio de %s. Pulse los botones de flecha abajo para ir hacia atrás y hacia adelante.</string>
   <string name="swipe_buttons_instructions">Usted está en el inicio de %s. Deslice la pantalla como se muestra a continuación o pulse los botones de flecha para ir atrás y adelante.</string>
+  <string name="form_processing_logic">La lógica de procesamiento de formularios</string>
+  <string name="form_processing_logic_recommended">Recomendado (predeterminado)</string>
+  <string name="form_processing_logic_0">Reciente (el más rápido)</string>
+  <string name="form_processing_logic_1">Reciente (más segura)</string>
+  <string name="form_processing_logic_2">Mediados de 2014 (lento)</string>
+  <string name="form_processing_logic_3">A principios del 2014 (rápido)</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Iniciar Impresión</string>
   <string name="no_printer">La impresora solicitado no está instalado. Por favor, instale la impresora.</string>
