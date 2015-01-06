@@ -71,8 +71,8 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
     }
 
     @Override
-    public Vector getPrototypes() {
-        return new Vector();
+    public List<Class[]> getPrototypes() {
+        return new ArrayList<Class[]>();
     }
 
     @Override
@@ -165,6 +165,9 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             try {
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection, selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
             } catch (Exception e) {
+                if ( c != null ) { 
+                  c.close();
+                }
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection, selectionArgs, null, null, null);
             }
 
@@ -176,13 +179,13 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
         }
     }
 
-    protected Vector<SelectChoice> createDynamicSelectChoices(Cursor c, LinkedHashMap<String, String> selectColumnMap, String safeImageColumn) {
+    protected ArrayList<SelectChoice> createDynamicSelectChoices(Cursor c, LinkedHashMap<String, String> selectColumnMap, String safeImageColumn) {
         List<String> columnsToExcludeFromLabels = new ArrayList<String>();
         if (safeImageColumn != null) {
             columnsToExcludeFromLabels.add(safeImageColumn);
         }
 
-        Vector<SelectChoice> selectChoices = new Vector<SelectChoice>();
+        ArrayList<SelectChoice> selectChoices = new ArrayList<SelectChoice>();
         if (c.getCount() > 0) {
             c.moveToPosition(-1);
             int index = 0;
