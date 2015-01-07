@@ -205,9 +205,30 @@ public class AdminPreferencesActivity extends PreferenceActivity {
             if ("-1".equals(formProcessingLoginIndex)) {
                 mode = FormDef.recommendedMode;
             } else {
-                int preferredModeIndex = Integer.parseInt(formProcessingLoginIndex);
-                mode = FormDef.EvalBehavior.values()[preferredModeIndex];
-            }
+					int preferredModeIndex = Integer.parseInt(formProcessingLoginIndex);
+					switch (preferredModeIndex) {
+						case 0: {
+							mode = FormDef.EvalBehavior.Fast_2014;
+							break;
+						}
+						case 1: {
+							mode = FormDef.EvalBehavior.Safe_2014;
+							break;
+						}
+						case 2: {
+							mode = FormDef.EvalBehavior.April_2014;
+							break;
+						}
+						case 3: {
+							mode = FormDef.EvalBehavior.Legacy;
+							break;
+						}
+						default: {
+							mode = FormDef.recommendedMode;
+							break;
+						}
+					}
+				}
         } catch (Exception e) {
             e.printStackTrace();
             Log.w("AdminPreferencesActivity", "Unable to get EvalBehavior -- defaulting to recommended mode");

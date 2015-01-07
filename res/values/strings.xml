@@ -221,6 +221,7 @@
 <string name="admin_preferences">Admin Settings</string>
 <string name="admin_access_settings">Tap for admin access to settings</string>
 <string name="user_access_form_entry">User can access Form Entry items:</string>
+<string name="admin_advanced_settings">Advanced settings (when advised):</string>
 <string name="save_mid">Save Form</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
