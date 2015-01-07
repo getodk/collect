@@ -129,10 +129,10 @@ public final class ExternalDataUtil {
         }
     }
 
-    public static List<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt, XPathFuncExpr xPathFuncExpr) {
+    public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt, XPathFuncExpr xPathFuncExpr) {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
-            List<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
+            ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {

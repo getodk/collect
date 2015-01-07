@@ -18,16 +18,18 @@
 
 package org.odk.collect.android.external.handler;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
 
-import java.util.Vector;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Author: Meletis Margaritis
@@ -48,8 +50,8 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
     }
 
     @Override
-    public Vector getPrototypes() {
-        return new Vector();
+    public List<Class[]> getPrototypes() {
+        return new ArrayList<Class[]>();
     }
 
     @Override

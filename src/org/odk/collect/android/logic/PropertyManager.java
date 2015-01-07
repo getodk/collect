@@ -17,7 +17,6 @@ package org.odk.collect.android.logic;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
@@ -145,7 +144,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     @Override
-    public Vector<String> getProperty(String propertyName) {
+    public List<String> getProperty(String propertyName) {
         return null;
     }
 
@@ -175,7 +174,7 @@ public class PropertyManager implements IPropertyManager {
 
 
     @Override
-    public Vector<IPropertyRules> getRules() {
+    public List<IPropertyRules> getRules() {
         return null;
     }
 

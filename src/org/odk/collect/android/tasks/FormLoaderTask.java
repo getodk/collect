@@ -142,13 +142,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     FormDef.EvalBehavior mode = AdminPreferencesActivity.getConfiguredFormProcessingLogic(Collect.getInstance());
     FormDef.setEvalBehavior(mode);
 
-    FormDef.setDefaultEventNotifier(new EventNotifier() {
-
-      @Override
-      public void publishEvent(Event event) {
-        Log.d("FormDef", event.asLogLine());
-      }
-    });
+//    FormDef.setDefaultEventNotifier(new EventNotifier() {
+//
+//      @Override
+//      public void publishEvent(Event event) {
+//        Log.d("FormDef", event.asLogLine());
+//      }
+//    });
 
     if (formBin.exists()) {
       // if we have binary, deserialize binary

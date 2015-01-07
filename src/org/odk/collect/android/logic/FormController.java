@@ -466,7 +466,7 @@ public class FormController {
      */
     public int answerQuestion(FormIndex index, IAnswerData data) throws JavaRosaException {
        try {
-          return mFormEntryController.answerQuestion(index, data, false, true);
+          return mFormEntryController.answerQuestion(index, data, true);
       } catch (Exception e) {
          throw new JavaRosaException(e);
       }
@@ -503,7 +503,7 @@ public class FormController {
      */
     public boolean saveAnswer(FormIndex index, IAnswerData data) throws JavaRosaException {
         try {
-            return mFormEntryController.saveAnswer(index, data, false, true);
+            return mFormEntryController.saveAnswer(index, data, true);
         } catch (Exception e) {
             throw new JavaRosaException(e);
         }
