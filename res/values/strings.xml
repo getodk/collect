@@ -252,8 +252,8 @@
 <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
 <string name="form_processing_logic">Form processing logic</string>
 <string name="form_processing_logic_recommended">Recommended (default)</string>
-<string name="form_processing_logic_0">Latest (fastest)</string>
-<string name="form_processing_logic_1">Latest (safest)</string>
+<string name="form_processing_logic_0">January 2015 (fastest)</string>
+<string name="form_processing_logic_1">January 2015 (safest)</string>
 <string name="form_processing_logic_2">Mid 2014 (slow)</string>
 <string name="form_processing_logic_3">Early 2014 (fast)</string>
 <string name="change_url_default">URL</string>
