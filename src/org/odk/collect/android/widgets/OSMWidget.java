@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets;
 
+import java.util.List;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -30,6 +32,8 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private TextView mTagsTextView;
 	private TextView mErrorTextView;
 	
+	private List<String> mOsmRequiredTags;
+	
 	public OSMWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 		
@@ -44,6 +48,18 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
         mErrorTextView.setText("Something went wrong. We did not get valid OSM data.");
+        
+        // Show user the tags required
+        mOsmRequiredTags = prompt.getQuestion().getOsmTags();
+        mTagsTextView = new TextView(context);
+        mTagsTextView.setId(QuestionWidget.newUniqueId());
+        String tagsStr = "Required Tags:\n";
+        if (mOsmRequiredTags != null) {
+        	for (String tag : mOsmRequiredTags) {
+            	tagsStr += tag + '\n';
+            }
+        }
+        mTagsTextView.setText(tagsStr);
         
         // Setup Launch OpenMapKit Button
         mLaunchOpenMapKitButton = new Button(getContext());
@@ -74,6 +90,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         // finish complex layout
         addView(mLaunchOpenMapKitButton);
         addView(mErrorTextView);
+        addView(mTagsTextView);
         
         // Hide Launch button if read-only
         if ( prompt.isReadOnly() ) {
