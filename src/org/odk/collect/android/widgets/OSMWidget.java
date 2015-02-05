@@ -6,6 +6,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormController.InstanceMetadata;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -33,12 +35,16 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private TextView mErrorTextView;
 	
 	private List<String> mOsmRequiredTags;
+	private String mInstanceId;
+	private int mFormId;
 	
 	public OSMWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 		
-		mInstanceFolder =
-                Collect.getInstance().getFormController().getInstancePath().getParent();
+		FormController formController = Collect.getInstance().getFormController();
+		mInstanceFolder = formController.getInstancePath().getParent();
+		mInstanceId = formController.getSubmissionMetadata().instanceId;
+		mFormId = formController.getFormDef().getID();
 		
 		setOrientation(LinearLayout.VERTICAL);
 		
@@ -84,6 +90,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 				Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchOpenMapKitButton", 
             			"click", mPrompt.getIndex());
 				mErrorTextView.setVisibility(View.GONE);
+				
 			}
 		});
         
