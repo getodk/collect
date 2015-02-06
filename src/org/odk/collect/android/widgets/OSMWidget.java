@@ -141,17 +141,17 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
                 ((Activity)ctx).startActivityForResult(launchIntent, FormEntryActivity.OSM_CAPTURE);
             }
 		} catch(Exception ex) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//            builder.setTitle("Alert");
-//            builder.setMessage("Please install OpenMapKit!");
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Alert");
+            builder.setMessage("Please install OpenMapKit!");
 //            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 //                public void onClick(DialogInterface dialog, int id) {
 //                    //TODO: launch to app store?
 //                }
 //            });
-//
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
 	}
 	
