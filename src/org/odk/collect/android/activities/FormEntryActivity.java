@@ -144,6 +144,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int ALIGNED_IMAGE = 16;
 	public static final int BEARING_CAPTURE = 17;
     public static final int EX_GROUP_CAPTURE = 18;
+    public static final int OSM_CAPTURE = 19;
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";

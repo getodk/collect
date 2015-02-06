@@ -1,15 +1,23 @@
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.protocol.HTTP;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.InstanceMetadata;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -27,7 +35,7 @@ import android.widget.TextView;
  *
  */
 public class OSMWidget extends QuestionWidget implements IBinaryWidget {
-
+	
 	private Button mLaunchOpenMapKitButton;
 	private String mBinaryName;
 	private String mInstanceFolder;
@@ -90,7 +98,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 				Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchOpenMapKitButton", 
             			"click", mPrompt.getIndex());
 				mErrorTextView.setVisibility(View.GONE);
-				
+				launchOpenMapKit();
 			}
 		});
         
@@ -107,6 +115,46 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         
 	}
 
+	private void launchOpenMapKit() {
+		try {
+			//launch with intent that sends plain text
+            Intent launchIntent = new Intent(Intent.ACTION_SEND);
+            launchIntent.setType(HTTP.PLAIN_TEXT_TYPE);
+
+            //send form id
+            launchIntent.putExtra("FORM_ID", String.valueOf(mFormId));
+
+            //send instance id
+            launchIntent.putExtra("INSTANCE_ID", mInstanceId);
+
+            //send list of required tags
+            launchIntent.putStringArrayListExtra("REQUIRED_TAGS", (ArrayList<String>) mOsmRequiredTags);
+            
+            //verify the package resolves before starting activity
+            Context ctx = getContext();
+            PackageManager packageManager = ctx.getPackageManager();
+            List<ResolveInfo> activities = packageManager.queryIntentActivities(launchIntent, 0);
+            boolean isIntentSafe = activities.size() > 0;
+
+            //launch activity if it is safe
+            if (isIntentSafe) {
+                ((Activity)ctx).startActivityForResult(launchIntent, FormEntryActivity.OSM_CAPTURE);
+            }
+		} catch(Exception ex) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//            builder.setTitle("Alert");
+//            builder.setMessage("Please install OpenMapKit!");
+//            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    //TODO: launch to app store?
+//                }
+//            });
+//
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
+        }
+	}
+	
 	@Override
 	public void setBinaryData(Object answer) {
 		// TODO Auto-generated method stub
