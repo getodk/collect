@@ -150,21 +150,21 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 //      }
 //    });
 
-    if (formBin.exists()) {
-      // if we have binary, deserialize binary
-      Log.i(
-          t,
-          "Attempting to load " + formXml.getName() + " from cached file: "
-              + formBin.getAbsolutePath());
-      fd = deserializeFormDef(formBin);
-      if (fd == null) {
-        // some error occured with deserialization. Remove the file, and make a
-        // new .formdef
-        // from xml
-        Log.w(t, "Deserialization FAILED!  Deleting cache file: " + formBin.getAbsolutePath());
-        formBin.delete();
-      }
-    }
+//    if (formBin.exists()) {
+//      // if we have binary, deserialize binary
+//      Log.i(
+//          t,
+//          "Attempting to load " + formXml.getName() + " from cached file: "
+//              + formBin.getAbsolutePath());
+//      fd = deserializeFormDef(formBin);
+//      if (fd == null) {
+//        // some error occured with deserialization. Remove the file, and make a
+//        // new .formdef
+//        // from xml
+//        Log.w(t, "Deserialization FAILED!  Deleting cache file: " + formBin.getAbsolutePath());
+//        formBin.delete();
+//      }
+//    }
     if (fd == null) {
       // no binary, read from xml
       try {
