@@ -15,6 +15,7 @@ import org.odk.collect.android.logic.FormController.InstanceMetadata;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -38,7 +39,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	
 	private Button mLaunchOpenMapKitButton;
 	private String mBinaryName;
-	private String mInstanceFolder;
+	private String mInstanceDirectory;
 	private TextView mTagsTextView;
 	private TextView mErrorTextView;
 	
@@ -50,7 +51,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 		super(context, prompt);
 		
 		FormController formController = Collect.getInstance().getFormController();
-		mInstanceFolder = formController.getInstancePath().getParent();
+		mInstanceDirectory = formController.getInstancePath().getParent();
 		mInstanceId = formController.getSubmissionMetadata().instanceId;
 		mFormId = formController.getFormDef().getID();
 		
@@ -126,6 +127,9 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 
             //send instance id
             launchIntent.putExtra("INSTANCE_ID", mInstanceId);
+            
+            //send instance directory
+            launchIntent.putExtra("INSTANCE_DIR", mInstanceDirectory);
 
             //send list of required tags
             launchIntent.putStringArrayListExtra("REQUIRED_TAGS", (ArrayList<String>) mOsmRequiredTags);
@@ -144,12 +148,13 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Alert");
             builder.setMessage("Please install OpenMapKit!");
-//            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int id) {
-//                    //TODO: launch to app store?
-//                }
-//            });
-
+            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+            	public void onClick(DialogInterface dialog, int id) {
+                    //TODO: launch to app store?
+                }
+            	
+            };
+            builder.setPositiveButton("Ok", okClickListener);
             AlertDialog dialog = builder.create();
             dialog.show();
         }
