@@ -585,6 +585,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			((ODKView) mCurrentView).setBinaryData(sb);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			break;
+		case OSM_CAPTURE:
+			String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
+			((ODKView) mCurrentView).setBinaryData(osmFileName);
+			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			break;
 		case EX_STRING_CAPTURE:
 		case EX_INT_CAPTURE:
 		case EX_DECIMAL_CAPTURE:

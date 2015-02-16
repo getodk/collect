@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.protocol.HTTP;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -23,6 +24,7 @@ import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -40,8 +42,9 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private Button mLaunchOpenMapKitButton;
 	private String mBinaryName;
 	private String mInstanceDirectory;
-	private TextView mTagsTextView;
 	private TextView mErrorTextView;
+	private TextView mTagsTextView;
+	private TextView mOSMFileNameTextView;
 	
 	private List<String> mOsmRequiredTags;
 	private String mInstanceId;
@@ -103,17 +106,27 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 			}
 		});
         
+        // text view showing the resulting OSM file name
+        mOSMFileNameTextView = new TextView(context);
+        mOSMFileNameTextView.setId(QuestionWidget.newUniqueId());
+        
+        String s = prompt.getAnswerText();
+        if (s != null) {
+        	mOSMFileNameTextView.setText(s);
+        	mTagsTextView.setVisibility(View.GONE);
+        }
+        
         // finish complex layout
         addView(mLaunchOpenMapKitButton);
         addView(mErrorTextView);
         addView(mTagsTextView);
+        addView(mOSMFileNameTextView);
         
         // Hide Launch button if read-only
         if ( prompt.isReadOnly() ) {
         	mLaunchOpenMapKitButton.setVisibility(View.GONE);
         }
         mErrorTextView.setVisibility(View.GONE);
-        
 	}
 
 	private void launchOpenMapKit() {
@@ -142,7 +155,12 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 
             //launch activity if it is safe
             if (isIntentSafe) {
+            	// notify that the form is waiting for data
+            	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+            	// launch
                 ((Activity)ctx).startActivityForResult(launchIntent, FormEntryActivity.OSM_CAPTURE);
+            } else {
+            	mErrorTextView.setVisibility(View.VISIBLE);
             }
 		} catch(Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -162,44 +180,57 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	
 	@Override
 	public void setBinaryData(Object answer) {
-		// TODO Auto-generated method stub
-
+		// hide initial view showing required tags
+		mTagsTextView.setVisibility(View.GONE);
+		
+		// show file name of saved osm data
+		String osmFileName = (String) answer;
+		String osmInfo = osmFileName;
+		mOSMFileNameTextView.setText(osmInfo);
+		mOSMFileNameTextView.setVisibility(View.VISIBLE);
+		
+		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
 	@Override
 	public void cancelWaitingForBinaryData() {
-		// TODO Auto-generated method stub
-
+		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
 	@Override
 	public boolean isWaitingForBinaryData() {
-		// TODO Auto-generated method stub
-		return false;
+		return mPrompt.getIndex().equals(
+				Collect.getInstance().getFormController()
+						.getIndexWaitingForData());
 	}
 
 	@Override
 	public IAnswerData getAnswer() {
-		// TODO Auto-generated method stub
-		return null;
+		String s = mOSMFileNameTextView.getText().toString();
+		if (s == null || s.equals("")) {
+			return null;
+		} else {
+			return new StringData(s);
+		}
 	}
 
 	@Override
 	public void clearAnswer() {
-		// TODO Auto-generated method stub
-
+		mOSMFileNameTextView.setText(null);
 	}
 
 	@Override
 	public void setFocus(Context context) {
-		// TODO Auto-generated method stub
-
+		// Hide the soft keyboard if it's showing.
+		InputMethodManager inputManager = (InputMethodManager) context
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
 	}
 
 	@Override
 	public void setOnLongClickListener(OnLongClickListener l) {
-		// TODO Auto-generated method stub
-
+		mOSMFileNameTextView.setOnLongClickListener(l);
+		mLaunchOpenMapKitButton.setOnLongClickListener(l);
 	}
 
 }
