@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.http.protocol.HTTP;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.osm.OSMTag;
+import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -46,7 +48,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private TextView mTagsTextView;
 	private TextView mOSMFileNameTextView;
 	
-	private List<String> mOsmRequiredTags;
+	private List<OSMTag> mOsmRequiredTags;
 	private String mInstanceId;
 	private int mFormId;
 	
@@ -71,12 +73,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mOsmRequiredTags = prompt.getQuestion().getOsmTags();
         mTagsTextView = new TextView(context);
         mTagsTextView.setId(QuestionWidget.newUniqueId());
-        String tagsStr = "Required Tags:\n";
-        if (mOsmRequiredTags != null) {
-        	for (String tag : mOsmRequiredTags) {
-            	tagsStr += tag + '\n';
-            }
-        }
+        String tagsStr = osmRequiredTagsAsString(mOsmRequiredTags);
         mTagsTextView.setText(tagsStr);
         
         // Setup Launch OpenMapKit Button
@@ -144,8 +141,8 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             //send instance directory
             launchIntent.putExtra("INSTANCE_DIR", mInstanceDirectory);
 
-            //send list of required tags
-            launchIntent.putStringArrayListExtra("REQUIRED_TAGS", (ArrayList<String>) mOsmRequiredTags);
+            //send encode tag data structure to intent
+            writeOsmRequiredTagsToExtras(launchIntent);
             
             //verify the package resolves before starting activity
             Context ctx = getContext();
@@ -233,4 +230,50 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 		mLaunchOpenMapKitButton.setOnLongClickListener(l);
 	}
 
+	private String osmRequiredTagsAsString(List<OSMTag> osmRequiredTags) {
+		String str = "Required Tags:\n";
+	    if (osmRequiredTags != null && osmRequiredTags.size() > 0) {
+	    	for (OSMTag tag : osmRequiredTags) {
+	        	str += tag.key;
+	        	if (tag.label != null) {
+	        		str += " (Label: " + tag.label + ")";
+	        	}
+	        	str += '\n';
+	        	if (tag.items.size() > 0) {
+	        		str += "\tTag Value Choices:\n";
+	        		for (OSMTagItem item : tag.items) {
+	        			str += "\t\t";
+	        			str += item.value;
+	        			if (item.label != null){
+	        				str += " (Label: " + item.label + ")";
+	        			}
+	        			str += "\n";
+	        		}
+	        	}
+	        }
+	    }
+		return str;
+	}
+	
+	/**
+	 * See: https://github.com/AmericanRedCross/openmapkit/wiki/ODK-Collect-Tag-Intent-Extras
+	 */
+	private void writeOsmRequiredTagsToExtras(Intent intent) {
+		ArrayList<String> tagKeys = new ArrayList<String>();
+		for (OSMTag tag: mOsmRequiredTags) {
+			tagKeys.add(tag.key);
+			if (tag.label != null) {
+				intent.putExtra("TAG_LABEL." + tag.key, tag.label);
+			}
+			ArrayList<String> tagValues = new ArrayList<String>();
+			for (OSMTagItem item : tag.items) {
+				tagValues.add(item.value);
+				if (item.label != null) {
+					intent.putExtra("TAG_VALUE_LABEL." + tag.key + "." + item.value, item.label);
+				}
+			}
+			intent.putStringArrayListExtra("TAG_VALUES." + tag.key, tagValues);
+		}
+		intent.putStringArrayListExtra("TAG_KEYS", tagKeys);
+	}
 }
