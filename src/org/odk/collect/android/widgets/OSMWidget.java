@@ -13,7 +13,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.FormController.InstanceMetadata;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,7 +23,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -51,11 +49,22 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private List<OSMTag> mOsmRequiredTags;
 	private String mInstanceId;
 	private int mFormId;
+	private String mFormFileName;
 	
 	public OSMWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 		
 		FormController formController = Collect.getInstance().getFormController();
+		
+		/**
+		 * NH: I'm trying to find the form xml file name, but this is neither
+		 * in the formController nor the formDef. In fact, it doesn't seem to
+		 * be saved into any object in JavaRosa. However, the mediaFolder
+		 * has the substring of the file name in it, so I extract the file name
+		 * from here. Awkward...
+		 */
+		mFormFileName = formController.getMediaFolder().getName().split("-media")[0];
+		
 		mInstanceDirectory = formController.getInstancePath().getParent();
 		mInstanceId = formController.getSubmissionMetadata().instanceId;
 		mFormId = formController.getFormDef().getID();
@@ -140,6 +149,9 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             
             //send instance directory
             launchIntent.putExtra("INSTANCE_DIR", mInstanceDirectory);
+            
+            //send form file name
+            launchIntent.putExtra("FORM_FILE_NAME", mFormFileName);
 
             //send encode tag data structure to intent
             writeOsmRequiredTagsToExtras(launchIntent);
