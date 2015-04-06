@@ -43,7 +43,6 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private String mBinaryName;
 	private String mInstanceDirectory;
 	private TextView mErrorTextView;
-	private TextView mTagsTextView;
 	private TextView mOSMFileNameTextView;
 	
 	private List<OSMTag> mOsmRequiredTags;
@@ -72,18 +71,14 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 		setOrientation(LinearLayout.VERTICAL);
 		
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+        params.setMargins(35, 20, 35, 20);
         
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
         mErrorTextView.setText("Something went wrong. We did not get valid OSM data.");
         
-        // Show user the tags required
+        // Determine the tags required
         mOsmRequiredTags = prompt.getQuestion().getOsmTags();
-        mTagsTextView = new TextView(context);
-        mTagsTextView.setId(QuestionWidget.newUniqueId());
-        String tagsStr = osmRequiredTagsAsString(mOsmRequiredTags);
-        mTagsTextView.setText(tagsStr);
         
         // Setup Launch OpenMapKit Button
         mLaunchOpenMapKitButton = new Button(getContext());
@@ -116,16 +111,10 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mOSMFileNameTextView = new TextView(context);
         mOSMFileNameTextView.setId(QuestionWidget.newUniqueId());
         
-        String s = prompt.getAnswerText();
-        if (s != null) {
-        	mOSMFileNameTextView.setText(s);
-        	mTagsTextView.setVisibility(View.GONE);
-        }
         
         // finish complex layout
         addView(mLaunchOpenMapKitButton);
         addView(mErrorTextView);
-        addView(mTagsTextView);
         addView(mOSMFileNameTextView);
         
         // Hide Launch button if read-only
@@ -188,10 +177,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	}
 	
 	@Override
-	public void setBinaryData(Object answer) {
-		// hide initial view showing required tags
-		mTagsTextView.setVisibility(View.GONE);
-		
+	public void setBinaryData(Object answer) {	
 		// show file name of saved osm data
 		String osmFileName = (String) answer;
 		String osmInfo = osmFileName;
@@ -240,31 +226,6 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	public void setOnLongClickListener(OnLongClickListener l) {
 		mOSMFileNameTextView.setOnLongClickListener(l);
 		mLaunchOpenMapKitButton.setOnLongClickListener(l);
-	}
-
-	private String osmRequiredTagsAsString(List<OSMTag> osmRequiredTags) {
-		String str = "Required Tags:\n";
-	    if (osmRequiredTags != null && osmRequiredTags.size() > 0) {
-	    	for (OSMTag tag : osmRequiredTags) {
-	        	str += tag.key;
-	        	if (tag.label != null) {
-	        		str += " (Label: " + tag.label + ")";
-	        	}
-	        	str += '\n';
-	        	if (tag.items.size() > 0) {
-	        		str += "\tTag Value Choices:\n";
-	        		for (OSMTagItem item : tag.items) {
-	        			str += "\t\t";
-	        			str += item.value;
-	        			if (item.label != null){
-	        				str += " (Label: " + item.label + ")";
-	        			}
-	        			str += "\n";
-	        		}
-	        	}
-	        }
-	    }
-		return str;
 	}
 	
 	/**
