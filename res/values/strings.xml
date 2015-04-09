@@ -33,6 +33,7 @@
 <string name="capture_audio">Record Sound</string>
 <string name="capture_image">Take Picture</string>
 <string name="capture_osm">Launch OpenMapKit</string>
+<string name="recapture_osm">Redo OSM Tagging</string>
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">ODK Password</string>

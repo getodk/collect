@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.protocol.HTTP;
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
@@ -40,6 +41,10 @@ import android.widget.TextView;
  */
 public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	
+	// button colors
+	private static final int OSM_GREEN = Color.rgb(126,188,111);
+	private static final int OSM_BLUE = Color.rgb(112,146,255);
+			
 	private Button mLaunchOpenMapKitButton;
 	private String mBinaryName;
 	private String mInstanceDirectory;
@@ -51,6 +56,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	private String mInstanceId;
 	private int mFormId;
 	private String mFormFileName;
+	private String mOSMFileName;
 	
 	public OSMWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
@@ -77,16 +83,28 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mErrorTextView.setText("Something went wrong. We did not get valid OSM data.");
         
         // Determine the tags required
+        QuestionDef question = prompt.getQuestion();
         mOsmRequiredTags = prompt.getQuestion().getOsmTags();
+        
+        // If an OSM File has already been saved, get the name.
+        mOSMFileName = prompt.getAnswerText();
         
         // Setup Launch OpenMapKit Button
         mLaunchOpenMapKitButton = new Button(getContext());
         mLaunchOpenMapKitButton.setId(QuestionWidget.newUniqueId());
         
         // Button Styling
-        mLaunchOpenMapKitButton.setBackgroundColor(Color.rgb(126,188,111)); // OSM Green
+        if (mOSMFileName != null) {
+        	mLaunchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
+        } else {
+        	mLaunchOpenMapKitButton.setBackgroundColor(OSM_GREEN);
+        }
         mLaunchOpenMapKitButton.setTextColor(Color.WHITE); // White text
-        mLaunchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
+        if (mOSMFileName != null) {
+        	mLaunchOpenMapKitButton.setText(getContext().getString(R.string.recapture_osm));
+        } else {
+        	mLaunchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
+        }
         mLaunchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mLaunchOpenMapKitButton.setPadding(20, 20, 20, 20);
         mLaunchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
@@ -98,7 +116,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mLaunchOpenMapKitButton.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				mLaunchOpenMapKitButton.setBackgroundColor(Color.rgb(112,146,255)); // OSM Blue
+				mLaunchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
 				Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchOpenMapKitButton", 
             			"click", mPrompt.getIndex());
 				mErrorTextView.setVisibility(View.GONE);
@@ -118,9 +136,8 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mOSMFileNameTextView.setId(QuestionWidget.newUniqueId());
         mOSMFileNameTextView.setTextSize(18);
         mOSMFileNameTextView.setTypeface(null, Typeface.ITALIC);
-        String s = prompt.getAnswerText();
-        if (s != null) {
-        	mOSMFileNameTextView.setText(s);
+        if (mOSMFileName != null) {
+        	mOSMFileNameTextView.setText(mOSMFileName);
         } else {
         	mOSMFileNameHeaderTextView.setVisibility(View.GONE);
         }
@@ -157,6 +174,11 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             
             //send form file name
             launchIntent.putExtra("FORM_FILE_NAME", mFormFileName);
+            
+            //send OSM file name if there was a previous edit
+            if (mOSMFileName != null) {
+            	launchIntent.putExtra("OSM_EDIT_FILE_NAME", mOSMFileName);
+            }
 
             //send encode tag data structure to intent
             writeOsmRequiredTagsToExtras(launchIntent);
@@ -195,9 +217,8 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 	@Override
 	public void setBinaryData(Object answer) {	
 		// show file name of saved osm data
-		String osmFileName = (String) answer;
-		String osmInfo = osmFileName;
-		mOSMFileNameTextView.setText(osmInfo);
+		mOSMFileName = (String) answer;
+		mOSMFileNameTextView.setText(mOSMFileName);
 		mOSMFileNameHeaderTextView.setVisibility(View.VISIBLE);
 		mOSMFileNameTextView.setVisibility(View.VISIBLE);
 		
