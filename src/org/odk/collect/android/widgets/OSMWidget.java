@@ -277,12 +277,14 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 				intent.putExtra("TAG_LABEL." + tag.key, tag.label);
 			}
 			ArrayList<String> tagValues = new ArrayList<String>();
-			for (OSMTagItem item : tag.items) {
-				tagValues.add(item.value);
-				if (item.label != null) {
-					intent.putExtra("TAG_VALUE_LABEL." + tag.key + "." + item.value, item.label);
+			if (tag.items != null) {
+				for (OSMTagItem item : tag.items) {
+					tagValues.add(item.value);
+					if (item.label != null) {
+						intent.putExtra("TAG_VALUE_LABEL." + tag.key + "." + item.value, item.label);
+					}
 				}
-			}
+			}		
 			intent.putStringArrayListExtra("TAG_VALUES." + tag.key, tagValues);
 		}
 		intent.putStringArrayListExtra("TAG_KEYS", tagKeys);
