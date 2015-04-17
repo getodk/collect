@@ -144,6 +144,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int ALIGNED_IMAGE = 16;
 	public static final int BEARING_CAPTURE = 17;
     public static final int EX_GROUP_CAPTURE = 18;
+    public static final int OSM_CAPTURE = 19;
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -582,6 +583,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case BARCODE_CAPTURE:
 			String sb = intent.getStringExtra("SCAN_RESULT");
 			((ODKView) mCurrentView).setBinaryData(sb);
+			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			break;
+		case OSM_CAPTURE:
+			String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
+			((ODKView) mCurrentView).setBinaryData(osmFileName);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			break;
 		case EX_STRING_CAPTURE:

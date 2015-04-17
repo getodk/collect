@@ -115,6 +115,9 @@ public class WidgetFactory {
             		questionWidget = new ImageWidget(context, fep);
             	}
                 break;
+            case Constants.CONTROL_OSM_CAPTURE:
+            	questionWidget = new OSMWidget(context, fep);
+            	break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 questionWidget = new AudioWidget(context, fep);
                 break;
