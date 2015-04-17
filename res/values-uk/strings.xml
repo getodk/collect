@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="accept_location">Географічне положення</string>
+  <string name="accuracy">Точність</string>
+  <string name="add_another">Додати групу</string>
+  <string name="add_another_repeat">Додати ще \"%s\" групу?</string>
+  <string name="add_more">Додати ще</string>
+  <string name="add_repeat">Додати нову \"%s\" групу?</string>
+  <string name="add_repeat_no">Не додавати</string>
+  <string name="altitude">Висота над рівнем моря</string>
+  <string name="barcode_scanner_error">Вибачте, сканер баркодів не встановлено!</string>
+  <string name="cancel">Скасувати</string>
+  <string name="cancel_loading_form">Скасувати</string>
+  <string name="cancel_location">Скасувати</string>
+  <string name="cancel_saving_form">Скасувати</string>
+  <string name="cannot_edit_completed_form">Цю форму не можливо редагувати після того як вона була завершена. Вона може бути закодована.</string>
+  <string name="capture_audio">Записати звук</string>
+  <string name="capture_image">Сфотографувати</string>
+  <string name="capture_video">Записати відео</string>
+  <string name="change_language">Змінити мову</string>
+  <string name="change_password">Пароль ODK</string>
+  <string name="change_protocol_settings_default">Налаштування платформи</string>
+  <string name="change_username">Ім\'я користувача ODK</string>
+  <string name="clearanswer_confirm">Видалити відповідь на \"%s\"?</string>
+  <string name="clear_answer">Видалити відповідь</string>
+  <string name="clear_answer_ask">Видалити цю відповідь?</string>
+  <string name="clear_answer_no">Скасувати</string>
+  <string name="delete_repeat_no">Скасувати</string>
+  <string name="discard_answer">Видалити відповідь</string>
+  <string name="do_not_change">Скасувати</string>
+  <string name="do_not_exit">Скасувати</string>
+  <string name="entering_repeat">Додати групу</string>
+  <string name="get_location">Географічне положення</string>
+  <string name="leave_repeat_yes">Не додавати</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+</resources>

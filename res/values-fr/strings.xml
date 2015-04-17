@@ -215,6 +215,7 @@
   <string name="admin_preferences">Paramètres administrateur</string>
   <string name="admin_access_settings">Touchez pour obtenir l\'accès administrateur aux paramètres</string>
   <string name="user_access_form_entry">L\'utilisateur peut accéder aux éléments du formulaire :</string>
+  <string name="admin_advanced_settings">Paramètres avancés (lorsqu\'il est conseillé)</string>
   <string name="save_mid">Sauvegarder le formulaire</string>
   <string name="enter_new_password">Saisissez un nouveau mot de passe</string>
   <string name="verify_new_password">Ressaisissez le nouveau mot de passe</string>
@@ -243,6 +244,12 @@
   <string name="swipe_instructions">Vous êtes au début de %s. Faites glisser votre doigt sur l\'écran pour avancer ou reculer.</string>
   <string name="buttons_instructions">Vous êtes au début de %s. Utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="swipe_buttons_instructions">Vous êtes au début de %s. Faites glisser votre doigt comme montré ou utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
+  <string name="form_processing_logic">Logique de traitement du formulaire</string>
+  <string name="form_processing_logic_recommended">Recommendé (par défaut)</string>
+  <string name="form_processing_logic_0">janvier 2015 (le plus vite)</string>
+  <string name="form_processing_logic_1">janvier 2015 (le plus sûr)</string>
+  <string name="form_processing_logic_2">mi-2014 (lent)</string>
+  <string name="form_processing_logic_3">début de 2014 (vite)</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Lancer l\'impression</string>
   <string name="no_printer">L\'imprimante demandée n\'est pas installée. Merci d\'installer l\'imprimante.</string>
@@ -316,4 +323,7 @@
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
   <string name="change_server_url">URL du serveur</string>
   <string name="gme_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour le parcourir.  </string>
+  <string name="no_blank_search">Le champ de recherche ne peut pas être vide.</string>
+  <string name="select_maps_account">Vous avez sélectionné Google Maps Engine comme serveur. Merci de sélectionner le compte Google correspondant dans les paramètres généraux avant de continuer.</string>
+  <string name="get_project_IDs">Obtention des IDs des projets</string>
 </resources>

@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Enregistrar localització</string>
   <string name="accuracy">Precisió</string>
-  <string name="activity_not_found">Cap activitat trobada per manegar: %s</string>
+  <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="add_another">Afegir grup</string>
   <string name="add_another_repeat">Afegir un altre grup \"%s\"?</string>
   <string name="add_more">Afegir mes</string>
@@ -215,6 +215,7 @@
   <string name="admin_preferences">Opcions d\'Administrador</string>
   <string name="admin_access_settings">Polsa per entrar a Configuració</string>
   <string name="user_access_form_entry">Opcions d\'Usuari a gestió de Formularis:</string>
+  <string name="admin_advanced_settings">Configuració avançada (aconsellada):</string>
   <string name="save_mid">Desar mig formulari</string>
   <string name="enter_new_password">Entrar nova clau d\'accés</string>
   <string name="verify_new_password">Re-entrar nova clau d\'accés</string>
@@ -243,6 +244,12 @@
   <string name="swipe_instructions">Ets a l\'inici de %s. Desplaça la pantalla com l\'exemple de sota per anar endavant i enrere.</string>
   <string name="buttons_instructions">Ets a l\'inici de %s. Prem les fletxes de sota per anar endavant i enrere.</string>
   <string name="swipe_buttons_instructions">Ets a l\'inici de %s. Desplaça la pantalla com l\'exemple o prem les fletxes per anar endavant i enrere.</string>
+  <string name="form_processing_logic">Lògica processament formulari</string>
+  <string name="form_processing_logic_recommended">Recomanat(per defecte)</string>
+  <string name="form_processing_logic_0">gener 2015(mes ràpid)</string>
+  <string name="form_processing_logic_1">gener 2015(mes segur)</string>
+  <string name="form_processing_logic_2">Mitjans 2014(lent)</string>
+  <string name="form_processing_logic_3">Inicis 2014(ràpid)</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Inicia la impressió</string>
   <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>
