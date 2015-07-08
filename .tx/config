@@ -1,9 +1,0 @@
-[main]
-host = https://www.transifex.com
-
-[odk-collect.strings]
-source_file = res/values/strings.xml
-source_lang = en
-file_filter = res/values-<lang>/strings.xml
-type = ANDROID
-lang_map = fil:tl-rPH, th_TH:th-rTH, sw_KE:sw-rKE
