@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import java.util.ArrayList;
 
+import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
@@ -450,7 +451,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
     // the property manager should be re-assigned, as properties
     // may have changed.
-    PropertyManager mgr = new PropertyManager(this);
+    IPropertyManager mgr = new PropertyManager(this);
     FormController.initializeJavaRosa(mgr);
   }
 
