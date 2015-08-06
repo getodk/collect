@@ -62,6 +62,14 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 							Object newValue) {
 						String url = newValue.toString();
 
+						// remove leading and trailing whitespace
+						if ( !url.equals(url.trim()) ) {
+                            Toast.makeText(getApplicationContext(),
+                                    R.string.url_error_whitespace, Toast.LENGTH_SHORT)
+                                    .show();
+                            return false;
+                        }
+
 						// remove all trailing "/"s
 						while (url.endsWith("/")) {
 							url = url.substring(0, url.length() - 1);
@@ -85,7 +93,17 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((CharSequence) newValue);
+                String username = newValue.toString();
+
+                // do not allow leading and trailing whitespace
+                if ( !username.equals(username.trim()) ) {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.username_error_whitespace, Toast.LENGTH_SHORT)
+                            .show();
+                    return false;
+                }
+
+                preference.setSummary(username);
 
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, getString(R.string.default_server_url));
@@ -106,6 +124,14 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 					public boolean onPreferenceChange(Preference preference,
 							Object newValue) {
 						String pw = newValue.toString();
+
+                        // do not allow leading and trailing whitespace
+                        if ( !pw.equals(pw.trim()) ) {
+                            Toast.makeText(getApplicationContext(),
+                                    R.string.password_error_whitespace, Toast.LENGTH_SHORT)
+                                    .show();
+                            return false;
+                        }
 
 						if (pw.length() > 0) {
 							mPasswordPreference.setSummary("********");

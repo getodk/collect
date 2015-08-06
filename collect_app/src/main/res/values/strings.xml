@@ -334,4 +334,7 @@
 <string name="no_blank_search">Search field cannot be blank.</string>
 <string name="select_maps_account">You have selected Google Maps Engine as your server, please select a corresponding Google Account in the General Settings before continuing</string>
 <string name="get_project_IDs">Getting Project IDs</string>
+    <string name="url_error_whitespace">leading or trailing whitespace is not allowed in urls</string>
+    <string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
+    <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
 </resources>
