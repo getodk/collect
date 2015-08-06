@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="add_another">সংযুক্ত করণ</string>
+  <string name="add_another_repeat">অন্যান্য বিষয় \"%s\" সংযুক্ত করণ</string>
+  <string name="add_more">আরো সংযুক্ত করণ:</string>
+  <string name="add_repeat_no">আর সংযুক্ত করা যাবে না</string>
+  <string name="cancel">বাতিল</string>
+  <string name="cancel_loading_form">বাতিল</string>
+  <string name="cancel_location">বাতিল</string>
+  <string name="cancel_saving_form">বাতিল</string>
+  <string name="capture_image">ছবি তোলা </string>
+  <string name="change_language">ভাসা পরিবর্তন </string>
+  <string name="clear_answer">জবাটাকে সরান</string>
+  <string name="clear_answer_no">বাতিল</string>
+  <string name="completed_data">শেষ (%s)</string>
+  <string name="data">সংরক্ষিত ফরম</string>
+  <string name="data_saved_error">দু:খিত ফরম সংরক্ষিত হয়নি</string>
+  <string name="data_saved_ok">ফরম সংরক্ষিত হয়েছে</string>
+  <string name="delete_confirm">ফরম %s মুছে দিন </string>
+  <string name="delete_file">মুছেদিন নির্বাচিত</string>
+  <string name="delete_no">মুছেদিন না</string>
+  <string name="delete_repeat">গ্রুপ সরান </string>
+  <string name="delete_repeat_ask">এই গ্রুপ মুছে ফেলুন</string>
+  <string name="delete_repeat_no">বাতিল</string>
+  <string name="delete_yes">ফরম মুছে দিন </string>
+  <string name="discard_answer">জবাটাকে সরান</string>
+  <string name="discard_group">গ্রুপটাকে সরান </string>
+  <string name="download">নির্বাচিত করুন </string>
+  <string name="downloading_data">সাভারের সাথে সংযুগ </string>
+  <string name="do_not_change">বাতিল</string>
+  <string name="do_not_exit">বাতিল</string>
+  <string name="do_not_save">পরিবর্তন অপেক্ষা</string>
+  <string name="entering_repeat">গ্রুপ যোগ করুন</string>
+  <string name="entering_repeat_ask">নতুন গ্রুপ যোগ করুন</string>
+  <string name="enter_data">নতুন ফরম পূরণ করুন</string>
+  <string name="enter_data_button">নতুন ফরম পূরণ করুন</string>
+  <string name="error_occured">ত্রুটি ঘটেছে</string>
+  <string name="forms">ফাঁকা ফরম </string>
+  <string name="leave_repeat_yes">আর সংযুক্ত করা যাবে না</string>
+  <string name="leaving_repeat_ask">আরো একগ্রুপ যোগ করুন</string>
+  <string name="loading_form">লোড হচ্ছে ফরম</string>
+  <string name="main_menu">প্রধান মেনু</string>
+  <string name="main_menu_details">সুষ্ঠু ডাটা সংগ্রহ</string>
+  <string name="manage_files">সংরক্ষিত ফরম মুছে দিন </string>
+  <string name="mark_finished">মার্ক ফরম চূড়ান্ত হিসেবে </string>
+  <string name="noselect_error">দুঃখিত আপনি কোন ধরনের নির্বাচন না </string>
+  <string name="no_connection">পাওয়া কোন নেটওয়ার্ক সংযোগ</string>
+  <string name="ok">ঠিক আছে</string>
+  <string name="quit_application">%s প্রস্থান</string>
+  <string name="quit_entry">সংরক্ষন করুন ফরম এবং থেকে প্রস্থান করুন </string>
+  <string name="refresh">সতেজ করা </string>
+  <string name="review_data">সম্পাদনা করুন সংরক্ষিত ফরম </string>
+  <string name="review_data_button">সম্পাদনা করুন সংরক্ষিত ফরম %s</string>
+  <string name="save_all_answers">সংরক্ষণ করুন ফরম </string>
+  <string name="save_enter_data_description">আপনি %s ফরম শেষে দিকে রয়েছে </string>
+  <string name="saving_form">msi¶Y Ki“ dig</string>
+  <string name="send_data">চূড়ান্ত ফরম পাঠান</string>
+  <string name="send_data_button">চূড়ান্ত ফরম (%s) পাঠান</string>
+  <string name="send_selected_data">পাঠান নির্বাচিত</string>
+  <string name="uploading_data">পাঠানো হচ্ছে ফরম </string>
+  <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
+  <string name="success">সাফল্য </string>
+  <string name="choose_image">ছবি নির্বাচন করুন </string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="save_mid">সংরক্ষণ করুন ফরম </string>
+  <string name="swipe_instructions">আপনি %s টি শুরুতে বিষয় ঠিক করতে পরদার নীচের দিকে উপর নীচ করে নিরধারণ করুন</string>
+</resources>

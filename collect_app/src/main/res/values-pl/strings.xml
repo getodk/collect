@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Zapisz Lokalizację</string>
   <string name="accuracy">Dokładność</string>
@@ -21,6 +21,8 @@
   <string name="cannot_edit_completed_form">Ten formularz nie może być edytowany gdy zostanie zaznaczony jako skończony. Formularz może być zaszyfrowany.</string>
   <string name="capture_audio">Nagraj Dźwięk</string>
   <string name="capture_image">Zrób Zdjęcie</string>
+  <string name="capture_osm">Uruchom OpenMapKit</string>
+  <string name="recapture_osm">Ponów OSM Tagging</string>
   <string name="capture_video">Nagraj Wideo</string>
   <string name="change_language">Zmień Język</string>
   <string name="change_password">Hasło ODK</string>
@@ -215,6 +217,7 @@
   <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
   <string name="user_access_form_entry">Użytkownik może korzystać z pozycji Wypełniania Formularza:</string>
+  <string name="admin_advanced_settings">Ustawienia zaawansowane (gdy zalecone):</string>
   <string name="save_mid">Zapisz Formularz</string>
   <string name="enter_new_password">Wprowadź nowe hasło</string>
   <string name="verify_new_password">Wprowadź powtórnie nowe hasło</string>
@@ -243,6 +246,12 @@
   <string name="swipe_instructions">Jesteś na początku %s. Przeciągnij po ekranie jak pokazane poniżej aby przejść wstecz lub do przodu.</string>
   <string name="buttons_instructions">Jesteś na początku %s. Naciśnij przyciski strzałek poniżej aby przejść wstecz i do przodu.</string>
   <string name="swipe_buttons_instructions">Jesteś na początku %s. Przeciągnij po ekranie jak pokazane poniżej lub naciśnij przyciski strzałek poniżej aby przejść wstecz lub do przodu.</string>
+  <string name="form_processing_logic">Logika przetwarzania formularza</string>
+  <string name="form_processing_logic_recommended">Zalecane (domyślne)</string>
+  <string name="form_processing_logic_0">Styczeń 2015 (najszybszy)</string>
+  <string name="form_processing_logic_1">Styczeń 2015 (najbezpieczniejszy)</string>
+  <string name="form_processing_logic_2">W trakcie 2014 (wolny)</string>
+  <string name="form_processing_logic_3">Początek 2014 (szybki)</string>
   <string name="change_url_default">URL</string>
   <string name="launch_printer">Inicjalizuj Drukowanie</string>
   <string name="no_printer">Żądana drukarka nie jest zainstalowana. Proszę, zainstaluj drukarkę.</string>

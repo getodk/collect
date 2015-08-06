@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Registra Posizione</string>
   <string name="accuracy">Precisione</string>
@@ -21,6 +21,8 @@
   <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che è stato contrassegnato come completo. Potrebbe essere cifrato.</string>
   <string name="capture_audio">Registra Suono</string>
   <string name="capture_image">Scatta Foto</string>
+  <string name="capture_osm">Lancia OpenMapKit</string>
+  <string name="recapture_osm">Rifai tag a OSM</string>
   <string name="capture_video">Registra Video</string>
   <string name="change_language">Cambia Lingua</string>
   <string name="change_password">Password ODK</string>
@@ -246,7 +248,7 @@
   <string name="buttons_instructions">Sei all\'inizio di %s. Utilizza le frecce qui in basso per andare avanti o indietro.</string>
   <string name="swipe_buttons_instructions">Sei all\'inizio di %s. Scorri il dito sullo schermo come indicato o utilizza le frecce qui in basso per andare avanti o indietro.</string>
   <string name="form_processing_logic">Modulo di processo logico</string>
-  <string name="form_processing_logic_recommended">Raccomandati (default)</string>
+  <string name="form_processing_logic_recommended">Raccomandato (default)</string>
   <string name="form_processing_logic_0">Gennaio 2015 (più veloce)</string>
   <string name="form_processing_logic_1">Gennaio 2015 (più sicuro)</string>
   <string name="form_processing_logic_2">Metà 2014 (lento)</string>

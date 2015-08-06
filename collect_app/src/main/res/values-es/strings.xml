@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Registrar localización</string>
   <string name="accuracy">Precisión</string>
@@ -21,6 +21,8 @@
   <string name="cannot_edit_completed_form">Este formulario no puede ser editado después que se marco como terminado. Puede que este encriptado</string>
   <string name="capture_audio">Grabar el Sonido</string>
   <string name="capture_image">Tomar la Foto</string>
+  <string name="capture_osm">Iniciar OpenMapKit</string>
+  <string name="recapture_osm">Rehacer OSM Tagging</string>
   <string name="capture_video">Grabar el Video</string>
   <string name="change_language">Cambiar el Idioma</string>
   <string name="change_password">Contraseña</string>

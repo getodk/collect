@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">場所を記録</string>
   <string name="accuracy">精度</string>
@@ -21,6 +21,8 @@
   <string name="cannot_edit_completed_form">完了済になっているため、このフォームは編集できません。暗号化されているかもしれません。</string>
   <string name="capture_audio">サウンドを録音</string>
   <string name="capture_image">写真を撮影</string>
+  <string name="capture_osm">OpenMapKit を起動</string>
+  <string name="recapture_osm">OSM タグ付けを繰り返す</string>
   <string name="capture_video">ビデオを録画</string>
   <string name="change_language">言語を変更</string>
   <string name="change_password">ODK パスワード</string>

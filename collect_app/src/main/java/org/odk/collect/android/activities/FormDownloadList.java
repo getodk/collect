@@ -18,12 +18,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import android.database.Cursor;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
@@ -92,6 +94,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
     private static final String FORMID_DISPLAY = "formiddisplay";
+
+    private static final String FORM_ID_KEY = "formid";
+    private static final String FORM_VERSION_KEY = "formversion";
 
     private String mAlertMsg;
     private boolean mAlertShowing = false;
@@ -558,6 +563,44 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         super.onPause();
     }
 
+    /**
+     * Determines if a local form on the device is superseded by a given version (of the same form presumably available
+     * on the server).
+     *
+     * @param formId the form to be checked. A form with this ID may or may not reside on the local device.
+     * @param latestVersion the version against which the local form (if any) is tested.
+     * @return true if a form with id <code>formId</code> exists on the local device and its version is less than
+     *         <code>latestVersion</code>.
+     */
+    public static boolean isLocalFormSuperseded(String formId, String latestVersion) {
+
+        String[] selectionArgs = { formId, latestVersion };
+        String selection = FormsColumns.JR_FORM_ID + "=? AND " + FormsColumns.JR_VERSION + "<?";
+
+        Cursor formCursor = null;
+        try {
+            formCursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            return formCursor.getCount() > 0;
+        } finally {
+            if (formCursor != null) {
+                formCursor.close();
+            }
+        }
+    }
+
+    /**
+     * Causes any local forms that have been updated on the server to become checked in the list. This is a prompt and a
+     * convenience to users to download the latest version of those forms from the server.
+     */
+    private void selectSupersededForms() {
+
+        for (int idx = 0; idx < mFormList.size(); idx++) {
+            HashMap<String, String> item = mFormList.get(idx);
+            if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
+                getListView().setItemChecked(idx, true);
+            }
+        }
+    }
 
     /**
      * Called when the form list has finished downloading. results will either contain a set of
@@ -604,6 +647,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 		((details.formVersion == null) ? "" : (getString(R.string.version) + " " + details.formVersion + " ")) +
                 		"ID: " + details.formID );
                 item.put(FORMDETAIL_KEY, formDetailsKey);
+                item.put(FORM_ID_KEY, details.formID);
+                item.put(FORM_VERSION_KEY, details.formVersion);
 
                 // Insert the new form in alphabetical order.
                 if (mFormList.size() == 0) {
@@ -620,6 +665,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     mFormList.add(j, item);
                 }
             }
+            selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
         }
     }
