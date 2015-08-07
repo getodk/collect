@@ -62,8 +62,8 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 							Object newValue) {
 						String url = newValue.toString();
 
-						// remove leading and trailing whitespace
-						if ( !url.equals(url.trim()) ) {
+						// disallow any whitespace
+						if ( url.contains(" ") || !url.equals(url.trim()) ) {
                             Toast.makeText(getApplicationContext(),
                                     R.string.url_error_whitespace, Toast.LENGTH_SHORT)
                                     .show();
