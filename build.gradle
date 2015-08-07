@@ -12,10 +12,10 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-release'
+            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-release-local'
         }
         maven {
-            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-snapshot'
+            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-snapshot-local'
         }
     }
 }
