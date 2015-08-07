@@ -76,6 +76,3 @@
 				android:visibility="gone" />
 		</LinearLayout>
 </FrameLayout>
-<!-- android:text="@string/cancel"
-android:text="@string/accept_location"
-android:text="@string/go_to_location" -->
