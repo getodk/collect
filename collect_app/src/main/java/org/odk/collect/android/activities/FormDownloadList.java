@@ -574,13 +574,26 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      */
     public static boolean isLocalFormSuperseded(String formId, String latestVersion) {
 
-        String[] selectionArgs = { formId, latestVersion };
-        String selection = FormsColumns.JR_FORM_ID + "=? AND " + FormsColumns.JR_VERSION + "<?";
+        String[] selectionArgs = { formId };
+        String selection = FormsColumns.JR_FORM_ID + "=?";
+        String[] fields = { FormsColumns.JR_VERSION };
 
         Cursor formCursor = null;
         try {
-            formCursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
-            return formCursor.getCount() > 0;
+            formCursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, fields, selection, selectionArgs, null);
+            if ( formCursor.getCount() == 0 ) {
+                // form does not already exist locally
+                return true;
+            }
+            formCursor.moveToFirst();
+            int idxJrVersion = formCursor.getColumnIndex(fields[0]);
+            if ( formCursor.isNull(idxJrVersion) ) {
+                // any non-null version on server is newer
+                return (latestVersion != null);
+            }
+            String jr_version = formCursor.getString(idxJrVersion);
+            // if what we have is less, then the server is newer
+            return ( jr_version.compareTo(latestVersion) < 0 );
         } finally {
             if (formCursor != null) {
                 formCursor.close();
