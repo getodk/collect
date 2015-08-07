@@ -1,34 +1,57 @@
 /**************************************************************************************************
-                                        GRADLE CONFIG
+ GRADLE CONFIG
  *************************************************************************************************/
+
+if ((new File(gradle.local)).exists()) { // TODO: This is very strange
+    def localPath = '../' + gradle.local // Shouldn't need to append ../ not consistent
+    apply from: localPath
+} else {
+    apply from: gradle.remote
+}
+
+applicationScripts.each {
+    apply from: it
+}
 
 apply plugin: 'com.android.application'
 
 android {
-    buildToolsVersion "22.0.1"
-    compileSdkVersion "Google Inc.:Google APIs:19"
+    // The following are set in the common.gradle file
+    compileSdkVersion("Google Inc.:Google APIs:19")
+    buildToolsVersion("22.0.1")
+
     defaultConfig {
-        applicationId "org.odk.collect"
-        minSdkVersion 7
-        targetSdkVersion 8
+        applicationId(groupId + collectName)
+        minSdkVersion(7)
+        targetSdkVersion(8)
+        versionCode(1050)
+        versionName("1.4.6")
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled(minify)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        snapshot {
+            // Build type for snapshots
+        }
+        debug {
+            testCoverageEnabled(testCoverage) // Allows AndroidTest JaCoCo reports to be generated
         }
     }
 
-    packagingOptions {
-        pickFirst 'META-INF/DEPENDENCIES'
-        pickFirst 'META-INF/LICENSE'
-        pickFirst 'META-INF/LICENSE.txt'
-        pickFirst 'META-INF/NOTICE'
-        pickFirst 'META-INF/NOTICE.txt'
+    packagingOptions { // Pick first occurrence of any files that cause conflicts, as defined in common.gradle
+        packageList.each {
+            pickFirst it
+        }
     }
 }
 
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
+
+    compile(group: groupId, name: playServicesName, version: playServicesVersion)
+
+    testCompile 'junit:junit:4.12'
 }

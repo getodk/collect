@@ -1,1 +1,15 @@
-include ':collect_app'
+gradle.ext.local = '../gradle-config/local.gradle'
+gradle.ext.remote = 'https://raw.githubusercontent.com/opendatakit/gradle-config/master/remote.gradle'
+gradle.ext.useLocal = true // set to false to always build against remote artifacts
+
+if ((new File(gradle.ext.local)).exists()) {
+    apply from: gradle.ext.local
+} else {
+    apply from: gradle.ext.remote
+}
+
+settingsScripts.each {
+    apply from: it
+}
+
+include(collectProjectChild)
