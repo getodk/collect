@@ -21,8 +21,8 @@ android {
     buildToolsVersion("22.0.1")
 
     defaultConfig {
-        applicationId(groupId + collectName)
-        minSdkVersion(7)
+        applicationId("org.odk.collect.android")
+        minSdkVersion(8)
         targetSdkVersion(8)
         versionCode(1050)
         versionName("1.4.6")
@@ -51,7 +51,9 @@ android {
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
 
-    compile(group: groupId, name: playServicesName, version: playServicesVersion)
+    releaseCompile(group: groupId, name: playServicesArtifactName, version: playServicesRelease, ext: 'aar')
+    snapshotCompile(group: groupId, name: playServicesArtifactName, version: playServicesSnapshot, ext: 'aar')
+    debugCompile(group: groupId, name: playServicesArtifactName, version: playServicesSnapshot, ext: 'aar')
 
     testCompile 'junit:junit:4.12'
 }
