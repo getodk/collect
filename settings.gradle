@@ -15,3 +15,8 @@ settingsScripts.each {
 }
 
 include(collectProjectChild)
+
+if (playServicesPath.exists() && gradle.ext.useLocal) { // check if local play services project is present
+    include playServicesName
+    project(playServicesName).setProjectDir(playServicesPath) // set local location
+}
