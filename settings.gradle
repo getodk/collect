@@ -1,5 +1,7 @@
+gradle.ext.gradleConfigVersion = 2
+
 gradle.ext.local = '../gradle-config/remote.gradle'
-gradle.ext.remote = 'https://raw.githubusercontent.com/opendatakit/gradle-config/1.0/remote.gradle'
+gradle.ext.remote = 'https://raw.githubusercontent.com/opendatakit/gradle-config/' + gradle.ext.gradleConfigVersion + '/remote.gradle'
 gradle.ext.useLocal = true // set to false to always build against remote artifacts
 
 if ((new File(gradle.ext.local)).exists()) {
