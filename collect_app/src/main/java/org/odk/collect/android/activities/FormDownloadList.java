@@ -679,6 +679,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 }
             }
             selectSupersededForms();
+            mDownloadButton.setEnabled(!(selectedItemCount() == 0));
             mFormListAdapter.notifyDataSetChanged();
         }
     }
