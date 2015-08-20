@@ -36,7 +36,7 @@ public class FormRelationsContract {
 
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
-    public FormRelationsContract() {}
+    private FormRelationsContract() {}
 
     public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "relations.db";

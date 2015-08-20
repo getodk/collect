@@ -121,6 +121,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     		mInstanceName = updatedSaveName;
     	}
 
+        // PMA-Linking BEGIN
+        /*  Must try to link before exporting. Exporting encrypts.
+         * TODO determine the best place/logic for when to output / update child forms.
+         *
+         *  First, check if need to output a new form. Only if form is completed.
+         *
+         *  Second, check if need to update linked fields. Do this always when saving.
+         */
+        if (mMarkCompleted) {
+            Log.i(t, "Searching for child form. Should only happen when form is marked complete.");
+        }
+
+
+        // PMA-Linking END
+
+
         try {
     	    exportData(mMarkCompleted);
 
