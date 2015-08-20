@@ -26,7 +26,7 @@ package org.odk.collect.android.database;
 import android.provider.BaseColumns;
 
 /**
- *  Defines all constants needed to manage SQLite databse for form relations.
+ *  Defines all constants needed to manage SQLite database for form relations.
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
@@ -42,7 +42,7 @@ public class FormRelationsContract {
     public static final String DATABASE_NAME = "relations.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
-    private static final String COMMA_SEP = ",";
+    private static final String COMMA_SEP = ", ";
 
     /**
      *  Inner class that defines the table contents.
@@ -56,6 +56,10 @@ public class FormRelationsContract {
      *           child instance id + child node
      *
      *  Because it implements `BaseColumns`, "_ID" is inherited.
+     *
+     *  See
+     *  [0] http://developer.android.com/training/basics/data-storage/databases.html
+     *  [1] http://developer.android.com/reference/android/provider/BaseColumns.html
      */
     public static abstract class FormRelations implements BaseColumns {
         public static final String TABLE_NAME = "relations";
