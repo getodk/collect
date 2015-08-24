@@ -155,7 +155,7 @@ public class GridMultiWidget extends QuestionWidget {
             String audioURI =
             		prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if ( audioURI != null) {
-            	audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI);
+            	audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI, mPlayer);
             } else {
             	audioHandlers[i] = null;
             }
@@ -287,7 +287,7 @@ public class GridMultiWidget extends QuestionWidget {
                 if (selected[position]) {
                     selected[position] = false;
                 	if ( audioHandlers[position] != null) {
-                		audioHandlers[position].stopPlaying();
+                	    stopAudio();
                 	}
                     imageViews[position].setBackgroundColor(Color.WHITE);
                    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.deselect",
@@ -296,7 +296,7 @@ public class GridMultiWidget extends QuestionWidget {
                 } else {
                     selected[position] = true;
                 	if ( audioHandlers[lastClickPosition] != null) {
-                		audioHandlers[lastClickPosition].stopPlaying();
+                		stopAudio();
                 	}
                     imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));

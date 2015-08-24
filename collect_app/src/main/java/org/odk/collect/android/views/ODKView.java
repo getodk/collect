@@ -417,5 +417,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.cancelLongPress();
         }
     }
+    
+    public void stopAudio() {
+        widgets.get(0).stopAudio();
+    }
 
 }
