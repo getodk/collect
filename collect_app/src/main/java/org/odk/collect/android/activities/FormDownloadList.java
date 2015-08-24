@@ -352,9 +352,10 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      * @return
      */
     private int selectedItemCount() {
+        ListView lv = getListView();
         int count = 0;
-        SparseBooleanArray sba = getListView().getCheckedItemPositions();
-        for (int i = 0; i < getListView().getCount(); i++) {
+        SparseBooleanArray sba = lv.getCheckedItemPositions();
+        for (int i = 0; i < lv.getCount(); i++) {
             if (sba.get(i, false)) {
                 count++;
             }
@@ -607,10 +608,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      */
     private void selectSupersededForms() {
 
+        ListView ls = getListView();
         for (int idx = 0; idx < mFormList.size(); idx++) {
             HashMap<String, String> item = mFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
-                getListView().setItemChecked(idx, true);
+                ls.setItemChecked(idx, true);
             }
         }
     }
@@ -679,8 +681,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 }
             }
             selectSupersededForms();
-            mDownloadButton.setEnabled(!(selectedItemCount() == 0));
             mFormListAdapter.notifyDataSetChanged();
+            mDownloadButton.setEnabled(!(selectedItemCount() == 0));
         }
     }
 

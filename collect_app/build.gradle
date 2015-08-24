@@ -24,7 +24,7 @@ android {
         applicationId("org.odk.collect.android")
         minSdkVersion(8)
         targetSdkVersion(8)
-        versionCode(1050)
+        versionCode(1051)
         versionName("1.4.6")
     }
 
