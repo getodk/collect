@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
@@ -27,6 +28,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormRelationsManager;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -129,11 +131,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
          *
          *  Second, check if need to update linked fields. Do this always when saving.
          */
-        if (mMarkCompleted) {
-            Log.i(t, "Searching for child form. Should only happen when form is marked complete.");
-        }
-
-
+        Long parentId = Long.valueOf(mUri.getLastPathSegment());
+        TreeElement instanceRoot = formController.getFormDef().getInstance().getRoot();
+        FormRelationsManager.manageChildForms(parentId, instanceRoot);
         // PMA-Linking END
 
 

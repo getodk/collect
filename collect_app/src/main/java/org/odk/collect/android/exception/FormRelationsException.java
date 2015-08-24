@@ -21,47 +21,17 @@
  * THE SOFTWARE.
  */
 
-package org.odk.collect.android.logic;
-
-import android.net.Uri;
-
-import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.instance.TreeElement;
+package org.odk.collect.android.exception;
 
 /**
- *  Defines important functions for working with Parent/Child forms.
+ *  Defines custom exception for dealing with form relations.
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 20 August 2015
+ *  Last modified: 24 August 2015
  */
-public class FormRelationManager {
-
-    private static final String TAG = "FormRelationManager";
-
-    public static String createInstance(Uri formUri) {
-        // STUB
-        return null;
-    }
-
-    public static void outputOrUpdateChildForms() {
-        // STUB
-    }
-
-    private class traverseData {
-        String parentNode;
-        int repeatIndex;
-        String parentValue;
-        String childNode;
-        String childFormId;
-    }
-
-    // Update mutable objects:
-    //  - XPaths and values for non-repeat saveInstance + child XPath
-    //  - non-repeat saveForm + formId + XPath
-    //  - XPaths and values and repeat number for repeat saveInstance
-    //  - repeat saveForm + formId + XPath + repeat number
-    private void traverseInstance(TreeElement te, FormDef fd) {
-
+public class FormRelationsException extends Exception {
+    public FormRelationsException(String msg) {
+        super(msg);
     }
 }
