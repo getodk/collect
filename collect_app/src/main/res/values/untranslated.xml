@@ -10,7 +10,7 @@
     <!-- strings that should not be translated -->
 	<string translatable="false" name="app_name">ODK Collect</string>
 	<string translatable="false" name="protocol_odk_default">odk_default</string>
-	<string translatable="false" name="protocol_google_maps_engine">google_maps_engine</string>
+	<string translatable="false" name="protocol_google_sheets">google_sheets</string>
     <string translatable="false" name="default_form_processing_logic">-1</string>
     <string translatable="false" name="protocol_other">other_protocol</string>
 	<string translatable="false" name="default_server_url">https://opendatakit.appspot.com</string>

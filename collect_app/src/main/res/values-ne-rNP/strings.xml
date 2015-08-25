@@ -17,7 +17,6 @@
   <string name="cancel">फिर्ता जानुहोस्</string>
   <string name="cancel_loading_form">फिर्ता जानुहोस्</string>
   <string name="cancel_location">फिर्ता जानुहोस्</string>
-  <string name="cancel_saving_form">फिर्ता जानुहोस्</string>
   <string name="cannot_edit_completed_form">एक पटक पूरा भनी अंकित गरिएको फारमलाई सम्पादन गर्न मिल्दैन । सो फारम गुप्तिकृत (encrypted) गरिएको पनि हुन सक्छ । </string>
   <string name="capture_audio">आवाज रेकर्ड गर्नुहोस् </string>
   <string name="capture_image">फोटो लिनुहोस् </string>
@@ -102,7 +101,6 @@
   <string name="play_audio">आवाज सुन्नुहोस्</string>
   <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>
-  <string name="please_wait_google_drive">कृपया पर्खनुहोस् | गुगल ड्राइभमा प्रवेश गर्न खोजिदैछ |</string>
   <string name="please_wait_long">कृपया पर्खनुहोस् । केही समय लाग्न सक्छ । </string>
   <string name="quit_application">बाहिर निस्कनुहोस् %s </string>
   <string name="quit_entry">फारम संचित गरी बाहिर निस्कनुहोस् </string>
@@ -175,7 +173,6 @@
   <string name="edit_prompt">सम्पादन गर्न प्रेरित गर्नुहोस् </string>
   <string name="selected_google_account_text">गुगल एकाउण्ट</string>
   <string name="server_platform_odk_aggregate">ODK एग्रिगेट</string>
-  <string name="server_platform_google_forms">गुगल फारमहरू</string>
   <string name="server_platform_other">अन्य</string>
   <string name="font_size_extra_large">अझ ठूलो </string>
   <string name="font_size_large">ठूलो </string>
@@ -243,7 +240,6 @@
   <string name="swipe_instructions">तपाईं %s को शुरुवातमा हुनुहुन्छ । अघि वा पछि जान तल स्क्रीनमा देखाइए झैं स्वाइप गर्नुहोस् । </string>
   <string name="buttons_instructions">तपाईं %s को शुरुवातमा हुनुहुन्छ । पछाडि र अगाडी जान तलको एरो बटनमा दबाउनु होस्।</string>
   <string name="swipe_buttons_instructions">तपाईं %s को शुरुवातमा हुनुहुन्छ । तल स्क्रीनमा देखाइए झैं स्वाइप गर्नुहोस् वा पछाडि र अगाडी जान एरो बटनमा दबाउनु होस्।</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">प्रिन्टिङ स्टार्ट गर्नुहोस्</string>
   <string name="no_printer">खोजिएको प्रिन्टर जडान गरिएको छैन। कृपया प्रिन्टर जडान गर्नुहोस्।</string>
   <string name="constraint_behavior">अभाव प्रशोधन व्यवहार </string>
@@ -274,8 +270,6 @@
   <string name="ext_assign_value_error">\'%s\' मा कुनै मान दिन सकिएन |</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' डिलिट गर्न सकिएन | कृपया सो फाइल आफैं डिलिट गर्नुहोस् र फारम फेरी डाउनलोड गर्नुहोस् |</string>
   <string name="fs_create_media_folder_error">मिडिया फोल्डर बनाउन असमर्थ \'%s\'।</string>
-  <string name="fs_create_folder_error">कलेक्ट प्रतिवेदन: डाइरेक्टरी बनाउन सकिएन: %s</string>
-  <string name="fs_create_folder_is_file_error">कलेक्ट प्रतिवेदन: %s उपलब्ध छ तर डाइरेक्टरी होइन |</string>
   <string name="fs_file_copy_error">\'%2$s\' माथि \'%1$s\' कपी गर्न सकिएन | कारण: %3$s</string>
   <string name="survey_internal_error">भित्री गल्ती: प्रम्ट सम्म को चरण असफल भयो |</string>
   <string name="survey_multiple_forms_error">तपाईंले एकै फारम आइ डी र भर्सनको दुई भिन्न फारम डाउनलोड गर्नुभयो । ती फारमहरू भिन्न समय वा भिन्न सर्भरमा अपलोड गरिएको हुन सक्छ । कुनै एक फारम डिलिट गर्नुहोस् ।</string>
@@ -289,8 +283,6 @@
   <string name="survey_saving_encrypting_message">तथ्यांक गुप्तिकृत गरिदैछ...</string>
   <string name="high_resolution_summary">उच्च स्तरीय भिडियो रेकर्ड गर्ने क्षमता सक्रिय गर्नुस् </string>
   <string name="high_resolution">उच्च स्तरीय भिडियो सक्रिय गर्नुस् </string>
-  <string name="server_platform_google_maps_engine">गुगल ड्राइभ, गुगल म्याप्स ईन्जिन</string>
-  <string name="gme_project_id">प्रोजेक्ट आइ डी</string>
   <string name="google_drive">गुगल ड्राइभ</string>
   <string name="go_drive">मेरो ड्राइभ</string>
   <string name="go_shared">म संग साझा गरिएको </string>
@@ -298,16 +290,9 @@
   <string name="protocol_settings">प्लेटफर्म सेटिङ्स मिलाउनुहोस्</string>
   <string name="aggregate_preferences">ODK एग्रीगेट सेटिङ्स</string>
   <string name="other_preferences">अन्य प्लेटफर्म सेटिङ्स</string>
-  <string name="gme_preferences">गुगल म्याप ईन्जिन सेटिङ्स</string>
-  <string name="no_coordinates">उदाहरणमा निर्देशांक छैन | त्यसैले अपलोड गर्न सकिएन |</string>
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
-  <string name="gme_set_account">तपाईंले गुगल म्याप ईन्जिनलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल खाता छान्नुहोस्</string>
   <string name="invalid_oauth">अमान्य OAuth 2 टोकन</string>
-  <string name="gme_repeat_error">गुगल म्याप इन्जिन ले Repeats लाई हाल समर्थन गर्दैन |</string>
-  <string name="gme_project_id_error">प्रोजेक्ट आइ डी छैन । गुगल म्याप ईन्जिन सेटिङ्स वा फारममा प्रोजेक्ट आइ डी घोषणा गर्नुपर्छ ।</string>
-  <string name="gme_table_error">गुगल म्याप्स ईन्जिन टेबल पत्ता लगाउन वा बनाउन असमर्थ</string>
-  <string name="gme_create_400">400 BAD REQUEST प्राप्त भयो |  गुगल म्याप इन्जिनमा नयाँ तालिका बनाएपछि यो समस्या देखिनु नयाँ कुरा होइन | कृपया केहि समयपछि फेरी प्रयास गर्नुहोला |</string>
   <string name="picasa_upload_error">उपलब्ध नभएको तस्विर अपलोड गर्न असफल: %1$s</string>
   <string name="odk_auth_auth_fail">ODK स्वत: प्रेषण प्रमाणीकरण असफल , कृपया आफ्नो सेटिङ्स सही छ छैन चेक गर्नुहोस्</string>
   <string name="odk_auto_note">ODK स्वत: प्रेषण सूचना</string>
@@ -315,8 +300,6 @@
   <string name="delete_after_send">पठाए पछि डिलिट गर्नुहोस् </string>
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="change_server_url">सर्भर URL</string>
-  <string name="gme_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
+  <string name="google_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
   <string name="no_blank_search">सर्च क्षेत्र रिक्त हुनु हुदैन।</string>
-  <string name="select_maps_account">तपाईंले गुगल म्याप ईन्जिनलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल अकाउन्ट छान्नुहोस्</string>
-  <string name="get_project_IDs">प्रोजेक्ट आइ डी प्राप्त गरिदैछ |</string>
-</resources>
+  </resources>

@@ -17,7 +17,6 @@
   <string name="cancel">Anulează</string>
   <string name="cancel_loading_form">Anulează</string>
   <string name="cancel_location">Anulează</string>
-  <string name="cancel_saving_form">Anulează</string>
   <string name="cannot_edit_completed_form">Acest formular nu poate fi modificat după ce a fost marcat ca fiind completat. Acesta poate fi criptat.</string>
   <string name="capture_audio">Înregistrează sunet</string>
   <string name="capture_image">Fă o poză</string>
@@ -104,7 +103,6 @@
   <string name="play_audio">Redați sunet</string>
   <string name="play_video">Redați video</string>
   <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
-  <string name="please_wait_google_drive">Vă rugăm să așteptați. Accesez Google Drive.</string>
   <string name="please_wait_long">Vă rugăm să așteptați. Ar putea dura câteva minute.</string>
   <string name="quit_application">Ieșire %s</string>
   <string name="quit_entry">Salvați formularul și ieșiți</string>
@@ -177,7 +175,6 @@
   <string name="edit_prompt">Editare câmp</string>
   <string name="selected_google_account_text">Cont Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Formulare Google</string>
   <string name="server_platform_other">Alte</string>
   <string name="font_size_extra_large">Extra mare</string>
   <string name="font_size_large">Mare</string>
@@ -252,7 +249,6 @@
   <string name="form_processing_logic_1">Ianuarie 2015 (cel mai sigur)</string>
   <string name="form_processing_logic_2">Mijlocul lui 2014 (încet)</string>
   <string name="form_processing_logic_3">Începutul lui 2014 (cel mai rapid)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Printare inițializată</string>
   <string name="no_printer">Imprimanta specificată nu este instalată. Vă rugăm să instalați implimanta.</string>
   <string name="constraint_behavior">Comportament de procesare constrâns</string>
@@ -283,8 +279,6 @@
   <string name="ext_assign_value_error">Nu pot atribui valoarea la \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Nu am putut șterge \'%s\'. Vă rugăm să ștergeți fișierul maunal și să re-descărcați formularul.</string>
   <string name="fs_create_media_folder_error">Nu pot crea directorul media \'%s\'.</string>
-  <string name="fs_create_folder_error">Rapoarte Collect: Nu am putut crea directorul: %s</string>
-  <string name="fs_create_folder_is_file_error">Rapoarte Collect: \'%s\' există, dar nu este un director.</string>
   <string name="fs_file_copy_error">Nu pot copia \'%1$s\' peste \'%2$s\'. Motiv: %3$s</string>
   <string name="survey_internal_error">Eroare internă: trecerea către prompt eșuată.</string>
   <string name="survey_multiple_forms_error">Ați descărcat două formulare diferite cu același form ID și versiune. Poate a fost același formular încărcat la momente diferite sau către servere diferite. Va trebui să ștergeți unul.</string>
@@ -298,8 +292,6 @@
   <string name="survey_saving_encrypting_message">Criptez datele...</string>
   <string name="high_resolution_summary">Activați înregistrările video high-resolution</string>
   <string name="high_resolution">Activați video hi-res</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">ID Proiect</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>
@@ -307,16 +299,9 @@
   <string name="protocol_settings">Configurați setările platformei</string>
   <string name="aggregate_preferences">Setări ODK Aggregate</string>
   <string name="other_preferences">Setările altor platforme</string>
-  <string name="gme_preferences">Setări Google Maps Engine</string>
-  <string name="no_coordinates">Instanța nu are coordonate. Nu am putut încărca</string>
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
-  <string name="gme_set_account">Ați selectat Google Maps Engine ca server, vă rugăm să selectați un cont Google corespondent în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
-  <string name="gme_repeat_error">Repetările nu sunt suportate de Google Maps Engine în acest moment.</string>
-  <string name="gme_project_id_error">Nicun ID de proiect nu a fost găsit. Trebuie să declarați ID Proiect ori în setările Google Maps Engine ori în formular.</string>
-  <string name="gme_table_error">Nu am putut găsi sau crea un tabel Google Maps Engine</string>
-  <string name="gme_create_400">Am recepționat 400 BAD REQUEST. Acesta este un bug cunoscut al Google Maps Engine după ce un tabel este nou creat, vă rugăm să transmiteți din nou în câteva secunde.</string>
   <string name="picasa_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
   <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
   <string name="odk_auto_note">Notificare ODK Autosend</string>
@@ -324,8 +309,6 @@
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
   <string name="change_server_url">URL server</string>
-  <string name="gme_search_browse">Căutați formulare. Sau selectați \'My Drive\' de mai jos pentru a naviga către ele.</string>
+  <string name="google_search_browse">Căutați formulare. Sau selectați \'My Drive\' de mai jos pentru a naviga către ele.</string>
   <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
-  <string name="select_maps_account">Ați selectat Google Maps Engine ca server, vă rugăm să selectați un cont Google corespondent în Setări generale înainte de a continua</string>
-  <string name="get_project_IDs">Preluare ID-uri proiecte</string>
-</resources>
+  </resources>

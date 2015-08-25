@@ -15,7 +15,6 @@
   <string name="cancel">Tamatisha</string>
   <string name="cancel_loading_form">Tamatisha</string>
   <string name="cancel_location">Tamatisha</string>
-  <string name="cancel_saving_form">Tamatisha</string>
   <string name="cannot_edit_completed_form">Fomu hii haiwezi batilishwa pindi inapoekwa alama ya ukamilifu. Inaweza kuwa fiche</string>
   <string name="capture_audio">Rekodi Sauti</string>
   <string name="capture_image">Piga Picha</string>
@@ -165,7 +164,6 @@
   <string name="edit_prompt">Hariri ilani</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Fomu za Google</string>
   <string name="server_platform_other">Nyingine</string>
   <string name="font_size_extra_large">Kubwa zaidi</string>
   <string name="font_size_large">Kubwa</string>
@@ -226,7 +224,6 @@
   <string name="swipe_navigation">Teleza kwa upande</string>
   <string name="buttons_navigation">Tumia vibonyezo vya mbele na nyuma</string>
   <string name="swipe_buttons_navigation">Telezesha ama tumia vibonyezo</string>
-  <string name="change_url_default">anwani ya wavuti</string>
   <string name="launch_printer">Anzisha uchapishaji</string>
   <string name="no_printer">Printer utakayo haipo. Tafadhali weka Printer</string>
   <string name="constraint_behavior">Uchakatishi wa dhibitisho</string>
@@ -247,7 +244,6 @@
   <string name="ext_import_completed_message">Usomaji wa takwimu umemalizika</string>
   <string name="ext_assign_value_error">Safuwima %s zinalingana!</string>
   <string name="fs_create_media_folder_error">Faili \'%s\' la midia halitengenezeki.</string>
-  <string name="fs_create_folder_error">Ripoti za Collect: Kabrasha haingetengenezeki: %s</string>
   <string name="survey_internal_error">Hitilafu ya ndani: hatua ya amri ina kasoro.</string>
   <string name="survey_multiple_forms_error">Umepakua fomu mbili tofauti zinayo ID na version moja. Labda ilikuwa fomu moja ikipakiwa</string>
   <string name="survey_loading_reading_form_message">Fomu inasomwa taarifa</string>

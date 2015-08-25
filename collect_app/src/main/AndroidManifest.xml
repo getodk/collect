@@ -147,7 +147,7 @@
             android:name=".activities.FileManagerTabs"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.GoogleMapsEngineUploaderActivity"
+            android:name=".activities.GoogleSheetsUploaderActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.InstanceUploaderList"
@@ -166,7 +166,7 @@
             android:name=".preferences.PreferencesActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".preferences.GMEPreferencesActivity"
+            android:name=".preferences.GooglePreferencesActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.OtherPreferencesActivity"

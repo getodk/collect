@@ -49,8 +49,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
-
+    compile fileTree(dir: 'libs', include: '*.jar')
     if (playServicesPath.exists() && gradle.useLocal) { // Local project is favoured
         compile project(playServicesName)
     } else {
@@ -58,6 +57,5 @@ dependencies {
         snapshotCompile(group: groupId, name: playServicesArtifactName, version: playServicesSnapshot, ext: 'aar')
         debugCompile(group: groupId, name: playServicesArtifactName, version: playServicesSnapshot, ext: 'aar')
     }
-
     testCompile 'junit:junit:4.12'
 }

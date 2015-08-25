@@ -202,7 +202,7 @@ public class MainMenuActivity extends Activity {
 				String protocol = sharedPreferences.getString(
 						PreferencesActivity.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
 				Intent i = null;
-				if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_maps_engine))) {
+				if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
 					i = new Intent(getApplicationContext(),
 							GoogleDriveActivity.class);
 				} else {

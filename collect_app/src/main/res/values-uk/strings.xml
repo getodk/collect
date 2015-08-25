@@ -12,7 +12,6 @@
   <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
-  <string name="cancel_saving_form">Скасувати</string>
   <string name="cannot_edit_completed_form">Цю форму не можливо редагувати після того як вона була завершена. Вона може бути закодована.</string>
   <string name="capture_audio">Записати звук</string>
   <string name="capture_image">Сфотографувати</string>

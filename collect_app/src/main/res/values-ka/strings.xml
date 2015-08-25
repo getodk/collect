@@ -17,7 +17,6 @@
   <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
-  <string name="cancel_saving_form">გაუქმება</string>
   <string name="cannot_edit_completed_form">ამ ფორმის რედაქტირება  დასრულების შემდეგ შეუძლებელია. იგი შეიძლება კოდირებული იყოს.</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
@@ -102,7 +101,6 @@
   <string name="play_audio">ხმის დაკვრა</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
-  <string name="please_wait_google_drive">გთხოვთ, დაიცადოთ. მიმდინარეობს Google Drive-სთან დაკავშირება</string>
   <string name="please_wait_long">გთხოვთ, დაიცადოთ; ოპერაციის შესრულებას შეიძლება რამდენიმე წუთი დაჭირდეს</string>
   <string name="quit_application">%s-დან გამოსვლა</string>
   <string name="quit_entry">ფორმის შენახვა და გამოსვლა</string>
@@ -175,7 +173,6 @@
   <string name="edit_prompt">გამოპასუხების რედაქტირება</string>
   <string name="selected_google_account_text">Google ექაუნთი</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google ფორმები</string>
   <string name="server_platform_other">სხვა</string>
   <string name="font_size_extra_large">ძალიან დიდი</string>
   <string name="font_size_large">დიდი</string>
@@ -242,7 +239,6 @@
   <string name="swipe_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. გაასრიალეთ ეკრანი, როგორც მითითებულია, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
-  <string name="change_url_default">URL/ბმული</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>
@@ -256,7 +252,6 @@
   <string name="survey_saving_collecting_message">მიმდინარეობს მონაცემთა შეგროვება</string>
   <string name="survey_saving_saving_message">მიმდინარეობს SD-ბარათზე შენახვა</string>
   <string name="high_resolution">მაღალი რეზოლუციის ვიდეოს დაშვება</string>
-  <string name="gme_project_id">პროექტის ID</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">ჩემი Drive</string>
   <string name="protocol_settings">პლატფორმის პარამეტრების შეცვლა</string>
@@ -266,5 +261,4 @@
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
   <string name="no_blank_search">საძიებო ველი არ უნდა იყოს ცარიელი!</string>
-  <string name="get_project_IDs">პროექტის ID-კოდების მიღება</string>
-</resources>
+  </resources>

@@ -17,7 +17,6 @@
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
-  <string name="cancel_saving_form">キャンセル</string>
   <string name="cannot_edit_completed_form">完了済になっているため、このフォームは編集できません。暗号化されているかもしれません。</string>
   <string name="capture_audio">サウンドを録音</string>
   <string name="capture_image">写真を撮影</string>
@@ -104,7 +103,6 @@
   <string name="play_audio">サウンドを再生</string>
   <string name="play_video">ビデオを再生</string>
   <string name="please_wait">しばらくお待ちください。</string>
-  <string name="please_wait_google_drive">しばらくお待ちください。Google ドライブにアクセス中。</string>
   <string name="please_wait_long">しばらくお待ちください。数分間かかることがあります。</string>
   <string name="quit_application">%s を終了</string>
   <string name="quit_entry">フォームを保存して終了</string>
@@ -177,7 +175,6 @@
   <string name="edit_prompt">プロンプトを編集</string>
   <string name="selected_google_account_text">Google アカウント</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google フォーム</string>
   <string name="server_platform_other">その他</string>
   <string name="font_size_extra_large">特大</string>
   <string name="font_size_large">大</string>
@@ -252,7 +249,6 @@
   <string name="form_processing_logic_1">2015年1月 (最も安全)</string>
   <string name="form_processing_logic_2">2014年中期 (遅い)</string>
   <string name="form_processing_logic_3">2014年初期 (速い)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">印刷を開始</string>
   <string name="no_printer">要求されたプリンターがインストールされていません。プリンターをインストールしてください。</string>
   <string name="constraint_behavior">処理動作の制約</string>
@@ -283,8 +279,6 @@
   <string name="ext_assign_value_error">\'%s\' の値を割り当てできません。</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' を削除できませんでした。ファイルを手動で削除して、フォームを再ダウンロードしてください。</string>
   <string name="fs_create_media_folder_error">メディアフォルダー \'%s\' を作成できませんでした。</string>
-  <string name="fs_create_folder_error">Collect 報告: ディレクトリーを作成できません: %s</string>
-  <string name="fs_create_folder_is_file_error">Collect 報告: \'%s\' は存在しますが、ディレクトリーではありません。</string>
   <string name="fs_file_copy_error">\'%1$s\' を \'%2$s\' に上書きコピーできませんでした。理由: %3$s</string>
   <string name="survey_internal_error">内部エラー: プロンプトするステップに失敗しました。</string>
   <string name="survey_multiple_forms_error">同じフォームIDとバージョンを持つ、2つの異なるフォームをダウンロードしました。異なる時間に、または異なるサーバーにアップロードした、同じフォームかもしれません​​。いずれにせよ、一方を削除する必要があります。</string>
@@ -298,8 +292,6 @@
   <string name="survey_saving_encrypting_message">データを暗号化中…</string>
   <string name="high_resolution_summary">高解像度のビデオ録画を有効にします</string>
   <string name="high_resolution">高解像度ビデオを有効</string>
-  <string name="server_platform_google_maps_engine">Google ドライブ, Google マップ エンジン</string>
-  <string name="gme_project_id">プロジェクト ID</string>
   <string name="google_drive">Google ドライブ</string>
   <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
@@ -307,16 +299,9 @@
   <string name="protocol_settings">プラットフォーム設定を構成</string>
   <string name="aggregate_preferences">ODK Aggregate 設定</string>
   <string name="other_preferences">その他のプラットフォーム設定</string>
-  <string name="gme_preferences">Google マップ エンジン設定</string>
-  <string name="no_coordinates">インスタンスにコーディネートがありません。アップロードできません。</string>
   <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
-  <string name="gme_set_account">サーバーとして Google マップ エンジンを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="invalid_oauth">OAuth 2 トークンが正しくありません</string>
-  <string name="gme_repeat_error">この時点では Google マップ エンジンで繰り返しはサポートされていません。</string>
-  <string name="gme_project_id_error">プロジェクト IDが見つかりませんでした。Google マップ エンジン設定またはフォームで、プロジェクトIDを宣言する必要があります。</string>
-  <string name="gme_table_error">Google マップ エンジンのテーブルを、検索または作成できません</string>
-  <string name="gme_create_400">400 BAD REQUESTを受け取りました。これはGoogle マップ エンジンで、テーブルが新たに作成された後に、既知のバグです、数秒後に再送信してみてください。</string>
   <string name="picasa_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
@@ -324,8 +309,6 @@
   <string name="delete_after_send">送信後に削除</string>
   <string name="delete_after_send_summary">サーバに送信した後、確定されたフォームやメディアを削除します</string>
   <string name="change_server_url">サーバー URL</string>
-  <string name="gme_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
+  <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="no_blank_search">検索フィールドは空にできません。</string>
-  <string name="select_maps_account">サーバとして Google マップ エンジンを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
-  <string name="get_project_IDs">プロジェクト ID の取得中</string>
-</resources>
+  </resources>

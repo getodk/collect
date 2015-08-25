@@ -17,7 +17,6 @@
   <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
-  <string name="cancel_saving_form">ยกเลิก</string>
   <string name="cannot_edit_completed_form">แบบสำรวจอาจถูกเข้ารหัสและจะแก้ไขไม่ได้อีก หากถูกทำเครื่องหมายว่าเสร็จสมบูรณ์แล้ว</string>
   <string name="capture_audio">บันทึกเสียง</string>
   <string name="capture_image">บันทึกภาพ</string>
@@ -99,7 +98,6 @@
   <string name="play_audio">เปิดเสียง</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>
-  <string name="please_wait_google_drive">โปรดรอสักครู่ กำลังเชื่อมต่อ Google Drive</string>
   <string name="please_wait_long">โปรดรอ อาจต้องใช้เวลาสักครู่</string>
   <string name="quit_application">ออกจาก %s</string>
   <string name="quit_entry">บันทึกและออก</string>
@@ -172,7 +170,6 @@
   <string name="edit_prompt">แก้ไขจุดที่เลือก</string>
   <string name="selected_google_account_text">บัญชีกูเกิล</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">แบบฟอร์มของ Google</string>
   <string name="server_platform_other">อื่นๆ</string>
   <string name="font_size_extra_large">ขนาดใหญ่พิเศษ</string>
   <string name="font_size_large">ขนาดใหญ่</string>
@@ -240,7 +237,6 @@
   <string name="swipe_instructions">เริ่มต้นแบบสำรวจ %s. เลื่อนหน้าจอตามที่แสดงด้านล่างเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
   <string name="buttons_instructions">เริ่มต้นแบบสำรวจ %s. แตะปุ่มลูกศรด้านล่างเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
   <string name="swipe_buttons_instructions">เริ่มต้นแบบสำรวจ %s. เลื่อนหน้าจอตามที่แสดงด้านล่างหรือแตะปุ่มลูกศรเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">เริ่มต้นการพิมพ์</string>
   <string name="no_printer">เครื่องพิมพ์ที่เลือกยังไม่ได้ติดตั้ง กรุณาติดตั้งเครื่องพิมพ์</string>
   <string name="constraint_behavior">ลักษณะการประมวลผลแบบมีเงื่อนไข</string>
@@ -275,20 +271,16 @@
   <string name="survey_saving_encrypting_message">กำลังเข้ารหัสข้อมูล</string>
   <string name="high_resolution_summary">เปิดใช้งานการบันทึกวีดีโอความละเอียดสูง</string>
   <string name="high_resolution">เปิดใช้งานวีดีโอความละเอียดสูง</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="modified_on_date_at_time">\'แก้ไขเมื่อ\' EEE, MMM dd, yyy \'เวลา\' HH:mm</string>
   <string name="protocol_settings">ปรับตั้งการตั้งค่าของ Platform</string>
   <string name="aggregate_preferences">ตั้งค่า ODK Aggregate</string>
   <string name="other_preferences">ตั้งค่า Platform อื่น</string>
-  <string name="gme_preferences">ตั้งค่า Google Maps Engine</string>
   <string name="no_google_account">ไม่ได้เลือกบัญชีผู้ใช้งาน Google</string>
-  <string name="gme_repeat_error">Google Maps Engine ยังไม่รองรับการทำซ้ำในขณะนี้</string>
-  <string name="gme_table_error">ไม่สามารถค้นหาหรือสร้างตาราง Google Maps Engine ได้</string>
   <string name="picasa_upload_error">ไม่สามารถอัพโหลดรูปภาพที่ไม่มีอยู่ได้ %1$s</string>
   <string name="notification_error">การแสดงข้อความเตือนผิดพลาด</string>
   <string name="delete_after_send">ลบหลังจากส่งแล้ว</string>
-  <string name="gme_search_browse">ค้นหาแบบฟอร์มหรือเลือก My Drive ด้านล่างเพื่อค้นหา</string>
+  <string name="google_search_browse">ค้นหาแบบฟอร์มหรือเลือก My Drive ด้านล่างเพื่อค้นหา</string>
   <string name="no_blank_search">ช่องค้นหาปล่อยว่างไม่ได้</string>
 </resources>

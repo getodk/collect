@@ -17,7 +17,6 @@
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
-  <string name="cancel_saving_form">إلغاء</string>
   <string name="cannot_edit_completed_form">يتعذر تحرير هذا النموذج مرة واحدة تم وضع علامة على أنها كاملة. قد تكون مشفرة.</string>
   <string name="capture_audio">تسجيل صوتي</string>
   <string name="capture_image">التقط صورة</string>
@@ -102,7 +101,6 @@
   <string name="play_audio">تشغيل التسجيل الصوتي</string>
   <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
-  <string name="please_wait_google_drive">الرجاْ الإنتظار. الاتصال بجوجل درايف.</string>
   <string name="please_wait_long">الرجاء الانتظار. قد يتطلّب ذلك بضع دقائق.</string>
   <string name="quit_application">خروج %s</string>
   <string name="quit_entry">حفظ الاستمارة والخروج</string>
@@ -175,7 +173,6 @@
   <string name="edit_prompt">تعديل التوجيه</string>
   <string name="selected_google_account_text">حساب غوغل</string>
   <string name="server_platform_odk_aggregate">جمع ODK </string>
-  <string name="server_platform_google_forms">استمارات غوغل</string>
   <string name="server_platform_other">اخرى</string>
   <string name="font_size_extra_large">كبير جدا</string>
   <string name="font_size_large">كبير</string>
@@ -250,7 +247,6 @@
   <string name="form_processing_logic_1">كانون الثاني 2015 (الاكثر امانا)</string>
   <string name="form_processing_logic_2">منتصف 2014 (بطيء)</string>
   <string name="form_processing_logic_3">بداية 2014 (سريع)</string>
-  <string name="change_url_default">الرابط</string>
   <string name="launch_printer">البدء بالطباعة</string>
   <string name="no_printer">لم يتم تثبيت الطابعة المختارة. يرجى تثبيتها اولا.</string>
   <string name="constraint_behavior">قيد معالجة السلوك</string>
@@ -281,8 +277,6 @@
   <string name="ext_assign_value_error">لا يمكن تعيين القيمة في   \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">لا يمكن المسح  \'%s\'.  يرجى حذف الملف يدويا وقم بأعادة تحميل الاستمارة</string>
   <string name="fs_create_media_folder_error">لا يمكن انشاء ملف وسائط متعددة \'%s\'.</string>
-  <string name="fs_create_folder_error">جمع التقارير: لا يمكن الانشاء مباشرة: %s</string>
-  <string name="fs_create_folder_is_file_error">جمع التقارير:  \'%s\' موجود, لكنه ليس دليل</string>
   <string name="fs_file_copy_error">لا يمكن النسخ  \'%1$s\' فوق  \'%2$s\'. السبب %3$s</string>
   <string name="survey_internal_error">خطأ داخلي: فشل الخطأ الموجه-</string>
   <string name="survey_multiple_forms_error">قمت بتحميل استمارتين مختلفتين بنفس الشكل والاصدار. ربما قد يكون نفس الشكل الذي تم تحميله في اوقات مختلفة او في خودام مختلفة. بأي حال يجب عليك حذف واحدة.</string>
@@ -296,8 +290,6 @@
   <string name="survey_saving_encrypting_message">تشفير البيانات</string>
   <string name="high_resolution_summary">تمكين تسجيلات الفيديو عالية الدقة</string>
   <string name="high_resolution">تمكين دقة الفيديو</string>
-  <string name="server_platform_google_maps_engine">محرك قوقل:  محرك خرائط قوقل</string>
-  <string name="gme_project_id">اعدادات المشروع</string>
   <string name="google_drive">محرك القوقل</string>
   <string name="go_drive">المحرك الخاص بي</string>
   <string name="go_shared">مشاركة معي</string>
@@ -305,16 +297,9 @@
   <string name="protocol_settings">تكوين اعدادات البرنامج</string>
   <string name="aggregate_preferences">ODK  جمع الاعدادات</string>
   <string name="other_preferences">اعدادات المنصة الاخرى</string>
-  <string name="gme_preferences">اعدادات محرك خرائط القوقل</string>
-  <string name="no_coordinates">لا يوجد احداثيات للمثال. غير قادر على التحميل</string>
   <string name="drive_get_file">الحصول %1$s وملفات الوسائط</string>
   <string name="no_google_account">لم يتم اختيار حساب قوقل!</string>
-  <string name="gme_set_account">قمت باحتيتار محرك خرائط قوقل ك الخادم الخاص بك, اختر  حساب قوقل مطابق في الاعدادات العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
-  <string name="gme_repeat_error">التكرارات غير معتمدة من قبل محرك خرائط قوقل في هذا الوقت</string>
-  <string name="gme_project_id_error">لا يوجد اعدادات للمشروع. يجب اعلان اعدادات المشروع اما في اعدادات محرك خرائط القوقل او في الاستمارة</string>
-  <string name="gme_table_error">غير قادر على ايجاد او انشاء محرك القوقل: جدول محرك الخرائط</string>
-  <string name="gme_create_400">استقبال 400 طلب غير صحيح. هذا خطأ معروف في محرك خرائط قوقل بعد انشاء جدول حديث, يرجى اعادة المحاولة بعد مرور بض ثواني.</string>
   <string name="picasa_upload_error">فشل تحميل الصورة الغير موجودة%1$s</string>
   <string name="odk_auth_auth_fail">ODK فشل ارسال مصادقة السيارات, رجاءا تأكد من ان جميع الاعدادات صحيحة</string>
   <string name="odk_auto_note">ODK  ارسال الاشعارات اوتوماتيكيا</string>
@@ -322,8 +307,6 @@
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاشكال في صيغتها النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="change_server_url">خادم الرابط</string>
-  <string name="gme_search_browse">البحث عن الاستمارات: او اختر \'My Drive\' تصفح في الاسفل.</string>
+  <string name="google_search_browse">البحث عن الاستمارات: او اختر \'My Drive\' تصفح في الاسفل.</string>
   <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا</string>
-  <string name="select_maps_account">قمت بتحديد محرك خرائط قوقل محرك قوقل المحرك الخاص بك, يرجى اختيار حساب قوقل في الاعدادات العامة قبل المتابعة</string>
-  <string name="get_project_IDs">اعدادات المشروع</string>
-</resources>
+  </resources>
