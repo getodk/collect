@@ -23,17 +23,19 @@
 
 package org.odk.collect.android.database;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.FormRelationsContract.FormRelations;
 
 /**
  *  Implements database creation and upgrade for form relations.
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 20 August 2015
+ *  Last modified: 25 August 2015
  */
 public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
@@ -53,14 +55,14 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         if (LOCAL_LOG) {
             Log.d(TAG, "onCreate. Created relations table.");
         }
-        db.execSQL(FormRelationsContract.FormRelations.CREATE_TABLE);
+        db.execSQL(FormRelations.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
-        db.execSQL(FormRelationsContract.FormRelations.DELETE_TABLE);
+        db.execSQL(FormRelations.DELETE_TABLE);
         onCreate(db);
     }
 
@@ -70,4 +72,39 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
      *      //do stuff
      *      db.close();
      */
+
+
+    public static long getChild(long parentId, int repeatIndex) {
+        long mFound = -1;
+
+        FormRelationsDb mFrdb = new FormRelationsDb();
+        SQLiteDatabase mDb = mFrdb.getReadableDatabase();
+
+        String[] columns = {
+                FormRelations.COLUMN_CHILD_INSTANCE_ID
+        };
+        String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? and " +
+                FormRelations.COLUMN_PARENT_NODE + "=?";
+        String[] selectionArgs = {
+                String.valueOf(parentId), String.valueOf(repeatIndex)
+        };
+        /* // Old way
+        Cursor mCursor = mDb.query(true, FormRelations.TABLE_NAME, null, selection, selectionArgs, null,
+                null, null, null);
+        */
+        Cursor mCursor = mDb.query(FormRelations.TABLE_NAME, columns, selection, selectionArgs,
+                null, null, null);
+        if (mCursor != null) {
+            if (mCursor.getCount() > 0) {
+                mCursor.moveToFirst();
+                mFound = mCursor.getLong(mCursor.getColumnIndex(
+                        FormRelations.COLUMN_CHILD_INSTANCE_ID));
+            }
+            mCursor.close();
+        }
+
+        mDb.close();
+
+        return mFound;
+    }
 }

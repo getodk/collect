@@ -469,7 +469,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
    *          serialized FormDef file
    * @return {@link FormDef} object
    */
-  public FormDef deserializeFormDef(File formDef) {
+  // PMA-Linking BEGIN
+  // This was formerly in FileUtils. It really should be there.
+  // The only change is to make this a static method. No reason it should not be static.
+  // PMA-Linking END
+  public static FormDef deserializeFormDef(File formDef) {
 
     // TODO: any way to remove reliance on jrsp?
     FileInputStream fis = null;
@@ -507,7 +511,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
    * @param filepath
    *          path to the form file
    */
-  public void serializeFormDef(FormDef fd, String filepath) {
+  // PMA-Linking BEGIN
+  // This was formerly in FileUtils. It really should be there.
+  // The only change is to make this a static method. No reason it should not be static.
+  // PMA-Linking END
+  public static void serializeFormDef(FormDef fd, String filepath) {
     // calculate unique md5 identifier
     String hash = FileUtils.getMd5Hash(new File(filepath));
     File formDef = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");

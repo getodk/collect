@@ -378,7 +378,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      * @param path
      * @return
      */
-    static void exportXmlFile(ByteArrayPayload payload, String path) throws IOException {
+    // PMA-Linking BEGIN
+    // This helper method used to be in FileUtils. Needed to make it `public` for use in
+    // FormRelationsManager.
+    // PMA-Linking END
+    public static void exportXmlFile(ByteArrayPayload payload, String path) throws IOException {
         File file = new File(path);
         if (file.exists() && !file.delete()) {
             throw new IOException("Cannot overwrite " + path + ". Perhaps the file is locked?");
