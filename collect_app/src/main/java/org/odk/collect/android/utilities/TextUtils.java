@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2015 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -37,19 +37,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 
-/**
- * Consolidate all interactions with media providers here.
- *
- * The functionality of getPath() was provided by paulburke as described here:
- * See
- * http://stackoverflow.com/questions/20067508/get-real-path-from-uri-android
- * -kitkat-new-storage-access-framework for details
- *
- * @author mitchellsundt@gmail.com
- * @author paulburke
- *
- *
- */
 public class TextUtils {
 	private static final String t = "TextUtils";
 
