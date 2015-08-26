@@ -23,6 +23,7 @@
 
 package org.odk.collect.android.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -30,12 +31,14 @@ import android.util.Log;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormRelationsContract.FormRelations;
 
+import java.text.Normalizer;
+
 /**
  *  Implements database creation and upgrade for form relations.
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 25 August 2015
+ *  Last modified: 26 August 2015
  */
 public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
@@ -77,8 +80,8 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
     public static long getChild(long parentId, int repeatIndex) {
         long mFound = -1;
 
-        FormRelationsDb mFrdb = new FormRelationsDb();
-        SQLiteDatabase mDb = mFrdb.getReadableDatabase();
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
 
         String[] columns = {
                 FormRelations.COLUMN_CHILD_INSTANCE_ID
@@ -92,7 +95,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         Cursor mCursor = mDb.query(true, FormRelations.TABLE_NAME, null, selection, selectionArgs, null,
                 null, null, null);
         */
-        Cursor mCursor = mDb.query(FormRelations.TABLE_NAME, columns, selection, selectionArgs,
+        Cursor mCursor = db.query(FormRelations.TABLE_NAME, columns, selection, selectionArgs,
                 null, null, null);
         if (mCursor != null) {
             if (mCursor.getCount() > 0) {
@@ -103,8 +106,60 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
             mCursor.close();
         }
 
-        mDb.close();
-
+        db.close();
         return mFound;
+    }
+
+    public static long insert(String parentId, String parentNode, String repeatIndex,
+                                 String childId, String childNode) {
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(FormRelations.COLUMN_PARENT_INSTANCE_ID, parentId);
+        cv.put(FormRelations.COLUMN_PARENT_NODE, parentNode);
+        cv.put(FormRelations.COLUMN_PARENT_INDEX, repeatIndex);
+        cv.put(FormRelations.COLUMN_CHILD_INSTANCE_ID, childId);
+        cv.put(FormRelations.COLUMN_CHILD_NODE, childNode);
+        long newRowId = db.insert(FormRelations.TABLE_NAME, null, cv);
+
+        db.close();
+        return newRowId;
+    }
+
+    public static boolean isRowExists(String parentId, String parentNode, String repeatIndex,
+                                      String childId, String childNode) {
+        boolean rowFound = false;
+
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
+
+        String[] columns = {
+                FormRelations._ID
+        };
+        String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? and " +
+                FormRelations.COLUMN_PARENT_NODE + "=? and " +
+                FormRelations.COLUMN_PARENT_INDEX + "=? and " +
+                FormRelations.COLUMN_CHILD_INSTANCE_ID + "=? and " +
+                FormRelations.COLUMN_CHILD_NODE + "=?";
+        String[] selectionArgs = {
+                parentId,
+                parentNode,
+                repeatIndex,
+                childId,
+                childNode
+        };
+
+        Cursor mCursor = db.query(FormRelations.TABLE_NAME, columns, selection, selectionArgs,
+                null, null, null);
+        if (mCursor != null) {
+            if (mCursor.getCount() > 0) {
+                rowFound = true;
+            }
+            mCursor.close();
+        }
+
+        db.close();
+        return rowFound;
     }
 }

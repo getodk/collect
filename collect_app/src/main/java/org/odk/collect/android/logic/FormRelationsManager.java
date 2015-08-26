@@ -47,11 +47,19 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,12 +67,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 /**
  *  Defines important functions for working with Parent/Child forms.
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 25 August 2015
+ *  Last modified: 26 August 2015
  */
 public class FormRelationsManager {
 
@@ -78,6 +99,8 @@ public class FormRelationsManager {
     private static final int NO_ERROR_CODE = 0;
     private static final int PROVIDER_NO_FORM = 1;
     private static final int NO_INSTANCE_NO_FORM = 2;
+    private static final int NO_REPEAT_NUMBER = 3;
+    private static final int PROVIDER_NO_INSTANCE = 4;
 
     private long parentId;
     private ArrayList<TraverseData> allTraverseData;
@@ -89,73 +112,136 @@ public class FormRelationsManager {
         maxRepeatIndex = 0;
     }
 
-    private class TraverseData {
-        String attr;
-        String attrValue;
-        String instanceXpath;
-        String instanceValue;
-        int repeatIndex;
-    }
-
-    // Cleans the input somewhat
-    private void addTraverseData(String attr, String attrValue, String instanceXpath,
-                                String instanceValue) throws FormRelationsException {
-        TraverseData td = new TraverseData();
-        if (DELETE_FORM.equals(attr)) {
-            throw new FormRelationsException(DELETE_FORM);
-        }
-        td.attr = attr;
-        td.attrValue = attrValue;
-        td.instanceXpath = cleanInstanceXpath(instanceXpath);
-        td.instanceValue = instanceValue;
-        td.repeatIndex = parseInstanceXpath(td.instanceXpath);
-        allTraverseData.add(td);
-    }
-
-    private String cleanInstanceXpath(String instanceXpath) {
-        int firstSlash = instanceXpath.indexOf("/");
-        String toReturn = instanceXpath.substring(firstSlash);
-        return toReturn;
-    }
-
-    // Return repeat count. Assumes that all transferred data is in a repeat,
-    // and not shared with other repeats (and not in a repeat, e.g. house number,
-    // and repeat for household members). Enforce rules that there should be
-    // only one non-"1" index (only one group/repeat) in the xpath.
-    private int parseInstanceXpath(String instanceXpath) {
-        int repeatIndex = 1;
-        int numNonOne = 0;
-
-        int leftBracket = instanceXpath.indexOf("[");
-        int safety = 100;
-        while (leftBracket >= 0 && safety > 0) {
-            int rightBracket = instanceXpath.indexOf("]", leftBracket);
-            if (rightBracket < 0) {
-                break;
-            }
-            try {
-                String repeat = instanceXpath.substring(leftBracket+1, rightBracket);
+    // Entry point. Called while saving.
+    public static void manageChildForms(long parentId, TreeElement instanceRoot) {
+        try {
+            FormRelationsManager frm = new FormRelationsManager(parentId);
+            traverseInstance(instanceRoot, frm);
+            frm.outputOrUpdateChildForms();
+        } catch (FormRelationsException e) {
+            if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
-                    Log.d(TAG, "Trying to parse \'" + repeat + "\'. Left bracket @" + leftBracket + " and right bracket @" + rightBracket);
+                    Log.d(TAG, "Interrupted to delete instance with id (" + parentId + ")");
                 }
-                int potentialRepeat = Integer.parseInt(repeat);
-                if (potentialRepeat > 1) {
-                    repeatIndex = potentialRepeat;
-                    numNonOne += 1;
-                    maxRepeatIndex = Math.max(maxRepeatIndex, repeatIndex);
-                }
-            } catch (NumberFormatException e) {
-                Log.w(TAG, "Error parsing repeat index to int: \'" + instanceXpath + "\'");
+                deleteInstance(parentId);
             }
-            leftBracket = instanceXpath.indexOf("[", rightBracket);
-            safety--;
+        }
+    }
+
+    private void outputOrUpdateChildForms() {
+        for (int i = 1; i <= maxRepeatIndex; i++ ) {
+            ArrayList<TraverseData> saveFormMapping = new ArrayList<TraverseData>();
+            ArrayList<TraverseData> saveInstanceMapping = new ArrayList<TraverseData>();
+
+            // Build up `saveFormMapping` and `saveInstanceMapping` for repeat index `i`
+            for (Iterator<TraverseData> it = allTraverseData.iterator(); it.hasNext(); ) {
+                TraverseData td = it.next();
+                if (td.repeatIndex == i) {
+                    if (SAVE_FORM.equals(td.attr)) {
+                        saveFormMapping.add(td);
+                    } else if (SAVE_INSTANCE.equals(td.attr)) {
+                        saveInstanceMapping.add(td);
+                    } else {
+                        String m = "Trying to output or update child form. Unexpected attr=\'" +
+                                td.attr + "\' @" + td.instanceXpath;
+                        Log.w(TAG, m);
+                    }
+                }
+            }
+
+            if (saveFormMapping.isEmpty() && saveInstanceMapping.isEmpty()) {
+                Log.i(TAG, "No form relations information for repeat node (" + i + ")");
+                continue;
+            }
+
+            try {
+                Uri childInstance = getOrCreateChildForm(saveFormMapping, saveInstanceMapping);
+
+                // Now that we have the URI, the child instance definitely exists. Need to
+                // transfer over values that are different.
+                insertAllIntoChild(saveFormMapping, saveInstanceMapping, childInstance);
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+                // Log.w(TAG, "Error creating serialized payload");
+                e.printStackTrace();
+                continue;
+            } catch (FormRelationsException e) {
+                String msg = "Exception raised when getting or creating child form for repeat (" +
+                        i + ")";
+
+                switch (e.getErrorCode()) {
+                    case NO_ERROR_CODE:
+                        break;
+                    case PROVIDER_NO_FORM:
+                        msg = "No form with id \'" + e.getInfo() + "\' in FormProvider for " +
+                                "repeat (" + i +")";
+                        break;
+                    case NO_INSTANCE_NO_FORM:
+                        msg = "No child form exists, impossible to create one, no saveForm " +
+                                "information in repeat node (" + i + ")!";
+                        break;
+                    case NO_REPEAT_NUMBER:
+                        // This should never happen
+                        msg = "No information from form relations to indicate which repeat (" +
+                                i + ")";
+                        break;
+                    case PROVIDER_NO_INSTANCE:
+                        // This should never happen
+                        msg = "InstanceProvider does not have record of child for repeat (" +
+                                i + ")";
+                }
+                Log.w(TAG, msg);
+                continue;
+            }
+        }
+    }
+
+    private Uri getOrCreateChildForm(ArrayList<TraverseData> saveFormMapping,
+                                     ArrayList<TraverseData> saveInstanceMapping) throws
+            FormRelationsException, IOException {
+        Uri childInstance;
+
+        int repeatIndex = getRepeatIndex(saveFormMapping, saveInstanceMapping);
+
+        long childId = FormRelationsDb.getChild(parentId, repeatIndex);
+        if (childId < 0) {
+            // There was no child for the given parent form and associated index, so create one.
+            String childFormId = getChildFormId(saveFormMapping);
+
+            String[] columns = {
+                    FormsColumns._ID
+            };
+            String selection = FormsColumns.JR_FORM_ID + "=?";
+            String[] selectionArgs = {
+                    childFormId
+            };
+
+            Cursor cursor = Collect
+                    .getInstance()
+                    .getContentResolver()
+                    .query(FormsColumns.CONTENT_URI, columns, selection, selectionArgs, null);
+            long formId = -1;
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    formId = cursor.getLong(cursor.getColumnIndex(FormsColumns._ID));
+                }
+                cursor.close();
+            }
+
+            if (formId == -1) {
+                throw new FormRelationsException(PROVIDER_NO_FORM, childFormId);
+            }
+
+            Uri formUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, String.valueOf(formId));
+            childInstance = createInstance(formUri);
+        } else {
+            // Get old instance
+            childInstance = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                    String.valueOf(childId));
         }
 
-        if (numNonOne > 1) {
-            Log.w(TAG, "Multiple repeats detected in this XPath: \'" + instanceXpath + "\'");
-        }
-
-        return repeatIndex;
+        return childInstance;
     }
 
     // Unfortunately, we must violate DRY (don't repeat yourself). Creating an instance
@@ -168,7 +254,7 @@ public class FormRelationsManager {
      * happens in FormLoaderTask, but we're already in a thread here.
      */
     // Lots of copy and paste
-    public static String createInstance(Uri formUri) throws FormRelationsException {
+    public static Uri createInstance(Uri formUri) throws FormRelationsException, IOException {
         if (LOCAL_LOG) {
             Log.d(TAG, "Inside createInstance(" + formUri.toString() + ")");
         }
@@ -278,29 +364,19 @@ public class FormRelationsManager {
         }
 
         exportData(formController);
-        updateInstanceDatabase(formUri, instancePath);
-        return instancePath;
+        Uri createdInstance = updateInstanceDatabase(formUri, instancePath);
+        return createdInstance;
     }
 
     /**
-     * Writes the data to the sdcard, and updates the instances content
-     * provider. In theory we don't have to write to disk, and this is where
-     * you'd add other methods.
+     * Writes the data to the sdcard.
      */
-    public static boolean exportData(FormController formController) {
-
+    public static boolean exportData(FormController formController) throws IOException {
         ByteArrayPayload payload;
-        try {
-            payload = formController.getFilledInFormXml();
-            // write out xml
-            String instancePath = formController.getInstancePath().getAbsolutePath();
-            SaveToDiskTask.exportXmlFile(payload, instancePath);
-
-        } catch (IOException e) {
-            Log.e(TAG, "Error creating serialized payload");
-            e.printStackTrace();
-            return false;
-        }
+        payload = formController.getFilledInFormXml();
+        // write out xml
+        String instancePath = formController.getInstancePath().getAbsolutePath();
+        SaveToDiskTask.exportXmlFile(payload, instancePath);
         return true;
     }
 
@@ -355,60 +431,148 @@ public class FormRelationsManager {
         return true;
     }
 
-    private void outputOrUpdateChildForms() {
-        for (int i = 1; i <= maxRepeatIndex; i++ ) {
-            ArrayList<TraverseData> saveFormMapping = new ArrayList<TraverseData>();
-            ArrayList<TraverseData> saveInstanceMapping = new ArrayList<TraverseData>();
+    private void insertAllIntoChild(ArrayList<TraverseData> saveFormMapping,
+                                    ArrayList<TraverseData> saveInstanceMapping,
+                                    Uri childInstance) throws FormRelationsException {
+        String childInstancePath = getInstancePath(childInstance);
 
-            for (Iterator<TraverseData> it = allTraverseData.iterator(); it.hasNext(); ) {
-                TraverseData td = it.next();
-                if (td.repeatIndex == i) {
-                    if (SAVE_FORM.equals(td.attr)) {
-                        saveFormMapping.add(td);
-                    } else if (SAVE_INSTANCE.equals(td.attr)) {
-                        saveInstanceMapping.add(td);
-                    } else {
-                        String m = "Trying to output or update child form. Unexpected attr=\'" +
-                                td.attr + "\' @" + td.instanceXpath;
-                        Log.w(TAG, m);
-                    }
+        try {
+            File outputFile = new File(childInstancePath);
+            Document document = null;
+            if (outputFile.exists()) {
+                InputStream inputStream = new FileInputStream(outputFile);
+                Reader reader = new InputStreamReader(inputStream, "UTF-8");
+                InputSource inputSource = new InputSource(reader);
+                document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                        .parse(inputSource);
+            } else {
+                // should never get here since we've always just created the new instance
+                Log.w(TAG, "Error: instance somehow did not exist!");
+            }
+
+            // here we should have a good xml document in DOM
+            if (saveFormMapping.size() > 0) {
+                TraverseData td = saveFormMapping.get(0);
+                ContentValues values = new ContentValues();
+                values.put(InstanceColumns.DISPLAY_NAME, td.instanceValue);
+                Collect.getInstance().getContentResolver()
+                        .update(childInstance, values, null, null);
+            }
+
+            int repeatIndex = getRepeatIndex(saveFormMapping, saveInstanceMapping);
+            long childId = getIdFromSingleUri(childInstance);
+            boolean isInstanceModified = false;
+            for (TraverseData td : saveInstanceMapping) {
+                boolean isThisModified = insertIntoChild(td, document);
+                if (isThisModified) {
+                    checkCopyBinaryFile(td, childInstancePath);
                 }
+                isInstanceModified = isInstanceModified || isThisModified;
+                updateRelationsDatabase(parentId, td.instanceXpath, repeatIndex, childId,
+                        td.attrValue);
             }
 
-            if (saveFormMapping.isEmpty() && saveInstanceMapping.isEmpty()) {
-                Log.i(TAG, "No form relations information for repeat node (" + i + ")");
-                continue;
+            if (isInstanceModified) {
+                // only need to update xml if something changed
+                // there's a bug in streamresult that replaces spaces in the
+                // filename with %20
+                // so we use a fileoutput stream
+                // http://stackoverflow.com/questions/10301674/save-file-in-android-with-spaces-in-file-name
+                FileOutputStream fos = new FileOutputStream(outputFile);
+                Result output = new StreamResult(fos);
+                Source input = new DOMSource(document);
+                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.transform(input, output);
             }
-
-            String childInstancePath = "";
-            try {
-                childInstancePath = getOrCreateChildForm(saveFormMapping, saveInstanceMapping);
-            } catch (FormRelationsException e) {
-                String msg = "Exception raised when getting or creating child form for repeat (" +
-                        i + ")";
-
-                switch (e.getErrorCode()) {
-                    case NO_ERROR_CODE:
-                        break;
-                    case PROVIDER_NO_FORM:
-                        msg = "No form with id \'" + e.getInfo() + "\' in FormProvider for " +
-                                "repeat (" + i +")";
-                        break;
-                    case NO_INSTANCE_NO_FORM:
-                        msg = "No child form exists, impossible to create one, no saveForm " +
-                                "information in repeat node (" + i + ")!";
-                        break;
-                }
-                Log.w(TAG, msg);
-                continue;
-            }
+        } catch (FormRelationsException e) {
+            throw e;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private String getOrCreateChildForm(ArrayList<TraverseData> saveFormMapping,
-            ArrayList<TraverseData> saveInstanceMapping) throws FormRelationsException {
-        String instancePath = null;
+    // return true iff updated
+    private boolean insertIntoChild(TraverseData td, Document document) throws
+            XPathExpressionException {
+        boolean isModified = false;
+        String childInstanceValue = td.instanceValue;
+        if (null != childInstanceValue) {
+            // extract nodes using xpath
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            XPathExpression expression;
 
+            String childInstanceXpath = td.instanceXpath;
+
+            expression = xpath.compile(childInstanceXpath);
+            Node node = (Node) expression.evaluate(document, XPathConstants.NODE);
+            if ( !node.getTextContent().equals(childInstanceValue) ) {
+                Log.i(TAG, "Found a difference while saving child form: " +
+                        node.getTextContent() + " :: " + childInstanceValue +
+                        " for node " + node.getNodeName());
+                node.setTextContent(childInstanceValue);
+                isModified = true;
+            }
+        }
+        return isModified;
+    }
+
+    private static boolean updateRelationsDatabase(long parentId, String parentXpath,
+                                                   int repeatIndex, long childId,
+                                                   String childXpath) {
+        // First check if row exists.
+        boolean rowExists = FormRelationsDb.isRowExists(String.valueOf(parentId), parentXpath,
+                String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
+        if ( !rowExists ) {
+            FormRelationsDb.insert(String.valueOf(parentId), parentXpath,
+                    String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
+            rowExists = true;
+        }
+        // Otherwise add
+        return rowExists;
+    }
+
+    private boolean checkCopyBinaryFile(TraverseData td, String childInstancePath) throws
+            FormRelationsException {
+        boolean toReturn = false;
+        String childInstanceValue = td.instanceValue;
+        if (childInstanceValue.endsWith(".jpg") || childInstanceValue.endsWith(".jpeg") ||
+                childInstanceValue.endsWith(".3gpp") || childInstanceValue.endsWith(".3gp") ||
+                childInstanceValue.endsWith(".mp4") || childInstanceValue.endsWith(".png")) {
+            // more?
+
+            Uri parentInstance = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+                    String.valueOf(parentId));
+            String parentInstancePath = getInstancePath(parentInstance);
+            toReturn = copyBinaryFile(parentInstancePath, childInstancePath, childInstanceValue);
+        }
+        return toReturn;
+    }
+
+    private static boolean copyBinaryFile(String parentInstancePath, String childInstancePath,
+                                          String filename) {
+        File parentFile = new File(parentInstancePath);
+        File childFile = new File(childInstancePath);
+
+        File parentImage = new File(parentFile.getParent() + "/" + filename);
+        File childImage = new File(childFile.getParent() + "/" + filename);
+
+        FileUtils.copyFile(parentImage, childImage);
+        return true;
+    }
+
+    private static long getIdFromSingleUri(Uri instance) {
+        long id = Long.valueOf(instance.getPath());
+        return id;
+    }
+
+    private int getRepeatIndex(ArrayList<TraverseData> saveFormMapping, ArrayList<TraverseData>
+            saveInstanceMapping) throws FormRelationsException {
         int repeatIndex = 0;
         if ( !saveFormMapping.isEmpty() ) {
             repeatIndex = saveFormMapping.get(0).repeatIndex;
@@ -416,62 +580,107 @@ public class FormRelationsManager {
             repeatIndex = saveInstanceMapping.get(0).repeatIndex;
         }
 
-        long childId = FormRelationsDb.getChild(parentId, repeatIndex);
-        if (childId < 0 && saveFormMapping.isEmpty()) {
-            throw new FormRelationsException();
-        } else if (childId < 0) {
-            // There was no child for the given parent form and associated index, so create one.
-            String childFormId = saveFormMapping.get(0).attrValue;
-
-            String[] columns = {
-                    FormsColumns._ID
-            };
-            String selection = FormsColumns.JR_FORM_ID + "=?";
-            String[] selectionArgs = {
-                    childFormId
-            };
-
-            Cursor cursor = Collect
-                    .getInstance()
-                    .getContentResolver()
-                    .query(FormsColumns.CONTENT_URI, columns, selection, selectionArgs, null);
-            long formId = -1;
-            if (cursor != null) {
-                if (cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    formId = cursor.getLong(cursor.getColumnIndex(FormsColumns._ID));
-                }
-                cursor.close();
-            }
-
-            if (formId == -1) {
-                throw new FormRelationsException(PROVIDER_NO_FORM, childFormId);
-            }
-
-            instancePath = createInstance(Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                    String.valueOf(formId)));
-        } else {
-            // Get old instance
-
+        if (repeatIndex == 0) {
+            throw new FormRelationsException(NO_REPEAT_NUMBER);
         }
 
+        return repeatIndex;
+    }
+
+    private String getChildFormId(ArrayList<TraverseData> saveFormMapping) throws
+            FormRelationsException{
+        if (saveFormMapping.isEmpty()) {
+            throw new FormRelationsException(NO_INSTANCE_NO_FORM);
+        }
+        String childFormId = saveFormMapping.get(0).attrValue;
+        return childFormId;
+    }
+
+    private static String getInstancePath(Uri oneInstance) throws FormRelationsException {
+        String[] projection = {
+                InstanceColumns.INSTANCE_FILE_PATH
+        };
+        Cursor childCursor = Collect.getInstance().getContentResolver()
+                .query(oneInstance, projection, null, null, null);
+        if (null == childCursor || childCursor.getCount() < 1) {
+            throw new FormRelationsException(PROVIDER_NO_INSTANCE);
+        }
+        // If URI is for table, not for row, potential error (only getting the first row).
+        childCursor.moveToFirst();
+        String instancePath = childCursor.getString(childCursor.getColumnIndex(
+                InstanceColumns.INSTANCE_FILE_PATH));
+        childCursor.close();
         return instancePath;
     }
 
+    private class TraverseData {
+        String attr;
+        String attrValue;
+        String instanceXpath;
+        String instanceValue;
+        int repeatIndex;
+    }
 
-    public static void manageChildForms(long parentId, TreeElement instanceRoot) {
-        try {
-            FormRelationsManager frm = new FormRelationsManager(parentId);
-            traverseInstance(instanceRoot, frm);
-            frm.outputOrUpdateChildForms();
-        } catch (FormRelationsException e) {
-            if (DELETE_FORM.equals(e.getMessage())) {
-                if (LOCAL_LOG) {
-                    Log.d(TAG, "Interrupted to delete instance with id (" + parentId + ")");
-                }
-                deleteInstance(parentId);
-            }
+    // Cleans the input somewhat
+    private void addTraverseData(String attr, String attrValue, String instanceXpath,
+                                 String instanceValue) throws FormRelationsException {
+        TraverseData td = new TraverseData();
+        if (DELETE_FORM.equals(attr)) {
+            throw new FormRelationsException(DELETE_FORM);
         }
+        td.attr = attr;
+        td.attrValue = attrValue;
+        td.instanceXpath = cleanInstanceXpath(instanceXpath);
+        td.instanceValue = instanceValue;
+        td.repeatIndex = parseInstanceXpath(td.instanceXpath);
+        allTraverseData.add(td);
+    }
+
+    private String cleanInstanceXpath(String instanceXpath) {
+        int firstSlash = instanceXpath.indexOf("/");
+        String toReturn = instanceXpath.substring(firstSlash);
+        return toReturn;
+    }
+
+    // Return repeat count. Assumes that all transferred data is in a repeat,
+    // and not shared with other repeats (and not in a repeat, e.g. house number,
+    // and repeat for household members). Enforce rules that there should be
+    // only one non-"1" index (only one group/repeat) in the xpath.
+    private int parseInstanceXpath(String instanceXpath) {
+        int repeatIndex = 1;
+        int numNonOne = 0;
+
+        int leftBracket = instanceXpath.indexOf("[");
+        int safety = 100;
+        while (leftBracket >= 0 && safety > 0) {
+            int rightBracket = instanceXpath.indexOf("]", leftBracket);
+            if (rightBracket < 0) {
+                break;
+            }
+            try {
+                String repeat = instanceXpath.substring(leftBracket+1, rightBracket);
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Trying to parse \'" + repeat + "\'. Left bracket @" +
+                            leftBracket + " and right bracket @" + rightBracket);
+                }
+                int potentialRepeat = Integer.parseInt(repeat);
+                if (potentialRepeat > 1) {
+                    repeatIndex = potentialRepeat;
+                    numNonOne += 1;
+                    maxRepeatIndex = Math.max(maxRepeatIndex, repeatIndex);
+                }
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "Error parsing repeat index to int: \'" + instanceXpath + "\'");
+            }
+            leftBracket = instanceXpath.indexOf("[", rightBracket);
+            safety--;
+        }
+
+        if (numNonOne > 1) {
+            Log.w(TAG, "Multiple repeats detected in this XPath: \'" + instanceXpath + "\'");
+        }
+
+        return repeatIndex;
     }
 
     // Update mutable object: FormRelationsManager
