@@ -16,12 +16,12 @@ package org.odk.collect.android.views;
 
 import java.io.File;
 
-import android.widget.*;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -32,12 +32,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
@@ -45,7 +55,7 @@ import android.widget.ImageView.ScaleType;
  * 
  * @author carlhartung
  */
-public class MediaLayout extends RelativeLayout {
+public class MediaLayout extends RelativeLayout implements OnClickListener {
     private static final String t = "AVTLayout";
 
     private String mSelectionDesignator;
@@ -57,9 +67,15 @@ public class MediaLayout extends RelativeLayout {
     private TextView mMissingImage;
     
     private String mVideoURI = null;
+    private MediaPlayer mPlayer;
+    private AudioPlayListener mAudioPlayListener;
+    private int mPlayTextColor;
+    private int mPlayBackgroundTextColor;
+    
+    private CharSequence mOriginalText;
 
 
-    public MediaLayout(Context c) {
+    public MediaLayout(Context c, MediaPlayer player) {
         super(c);
         mView_Text = null;
         mAudioButton = null;
@@ -67,12 +83,41 @@ public class MediaLayout extends RelativeLayout {
         mMissingImage = null;
         mVideoButton = null;
         mIndex = null;
+        mPlayer = player;
+        mAudioPlayListener = null;
+        mPlayTextColor = Color.BLUE;
+        mPlayBackgroundTextColor = Color.WHITE;
     }
 
     public void playAudio() {
     	if ( mAudioButton != null ) {
-    		mAudioButton.playAudio();
+    	    // have to call toString() to remove the html formatting 
+    	    // (it's a spanned thing...)
+    	    mView_Text.setText(mView_Text.getText().toString());
+    	    mView_Text.setTextColor(mPlayTextColor);
+    	    mView_Text.setBackgroundColor(mPlayBackgroundTextColor);
+    	    mAudioButton.playAudio();
     	}
+    }
+    
+    public void setPlayTextColor(int textColor) {
+        mPlayTextColor = textColor;
+    }
+    
+    public void setPlayTextBackgroundColor(int textColor) {
+        mPlayBackgroundTextColor = textColor;
+    }
+    
+    /*
+     * Resets text formatting to whatever is defaulted
+     * in the form
+     */
+    public void resetTextFormatting(){
+        // first set it to defaults
+        mView_Text.setTextColor(Color.BLACK);
+        mView_Text.setBackgroundColor(Color.WHITE);
+        // then set the text to our original (brings back any html formatting)
+        mView_Text.setText(mOriginalText);
     }
 
     public void playVideo() {
@@ -113,6 +158,7 @@ public class MediaLayout extends RelativeLayout {
     	mSelectionDesignator = selectionDesignator;
     	mIndex = index;
         mView_Text = text;
+        mOriginalText = text.getText();
         mView_Text.setId(QuestionWidget.newUniqueId());
         mVideoURI = videoURI;
 
@@ -129,7 +175,8 @@ public class MediaLayout extends RelativeLayout {
         // First set up the audio button
         if (audioURI != null) {
             // An audio file is specified
-            mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI);
+            mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI, mPlayer);
+            mAudioButton.setOnClickListener(this);
             mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
                                                                       // relative layout.
         } else {
@@ -353,15 +400,35 @@ public class MediaLayout extends RelativeLayout {
         addView(v, dividerParams);
     }
 
+    
+    public void setTextcolor(int color) {
+        mView_Text.setTextColor(color);
+    }
 
+    /**
+     * This is what gets called when the AudioButton gets clicked
+     */
     @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        super.onWindowVisibilityChanged(visibility);
-        if (visibility != View.VISIBLE) {
-            if (mAudioButton != null) {
-                mAudioButton.stopPlaying();
-            }
+    public void onClick(View v) {
+        if (mAudioPlayListener != null) {
+            mAudioPlayListener.resetQuestionTextColor();
         }
+        if (mPlayer.isPlaying()) {
+            mPlayer.stop();
+            mPlayer.reset();
+        }
+        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                resetTextFormatting();
+                mediaPlayer.reset();
+            }
+        });
+        playAudio();
+    }
+    
+    public void setAudioListener(AudioPlayListener listener) {
+        mAudioPlayListener = listener;
     }
 
 }

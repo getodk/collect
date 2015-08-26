@@ -27,9 +27,13 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -45,13 +49,17 @@ import android.widget.RadioButton;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SelectOneWidget extends QuestionWidget implements
-		OnCheckedChangeListener {
+		OnCheckedChangeListener, AudioPlayListener {
 
 	List<SelectChoice> mItems; // may take a while to compute
 	ArrayList<RadioButton> buttons;
+	ArrayList<MediaLayout> playList;
+	private int playcounter = 0;
+
 
 	public SelectOneWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
+		playList = new ArrayList<MediaLayout>();
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
@@ -73,8 +81,8 @@ public class SelectOneWidget extends QuestionWidget implements
 		if (mItems != null) {
 			for (int i = 0; i < mItems.size(); i++) {
 				RadioButton r = new RadioButton(getContext());
-				r.setText(prompt.getSelectChoiceText(mItems.get(i)));
-				r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setText(TextUtils.fixHtml(prompt.getSelectChoiceText(mItems.get(i))));
 				r.setTag(Integer.valueOf(i));
 				r.setId(QuestionWidget.newUniqueId());
 				r.setEnabled(!prompt.isReadOnly());
@@ -107,9 +115,13 @@ public class SelectOneWidget extends QuestionWidget implements
 				bigImageURI = prompt.getSpecialFormSelectChoiceText(
 						mItems.get(i), "big-image");
 
-				MediaLayout mediaLayout = new MediaLayout(getContext());
+				MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
 				mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, audioURI, imageURI,
 						videoURI, bigImageURI);
+				mediaLayout.setAudioListener(this);
+				mediaLayout.setPlayTextColor(mPlayColor);
+				mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+				playList.add(mediaLayout);
 
 				if (i != mItems.size() - 1) {
 					// Last, add the dividing line (except for the last element)
@@ -206,5 +218,58 @@ public class SelectOneWidget extends QuestionWidget implements
 			button.cancelLongPress();
 		}
 	}
+	
+	
+	public void playNextSelectItem() {
+        if (!this.isShown()) {
+            return;
+        }
+        // if there's more, set up to play the next item
+        if (playcounter < playList.size()) {
+        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                resetQuestionTextColor();
+                mediaPlayer.reset();
+                playNextSelectItem();
+            }
+        });
+        // play the current item
+        playList.get(playcounter).playAudio();
+        playcounter++;
+        
+     } else {
+         playcounter = 0;
+         mPlayer.setOnCompletionListener(null);
+         mPlayer.reset();
+     }
 
+    }
+    
+    
+    @Override
+    public void playAllPromptText() {
+        // set up to play the items when the
+        // question text is finished
+        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                resetQuestionTextColor();
+                mediaPlayer.reset();
+                playNextSelectItem();
+            }
+
+        });
+        // plays the question text
+        super.playAllPromptText();
+    }
+
+    @Override
+    public void resetQuestionTextColor() {
+        super.resetQuestionTextColor();
+        for (MediaLayout layout : playList) {
+            layout.resetTextFormatting();
+        }   
+    }
+ 
 }

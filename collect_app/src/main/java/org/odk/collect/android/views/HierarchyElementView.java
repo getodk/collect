@@ -15,9 +15,12 @@
 package org.odk.collect.android.views;
 
 import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.TextUtils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -45,7 +48,7 @@ public class HierarchyElementView extends RelativeLayout {
 
         mPrimaryTextView = new TextView(context);
         mPrimaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
-        mPrimaryTextView.setText(it.getPrimaryText());
+        setPrimaryText(it.getPrimaryText());
         mPrimaryTextView.setId(2);
         mPrimaryTextView.setGravity(Gravity.CENTER_VERTICAL);
         LayoutParams l =
@@ -70,7 +73,7 @@ public class HierarchyElementView extends RelativeLayout {
 
 
     public void setPrimaryText(String text) {
-        mPrimaryTextView.setText(text);
+        mPrimaryTextView.setText(TextUtils.fixHtml(text));
     }
 
 

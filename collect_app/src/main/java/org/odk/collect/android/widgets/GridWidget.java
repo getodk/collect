@@ -158,7 +158,7 @@ public class GridWidget extends QuestionWidget {
             String audioURI =
             		prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if ( audioURI != null) {
-            	audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI);
+            	audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI, mPlayer);
             } else {
             	audioHandlers[i] = null;
             }
@@ -294,7 +294,7 @@ public class GridWidget extends QuestionWidget {
                 for (int i = 0; i < selected.length; i++) {
                 	// if we have an audio handler, be sure audio is stopped.
                 	if ( selected[i] && (audioHandlers[i] != null)) {
-                		audioHandlers[i].stopPlaying();
+                		stopAudio();
                 	}
                     selected[i] = false;
                     if (imageViews[i] != null) {

@@ -20,13 +20,18 @@ import java.util.List;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -36,22 +41,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public abstract class QuestionWidget extends LinearLayout {
+public abstract class QuestionWidget extends LinearLayout implements AudioPlayListener {
 
     @SuppressWarnings("unused")
     private final static String t = "QuestionWidget";
+    private static int idGenerator = 1211322;
 
-	private static int idGenerator = 1211322;
-
-	/**
-	 * Generate a unique ID to keep Android UI happy when the screen orientation
-	 * changes.
-	 *
-	 * @return
-	 */
-	public static int newUniqueId() {
-		return ++idGenerator;
-	}
+    /**
+     * Generate a unique ID to keep Android UI happy when the screen orientation
+     * changes.
+     * 
+     * @return
+     */
+    public static int newUniqueId() {
+        return ++idGenerator;
+    }
 
     private LinearLayout.LayoutParams mLayout;
     protected FormEntryPrompt mPrompt;
@@ -63,10 +67,23 @@ public abstract class QuestionWidget extends LinearLayout {
     private MediaLayout mediaLayout;
     private TextView mHelpText;
 
+    protected MediaPlayer mPlayer;
+
+    protected int mPlayColor = Color.BLUE;
+    protected int mPlayBackgroundColor = Color.WHITE;
 
     public QuestionWidget(Context context, FormEntryPrompt p) {
         super(context);
 
+        mPlayer = new MediaPlayer();
+        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaLayout.resetTextFormatting();
+                mediaPlayer.reset();
+            }
+
+        });
         mQuestionFontsize = Collect.getQuestionFontsize();
         mAnswerFontsize = mQuestionFontsize + 2;
 
@@ -76,71 +93,86 @@ public abstract class QuestionWidget extends LinearLayout {
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        mLayout =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 
         addQuestionText(p);
         addHelpText(p);
+
+        String playColorString = p.getFormElement().getAdditionalAttribute(null, "playColor");
+        if (playColorString != null) {
+            try {
+                mPlayColor = Color.parseColor(playColorString);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        } 
+        mediaLayout.setPlayTextColor(mPlayColor);
+        
+        String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null, "playBackgroundColor");
+        if (playBackgroundColorString != null) {
+            try {
+                mPlayBackgroundColor = Color.parseColor(playBackgroundColorString);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        } 
+        mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
     }
 
     public void playAudio() {
-    	mediaLayout.playAudio();
+        playAllPromptText();
     }
 
     public void playVideo() {
-    	mediaLayout.playVideo();
+        mediaLayout.playVideo();
     }
 
     public FormEntryPrompt getPrompt() {
         return mPrompt;
     }
 
-   	// http://code.google.com/p/android/issues/detail?id=8488
+    // http://code.google.com/p/android/issues/detail?id=8488
     private void recycleDrawablesRecursive(ViewGroup viewGroup, List<ImageView> images) {
 
         int childCount = viewGroup.getChildCount();
-        for(int index = 0; index < childCount; index++)
-        {
-          View child = viewGroup.getChildAt(index);
-          if ( child instanceof ImageView ) {
-        	  images.add((ImageView)child);
-          } else if ( child instanceof ViewGroup ) {
-        	  recycleDrawablesRecursive((ViewGroup) child, images);
-          }
+        for (int index = 0; index < childCount; index++) {
+            View child = viewGroup.getChildAt(index);
+            if (child instanceof ImageView) {
+                images.add((ImageView)child);
+            } else if (child instanceof ViewGroup) {
+                recycleDrawablesRecursive((ViewGroup)child, images);
+            }
         }
         viewGroup.destroyDrawingCache();
     }
 
-   	// http://code.google.com/p/android/issues/detail?id=8488
+    // http://code.google.com/p/android/issues/detail?id=8488
     public void recycleDrawables() {
-    	List<ImageView> images = new ArrayList<ImageView>();
-    	// collect all the image views
-    	recycleDrawablesRecursive(this, images);
-    	for ( ImageView imageView : images ) {
-    		imageView.destroyDrawingCache();
-    		Drawable d = imageView.getDrawable();
-    		if ( d != null && d instanceof BitmapDrawable) {
-    			imageView.setImageDrawable(null);
-    			BitmapDrawable bd = (BitmapDrawable) d;
-    			Bitmap bmp = bd.getBitmap();
-    			if ( bmp != null ) {
-    				bmp.recycle();
-    			}
-    		}
-    	}
+        List<ImageView> images = new ArrayList<ImageView>();
+        // collect all the image views
+        recycleDrawablesRecursive(this, images);
+        for (ImageView imageView : images) {
+            imageView.destroyDrawingCache();
+            Drawable d = imageView.getDrawable();
+            if (d != null && d instanceof BitmapDrawable) {
+                imageView.setImageDrawable(null);
+                BitmapDrawable bd = (BitmapDrawable)d;
+                Bitmap bmp = bd.getBitmap();
+                if (bmp != null) {
+                    bmp.recycle();
+                }
+            }
+        }
     }
 
     // Abstract methods
     public abstract IAnswerData getAnswer();
 
-
     public abstract void clearAnswer();
 
-
     public abstract void setFocus(Context context);
-
 
     public abstract void setOnLongClickListener(OnLongClickListener l);
 
@@ -153,7 +185,7 @@ public abstract class QuestionWidget extends LinearLayout {
      * @return true if the fling gesture should be suppressed
      */
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-    	return false;
+       return false;
     }
 
     /**
@@ -172,11 +204,11 @@ public abstract class QuestionWidget extends LinearLayout {
         String promptText = p.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         mQuestionText = new TextView(getContext());
-        mQuestionText.setText(promptText == null ? "" : promptText);
         mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         mQuestionText.setTypeface(null, Typeface.BOLD);
         mQuestionText.setPadding(0, 0, 0, 7);
         mQuestionText.setId(QuestionWidget.newUniqueId()); // assign random id
+        mQuestionText.setText(promptText == null ? "" : TextUtils.fixHtml(promptText));
 
         // Wrap to the size of the parent view
         mQuestionText.setHorizontallyScrolling(false);
@@ -186,12 +218,12 @@ public abstract class QuestionWidget extends LinearLayout {
         }
 
         // Create the layout for audio, image, text
-        mediaLayout = new MediaLayout(getContext());
+        mediaLayout = new MediaLayout(getContext(), mPlayer);
         mediaLayout.setAVT(p.getIndex(), "", mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
+        mediaLayout.setAudioListener(this);
 
         addView(mediaLayout, mLayout);
     }
-
 
     /**
      * Add a TextView containing the help text.
@@ -206,13 +238,12 @@ public abstract class QuestionWidget extends LinearLayout {
             mHelpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             mHelpText.setHorizontallyScrolling(false);
-            mHelpText.setText(s);
             mHelpText.setTypeface(null, Typeface.ITALIC);
+            mHelpText.setText(TextUtils.fixHtml(s));
 
             addView(mHelpText, mLayout);
         }
     }
-
 
     /**
      * Every subclassed widget should override this, adding any views they may contain, and calling
@@ -228,4 +259,31 @@ public abstract class QuestionWidget extends LinearLayout {
         }
     }
 
+    /*
+     * Prompts with items must override this
+     */
+    public void playAllPromptText() {
+        mediaLayout.playAudio();
+    }
+
+    public void setQuestionTextColor(int color) {
+        mediaLayout.setTextcolor(color);
+    }
+
+    public void resetQuestionTextColor() {
+        mediaLayout.resetTextFormatting();
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged (int visibility) {
+        if (visibility == INVISIBLE || visibility == GONE) {
+            mPlayer.stop();
+            mPlayer.reset();
+        }
+    }
+    
+    public void stopAudio() {
+        mPlayer.stop();
+        mPlayer.reset();
+    }
 }

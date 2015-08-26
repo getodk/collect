@@ -2166,6 +2166,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			}
 		}
+		if (mCurrentView != null && mCurrentView instanceof ODKView) {
+		    // stop audio if it's playing
+		    ((ODKView)mCurrentView).stopAudio();
+		}
+		
 
 		super.onPause();
 	}

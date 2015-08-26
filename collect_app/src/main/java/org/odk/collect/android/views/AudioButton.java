@@ -27,10 +27,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -38,7 +35,7 @@ import android.widget.Toast;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends ImageButton implements OnClickListener {
+public class AudioButton extends ImageButton {
     private final static String t = "AudioButton";
 
     /**
@@ -53,14 +50,16 @@ public class AudioButton extends ImageButton implements OnClickListener {
         private FormIndex index;
         private String selectionDesignator;
         private String URI;
-        private MediaPlayer player;
+        private MediaPlayer mPlayer;
 
-        public AudioHandler(FormIndex index, String selectionDesignator, String URI) {
+        public AudioHandler(FormIndex index, String selectionDesignator, String URI, MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
             this.URI = URI;
-            player = null;
+            mPlayer = player;
         }
+        
+        
         public void playAudio(Context c) {
         	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick.playAudioPrompt", selectionDesignator, index);
             if (URI == null) {
@@ -88,21 +87,10 @@ public class AudioButton extends ImageButton implements OnClickListener {
                 return;
             }
 
-            // In case we're currently playing sounds.
-            stopPlaying();
-
-            player = new MediaPlayer();
             try {
-                player.setDataSource(audioFilename);
-                player.prepare();
-                player.start();
-                player.setOnCompletionListener(new OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        mediaPlayer.release();
-                    }
-
-                });
+                mPlayer.setDataSource(audioFilename);
+                mPlayer.prepare();
+                mPlayer.start();
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid);
                 Log.e(t, errorMsg);
@@ -111,20 +99,13 @@ public class AudioButton extends ImageButton implements OnClickListener {
             }
         	
         }
-
-        public void stopPlaying() {
-            if (player != null) {
-                player.release();
-            }
-        }
     }
 
     AudioHandler handler; 
     
-    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI) {
+    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI, MediaPlayer player) {
         super(context);
-        this.setOnClickListener(this);
-        handler = new AudioHandler( index, selectionDesignator, URI);
+        handler = new AudioHandler( index, selectionDesignator, URI, player);
         Bitmap b =
             BitmapFactory.decodeResource(context.getResources(),
                 android.R.drawable.ic_lock_silent_mode_off);
@@ -133,15 +114,5 @@ public class AudioButton extends ImageButton implements OnClickListener {
 
     public void playAudio() {
     	handler.playAudio(getContext());
-    }
-
-    @Override
-    public void onClick(View v) {
-    	playAudio();
-    }
-
-
-    public void stopPlaying() {
-        handler.stopPlaying();
     }
 }
