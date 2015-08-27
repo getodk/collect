@@ -31,14 +31,14 @@ import android.util.Log;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormRelationsContract.FormRelations;
 
-import java.text.Normalizer;
+import java.util.ArrayList;
 
 /**
  *  Implements database creation and upgrade for form relations.
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 26 August 2015
+ *  Last modified: 27 August 2015
  */
 public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
@@ -48,9 +48,6 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
     public FormRelationsDb() {
         super(Collect.METADATA_PATH, FormRelationsContract.DATABASE_NAME, null,
                 FormRelationsContract.DATABASE_VERSION);
-        if (LOCAL_LOG) {
-            Log.d(TAG, "constructor");
-        }
     }
 
     @Override
@@ -69,45 +66,99 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         onCreate(db);
     }
 
-    /*
-     *  public void insertSomething(something) {
-     *      SQLiteDatabase db = this.getWritableDatabase();
-     *      //do stuff
-     *      db.close();
-     */
+    public static class MappingData {
+        public String parentNode;
+        public String childNode;
+    }
 
-
-    public static long getChild(long parentId, int repeatIndex) {
-        long mFound = -1;
+    public static ArrayList<MappingData> getMappingsToParent(long childId) {
+        ArrayList<MappingData> mappings = new ArrayList<MappingData>();
 
         FormRelationsDb frdb = new FormRelationsDb();
         SQLiteDatabase db = frdb.getReadableDatabase();
 
-        String[] columns = {
+        String[] projection = {
+                FormRelations.COLUMN_CHILD_NODE,
+                FormRelations.COLUMN_PARENT_NODE
+        };
+        String selection = FormRelations.COLUMN_CHILD_INSTANCE_ID + "=?";
+        String[] selectionArgs = {
+                String.valueOf(childId)
+        };
+
+        Cursor cursor = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
+                null, null, null);
+        if (null != cursor) {
+            while (cursor.moveToNext()) {
+                MappingData thisMapping = new MappingData();
+                thisMapping.childNode = cursor.getString(cursor.getColumnIndex(
+                        FormRelations.COLUMN_CHILD_NODE));
+                thisMapping.parentNode = cursor.getString(cursor.getColumnIndex(
+                        FormRelations.COLUMN_PARENT_NODE));
+                mappings.add(thisMapping);
+            }
+            cursor.close();
+        }
+
+        return mappings;
+    }
+
+    public static long getParent(long childId) {
+        long found = -1;
+
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
+
+        String[] projection = {
+                FormRelations.COLUMN_PARENT_INSTANCE_ID
+        };
+        String selection = FormRelations.COLUMN_CHILD_INSTANCE_ID + "=?";
+        String[] selectionArgs = {
+                String.valueOf(childId)
+        };
+
+        Cursor cursor = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
+                null, null, null);
+        if (null != cursor) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                found = cursor.getLong(cursor.getColumnIndex(
+                        FormRelations.COLUMN_PARENT_INSTANCE_ID));
+            }
+            cursor.close();
+        }
+
+        return found;
+    }
+
+    public static long getChild(long parentId, int repeatIndex) {
+        long found = -1;
+
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
+
+        String[] projection = {
                 FormRelations.COLUMN_CHILD_INSTANCE_ID
         };
         String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? and " +
-                FormRelations.COLUMN_PARENT_NODE + "=?";
+                FormRelations.COLUMN_PARENT_INDEX + "=?";
         String[] selectionArgs = {
                 String.valueOf(parentId), String.valueOf(repeatIndex)
         };
-        /* // Old way
-        Cursor mCursor = mDb.query(true, FormRelations.TABLE_NAME, null, selection, selectionArgs, null,
+
+        Cursor cursor = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
                 null, null, null);
-        */
-        Cursor mCursor = db.query(FormRelations.TABLE_NAME, columns, selection, selectionArgs,
-                null, null, null);
-        if (mCursor != null) {
-            if (mCursor.getCount() > 0) {
-                mCursor.moveToFirst();
-                mFound = mCursor.getLong(mCursor.getColumnIndex(
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                found = cursor.getLong(cursor.getColumnIndex(
                         FormRelations.COLUMN_CHILD_INSTANCE_ID));
             }
-            mCursor.close();
+            cursor.close();
         }
 
         db.close();
-        return mFound;
+        return found;
     }
 
     public static long insert(String parentId, String parentNode, String repeatIndex,
@@ -134,7 +185,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         FormRelationsDb frdb = new FormRelationsDb();
         SQLiteDatabase db = frdb.getReadableDatabase();
 
-        String[] columns = {
+        String[] projection = {
                 FormRelations._ID
         };
         String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? and " +
@@ -150,7 +201,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
                 childNode
         };
 
-        Cursor mCursor = db.query(FormRelations.TABLE_NAME, columns, selection, selectionArgs,
+        Cursor mCursor = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
                 null, null, null);
         if (mCursor != null) {
             if (mCursor.getCount() > 0) {

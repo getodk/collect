@@ -123,22 +123,24 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     		mInstanceName = updatedSaveName;
     	}
 
-        // PMA-Linking BEGIN
-        /*  Must try to link before exporting. Exporting encrypts.
-         * TODO determine the best place/logic for when to output / update child forms.
-         *
-         *  First, check if need to output a new form. Only if form is completed.
-         *
-         *  Second, check if need to update linked fields. Do this always when saving.
-         */
-        Long parentId = Long.valueOf(mUri.getLastPathSegment());
-        TreeElement instanceRoot = formController.getFormDef().getInstance().getRoot();
-        FormRelationsManager.manageChildForms(parentId, instanceRoot);
-        // PMA-Linking END
-
-
         try {
     	    exportData(mMarkCompleted);
+
+            // PMA-Linking BEGIN
+        /*  Must try to link before exporting. Exporting encrypts.
+         *  Encrypting information must be given in the form.
+         *  see https://opendatakit.org/help/encrypted-forms/
+         *  TODO determine the best place/logic for when to output / update child forms.
+         *
+         *  Must update parent first (transfer correct values) because manageChildForms
+         *  deletes if deleteForm is relevant.
+         */
+            Long instanceId = Long.valueOf(mUri.getLastPathSegment());
+            TreeElement instanceRoot = formController.getFormDef().getInstance().getRoot();
+            FormRelationsManager.manageParentForm(instanceId);
+            FormRelationsManager.manageChildForms(instanceId, instanceRoot);
+            // PMA-Linking END
+
 
             // attempt to remove any scratch file
             File shadowInstance = savepointFile(formController.getInstancePath());

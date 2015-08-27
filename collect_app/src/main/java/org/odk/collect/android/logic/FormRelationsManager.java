@@ -39,6 +39,7 @@ import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormRelationsDb;
+import org.odk.collect.android.database.FormRelationsDb.MappingData;
 import org.odk.collect.android.exception.FormRelationsException;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -50,6 +51,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,9 +70,11 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -85,7 +89,7 @@ import javax.xml.xpath.XPathFactory;
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 26 August 2015
+ *  Last modified: 27 August 2015
  */
 public class FormRelationsManager {
 
@@ -101,10 +105,17 @@ public class FormRelationsManager {
     private static final int NO_INSTANCE_NO_FORM = 2;
     private static final int NO_REPEAT_NUMBER = 3;
     private static final int PROVIDER_NO_INSTANCE = 4;
+    private static final int BAD_XPATH_INSTANCE = 5;
 
     private long parentId;
     private ArrayList<TraverseData> allTraverseData;
     private int maxRepeatIndex;
+
+    public FormRelationsManager () {
+        parentId = -1;
+        allTraverseData = new ArrayList<TraverseData>();
+        maxRepeatIndex = 0;
+    }
 
     public FormRelationsManager(long parentId) {
         this.parentId = parentId;
@@ -112,12 +123,87 @@ public class FormRelationsManager {
         maxRepeatIndex = 0;
     }
 
+    // Entry point.
+    public static boolean manageParentForm(long childId) {
+        Long parentId = FormRelationsDb.getParent(childId);
+        if (parentId < 0) { // No parent form to manage
+            return false;
+        }
+
+        try {
+            String parentInstancePath = getInstancePath(getInstanceUriFromId(parentId));
+            String childInstancePath = getInstancePath(getInstanceUriFromId(childId));
+
+            Document parentDocument = getDocument(parentInstancePath);
+            Document childDocument = getDocument(childInstancePath);
+
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            ArrayList<MappingData> mappings = FormRelationsDb.getMappingsToParent(childId);
+            boolean editedParentForm = false;
+            for (MappingData mapping : mappings) {
+                XPathExpression parentExpression = xpath.compile(mapping.parentNode);
+                XPathExpression childExpression = xpath.compile(mapping.childNode);
+
+                Node parentNode = (Node) parentExpression.evaluate(parentDocument,
+                        XPathConstants.NODE);
+                Node childNode = (Node) childExpression.evaluate(childDocument,
+                        XPathConstants.NODE);
+
+                if (null == parentNode || null == childNode) {
+                    throw new FormRelationsException(BAD_XPATH_INSTANCE, "Child: " +
+                            mapping.childNode + ", Parent: " + mapping.parentNode);
+                }
+
+                if ( !childNode.getTextContent().equals(parentNode.getTextContent()) ) {
+                    Log.i(TAG, "Found difference updating parent form @ parent node \'" +
+                            parentNode.getNodeName() + "\'. Child: \'" +
+                            childNode.getTextContent() + "\' <> Parent: \'" +
+                            parentNode.getTextContent() + "\'");
+                    parentNode.setTextContent(childNode.getTextContent());
+                    editedParentForm = true;
+                }
+            }
+
+            if (editedParentForm) {
+                writeDocumentToFile(parentInstancePath, parentDocument);
+                ContentValues cv = new ContentValues();
+                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+                Collect.getInstance().getContentResolver().update(getInstanceUriFromId(parentId),
+                        cv, null, null);
+            }
+        } catch (FormRelationsException e) {
+            if (e.getErrorCode() == PROVIDER_NO_INSTANCE) {
+                Log.w(TAG, "Unable to find the instance path for either this form (id=" +
+                        childId + ") or its parent (id=" + parentId + ")");
+            } else if (e.getErrorCode() == BAD_XPATH_INSTANCE) {
+                Log.w(TAG, "Bad XPath from one of child or parent. " + e.getInfo());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
     // Entry point. Called while saving.
-    public static void manageChildForms(long parentId, TreeElement instanceRoot) {
+    public static boolean manageChildForms(long parentId, TreeElement instanceRoot) {
+        boolean hasChild = false;
         try {
             FormRelationsManager frm = new FormRelationsManager(parentId);
             traverseInstance(instanceRoot, frm);
-            frm.outputOrUpdateChildForms();
+            hasChild = frm.outputOrUpdateChildForms();
         } catch (FormRelationsException e) {
             if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
@@ -126,9 +212,12 @@ public class FormRelationsManager {
                 deleteInstance(parentId);
             }
         }
+        return hasChild;
     }
 
-    private void outputOrUpdateChildForms() {
+    private boolean outputOrUpdateChildForms() {
+        boolean hasChild = false;
+
         for (int i = 1; i <= maxRepeatIndex; i++ ) {
             ArrayList<TraverseData> saveFormMapping = new ArrayList<TraverseData>();
             ArrayList<TraverseData> saveInstanceMapping = new ArrayList<TraverseData>();
@@ -155,11 +244,14 @@ public class FormRelationsManager {
             }
 
             try {
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Calling `getOrCreateChildForm` for index (" + i + ")");
+                }
                 Uri childInstance = getOrCreateChildForm(saveFormMapping, saveInstanceMapping);
 
                 // Now that we have the URI, the child instance definitely exists. Need to
                 // transfer over values that are different.
-                insertAllIntoChild(saveFormMapping, saveInstanceMapping, childInstance);
+                hasChild = insertAllIntoChild(saveFormMapping, saveInstanceMapping, childInstance);
             } catch (IOException e) {
                 Log.w(TAG, e.getMessage());
                 // Log.w(TAG, "Error creating serialized payload");
@@ -194,6 +286,8 @@ public class FormRelationsManager {
                 continue;
             }
         }
+
+        return hasChild;
     }
 
     private Uri getOrCreateChildForm(ArrayList<TraverseData> saveFormMapping,
@@ -202,8 +296,10 @@ public class FormRelationsManager {
         Uri childInstance;
 
         int repeatIndex = getRepeatIndex(saveFormMapping, saveInstanceMapping);
-
         long childId = FormRelationsDb.getChild(parentId, repeatIndex);
+        if (LOCAL_LOG) {
+            Log.d(TAG, "From relations database, child id is: " + childId);
+        }
         if (childId < 0) {
             // There was no child for the given parent form and associated index, so create one.
             String childFormId = getChildFormId(saveFormMapping);
@@ -233,12 +329,11 @@ public class FormRelationsManager {
                 throw new FormRelationsException(PROVIDER_NO_FORM, childFormId);
             }
 
-            Uri formUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, String.valueOf(formId));
+            Uri formUri = getFormUriFromId(formId);
             childInstance = createInstance(formUri);
         } else {
             // Get old instance
-            childInstance = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                    String.valueOf(childId));
+            childInstance = getInstanceUriFromId(childId);
         }
 
         return childInstance;
@@ -431,24 +526,15 @@ public class FormRelationsManager {
         return true;
     }
 
-    private void insertAllIntoChild(ArrayList<TraverseData> saveFormMapping,
+    private boolean insertAllIntoChild(ArrayList<TraverseData> saveFormMapping,
                                     ArrayList<TraverseData> saveInstanceMapping,
                                     Uri childInstance) throws FormRelationsException {
+        boolean hasChild = false;
+
         String childInstancePath = getInstancePath(childInstance);
 
         try {
-            File outputFile = new File(childInstancePath);
-            Document document = null;
-            if (outputFile.exists()) {
-                InputStream inputStream = new FileInputStream(outputFile);
-                Reader reader = new InputStreamReader(inputStream, "UTF-8");
-                InputSource inputSource = new InputSource(reader);
-                document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                        .parse(inputSource);
-            } else {
-                // should never get here since we've always just created the new instance
-                Log.w(TAG, "Error: instance somehow did not exist!");
-            }
+            Document document = getDocument(childInstancePath);
 
             // here we should have a good xml document in DOM
             if (saveFormMapping.size() > 0) {
@@ -457,32 +543,40 @@ public class FormRelationsManager {
                 values.put(InstanceColumns.DISPLAY_NAME, td.instanceValue);
                 Collect.getInstance().getContentResolver()
                         .update(childInstance, values, null, null);
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Updated InstanceProvider to show correct instanceName: " + td.instanceValue);
+                }
             }
 
             int repeatIndex = getRepeatIndex(saveFormMapping, saveInstanceMapping);
             long childId = getIdFromSingleUri(childInstance);
             boolean isInstanceModified = false;
             for (TraverseData td : saveInstanceMapping) {
-                boolean isThisModified = insertIntoChild(td, document);
-                if (isThisModified) {
-                    checkCopyBinaryFile(td, childInstancePath);
+                try {
+                    boolean isThisModified = insertIntoChild(td, document);
+                    if (isThisModified) {
+                        checkCopyBinaryFile(td, childInstancePath);
+                    }
+                    isInstanceModified = isInstanceModified || isThisModified;
+                    hasChild = true;
+                } catch (FormRelationsException e) {
+                    if (e.getErrorCode() == BAD_XPATH_INSTANCE) {
+                        Log.w(TAG, "Unable to insert value \'" + td.instanceValue +
+                                "\' into child at " + e.getInfo());
+                    }
                 }
-                isInstanceModified = isInstanceModified || isThisModified;
+
                 updateRelationsDatabase(parentId, td.instanceXpath, repeatIndex, childId,
                         td.attrValue);
             }
 
             if (isInstanceModified) {
+                writeDocumentToFile(childInstancePath, document);
                 // only need to update xml if something changed
-                // there's a bug in streamresult that replaces spaces in the
-                // filename with %20
-                // so we use a fileoutput stream
-                // http://stackoverflow.com/questions/10301674/save-file-in-android-with-spaces-in-file-name
-                FileOutputStream fos = new FileOutputStream(outputFile);
-                Result output = new StreamResult(fos);
-                Source input = new DOMSource(document);
-                Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                transformer.transform(input, output);
+
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Rewrote child instance because of changes at " + childInstancePath);
+                }
             }
         } catch (FormRelationsException e) {
             throw e;
@@ -492,14 +586,36 @@ public class FormRelationsManager {
             e.printStackTrace();
         } catch (XPathExpressionException e) {
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return hasChild;
+    }
+
+    private static void writeDocumentToFile(String path, Document document) throws
+            FileNotFoundException, TransformerException {
+        // there's a bug in streamresult that replaces spaces in the
+        // filename with %20
+        // so we use a fileoutput stream
+        // http://stackoverflow.com/questions/10301674/save-file-in-android-with-spaces-in-file-name
+        File outputFile = new File(path);
+        FileOutputStream fos = new FileOutputStream(outputFile);
+        Result output = new StreamResult(fos);
+        Source input = new DOMSource(document);
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(input, output);
     }
 
     // return true iff updated
     private boolean insertIntoChild(TraverseData td, Document document) throws
-            XPathExpressionException {
+            XPathExpressionException, FormRelationsException {
         boolean isModified = false;
         String childInstanceValue = td.instanceValue;
         if (null != childInstanceValue) {
@@ -507,14 +623,17 @@ public class FormRelationsManager {
             XPath xpath = XPathFactory.newInstance().newXPath();
             XPathExpression expression;
 
-            String childInstanceXpath = td.instanceXpath;
+            String childInstanceXpath = td.attrValue;
 
             expression = xpath.compile(childInstanceXpath);
             Node node = (Node) expression.evaluate(document, XPathConstants.NODE);
+            if ( null == node ) {
+                throw new FormRelationsException(BAD_XPATH_INSTANCE, childInstanceXpath);
+            }
             if ( !node.getTextContent().equals(childInstanceValue) ) {
-                Log.i(TAG, "Found a difference while saving child form: " +
-                        node.getTextContent() + " :: " + childInstanceValue +
-                        " for node " + node.getNodeName());
+                Log.i(TAG, "Found difference saving child form @ child node \'" + node.getNodeName() +
+                        "\'. Child: \'" + node.getTextContent() +
+                        "\' <> Parent: \'" + childInstanceValue + "\'");
                 node.setTextContent(childInstanceValue);
                 isModified = true;
             }
@@ -525,10 +644,16 @@ public class FormRelationsManager {
     private static boolean updateRelationsDatabase(long parentId, String parentXpath,
                                                    int repeatIndex, long childId,
                                                    String childXpath) {
-        // First check if row exists.
+            // First check if row exists.
         boolean rowExists = FormRelationsDb.isRowExists(String.valueOf(parentId), parentXpath,
                 String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
         if ( !rowExists ) {
+            if (LOCAL_LOG) {
+                Log.d(TAG, "Inserting (parentId=" + parentId + ", parentNode=" + parentXpath +
+                        ", index=" + repeatIndex + ", childId=" + childId + ", childNode=" +
+                        childXpath + ") into relations database");
+            }
+
             FormRelationsDb.insert(String.valueOf(parentId), parentXpath,
                     String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
             rowExists = true;
@@ -546,8 +671,7 @@ public class FormRelationsManager {
                 childInstanceValue.endsWith(".mp4") || childInstanceValue.endsWith(".png")) {
             // more?
 
-            Uri parentInstance = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                    String.valueOf(parentId));
+            Uri parentInstance = getInstanceUriFromId(parentId);
             String parentInstancePath = getInstancePath(parentInstance);
             toReturn = copyBinaryFile(parentInstancePath, childInstancePath, childInstanceValue);
         }
@@ -556,6 +680,11 @@ public class FormRelationsManager {
 
     private static boolean copyBinaryFile(String parentInstancePath, String childInstancePath,
                                           String filename) {
+        if (LOCAL_LOG) {
+            Log.d(TAG, "copyBinaryFile \'" + filename + "\' from " + parentInstancePath + " to " +
+                    childInstancePath);
+        }
+
         File parentFile = new File(parentInstancePath);
         File childFile = new File(childInstancePath);
 
@@ -567,8 +696,17 @@ public class FormRelationsManager {
     }
 
     private static long getIdFromSingleUri(Uri instance) {
-        long id = Long.valueOf(instance.getPath());
+        String idStr = instance.getLastPathSegment();
+        long id = Long.parseLong(idStr);
         return id;
+    }
+
+    private static Uri getInstanceUriFromId(long id) {
+        return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, String.valueOf(id));
+    }
+
+    private static Uri getFormUriFromId(long id) {
+        return Uri.withAppendedPath(FormsColumns.CONTENT_URI, String.valueOf(id));
     }
 
     private int getRepeatIndex(ArrayList<TraverseData> saveFormMapping, ArrayList<TraverseData>
@@ -659,10 +797,6 @@ public class FormRelationsManager {
             }
             try {
                 String repeat = instanceXpath.substring(leftBracket+1, rightBracket);
-                if (LOCAL_LOG) {
-                    Log.d(TAG, "Trying to parse \'" + repeat + "\'. Left bracket @" +
-                            leftBracket + " and right bracket @" + rightBracket);
-                }
                 int potentialRepeat = Integer.parseInt(repeat);
                 if (potentialRepeat > 1) {
                     repeatIndex = potentialRepeat;
@@ -719,13 +853,20 @@ public class FormRelationsManager {
                     if (te.getValue() != null) {
                         instanceValue = te.getValue().getDisplayText();
                     }
-                    if (LOCAL_LOG) {
-                        Log.d(TAG, "@" + instanceXpath + " found " + thisAttr + "=\'" + attrValue +
-                                "\' with instance value \'" + instanceValue + "\'");
-                    }
                     frm.addTraverseData(thisAttr, attrValue, instanceXpath, instanceValue);
                 }
             }
         }
+    }
+
+    private static Document getDocument(String path) throws ParserConfigurationException,
+            SAXException, IOException {
+        File outputFile = new File(path);
+        InputStream inputStream = new FileInputStream(outputFile);
+        Reader reader = new InputStreamReader(inputStream, "UTF-8");
+        InputSource inputSource = new InputSource(reader);
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(inputSource);
+        return document;
     }
 }

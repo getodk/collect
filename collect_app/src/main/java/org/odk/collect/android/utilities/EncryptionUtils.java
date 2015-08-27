@@ -287,6 +287,10 @@ public class EncryptionUtils {
 	 * @return
 	 */
 	public static EncryptedFormInformation getEncryptedFormInformation(Uri mUri, InstanceMetadata instanceMetadata) {
+		// PMA-Linking BEGIN
+		Log.d(t, "Inside EncryptedFormInformation()");
+		// PMA-Linking END
+
 
 		ContentResolver cr = Collect.getInstance().getContentResolver();
 
@@ -423,6 +427,9 @@ public class EncryptionUtils {
 			return null;
 		}
 
+		//PMA-Linking BEGIN
+		Log.d(t, "Returning with new EncryptedFormInformation");
+		//PMA-Linking END
 		return new EncryptedFormInformation(formId, formVersion, instanceMetadata,
 				pk, wrapper);
 	}
