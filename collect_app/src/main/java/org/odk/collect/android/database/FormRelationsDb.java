@@ -161,6 +161,36 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         return found;
     }
 
+    public static int deleteChild(long instanceId) {
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getWritableDatabase();
+
+        String where = FormRelations.COLUMN_CHILD_INSTANCE_ID + "=?";
+        String[] whereArgs = {
+                String.valueOf(instanceId)
+        };
+
+        int recordsDeleted = db.delete(FormRelations.TABLE_NAME, where, whereArgs);
+        db.close();
+        return recordsDeleted;
+    }
+
+    public static int deleteChild(long parentId, int repeatIndex) {
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getWritableDatabase();
+
+        String where = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? and " +
+                FormRelations.COLUMN_PARENT_INDEX + "=?";
+        String[] whereArgs = {
+                String.valueOf(parentId),
+                String.valueOf(repeatIndex)
+        };
+
+        int recordsDeleted = db.delete(FormRelations.TABLE_NAME, where, whereArgs);
+        db.close();
+        return recordsDeleted;
+    }
+
     public static long insert(String parentId, String parentNode, String repeatIndex,
                                  String childId, String childNode) {
         FormRelationsDb frdb = new FormRelationsDb();

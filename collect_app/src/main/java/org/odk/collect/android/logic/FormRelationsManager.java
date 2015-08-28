@@ -110,17 +110,20 @@ public class FormRelationsManager {
     private long parentId;
     private ArrayList<TraverseData> allTraverseData;
     private int maxRepeatIndex;
+    private ArrayList<TraverseData> nonRelevantSaveForm;
 
     public FormRelationsManager () {
         parentId = -1;
         allTraverseData = new ArrayList<TraverseData>();
         maxRepeatIndex = 0;
+        nonRelevantSaveForm = new ArrayList<TraverseData>();
     }
 
     public FormRelationsManager(long parentId) {
         this.parentId = parentId;
         allTraverseData = new ArrayList<TraverseData>();
         maxRepeatIndex = 0;
+        nonRelevantSaveForm = new ArrayList<TraverseData>();
     }
 
     // Entry point.
@@ -522,7 +525,9 @@ public class FormRelationsManager {
     }
 
     public static boolean deleteInstance(long instanceId) {
-        // STUB
+        // Delete from relations.db
+        FormRelationsDb.deleteChild(instanceId);
+        // Delete from instance provider
         return true;
     }
 
@@ -761,9 +766,10 @@ public class FormRelationsManager {
 
     // Cleans the input somewhat
     private void addTraverseData(String attr, String attrValue, String instanceXpath,
-                                 String instanceValue) throws FormRelationsException {
+                                 String instanceValue, boolean isRelevant) throws
+            FormRelationsException {
         TraverseData td = new TraverseData();
-        if (DELETE_FORM.equals(attr)) {
+        if ( DELETE_FORM.equals(attr) ) {
             throw new FormRelationsException(DELETE_FORM);
         }
         td.attr = attr;
@@ -771,7 +777,12 @@ public class FormRelationsManager {
         td.instanceXpath = cleanInstanceXpath(instanceXpath);
         td.instanceValue = instanceValue;
         td.repeatIndex = parseInstanceXpath(td.instanceXpath);
-        allTraverseData.add(td);
+        if (isRelevant) {
+            allTraverseData.add(td);
+        } else if ( SAVE_FORM.equals(td.attr) ) {
+            nonRelevantSaveForm.add(td);
+        }
+
     }
 
     private String cleanInstanceXpath(String instanceXpath) {
@@ -840,21 +851,20 @@ public class FormRelationsManager {
 
     private static void checkAttrs(TreeElement te, FormRelationsManager frm) throws
             FormRelationsException {
-        if (te.isRelevant()) {
-            List<TreeElement> attrs = te.getBindAttributes();
-            for (TreeElement attr : attrs) {
-                boolean isFormRelationMaterial = SAVE_INSTANCE.equals(attr.getName()) ||
-                        SAVE_FORM.equals(attr.getName()) || DELETE_FORM.equals(attr.getName());
-                if (isFormRelationMaterial) {
-                    String thisAttr = attr.getName();
-                    String attrValue = attr.getAttributeValue();
-                    String instanceXpath = te.getRef().toString(true);
-                    String instanceValue = null;
-                    if (te.getValue() != null) {
-                        instanceValue = te.getValue().getDisplayText();
-                    }
-                    frm.addTraverseData(thisAttr, attrValue, instanceXpath, instanceValue);
+        List<TreeElement> attrs = te.getBindAttributes();
+        for (TreeElement attr : attrs) {
+            boolean isFormRelationMaterial = SAVE_INSTANCE.equals(attr.getName()) ||
+                    SAVE_FORM.equals(attr.getName()) || DELETE_FORM.equals(attr.getName());
+            if (isFormRelationMaterial) {
+                String thisAttr = attr.getName();
+                String attrValue = attr.getAttributeValue();
+                String instanceXpath = te.getRef().toString(true);
+                String instanceValue = null;
+                if (te.getValue() != null) {
+                    instanceValue = te.getValue().getDisplayText();
                 }
+                frm.addTraverseData(thisAttr, attrValue, instanceXpath, instanceValue,
+                        te.isRelevant());
             }
         }
     }
