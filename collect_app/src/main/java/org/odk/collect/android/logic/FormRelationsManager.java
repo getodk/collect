@@ -68,6 +68,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -89,12 +90,16 @@ import javax.xml.xpath.XPathFactory;
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 27 August 2015
+ *  Last modified: 31 August 2015
  */
 public class FormRelationsManager {
 
     private static final String TAG = "FormRelationManager";
     private static final boolean LOCAL_LOG = true;
+
+    public static final int NO_DELETE = -1;
+    public static final int DELETE_THIS = 0;
+    public static final int DELETE_CHILD = 1;
 
     private static final String SAVE_INSTANCE = "saveInstance";
     private static final String SAVE_FORM = "saveForm";
@@ -111,12 +116,14 @@ public class FormRelationsManager {
     private ArrayList<TraverseData> allTraverseData;
     private int maxRepeatIndex;
     private ArrayList<TraverseData> nonRelevantSaveForm;
+    private boolean hasDeleteForm;
 
     public FormRelationsManager () {
         parentId = -1;
         allTraverseData = new ArrayList<TraverseData>();
         maxRepeatIndex = 0;
         nonRelevantSaveForm = new ArrayList<TraverseData>();
+        hasDeleteForm = false;
     }
 
     public FormRelationsManager(long parentId) {
@@ -124,6 +131,7 @@ public class FormRelationsManager {
         allTraverseData = new ArrayList<TraverseData>();
         maxRepeatIndex = 0;
         nonRelevantSaveForm = new ArrayList<TraverseData>();
+        hasDeleteForm = false;
     }
 
     // Entry point.
@@ -201,6 +209,7 @@ public class FormRelationsManager {
     }
 
     // Entry point. Called while saving.
+    // TODO perhaps change to non-static
     public static boolean manageChildForms(long parentId, TreeElement instanceRoot) {
         boolean hasChild = false;
         try {
@@ -216,6 +225,44 @@ public class FormRelationsManager {
             }
         }
         return hasChild;
+    }
+
+    // call this to test if something should be deleted
+    public static FormRelationsManager getFormRelationsManager(long parentId,
+                                                               TreeElement instanceRoot) {
+        FormRelationsManager frm = new FormRelationsManager(parentId);
+        try {
+            traverseInstance(instanceRoot, frm);
+        } catch (FormRelationsException e) {
+            if (DELETE_FORM.equals(e.getMessage())) {
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Interrupted to delete instance with id (" + parentId + ")");
+                }
+                frm.setDeleteForm(true);
+            }
+        }
+        return frm;
+    }
+
+    // called when deleting a repeat group
+    public static void manageRepeatDelete(long parentId, int repeatIndex) {
+        Long childInstanceId = FormRelationsDb.getChild(parentId, repeatIndex);
+        Uri childInstance = getInstanceUriFromId(childInstanceId);
+        Collect.getInstance().getContentResolver().delete(childInstance, null, null);
+        FormRelationsDb.deleteChild(parentId, repeatIndex);
+    }
+
+    // called when deleting because saving and saveInstance not relevant
+    // TODO make sure not to double delete with updateoroutputchild
+    public void manageDeletions() {
+        int deleteWhat = getWhatToDelete();
+        if ( deleteWhat == DELETE_THIS ) {
+            deleteInstance(parentId);
+        } else if ( deleteWhat == DELETE_CHILD ) {
+            // Get all repeat indices from nonRelevant that do have children
+            // Sort so that highest number is first
+            // In order, (a) delete child, (b) fix indices,
+        }
     }
 
     private boolean outputOrUpdateChildForms() {
@@ -524,11 +571,23 @@ public class FormRelationsManager {
 
     }
 
-    public static boolean deleteInstance(long instanceId) {
+    // assumes no more than two generations (no grandparents/grandchildren or beyond).
+    public static void deleteInstance(long instanceId) {
+        long[] childrenIds = FormRelationsDb.getChildren(instanceId);
         // Delete from relations.db
-        FormRelationsDb.deleteChild(instanceId);
+        FormRelationsDb.deleteAsParent(instanceId);
+        FormRelationsDb.deleteAsChild(instanceId);
         // Delete from instance provider
-        return true;
+        Uri thisInstance = getInstanceUriFromId(instanceId);
+        Collect.getInstance().getContentResolver().delete(thisInstance, null, null);
+        for (int i = 0; i < childrenIds.length; i++) {
+            Uri childInstance = getInstanceUriFromId(instanceId);
+            Collect.getInstance().getContentResolver().delete(childInstance, null, null);
+        }
+
+        for (int i = childrenIds.length - 1; i >= 0; i--) {
+            // TODO add to remove parentId + repeat index
+        }
     }
 
     private boolean insertAllIntoChild(ArrayList<TraverseData> saveFormMapping,
@@ -878,5 +937,44 @@ public class FormRelationsManager {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(inputSource);
         return document;
+    }
+
+    public int getHowManyToDelete() {
+        int howMany = 0;
+        if ( hasDeleteForm ) {
+            howMany++;
+            howMany += FormRelationsDb.getChildren(parentId).length;
+        } else {
+            TreeSet<Integer> repeatIndexSet = new TreeSet<Integer>();
+            for (TraverseData td : nonRelevantSaveForm ) {
+                if ( FormRelationsDb.getChild(parentId, td.repeatIndex) != -1 ) {
+                    repeatIndexSet.add(td.repeatIndex);
+                }
+            }
+            howMany += repeatIndexSet.size();
+        }
+        return howMany;
+    }
+
+    public int getWhatToDelete() {
+        int returnCode = NO_DELETE;
+        if ( hasDeleteForm ) {
+            returnCode = DELETE_THIS;
+        } else {
+            for (TraverseData td : nonRelevantSaveForm ) {
+                if ( FormRelationsDb.getChild(parentId, td.repeatIndex) != -1 ) {
+                    returnCode = DELETE_CHILD;
+                }
+            }
+        }
+        return returnCode;
+    }
+
+    public void setDeleteForm(boolean val) {
+        hasDeleteForm = val;
+    }
+
+    public boolean getDeleteForm() {
+        return hasDeleteForm;
     }
 }
