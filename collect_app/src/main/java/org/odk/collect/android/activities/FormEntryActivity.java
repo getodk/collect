@@ -37,6 +37,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.logic.FormRelationsManager;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -831,8 +832,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.getActivityLogger()
 					.logInstanceAction(this, "onOptionsItemSelected",
 							"MENU_SAVE");
-			// don't exit
-			saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
+			// PMA-Linking BEGIN
+			FormRelationsManager frm = FormRelationsManager.getFormRelationsManager(getIntent().getData(), Collect.getInstance().getFormController().getFormDef().getInstance().getRoot());
+			int whatToDelete = frm.getWhatToDelete();
+			if (whatToDelete == FormRelationsManager.NO_DELETE) {
+				saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
+			} else {
+				createDeleteFormDialog(frm, false, DO_NOT_EXIT, isInstanceComplete(false), null);
+			}
+			// PMA-Linking END
+
+			// Uncomment for old way
+			// // don't exit
+			// saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
 			return true;
 		case MENU_HIERARCHY_VIEW:
 			Collect.getInstance()
@@ -934,7 +946,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.getActivityLogger()
 					.logInstanceAction(this, "onContextItemSelected",
 							"createDeleteRepeatConfirmDialog");
-			createDeleteRepeatConfirmDialog();
+			// PMA-Linking BEGIN
+			FormRelationsManager frm = FormRelationsManager.getFormRelationsManager(getIntent().getData(), Collect.getInstance().getFormController().getFormDef().getInstance().getRoot());
+			int whatToDelete = frm.getWhatToDelete();
+			if (whatToDelete == FormRelationsManager.NO_DELETE) {
+				createDeleteRepeatConfirmDialog();
+			} else {
+				createDeleteFormDialog(frm, true, DO_NOT_EXIT, isInstanceComplete(false), null);
+			}
+			// PMA-Linking END
+
+			// PMA-Linking: Uncomment for old way
+			// createDeleteRepeatConfirmDialog();
 		}
 
 		return super.onContextItemSelected(item);
@@ -1168,9 +1191,20 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 										R.string.save_as_error,
 										Toast.LENGTH_SHORT).show();
 							} else {
-								saveDataToDisk(EXIT, instanceComplete
-										.isChecked(), saveAs.getText()
-										.toString());
+								// PMA-Linking BEGIN
+								FormRelationsManager frm = FormRelationsManager.getFormRelationsManager(getIntent().getData(), Collect.getInstance().getFormController().getFormDef().getInstance().getRoot());
+								int whatToDelete = frm.getWhatToDelete();
+								if (whatToDelete == FormRelationsManager.NO_DELETE) {
+									saveDataToDisk(EXIT, instanceComplete.isChecked(), saveAs.getText().toString());
+								} else {
+									createDeleteFormDialog(frm, false, EXIT, instanceComplete.isChecked(), saveAs.getText().toString());
+								}
+								// PMA-Linking END
+
+								// PMA-Linking: Uncomment for the old way
+								// saveDataToDisk(EXIT, instanceComplete
+								// 		.isChecked(), saveAs.getText()
+								// 		.toString());
 							}
 						}
 					});
@@ -1730,6 +1764,65 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	}
 
 	/**
+	 * PMA-Linking
+	 * Creates a confirm/cancel dialog for deleting repeats with associated sub-form...
+	 */
+	private void createDeleteFormDialog(FormRelationsManager frm, final boolean isDeleteRepeat, final boolean exit, final boolean complete, final String name) {
+		FormController formController = Collect.getInstance().getFormController();
+		final int repeatCount = formController.getLastRepeatedGroupRepeatCount() + 1;
+
+		final long instanceId = frm.getParentId();
+		final int whatToDelete = frm.getWhatToDelete();
+		final int howManyToDelete;
+		if (isDeleteRepeat) {
+			howManyToDelete = frm.getHowManyToDelete(repeatCount);
+		} else {
+			howManyToDelete = frm.getHowManyToDelete();
+		}
+
+		mAlertDialog = new AlertDialog.Builder(this).create();
+		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+
+		mAlertDialog.setTitle(getString(R.string.delete_form));
+		if (whatToDelete == FormRelationsManager.DELETE_THIS) {
+			String text = String.format(getString(R.string.warn_delete_parent_form),
+					getString(R.string.save_delete));
+			mAlertDialog.setMessage(text);
+		} else { // if ( whatToDelete == FormRelationsManager.DELETE_CHILD ) {
+			String text = String.format(getString(R.string.warn_delete_child_form),
+					getString(R.string.save_delete), howManyToDelete);
+			mAlertDialog.setMessage(text);
+		}
+
+		DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int i) {
+					FormController formController = Collect.getInstance().getFormController();
+					switch (i) {
+						case DialogInterface.BUTTON_POSITIVE: // yes
+							if ( isDeleteRepeat ) {
+								FormRelationsManager.manageRepeatDelete(instanceId, repeatCount);
+								formController.deleteRepeat();
+								saveDataToDisk(false, false, name);
+								showPreviousView();
+							} else if ( whatToDelete == FormRelationsManager.DELETE_THIS ) {
+								saveDataToDisk(true, false, name);
+							} else {
+								saveDataToDisk(complete, false, name);
+							}
+							break;
+						case DialogInterface.BUTTON_NEGATIVE: // no
+							break;
+					}
+				}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.save_delete), quitListener);
+		mAlertDialog.setButton2(getString(R.string.cancel), quitListener);
+		mAlertDialog.show();
+	}
+
+	/**
 	 * Saves data and writes it to disk. If exit is set, program will exit after
 	 * save completes. Complete indicates whether the user has marked the
 	 * isntancs as complete. If updatedSaveName is non-null, the instances
@@ -1814,54 +1907,64 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
 
-						case 0: // save and exit
-							// this is slightly complicated because if the
-							// option is disabled in
-							// the admin menu, then case 0 actually becomes
-							// 'discard and exit'
-							// whereas if it's enabled it's 'save and exit'
-							if (mAdminPreferences
-									.getBoolean(
-											AdminPreferencesActivity.KEY_SAVE_MID,
-											true)) {
-								Collect.getInstance()
-										.getActivityLogger()
-										.logInstanceAction(this,
-												"createQuitDialog",
-												"saveAndExit");
-								saveDataToDisk(EXIT, isInstanceComplete(false),
-										null);
-							} else {
+							case 0: // save and exit
+								// this is slightly complicated because if the
+								// option is disabled in
+								// the admin menu, then case 0 actually becomes
+								// 'discard and exit'
+								// whereas if it's enabled it's 'save and exit'
+								if (mAdminPreferences
+										.getBoolean(
+												AdminPreferencesActivity.KEY_SAVE_MID,
+												true)) {
+									Collect.getInstance()
+											.getActivityLogger()
+											.logInstanceAction(this,
+													"createQuitDialog",
+													"saveAndExit");
+									// PMA-Linking BEGIN
+									FormRelationsManager frm = FormRelationsManager.getFormRelationsManager(getIntent().getData(), Collect.getInstance().getFormController().getFormDef().getInstance().getRoot());
+									int whatToDelete = frm.getWhatToDelete();
+									if (whatToDelete == FormRelationsManager.NO_DELETE) {
+										saveDataToDisk(EXIT, isInstanceComplete(false), null);
+									} else {
+										createDeleteFormDialog(frm, false, EXIT, isInstanceComplete(false), null);
+									}
+									// PMA-Linking END
+
+									// PMA-Linking: Uncomment this for old way
+									// saveDataToDisk(EXIT, isInstanceComplete(false), null);
+								} else {
+									Collect.getInstance()
+											.getActivityLogger()
+											.logInstanceAction(this,
+													"createQuitDialog",
+													"discardAndExit");
+									removeTempInstance();
+									finishReturnInstance();
+								}
+								break;
+
+							case 1: // discard changes and exit
 								Collect.getInstance()
 										.getActivityLogger()
 										.logInstanceAction(this,
 												"createQuitDialog",
 												"discardAndExit");
+
+								// close all open databases of external data.
+								Collect.getInstance().getExternalDataManager().close();
+
 								removeTempInstance();
 								finishReturnInstance();
-							}
-							break;
+								break;
 
-						case 1: // discard changes and exit
-							Collect.getInstance()
-									.getActivityLogger()
-									.logInstanceAction(this,
-											"createQuitDialog",
-											"discardAndExit");
-
-                            // close all open databases of external data.
-                            Collect.getInstance().getExternalDataManager().close();
-
-							removeTempInstance();
-							finishReturnInstance();
-							break;
-
-						case 2:// do nothing
-							Collect.getInstance()
-									.getActivityLogger()
-									.logInstanceAction(this,
-											"createQuitDialog", "cancel");
-							break;
+							case 2:// do nothing
+								Collect.getInstance()
+										.getActivityLogger()
+										.logInstanceAction(this,
+												"createQuitDialog", "cancel");
+								break;
 						}
 					}
 				}).create();

@@ -95,7 +95,7 @@ import javax.xml.xpath.XPathFactory;
  */
 public class FormRelationsManager {
 
-    private static final String TAG = "FormRelationManager";
+    private static final String TAG = "FormRelationsManager";
     private static final boolean LOCAL_LOG = true;
 
     // Return codes for what to delete
@@ -120,6 +120,14 @@ public class FormRelationsManager {
     private int maxRepeatIndex;
     private ArrayList<TraverseData> nonRelevantSaveForm;
     private boolean hasDeleteForm;
+
+    public FormRelationsManager() {
+        parentId = -1;
+        allTraverseData = new ArrayList<TraverseData>();
+        maxRepeatIndex = 0;
+        nonRelevantSaveForm = new ArrayList<TraverseData>();
+        hasDeleteForm = false;
+    }
 
     public FormRelationsManager(long parentId) {
         this.parentId = parentId;
@@ -214,15 +222,52 @@ public class FormRelationsManager {
     }
 
     // call this to test if something should be deleted
-    public static FormRelationsManager getFormRelationsManager(long parentId,
-                                                               TreeElement instanceRoot) {
+    public static FormRelationsManager getFormRelationsManager(TreeElement instanceRoot) {
+        FormRelationsManager frm = new FormRelationsManager();
+        try {
+            traverseInstance(instanceRoot, frm);
+        } catch (FormRelationsException e) {
+            if (DELETE_FORM.equals(e.getMessage())) {
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Interrupt traverse to delete instance");
+                }
+                frm.setDeleteForm(true);
+            }
+        }
+        return frm;
+    }
+
+    public static FormRelationsManager getFormRelationsManager(long parentId, TreeElement instanceRoot) {
         FormRelationsManager frm = new FormRelationsManager(parentId);
         try {
             traverseInstance(instanceRoot, frm);
         } catch (FormRelationsException e) {
             if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
-                    Log.d(TAG, "Interrupt traverse to delete instance with id (" + parentId + ")");
+                    Log.d(TAG, "Interrupt traverse to delete instance");
+                }
+                frm.setDeleteForm(true);
+            }
+        }
+        return frm;
+    }
+
+    // meant to be called using the intent data that starts FormEntryActivity
+    public static FormRelationsManager getFormRelationsManager(Uri formUri, TreeElement instanceRoot) {
+        if (LOCAL_LOG) {
+            Log.d(TAG, "Inside getFormRelationsManager with uri \'" + formUri.toString() + "\'");
+        }
+        long instanceId = getIdFromSingleUri(formUri);
+        if (LOCAL_LOG) {
+            Log.d(TAG, "Determined id to be \'" + instanceId + "\'");
+        }
+        FormRelationsManager frm = new FormRelationsManager(instanceId);
+        try {
+            traverseInstance(instanceRoot, frm);
+        } catch (FormRelationsException e) {
+            if (DELETE_FORM.equals(e.getMessage())) {
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Interrupt traverse to delete instance");
                 }
                 frm.setDeleteForm(true);
             }
@@ -243,6 +288,9 @@ public class FormRelationsManager {
             TreeSet<Long> allWaywardChildren = new TreeSet<Long>();
             for (Integer i : allRepeatIndices) {
                 Long childInstanceId = FormRelationsDb.getChild(parentId, i);
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "ParentId(" + parentId + ") + RepeatIndex(" + i + ") + ChildIdFound(" + i +")");
+                }
                 if (childInstanceId != -1) {
                     allWaywardChildren.add(childInstanceId);
                 }
@@ -255,10 +303,12 @@ public class FormRelationsManager {
 
     // called when deleting a repeat group
     public static void manageRepeatDelete(long parentId, int repeatIndex) {
-        Long childInstanceId = FormRelationsDb.getChild(parentId, repeatIndex);
-        Uri childInstance = getInstanceUriFromId(childInstanceId);
-        Collect.getInstance().getContentResolver().delete(childInstance, null, null);
-        FormRelationsDb.deleteChild(parentId, repeatIndex);
+        if (parentId >= 0 && repeatIndex >= 0) {
+            Long childInstanceId = FormRelationsDb.getChild(parentId, repeatIndex);
+            Uri childInstance = getInstanceUriFromId(childInstanceId);
+            Collect.getInstance().getContentResolver().delete(childInstance, null, null);
+            FormRelationsDb.deleteChild(parentId, repeatIndex);
+        }
     }
 
     private boolean outputOrUpdateChildForms() {
@@ -569,6 +619,9 @@ public class FormRelationsManager {
 
     // assumes no more than two generations (no grandparents/grandchildren or beyond).
     public static void deleteInstance(long instanceId) {
+        if (LOCAL_LOG) {
+            Log.d(TAG, "### deleteInstance(" + instanceId + ")");
+        }
         long[] childrenIds = FormRelationsDb.getChildren(instanceId);
         // Delete from relations.db
         FormRelationsDb.deleteAsParent(instanceId);
@@ -752,8 +805,32 @@ public class FormRelationsManager {
     }
 
     private static long getIdFromSingleUri(Uri instance) {
-        String idStr = instance.getLastPathSegment();
-        long id = Long.parseLong(idStr);
+        long id = -1;
+        if (Collect.getInstance().getContentResolver().getType(instance)
+                .equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+            String idStr = instance.getLastPathSegment();
+            id = Long.parseLong(idStr);
+        } else { // if uri is for a form
+            // first try to find by looking up absolute path
+            FormController formController = Collect.getInstance().getFormController();
+            String[] projection = {
+                    InstanceColumns._ID
+            };
+            String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+            String instancePath = formController.getInstancePath().getAbsolutePath();
+            String[] selectionArgs = {
+                    instancePath
+            };
+            Cursor c = Collect.getInstance().getContentResolver()
+                    .query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+            if ( c != null ) {
+                if ( c.getCount() > 0 ) {
+                    c.moveToFirst();
+                    id = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                }
+                c.close();
+            }
+        }
         return id;
     }
 
@@ -863,8 +940,8 @@ public class FormRelationsManager {
                 if (potentialRepeat > 1) {
                     repeatIndex = potentialRepeat;
                     numNonOne += 1;
-                    maxRepeatIndex = Math.max(maxRepeatIndex, repeatIndex);
                 }
+                maxRepeatIndex = Math.max(maxRepeatIndex, repeatIndex);
             } catch (NumberFormatException e) {
                 Log.w(TAG, "Error parsing repeat index to int: \'" + instanceXpath + "\'");
             }
@@ -975,7 +1052,7 @@ public class FormRelationsManager {
         int returnCode = NO_DELETE;
         if ( hasDeleteForm ) {
             returnCode = DELETE_THIS;
-        } else {
+        } else if ( parentId != -1 ) {
             TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
             for (TraverseData td : nonRelevantSaveForm ) {
                 allRepeatIndices.add(td.repeatIndex);
@@ -992,6 +1069,14 @@ public class FormRelationsManager {
 
     public void setDeleteForm(boolean val) {
         hasDeleteForm = val;
+    }
+
+    public void setParentId(long id) {
+        parentId = id;
+    }
+
+    public long getParentId() {
+        return parentId;
     }
 
     public boolean getDeleteForm() {
