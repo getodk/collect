@@ -39,7 +39,8 @@ import java.util.TreeSet;
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 31 August 2015
+ *  Created: 20 August 2015
+ *  Last modified: 1 September 2015
  */
 public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
@@ -101,6 +102,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
             cursor.close();
         }
 
+        db.close();
         return mappings;
     }
 
@@ -129,6 +131,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
             cursor.close();
         }
 
+        db.close();
         return found;
     }
 
@@ -212,10 +215,8 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         return recordsDeleted;
     }
 
+    // Does not remove repeat, so no need to shift higher repeat indices
     public static int deleteAsChild(long instanceId) {
-        // TODO
-        // Repurpose to call deleteChild
-        // i.e. get parentId and repeatIndex
         FormRelationsDb frdb = new FormRelationsDb();
         SQLiteDatabase db = frdb.getWritableDatabase();
 
@@ -229,6 +230,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         return recordsDeleted;
     }
 
+    // Called when repeat is removed
     public static int deleteChild(long parentId, int repeatIndex) {
         FormRelationsDb frdb = new FormRelationsDb();
         SQLiteDatabase db = frdb.getWritableDatabase();

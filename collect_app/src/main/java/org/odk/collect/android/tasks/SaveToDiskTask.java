@@ -137,8 +137,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
          */
             Long instanceId = Long.valueOf(mUri.getLastPathSegment());
             TreeElement instanceRoot = formController.getFormDef().getInstance().getRoot();
-            FormRelationsManager.manageParentForm(instanceId);
-            FormRelationsManager.manageChildForms(instanceId, instanceRoot);
+            FormRelationsManager.manageFormRelations(instanceId, instanceRoot);
             // PMA-Linking END
 
 

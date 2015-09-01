@@ -90,13 +90,15 @@ import javax.xml.xpath.XPathFactory;
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 31 August 2015
+ *  Created: 20 August 2015
+ *  Last modified: 1 September 2015
  */
 public class FormRelationsManager {
 
     private static final String TAG = "FormRelationManager";
     private static final boolean LOCAL_LOG = true;
 
+    // Return codes for what to delete
     public static final int NO_DELETE = -1;
     public static final int DELETE_THIS = 0;
     public static final int DELETE_CHILD = 1;
@@ -105,6 +107,7 @@ public class FormRelationsManager {
     private static final String SAVE_FORM = "saveForm";
     private static final String DELETE_FORM = "deleteForm";
 
+    // Error codes for FormRelationsException
     private static final int NO_ERROR_CODE = 0;
     private static final int PROVIDER_NO_FORM = 1;
     private static final int NO_INSTANCE_NO_FORM = 2;
@@ -118,14 +121,6 @@ public class FormRelationsManager {
     private ArrayList<TraverseData> nonRelevantSaveForm;
     private boolean hasDeleteForm;
 
-    public FormRelationsManager () {
-        parentId = -1;
-        allTraverseData = new ArrayList<TraverseData>();
-        maxRepeatIndex = 0;
-        nonRelevantSaveForm = new ArrayList<TraverseData>();
-        hasDeleteForm = false;
-    }
-
     public FormRelationsManager(long parentId) {
         this.parentId = parentId;
         allTraverseData = new ArrayList<TraverseData>();
@@ -134,9 +129,19 @@ public class FormRelationsManager {
         hasDeleteForm = false;
     }
 
-    // Entry point.
-    public static boolean manageParentForm(long childId) {
+    // Called within SaveToDiskTask
+    public static void manageFormRelations(long instanceId, TreeElement instanceRoot) {
+        manageParentForm(instanceId);
+        FormRelationsManager frm = getFormRelationsManager(instanceId, instanceRoot);
+        frm.outputOrUpdateChildForms();
+        frm.manageDeletions();
+    }
+
+    private static boolean manageParentForm(long childId) {
         Long parentId = FormRelationsDb.getParent(childId);
+        if (LOCAL_LOG) {
+            Log.d(TAG, "Inside manageParentForm. Parent instance id is \'" + parentId + "\'");
+        }
         if (parentId < 0) { // No parent form to manage
             return false;
         }
@@ -208,25 +213,6 @@ public class FormRelationsManager {
         return true;
     }
 
-    // Entry point. Called while saving.
-    // TODO perhaps change to non-static
-    public static boolean manageChildForms(long parentId, TreeElement instanceRoot) {
-        boolean hasChild = false;
-        try {
-            FormRelationsManager frm = new FormRelationsManager(parentId);
-            traverseInstance(instanceRoot, frm);
-            hasChild = frm.outputOrUpdateChildForms();
-        } catch (FormRelationsException e) {
-            if (DELETE_FORM.equals(e.getMessage())) {
-                if (LOCAL_LOG) {
-                    Log.d(TAG, "Interrupted to delete instance with id (" + parentId + ")");
-                }
-                deleteInstance(parentId);
-            }
-        }
-        return hasChild;
-    }
-
     // call this to test if something should be deleted
     public static FormRelationsManager getFormRelationsManager(long parentId,
                                                                TreeElement instanceRoot) {
@@ -236,12 +222,35 @@ public class FormRelationsManager {
         } catch (FormRelationsException e) {
             if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
-                    Log.d(TAG, "Interrupted to delete instance with id (" + parentId + ")");
+                    Log.d(TAG, "Interrupt traverse to delete instance with id (" + parentId + ")");
                 }
                 frm.setDeleteForm(true);
             }
         }
         return frm;
+    }
+
+    // called when deleting because saving and saveInstance not relevant
+    private void manageDeletions() {
+        int deleteWhat = getWhatToDelete();
+        if ( deleteWhat == DELETE_THIS ) {
+            deleteInstance(parentId);
+        } else if ( deleteWhat == DELETE_CHILD ) {
+            TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
+            for (TraverseData td : nonRelevantSaveForm ) {
+                allRepeatIndices.add(td.repeatIndex);
+            }
+            TreeSet<Long> allWaywardChildren = new TreeSet<Long>();
+            for (Integer i : allRepeatIndices) {
+                Long childInstanceId = FormRelationsDb.getChild(parentId, i);
+                if (childInstanceId != -1) {
+                    allWaywardChildren.add(childInstanceId);
+                }
+            }
+            for (Long childInstanceId : allWaywardChildren) {
+                deleteInstance(childInstanceId);
+            }
+        }
     }
 
     // called when deleting a repeat group
@@ -252,21 +261,11 @@ public class FormRelationsManager {
         FormRelationsDb.deleteChild(parentId, repeatIndex);
     }
 
-    // called when deleting because saving and saveInstance not relevant
-    // TODO make sure not to double delete with updateoroutputchild
-    public void manageDeletions() {
-        int deleteWhat = getWhatToDelete();
-        if ( deleteWhat == DELETE_THIS ) {
-            deleteInstance(parentId);
-        } else if ( deleteWhat == DELETE_CHILD ) {
-            // Get all repeat indices from nonRelevant that do have children
-            // Sort so that highest number is first
-            // In order, (a) delete child, (b) fix indices,
-        }
-    }
-
     private boolean outputOrUpdateChildForms() {
         boolean hasChild = false;
+        if ( hasDeleteForm ) { // Children to be deleted. Just return.
+            return hasChild;
+        }
 
         for (int i = 1; i <= maxRepeatIndex; i++ ) {
             ArrayList<TraverseData> saveFormMapping = new ArrayList<TraverseData>();
@@ -516,7 +515,7 @@ public class FormRelationsManager {
     /**
      * Writes the data to the sdcard.
      */
-    public static boolean exportData(FormController formController) throws IOException {
+    private static boolean exportData(FormController formController) throws IOException {
         ByteArrayPayload payload;
         payload = formController.getFilledInFormXml();
         // write out xml
@@ -527,9 +526,6 @@ public class FormRelationsManager {
 
     // Just like the private method inside SaveToDiskTask
     private static Uri updateInstanceDatabase(Uri formUri, String instancePath) {
-        if (LOCAL_LOG)  {
-            Log.d(TAG, "Inside updateInstanceDatabase");
-        }
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
@@ -583,10 +579,6 @@ public class FormRelationsManager {
         for (int i = 0; i < childrenIds.length; i++) {
             Uri childInstance = getInstanceUriFromId(instanceId);
             Collect.getInstance().getContentResolver().delete(childInstance, null, null);
-        }
-
-        for (int i = childrenIds.length - 1; i >= 0; i--) {
-            // TODO add to remove parentId + repeat index
         }
     }
 
@@ -663,20 +655,6 @@ public class FormRelationsManager {
         return hasChild;
     }
 
-    private static void writeDocumentToFile(String path, Document document) throws
-            FileNotFoundException, TransformerException {
-        // there's a bug in streamresult that replaces spaces in the
-        // filename with %20
-        // so we use a fileoutput stream
-        // http://stackoverflow.com/questions/10301674/save-file-in-android-with-spaces-in-file-name
-        File outputFile = new File(path);
-        FileOutputStream fos = new FileOutputStream(outputFile);
-        Result output = new StreamResult(fos);
-        Source input = new DOMSource(document);
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.transform(input, output);
-    }
-
     // return true iff updated
     private boolean insertIntoChild(TraverseData td, Document document) throws
             XPathExpressionException, FormRelationsException {
@@ -705,10 +683,24 @@ public class FormRelationsManager {
         return isModified;
     }
 
+    private static void writeDocumentToFile(String path, Document document) throws
+            FileNotFoundException, TransformerException {
+        // there's a bug in streamresult that replaces spaces in the
+        // filename with %20
+        // so we use a fileoutput stream
+        // http://stackoverflow.com/questions/10301674/save-file-in-android-with-spaces-in-file-name
+        File outputFile = new File(path);
+        FileOutputStream fos = new FileOutputStream(outputFile);
+        Result output = new StreamResult(fos);
+        Source input = new DOMSource(document);
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(input, output);
+    }
+
     private static boolean updateRelationsDatabase(long parentId, String parentXpath,
                                                    int repeatIndex, long childId,
                                                    String childXpath) {
-            // First check if row exists.
+        // First check if row exists.
         boolean rowExists = FormRelationsDb.isRowExists(String.valueOf(parentId), parentXpath,
                 String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
         if ( !rowExists ) {
@@ -744,16 +736,16 @@ public class FormRelationsManager {
 
     private static boolean copyBinaryFile(String parentInstancePath, String childInstancePath,
                                           String filename) {
-        if (LOCAL_LOG) {
-            Log.d(TAG, "copyBinaryFile \'" + filename + "\' from " + parentInstancePath + " to " +
-                    childInstancePath);
-        }
-
         File parentFile = new File(parentInstancePath);
         File childFile = new File(childInstancePath);
 
         File parentImage = new File(parentFile.getParent() + "/" + filename);
         File childImage = new File(childFile.getParent() + "/" + filename);
+
+        if (LOCAL_LOG) {
+            Log.d(TAG, "copyBinaryFile \'" + filename + "\' from " +
+                    parentFile.getParent() + " to " + childFile.getParent());
+        }
 
         FileUtils.copyFile(parentImage, childImage);
         return true;
@@ -828,15 +820,15 @@ public class FormRelationsManager {
                                  String instanceValue, boolean isRelevant) throws
             FormRelationsException {
         TraverseData td = new TraverseData();
-        if ( DELETE_FORM.equals(attr) ) {
-            throw new FormRelationsException(DELETE_FORM);
-        }
         td.attr = attr;
         td.attrValue = attrValue;
         td.instanceXpath = cleanInstanceXpath(instanceXpath);
         td.instanceValue = instanceValue;
         td.repeatIndex = parseInstanceXpath(td.instanceXpath);
         if (isRelevant) {
+            if ( DELETE_FORM.equals(attr) ) {
+                throw new FormRelationsException(DELETE_FORM);
+            }
             allTraverseData.add(td);
         } else if ( SAVE_FORM.equals(td.attr) ) {
             nonRelevantSaveForm.add(td);
@@ -945,13 +937,36 @@ public class FormRelationsManager {
             howMany++;
             howMany += FormRelationsDb.getChildren(parentId).length;
         } else {
-            TreeSet<Integer> repeatIndexSet = new TreeSet<Integer>();
+            TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
             for (TraverseData td : nonRelevantSaveForm ) {
-                if ( FormRelationsDb.getChild(parentId, td.repeatIndex) != -1 ) {
-                    repeatIndexSet.add(td.repeatIndex);
+                allRepeatIndices.add(td.repeatIndex);
+            }
+            for (Integer i : allRepeatIndices) {
+                if (FormRelationsDb.getChild(parentId, i) != -1) {
+                    howMany++;
                 }
             }
-            howMany += repeatIndexSet.size();
+        }
+        return howMany;
+    }
+
+    // called when removing a repeat.
+    public int getHowManyToDelete(int repeatIndex) {
+        int howMany = 0;
+        if ( hasDeleteForm ) {
+            howMany++;
+            howMany += FormRelationsDb.getChildren(parentId).length;
+        } else {
+            TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
+            allRepeatIndices.add(repeatIndex);
+            for (TraverseData td : nonRelevantSaveForm ) {
+                allRepeatIndices.add(td.repeatIndex);
+            }
+            for (Integer i : allRepeatIndices) {
+                if (FormRelationsDb.getChild(parentId, i) != -1) {
+                    howMany++;
+                }
+            }
         }
         return howMany;
     }
@@ -961,9 +976,14 @@ public class FormRelationsManager {
         if ( hasDeleteForm ) {
             returnCode = DELETE_THIS;
         } else {
+            TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
             for (TraverseData td : nonRelevantSaveForm ) {
-                if ( FormRelationsDb.getChild(parentId, td.repeatIndex) != -1 ) {
+                allRepeatIndices.add(td.repeatIndex);
+            }
+            for (Integer i : allRepeatIndices) {
+                if (FormRelationsDb.getChild(parentId, i) != -1) {
                     returnCode = DELETE_CHILD;
+                    break;
                 }
             }
         }
