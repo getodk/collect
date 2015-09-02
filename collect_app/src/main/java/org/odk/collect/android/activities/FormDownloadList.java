@@ -593,6 +593,16 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 return (latestVersion != null);
             }
             String jr_version = formCursor.getString(idxJrVersion);
+            // apparently, the isNull() predicate above is not respected on all Android OSes???
+            if ( jr_version == null && latestVersion == null ) {
+                return false;
+            }
+            if ( jr_version == null ) {
+                return true;
+            }
+            if ( latestVersion == null ) {
+                return false;
+            }
             // if what we have is less, then the server is newer
             return ( jr_version.compareTo(latestVersion) < 0 );
         } finally {
