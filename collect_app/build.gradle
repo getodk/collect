@@ -25,7 +25,7 @@ android {
         minSdkVersion(8)
         targetSdkVersion(8)
         versionCode(1053)
-        versionName("1.4.6")
+        versionName("1.4.7")
     }
 
     buildTypes {
