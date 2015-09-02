@@ -72,9 +72,9 @@ public class FormRelationsContract {
         public static final String CREATE_TABLE = "CREATE TABLE " +
                 TABLE_NAME + "(" + _ID + INT_TYPE + " PRIMARY KEY" + COMMA_SEP +
                 COLUMN_PARENT_INSTANCE_ID + INT_TYPE + COMMA_SEP +
-                COLUMN_PARENT_NODE + TEXT_TYPE + COMMA_SEP +
                 COLUMN_PARENT_INDEX + INT_TYPE + COMMA_SEP +
                 COLUMN_CHILD_INSTANCE_ID + INT_TYPE + COMMA_SEP +
+                COLUMN_PARENT_NODE + TEXT_TYPE + COMMA_SEP +
                 COLUMN_CHILD_NODE + TEXT_TYPE + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

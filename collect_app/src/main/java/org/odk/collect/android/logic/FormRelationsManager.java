@@ -289,7 +289,7 @@ public class FormRelationsManager {
             for (Integer i : allRepeatIndices) {
                 Long childInstanceId = FormRelationsDb.getChild(parentId, i);
                 if (LOCAL_LOG) {
-                    Log.d(TAG, "ParentId(" + parentId + ") + RepeatIndex(" + i + ") + ChildIdFound(" + i +")");
+                    Log.d(TAG, "ParentId(" + parentId + ") + RepeatIndex(" + i + ") + ChildIdFound(" + childInstanceId +")");
                 }
                 if (childInstanceId != -1) {
                     allWaywardChildren.add(childInstanceId);
@@ -680,8 +680,14 @@ public class FormRelationsManager {
             }
 
             if (isInstanceModified) {
-                writeDocumentToFile(childInstancePath, document);
                 // only need to update xml if something changed
+                writeDocumentToFile(childInstancePath, document);
+
+                // Set status to incomplete
+                ContentValues values = new ContentValues();
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+                Collect.getInstance().getContentResolver()
+                        .update(childInstance, values, null, null);
 
                 if (LOCAL_LOG) {
                     Log.d(TAG, "Rewrote child instance because of changes at " + childInstancePath);
@@ -726,7 +732,7 @@ public class FormRelationsManager {
                 throw new FormRelationsException(BAD_XPATH_INSTANCE, childInstanceXpath);
             }
             if ( !node.getTextContent().equals(childInstanceValue) ) {
-                Log.i(TAG, "Found difference saving child form @ child node \'" + node.getNodeName() +
+                Log.v(TAG, "Found difference saving child form @ child node \'" + node.getNodeName() +
                         "\'. Child: \'" + node.getTextContent() +
                         "\' <> Parent: \'" + childInstanceValue + "\'");
                 node.setTextContent(childInstanceValue);
@@ -758,7 +764,7 @@ public class FormRelationsManager {
                 String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
         if ( !rowExists ) {
             if (LOCAL_LOG) {
-                Log.d(TAG, "Inserting (parentId=" + parentId + ", parentNode=" + parentXpath +
+                Log.v(TAG, "Inserting (parentId=" + parentId + ", parentNode=" + parentXpath +
                         ", index=" + repeatIndex + ", childId=" + childId + ", childNode=" +
                         childXpath + ") into relations database");
             }
