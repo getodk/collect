@@ -8,7 +8,7 @@
 	the specific language governing permissions and limitations under the License. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- strings that should not be translated -->
-	<string translatable="false" name="app_name">ODK Collect</string>
+	<string translatable="false" name="app_name">JHU Collect</string>
 	<string translatable="false" name="protocol_odk_default">odk_default</string>
 	<string translatable="false" name="protocol_google_maps_engine">google_maps_engine</string>
     <string translatable="false" name="default_form_processing_logic">-1</string>

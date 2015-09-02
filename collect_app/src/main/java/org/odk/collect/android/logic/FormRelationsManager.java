@@ -91,7 +91,7 @@ import javax.xml.xpath.XPathFactory;
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
  *  Created: 20 August 2015
- *  Last modified: 1 September 2015
+ *  Last modified: 2 September 2015
  */
 public class FormRelationsManager {
 
@@ -225,7 +225,7 @@ public class FormRelationsManager {
     public static FormRelationsManager getFormRelationsManager(TreeElement instanceRoot) {
         FormRelationsManager frm = new FormRelationsManager();
         try {
-            traverseInstance(instanceRoot, frm);
+            traverseInstance(instanceRoot, frm, null);
         } catch (FormRelationsException e) {
             if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
@@ -240,7 +240,7 @@ public class FormRelationsManager {
     public static FormRelationsManager getFormRelationsManager(long parentId, TreeElement instanceRoot) {
         FormRelationsManager frm = new FormRelationsManager(parentId);
         try {
-            traverseInstance(instanceRoot, frm);
+            traverseInstance(instanceRoot, frm, null);
         } catch (FormRelationsException e) {
             if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
@@ -263,7 +263,7 @@ public class FormRelationsManager {
         }
         FormRelationsManager frm = new FormRelationsManager(instanceId);
         try {
-            traverseInstance(instanceRoot, frm);
+            traverseInstance(instanceRoot, frm, null);
         } catch (FormRelationsException e) {
             if (DELETE_FORM.equals(e.getMessage())) {
                 if (LOCAL_LOG) {
@@ -676,7 +676,7 @@ public class FormRelationsManager {
                 }
 
                 updateRelationsDatabase(parentId, td.instanceXpath, repeatIndex, childId,
-                        td.attrValue);
+                        td.attrValue, td.repeatableNode);
             }
 
             if (isInstanceModified) {
@@ -758,22 +758,24 @@ public class FormRelationsManager {
 
     private static boolean updateRelationsDatabase(long parentId, String parentXpath,
                                                    int repeatIndex, long childId,
-                                                   String childXpath) {
+                                                   String childXpath, String repeatableNode) {
         // First check if row exists.
         boolean rowExists = FormRelationsDb.isRowExists(String.valueOf(parentId), parentXpath,
-                String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
+                String.valueOf(repeatIndex), String.valueOf(childId), childXpath, repeatableNode);
         if ( !rowExists ) {
             if (LOCAL_LOG) {
                 Log.v(TAG, "Inserting (parentId=" + parentId + ", parentNode=" + parentXpath +
                         ", index=" + repeatIndex + ", childId=" + childId + ", childNode=" +
-                        childXpath + ") into relations database");
+                        childXpath + ", repeatableNode=" + repeatableNode +
+                        ") into relations database");
             }
 
+            // Otherwise add
             FormRelationsDb.insert(String.valueOf(parentId), parentXpath,
-                    String.valueOf(repeatIndex), String.valueOf(childId), childXpath);
+                    String.valueOf(repeatIndex), String.valueOf(childId), childXpath,
+                    repeatableNode);
             rowExists = true;
         }
-        // Otherwise add
         return rowExists;
     }
 
@@ -896,18 +898,20 @@ public class FormRelationsManager {
         String instanceXpath;
         String instanceValue;
         int repeatIndex;
+        String repeatableNode;
     }
 
     // Cleans the input somewhat
     private void addTraverseData(String attr, String attrValue, String instanceXpath,
-                                 String instanceValue, boolean isRelevant) throws
-            FormRelationsException {
+                                 String instanceValue, String repeatableNode,
+                                 boolean isRelevant) throws FormRelationsException {
         TraverseData td = new TraverseData();
         td.attr = attr;
         td.attrValue = attrValue;
         td.instanceXpath = cleanInstanceXpath(instanceXpath);
         td.instanceValue = instanceValue;
         td.repeatIndex = parseInstanceXpath(td.instanceXpath);
+        td.repeatableNode = cleanInstanceXpath(repeatableNode);
         if (isRelevant) {
             if ( DELETE_FORM.equals(attr) ) {
                 throw new FormRelationsException(DELETE_FORM);
@@ -963,8 +967,8 @@ public class FormRelationsManager {
     }
 
     // Update mutable object: FormRelationsManager
-    private static void traverseInstance(TreeElement te, FormRelationsManager frm) throws
-            FormRelationsException {
+    private static void traverseInstance(TreeElement te, FormRelationsManager frm,
+                                         String repeatableNode) throws FormRelationsException {
         for (int i = 0; i < te.getNumChildren(); i++) {
             TreeElement teChild = te.getChildAt(i);
 
@@ -974,17 +978,26 @@ public class FormRelationsManager {
                 continue;
             }
 
-            checkAttrs(teChild, frm);
+
+            if (teChild.isRepeatable()) {
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "In repeatable node @" + ref + " with index [" +
+                            teChild.getMult() + "]");
+                }
+                repeatableNode = ref;
+            }
+
+            checkAttrs(teChild, frm, repeatableNode);
 
             // recurse
             if (teChild.getNumChildren() > 0) {
-                traverseInstance(teChild, frm);
+                traverseInstance(teChild, frm, repeatableNode);
             }
         }
     }
 
-    private static void checkAttrs(TreeElement te, FormRelationsManager frm) throws
-            FormRelationsException {
+    private static void checkAttrs(TreeElement te, FormRelationsManager frm,
+                                   String repeatableNode) throws FormRelationsException {
         List<TreeElement> attrs = te.getBindAttributes();
         for (TreeElement attr : attrs) {
             boolean isFormRelationMaterial = SAVE_INSTANCE.equals(attr.getName()) ||
@@ -998,7 +1011,7 @@ public class FormRelationsManager {
                     instanceValue = te.getValue().getDisplayText();
                 }
                 frm.addTraverseData(thisAttr, attrValue, instanceXpath, instanceValue,
-                        te.isRelevant());
+                        repeatableNode, te.isRelevant());
             }
         }
     }
@@ -1060,6 +1073,26 @@ public class FormRelationsManager {
             returnCode = DELETE_THIS;
         } else if ( parentId != -1 ) {
             TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
+            for (TraverseData td : nonRelevantSaveForm ) {
+                allRepeatIndices.add(td.repeatIndex);
+            }
+            for (Integer i : allRepeatIndices) {
+                if (FormRelationsDb.getChild(parentId, i) != -1) {
+                    returnCode = DELETE_CHILD;
+                    break;
+                }
+            }
+        }
+        return returnCode;
+    }
+
+    public int getWhatToDelete(int repeatIndex) {
+        int returnCode = NO_DELETE;
+        if ( hasDeleteForm ) {
+            returnCode = DELETE_THIS;
+        } else if ( parentId != -1 ) {
+            TreeSet<Integer> allRepeatIndices = new TreeSet<Integer>();
+            allRepeatIndices.add(repeatIndex);
             for (TraverseData td : nonRelevantSaveForm ) {
                 allRepeatIndices.add(td.repeatIndex);
             }

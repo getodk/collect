@@ -947,8 +947,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.logInstanceAction(this, "onContextItemSelected",
 							"createDeleteRepeatConfirmDialog");
 			// PMA-Linking BEGIN
-			FormRelationsManager frm = FormRelationsManager.getFormRelationsManager(getIntent().getData(), Collect.getInstance().getFormController().getFormDef().getInstance().getRoot());
-			int whatToDelete = frm.getWhatToDelete();
+			FormController formController = Collect.getInstance().getFormController();
+			int repeatIndex = formController.getLastRepeatedGroupRepeatCount() + 1;
+			Log.d(t, "Repeat delete context menu found repeatIndex (" + repeatIndex + ")");
+			FormRelationsManager frm = FormRelationsManager.getFormRelationsManager(getIntent().getData(), formController.getFormDef().getInstance().getRoot());
+			int whatToDelete = frm.getWhatToDelete(repeatIndex);
 			if (whatToDelete == FormRelationsManager.NO_DELETE) {
 				createDeleteRepeatConfirmDialog();
 			} else {
@@ -1769,13 +1772,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 */
 	private void createDeleteFormDialog(FormRelationsManager frm, final boolean isDeleteRepeat, final boolean exit, final boolean complete, final String name) {
 		FormController formController = Collect.getInstance().getFormController();
-		final int repeatCount = formController.getLastRepeatedGroupRepeatCount() + 1;
+		final int repeatIndex = formController.getLastRepeatedGroupRepeatCount() + 1;
+
+		Log.d(t, "createDeleteFormDialog found repeatIndex (" + repeatIndex + ")");
 
 		final long instanceId = frm.getParentId();
 		final int whatToDelete = frm.getWhatToDelete();
 		final int howManyToDelete;
 		if (isDeleteRepeat) {
-			howManyToDelete = frm.getHowManyToDelete(repeatCount);
+			howManyToDelete = frm.getHowManyToDelete(repeatIndex);
 		} else {
 			howManyToDelete = frm.getHowManyToDelete();
 		}
@@ -1801,14 +1806,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					switch (i) {
 						case DialogInterface.BUTTON_POSITIVE: // yes
 							if ( isDeleteRepeat ) {
-								FormRelationsManager.manageRepeatDelete(instanceId, repeatCount);
+								FormRelationsManager.manageRepeatDelete(instanceId, repeatIndex);
 								formController.deleteRepeat();
 								saveDataToDisk(false, false, name);
 								showPreviousView();
 							} else if ( whatToDelete == FormRelationsManager.DELETE_THIS ) {
 								saveDataToDisk(true, false, name);
 							} else {
-								saveDataToDisk(complete, false, name);
+								saveDataToDisk(exit, complete, name);
 							}
 							break;
 						case DialogInterface.BUTTON_NEGATIVE: // no

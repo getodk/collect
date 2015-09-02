@@ -30,7 +30,8 @@ import android.provider.BaseColumns;
  *
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
- *  Last modified: 20 August 2015
+ *  Created: 20 August 2015
+ *  Last modified: 2 September 2015
  */
 public class FormRelationsContract {
 
@@ -64,10 +65,11 @@ public class FormRelationsContract {
     public static abstract class FormRelations implements BaseColumns {
         public static final String TABLE_NAME = "relations";
         public static final String COLUMN_PARENT_INSTANCE_ID = "parent_id";
-        public static final String COLUMN_PARENT_NODE = "parent_node";
         public static final String COLUMN_PARENT_INDEX = "parent_index";
         public static final String COLUMN_CHILD_INSTANCE_ID = "child_id";
+        public static final String COLUMN_PARENT_NODE = "parent_node";
         public static final String COLUMN_CHILD_NODE = "child_node";
+        public static final String COLUMN_REPEATABLE = "repeatable";
 
         public static final String CREATE_TABLE = "CREATE TABLE " +
                 TABLE_NAME + "(" + _ID + INT_TYPE + " PRIMARY KEY" + COMMA_SEP +
@@ -75,7 +77,8 @@ public class FormRelationsContract {
                 COLUMN_PARENT_INDEX + INT_TYPE + COMMA_SEP +
                 COLUMN_CHILD_INSTANCE_ID + INT_TYPE + COMMA_SEP +
                 COLUMN_PARENT_NODE + TEXT_TYPE + COMMA_SEP +
-                COLUMN_CHILD_NODE + TEXT_TYPE + ");";
+                COLUMN_CHILD_NODE + TEXT_TYPE + COMMA_SEP +
+                COLUMN_REPEATABLE + TEXT_TYPE + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
