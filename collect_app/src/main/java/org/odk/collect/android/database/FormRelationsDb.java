@@ -40,7 +40,7 @@ import java.util.TreeSet;
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
  *  Created: 20 August 2015
- *  Last modified: 2 September 2015
+ *  Last modified: 3 September 2015
  */
 public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
@@ -147,7 +147,8 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? AND " +
                 FormRelations.COLUMN_PARENT_INDEX + "=?";
         String[] selectionArgs = {
-                String.valueOf(parentId), String.valueOf(repeatIndex)
+                String.valueOf(parentId),
+                String.valueOf(repeatIndex)
         };
 
         Cursor cursor = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
@@ -163,6 +164,73 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
         db.close();
         return found;
+    }
+
+    public static int getRepeatIndex(long parentId, long childId) {
+        int repeatIndex = -1;
+
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
+
+        String[] projection = {
+                FormRelations.COLUMN_PARENT_INDEX
+        };
+        String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? AND " +
+                FormRelations.COLUMN_CHILD_INSTANCE_ID + "=?";
+        String[] selectionArgs = {
+                String.valueOf(parentId),
+                String.valueOf(childId)
+        };
+
+        Cursor c = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
+                null, null, null);
+
+        if (c != null) {
+            c.moveToFirst();
+            repeatIndex = c.getInt(c.getColumnIndex(FormRelations.COLUMN_PARENT_INDEX));
+            c.close();
+        }
+
+        db.close();
+        return repeatIndex;
+    }
+
+    public static String getRepeatable(long parentId, long childId) {
+        String repeatable = null;
+
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
+
+        String[] projection = {
+                FormRelations.COLUMN_REPEATABLE
+        };
+        String selection = FormRelations.COLUMN_PARENT_INSTANCE_ID + "=? AND " +
+                FormRelations.COLUMN_CHILD_INSTANCE_ID + "=?";
+        String[] selectionArgs = {
+                String.valueOf(parentId),
+                String.valueOf(childId)
+        };
+
+        Cursor c = db.query(FormRelations.TABLE_NAME, projection, selection, selectionArgs,
+                null, null, null);
+
+        if (c != null) {
+            while (c.moveToNext()) {
+                repeatable = c.getString(c.getColumnIndex(FormRelations.COLUMN_REPEATABLE));
+                if ( repeatable != null ) {
+                    break;
+                }
+            }
+            c.close();
+        }
+
+        if (LOCAL_LOG) {
+            Log.d(TAG, "Found repeatable @" + repeatable + " for parentId (" + parentId +
+                    ") and childId (" + childId + ")");
+        }
+
+        db.close();
+        return repeatable;
     }
 
     public static long[] getChildren(long parentId) {
@@ -230,7 +298,7 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         return recordsDeleted;
     }
 
-    // Called when repeat is removed
+    // Called when repeat is removed by user
     public static int deleteChild(long parentId, int repeatIndex) {
         if (LOCAL_LOG) {
             Log.v(TAG, "Calling deleteChild(" + parentId + ", " + repeatIndex + ")");

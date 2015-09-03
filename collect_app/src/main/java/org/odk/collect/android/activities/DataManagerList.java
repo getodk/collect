@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.FormRelationsDb;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
@@ -69,7 +70,33 @@ public class DataManagerList extends ListActivity implements
 			public void onClick(View v) {
 		    	Collect.getInstance().getActivityLogger().logAction(this, "deleteButton", Integer.toString(mSelected.size()));
 				if (mSelected.size() > 0) {
-					createDeleteInstancesDialog();
+
+					// PMA-Linking BEGIN
+					boolean related = false;
+					for (Long selectedId : mSelected) {
+						// Test if it has parent
+						long parent = FormRelationsDb.getParent(selectedId);
+						if (parent != -1) {
+							related = true;
+							break;
+						}
+						// Test if it has child(ren)
+						long[] children = FormRelationsDb.getChildren(selectedId);
+						if (children.length > 0) {
+							related = true;
+							break;
+						}
+					}
+
+					if ( related ) {
+						createDeleteRelationsWarningDialog();
+					} else {
+						createDeleteInstancesDialog();
+					}
+					// PMA-Linking END
+
+					// PMA-Linking: Uncomment to return to original
+					// createDeleteInstancesDialog();
 				} else {
 					Toast.makeText(getApplicationContext(),
 							R.string.noselect_error, Toast.LENGTH_SHORT).show();
@@ -205,6 +232,44 @@ public class DataManagerList extends ListActivity implements
 				case DialogInterface. BUTTON_NEGATIVE: // do nothing
 			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "cancel");
 					break;
+				}
+			}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.delete_yes),
+				dialogYesNoListener);
+		mAlertDialog.setButton2(getString(R.string.delete_no),
+				dialogYesNoListener);
+		mAlertDialog.show();
+	}
+
+	/**
+	 * PMA-Linking
+	 */
+	private void createDeleteRelationsWarningDialog() {
+		mAlertDialog = new AlertDialog.Builder(this).create();
+		mAlertDialog.setTitle(getString(R.string.delete_file));
+		mAlertDialog.setMessage(getString(R.string.data_manager_delete));
+		DialogInterface.OnClickListener dialogYesNoListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+					case DialogInterface.BUTTON1: // delete
+						// add related child forms to the list to be deleted
+						for (Long instanceId : mSelected) {
+							// if it has children, add them to the selected list
+							long[] childList = FormRelationsDb.getChildren(instanceId);
+							for (int j = 0; j < childList.length; j++) {
+								// only add it if it isn't already selected
+								if ( !mSelected.contains(childList[j]) ) {
+									mSelected.add(childList[j]);
+								}
+							}
+						}
+						deleteSelectedInstances();
+						break;
+					case DialogInterface.BUTTON2: // do nothing
+						break;
 				}
 			}
 		};

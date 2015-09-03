@@ -91,7 +91,7 @@ import javax.xml.xpath.XPathFactory;
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
  *  Created: 20 August 2015
- *  Last modified: 2 September 2015
+ *  Last modified: 3 September 2015
  */
 public class FormRelationsManager {
 
@@ -189,7 +189,7 @@ public class FormRelationsManager {
             }
 
             if (editedParentForm) {
-                writeDocumentToFile(parentInstancePath, parentDocument);
+                writeDocumentToFile(parentDocument, parentInstancePath);
                 ContentValues cv = new ContentValues();
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
                 Collect.getInstance().getContentResolver().update(getInstanceUriFromId(parentId),
@@ -681,7 +681,7 @@ public class FormRelationsManager {
 
             if (isInstanceModified) {
                 // only need to update xml if something changed
-                writeDocumentToFile(childInstancePath, document);
+                writeDocumentToFile(document, childInstancePath);
 
                 // Set status to incomplete
                 ContentValues values = new ContentValues();
@@ -715,7 +715,7 @@ public class FormRelationsManager {
     }
 
     // return true iff updated
-    private boolean insertIntoChild(TraverseData td, Document document) throws
+    private static boolean insertIntoChild(TraverseData td, Document document) throws
             XPathExpressionException, FormRelationsException {
         boolean isModified = false;
         String childInstanceValue = td.instanceValue;
@@ -742,7 +742,85 @@ public class FormRelationsManager {
         return isModified;
     }
 
-    private static void writeDocumentToFile(String path, Document document) throws
+    private static boolean removeFromDocument(String xpathStr, Document document) throws
+            XPathExpressionException, FormRelationsException {
+        boolean isModified = false;
+        if ( null != xpathStr ) {
+            // extract nodes using xpath
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            XPathExpression expression;
+
+            expression = xpath.compile(xpathStr);
+            Node node = (Node) expression.evaluate(document, XPathConstants.NODE);
+            if ( null == node ) {
+                throw new FormRelationsException(BAD_XPATH_INSTANCE, xpathStr);
+            }
+
+            if (LOCAL_LOG) {
+                Log.i(TAG, "removeFromDocument -- attempting to delete: " + xpathStr);
+            }
+
+            Node removeNode = node.getParentNode();
+            removeNode.removeChild(node);
+            isModified = true;
+        }
+        return isModified;
+    }
+
+    // Called from within DeleteInstancesTask
+    // Remove the repeat node in the parent document.
+    // Write the parent to disk
+    // Remove from relations.db
+    public static void removeAllReferences(long instanceId) {
+        boolean isParentModified = false;
+        long parentId = FormRelationsDb.getParent(instanceId);
+        if (parentId != -1) {
+            try {
+                String parentPath = getInstancePath(getInstanceUriFromId(parentId));
+                Document parentDocument = getDocument(parentPath);
+                String repeatXpathToRemove = FormRelationsDb.getRepeatable(parentId, instanceId);
+                isParentModified = removeFromDocument(repeatXpathToRemove, parentDocument);
+                if (isParentModified) {
+                    writeDocumentToFile(parentDocument, parentPath);
+                }
+            } catch (FormRelationsException e) {
+                if ( e.getErrorCode() == PROVIDER_NO_INSTANCE ) {
+                    Log.w(TAG, "Removing all references for " + instanceId +
+                            ". Parent in relations.db, but no parent in InstanceProvider");
+                } else if ( e.getErrorCode() == BAD_XPATH_INSTANCE ) {
+                    Log.w(TAG, "Unable to remove node @" + e.getInfo() +
+                            " from parent of instance (" + instanceId + ")");
+                } else {
+                    Log.w(TAG, "OTHER FORMRELATIONSEXCEPTION in removeAllReferences: " +
+                            e.getErrorCode());
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (isParentModified) {
+                    int repeatIndex = FormRelationsDb.getRepeatIndex(parentId, instanceId);
+                    FormRelationsDb.deleteChild(parentId, repeatIndex);
+                } else {
+                    FormRelationsDb.deleteAsChild(instanceId);
+                }
+            }
+        }
+        FormRelationsDb.deleteAsParent(instanceId);
+    }
+
+    private static void writeDocumentToFile(Document document, String path) throws
             FileNotFoundException, TransformerException {
         // there's a bug in streamresult that replaces spaces in the
         // filename with %20
