@@ -32,6 +32,9 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormRelationsContract.FormRelations;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -133,6 +136,30 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
 
         db.close();
         return found;
+    }
+
+    public static Set<Long> getAllChildren() {
+        Set<Long> allChildren = new HashSet<Long>();
+
+        FormRelationsDb frdb = new FormRelationsDb();
+        SQLiteDatabase db = frdb.getReadableDatabase();
+
+        String[] projection = {
+                FormRelations._ID
+        };
+        Cursor c = db.query(true, FormRelations.TABLE_NAME, projection, null, null,
+                null, null, null, null);
+
+        if ( null != c ) {
+            while( c.moveToNext() ) {
+                Long thisChild = c.getLong(c.getColumnIndex(FormRelations._ID));
+                allChildren.add(thisChild);
+            }
+            c.close();
+        }
+
+        db.close();
+        return allChildren;
     }
 
     public static long getChild(long parentId, int repeatIndex) {

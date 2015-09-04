@@ -244,7 +244,8 @@ public class FormRelationsManager {
         return frm;
     }
 
-    public static FormRelationsManager getFormRelationsManager(long parentId, TreeElement instanceRoot) {
+    public static FormRelationsManager getFormRelationsManager(long parentId,
+                                                               TreeElement instanceRoot) {
         FormRelationsManager frm = new FormRelationsManager(parentId);
         try {
             traverseInstance(instanceRoot, frm, null);
@@ -260,7 +261,8 @@ public class FormRelationsManager {
     }
 
     // meant to be called using the intent data that starts FormEntryActivity
-    public static FormRelationsManager getFormRelationsManager(Uri formUri, TreeElement instanceRoot) {
+    public static FormRelationsManager getFormRelationsManager(Uri formUri,
+                                                               TreeElement instanceRoot) {
         if (LOCAL_LOG) {
             Log.d(TAG, "Inside getFormRelationsManager with uri \'" + formUri.toString() + "\'");
         }
@@ -296,7 +298,8 @@ public class FormRelationsManager {
             for (Integer i : allRepeatIndices) {
                 Long childInstanceId = FormRelationsDb.getChild(parentId, i);
                 if (LOCAL_LOG) {
-                    Log.d(TAG, "ParentId(" + parentId + ") + RepeatIndex(" + i + ") + ChildIdFound(" + childInstanceId +")");
+                    Log.d(TAG, "ParentId(" + parentId + ") + RepeatIndex(" + i +
+                            ") + ChildIdFound(" + childInstanceId +")");
                 }
                 if (childInstanceId != -1) {
                     allWaywardChildren.add(childInstanceId);
@@ -660,7 +663,8 @@ public class FormRelationsManager {
                 Collect.getInstance().getContentResolver()
                         .update(childInstance, values, null, null);
                 if (LOCAL_LOG) {
-                    Log.d(TAG, "Updated InstanceProvider to show correct instanceName: " + td.instanceValue);
+                    Log.d(TAG, "Updated InstanceProvider to show correct instanceName: " +
+                            td.instanceValue);
                 }
             }
 
@@ -739,8 +743,8 @@ public class FormRelationsManager {
                 throw new FormRelationsException(BAD_XPATH_INSTANCE, childInstanceXpath);
             }
             if ( !node.getTextContent().equals(childInstanceValue) ) {
-                Log.v(TAG, "Found difference saving child form @ child node \'" + node.getNodeName() +
-                        "\'. Child: \'" + node.getTextContent() +
+                Log.v(TAG, "Found difference saving child form @ child node \'" +
+                        node.getNodeName() + "\'. Child: \'" + node.getTextContent() +
                         "\' <> Parent: \'" + childInstanceValue + "\'");
                 node.setTextContent(childInstanceValue);
                 isModified = true;
@@ -1119,6 +1123,7 @@ public class FormRelationsManager {
         return document;
     }
 
+    // Assumes one generation span max.
     public static int getRelatedFormsFinalized(long instanceId) {
         int toReturn = NO_RELATIONS;
 
