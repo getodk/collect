@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormRelationsManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -231,6 +232,21 @@ public class InstanceUploaderList extends ListActivity implements
         long[] instanceIDs = new long[mSelected.size()];
         for (int i = 0; i < mSelected.size(); i++) {
             instanceIDs[i] = mSelected.get(i);
+
+			// PMA-Linking BEGIN
+			// make sure this form has no unfinished parent/children forms
+			int returnCode = FormRelationsManager.getRelatedFormsFinalized(instanceIDs[i]);
+			if (returnCode == FormRelationsManager.PARENT_UNFINALIZED) {
+				Toast.makeText(this, getString(R.string.finalize_parent_form),
+						Toast.LENGTH_SHORT).show();
+				return;
+			} else if (returnCode == FormRelationsManager.CHILD_UNFINALIZED ||
+					returnCode == FormRelationsManager.SIBLING_UNFINALIZED) {
+				Toast.makeText(this, getString(R.string.finalize_sub_form),
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			// PMA-Linking END
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

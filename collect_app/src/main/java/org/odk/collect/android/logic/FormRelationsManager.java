@@ -91,7 +91,7 @@ import javax.xml.xpath.XPathFactory;
  *  Creator: James K. Pringle
  *  E-mail: jpringle@jhu.edu
  *  Created: 20 August 2015
- *  Last modified: 3 September 2015
+ *  Last modified: 4 September 2015
  */
 public class FormRelationsManager {
 
@@ -102,6 +102,13 @@ public class FormRelationsManager {
     public static final int NO_DELETE = -1;
     public static final int DELETE_THIS = 0;
     public static final int DELETE_CHILD = 1;
+
+    // Return codes for what related forms are finalized
+    public static final int NO_RELATIONS = -1;
+    public static final int ALL_FINALIZED = 0;
+    public static final int CHILD_UNFINALIZED = 1;
+    public static final int PARENT_UNFINALIZED = 2;
+    public static final int SIBLING_UNFINALIZED = 3;
 
     private static final String SAVE_INSTANCE = "saveInstance";
     private static final String SAVE_FORM = "saveForm";
@@ -1002,8 +1009,15 @@ public class FormRelationsManager {
     }
 
     private String cleanInstanceXpath(String instanceXpath) {
-        int firstSlash = instanceXpath.indexOf("/");
-        String toReturn = instanceXpath.substring(firstSlash);
+        String toReturn = null;
+        if (instanceXpath != null) {
+            int firstSlash = instanceXpath.indexOf("/");
+            if (firstSlash < 0) {
+                toReturn = instanceXpath;
+            } else {
+                toReturn = instanceXpath.substring(firstSlash);
+            }
+        }
         return toReturn;
     }
 
@@ -1104,6 +1118,94 @@ public class FormRelationsManager {
                 .parse(inputSource);
         return document;
     }
+
+    public static int getRelatedFormsFinalized(long instanceId) {
+        int toReturn = NO_RELATIONS;
+
+        long parent = FormRelationsDb.getParent(instanceId);
+        long[] children = FormRelationsDb.getChildren(instanceId);
+
+        if ( parent != -1 ) {
+            toReturn = PARENT_UNFINALIZED;
+
+            try {
+                boolean isParentFinalized = isInstanceFinalized(parent);
+                if ( isParentFinalized ) {
+                    toReturn = ALL_FINALIZED;
+                }
+            } catch (FormRelationsException e) {
+                Log.w(TAG, "Error searching for parent (" + parent +
+                        ") when trying to determine finalized-ness");
+            }
+
+            long[] parentChildren = FormRelationsDb.getChildren(parent);
+            if ( toReturn != PARENT_UNFINALIZED ) {
+                try {
+                    for (int i = 0; i < parentChildren.length; i++) {
+                        boolean isParentChildFinalized = isInstanceFinalized(parentChildren[i]);
+                        if ( !isParentChildFinalized ) {
+                            toReturn = SIBLING_UNFINALIZED;
+                            break;
+                        }
+                    }
+                } catch (FormRelationsException e) {
+                    toReturn = SIBLING_UNFINALIZED;
+                    Log.w(TAG, "Error searching for child (" + e.getInfo() +
+                            ") when trying to determine finalized-ness");
+                }
+            }
+        }
+
+        if ( toReturn != PARENT_UNFINALIZED && toReturn != SIBLING_UNFINALIZED ) {
+            try {
+                for (int i = 0; i < children.length; i++) {
+                    boolean isChildFinalized = isInstanceFinalized(children[i]);
+                    if ( !isChildFinalized ) {
+                        toReturn = CHILD_UNFINALIZED;
+                        break;
+                    }
+                }
+            } catch (FormRelationsException e) {
+                toReturn = CHILD_UNFINALIZED;
+                Log.w(TAG, "Error searching for child (" + e.getInfo() +
+                        ") when trying to determine finalized-ness");
+            }
+        }
+
+        return toReturn;
+    }
+
+    public static boolean isInstanceFinalized(long instanceId) throws FormRelationsException {
+        boolean isFinalized = false;
+
+        Uri instance = getInstanceUriFromId(instanceId);
+
+        String[] projection = {
+                InstanceColumns.STATUS
+        };
+
+        Cursor cursor = Collect.getInstance().getContentResolver().query(instance, projection,
+                null, null, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                String thisStatus = cursor.getString(cursor.getColumnIndex(InstanceColumns.STATUS));
+                if ( !thisStatus.equals(InstanceProviderAPI.STATUS_INCOMPLETE) ) {
+                    isFinalized = true;
+                }
+            } else {
+                cursor.close();
+                throw new FormRelationsException(PROVIDER_NO_INSTANCE, String.valueOf(instanceId));
+            }
+            cursor.close();
+        } else {
+            throw new FormRelationsException(PROVIDER_NO_INSTANCE, String.valueOf(instanceId));
+        }
+
+        return isFinalized;
+    }
+
+
 
     public int getHowManyToDelete() {
         int howMany = 0;

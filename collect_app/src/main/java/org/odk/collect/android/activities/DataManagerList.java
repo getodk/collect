@@ -249,7 +249,9 @@ public class DataManagerList extends ListActivity implements
 	private void createDeleteRelationsWarningDialog() {
 		mAlertDialog = new AlertDialog.Builder(this).create();
 		mAlertDialog.setTitle(getString(R.string.delete_file));
-		mAlertDialog.setMessage(getString(R.string.data_manager_delete));
+		String message = String.format(getString(R.string.data_manager_delete),
+				getString(R.string.delete_yes));
+		mAlertDialog.setMessage(message);
 		DialogInterface.OnClickListener dialogYesNoListener = new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int i) {

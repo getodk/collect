@@ -339,8 +339,10 @@
 <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
 <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
 <string name="delete_form">Delete Form</string>
-<string name="warn_delete_child_form">Warning: If you tap \'%1$s\', then %2$d sub-form(s) will be deleted.</string>
+<string name="warn_delete_child_form">The values entered have invalidated sub-form(s). If you tap \'%1$s\', then %2$d sub-form(s) will be deleted.</string>
 <string name="warn_delete_parent_form">The values entered have invalidated this form. If you tap \'%s\', this form will be deleted and the form entry session will end.</string>
 <string name="save_delete">Save and Delete</string>
-<string name="data_manager_delete">Warning: You have selected one or more forms with related instances. Related forms will be modified or deleted if you select Delete Forms. Delete forms?</string>
+<string name="data_manager_delete">Warning: You have selected one or more forms with related instances. Related forms will be modified or deleted if you select \'%s\'.</string>
+<string name="finalize_parent_form">Parent form has not been marked complete. Please finalize parent form before sending.</string>
+<string name="finalize_sub_form">Not all sub-forms have been marked complete. Please finalize all related sub-forms before sending.</string>
 </resources>
