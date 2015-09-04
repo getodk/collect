@@ -13,5 +13,5 @@ public class ChildInstanceChooserList extends ListActivity {
     private AlertDialog mAlertDialog;
     private boolean mRelativesSent;
 
-    
+
 }

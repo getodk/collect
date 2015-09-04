@@ -145,14 +145,15 @@ public class FormRelationsDb extends ODKSQLiteOpenHelper {
         SQLiteDatabase db = frdb.getReadableDatabase();
 
         String[] projection = {
-                FormRelations._ID
+                FormRelations.COLUMN_CHILD_INSTANCE_ID
         };
         Cursor c = db.query(true, FormRelations.TABLE_NAME, projection, null, null,
                 null, null, null, null);
 
         if ( null != c ) {
             while( c.moveToNext() ) {
-                Long thisChild = c.getLong(c.getColumnIndex(FormRelations._ID));
+                Long thisChild = c.getLong(c.getColumnIndex(
+                        FormRelations.COLUMN_CHILD_INSTANCE_ID));
                 allChildren.add(thisChild);
             }
             c.close();

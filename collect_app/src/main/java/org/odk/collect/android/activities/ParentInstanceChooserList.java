@@ -123,8 +123,13 @@ public class ParentInstanceChooserList extends ListActivity {
         };
 
         // render total instance view
+        String[] viewString = {
+                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
+                InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT
+        };
+
         SimpleCursorAdapter instances =
-                new ParentFormListAdapter(this,  R.layout.two_item, c, projection, view);
+                new ParentFormListAdapter(this,  R.layout.two_item, c, viewString, view);
         setListAdapter(instances);
     }
 
