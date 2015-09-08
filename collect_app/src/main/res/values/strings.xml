@@ -346,4 +346,5 @@
 <string name="finalize_parent_form">Parent form has not been marked complete. Please finalize parent form before sending.</string>
 <string name="finalize_sub_form">Not all sub-forms have been marked complete. Please finalize all related sub-forms before sending.</string>
 <string name="no_related_forms">No related sub-forms to display</string>
+<string name="no_editing_sub_forms">A related form has already been submitted. Editing related forms is now prohibited.</string>
 </resources>

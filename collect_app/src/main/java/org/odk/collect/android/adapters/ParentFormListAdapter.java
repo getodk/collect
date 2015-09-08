@@ -1,3 +1,26 @@
+/* The MIT License (MIT)
+ *
+ *       Copyright (c) 2015 PMA2020
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
@@ -14,7 +37,12 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 /**
- * Created by jpringle on 9/4/15.
+ *  Responsible for creating views for ParentInstnaceChooserList
+ *
+ *  Creator: James K. Pringle
+ *  Email: jpringle@jhu.edu
+ *  Created: 4 September 2015
+ *  Last modified: 8 September 2015
  */
 public class ParentFormListAdapter extends SimpleCursorAdapter {
 
@@ -26,11 +54,12 @@ public class ParentFormListAdapter extends SimpleCursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         super.bindView(view, context, cursor);
 
-        TextView t = (TextView) view.findViewById(R.id.text2);
-        long id = cursor.getLong(cursor.getColumnIndex(InstanceColumns._ID));
 
+        long id = cursor.getLong(cursor.getColumnIndex(InstanceColumns._ID));
         long[] children = FormRelationsDb.getChildren(id);
+
         if (children.length > 0) {
+            TextView t = (TextView) view.findViewById(R.id.text2);
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < children.length; i++) {
@@ -41,11 +70,12 @@ public class ParentFormListAdapter extends SimpleCursorAdapter {
             }
 
             String selection = "( " + InstanceColumns.STATUS + " = ? OR " +
-                    InstanceColumns.STATUS
-                    + " = ?)" + " AND (" + sb.toString() + ")";
+                    InstanceColumns.STATUS + " = ? OR " + InstanceColumns.STATUS + " = ? )" +
+                    " AND (" + sb.toString() + ")";
             String[] selectionArgs = {
                     InstanceProviderAPI.STATUS_SUBMITTED,
-                    InstanceProviderAPI.STATUS_COMPLETE
+                    InstanceProviderAPI.STATUS_COMPLETE,
+                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED
             };
             String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME
                     + " ASC";
@@ -54,9 +84,6 @@ public class ParentFormListAdapter extends SimpleCursorAdapter {
             int count = c.getCount();
             c.close();
             t.setText("Completed: " + count + "/" + children.length);
-        } else {
-            String saveText = cursor.getString(cursor.getColumnIndex(InstanceColumns.DISPLAY_SUBTEXT));
-            t.setText(saveText);
         }
     }
 

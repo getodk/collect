@@ -41,7 +41,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ParentFormListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormRelationsDb;
-import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.Iterator;
@@ -55,7 +55,7 @@ import java.util.Set;
  *  Creator: James K. Pringle
  *  Email: jpringle@jhu.edu
  *  Created: 4 September 2015
- *  Last modified: 4 September 2015
+ *  Last modified: 8 September 2015
  */
 public class ParentInstanceChooserList extends ListActivity {
 
@@ -78,18 +78,21 @@ public class ParentInstanceChooserList extends ListActivity {
             return;
         }
 
-        setContentView(R.layout.parent_chooser_list_layout);
+        // ParentInstanceChooser looks exactly the same as original list chooser.
+        setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
 
 
         String[] projection = {
-                InstanceProviderAPI.InstanceColumns._ID,
-                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
-                InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT
+                InstanceColumns._ID,
+                InstanceColumns.DISPLAY_NAME,
+                InstanceColumns.DISPLAY_SUBTEXT,
+                InstanceColumns.STATUS,
+                InstanceColumns.CAN_EDIT_WHEN_COMPLETE
         };
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + " != ?";
+        String selection = InstanceColumns.STATUS + " != ?";
 
         Set<Long> children = FormRelationsDb.getAllChildren();
         if ( children.size() > 0 ) {
@@ -97,7 +100,7 @@ public class ParentInstanceChooserList extends ListActivity {
             StringBuilder sb = new StringBuilder();
             for (Iterator<Long> it = children.iterator(); it.hasNext(); ) {
                 Long child = it.next();
-                sb.append(InstanceProviderAPI.InstanceColumns._ID + " != " + String.valueOf(child));
+                sb.append(InstanceColumns._ID + " != " + String.valueOf(child));
                 if (it.hasNext()) {
                     sb.append(" AND ");
                 }
@@ -114,23 +117,27 @@ public class ParentInstanceChooserList extends ListActivity {
                 InstanceProviderAPI.STATUS_SUBMITTED
         };
 
-        String sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " +
-                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceProviderAPI.InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+        String sortOrder = InstanceColumns.STATUS + " DESC, " +
+                InstanceColumns.DISPLAY_NAME + " ASC";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
 
-        int[] view = new int[] {
+        if (LOCAL_LOG) {
+            Log.d(TAG, "Query for parents returned " + c.getCount() + " view(s) to display");
+        }
+
+        int[] toViews = new int[] {
                 R.id.text1, R.id.text2
         };
 
         // render total instance view
-        String[] viewString = {
+        String[] fromColumns = {
                 InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
                 InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT
         };
 
-        SimpleCursorAdapter instances =
-                new ParentFormListAdapter(this,  R.layout.two_item, c, viewString, view);
-        setListAdapter(instances);
+        SimpleCursorAdapter adapter =
+                new ParentFormListAdapter(this,  R.layout.two_item, c, fromColumns, toViews);
+        setListAdapter(adapter);
     }
 
     /**
@@ -140,7 +147,7 @@ public class ParentInstanceChooserList extends ListActivity {
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         Cursor c = (Cursor) getListAdapter().getItem(position);
         startManagingCursor(c);
-        Long parentId = c.getLong(c.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+        Long parentId = c.getLong(c.getColumnIndex(InstanceColumns._ID));
         Uri instanceUri =
                 ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                         parentId);
@@ -153,11 +160,9 @@ public class ParentInstanceChooserList extends ListActivity {
             // the form can be edited if it is incomplete or if, when it was
             // marked as complete, it was determined that it could be edited
             // later.
-            String status = c.getString(c.getColumnIndex(
-                    InstanceProviderAPI.InstanceColumns.STATUS));
+            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
             String strCanEditWhenComplete =
-                    c.getString(c.getColumnIndex(
-                            InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+                    c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
 
             boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE) ||
                     Boolean.parseBoolean(strCanEditWhenComplete);
@@ -179,6 +184,13 @@ public class ParentInstanceChooserList extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+
+        if (resultCode == RESULT_CANCELED) {
+
+        } else {
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     @Override
