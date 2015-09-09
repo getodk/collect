@@ -26,17 +26,17 @@ package org.odk.collect.android.database;
 import android.provider.BaseColumns;
 
 /**
- *  Defines all constants needed to manage SQLite database for form relations.
+ * Defines all constants needed to manage SQLite database for form relations.
  *
- *  Creator: James K. Pringle
- *  E-mail: jpringle@jhu.edu
- *  Created: 20 August 2015
- *  Last modified: 2 September 2015
+ * Creator: James K. Pringle
+ * E-mail: jpringle@jhu.edu
+ * Created: 20 August 2015
+ * Last modified: 9 September 2015
  */
 public class FormRelationsContract {
 
     // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
+    // give it a private, empty constructor.
     private FormRelationsContract() {}
 
     public static final int DATABASE_VERSION = 6;
@@ -46,21 +46,27 @@ public class FormRelationsContract {
     private static final String COMMA_SEP = ", ";
 
     /**
-     *  Inner class that defines the table contents.
+     * Inner class that defines the table contents.
      *
-     *  In order to maintain a record of parent child form relations,
-     *  mapping is:
+     * In order to maintain a record of parent child form relations,
+     * mapping is:
      *
-     *    parent instance id + parent node + parent index
-     *                             |
-     *                             V
+     *          parent instance id + parent node
+     *                           |
+     *                           V
      *           child instance id + child node
      *
-     *  Because it implements `BaseColumns`, "_ID" is inherited.
+     * Furthermore, the `repeat index` and `repeatable` are tracked. The
+     * repeat index is parsed out of the parent node. The repeatable is
+     * the root of the repeat/group.
      *
-     *  See
-     *  [0] http://developer.android.com/training/basics/data-storage/databases.html
-     *  [1] http://developer.android.com/reference/android/provider/BaseColumns.html
+     * Because it implements `BaseColumns`, "_ID" is inherited.
+     *
+     * SQL statements for creating and deleting the form relations table.
+     *
+     * See
+     * [0] http://developer.android.com/training/basics/data-storage/databases.html
+     * [1] http://developer.android.com/reference/android/provider/BaseColumns.html
      */
     public static abstract class FormRelations implements BaseColumns {
         public static final String TABLE_NAME = "relations";

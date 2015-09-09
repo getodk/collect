@@ -86,12 +86,21 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 /**
- *  Defines important functions for working with Parent/Child forms.
+ * Defines important functions for working with Parent/Child forms.
  *
- *  Creator: James K. Pringle
- *  E-mail: jpringle@jhu.edu
- *  Created: 20 August 2015
- *  Last modified: 8 September 2015
+ * This class is the workhorse of the form relations logic. It contains
+ * routines that are run when users save, delete, and upload forms. General
+ * uses are the following:
+ *
+ * 1. When saving, initialize `FormRelationsManager` with static factory
+ * method. Test if anything will be deleted. Then `manageFormRelations()`.
+ * 2. When deleting, use `removeAllReferences`.
+ * 3. When uploading, use `getRelatedFormsFinalized`.
+ *
+ * Creator: James K. Pringle
+ * E-mail: jpringle@jhu.edu
+ * Created: 20 August 2015
+ * Last modified: 9 September 2015
  */
 public class FormRelationsManager {
 
@@ -110,10 +119,6 @@ public class FormRelationsManager {
     public static final int PARENT_UNFINALIZED = 2;
     public static final int SIBLING_UNFINALIZED = 3;
 
-    private static final String SAVE_INSTANCE = "saveInstance";
-    private static final String SAVE_FORM = "saveForm";
-    private static final String DELETE_FORM = "deleteForm";
-
     // Error codes for FormRelationsException
     private static final int NO_ERROR_CODE = 0;
     private static final int PROVIDER_NO_FORM = 1;
@@ -121,6 +126,11 @@ public class FormRelationsManager {
     private static final int NO_REPEAT_NUMBER = 3;
     private static final int PROVIDER_NO_INSTANCE = 4;
     private static final int BAD_XPATH_INSTANCE = 5;
+
+    // Important strings to search for in XForms
+    private static final String SAVE_INSTANCE = "saveInstance";
+    private static final String SAVE_FORM = "saveForm";
+    private static final String DELETE_FORM = "deleteForm";
 
     private long parentId;
     private ArrayList<TraverseData> allTraverseData;
@@ -144,7 +154,29 @@ public class FormRelationsManager {
         hasDeleteForm = false;
     }
 
-    // Called within SaveToDiskTask
+    /**
+     * Performs all necessary routines for maintaining form relations.
+     *
+     * When saving, the following tasks are always done in this order:
+     *
+     *   1. The parent form is updated
+     *   2. Children forms are created and updated
+     *   3. Relevant deletions are performed
+     *
+     * Of course, these subroutines are no-ops if nothing needs to be done or
+     * if there is no parent/child form extent.
+     *
+     * This method is the entry point for the `SaveToDiskTask`. By the time
+     * this method is called, the instance should already be saved to disk,
+     * i.e. not stored as a temporary save file.
+     *
+     * After this method finishes, the form relations database should be
+     * up-to-date, all paired nodes between parent and child forms should be
+     * synced, and all relevant deletions should have taken place.
+     *
+     * @param instanceId Instance id of the current survey.
+     * @param instanceRoot Root of the JavaRosa tree built during the survey.
+     */
     public static void manageFormRelations(long instanceId, TreeElement instanceRoot) {
         manageParentForm(instanceId);
         FormRelationsManager frm = getFormRelationsManager(instanceId, instanceRoot);
@@ -152,6 +184,20 @@ public class FormRelationsManager {
         frm.manageDeletions();
     }
 
+    /**
+     * Modifies the parent form if a paired node with child form is changed.
+     *
+     * When this method is called, both child and parent instance are saved to
+     * disk. After opening each file, this method gets all node pairs, or
+     * mappings, and loops through them. For each mapping, the instance value
+     * is obtained in both files. If there is a difference, then the parent
+     * is modified in memory. If there is any change in the parent, then the
+     * file is rewritten to disk. If there is an exception while evaulating
+     * xpaths or doing anything else, updating the parent form is aborted.
+     *
+     * @param childId Instance id
+     * @return Returns true if and only if there is a parent form.
+     */
     private static boolean manageParentForm(long childId) {
         Long parentId = FormRelationsDb.getParent(childId);
         if (LOCAL_LOG) {
@@ -228,22 +274,21 @@ public class FormRelationsManager {
         return true;
     }
 
-    // call this to test if something should be deleted
-    public static FormRelationsManager getFormRelationsManager(TreeElement instanceRoot) {
-        FormRelationsManager frm = new FormRelationsManager();
-        try {
-            traverseInstance(instanceRoot, frm, null);
-        } catch (FormRelationsException e) {
-            if (DELETE_FORM.equals(e.getMessage())) {
-                if (LOCAL_LOG) {
-                    Log.d(TAG, "Interrupt traverse to delete instance");
-                }
-                frm.setDeleteForm(true);
-            }
-        }
-        return frm;
-    }
-
+    /**
+     * Initializes a `FormRelationsManager` with form relations information.
+     *
+     * A FormRelationsManager is initialized, and then the JavaRosa tree for
+     * the current instance is traversed. All attributes and values are
+     * analyzed to determine what relates to form relations.
+     *
+     * The `FormRelationsManager` is then used to determine what to create,
+     * update, or delete.
+     *
+     * @param parentId The instance id of the current form
+     * @param instanceRoot Root of the JavaRosa tree built during the survey.
+     * @return Returns a properly initialized FormRelationsManager, containing
+     * the information needed for subsequent CRUD.
+     */
     public static FormRelationsManager getFormRelationsManager(long parentId,
                                                                TreeElement instanceRoot) {
         FormRelationsManager frm = new FormRelationsManager(parentId);
@@ -260,7 +305,55 @@ public class FormRelationsManager {
         return frm;
     }
 
-    // meant to be called using the intent data that starts FormEntryActivity
+    /**
+     * Initializes a `FormRelationsManager` with form relations information.
+     *
+     * This is called in the UI thread in order to determine if any deletions
+     * have become relevant. This information is used to determine what
+     * warning dialogs, if any, to display. Note that the instance may not
+     * be in the InstanceProvider if the form has not yet been saved.
+     *
+     * This method traverses the JavaRosa tree analyzing all attributes and
+     * values. The only difference with the other version of this overloaded
+     * method is that the object member `parentId` is not set.
+     *
+     * @param instanceRoot Root of the JavaRosa tree built during the survey.
+     * @return Returns a properly initialized FormRelationsManager, containing
+     * the information needed to determine if a delete is necessary.
+     */
+    public static FormRelationsManager getFormRelationsManager(TreeElement instanceRoot) {
+        FormRelationsManager frm = new FormRelationsManager();
+        try {
+            traverseInstance(instanceRoot, frm, null);
+        } catch (FormRelationsException e) {
+            if (DELETE_FORM.equals(e.getMessage())) {
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "Interrupt traverse to delete instance");
+                }
+                frm.setDeleteForm(true);
+            }
+        }
+        return frm;
+    }
+
+    /**
+     * Initializes a `FormRelationsManager` with form relations information.
+     *
+     * This is called in the UI thread from `FormEntryActivity` in order to
+     * determine if any deletions have become relevant. This information is
+     * used to determine what warning dialogs, if any, to display. Note that
+     * the instance may not be in the InstanceProvider if the form has not yet
+     * been saved. That is why the intent data that starts FormEntryActivity
+     * is passed here.
+     *
+     * This method traverses the JavaRosa tree analyzing all attributes and
+     * values.
+     *
+     * @param formUri The Uri passed in the intent to start FormEntryActivity.
+     * @param instanceRoot Root of the JavaRosa tree built during the survey.
+     * @return Returns a properly initialized FormRelationsManager, containing
+     * the information needed to determine if a delete is necessary.
+     */
     public static FormRelationsManager getFormRelationsManager(Uri formUri,
                                                                TreeElement instanceRoot) {
         if (LOCAL_LOG) {
@@ -284,7 +377,20 @@ public class FormRelationsManager {
         return frm;
     }
 
-    // called when deleting because saving and saveInstance not relevant
+    /**
+     * Deletes current instance or children, as necessary.
+     *
+     * Pre-condition: The FormRelationsManager object should have been
+     * initialized by one of the getFormRelationsManager methods. Thus all
+     * form relations information in the current instance is collected.
+     * Furthermore, the current instance should already be saved to disk.
+     *
+     * Post-condition: If a relevant deleteForm is discovered, then the
+     * current instance (and its children) are deleted from the
+     * InstanceProvider and from the form relations database. If an irrelevant
+     * saveForm is discovered and it is associated with a child, then that
+     * child is deleted. In this second case, the parent form is unmodified.
+     */
     private void manageDeletions() {
         int deleteWhat = getWhatToDelete();
         if ( deleteWhat == DELETE_THIS ) {
@@ -311,7 +417,22 @@ public class FormRelationsManager {
         }
     }
 
-    // called when deleting a repeat group
+    /**
+     * Deletes a child when a repeat group in the parent form is removed.
+     *
+     * When a repeat is removed from a parent form, then the deletion process
+     * must take place here. It is different from a normal child deletion
+     * because siblings are possibly affected.
+     *
+     * FormRelationsDb handles fixing the database to account for the
+     * deletion.
+     *
+     * Unfortunately, this is currently called in the UI thread.
+     *
+     * @param parentId The instance id of the current form
+     * @param repeatIndex The repeat index in the parent instance, where a
+     *                    repeatIndex is greater than zero.
+     */
     public static void manageRepeatDelete(long parentId, int repeatIndex) {
         if (parentId >= 0 && repeatIndex >= 0) {
             Long childInstanceId = FormRelationsDb.getChild(parentId, repeatIndex);
@@ -321,6 +442,20 @@ public class FormRelationsManager {
         }
     }
 
+    /**
+     * Using the data from traversal, creates/updates children forms.
+     *
+     * During traversal, the largest repeat index is stored. From 1 up to and
+     * including the largest repeat index, the saveForm and saveInstance
+     * information is collected. If this information is not empty, then the
+     * Uri or the child instance is obtained (perhaps creating the child
+     * first). Everything is sent to the subroutine `insertAllIntoChild` to
+     * finish off transferring parent information to the child. Raised
+     * exceptions abort the process.
+     *
+     * @return Returns true if and only if there is a child form associated
+     * with this instance.
+     */
     private boolean outputOrUpdateChildForms() {
         boolean hasChild = false;
         if ( hasDeleteForm ) { // Children to be deleted. Just return.
@@ -348,7 +483,8 @@ public class FormRelationsManager {
             }
 
             if (saveFormMapping.isEmpty() && saveInstanceMapping.isEmpty()) {
-                Log.i(TAG, "No form relations information for repeat node (" + i + ")");
+                Log.i(TAG, "No form relations information for repeat node (" + i +
+                        "). Moving on...");
                 continue;
             }
 
@@ -363,7 +499,6 @@ public class FormRelationsManager {
                 hasChild = insertAllIntoChild(saveFormMapping, saveInstanceMapping, childInstance);
             } catch (IOException e) {
                 Log.w(TAG, e.getMessage());
-                // Log.w(TAG, "Error creating serialized payload");
                 e.printStackTrace();
                 continue;
             } catch (FormRelationsException e) {

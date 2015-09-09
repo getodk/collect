@@ -37,12 +37,15 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 /**
- *  Responsible for creating views for ParentInstnaceChooserList
+ * Responsible for creating views for ParentInstanceChooserList.
  *
- *  Creator: James K. Pringle
- *  Email: jpringle@jhu.edu
- *  Created: 4 September 2015
- *  Last modified: 8 September 2015
+ * Most of this code is copied from Nafundi's original efforts. Compare with
+ * their file of the same name.
+ *
+ * Creator: James K. Pringle
+ * Email: jpringle@jhu.edu
+ * Created: 4 September 2015
+ * Last modified: 9 September 2015
  */
 public class ParentFormListAdapter extends SimpleCursorAdapter {
 
