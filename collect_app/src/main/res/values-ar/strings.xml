@@ -185,15 +185,15 @@
   <string name="change_view">تغيير المشهد</string>
   <string name="show_sent_and_unsent_forms">عرض أشكال المرسلة وغير المرسلة</string>
   <string name="show_unsent_forms">عرض الاستمارات الغير مرسلة</string>
-  <string name="added_on_date_at_time">اضافة اليوم, الشهر, السنة في  HH:mm</string>
+  <string name="added_on_date_at_time">\'اضافة بتاريخ \' EEE, MMM dd, yyyy \' في \' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">حفظ اليوم, الشهر, السنة في  HH:mm</string>
+  <string name="saved_on_date_at_time">\'حفظ بتاريخ \' EEE, MMM dd, yyyy \' في \'  HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">اتمام اليوم, الشهر, السنة في Finalized</string>
+  <string name="finalized_on_date_at_time">\'اتمام بتاريخ \' EEE, MMM dd, yyyy \' في \' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">ارسال في اليوم, الشهر, السنة في Finalized</string>
+  <string name="sent_on_date_at_time">\'ارسال بتاريخ \' EEE, MMM dd, yyyy \' في \' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">فشل الارسال  اليوم , الشهر , السنة\' في HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'فشل ارسال بتاريخ \' EEE, MMM dd, yyyy \' في \' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">النسخة</string>
   <string name="parent_form_not_present">غير قادر على تعديل هذا النموذج المحفوظ لان الاستمارة المقابلة غي موجودة جاليا او قد تم مسحها./n/n اعدادات الاستمارة: %1$s</string>
@@ -308,22 +308,22 @@
   <string name="gme_preferences">اعدادات محرك خرائط القوقل</string>
   <string name="no_coordinates">لا يوجد احداثيات للمثال. غير قادر على التحميل</string>
   <string name="drive_get_file">الحصول %1$s وملفات الوسائط</string>
-  <string name="no_google_account">لم يتم اختيار حساب قوقل!</string>
+  <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="gme_set_account">قمت باحتيتار محرك خرائط قوقل ك الخادم الخاص بك, اختر  حساب قوقل مطابق في الاعدادات العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
-  <string name="gme_repeat_error">التكرارات غير معتمدة من قبل محرك خرائط قوقل في هذا الوقت</string>
-  <string name="gme_project_id_error">لا يوجد اعدادات للمشروع. يجب اعلان اعدادات المشروع اما في اعدادات محرك خرائط القوقل او في الاستمارة</string>
-  <string name="gme_table_error">غير قادر على ايجاد او انشاء محرك القوقل: جدول محرك الخرائط</string>
+  <string name="gme_repeat_error">التكرارات غير معتمدة من قبل محرك خرائط جوجل في هذا الوقت</string>
+  <string name="gme_project_id_error">لا يوجد اعدادات للمشروع. يجب اعلان اعدادات المشروع اما في اعدادات محرك خرائط الجوجل او في الاستمارة</string>
+  <string name="gme_table_error">غير قادر على ايجاد او انشاء محرك الجوجل جدول محرك الخرائط</string>
   <string name="gme_create_400">استقبال 400 طلب غير صحيح. هذا خطأ معروف في محرك خرائط قوقل بعد انشاء جدول حديث, يرجى اعادة المحاولة بعد مرور بض ثواني.</string>
   <string name="picasa_upload_error">فشل تحميل الصورة الغير موجودة%1$s</string>
-  <string name="odk_auth_auth_fail">ODK فشل ارسال مصادقة السيارات, رجاءا تأكد من ان جميع الاعدادات صحيحة</string>
-  <string name="odk_auto_note">ODK  ارسال الاشعارات اوتوماتيكيا</string>
+  <string name="odk_auth_auth_fail">ODK فشل ارسال مصادقة المعلومات, رجاءا تأكد من ان جميع الاعدادات صحيحة</string>
+  <string name="odk_auto_note">ODK  ارسال الاشعارات تلقائيا</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاشكال في صيغتها النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
-  <string name="change_server_url">خادم الرابط</string>
-  <string name="gme_search_browse">البحث عن الاستمارات: او اختر \'My Drive\' تصفح في الاسفل.</string>
+  <string name="change_server_url">رابط الخادم</string>
+  <string name="gme_search_browse">ابحث عن الاستمارات. أو اختر \'My Drive\'.</string>
   <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا</string>
-  <string name="select_maps_account">قمت بتحديد محرك خرائط قوقل محرك قوقل المحرك الخاص بك, يرجى اختيار حساب قوقل في الاعدادات العامة قبل المتابعة</string>
-  <string name="get_project_IDs">اعدادات المشروع</string>
+  <string name="select_maps_account">قمت بتحديد محرك خرائط جوجل كمحرك خاص بك, يرجى اختيار حساب جوجل في الاعدادات العامة قبل المتابعة</string>
+  <string name="get_project_IDs">اعدادات تعريف المشروع</string>
 </resources>

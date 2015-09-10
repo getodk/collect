@@ -39,8 +39,7 @@
   <string name="delete_confirm">%s formulier(en) verwijderen?</string>
   <string name="delete_file">Verwijder selectie</string>
   <string name="delete_no">Niet verwijderen</string>
-  <string name="delete_repeat">Groep verwijderen
-</string>
+  <string name="delete_repeat">Groep verwijderen</string>
   <string name="delete_repeat_ask">Deze groep verwijderen?</string>
   <string name="delete_repeat_confirm">Groep \"%s\" en alle subgroepen verwijderen?</string>
   <string name="delete_repeat_no">Annuleer</string>
