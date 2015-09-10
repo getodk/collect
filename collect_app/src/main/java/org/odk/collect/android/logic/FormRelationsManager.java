@@ -1725,7 +1725,8 @@ public class FormRelationsManager {
      * Gets all repeat indices from non-relevant saveForm attributes and
      * checks if there are children associated with those indices.
      *
-     * @return Returns one of three codes.
+     * @return Returns one of three codes to say no deletions, delete this 
+     * form, or delete at least one child
      */
     public int getWhatToDelete() {
         int returnCode = NO_DELETE;
@@ -1754,8 +1755,9 @@ public class FormRelationsManager {
      * version of the method is called when removing a repeat, so that index
      * is checked as well.
      *
-     * @param repeatIndex
-     * @return
+     * @param repeatIndex The index of the repeat to be removed
+     * @return Returns one of three codes to say no deletions, delete this
+     * form, or delete at least one child
      */
     public int getWhatToDelete(int repeatIndex) {
         int returnCode = NO_DELETE;
