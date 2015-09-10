@@ -100,7 +100,7 @@ import javax.xml.xpath.XPathFactory;
  * Creator: James K. Pringle
  * E-mail: jpringle@jhu.edu
  * Created: 20 August 2015
- * Last modified: 9 September 2015
+ * Last modified: 10 September 2015
  */
 public class FormRelationsManager {
 
@@ -194,6 +194,9 @@ public class FormRelationsManager {
      * is modified in memory. If there is any change in the parent, then the
      * file is rewritten to disk. If there is an exception while evaulating
      * xpaths or doing anything else, updating the parent form is aborted.
+     *
+     * If the parent form is changed, then its status is changed to
+     * incomplete.
      *
      * @param childId Instance id
      * @return Returns true if and only if there is a parent form.
@@ -534,6 +537,18 @@ public class FormRelationsManager {
         return hasChild;
     }
 
+    /**
+     * Gets the Uri of the child instance, creating it first if necessary.
+     *
+     * @param saveFormMapping All `saveForm` information gathered from
+     *                        traversal, filtered for this child.
+     * @param saveInstanceMapping All `saveInstance` information gathered from
+     *                            traversal, filtered for this child.
+     * @return Returns the Uri of an instance in the InstanceProvider.
+     * @throws FormRelationsException Process aborted if child must be created
+     * and no appropriate form is in the FormProvider.
+     * @throws IOException Process aborted if there is an IO error.
+     */
     private Uri getOrCreateChildForm(ArrayList<TraverseData> saveFormMapping,
                                      ArrayList<TraverseData> saveInstanceMapping) throws
             FormRelationsException, IOException {
@@ -583,16 +598,25 @@ public class FormRelationsManager {
         return childInstance;
     }
 
-    // Unfortunately, we must violate DRY (don't repeat yourself). Creating an instance
-    // from a URI is done at the end of onCreate in FormEntryActivity and in doInBackground
-    // of FormLoaderTask, not in a method that can be called.
-    /*
-     * In order to get the proper instance, we must first load the child form
-     * then save it to disk and only _then_ can we edit the .xml file with the
-     * appropriate values from the parent form. Much of this is similar to what
-     * happens in FormLoaderTask, but we're already in a thread here.
+    /**
+     * Creates an instance from a form definition.
+     *
+     * In order to get the proper instance, we must first load the child form,
+     * then save it to disk and only *then* can we edit the .xml file with the
+     * appropriate values from the parent form. Much of this is similar to
+     * what happens in FormLoaderTask, but we're already in a thread here.
+     *
+     * Unfortunately, we must violate DRY (don't repeat yourself). Normally,
+     * creating an instance from a Uri is done at the end of onCreate in
+     * FormEntryActivity and in doInBackground of FormLoaderTask, not in a
+     * method that can be called. This is a lot of copy and paste.
+     *
+     * @param formUri A Uri of a form in the FormProvider.
+     * @return Returns the Uri of the newly created instance.
+     * @throws FormRelationsException A catch-all for various errors, any of
+     * which aborts creation of an instance.
+     * @throws IOException Routine aborted if there is an IO error.
      */
-    // Lots of copy and paste
     public static Uri createInstance(Uri formUri) throws FormRelationsException, IOException {
         if (LOCAL_LOG) {
             Log.d(TAG, "Inside createInstance(" + formUri.toString() + ")");
@@ -708,7 +732,11 @@ public class FormRelationsManager {
     }
 
     /**
-     * Writes the data to the sdcard.
+     * Writes data in an instance to disk.
+     *
+     * @param formController The form controller for an instance
+     * @return Returns true if and only if no exception is raised
+     * @throws IOException An IO error aborts the routine.
      */
     private static boolean exportData(FormController formController) throws IOException {
         ByteArrayPayload payload;
@@ -719,7 +747,18 @@ public class FormRelationsManager {
         return true;
     }
 
-    // Just like the private method inside SaveToDiskTask
+    /**
+     * Adds to InstanceProvider using information from the form definition.
+     *
+     * After an instance is created and written to disk, it must be added to
+     * the InstanceProvider. That happens here. This is mostly copypasta from
+     * the private method inside the SaveToDiskTask.
+     *
+     * @param formUri The Uri for the form template for the instance.
+     * @param instancePath The path to disk where the instance has been saved.
+     * @return Returns the Uri of the record that was created in the
+     * InstanceProvider.
+     */
     private static Uri updateInstanceDatabase(Uri formUri, String instancePath) {
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
@@ -742,7 +781,6 @@ public class FormRelationsManager {
             // add missing fields into values
             values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
             values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
-            // TODO: Could insert instance name here?
             values.put(InstanceColumns.DISPLAY_NAME, formname);
             values.put(InstanceColumns.JR_FORM_ID, jrformid);
             values.put(InstanceColumns.JR_VERSION, jrversion);
@@ -762,7 +800,22 @@ public class FormRelationsManager {
 
     }
 
-    // assumes no more than two generations (no grandparents/grandchildren or beyond).
+    /**
+     * Deletes an instance from form relations database and InstanceProvider.
+     *
+     * Deleting an instance should delete all descendant sub-forms. This
+     * method assumes that there are no more than two generations, i.e. that
+     * there are no grandparents or grandchildren or beyond for any given
+     * form.
+     *
+     * First, all reference to the instance is removed from the form relations
+     * database. Second, the instance is removed from the InstanceProvider.
+     * Third, all children are removed from the InstanceProvider. These steps
+     * are no-ops if there are no children, no form relations, not in the
+     * InstanceProvider, etc.
+     *
+     * @param instanceId The id of the instance to be deleted.
+     */
     public static void deleteInstance(long instanceId) {
         if (LOCAL_LOG) {
             Log.d(TAG, "### deleteInstance(" + instanceId + ")");
@@ -780,6 +833,29 @@ public class FormRelationsManager {
         }
     }
 
+    /**
+     * Iterates through the traversal data for insertion into a child form.
+     *
+     * First, the InstanceProvider is updated to show the correct
+     * instanceName. Then for each item in saveInstanceMapping,
+     * insertIntoChild copies the new information if necessary. Binary data is
+     * copied if necessary. If saveInstanceMapping returns true, i.e. if the
+     * child form is changed, then the child form is written to disk and its
+     * status is set to incomplete.
+     *
+     * If an error is raised inside insertIntoChild, then that morsel of
+     * traversal data is skipped and the next is processed. Other errors abort
+     * the routine.
+     *
+     * @param saveFormMapping All `saveForm` information gathered from
+     *                        traversal, filtered for this child.
+     * @param saveInstanceMapping All `saveInstance` information gathered from
+     *                            traversal, filtered for this child.
+     * @param childInstance The Uri for the child instance
+     * @return Returns true if and only if a child is proven to exist.
+     * @throws FormRelationsException This exception is propagated to the
+     * calling method.
+     */
     private boolean insertAllIntoChild(ArrayList<TraverseData> saveFormMapping,
                                     ArrayList<TraverseData> saveInstanceMapping,
                                     Uri childInstance) throws FormRelationsException {
@@ -860,7 +936,17 @@ public class FormRelationsManager {
         return hasChild;
     }
 
-    // return true iff updated
+    /**
+     * Inserts data into child form from one morsel of traversal data.
+     *
+     * @param td A `saveInstance` morsel of traversal data.
+     * @param document The child form represented as a document.
+     * @return Returns true if and only if the child instance is modified.
+     * @throws XPathExpressionException Another possible error that should
+     * abort this routine.
+     * @throws FormRelationsException Thrown if the xpath data for the child
+     * form is bad.
+     */
     private static boolean insertIntoChild(TraverseData td, Document document) throws
             XPathExpressionException, FormRelationsException {
         boolean isModified = false;
@@ -888,6 +974,17 @@ public class FormRelationsManager {
         return isModified;
     }
 
+    /**
+     * Removes a node identified by xpath from a document (instance).
+     *
+     * @param xpathStr The xpath for the node to remove.
+     * @param document The document to mutate.
+     * @return Returns true if and only if a node is removed.
+     * @throws XPathExpressionException Another possible error that should
+     * abort this routine.
+     * @throws FormRelationsException Thrown if the xpath data for the
+     * supplied document is bad.
+     */
     private static boolean removeFromDocument(String xpathStr, Document document) throws
             XPathExpressionException, FormRelationsException {
         boolean isModified = false;
@@ -913,10 +1010,20 @@ public class FormRelationsManager {
         return isModified;
     }
 
-    // Called from within DeleteInstancesTask
-    // Remove the repeat node in the parent document.
-    // Write the parent to disk
-    // Remove from relations.db
+    /**
+     * Deletes a repeatable in parent and fixes affected siblings.
+     *
+     * This method is called from within `DeleteInstancesTask`. The instance
+     * goes through the meat-grinder there. This method wipes up the trail of
+     * blood. The repeat group in the parent form associated with this child
+     * is removed. Also, the sibling information from the child is corrected
+     * from in the relations database.
+     *
+     * If the form is instead a parent, the form relations database is
+     * cleared of that parent id.
+     *
+     * @param instanceId The id of the instance to remove.
+     */
     public static void removeAllReferences(long instanceId) {
         boolean isParentModified = false;
         long parentId = FormRelationsDb.getParent(instanceId);
@@ -966,6 +1073,14 @@ public class FormRelationsManager {
         FormRelationsDb.deleteAsParent(instanceId);
     }
 
+    /**
+     * Writes a Document object to the supplied path.
+     *
+     * @param document The document object
+     * @param path The output path
+     * @throws FileNotFoundException An exception that aborts writing to disk
+     * @throws TransformerException An exception that aborts writing to disk
+     */
     private static void writeDocumentToFile(Document document, String path) throws
             FileNotFoundException, TransformerException {
         // there's a bug in streamresult that replaces spaces in the
@@ -980,6 +1095,24 @@ public class FormRelationsManager {
         transformer.transform(input, output);
     }
 
+
+    /**
+     * Ensures the given information exists as a record in the relations db.
+     *
+     * First the method checks if there already is a row with this
+     * information. If there is not, then it is added to the form relations
+     * database.
+     *
+     * @param parentId Parent instance id.
+     * @param parentXpath Xpath to the paired node in the parent.
+     * @param repeatIndex The repeat index, parsed out of the xpath.
+     * @param childId Child instance id.
+     * @param childXpath Xpath to the paired node in the child.
+     * @param repeatableNode The root of the repeat group that contains child
+     *                       information.
+     * @return Returns true if and only if the row exists in the form
+     * relations database
+     */
     private static boolean updateRelationsDatabase(long parentId, String parentXpath,
                                                    int repeatIndex, long childId,
                                                    String childXpath, String repeatableNode) {
@@ -1003,6 +1136,18 @@ public class FormRelationsManager {
         return rowExists;
     }
 
+    /**
+     * Checks the value of a node, and if binary, the file is copied to child
+     *
+     * This check is performed on all data that is copied from parent to
+     * child.
+     *
+     * @param td Traversal data for the current node
+     * @param childInstancePath Path to the child instance save on disk
+     * @return Returns true if and only if `copyBinaryFile` returns true.
+     * @throws FormRelationsException An exception allowed to propagate from
+     * subroutines in order to abort checking/copying.
+     */
     private boolean checkCopyBinaryFile(TraverseData td, String childInstancePath) throws
             FormRelationsException {
         boolean toReturn = false;
@@ -1010,7 +1155,7 @@ public class FormRelationsManager {
         if (childInstanceValue.endsWith(".jpg") || childInstanceValue.endsWith(".jpeg") ||
                 childInstanceValue.endsWith(".3gpp") || childInstanceValue.endsWith(".3gp") ||
                 childInstanceValue.endsWith(".mp4") || childInstanceValue.endsWith(".png")) {
-            // more?
+            // check for more extensions?
 
             Uri parentInstance = getInstanceUriFromId(parentId);
             String parentInstancePath = getInstancePath(parentInstance);
@@ -1019,6 +1164,18 @@ public class FormRelationsManager {
         return toReturn;
     }
 
+    /**
+     * Copies a binary file from one instance to another.
+     *
+     * This method accepts paths to instances. The enclosing directories are
+     * determined, from which appropriate source and destination paths are
+     * generated for the file to be copied.
+     *
+     * @param parentInstancePath The path to the instance of the parent.
+     * @param childInstancePath The path to the instance of the child.
+     * @param filename The file name of the file to be copied.
+     * @return Returns true if everything happens without a hitch.
+     */
     private static boolean copyBinaryFile(String parentInstancePath, String childInstancePath,
                                           String filename) {
         File parentFile = new File(parentInstancePath);
@@ -1036,6 +1193,13 @@ public class FormRelationsManager {
         return true;
     }
 
+    /**
+     * Gets the id in the InstanceProvider for a given instance.
+     *
+     * @param instance The Uri for
+     * @return Returns the id in the InstanceProvider for a given instance.
+     * Returns -1 if no corresponding id is found.
+     */
     private static long getIdFromSingleUri(Uri instance) {
         long id = -1;
         if (Collect.getInstance().getContentResolver().getType(instance)
@@ -1066,14 +1230,40 @@ public class FormRelationsManager {
         return id;
     }
 
+    /**
+     * Converts an id number to Uri for an instance.
+     *
+     * @param id Id number
+     * @return Returns the corresponding InstanceProvider Uri.
+     */
     private static Uri getInstanceUriFromId(long id) {
         return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, String.valueOf(id));
     }
 
+    /**
+     * Converts an id number to Uri for a form.
+     *
+     * @param id Id number
+     * @return Returns the corresponding FormProvider Uri.
+     */
     private static Uri getFormUriFromId(long id) {
         return Uri.withAppendedPath(FormsColumns.CONTENT_URI, String.valueOf(id));
     }
 
+    /**
+     * Gets repeat index based off of traversal data
+     *
+     * Both saveFormMapping and saveInstanceMapping should have been filtered
+     * so that they only have the same repeat index at this point.
+     *
+     * @param saveFormMapping All `saveForm` information gathered from
+     *                        traversal, filtered for this child.
+     * @param saveInstanceMapping All `saveInstance` information gathered from
+     *                            traversal, filtered for this child.
+     * @return Returns the repeat index that is found.
+     * @throws FormRelationsException If no repeat index is found, then an
+     * exception is thrown.
+     */
     private int getRepeatIndex(ArrayList<TraverseData> saveFormMapping, ArrayList<TraverseData>
             saveInstanceMapping) throws FormRelationsException {
         int repeatIndex = 0;
@@ -1090,6 +1280,15 @@ public class FormRelationsManager {
         return repeatIndex;
     }
 
+    /**
+     * Gets the form id defined in a `saveForm`.
+     *
+     * @param saveFormMapping All `saveForm` information gathered from
+     *                        traversal, filtered for this child.
+     * @return Returns the found form id.
+     * @throws FormRelationsException Raised only if `saveFormMapping` is
+     * empty.
+     */
     private String getChildFormId(ArrayList<TraverseData> saveFormMapping) throws
             FormRelationsException{
         if (saveFormMapping.isEmpty()) {
@@ -1099,6 +1298,14 @@ public class FormRelationsManager {
         return childFormId;
     }
 
+    /**
+     * Gets the instance path from a Uri for one instance
+     *
+     * @param oneInstance A Uri for a single instance (has primary key _ID)
+     * @return Returns the path found in the InstanceProvider.
+     * @throws FormRelationsException If the InstanceProvider does not have
+     * the required information, this exception is thrown.
+     */
     private static String getInstancePath(Uri oneInstance) throws FormRelationsException {
         String[] projection = {
                 InstanceColumns.INSTANCE_FILE_PATH
@@ -1116,6 +1323,9 @@ public class FormRelationsManager {
         return instancePath;
     }
 
+    /**
+     * A container for saving information discovered during traversal.
+     */
     private class TraverseData {
         String attr;
         String attrValue;
@@ -1126,6 +1336,28 @@ public class FormRelationsManager {
     }
 
     // Cleans the input somewhat
+
+    /**
+     * Accepts raw information from traversal, cleans it, and stores it.
+     *
+     * The data is placed into a `TraverseData` object. Before storage, some
+     * information is cleaned or parsed. The xpath is stripped of the initial
+     * instance name information so that it starts with '/'. The repeat index
+     * is parsed from the xpath.
+     *
+     * Depending on `isRelevant` the information goes into either the object
+     * member `allTraverseData` or the object member `nonRelevantSaveForm`.
+     *
+     * @param attr The tag attribute
+     * @param attrValue The value associated with the attribute
+     * @param instanceXpath The xpath to the tag (node)
+     * @param instanceValue The value (text) stored inside the node
+     * @param repeatableNode The nearest ancestor repeatable root
+     * @param isRelevant Boolean, true if the node is relevant.
+     * @throws FormRelationsException This exception is thrown if a
+     * `deleteForm` is discovered. No more information is needed because this
+     * form is going to be deleted.
+     */
     private void addTraverseData(String attr, String attrValue, String instanceXpath,
                                  String instanceValue, String repeatableNode,
                                  boolean isRelevant) throws FormRelationsException {
@@ -1136,7 +1368,7 @@ public class FormRelationsManager {
         td.instanceValue = instanceValue;
         td.repeatIndex = parseInstanceXpath(td.instanceXpath);
         td.repeatableNode = cleanInstanceXpath(repeatableNode);
-        if (isRelevant) {
+        if ( isRelevant ) {
             if ( DELETE_FORM.equals(attr) ) {
                 throw new FormRelationsException(DELETE_FORM);
             }
@@ -1147,6 +1379,12 @@ public class FormRelationsManager {
 
     }
 
+    /**
+     * Cleans an instance xpath when adding traverse data.
+     *
+     * @param instanceXpath The xpath of a given node.
+     * @return Returns the instance path starting with the first '/'.
+     */
     private String cleanInstanceXpath(String instanceXpath) {
         String toReturn = null;
         if (instanceXpath != null) {
@@ -1160,10 +1398,26 @@ public class FormRelationsManager {
         return toReturn;
     }
 
-    // Return repeat count. Assumes that all transferred data is in a repeat,
-    // and not shared with other repeats (and not in a repeat, e.g. house number,
-    // and repeat for household members). Enforce rules that there should be
-    // only one non-"1" index (only one group/repeat) in the xpath.
+    /**
+     * Gets the largest child selector number in an xpath.
+     *
+     * From examination, xpaths have child selectors at each step of xpath
+     * after root, i.e. /root/path[1]/to[1]/node[1]... etc. If any of the
+     * child selectors are greater than one, then it must be a repeat group.
+     * Usually children are created with the information from a repeat group.
+     *
+     * This method picks out the greatest child selector in the supplied
+     * xpath.
+     *
+     * If there is more than one non-"1" child selector, then a warning is
+     * logged. Perhaps an exception should be thrown?
+     *
+     * This method taught me how hard it is to debug Java code using an
+     * Android device.
+     *
+     * @param instanceXpath Xpath to the node under examination
+     * @return Returns a number greater than zero.
+     */
     private int parseInstanceXpath(String instanceXpath) {
         int repeatIndex = 1;
         int numNonOne = 0;
@@ -1197,7 +1451,20 @@ public class FormRelationsManager {
         return repeatIndex;
     }
 
-    // Update mutable object: FormRelationsManager
+    /**
+     * Traverses an instance and collects all form relations information.
+     *
+     * This is a recursive method that traverses a tree in a depth-first
+     * search. It keeps a record of the nearest repeatable node as it goes. It
+     * scans all attributes for all nodes in this search.
+     *
+     * @param te The current tree element
+     * @param frm The `FormRelationsManager` object that stores traverse data.
+     * @param repeatableNode The most recent repeatable node. It is null if
+     *                       there is no repeatable ancestor node.
+     * @throws FormRelationsException Thrown if a `deleteForm` is found to be
+     * relevant, propagated from checkAttrs.
+     */
     private static void traverseInstance(TreeElement te, FormRelationsManager frm,
                                          String repeatableNode) throws FormRelationsException {
         for (int i = 0; i < te.getNumChildren(); i++) {
@@ -1205,7 +1472,7 @@ public class FormRelationsManager {
 
             String ref = teChild.getRef().toString(true);
             if (ref.contains("@template")) {
-                // skip template nodes
+                // skip template nodes (from Nafundi)
                 continue;
             }
 
@@ -1227,6 +1494,15 @@ public class FormRelationsManager {
         }
     }
 
+    /**
+     * Checks attributes of a node for form relation material.
+     *
+     * @param te The current tree element
+     * @param frm The `FormRelationsManager` object that stores traverse data.
+     * @param repeatableNode The most recent repeatable node.
+     * @throws FormRelationsException Thrown if a `deleteForm` is found to be
+     * relevant, propagated from addTraverseData.
+     */
     private static void checkAttrs(TreeElement te, FormRelationsManager frm,
                                    String repeatableNode) throws FormRelationsException {
         List<TreeElement> attrs = te.getBindAttributes();
@@ -1247,6 +1523,16 @@ public class FormRelationsManager {
         }
     }
 
+    /**
+     * Gets a Document object for a given instance path.
+     *
+     * @param path The path to the instance
+     * @return Returns a Document object for the file at the supplied path.
+     * @throws ParserConfigurationException One of various exceptions that
+     * abort the routine.
+     * @throws SAXException One of various exceptions that abort the routine.
+     * @throws IOException One of various exceptions that abort the routine.
+     */
     private static Document getDocument(String path) throws ParserConfigurationException,
             SAXException, IOException {
         File outputFile = new File(path);
@@ -1255,10 +1541,24 @@ public class FormRelationsManager {
         InputSource inputSource = new InputSource(reader);
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(inputSource);
+        inputStream.close();
+        reader.close();
         return document;
     }
 
     // Assumes one generation span max.
+
+    /**
+     * Checks parents, children, and siblings for finalized-ness.
+     *
+     * Checks if there are relations. Checks if parent is finalized. Checks if
+     * siblings are finalized. Checks if children are finalized.
+     *
+     * Does not check if self is finalized.
+     *
+     * @param instanceId The instance id of the form's family to check
+     * @return Returns an integer code for one of five outcomes.
+     */
     public static int getRelatedFormsFinalized(long instanceId) {
         int toReturn = NO_RELATIONS;
 
@@ -1297,6 +1597,9 @@ public class FormRelationsManager {
         }
 
         if ( toReturn != PARENT_UNFINALIZED && toReturn != SIBLING_UNFINALIZED ) {
+            if ( children.length > 0 ) {
+                toReturn = ALL_FINALIZED;
+            }
             try {
                 for (int i = 0; i < children.length; i++) {
                     boolean isChildFinalized = isInstanceFinalized(children[i]);
@@ -1315,6 +1618,19 @@ public class FormRelationsManager {
         return toReturn;
     }
 
+    /**
+     * Checks if an instance is finalized
+     *
+     * Being finalized is defined as not having STATUS_INCOMPLETE. That means
+     * being sent / having problems being sent / being finalized counts.
+     *
+     * It is assumed that at the family of forms spans at most two
+     * generations, i.e. no grandparents or grandchildren or beyond.
+     *
+     * @param instanceId The instance id
+     * @return Returns true if and only if the instance is proven to be finalized.
+     * @throws FormRelationsException This exception is raised if
+     */
     public static boolean isInstanceFinalized(long instanceId) throws FormRelationsException {
         boolean isFinalized = false;
 
@@ -1345,8 +1661,14 @@ public class FormRelationsManager {
         return isFinalized;
     }
 
-
-
+    /**
+     * Gets how many forms to delete
+     *
+     * Pre-condition: a `FormRelationsManager` object has been initialized and
+     * traverse data has been collected for a form.
+     *
+     * @return An integer representing how many forms to delete.
+     */
     public int getHowManyToDelete() {
         int howMany = 0;
         if ( hasDeleteForm ) {
@@ -1366,7 +1688,17 @@ public class FormRelationsManager {
         return howMany;
     }
 
-    // called when removing a repeat.
+    /**
+     * Gets how many forms to delete
+     *
+     * This version of the method is called when removing a repeat.
+     *
+     * Pre-condition: a `FormRelationsManager` object has been initialized and
+     * traverse data has been collected for a form.
+     *
+     * @param repeatIndex The index of the repeat to be removed
+     * @return An integer representing how many forms to delete.
+     */
     public int getHowManyToDelete(int repeatIndex) {
         int howMany = 0;
         if ( hasDeleteForm ) {
@@ -1387,6 +1719,14 @@ public class FormRelationsManager {
         return howMany;
     }
 
+    /**
+     * Gets information to say what is scheduled for deletion
+     *
+     * Gets all repeat indices from non-relevant saveForm attributes and
+     * checks if there are children associated with those indices.
+     *
+     * @return Returns one of three codes.
+     */
     public int getWhatToDelete() {
         int returnCode = NO_DELETE;
         if ( hasDeleteForm ) {
@@ -1406,6 +1746,17 @@ public class FormRelationsManager {
         return returnCode;
     }
 
+    /**
+     * Gets information to say what is scheduled for deletion
+     *
+     * Gets all repeat indices from non-relevant saveForm attributes and
+     * checks if there are children associated with those indices. This
+     * version of the method is called when removing a repeat, so that index
+     * is checked as well.
+     *
+     * @param repeatIndex
+     * @return
+     */
     public int getWhatToDelete(int repeatIndex) {
         int returnCode = NO_DELETE;
         if ( hasDeleteForm ) {
