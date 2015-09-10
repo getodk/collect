@@ -1,6 +1,21 @@
-gradle.ext.gradleConfigVersion = 2
+gradle.ext.gradleConfigVersion = 5
 
-gradle.ext.local = '../gradle-config/remote.gradle'
+if ( !gradle.ext.has('workspacePath') ) {
+	def env = System.getProperties();
+	logger.warn("collect/settings.gradle System.getProperties().stringPropertyNames(): " + env.stringPropertyNames());
+    def path = System.getProperty('com.android.studio.gradle.project.path');
+    if ( path != null ) {
+        logger.warn("collect/settings.gradle Found value for System.getProperty('com.android.studio.gradle.project.path')");
+        gradle.ext.workspacePath = (new File(path)).getParentFile().getAbsolutePath();
+    } else {
+        logger.warn("collect/settings.gradle No value found for System.getProperty('com.android.studio.gradle.project.path')");
+        gradle.ext.workspacePath = new File("..").getAbsolutePath();
+    }
+}
+
+logger.warn('collect/settings.gradle -- gradle.ext.workspacePath: ' + gradle.ext.workspacePath)
+
+gradle.ext.local = gradle.ext.workspacePath + '/gradle-config/remote.gradle'
 gradle.ext.remote = 'https://raw.githubusercontent.com/opendatakit/gradle-config/' + gradle.ext.gradleConfigVersion + '/remote.gradle'
 gradle.ext.useLocal = true // set to false to always build against remote artifacts
 
