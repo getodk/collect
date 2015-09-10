@@ -2,9 +2,8 @@
  GRADLE CONFIG
  *************************************************************************************************/
 
-if ((new File(gradle.local)).exists()) { // TODO: This is very strange
-    def localPath = '../' + gradle.local // Shouldn't need to append ../ not consistent
-    apply from: localPath
+if ((new File(gradle.local)).exists()) {
+    apply from: gradle.local
 } else {
     apply from: gradle.remote
 }
