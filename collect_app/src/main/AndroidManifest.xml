@@ -55,6 +55,7 @@
 
     <application
         android:name="org.odk.collect.android.application.Collect"
+		android:supportsRtl="true" 
         android:largeHeap="true"
         android:installLocation="auto"
         android:icon="@drawable/notes"

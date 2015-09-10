@@ -44,7 +44,9 @@
 				android:background="@android:color/transparent"
 				android:textSize="22sp"
 				android:textStyle="bold"
+				android:paddingStart="7dip"
 				android:paddingLeft="7dip"
+				android:paddingEnd="7dip"
 				android:paddingRight="7dip" />
 			<TextView
 				android:id="@+id/url"
@@ -53,7 +55,9 @@
 				android:layout_height="fill_parent"
 				android:background="@android:color/transparent"
 				android:textSize="14sp"
+				android:paddingStart="7dip"
 				android:paddingLeft="7dip"
+				android:paddingEnd="7dip"
 				android:paddingRight="7dip" />
 		</LinearLayout>
 	</LinearLayout>
