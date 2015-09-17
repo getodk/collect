@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
@@ -27,6 +28,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormRelationsManager;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -123,6 +125,21 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         try {
     	    exportData(mMarkCompleted);
+
+            // PMA-Linking BEGIN
+        /*  Must try to link before exporting. Exporting encrypts.
+         *  Encrypting information must be given in the form.
+         *  see https://opendatakit.org/help/encrypted-forms/
+         *  TODO determine the best place/logic for when to output / update child forms.
+         *
+         *  Must update parent first (transfer correct values) because manageChildForms
+         *  deletes if deleteForm is relevant.
+         */
+            Long instanceId = Long.valueOf(mUri.getLastPathSegment());
+            TreeElement instanceRoot = formController.getFormDef().getInstance().getRoot();
+            FormRelationsManager.manageFormRelations(instanceId, instanceRoot);
+            // PMA-Linking END
+
 
             // attempt to remove any scratch file
             File shadowInstance = savepointFile(formController.getInstancePath());
@@ -362,7 +379,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      * @param path
      * @return
      */
-    static void exportXmlFile(ByteArrayPayload payload, String path) throws IOException {
+    // PMA-Linking BEGIN
+    // This helper method used to be in FileUtils. Needed to make it `public` for use in
+    // FormRelationsManager.
+    // PMA-Linking END
+    public static void exportXmlFile(ByteArrayPayload payload, String path) throws IOException {
         File file = new File(path);
         if (file.exists() && !file.delete()) {
             throw new IOException("Cannot overwrite " + path + ". Perhaps the file is locked?");

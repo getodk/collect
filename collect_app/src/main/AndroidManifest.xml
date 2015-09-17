@@ -10,7 +10,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.odk.collect.android"
-    android:versionCode="1052"
+    android:versionCode="1054"
     android:versionName="1.4.7" >
 
     <uses-feature android:name="android.hardware.location" android:required="false" />
@@ -136,6 +136,12 @@
         </activity>
         <activity
             android:name=".activities.FormManagerList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.ChildInstanceChooserList"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.ParentInstanceChooserList"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.FormDownloadList"

@@ -16,6 +16,7 @@ package org.odk.collect.android.tasks;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.logic.FormRelationsManager;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import android.content.ContentResolver;
@@ -59,6 +60,10 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 	            
 	            if (wasDeleted > 0) {
 	            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
+
+					// PMA-Linking BEGIN
+					FormRelationsManager.removeAllReferences(params[i]);
+					// PMA-Linking END
 	            }
 			} catch ( Exception ex ) {
 				Log.e(t,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());

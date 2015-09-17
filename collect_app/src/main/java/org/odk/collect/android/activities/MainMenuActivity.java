@@ -170,7 +170,7 @@ public class MainMenuActivity extends Activity {
 				Collect.getInstance().getActivityLogger()
 						.logAction(this, "editSavedForm", "click");
 				Intent i = new Intent(getApplicationContext(),
-						InstanceChooserList.class);
+						ParentInstanceChooserList.class);
 				startActivity(i);
 			}
 		});
