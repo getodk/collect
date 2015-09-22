@@ -36,7 +36,9 @@ the License.
         android:background="#FFFFFF"
         android:orientation="horizontal"
         android:paddingBottom="0dip"
+        android:paddingStart="4dip"
         android:paddingLeft="4dip"
+        android:paddingEnd="4dip"
         android:paddingRight="4dip"
         android:paddingTop="4dip" >
 
