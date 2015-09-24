@@ -107,9 +107,12 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
-        } 
-        mediaLayout.setPlayTextColor(mPlayColor);
-        
+        }
+
+        if (mediaLayout != null) {
+            mediaLayout.setPlayTextColor(mPlayColor);
+        }
+
         String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null, "playBackgroundColor");
         if (playBackgroundColorString != null) {
             try {
@@ -117,8 +120,11 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
-        } 
-        mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+        }
+
+        if (mediaLayout != null) {
+            mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+        }
     }
 
     public void playAudio() {
