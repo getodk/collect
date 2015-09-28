@@ -17,7 +17,6 @@
   <string name="cancel">Zrušit</string>
   <string name="cancel_loading_form">Zrušit</string>
   <string name="cancel_location">Zrušit</string>
-  <string name="cancel_saving_form">Zrušit</string>
   <string name="cannot_edit_completed_form">Dotazník, který byl označen za kompletní už nejde editovat. Může být zakódovaný.</string>
   <string name="capture_audio">Nahrát zvuk</string>
   <string name="capture_image">Udělat fotku</string>
@@ -103,7 +102,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="play_audio">Přehrát zvuk</string>
   <string name="play_video">Přehrát video</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
-  <string name="please_wait_google_drive">Prosím čekejte. Připojuji se k Disku Google.</string>
   <string name="please_wait_long">Prosím čekejte. Může to trvat několik minut.</string>
   <string name="quit_application">Konec %s</string>
   <string name="quit_entry">Uložit dotazník a skončit</string>
@@ -176,7 +174,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="edit_prompt">Editovat otázku</string>
   <string name="selected_google_account_text">Účet Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Jiný</string>
   <string name="font_size_extra_large">Extra velký</string>
   <string name="font_size_large">Velký</string>
@@ -244,7 +241,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="swipe_instructions">Jste na začátku dotazníku %s. Pro posun vpřed a zpět přejeďte prstem po obrazovce tak, jak vidíte níže.</string>
   <string name="buttons_instructions">Jste na začátku dotazníku %s. Pro posun vpřed a zpět stiskněte tlačítka se šipkami zobrazená níže</string>
   <string name="swipe_buttons_instructions">Jste na začátku dotazníku %s. Pro pohyb vpřed a zpět přejeďte prstem po obrazovce nebo stiskněte tlačítka se šipkami</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Tisknout</string>
   <string name="no_printer">Vybraná tiskárna není nainstalována. Nejdříve ji nainstalujte.</string>
   <string name="constraint_behavior">Ověření správnosti odpovědi</string>
@@ -275,8 +271,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="ext_assign_value_error">Nemohu přidělit hodnotu k \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Nemohu vymazat \'%s\'. Vymažte soubor ručně a stáhněte dotazník znovu.</string>
   <string name="fs_create_media_folder_error">Nemohu vytvořit adresář pro mediální soubory \'%s\'.</string>
-  <string name="fs_create_folder_error">Nemohu vytvořit adresář: %s</string>
-  <string name="fs_create_folder_is_file_error">\'%s\' existuje, ale není to adresář.</string>
   <string name="fs_file_copy_error">Nezdařilo se nakopírovat \'%1$s\' přes \'%2$s\'. Důvod: %3$s </string>
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="survey_multiple_forms_error">Stáhli jste dva různé formuláře se shodným ID a verzí. Možná jste nahráli stejný dotazník dvakrát nebo na jiné servery. Každopádně, jeden byste měli smazat.</string>
@@ -290,8 +284,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="survey_saving_encrypting_message">Šifruji data...</string>
   <string name="high_resolution_summary">Povolit vysoké rozlišení videonahrávek</string>
   <string name="high_resolution">Vysoké rozlišení videa</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">ID projektu</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Můj disk</string>
   <string name="go_shared">Sdíleno se mnou</string>
@@ -299,16 +291,9 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="protocol_settings">Konfigurovat nastavení platformy</string>
   <string name="aggregate_preferences">Nastavení ODK Aggregate</string>
   <string name="other_preferences">Ostatní nastavení platformy</string>
-  <string name="gme_preferences">Nastavení Google Maps Engine</string>
-  <string name="no_coordinates">Instance nemá žádné souřadnice, Není možné ji nahrát.</string>
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
-  <string name="gme_set_account">Vybrali jste Google Maps Engine jako svůj server, nyní zvolte související účet Google v Obecném nastavení</string>
   <string name="invalid_oauth">Neplatný kód OAuth 2</string>
-  <string name="gme_repeat_error">V současnosti Google Maps Engine nepodporuje opakování</string>
-  <string name="gme_project_id_error">ID projektu nenalezeno. Musíte zadat ID projektu v dotazníku nebo v Google Maps Engine</string>
-  <string name="gme_table_error">Nemohu najít nebo vytvořit tabulku Google Maps Engine</string>
-  <string name="gme_create_400">Chyba 400 BAD REQUEST. Toto je chyba Google Maps Engine po vytvoření nové tabulky. Zkuste prosím odeslat znovu za několik vteřin.</string>
   <string name="picasa_upload_error">Chyba při nahrávání fotografie - Fotografie není k dispozici : %1$s</string>
   <string name="odk_auth_auth_fail">Chyba autorizace ODK pro automatické odesílání dat, ujistěte se, že Vaše nastavení je správné</string>
   <string name="odk_auto_note">ODK - výsledek automatického odeslání</string>
@@ -316,8 +301,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="delete_after_send">Vymazat po odeslání</string>
   <string name="delete_after_send_summary">Vymaže dokončené dotazníky a média po odeslání na server</string>
   <string name="change_server_url">URL Serveru</string>
-  <string name="gme_search_browse">Hledejte v dotaznících. Nebo využijte \"Můj disk\" k procházení</string>
+  <string name="google_search_browse">Hledejte v dotaznících. Nebo využijte \"Můj disk\" k procházení</string>
   <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
-  <string name="select_maps_account">Vybrali jste Google Maps Engine jako svůj server, nyní zvolte související účet Google v Obecném nastavení</string>
-  <string name="get_project_IDs">Získávám ID Projektu</string>
-</resources>
+  </resources>

@@ -17,7 +17,6 @@
   <string name="cancel">Anuluj</string>
   <string name="cancel_loading_form">Anuluj</string>
   <string name="cancel_location">Anuluj</string>
-  <string name="cancel_saving_form">Anuluj</string>
   <string name="cannot_edit_completed_form">Ten formularz nie może być edytowany gdy zostanie zaznaczony jako skończony. Formularz może być zaszyfrowany.</string>
   <string name="capture_audio">Nagraj Dźwięk</string>
   <string name="capture_image">Zrób Zdjęcie</string>
@@ -104,7 +103,6 @@
   <string name="play_audio">Odtwórz Dźwięk</string>
   <string name="play_video">Odtwórz Wideo</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
-  <string name="please_wait_google_drive">Poczekaj. Łączę się z Google Drive.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>
   <string name="quit_application">Zakończ %s</string>
   <string name="quit_entry">Zapisz Formularz i Zakończ</string>
@@ -177,7 +175,6 @@
   <string name="edit_prompt">Edytuj Pytanie</string>
   <string name="selected_google_account_text">Konto Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Formularze Google</string>
   <string name="server_platform_other">Inny</string>
   <string name="font_size_extra_large">Extra Duży</string>
   <string name="font_size_large">Duży</string>
@@ -283,8 +280,6 @@
   <string name="ext_assign_value_error">Nie mogę przypisać wartości do \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Nie mogę skasować \'%s\'. Skasuj, proszę, plik manualnie i ponownie pobierz formularz.</string>
   <string name="fs_create_media_folder_error">Nie mogę utworzyć folderu mediów \'%s\'.</string>
-  <string name="fs_create_folder_error">Zebrane raporty: Nie mogę utworzyć katalogu: %s</string>
-  <string name="fs_create_folder_is_file_error">Zebrane raporty: \'%s\' istnieje, ale nie jest katalogiem.</string>
   <string name="fs_file_copy_error">Nie mogę skopiować \'%1$s\' na \'%2$s\'. Powód: %3$s</string>
   <string name="survey_internal_error">Błąd wewnętrzny: przejście do pytania nie powiodło się.</string>
   <string name="survey_multiple_forms_error">Pobrałeś dwa różne formularze z tym samym ID formularza oraz wersją. Może był to ten sam formularz wysłany w różnym czasie lub na różne serwery. Powinieneś usunąć jeden z tych formularzy.</string>
@@ -298,8 +293,6 @@
   <string name="survey_saving_encrypting_message">Szyfruję dane...</string>
   <string name="high_resolution_summary">Włącz nagrywanie wideo wysokiej rozdzielczości</string>
   <string name="high_resolution">Włącz wideo wysokiej rozdzielczości</string>
-  <string name="server_platform_google_maps_engine">Google Drive, silnik Google Maps</string>
-  <string name="gme_project_id">ID Projektu</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
@@ -307,16 +300,9 @@
   <string name="protocol_settings">Skonfiguruj ustawienia platformy</string>
   <string name="aggregate_preferences">Ustawienia ODK Aggregate</string>
   <string name="other_preferences">Inne ustawienia platformy</string>
-  <string name="gme_preferences">Ustawienia silnika Google Maps</string>
-  <string name="no_coordinates">Przykład nie ma współrzędnych. Nie mogę wysłać.</string>
   <string name="drive_get_file">Pobieram %1$s i pliki medialne.</string>
   <string name="no_google_account">Nie wybrałeś Google Account!</string>
-  <string name="gme_set_account">Wybrałeś silnik Google Maps jako swój serwer, wskaż proszę powiązane Google Account w Ustawieniach Ogólnych zanim będziesz kontynuować</string>
   <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
-  <string name="gme_repeat_error">Obecnie powtórzenia nie są obsługiwane przez silnik Google Maps.</string>
-  <string name="gme_project_id_error">Nie znalazłem ID projektu. Musisz zadeklarować ID projektu w ustawieniach silnika Google Maps lub w formularzu.</string>
-  <string name="gme_table_error">Nie mogę znaleźć lub stworzyć tabeli silnika Google Maps</string>
-  <string name="gme_create_400">Otrzymałem 400 BAD REQUEST. Jest to znany błąd silnika Google Maps tuż po utworzeniu nowej tabeli, spróbuj wysłać ponownie za kilka sekund.</string>
   <string name="picasa_upload_error">Nie udało się wysłać zdjęcia, które nie istnieje: %1$s</string>
   <string name="odk_auth_auth_fail">Błąd autentykacji ODK Autosend, proszę upewnij się, że twoje ustawienia są poprawne</string>
   <string name="odk_auto_note">Powiadomienie ODK Autosend</string>
@@ -324,8 +310,6 @@
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>
   <string name="change_server_url">Serwer URL</string>
-  <string name="gme_search_browse">Szukaj formularzy. Lub wskaż \'My Drive\' poniżej, aby przeglądać.</string>
+  <string name="google_search_browse">Szukaj formularzy. Lub wskaż \'My Drive\' poniżej, aby przeglądać.</string>
   <string name="no_blank_search">Pole wyszukiwania nie może być puste.</string>
-  <string name="select_maps_account">Wybrałeś silnik Google Maps jako swój serwer, wskaż proszę powiązane Google Account w Ustawieniach Ogólnych zanim będziesz kontynuować</string>
-  <string name="get_project_IDs">Pobieram ID projektu</string>
-</resources>
+  </resources>

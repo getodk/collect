@@ -17,7 +17,6 @@
   <string name="cancel">Terug</string>
   <string name="cancel_loading_form">Terug</string>
   <string name="cancel_location">Terug</string>
-  <string name="cancel_saving_form">Terug</string>
   <string name="cannot_edit_completed_form">Een afgerond formulier kan niet bewerkt worden.</string>
   <string name="capture_audio">Audio vastleggen</string>
   <string name="capture_image">Foto nemen</string>
@@ -100,7 +99,6 @@
   <string name="play_audio">Bekijk audio</string>
   <string name="play_video">Bekijk video</string>
   <string name="please_wait">Een moment geduld alstublieft.</string>
-  <string name="please_wait_google_drive">Benaderen Google Drive...</string>
   <string name="please_wait_long">Geduld, dit kan enkele minuten duren.</string>
   <string name="quit_application">Sluit %s af</string>
   <string name="quit_entry">Opslaan en afsluiten</string>
@@ -173,7 +171,6 @@
   <string name="edit_prompt">Edit Prompt</string>
   <string name="selected_google_account_text">Google Account</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Anders</string>
   <string name="font_size_extra_large">Extra groot</string>
   <string name="font_size_large">Groot</string>
@@ -241,7 +238,6 @@
   <string name="swipe_instructions">U ben aan het einde van %s. Veeg over het scherm zoals afgebeeld om voor- of achteruit te gaan.</string>
   <string name="buttons_instructions">U ben aan het einde van %s. Gebruik de navigatie knoppen om voor- of achteruit te gaan.</string>
   <string name="swipe_buttons_instructions">U ben aan het einde van %s. Gebruik de navigatie knoppen of veeg over het scherm zoals afgebeeld om voor- of achteruit te gaan.</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Start printen</string>
   <string name="no_printer">De gevraagde printer is niet geinstalleerd. Installeer de printer.</string>
   <string name="constraint_behavior_on_swipe">Controleer bij doorgaan</string>
@@ -270,8 +266,6 @@
   <string name="ext_assign_value_error">Kon de waarde niet toewijzen bij \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Kon bestand \'%s\' niet verwijderen. Verwijd het bestand handmatig en download het formulier opnieuw.</string>
   <string name="fs_create_media_folder_error">Kon media directory \'%s\' niet aanmaken.</string>
-  <string name="fs_create_folder_error">Kan directory %s niet aanmaken.</string>
-  <string name="fs_create_folder_is_file_error">\'%s\' bestaat, maar is geen directory.</string>
   <string name="fs_file_copy_error">Kon \'%1$s\' niet over \'%2$s\' kopieren. Oorzaak: %3$s</string>
   <string name="survey_internal_error">Interne fout: doorgaan naar invoer mislukt.</string>
   <string name="survey_multiple_forms_error">Je hebt twee formulieren met een identieke form ID en versie. Misschien zijn ze op verschillende tijden of verschillende servers geupload. Je moet er één verwijderen.</string>
@@ -285,7 +279,6 @@
   <string name="survey_saving_encrypting_message">Data versleutelen...</string>
   <string name="high_resolution_summary">Hoge resolutie video opnames toestaan</string>
   <string name="high_resolution">Hoge resolutie video toestaan</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mijn Drive</string>
   <string name="go_shared">Gedeeld met mij</string>
@@ -295,8 +288,6 @@
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>
-  <string name="gme_search_browse">Zoek naar formulieren. Of kies \'Mijn Drive\' om te bladeren.</string>
+  <string name="google_search_browse">Zoek naar formulieren. Of kies \'Mijn Drive\' om te bladeren.</string>
   <string name="no_blank_search">Zoekveld mag niet leeg zijn.</string>
-  <string name="select_maps_account">Je hebt Google Maps Engine als server gekozen, kies nu een gekoppeld Google account in de algemene instellingen voordat je verder gaat</string>
-  <string name="get_project_IDs">Ophalen Project IDs</string>
-</resources>
+  </resources>

@@ -15,7 +15,6 @@
   <string name="cancel">Atšaukti</string>
   <string name="cancel_loading_form">Atšaukti</string>
   <string name="cancel_location">Atšaukti</string>
-  <string name="cancel_saving_form">Atšaukti</string>
   <string name="cannot_edit_completed_form">Ši forma daugiau negalės būti redaguojama, jei bus pažymėsite, kad ji baigta.</string>
   <string name="capture_audio">Įrašyti garsą</string>
   <string name="capture_image">Užfiksuoti kadrą</string>
@@ -165,7 +164,6 @@
   <string name="edit_prompt">Keisti atsakymą</string>
   <string name="selected_google_account_text">Google sąskaita</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Kita</string>
   <string name="font_size_extra_large">Labai didelis</string>
   <string name="font_size_large">Didelis</string>
@@ -232,7 +230,6 @@
   <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
   <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
   <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Serverio URL</string>

@@ -15,7 +15,6 @@
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
-  <string name="cancel_saving_form">Cancelar</string>
   <string name="cannot_edit_completed_form">Este formulário não pode ser editado depois de marcado como completo.</string>
   <string name="capture_audio">Gravar Áudio</string>
   <string name="capture_image">Tirar Foto</string>
@@ -97,7 +96,6 @@
   <string name="play_audio">Tocar Áudio</string>
   <string name="play_video">Assistir o Vídeo</string>
   <string name="please_wait">Por favor, aguarde um pouco.</string>
-  <string name="please_wait_google_drive">Por favor, aguarde. Acessando o Google Drive.</string>
   <string name="please_wait_long">Por favor, aguarde. Isto levará alguns minutos.</string>
   <string name="quit_application">Saída %s</string>
   <string name="quit_entry">Salvar Formulário e Sair</string>
@@ -170,7 +168,6 @@ Escolher Imagem</string>
   <string name="edit_prompt">Editar Prompt</string>
   <string name="selected_google_account_text">Conta Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Outro</string>
   <string name="font_size_extra_large">Extra Grande</string>
   <string name="font_size_large">Grande</string>
@@ -237,7 +234,6 @@ Escolher Imagem</string>
   <string name="swipe_instructions">Você está no início de %s. Deslize a tela como mostrado abaixo para avançar ou retroceder</string>
   <string name="buttons_instructions">Você está no início de %s. Toque nas setas abaixo para retroceder ou avançar</string>
   <string name="swipe_buttons_instructions">Você está no início de  %s. Deslize a tela como mostrado abaixo ou toque nas setas para retroceder ou avançar</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Impressão Inicializada</string>
   <string name="no_printer">A impressora solicitada não está instalada. Por favor, instale a impressora</string>
   <string name="constraint_behavior">Comportamento de processamento da regra</string>
@@ -268,8 +264,6 @@ Escolher Imagem</string>
   <string name="ext_assign_value_error">Não foi possível atribuir o valor a \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Não foi possível apagar \'%s\'. Por favor apague o arquivo manualmente e descarregue o formulário novamente.</string>
   <string name="fs_create_media_folder_error">Não foi possível criar a pasta de mídia \'%s\'.</string>
-  <string name="fs_create_folder_error">Collect informa: Não foi possível criar o diretório: %s</string>
-  <string name="fs_create_folder_is_file_error">Collect reporta: \'%s\' existe, mas não é um diretório.</string>
   <string name="fs_file_copy_error">Não foi possível copiar os dados de \'%1$s\' para \'%2$s\'.. Motivo: %3$s</string>
   <string name="survey_internal_error">Erro interno: falha na passagem para a linha de comando.</string>
   <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
@@ -283,8 +277,6 @@ Escolher Imagem</string>
   <string name="survey_saving_encrypting_message">Criptografando dados...</string>
   <string name="high_resolution_summary">Acionar gravação de videos em alta resolução</string>
   <string name="high_resolution">Acionar video em alta resolução</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Ferramenta Google Maps</string>
-  <string name="gme_project_id">Identificação do projeto</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>
@@ -292,16 +284,9 @@ Escolher Imagem</string>
   <string name="protocol_settings">Configurações da plataforma</string>
   <string name="aggregate_preferences">Configurações do Agregador ODK.</string>
   <string name="other_preferences">Configurações de outras plataformas.</string>
-  <string name="gme_preferences">Configurações da Ferramenta Google Maps.</string>
-  <string name="no_coordinates">O exemplo não possui coordenadas. Não foi possível carregar.</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
-  <string name="gme_set_account">Você selecionou a ferramenta Google Maps como seu servidor. Por favor, selecione uma conta de usuário Google nas configurações gerais antes de continuar.</string>
   <string name="invalid_oauth">Modo OAuth 2 inválido</string>
-  <string name="gme_repeat_error">Repetições não são permitidas atualmente na Ferramenta Google Maps.</string>
-  <string name="gme_project_id_error">Nenhuma identificação do projeto foi encontrada. A declaração da identidade do projeto na Ferramenta Google Maps ou no formulário é obrigatória.</string>
-  <string name="gme_table_error">Não foi possível encontrar ou criar uma tabela na Ferramenta Google Maps.</string>
-  <string name="gme_create_400">400 BAD REQUEST recebida. Esta é uma falha conhecida com a Ferramenta Google Maps depois de criada uma nova tabela. Por favor, tente realizar o envio novamente em alguns segundos.</string>
   <string name="picasa_upload_error">Falha ao carregar foto não existente: %1$s</string>
   <string name="odk_auth_auth_fail">Falhar de envio automático do ODK, por favor certifique-se de que suas configurações estão corretas.</string>
   <string name="odk_auto_note">Notificação de envio automático do ODK</string>
@@ -309,8 +294,6 @@ Escolher Imagem</string>
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="change_server_url">Servidor URL</string>
-  <string name="gme_search_browse">Procure por formulários ou selecione \'Meu Disco\' a seguir para navegar. </string>
+  <string name="google_search_browse">Procure por formulários ou selecione \'Meu Disco\' a seguir para navegar. </string>
   <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
-  <string name="select_maps_account">Você selecionou a ferramenta Google Maps como seu servidor. Por favor, selecione uma conta de usuário Google nas configurações gerais antes de continuar.</string>
-  <string name="get_project_IDs">Obtendo identificações dos projetos.</string>
-</resources>
+  </resources>

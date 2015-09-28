@@ -17,7 +17,6 @@
   <string name="cancel">Cancel·lar</string>
   <string name="cancel_loading_form">Cancel·lar</string>
   <string name="cancel_location">Cancel·lar</string>
-  <string name="cancel_saving_form">Cancel·lar</string>
   <string name="cannot_edit_completed_form">El formulari no pot ser editat un cop marcat com complert. Pot haver-se encriptat.</string>
   <string name="capture_audio">Enregistrar so</string>
   <string name="capture_image">Pren foto</string>
@@ -102,7 +101,6 @@
   <string name="play_audio">Reprodueix So</string>
   <string name="play_video">Reprodueix Vídeo</string>
   <string name="please_wait">Un moment si us plau.</string>
-  <string name="please_wait_google_drive">Espera si us plau. Accedint Google Drive.</string>
   <string name="please_wait_long">Un moment si us plau. Això pot trigar uns minuts.</string>
   <string name="quit_application">Sortida %s</string>
   <string name="quit_entry">Desa formulari i surt.</string>
@@ -175,7 +173,6 @@
   <string name="edit_prompt">Editar entrada:</string>
   <string name="selected_google_account_text">Compte Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Altres</string>
   <string name="font_size_extra_large">Extra gran</string>
   <string name="font_size_large">Gran</string>
@@ -250,7 +247,6 @@
   <string name="form_processing_logic_1">gener 2015(mes segur)</string>
   <string name="form_processing_logic_2">Mitjans 2014(lent)</string>
   <string name="form_processing_logic_3">Inicis 2014(ràpid)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Inicia la impressió</string>
   <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>
   <string name="constraint_behavior">Comportament del processament de restriccions</string>
@@ -281,8 +277,6 @@
   <string name="ext_assign_value_error">No pot assignar el valor a \'%s\'</string>
   <string name="fs_delete_media_path_if_file_error">No pot esborrar \'%s\': Si us plau, esborrar l\'arxiu manualment i recarregar el formulari.</string>
   <string name="fs_create_media_folder_error">No pot crear la carpeta de medis \'%s\'</string>
-  <string name="fs_create_folder_error">Collect reports: No pot crear carpeta: %s</string>
-  <string name="fs_create_folder_is_file_error">Informes de Collect: \'%s\' existeix, però no és un directori.</string>
   <string name="fs_file_copy_error">No pot copiar \'%1$s\' sobre \'%2$s\'. Raó: %3$s</string>
   <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
   <string name="survey_multiple_forms_error">Heu descarregat dos formularis diferents amb el mateix ID i versió. Potser son formularis repetits o procedents de dos servidors diferents. Cal esborrar-ne un.</string>
@@ -296,8 +290,6 @@
   <string name="survey_saving_encrypting_message">Encriptant dades...</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
   <string name="high_resolution">Activar vídeo HD</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">ID de projecte</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
@@ -305,16 +297,9 @@
   <string name="protocol_settings">Configurar característiques de la plataforma</string>
   <string name="aggregate_preferences">Paràmetres d\'ODK Aggregate</string>
   <string name="other_preferences">Paràmetres d\'altres plataformes</string>
-  <string name="gme_preferences">característiques de Google Maps Engine</string>
-  <string name="no_coordinates">Instància sense coordenades. No pot enviar.</string>
   <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
   <string name="no_google_account">Compte Google no seleccionada!</string>
-  <string name="gme_set_account">Has seleccionat Google Maps Engine com servidor, si us plau, selecciona el compte Google corresponent  abans de continuar</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
-  <string name="gme_repeat_error">Repeticions no suportades per Google Maps Engine en aquest moment.</string>
-  <string name="gme_project_id_error">ID de projecte no trobat. Cal declarar un ID de projecte a la configuració de Google Maps Engine o en el formulari.</string>
-  <string name="gme_table_error">No pot trobar o crear una taula Google Maps Engine</string>
-  <string name="gme_create_400">400 BAD REQUEST rebut. Es un error conegut amb Google Maps Engine després de crear una nova taula, si us plau, provar de tornar a enviar en uns segons.</string>
   <string name="picasa_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
@@ -322,8 +307,6 @@
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
   <string name="change_server_url">URL Servidor</string>
-  <string name="gme_search_browse">Buscar formularis. O seleccionar \'My Drive\' per visualitzat.</string>
+  <string name="google_search_browse">Buscar formularis. O seleccionar \'My Drive\' per visualitzat.</string>
   <string name="no_blank_search">Camp de cerca no pot ser blanc.</string>
-  <string name="select_maps_account">Has seleccionat Google Maps Engine com el teu servidor, si us plau selecciona el corresponent compte Google a la configuració general abans de seguir.</string>
-  <string name="get_project_IDs">Obtenint IDs de Projecte</string>
-</resources>
+  </resources>

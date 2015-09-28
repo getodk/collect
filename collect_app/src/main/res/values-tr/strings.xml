@@ -15,7 +15,6 @@
   <string name="cancel">Vazgeç</string>
   <string name="cancel_loading_form">Vazgeç</string>
   <string name="cancel_location">Vazgeç</string>
-  <string name="cancel_saving_form">Vazgeç</string>
   <string name="cannot_edit_completed_form">Bu form bitmiş olarak işaretlendiği için değiştirilemez. Şifrelenmiştir</string>
   <string name="capture_audio">Ses Kaydi</string>
   <string name="capture_image">Resim Çek</string>
@@ -138,7 +137,6 @@
   <string name="save_as_error">İsim alani boş bırakilamaz</string>
   <string name="selected_google_account_text">Google account</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Diğer</string>
   <string name="font_size_extra_large">Çok Büyük</string>
   <string name="font_size_large">Büyük</string>
@@ -179,7 +177,6 @@
   <string name="form_backward">Geri</string>
   <string name="navigation">navigasyon</string>
   <string name="buttons_navigation">ileri/geri butonlarini kullan </string>
-  <string name="change_url_default">URL</string>
   <string name="view_change_location">Lokasyonu Göster yada Değiştir</string>
   <string name="open_url">URL Aç</string>
 </resources>

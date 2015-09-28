@@ -15,7 +15,6 @@
   <string name="cancel">Huỷ</string>
   <string name="cancel_loading_form">Huỷ</string>
   <string name="cancel_location">Huỷ</string>
-  <string name="cancel_saving_form">Huỷ</string>
   <string name="cannot_edit_completed_form">Mẫu thu thập số liệu này không thể chỉnh sửa khi đã được đánh dấu là hoàn thành. Dữ liệu có thể bị mã hoá.</string>
   <string name="capture_audio">Ghi âm</string>
   <string name="capture_image">Chụp ảnh</string>
@@ -166,7 +165,6 @@
   <string name="edit_prompt">Sửa thông tin</string>
   <string name="selected_google_account_text">Tài khoản Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Biểu mẫu Google</string>
   <string name="server_platform_other">Khác</string>
   <string name="font_size_extra_large">Cực lớn</string>
   <string name="font_size_large">Lớn</string>
@@ -233,7 +231,6 @@
   <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
   <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
   <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Địa chỉ máy chủ</string>

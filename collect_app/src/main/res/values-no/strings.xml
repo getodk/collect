@@ -17,7 +17,6 @@
   <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
-  <string name="cancel_saving_form">Avbryt</string>
   <string name="cannot_edit_completed_form">Skjemaet kan ikke redigeres etter at den er merket som fullført. Det kan være kryptert.</string>
   <string name="capture_audio">Ta opp lyd</string>
   <string name="capture_image">Ta bilde</string>
@@ -177,7 +176,6 @@
   <string name="edit_prompt">Rediger prompt</string>
   <string name="selected_google_account_text">Google-konto</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Andre</string>
   <string name="font_size_extra_large">Ekstra stor</string>
   <string name="font_size_large">Stor</string>
