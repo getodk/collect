@@ -38,9 +38,9 @@
     -->
 
     <permission
-          android:name="org.odk.collect.android.permission.MAPS_RECEIVE"
+          android:name="${packageName}.permission.MAPS_RECEIVE"
           android:protectionLevel="signature" />
-    <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="${packageName}.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8" />
@@ -65,11 +65,11 @@
         <provider
             android:exported="true"
             android:name="org.odk.collect.android.provider.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms" />
+            android:authorities="${packageName}.provider.odk.forms" />
         <provider
             android:exported="true"
             android:name="org.odk.collect.android.provider.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances" />
+            android:authorities="${packageName}.provider.odk.instances" />
 
         <activity
             android:name=".activities.MainMenuActivity"
