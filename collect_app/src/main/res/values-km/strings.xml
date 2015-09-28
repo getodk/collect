@@ -149,6 +149,8 @@
   <string name="change_font_size">ទំហំពុម្ភអក្សរ</string>
   <string name="form_scan_starting">ការស្កែនសម្រាប់ទម្រង់</string>
   <string name="access_error">មានបញ្ហាខណៈពេលដំណើរការ %s:</string>
+  <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
+  <string name="file_fetch_failed">បញ្ហា: %2$s (%3$s) នៅ %1$s</string>
   <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>
   <string name="no_forms_uploaded">សុំទោស, គ្មានទម្រង់សម្រាប់ផ្ទុកឡើង.</string>
@@ -243,6 +245,7 @@
   <string name="ext_import_completed_message">ការអានទិន្នន័យ​បានបញ្ចប់!</string>
   <string name="fs_create_media_folder_error">មិនអាចបង្កើតថតមេឌៀបាន \'%s\'.</string>
   <string name="survey_loading_reading_csv_message">កំពុង​អាន​ឯកសារ CSV</string>
+  <string name="survey_saving_validating_message">កំពុងផ្ទៀងផ្ទាត់ចម្លើយ</string>
   <string name="survey_saving_collecting_message">កំពុងប្រមូលទិន្នន័យ</string>
   <string name="survey_saving_saving_message">កំពុងរក្សាទុកទៅកាន់ថាស SD</string>
   <string name="survey_saving_finalizing_message">កំពុងបញ្ចប់ទៅកាន់ថាស SD</string>
