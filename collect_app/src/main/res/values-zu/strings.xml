@@ -16,7 +16,6 @@
   <string name="cancel">Khansela</string>
   <string name="cancel_loading_form">Khansela</string>
   <string name="cancel_location">Khansela</string>
-  <string name="cancel_saving_form">Khansela</string>
   <string name="cannot_edit_completed_form">Leli fomu ayikwazi ukushintshwa uma isiyenziwe ephelele. Kungase ibethelwe.</string>
   <string name="capture_audio">Qopha umsindo</string>
   <string name="capture_image">Thwebula isithombe</string>
@@ -102,7 +101,6 @@
   <string name="play_audio">Dlala Umsindo</string>
   <string name="play_video">Dlala Umbukiso</string>
   <string name="please_wait">Sicela ulinde imizuzu emibalwa.</string>
-  <string name="please_wait_google_drive">Sicela ulinde. Kusafinyelelwa imvume yegoogle</string>
   <string name="please_wait_long">Uyacelwa ulinde. Lokhu kungathatha imizuzu embalwa.</string>
   <string name="quit_application">Phuma %s</string>
   <string name="quit_entry">londoloza ifomu bese uyaphuma</string>
@@ -171,7 +169,6 @@
   <string name="edit_prompt">Hlela ngokushesha</string>
   <string name="selected_google_account_text">akhawunti Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Amafomu eGoogle</string>
   <string name="server_platform_other">Okunye</string>
   <string name="font_size_extra_large">Okukhulu kakhulu</string>
   <string name="font_size_large">Okukhulu </string>
@@ -253,8 +250,6 @@
   <string name="ext_import_completed_message">Ukufunda ulwazi kuqediwe</string>
   <string name="ext_not_initialized_error">ExternalDataManager wolwazi uqalisiwe</string>
   <string name="fs_create_media_folder_error">Awenzeki umqulu wezokuxhumana</string>
-  <string name="fs_create_folder_error">Qoqa imibiko:Asenzeki isiqondiso</string>
-  <string name="fs_create_folder_is_file_error">Qoqa imibiko \'%s\' ikhona, kodwa akusona isiqondiso:</string>
   <string name="survey_loading_reading_form_message">Ufunda encazelweni</string>
   <string name="survey_loading_reading_data_message">ufunda ulwazi lwenhlovo…</string>
   <string name="survey_loading_reading_csv_message">ufunda amafayili e CSV…</string>
@@ -265,8 +260,6 @@
   <string name="survey_saving_encrypting_message">Uqopha ulwazi…</string>
   <string name="high_resolution_summary">Vumela ukuqobha ngesithwebuli sevidiyo sezinga eliphezulu</string>
   <string name="high_resolution">vumela ividiyo yezinga eliphezulu</string>
-  <string name="gme_repeat_error">Izimpinda azisekiwe Google Maps Engine</string>
-  <string name="gme_table_error">Ayitholakali futhi alenzeki ithebula Google Maps Engine</string>
   <string name="picasa_upload_error">Ngihlulekile ukufaka isithombe esivele singekho: %1$s</string>
   <string name="notification_error">Iphutha likhombisa umbiko wokwazisa</string>
   <string name="delete_after_send">Susa emva kokuthumela</string>

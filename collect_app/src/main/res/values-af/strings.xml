@@ -17,7 +17,6 @@
   <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>
-  <string name="cancel_saving_form">Kanselleer</string>
   <string name="cannot_edit_completed_form">Hierdie vorm kan nie gewysig word nadat dit as Voltooid gemerk is nie. Dit mag dalk ge-enkripteer wees.</string>
   <string name="capture_audio">Neem klank op</string>
   <string name="capture_image">Neem foto</string>
@@ -104,7 +103,6 @@
   <string name="play_audio">Speel Klank</string>
   <string name="play_video">Speel Video</string>
   <string name="please_wait">Wag asseblief \'n paar sekondes.</string>
-  <string name="please_wait_google_drive">Wag asseblief. Besig met toegang tot Google Drive.</string>
   <string name="please_wait_long">Wag asseblief. Hierdie kan dalk \'n paar minute neem.</string>
   <string name="quit_application">Verlaat %s</string>
   <string name="quit_entry">Stoor Vorm en Verlaat</string>
@@ -177,7 +175,6 @@
   <string name="edit_prompt">Wysig Vraag</string>
   <string name="selected_google_account_text">Google rekening</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Vorms</string>
   <string name="server_platform_other">Ander</string>
   <string name="font_size_extra_large">Extra Large</string>
   <string name="font_size_large">Large</string>
@@ -252,7 +249,6 @@
   <string name="form_processing_logic_1">Januarie 2015 (veiligste)</string>
   <string name="form_processing_logic_2">Middel 2014 (stadig)</string>
   <string name="form_processing_logic_3">Vroeg 2014 (vinnig)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Begin druk</string>
   <string name="no_printer">Die aangevraagde drukker is nie geïnstalleer nie. Installeer asseblief die drukker .</string>
   <string name="constraint_behavior">Constraint proseseringsgedrag</string>
@@ -283,8 +279,6 @@
   <string name="ext_assign_value_error">Kan nie die waarde by \'%s\' toeken nie</string>
   <string name="fs_delete_media_path_if_file_error">Kon nie \'%s\' verwyder nie. Verwyder self die leêr en laai die vorm weer af. </string>
   <string name="fs_create_media_folder_error">Kon nie media-folder \'%s\' skep nie</string>
-  <string name="fs_create_folder_error">Collect sê: Kan nie folder %s skep nie</string>
-  <string name="fs_create_folder_is_file_error">Collect sê: \'%s\' bestaan, maar is nie \'n directory nie</string>
   <string name="fs_file_copy_error">Kon nie \'%1$s\' oor \'%2$s\' skryf nie. Rede: %3$s</string>
   <string name="survey_internal_error">Interne fout: aanstap na die vraag het misluk</string>
   <string name="survey_multiple_forms_error">U het twee verskillende vorms afgelaai met dieselfde Vorm ID en weergawe. Miskien is dit dieselfde vorm wat of op verskillende tye of na verskillende servers opgelaai is. U moet in enige geval een verwyder.</string>
@@ -298,8 +292,6 @@
   <string name="survey_saving_encrypting_message">Enkripteer data...</string>
   <string name="high_resolution_summary">Laat hoë-resolusie video opnames toe</string>
   <string name="high_resolution">Laat hoë-resolusie video toe</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">Projek ID</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Skyf</string>
   <string name="go_shared">Met my gedeel</string>
@@ -307,16 +299,9 @@
   <string name="protocol_settings">Verstel platform verstellings</string>
   <string name="aggregate_preferences">ODK Aggregate verstellings</string>
   <string name="other_preferences">Ander platform verstellings</string>
-  <string name="gme_preferences">Google Maps Engine verstellings</string>
-  <string name="no_coordinates">Instance het nie koördinate nie. Kan nie oplaai nie.</string>
   <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
-  <string name="gme_set_account">U het Google Maps Engine as u server gekies, kies asb \'n ooreenstemmende Google rekening in die Algemene Verstellings voordat u verder gaan</string>
   <string name="invalid_oauth">Ongeldige OAuth 2 token</string>
-  <string name="gme_repeat_error">Repeats word nie tans deur Google Maps Engine ondersteun nie.</string>
-  <string name="gme_project_id_error">Geen projek ID gevind nie. U moet \'n projek ID in of die Google Maps Engine verstellings of in die vorm verklaar.</string>
-  <string name="gme_table_error">Kon nie \'n Google Maps Engine tabel vind of skep nie</string>
-  <string name="gme_create_400">Het 400 BAD REQUEST ontvang. Hierdie is \'n bekende bug met Google Maps Engine nadat \'n tabel nuut geskep is, probeer asseblief weer na \'n paar sekondes.</string>
   <string name="picasa_upload_error">Kon nie foto oplaai nie want dit bestaan nie: %1$s</string>
   <string name="odk_auth_auth_fail">ODK Outostuur authentication mislukking, maak asseblief seker u verstellings is korrek</string>
   <string name="odk_auto_note">ODK Outostuur Kennisgewing</string>
@@ -324,8 +309,5 @@
   <string name="delete_after_send">Verwyder na stuur</string>
   <string name="delete_after_send_summary">Verwyder gefinaliseerde vorms en media nadat dit server toe gestuur is</string>
   <string name="change_server_url">Server URL</string>
-  <string name="gme_search_browse">Soek vir vorms. Of kies \'My Skyf\' hieronder om self te soek.</string>
   <string name="no_blank_search">Soek-veld mag nie leeg wees nie.</string>
-  <string name="select_maps_account">U het Google Maps Engine as u server gekies, kies asb \'n ooreenstemmende Google Rekening in die Algemene Verstellings voordat u verder gaan</string>
-  <string name="get_project_IDs">Besig om projek IDs te haal</string>
 </resources>

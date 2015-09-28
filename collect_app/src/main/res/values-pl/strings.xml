@@ -249,7 +249,6 @@
   <string name="form_processing_logic_1">Styczeń 2015 (najbezpieczniejszy)</string>
   <string name="form_processing_logic_2">W trakcie 2014 (wolny)</string>
   <string name="form_processing_logic_3">Początek 2014 (szybki)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Inicjalizuj Drukowanie</string>
   <string name="no_printer">Żądana drukarka nie jest zainstalowana. Proszę, zainstaluj drukarkę.</string>
   <string name="constraint_behavior">Przetwarzam zachowanie ograniczeń</string>

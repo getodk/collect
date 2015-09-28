@@ -17,7 +17,6 @@
   <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
-  <string name="cancel_saving_form">Batal</string>
   <string name="cannot_edit_completed_form">Formulir tidak dapat diubah ketika telah diberikan tanda untuk siap kirim. Mungkin telah terenkripsi.</string>
   <string name="capture_audio">Simpan suara</string>
   <string name="capture_image">Ambil foto</string>
@@ -102,7 +101,6 @@
   <string name="play_audio">Mainkan suara</string>
   <string name="play_video">Mainkan video</string>
   <string name="please_wait">Silahkan tunggu.</string>
-  <string name="please_wait_google_drive">Silahkan tunggu. Mencoba mengakses Google Drive.</string>
   <string name="please_wait_long">Silahkan tunggu. Proses ini membutuhkan beberapa menit.</string>
   <string name="quit_application">Keluar dari %s</string>
   <string name="quit_entry">Simpan formulir dan selesai</string>
@@ -175,7 +173,6 @@
   <string name="edit_prompt">Ubah risalah</string>
   <string name="selected_google_account_text">Akun Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Lainnya</string>
   <string name="font_size_extra_large">Sangat besar</string>
   <string name="font_size_large">Besar</string>
@@ -250,7 +247,6 @@
   <string name="form_processing_logic_1">Januari 2015 (paling aman)</string>
   <string name="form_processing_logic_2">Pertengahan 2014 (Lambat)</string>
   <string name="form_processing_logic_3">Awal 2014 (cepat)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Memulai Mencetak</string>
   <string name="no_printer">Printer yang dipilih belum terpasang. Silakan pasang printer.</string>
   <string name="constraint_behavior">Kendala pemrosesan</string>
@@ -281,8 +277,6 @@
   <string name="ext_assign_value_error">Tidak dapat memberikan nilai pada \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Tidak dapat menghapus \'%s\'. Silahkan hapus file secara manual dan unduh ulang formulirnya.</string>
   <string name="fs_create_media_folder_error">Tidak dapat membuat folder media \'%s\'.</string>
-  <string name="fs_create_folder_error">Laporan ODK Collect: Tidak dapat membuat direktori: %s</string>
-  <string name="fs_create_folder_is_file_error">Laporan ODK Collect: \'%s\' sudah ada, tetapi bukan sebuah direktori.</string>
   <string name="fs_file_copy_error">Tidak dapat menyalin \'%1$s\' terhadap \'%2$s\'. Penyebab: %3$s</string>
   <string name="survey_internal_error">Kesalahan internal: langkah menuju pertanyaan selanjutnya gagal.</string>
   <string name="survey_multiple_forms_error">Kamu mengunduh dua formulir berbeda tapi memiliki ID dan versi formulir yang sama. Kemungkinan keduanya adalah formulir sama yang diunggah pada saat yang berbeda atau pada server yang berbeda. Pada kasus ini, hapus salah satu formulir.</string>
@@ -296,8 +290,6 @@
   <string name="survey_saving_encrypting_message">Mengenkripsi data...</string>
   <string name="high_resolution_summary">Mengaktifkan perekaman video beresolusi tinggi.</string>
   <string name="high_resolution">Mengaktifkan video resolusi tinggi</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">ID Proyek</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
@@ -305,16 +297,9 @@
   <string name="protocol_settings">Konfigurasi pengaturan platform</string>
   <string name="aggregate_preferences">Pengaturan ODK Aggregate</string>
   <string name="other_preferences">Pengaturan platform lainnya</string>
-  <string name="gme_preferences">Pengaturan Google Maps Engine</string>
-  <string name="no_coordinates">Permintaan tidak memiliki koordinat. Tidak dapat mengunggah.</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
-  <string name="gme_set_account">Kamu telah memilih Google Map Engine sebagai server pilihan, Silahkan pilih Akun Google terkait dalam Pengaturan Umum sebelum melanjutkan</string>
   <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
-  <string name="gme_repeat_error">Mengulang tidak didukung oleh Google Maps Engine pada saat ini.</string>
-  <string name="gme_project_id_error">Tidak ada ID Proyek yang ditemukan. Harus mendeklarasikan ID Proyek pada pengaturan Google Maps Engine atau di dalam formulir.</string>
-  <string name="gme_table_error">Tidak dapat mencari atau membuat tabel Google Maos Engine</string>
-  <string name="gme_create_400">Menerima 400 BAD RQUEST. Ini merupakan bug umum pada Google Maps Engine setelah pembuatan tabel baru, Silahkan coba memasukkan kembali dalam beberapa detik.</string>
   <string name="picasa_upload_error">Gagal mengunggah foto yang tidak ada: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikasi pengiriman otomatis ODK gagal, pastikan pengaturan anda sudah benar</string>
   <string name="odk_auto_note">Notifikasi Pengiriman otomatis ODK</string>
@@ -322,8 +307,5 @@
   <string name="delete_after_send">Hapus setelah mengirim</string>
   <string name="delete_after_send_summary">Menghapus media dan formulir yang sempurna setelah mengirim ke server  </string>
   <string name="change_server_url">Tautan server (URL)</string>
-  <string name="gme_search_browse">Mencari formulir. Atau pilih \'Drive Saya\' dibawah untuk browse</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
-  <string name="select_maps_account">Kamu telah memilih Google Maps Engine sebagai servernya, silahkan pilih Akun Google terkait pada Pengaturan Umum sebelum melanjutkan</string>
-  <string name="get_project_IDs">Mendapatkan ID Proyek</string>
 </resources>

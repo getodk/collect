@@ -17,7 +17,6 @@
   <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
-  <string name="cancel_saving_form">Скасувати</string>
   <string name="cannot_edit_completed_form">Цю анкету не можливо редагувати після того як її позначили завершеною. Вона може бути закодована.</string>
   <string name="capture_audio">Записати звук</string>
   <string name="capture_image">Сфотографувати</string>
@@ -104,7 +103,6 @@
   <string name="play_audio">Відтворити звук</string>
   <string name="play_video">Відтворити відео</string>
   <string name="please_wait">Будь ласка, трохи почекайте.</string>
-  <string name="please_wait_google_drive">Будь ласка, почекайте. Зв`язуюсь з Гугл Диском.</string>
   <string name="please_wait_long">Будь ласка, почекайте. Це може зайняти кілька хвилин.</string>
   <string name="quit_application">Вийти з %s</string>
   <string name="quit_entry">Зберегти анкету та вийти</string>
@@ -177,7 +175,6 @@
   <string name="edit_prompt">Редагувати запит</string>
   <string name="selected_google_account_text">Обліковий запис Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Форми</string>
   <string name="server_platform_other">Інше</string>
   <string name="font_size_extra_large">Дуже великий</string>
   <string name="font_size_large">Великий</string>
@@ -252,7 +249,6 @@
   <string name="form_processing_logic_1">Січень 2015 (найбезпечніша)</string>
   <string name="form_processing_logic_2">Середина 2014 (повільна)</string>
   <string name="form_processing_logic_3">Початок 2014 (швидка)</string>
-  <string name="change_url_default">Адреса ресурсу</string>
   <string name="launch_printer">Друк</string>
   <string name="no_printer">Потрібний принтер не встановлений. Будь ласка, встановіть принтер.</string>
   <string name="constraint_behavior">Обмеження зумовлюють поведінку</string>
@@ -281,14 +277,10 @@
   <string name="go_drive">Мій диск</string>
   <string name="aggregate_preferences">Налаштування ODK Aggregate</string>
   <string name="other_preferences">Налаштування інших платформ</string>
-  <string name="gme_preferences">Налаштування Google Maps Engine</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
   <string name="delete_after_send">Видалити після надсилання</string>
   <string name="delete_after_send_summary">Видаляє завершені анкети та медіа файли після надсилання на сервер</string>
   <string name="change_server_url">Адреса серверу URL</string>
-  <string name="gme_search_browse">Пошук анкет. Або виберіть нижче \'Мій диск\' для навігації.</string>
   <string name="no_blank_search">Поле пошуку не може бути порожнім</string>
-  <string name="select_maps_account">Ви обрали своїм сервером Google Maps Engine, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
-  <string name="get_project_IDs">Отримати ID проекту</string>
 </resources>

@@ -103,7 +103,6 @@
   <string name="play_audio">Spill lyd</string>
   <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>
-  <string name="please_wait_google_drive">Vennligst vent. Kontakter Google Drive.</string>
   <string name="please_wait_long">Vennligst vent. Det kan ta litt tid.</string>
   <string name="quit_application">Avslutt %s</string>
   <string name="quit_entry">Lagre skjema og avslutt</string>
@@ -250,7 +249,6 @@
   <string name="form_processing_logic_1">Januar 2015 (sikrest)</string>
   <string name="form_processing_logic_2">Medio 2014 (treg)</string>
   <string name="form_processing_logic_3">Primo 2014 (rask)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="constraint_behavior">Begrens prosesseringsmetoden</string>
@@ -281,8 +279,6 @@
   <string name="ext_assign_value_error">Kan ikke tildele verdien  \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Kan ikke slette \'%s\'. Slett filen manuelt, og last ned skjemamal på nytt. </string>
   <string name="fs_create_media_folder_error">Kan ikke opprette mediamappe \'%s\'.</string>
-  <string name="fs_create_folder_error">Collect melder: Kan ikke lage filmappen: %s</string>
-  <string name="fs_create_folder_is_file_error">Collect melder: \'%s\' eksister, men den er ikke en filmappe.</string>
   <string name="fs_file_copy_error">Kan ikke kopiere \'%1$s\' over \'%2$s\'. Årsak: %3$s</string>
   <string name="survey_internal_error">Intern feil: step to prompt feilet.</string>
   <string name="survey_multiple_forms_error">Du har lastet ned to ulike skjemamaler med samme skjema-ID og versjon. Kanskje er samme skjemamal lastet opp til ulike tidspunkt eller til ulike servere. Uansett bør du slette en av dem. </string>
@@ -296,8 +292,6 @@
   <string name="survey_saving_encrypting_message">Krypterer data...</string>
   <string name="high_resolution_summary">Slå på høyoppløst videoopptak.</string>
   <string name="high_resolution">Slå på høyoppløst video.</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">Prosjekt-ID</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Min Drive</string>
   <string name="go_shared">Delt med meg</string>
@@ -305,16 +299,9 @@
   <string name="protocol_settings">Angi plattforminnstillinger</string>
   <string name="aggregate_preferences">Innstillinger for ODK Aggregate</string>
   <string name="other_preferences">Andre plattforminnstillinger</string>
-  <string name="gme_preferences">Innstillinger for Google Maps Engine</string>
-  <string name="no_coordinates">Instansen mangler koordinater. Kan ikke laste opp.</string>
   <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
-  <string name="gme_set_account">Du har valgt Google Maps Engine som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
-  <string name="gme_repeat_error">Google Maps Engine støtter ikke gjentagelser. </string>
-  <string name="gme_project_id_error">Fant ikke noen prosjekt-ID. En prosjekt-id må oppgis enten i innstillingene for Google Maps Engine eller i skjemaet.</string>
-  <string name="gme_table_error">Klarer ikke å finne eller opprette en Google Maps Engine tabell</string>
-  <string name="gme_create_400">Mottok 400 BAD REQUEST. Dette er en kjent feil ved Google Maps Engine etter at en tabell nettopp er opprettet. Prøv på nytt om noen sekunder. </string>
   <string name="picasa_upload_error">Feil ved opplasting av bilde: %1$s</string>
   <string name="odk_auth_auth_fail">Feil ved autentisering av ODK Autosend. Sjekk innstillingene dine.</string>
   <string name="odk_auto_note">ODK Autosend kvittering</string>
@@ -322,8 +309,5 @@
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
   <string name="change_server_url">Server URL</string>
-  <string name="gme_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="no_blank_search">Søkefeltet kan ikke være tomt.</string>
-  <string name="select_maps_account">Du har valgt Google Maps Engine som server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
-  <string name="get_project_IDs">Henter prosjekt-IDer</string>
 </resources>
