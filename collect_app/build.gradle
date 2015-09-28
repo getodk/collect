@@ -23,7 +23,7 @@ android {
         applicationId("org.odk.collect.android")
         minSdkVersion(8)
         targetSdkVersion(8)
-        versionCode(1056)
+        versionCode(1057)
         versionName("1.4.7")
     }
 
