@@ -17,7 +17,6 @@
   <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
   <string name="cancel_location">Annulla</string>
-  <string name="cancel_saving_form">Annulla</string>
   <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che è stato contrassegnato come completo. Potrebbe essere cifrato.</string>
   <string name="capture_audio">Registra Suono</string>
   <string name="capture_image">Scatta Foto</string>
@@ -105,7 +104,6 @@
   <string name="play_audio">Riproduci Suono</string>
   <string name="play_video">Riproduci Video</string>
   <string name="please_wait">Si prega di attendere qualche istante.</string>
-  <string name="please_wait_google_drive">Attendi per favore. Accesso a Google Drive.</string>
   <string name="please_wait_long">Si prega di attendere. Questo potrebbe richiedere alcuni minuti.</string>
   <string name="quit_application">Uscita %s</string>
   <string name="quit_entry">Salva modulo ed esci</string>
@@ -178,7 +176,6 @@
   <string name="edit_prompt">Modifica Prompt</string>
   <string name="selected_google_account_text">Account Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Altro</string>
   <string name="font_size_extra_large">Molto Grande</string>
   <string name="font_size_large">Grande</string>
@@ -253,7 +250,6 @@
   <string name="form_processing_logic_1">Gennaio 2015 (più sicuro)</string>
   <string name="form_processing_logic_2">Metà 2014 (lento)</string>
   <string name="form_processing_logic_3">Inizio 2014 (veloce)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Inizio Stampa</string>
   <string name="no_printer">La stampante richiesta non è installata. Per piacere installa la stampante.</string>
   <string name="constraint_behavior">Comportamento sui vincoli</string>
@@ -284,8 +280,6 @@
   <string name="ext_assign_value_error">Impossibile assegnare un valore a \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">Non puoi cancellare \'%s\'. Perpiacere cancella il file manualmente e scarica nuovamente il Modulo.</string>
   <string name="fs_create_media_folder_error">Non puoi creare la cartella media \'%s\'.</string>
-  <string name="fs_create_folder_error">Collect report: non puoi creare la directory: %s</string>
-  <string name="fs_create_folder_is_file_error">Collect report: \'%s\' esiste ma non è una directory.</string>
   <string name="fs_file_copy_error">Non puoi copiare \'%1$s\' in \'%2$s\'. Motivo: %3$s</string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="survey_multiple_forms_error">Hai scaricato due diversi Moduli ma con lo stesso nome ID e versione. Potrebbe essere lo stesso Modulo scaricato in momenti diversi o con Server diversi. In ogni caso devi cancellarne uno.</string>
@@ -299,8 +293,6 @@
   <string name="survey_saving_encrypting_message">Crittografia dati...</string>
   <string name="high_resolution_summary">Permetti la registrazione di video ad alta risoluzione</string>
   <string name="high_resolution">Abilita video HD</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Motore Google Maps</string>
-  <string name="gme_project_id">Ident. Progetto</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
@@ -308,16 +300,9 @@
   <string name="protocol_settings">Configura le impostazioni della piattaforma</string>
   <string name="aggregate_preferences">Impostazioni ODK Aggregate</string>
   <string name="other_preferences">Altre impostazioni piattaforma</string>
-  <string name="gme_preferences">Impostazioni Motore Google Maps</string>
-  <string name="no_coordinates">L\'istanza non ha coordinate. Impossibile caricare.</string>
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
-  <string name="gme_set_account">Hai selezionato il Motore Google Maps come tuo server, per favore seleziona un account Google corrispondente nelle Impostazioni Generali prima di continuare</string>
   <string name="invalid_oauth">Token OAuth 2 non valido</string>
-  <string name="gme_repeat_error">Il Motore Google Maps non supporta ad oggi le ripetizioni.</string>
-  <string name="gme_project_id_error">Identificazione progetto non trovata. Occorre dichiarare una Identificazione Progetto nelle impostazioni del Motore Google Maps o nel modulo.</string>
-  <string name="gme_table_error">Impossibile cercare o creare una tabella Motore Google Maps</string>
-  <string name="gme_create_400">Ricevuto 400 BAD REQUEST. Questo è un errore noto con il Motore Google Maps dopo che una tabella viene creata, per favore riprova tra pochi secondi.</string>
   <string name="picasa_upload_error">Impossibile caricare foto inesistente: %1$s</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
   <string name="odk_auto_note">Notifica ODK Autosend</string>
@@ -325,8 +310,6 @@
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
   <string name="change_server_url">Server URL</string>
-  <string name="gme_search_browse">Ricerca moduli. Oppure seleziona \'My Drive\' sotto per sfogliare.</string>
+  <string name="google_search_browse">Ricerca moduli. Oppure seleziona \'My Drive\' sotto per sfogliare.</string>
   <string name="no_blank_search">Il campo ricerca non può essere vuoto.</string>
-  <string name="select_maps_account">Hai selezionato il Motore Google Maps come server, per favore seleziona un account Google corrispondente nelle Impostazioni Generali prima di continuare</string>
-  <string name="get_project_IDs">Caricamento Identificazione Progetto</string>
-</resources>
+  </resources>

@@ -17,7 +17,6 @@
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
-  <string name="cancel_saving_form">Cancelar</string>
   <string name="cannot_edit_completed_form">Este formulario no puede ser editado después que se marco como terminado. Puede que este encriptado</string>
   <string name="capture_audio">Grabar el Sonido</string>
   <string name="capture_image">Tomar la Foto</string>
@@ -104,7 +103,6 @@
   <string name="play_audio">Reproducir el Sonido</string>
   <string name="play_video">Reproducir el Video</string>
   <string name="please_wait">Por favor, espere un momento.</string>
-  <string name="please_wait_google_drive">Por favor espere. Accediendo a Google Drive</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
   <string name="quit_application">Salir %s</string>
   <string name="quit_entry">Guardar Formulario y Salir</string>
@@ -178,7 +176,6 @@
   <string name="edit_prompt">Editar entrada</string>
   <string name="selected_google_account_text">Cuenta de Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="server_platform_other">Otro</string>
   <string name="font_size_extra_large">Extra Grande</string>
   <string name="font_size_large">Grande</string>
@@ -253,7 +250,6 @@
   <string name="form_processing_logic_1">Enero 2015 (Más Seguro)</string>
   <string name="form_processing_logic_2">Mediados de 2014 (lento)</string>
   <string name="form_processing_logic_3">A principios del 2014 (rápido)</string>
-  <string name="change_url_default">URL</string>
   <string name="launch_printer">Iniciar Impresión</string>
   <string name="no_printer">La impresora solicitado no está instalado. Por favor, instale la impresora.</string>
   <string name="constraint_behavior">Comportamiento del proceso de restricciones</string>
@@ -284,8 +280,6 @@
   <string name="ext_assign_value_error">No puede asignar el valor a \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">No puede borrar \'%s\'. Por favor, borre manualmente el archivo y recargue el formulario.</string>
   <string name="fs_create_media_folder_error">No pudo crear la carpeta de medios \'%s\'</string>
-  <string name="fs_create_folder_error">Collect reports: No puede crear directorio: %s</string>
-  <string name="fs_create_folder_is_file_error">Collect reports: \'%s\' existe, pero no es un directorio.</string>
   <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
@@ -300,8 +294,6 @@
   <string name="survey_saving_encrypting_message">Encriptando datos...</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
   <string name="high_resolution">Activa vídeo HD</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">ID de Proyecto</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mi Drive</string>
   <string name="go_shared">Compartido conmigo</string>
@@ -309,16 +301,9 @@
   <string name="protocol_settings">Configurar Ajustes de Plataforma</string>
   <string name="aggregate_preferences">Ajustes de ODK Aggregate</string>
   <string name="other_preferences">Ajustes de Otras Plataformas</string>
-  <string name="gme_preferences">Ajustes de Google Maps Engine</string>
-  <string name="no_coordinates">Instancia no tiene coordenadas. No se puede cargar.</string>
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
-  <string name="gme_set_account">Ha seleccionado Google Maps Engine como su servidor, por favor seleccione una cuenta de Google correspondiente en los ajustes generales antes de continuar.</string>
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
-  <string name="gme_repeat_error">Las Repeticiones no son soportadas por Google Maps Engine en este momento.</string>
-  <string name="gme_project_id_error">ID de proyecto no encontrado. Debe declarar el ID del Proyecto ya sea en la configuración de Google Maps Engine o en el Formulario. </string>
-  <string name="gme_table_error">No se puede encontrar o crear una tabla Google Maps Engine.</string>
-  <string name="gme_create_400">Recibido 400 BAD REQUEST. Es un problema conocido de Google Maps Engine después de que una tabla se crea nuevamente. Por favor intente enviarlo de nuevo en unos segundos.</string>
   <string name="picasa_upload_error">Error al cargar la foto que no existe: %1$s</string>
   <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
   <string name="odk_auto_note">Notificación de ODK Autosend</string>
@@ -326,8 +311,6 @@
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="change_server_url">URL del Servidor</string>
-  <string name="gme_search_browse">Búsqueda de formularios. O Seleccione \'My Drive\' abajo para navegar.</string>
+  <string name="google_search_browse">Búsqueda de formularios. O Seleccione \'My Drive\' abajo para navegar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
-  <string name="select_maps_account">Ha seleccionado Google Maps Engine como su servidor, por favor, seleccione una cuenta de Google correspondiente en los ajustes generales antes de continuar</string>
-  <string name="get_project_IDs">Obtener IDs de Proyectos</string>
-</resources>
+  </resources>

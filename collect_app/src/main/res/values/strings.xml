@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 		Copyright (C) 2009 University of Washington Licensed under the Apache
 		License, Version 2.0 (the "License"); you may not use this file except
@@ -9,8 +9,7 @@
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
 		License.
--->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+--><resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
@@ -28,7 +27,6 @@
 <string name="cancel">Cancel</string>
 <string name="cancel_loading_form">Cancel</string>
 <string name="cancel_location">Cancel</string>
-<string name="cancel_saving_form">Cancel</string>
 <string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as complete. It may be encrypted.</string>
 <string name="capture_audio">Record Sound</string>
 <string name="capture_image">Take Picture</string>
@@ -99,7 +97,7 @@
 <string name="location_accuracy">Accuracy is %1$s m</string>
 <string name="longitude">Longitude</string>
 <string name="main_menu">Main Menu</string>
-<string name="main_menu_details">Data collection made easier&#8230;</string>
+<string name="main_menu_details">Data collection made easier…</string>
 <string name="manage_files">Delete Saved Form</string>
 <string name="mark_finished">Mark form as finalized</string>
 <string name="noselect_error">Sorry, you have not selected any forms!</string>
@@ -115,7 +113,6 @@
 <string name="play_audio">Play Sound</string>
 <string name="play_video">Play Video</string>
 <string name="please_wait">Please wait a few moments.</string>
-<string name="please_wait_google_drive">Please wait. Accessing Google Drive.</string>
 <string name="please_wait_long">Please wait. This could take a few minutes.</string>
 <string name="quit_application">Exit %s</string>
 <string name="quit_entry">Save Form and Exit</string>
@@ -165,10 +162,10 @@
 <string name="submission_url">Submission path</string>
 <string name="font_size">Text font size</string>
 <string name="change_font_size">Text font size</string>
-<string name="form_scan_starting">Scanning for forms&#8230;</string>
+<string name="form_scan_starting">Scanning for forms…</string>
 <string name="access_error">Error while accessing %s: </string>
-<string name="manifest_server_error">Manifest reply does not report an OpenRosa version &#8212; bad server?</string>
-<string name="root_element_error">Root element is not &lt;manifest\&gt; &#8212; was %s</string>
+<string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
+<string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
 <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
 <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
 <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
@@ -188,7 +185,6 @@
 <string name="edit_prompt">Edit Prompt</string>
 <string name="selected_google_account_text">Google account</string>
 <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-<string name="server_platform_google_forms">Google Forms</string>
 <string name="server_platform_other">Other</string>
 <string name="font_size_extra_large">Extra Large</string>
 <string name="font_size_large">Large</string>
@@ -258,7 +254,6 @@
 <string name="form_processing_logic_1">January 2015 (safest)</string>
 <string name="form_processing_logic_2">Mid 2014 (slow)</string>
 <string name="form_processing_logic_3">Early 2014 (fast)</string>
-<string name="change_url_default">URL</string>
 <string name="launch_printer">Initiate Printing</string>
 <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 <string name="constraint_behavior">Constraint processing behavior</string>
@@ -270,42 +265,39 @@
 <string name="replace_bearing">Replace Bearing</string>
 <string name="getting_bearing">Loading Bearing</string>
 <string name="accept_bearing">Record Bearing</string>
-    <string name="sdcard_unmounted">Collect cannot access the SD card. Perhaps it is mounted via USB? (Current state: %s)</string>
-    <string name="ext_file_no_data_error">The file contains no data!</string>
-    <string name="ext_conflicting_columns_error">Columns %s match!</string>
-    <string name="ext_sortBy_numeric_error">Your sortby column should contain only numeric values. Conflicting value was \'%s\'.</string>
-    <string name="ext_search_wrong_arguments_error">"Syntax error in search() function: The function needs 1, 4 or 6 arguments."</string>
-    <string name="ext_search_wrong_function_error">Syntax error in search() function : Unrecognised function \'%s\'.</string>
-    <string name="ext_search_bad_function_error">Syntax error in search() function: \'%s\' was not evaluated as a function.</string>
-    <string name="ext_search_return_error">The search handler returned a object of type \'%s\'.</string>
-    <string name="ext_import_generic_error">Could not import data from %1$s. Reason: %2$s</string>
-    <string name="ext_import_progress_message">Pre-loading data from \'%1$s\', please wait… %2$s</string>
-    <string name="ext_import_cancelled_message">Reading data cancelled!</string>
-    <string name="ext_import_finalizing_message">Finalizing pre-loaded data…</string>
-    <string name="ext_import_completed_message">Reading data completed!</string>
-    <string name="ext_not_initialized_error">The ExternalDataManager has not been initialized.</string>
-    <string name="ext_import_csv_missing_error">External data for %1$s has not been imported. Perhaps you forgot to include the %2$s.csv file with your form?</string>
-    <string name="ext_search_generic_error">Syntax error in search() function: %s</string>
-    <string name="ext_assign_value_error">Cannot assign the value at \'%s\'.</string>
-    <string name="fs_delete_media_path_if_file_error">Could not delete \'%s\'. Please delete the file manually and re-download the form.</string>
-    <string name="fs_create_media_folder_error">Could not create media folder \'%s\'.</string>
-    <string name="fs_create_folder_error">Collect reports: Cannot create directory: %s</string>
-    <string name="fs_create_folder_is_file_error">Collect reports: \'%s\' exists, but is not a directory.</string>
-    <string name="fs_file_copy_error">Could not copy \'%1$s\' over \'%2$s\'. Reason: %3$s</string>
-    <string name="survey_internal_error">Internal error: step to prompt failed.</string>
-    <string name="survey_multiple_forms_error">You have downloaded two different forms with the same form ID and version. Maybe they were the same form uploaded at different times or to different servers. In any case, you should delete one.</string>
-    <string name="survey_loading_reading_form_message">Reading form definition…</string>
-    <string name="survey_loading_reading_data_message">Reading survey data…</string>
-    <string name="survey_loading_reading_csv_message">Reading CSV files…</string>
-    <string name="survey_saving_validating_message">Validating answers…</string>
-    <string name="survey_saving_collecting_message">Collecting data…</string>
-    <string name="survey_saving_saving_message">Saving to SD card…</string>
-    <string name="survey_saving_finalizing_message">Finalizing to SD card…</string>
-    <string name="survey_saving_encrypting_message">Encrypting data…</string>
-    <string name="high_resolution_summary">Enable high-resolution video recordings</string>
-    <string name="high_resolution">Enable hi-res video</string>
-        <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-<string name="gme_project_id">Project ID</string>
+<string name="sdcard_unmounted">Collect cannot access the SD card. Perhaps it is mounted via USB? (Current state: %s)</string>
+<string name="ext_file_no_data_error">The file contains no data!</string>
+<string name="ext_conflicting_columns_error">Columns %s match!</string>
+<string name="ext_sortBy_numeric_error">Your sortby column should contain only numeric values. Conflicting value was \'%s\'.</string>
+<string name="ext_search_wrong_arguments_error">"Syntax error in search() function: The function needs 1, 4 or 6 arguments."</string>
+<string name="ext_search_wrong_function_error">Syntax error in search() function : Unrecognised function \'%s\'.</string>
+<string name="ext_search_bad_function_error">Syntax error in search() function: \'%s\' was not evaluated as a function.</string>
+<string name="ext_search_return_error">The search handler returned a object of type \'%s\'.</string>
+<string name="ext_import_generic_error">Could not import data from %1$s. Reason: %2$s</string>
+<string name="ext_import_progress_message">Pre-loading data from \'%1$s\', please wait… %2$s</string>
+<string name="ext_import_cancelled_message">Reading data cancelled!</string>
+<string name="ext_import_finalizing_message">Finalizing pre-loaded data…</string>
+<string name="ext_import_completed_message">Reading data completed!</string>
+<string name="ext_not_initialized_error">The ExternalDataManager has not been initialized.</string>
+<string name="ext_import_csv_missing_error">External data for %1$s has not been imported. Perhaps you forgot to include the %2$s.csv file with your form?</string>
+<string name="ext_search_generic_error">Syntax error in search() function: %s</string>
+<string name="ext_assign_value_error">Cannot assign the value at \'%s\'.</string>
+<string name="fs_delete_media_path_if_file_error">Could not delete \'%s\'. Please delete the file manually and re-download the form.</string>
+<string name="fs_create_media_folder_error">Could not create media folder \'%s\'.</string>
+<string name="fs_file_copy_error">Could not copy \'%1$s\' over \'%2$s\'. Reason: %3$s</string>
+<string name="survey_internal_error">Internal error: step to prompt failed.</string>
+<string name="survey_multiple_forms_error">You have downloaded two different forms with the same form ID and version. Maybe they were the same form uploaded at different times or to different servers. In any case, you should delete one.</string>
+<string name="survey_loading_reading_form_message">Reading form definition…</string>
+<string name="survey_loading_reading_data_message">Reading survey data…</string>
+<string name="survey_loading_reading_csv_message">Reading CSV files…</string>
+<string name="survey_saving_validating_message">Validating answers…</string>
+<string name="survey_saving_collecting_message">Collecting data…</string>
+<string name="survey_saving_saving_message">Saving to SD card…</string>
+<string name="survey_saving_finalizing_message">Finalizing to SD card…</string>
+<string name="survey_saving_encrypting_message">Encrypting data…</string>
+<string name="high_resolution_summary">Enable high-resolution video recordings</string>
+<string name="high_resolution">Enable hi-res video</string>
+<string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
 <string name="google_drive">Google Drive</string>
 <string name="go_drive">My Drive</string>
 <string name="go_shared">Shared with Me</string>
@@ -313,16 +305,14 @@
 <string name="protocol_settings">Configure platform settings</string>
 <string name="aggregate_preferences">ODK Aggregate settings</string>
 <string name="other_preferences">Other platform settings</string>
-<string name="gme_preferences">Google Maps Engine settings</string>
-<string name="no_coordinates">Instance has no coordinates. Unable to upload.</string>
+<string name="google_preferences">Google Sheets settings</string>
 <string name="drive_get_file">Getting %1$s and media files.</string>
 <string name="no_google_account">No Google Account Selected!</string>
-<string name="gme_set_account">You have selected Google Maps Engine as your server, please select a corresponding Google account in the General Settings before continuing</string>
+<string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
 <string name="invalid_oauth">Invalid OAuth 2 token</string>
-<string name="gme_repeat_error">Repeats are not supported by Google Maps Engine at this time.</string>
-<string name="gme_project_id_error">No project ID found. Must declare project ID in either Google Maps Engine settings or in the form.</string>
-<string name="gme_table_error">Unable to find or create a Google Maps Engine table</string>
-<string name="gme_create_400">Received 400 BAD REQUEST. This is a known bug with Google Maps Engine after a table is newly created, please try submitting again in a few seconds.</string>
+<string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
+<string name="google_audio_error">Audio files are not supported by Google Sheets at this time.</string>
+<string name="google_video_error">Video files are not supported by Google Sheets at this time.</string>
 <string name="picasa_upload_error">Failed to upload photo that does not exist: %1$s</string>
 <string name="odk_auth_auth_fail">ODK Autosend authentication failure, please make sure your settings are correct</string>
 <string name="odk_auto_note">ODK Autosend Notification</string>
@@ -330,10 +320,17 @@
 <string name="delete_after_send">Delete after send</string>
 <string name="delete_after_send_summary">Deletes finalized forms and media after sending to server</string>
 <string name="change_server_url">Server URL</string>
-<string name="gme_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
+<string name="google_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
 <string name="no_blank_search">Search field cannot be blank.</string>
-<string name="select_maps_account">You have selected Google Maps Engine as your server, please select a corresponding Google Account in the General Settings before continuing</string>
-<string name="get_project_IDs">Getting Project IDs</string>
+<string name="google_sheets_url">Google Sheets URL</string>
+<string name="default_google_sheets_url"></string>
+<string name="send_in_progress">Background send running, please try again shortly</string>
+<string name="sheets_google_account_needed">You have selected Google Sheets as your server, please select a corresponding Google Account in the General Settings before continuing</string>
+<string name="sheets_max_columns">Max number of columns is 255, your form has %1%s. Unable to upload to spreadsheet.</string>
+<string name="invalid_sheet_id">invalid sheet id: %1$s</string>
+<string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
+<string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
+<string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
     <string name="url_error_whitespace">whitespace is not allowed in urls</string>
     <string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
     <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>

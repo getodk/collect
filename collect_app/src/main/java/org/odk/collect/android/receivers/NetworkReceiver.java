@@ -1,4 +1,3 @@
-
 package org.odk.collect.android.receivers;
 
 import java.io.IOException;
@@ -14,7 +13,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleMapsEngineAbstractUploader;
+import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -43,7 +42,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     public static boolean running = false;
     InstanceUploaderTask mInstanceUploaderTask;
 
-    GoogleMapsEngineAutoUploadTask mGoogleMapsEngineUploadTask;
+    GoogleSheetsAutoUploadTask mGoogleSheetsUploadTask;
 
    @Override
 	public void onReceive(Context context, Intent intent) {
@@ -134,8 +133,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
             		context.getString(R.string.protocol_odk_default));
 
-            if (protocol.equals(context.getString(R.string.protocol_google_maps_engine))) {
-                mGoogleMapsEngineUploadTask = new GoogleMapsEngineAutoUploadTask(context);
+            if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
+                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
                 String googleUsername = settings.getString(
                         PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -143,9 +142,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     running = false;
                     return;
                 }
-                mGoogleMapsEngineUploadTask.setUserName(googleUsername);
-                mGoogleMapsEngineUploadTask.setUploaderListener(this);
-                mGoogleMapsEngineUploadTask.execute(toSendArray);
+                mGoogleSheetsUploadTask.setUserName(googleUsername);
+                mGoogleSheetsUploadTask.setUploaderListener(this);
+                mGoogleSheetsUploadTask.execute(toSendArray);
 
             } else {
                 // get the username, password, and server from preferences
@@ -175,8 +174,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(null);
         }
-        if (mGoogleMapsEngineUploadTask != null) {
-            mGoogleMapsEngineUploadTask.setUploaderListener(null);
+        if (mGoogleSheetsUploadTask != null) {
+            mGoogleSheetsUploadTask.setUploaderListener(null);
         }
         running = false;
 
@@ -263,18 +262,18 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(null);
         }
-        if (mGoogleMapsEngineUploadTask != null) {
-            mGoogleMapsEngineUploadTask.setUploaderListener(null);
+        if (mGoogleSheetsUploadTask != null) {
+            mGoogleSheetsUploadTask.setUploaderListener(null);
         }
         running = false;
     }
 
-    private class GoogleMapsEngineAutoUploadTask extends
-            GoogleMapsEngineAbstractUploader<Long, Integer, HashMap<String, String>> {
+    private class GoogleSheetsAutoUploadTask extends
+            GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
 
         private Context mContext;
 
-        public GoogleMapsEngineAutoUploadTask(Context c) {
+        public GoogleSheetsAutoUploadTask(Context c) {
             mContext = c;
         }
 

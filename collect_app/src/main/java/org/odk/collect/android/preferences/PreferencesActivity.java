@@ -57,7 +57,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   protected static final int IMAGE_CHOOSER = 0;
 
   // PUT ALL PREFERENCE KEYS HERE
-  public static final String KEY_INFO = "info";
   public static final String KEY_LAST_VERSION = "lastVersion";
   public static final String KEY_FIRST_RUN = "firstRun";
   public static final String KEY_SHOW_SPLASH = "showSplash";
@@ -78,9 +77,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   // AGGREGATE SPECIFIC
   public static final String KEY_SERVER_URL = "server_url";
 
-  // GME SPECIFIC
-  public static final String KEY_GME_PROJECT_ID = "gme_project_id";
-  public static final String KEY_GME_ID_HASHMAP = "gme_id_hashmap";
+  // GOOGLE SPECIFIC
+  public static final String KEY_GOOGLE_SHEETS_URL = "google_sheets_url";
 
   // OTHER SPECIFIC
   public static final String KEY_FORMLIST_URL = "formlist_url";
@@ -88,17 +86,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
   public static final String NAVIGATION_SWIPE = "swipe";
   public static final String NAVIGATION_BUTTONS = "buttons";
-  public static final String NAVIGATION_SWIPE_BUTTONS = "swipe_buttons";
 
   public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
-  public static final String CONSTRAINT_BEHAVIOR_ON_FINALIZE = "on_finalize";
   public static final String CONSTRAINT_BEHAVIOR_DEFAULT = "on_swipe";
 
   public static final String KEY_COMPLETED_DEFAULT = "default_completed";
 
   public static final String KEY_HIGH_RESOLUTION = "high_resolution";
-
-  public static final String KEY_AUTH = "auth";
 
   public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
   public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
@@ -185,8 +179,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
       setDefaultAggregatePaths();
       prefIntent = new Intent(this, AggregatePreferencesActivity.class);
     } else if (mProtocolPreference.getValue().equals(
-        getString(R.string.protocol_google_maps_engine))) {
-      prefIntent = new Intent(this, GMEPreferencesActivity.class);
+        getString(R.string.protocol_google_sheets))) {
+      prefIntent = new Intent(this, GooglePreferencesActivity.class);
     } else {
       // other
       prefIntent = new Intent(this, OtherPreferencesActivity.class);
@@ -208,8 +202,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         if (value.equals(getString(R.string.protocol_odk_default))) {
           setDefaultAggregatePaths();
           prefIntent = new Intent(PreferencesActivity.this, AggregatePreferencesActivity.class);
-        } else if (value.equals(getString(R.string.protocol_google_maps_engine))) {
-          prefIntent = new Intent(PreferencesActivity.this, GMEPreferencesActivity.class);
+        } else if (value.equals(getString(R.string.protocol_google_sheets))) {
+          prefIntent = new Intent(PreferencesActivity.this, GooglePreferencesActivity.class);
         } else {
           // other
           prefIntent = new Intent(PreferencesActivity.this, OtherPreferencesActivity.class);

@@ -119,7 +119,7 @@ public class InstanceUploaderList extends ListActivity implements
 				if (NetworkReceiver.running == true) {
 					Toast.makeText(
 							InstanceUploaderList.this,
-							"Background send running, please try again shortly",
+							R.string.send_in_progress,
 							Toast.LENGTH_SHORT).show();
 				} else if (ni == null || !ni.isConnected()) {
 					Collect.getInstance().getActivityLogger()
@@ -235,8 +235,8 @@ public class InstanceUploaderList extends ListActivity implements
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
-        if (server.equalsIgnoreCase(getString(R.string.protocol_google_maps_engine))) {
-            // if it's maps engine, start the maps-engine uploader
+        if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+            // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
 
             String googleUsername = prefs.getString(
@@ -245,7 +245,7 @@ public class InstanceUploaderList extends ListActivity implements
                 showDialog(GOOGLE_USER_DIALOG);
                 return;
             }
-            Intent i = new Intent(this, GoogleMapsEngineUploaderActivity.class);
+            Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
             i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
             startActivityForResult(i, INSTANCE_UPLOADER);
         } else {
@@ -459,7 +459,7 @@ public class InstanceUploaderList extends ListActivity implements
 
                 gudBuilder.setTitle(R.string.no_google_account);
                 gudBuilder
-                        .setMessage("You have selected Google Maps Engine as your server, please select a corresponding Google Account in the General Settings before continuing");
+                        .setMessage(R.string.sheets_google_account_needed);
                 gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

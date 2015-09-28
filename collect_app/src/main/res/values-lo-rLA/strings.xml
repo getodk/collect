@@ -17,7 +17,6 @@
   <string name="cancel">ຍົກເລິກ</string>
   <string name="cancel_loading_form">ຍົກເລີກ</string>
   <string name="cancel_location">ຍົກເລີກ</string>
-  <string name="cancel_saving_form">ຍົກເລີກ</string>
   <string name="cannot_edit_completed_form">ແບບ​ຟອມ​ນີ້ບໍ່​ສາ​ມາດ​ດັດ​ແກ້ໄດ້​ອີກ ໃນເມື່ອ​ມັນ​ຖືກ​ໝາຍ​ສົມ​ບູນ​ແລ້ວ. ມັນ​ອາດ​ຈະ​ຖືກ​ເຂົ້າ​ລະ​ຫັດ​ແລ້ວ.</string>
   <string name="capture_audio">ບັນທຶກສຽງ</string>
   <string name="capture_image">ຖ່າຍຮູບ</string>
@@ -102,7 +101,6 @@
   <string name="play_audio">ເປີດສຽງ</string>
   <string name="play_video">ເປີດວີດີໂອ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
-  <string name="please_wait_google_drive">ກະລຸນາລໍຖ້າ. ກຳລັງເຂົ້າຫາ Google Drive</string>
   <string name="please_wait_long">ກະລຸນາລໍຖ້າ. ມັນອາດຕ້ອງໃຊ້ເວລາໜ້ອຍໜື່ງ</string>
   <string name="quit_application">ອອກຈາກລະບົບ%s</string>
   <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
@@ -175,7 +173,6 @@
   <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>
   <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">ແບບຟອມ Google</string>
   <string name="server_platform_other">ອື່ນໆ</string>
   <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
   <string name="font_size_large">ຂະໜາດໃຫຍ່</string>
@@ -244,7 +241,6 @@
   <string name="swipe_instructions">ທ່ານ​ຢູ່​ຈຸດເລີ້ມຕົ້ນ​ຂອງ %s. ເລື່ອນໜ້າຈໍຕາມທີ່ສະແດງດ້ານລຸ່ມເພື່ອເລື່ອນໄປທາງໜ້າ ຫຼື ກັບ​ຄືນ.</string>
   <string name="buttons_instructions">​ທ່ານ​ຢູ່​ຈຸດເລີ້ມຕັ້ນ​ຂອງ %s. ແຕະປຸ່ມລູກສອນດ້ານລຸ່ມເພື່ອເ​ລື່ອນໄປທາງໜ້າ ຫຼື ກັບ​ຄືນ</string>
   <string name="swipe_buttons_instructions">ທ່ານ​ຢູ່​ຈຸດເລີ້ມຕົ້ນ​ຂອງ %s. ເລື່ອນໜ້າຈໍຕາມທີ່ສະແດງດ້ານລຸ່ມ ຫຼື ແຕະປຸ່ມລູກສອນເພື່ອເ​ລື່ອນໄປທາງໜ້າ ຫຼື ກັບ​ຄືນ</string>
-  <string name="change_url_default">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
   <string name="launch_printer">ເລີ່ມຕົ້ນການພີມ</string>
   <string name="no_printer">ເຄື່ອງພີມທີ່ເລືອກຍັງບໍ່ໄດ້ຕິດຕັ້ງ. ກະລຸນາຕິດຕັ້ງເຄື່ອງພີມ.</string>
   <string name="constraint_behavior">ລັກສະນະການປະເມີນຜົນແບບມີເງື່ອນໄຂ</string>
@@ -275,8 +271,6 @@
   <string name="ext_assign_value_error">ບໍ່​ສາ​ມາດກຳ​ນົດ​ຄ່າ​ທີ່ \'%s\'.</string>
   <string name="fs_delete_media_path_if_file_error">ບໍ່​ສາ​ມາດ​ລຶບ \'%s\'. ກະ​ລຸ​ນາ​ລຶບ​ເອ​ກະ​ສານດ້ວຍ​ມື ແລະ ດາວ​ໂຫຼດ​ຟອມ​ມາ​ໃໝ່.</string>
   <string name="fs_create_media_folder_error">ບໍ່​ສາ​ມາດ​ສ້າງ​ໂຟນ​ເດີ \'%s\'.</string>
-  <string name="fs_create_folder_error">ເກັບ​ກຳ​ລາຍ​ງານ: ບໍ່​ສາ​ມາດ​ສ້າງ​ໂຟນ​ເດີ​: %s</string>
-  <string name="fs_create_folder_is_file_error">ເກັບ​ກຳ​ລາຍ​ງານ: \'%s\' ມີແລ້ວ, ແຕ່ບໍ່​ແມ່ນ​ໂຟນ​ເດີ.</string>
   <string name="fs_file_copy_error">ບໍ່​ສາ​ມາດ​ກ໋ອບ​ປີ້ \'%1$s\' ຈາກ​ທັງ​ໝົດ \'%2$s\'. ​ເຫດຜົນ: %3$s</string>
   <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
   <string name="survey_multiple_forms_error">ທ່ານ​ໄດ້​ດາວ​ໂຫຼດ​ສອງ​ແບບ​ຟອມ ທີ່​ມີ ID ແລະ ເວີ​ຊັນ ຄື​ກັນ. ບາງ​ເທື່ອ​ຟອ​ມ​ດັ່ງ​ກ່າວ​ເປັນ​ຟອມ​ດຽວ​ກັນ ແຕ່​ອັບ​ໂຫຼດ​ເວ​ລາ​ຕ່າງ​ກັນ ຫຼື ຫາເສີບ​ເວີ​ຕ່າງ​ກັນ. ຢ່າງ​ໃດ​ກໍ່​ຕາມ ທ່ານ​ຄວນ​ລຶບ​ຟອມ​ໜຶ່ງ​ຖີ້ມ.</string>
@@ -290,8 +284,6 @@
   <string name="survey_saving_encrypting_message">​ກຳ​ລັງ​ເຂົ້າ​ລະ​ຫັດ​ຂໍ້​ມູນ...</string>
   <string name="high_resolution_summary">ເປີດ​ການ​ນຳ​ໃຊ້ ການ​ບັນ​ທຶກວີ​ດີ​ໂອ​ແບບ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
   <string name="high_resolution">​ເປີດ​ການ​ນຳ​ໃຊ້ ວີ​ດີ​ໂອ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
-  <string name="server_platform_google_maps_engine">Google Drive, Google Maps Engine</string>
-  <string name="gme_project_id">ເລກທີໂຄງການ</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
   <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
@@ -299,16 +291,9 @@
   <string name="protocol_settings">ດັດແກ້ການຕັ້ງຄ່າ Platform</string>
   <string name="aggregate_preferences">ການຕັ້ງຄ່າ ODK Aggregate</string>
   <string name="other_preferences">ການຕັ້ງຄ່າ platform ອື່ນໆ</string>
-  <string name="gme_preferences">ການຕັ້ງຄ່າ Google Maps Engine</string>
-  <string name="no_coordinates">ບໍ່ມີຄ່າເສັ້ນແວງ ເສັ້ນຂະໜານ. ບໍ່ສາມາດອັບໂຫຼດໄດ້.</string>
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
-  <string name="gme_set_account">ທ່ານເລືອກ Google Maps Engine ເປັນເສີບເວີ, ກະລຸນາບອກບັນຊີຜູ້ໃຊ້ຂອງ Google ໃນການຕັ້ງຄ່າທົ່ວໄປກ່ອນ.</string>
   <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
-  <string name="gme_repeat_error">ການເຮັດຊ້ຳໆ ແມ່ນເຮັດບໍ່ໄດ້ໃນ Google Maps Engine</string>
-  <string name="gme_project_id_error">ບໍ່ມີເລກທີໂຄງການ. ຕ້ອງຕັ້ງເລກທີໂຄງການໃນການຕັ້ງຄ່າ Google Maps Engine ຫຼື ໃນແບບຟອມ.</string>
-  <string name="gme_table_error">ບໍ່ສາມາດຊອກຫາ ຫຼື ສ້າງຕາຕະລາງ Google Maps Engine</string>
-  <string name="gme_create_400">ໄດ້ຮັບ 400 BAD REQUEST. ນີ້ມີບັນຫາກັບ Google Maps Engine ພາຍຫຼັງສ້າງຕາຕະລາງໃໝ່, ລໍຖ້າຄາວນຶ່ງ ແລ້ວສົ່ງອີກຄັ້ງ</string>
   <string name="picasa_upload_error">ບໍ່ສາມາດອັບໂຫຼດຮູບທີ່ບໍ່ມີ: %1$s</string>
   <string name="odk_auth_auth_fail">ການກວດສອບ ODK Autosend ຜິດພາດ, ກະລຸນາກວດສອບການຕັ້ງຄ່າວ່າຖືກຕ້ອງບໍ່</string>
   <string name="odk_auto_note">ສົ່ງການແຈ້ງເຕືອນແບບໂອໂຕຂອງ ODK</string>
@@ -316,8 +301,6 @@
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
-  <string name="gme_search_browse">ຊອກຫາຟອມ. ຫຼື ເລືອກ \'ຊ້ອງຂອງຂ້ອຍ\' ຂ້າງລຸ່ມ.</string>
+  <string name="google_search_browse">ຊອກຫາຟອມ. ຫຼື ເລືອກ \'ຊ້ອງຂອງຂ້ອຍ\' ຂ້າງລຸ່ມ.</string>
   <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
-  <string name="select_maps_account">ທ່ານເລືອກ Google Maps Engine ເປັນເສີບເວີ, ກະລຸນາບອກບັນຊີຜູ້ໃຊ້ຂອງ Google ໃນການຕັ້ງຄ່າທົ່ວໄປກ່ອນ.</string>
-  <string name="get_project_IDs">ກຳລັງເອົາເລກທີໂຄງການ</string>
-</resources>
+  </resources>

@@ -196,7 +196,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
         } else {
             // new
             TextView emptyView = new TextView(this);
-            emptyView.setText(getString(R.string.gme_search_browse));
+            emptyView.setText(getString(R.string.google_search_browse));
             emptyView.setGravity(Gravity.CENTER);
             emptyView.setTextSize(21);
 
@@ -449,7 +449,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                 AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
                 gudBuilder.setTitle(getString(R.string.no_google_account));
-                gudBuilder.setMessage(getString(R.string.gme_set_account));
+                gudBuilder.setMessage(getString(R.string.google_set_account));
                 gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

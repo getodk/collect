@@ -15,7 +15,6 @@
   <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
-  <string name="cancel_saving_form">Urong</string>
   <string name="cannot_edit_completed_form">Ang form ay hindi na maaaring ma-edit sa sandaling ito ay minarkahan bilang yari. Ito ay maaring naka-encrypt.</string>
   <string name="capture_audio">Mag-tala ng Tunog</string>
   <string name="capture_image">Kumuha ng Larawan</string>
@@ -159,7 +158,6 @@
   <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="selected_google_account_text">Google Account</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_google_forms">Google Forms</string>
   <string name="font_size_extra_large">Labis na Malaki</string>
   <string name="font_size_large">Malaki</string>
   <string name="font_size_medium">Katamtaman</string>
@@ -188,5 +186,4 @@
   <string name="change_server">Server Platform</string>
   <string name="change_username_default">Username</string>
   <string name="save_mid">Impukin ang mga sagot sa Form</string>
-  <string name="change_url_default">URL</string>
-</resources>
+  </resources>

@@ -17,7 +17,6 @@
   <string name="cancel">منسوخ</string>
   <string name="cancel_loading_form">منسوخ</string>
   <string name="cancel_location">منسوخ</string>
-  <string name="cancel_saving_form">منسوخ</string>
   <string name="cannot_edit_completed_form">ایک دفعہ مکمل کرنے کے بعد اس فائل کی مزید تدوین نہیں ہو سکتی ۔ یہ انکرپٹڈ ہوگی</string>
   <string name="capture_audio">آوازریکارڈ کریں</string>
   <string name="capture_image">تصویر لیں</string>
@@ -100,7 +99,6 @@
   <string name="password">شناختی لفظ (Password)</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="please_wait">براہ مہربانی۔ چند منٹ انتظار کرلیں</string>
-  <string name="please_wait_google_drive">براہ مہربانی انتظار کریں. گوگل ڈرائیو تک رسائی کی جا رہی ہے</string>
   <string name="please_wait_long">براہ مہربانی انتظار کریں۔ اسکو چند منٹ لگ سکتے ہیں</string>
   <string name="quit_application">‎%s‏ سے نکل جائیں</string>
   <string name="quit_entry">فارم کو محفوظ کرکے نکل جایئں</string>
@@ -169,7 +167,6 @@
   <string name="edit_prompt">پرامپٹ کی تدوین کریں</string>
   <string name="selected_google_account_text">گوگل اکاونٹ</string>
   <string name="server_platform_odk_aggregate">مجموعی  ODK</string>
-  <string name="server_platform_google_forms">گوگل کے فارم</string>
   <string name="server_platform_other">دیگر</string>
   <string name="font_size_extra_large">زیادہ بڑا</string>
   <string name="font_size_large">بڑا</string>
@@ -237,7 +234,6 @@
   <string name="swipe_instructions">’پ ‎%s‏ کے اغاز پر ہیں۔ نیچھے دیکھائے گئے طریقے کے مطابق سکرین کوآگے اور پیچھے جانے کیلئے سوائپ کریں</string>
   <string name="buttons_instructions">’پ ‎%s‏ کے اغاز پر ہیں۔ آگے اور پیچھے جانے کیلئے تیر والے بٹنوں کو دبائیں</string>
   <string name="swipe_buttons_instructions">’پ ‎%s‏ کے اغاز پر ہیں۔ آگے اور پیچھے جانے کیلئے نیچھے دیکھائے گئے طریقے کے مطابق سکرین کو سوائپ کریں یا تیر والے بٹنوں کو دبایئں</string>
-  <string name="change_url_default">یو آر ایل (URL)</string>
   <string name="launch_printer">پرنٹنگ کا آغاز کریں</string>
   <string name="no_printer">مطلوبہ پرینٹر انسٹال نہیں ہے۔ براہ مہربانی پرینٹر انسٹال کریں۔</string>
   <string name="constraint_behavior">ترکیبی عمل کو روکیں</string>
