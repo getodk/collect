@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.res.Resources;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -189,32 +190,36 @@ public class DateTimeWidget extends QuestionWidget {
         }
 
         if ( hideMonth || hideDay ) {
-		    for (Field datePickerDialogField : this.mDatePicker.getClass().getDeclaredFields()) {
-		        if ("mDayPicker".equals(datePickerDialogField.getName()) ||
-		                "mDaySpinner".equals(datePickerDialogField.getName())) {
-		            datePickerDialogField.setAccessible(true);
-		            Object dayPicker = new Object();
-		            try {
-		                dayPicker = datePickerDialogField.get(this.mDatePicker);
-		            } catch (Exception e) {
-		                e.printStackTrace();
-		            }
-		            ((View) dayPicker).setVisibility(View.GONE);
-		        }
-		        if ( hideMonth ) {
-			        if ("mMonthPicker".equals(datePickerDialogField.getName()) ||
-			                "mMonthSpinner".equals(datePickerDialogField.getName())) {
-			            datePickerDialogField.setAccessible(true);
-			            Object monthPicker = new Object();
-			            try {
-			            	monthPicker = datePickerDialogField.get(this.mDatePicker);
-			            } catch (Exception e) {
-			                e.printStackTrace();
-			            }
-			            ((View) monthPicker).setVisibility(View.GONE);
-			        }
-		        }
-		    }
+            mDatePicker.findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+            if (hideMonth) {
+                mDatePicker.findViewById(Resources.getSystem().getIdentifier("month", "id", "android")).setVisibility(View.GONE);
+            }
+//		    for (Field datePickerDialogField : this.mDatePicker.getClass().getDeclaredFields()) {
+//		        if ("mDayPicker".equals(datePickerDialogField.getName()) ||
+//		                "mDaySpinner".equals(datePickerDialogField.getName())) {
+//		            datePickerDialogField.setAccessible(true);
+//		            Object dayPicker = new Object();
+//		            try {
+//		                dayPicker = datePickerDialogField.get(this.mDatePicker);
+//		            } catch (Exception e) {
+//		                e.printStackTrace();
+//		            }
+//		            ((View) dayPicker).setVisibility(View.GONE);
+//		        }
+//		        if ( hideMonth ) {
+//			        if ("mMonthPicker".equals(datePickerDialogField.getName()) ||
+//			                "mMonthSpinner".equals(datePickerDialogField.getName())) {
+//			            datePickerDialogField.setAccessible(true);
+//			            Object monthPicker = new Object();
+//			            try {
+//			            	monthPicker = datePickerDialogField.get(this.mDatePicker);
+//			            } catch (Exception e) {
+//			                e.printStackTrace();
+//			            }
+//			            ((View) monthPicker).setVisibility(View.GONE);
+//			        }
+//		        }
+//		    }
         }
     }
 
