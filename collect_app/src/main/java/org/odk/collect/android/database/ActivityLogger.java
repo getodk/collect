@@ -166,6 +166,15 @@ public final class ActivityLogger {
         insertContentValues(cv, index);
     }
 
+   private String getInstancePath(FormController formController) {
+      File f = formController.getInstancePath();
+      if ( f == null ) {
+         return "<not-yet-specified>";
+      } else {
+         return f.getAbsolutePath();
+      }
+   }
+
     public void logScrollAction(Object t, int distance) {
     	if (!isOpen()) return;
 
@@ -190,11 +199,11 @@ public final class ActivityLogger {
 	    	}
 
 	    	String idx = "";
-	    	String instancePath = "";
+	    	String instancePath = null;
 	    	FormController formController = Collect.getInstance().getFormController();
 	    	if ( formController != null ) {
 	    		idx = getXPath(formController.getFormIndex());
-	    		instancePath = formController.getInstancePath().getAbsolutePath();
+	    		instancePath = getInstancePath(formController);
 	    	}
 
 	    	// Add a new scroll action to the buffer.
@@ -258,20 +267,16 @@ public final class ActivityLogger {
     	FormController formController = Collect.getInstance().getFormController();
     	if ( formController != null ) {
     		index = formController.getFormIndex();
-    		File instanceFile = formController.getInstancePath();
-    		if ( instanceFile != null ) {
-    			instancePath = instanceFile.getAbsolutePath();
-    		}
+        instancePath = getInstancePath(formController);
     	}
     	log( t.getClass().getName(), context, action, instancePath, index, null, null);
     }
 
     public void logInstanceAction(Object t, String context, String action, FormIndex index) {
-    	String instancePath = null;
+       String instancePath = null;
     	FormController formController = Collect.getInstance().getFormController();
     	if ( formController != null ) {
-    		index = formController.getFormIndex();
-	    	instancePath = formController.getInstancePath().getAbsolutePath();
+        instancePath = getInstancePath(formController);
     	}
     	log( t.getClass().getName(), context, action, instancePath, index, null, null);
     }

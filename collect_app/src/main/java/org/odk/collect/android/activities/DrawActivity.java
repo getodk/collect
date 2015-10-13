@@ -210,9 +210,7 @@ public class DrawActivity extends Activity {
 						.logInstanceAction(
 								DrawActivity.this,
 								"setColorButton",
-								"click",
-								Collect.getInstance().getFormController()
-										.getFormIndex());
+								"click");
 				ColorPickerDialog cpd = new ColorPickerDialog(
 						DrawActivity.this,
 						new ColorPickerDialog.OnColorChangedListener() {
@@ -239,9 +237,7 @@ public class DrawActivity extends Activity {
 						.logInstanceAction(
 								DrawActivity.this,
 								"saveAndCloseButton",
-								"click",
-								Collect.getInstance().getFormController()
-										.getFormIndex());
+								"click");
 				SaveAndClose();
 			}
 		});
@@ -254,9 +250,7 @@ public class DrawActivity extends Activity {
 						.logInstanceAction(
 								DrawActivity.this,
 								"resetButton",
-								"click",
-								Collect.getInstance().getFormController()
-										.getFormIndex());
+								"click");
 				Reset();
 			}
 		});
@@ -269,9 +263,7 @@ public class DrawActivity extends Activity {
 						.logInstanceAction(
 								DrawActivity.this,
 								"cancelAndCloseButton",
-								"click",
-								Collect.getInstance().getFormController()
-										.getFormIndex());
+								"click");
 				CancelAndClose();
 			}
 		});
