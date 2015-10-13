@@ -10,8 +10,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.odk.collect.android"
-    android:versionCode="1052"
-    android:versionName="1.4.7" >
+    android:versionCode="1058"
+    android:versionName="1.4.8" >
 
     <uses-feature android:name="android.hardware.location" android:required="false" />
     <uses-feature android:name="android.hardware.location.network" android:required="false" />
@@ -43,7 +43,7 @@
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
 
     <supports-screens
         android:anyDensity="true"
