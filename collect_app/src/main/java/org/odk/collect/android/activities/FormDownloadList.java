@@ -575,6 +575,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      */
     public static boolean isLocalFormSuperseded(String formId, String latestVersion) {
 
+       if ( formId == null ) {
+          Log.e(t, "isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
+          return true;
+       }
+
         String[] selectionArgs = { formId };
         String selection = FormsColumns.JR_FORM_ID + "=?";
         String[] fields = { FormsColumns.JR_VERSION };
