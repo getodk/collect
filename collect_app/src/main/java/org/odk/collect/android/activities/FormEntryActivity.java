@@ -2315,7 +2315,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			mStaleView = null;
 		}
 
-		if (mCurrentView instanceof ODKView) {
+		if (mCurrentView != null && mCurrentView instanceof ODKView) {
 			((ODKView) mCurrentView).setFocus(this);
 		}
 		mBeenSwiped = false;
@@ -2682,7 +2682,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			int xPixelLimit = (int) (dm.xdpi * .25);
 			int yPixelLimit = (int) (dm.ydpi * .25);
 
-			if (mCurrentView instanceof ODKView) {
+			if (mCurrentView != null && mCurrentView instanceof ODKView) {
 				if (((ODKView) mCurrentView).suppressFlingGesture(e1, e2,
 						velocityX, velocityY)) {
 					return false;
