@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.method.LinkMovementMethod;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
@@ -208,7 +209,8 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
         mQuestionText.setTypeface(null, Typeface.BOLD);
         mQuestionText.setPadding(0, 0, 0, 7);
         mQuestionText.setId(QuestionWidget.newUniqueId()); // assign random id
-        mQuestionText.setText(promptText == null ? "" : TextUtils.fixHtml(promptText));
+        mQuestionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+        mQuestionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
         mQuestionText.setHorizontallyScrolling(false);
@@ -239,7 +241,8 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
             // wrap to the widget of view
             mHelpText.setHorizontallyScrolling(false);
             mHelpText.setTypeface(null, Typeface.ITALIC);
-            mHelpText.setText(TextUtils.fixHtml(s));
+            mHelpText.setText(TextUtils.textToHtml(s));
+            mHelpText.setMovementMethod(LinkMovementMethod.getInstance());
 
             addView(mHelpText, mLayout);
         }

@@ -14,46 +14,71 @@
 
 package org.odk.collect.android.utilities;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.odk.collect.android.application.Collect;
-
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio;
-import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Video;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class TextUtils {
-	private static final String t = "TextUtils";
+    private static final String t = "TextUtils";
 
-	private TextUtils() {
-		// static methods only
-	}
+    private TextUtils() {
+        // static methods only
+    }
 
-    public static CharSequence fixHtml(String brokenHtml) {
-        // There's some terrible bug that displays all the text as the 
+    private static String markdownToHtml(String html) {
+
+        // Regular expressions should match https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
+        String strongRegex1 = "__(.*?)__";
+        String strongRegex2 = "\\*\\*(.*?)\\*\\*";
+        String strongReplacement = "<strong>$1</strong>";
+
+        String emphasisRegex1 = "_([^\\s][^_\\n]*)_";
+        String emphasisRegex2 = "\\*([^\\s][^\\*\\n]*)\\*";
+        String emphasisReplacement = "<em>$1</em>";
+
+        String linkRegex = "\\[([^\\]]*)\\]\\(([^\\)]+)\\)";
+        String linkReplacement = "<a href=\"$2\">$1</a>";
+
+        html = html.replaceAll(strongRegex1, strongReplacement);
+        html = html.replaceAll(strongRegex2, strongReplacement);
+        html = html.replaceAll(emphasisRegex1, emphasisReplacement);
+        html = html.replaceAll(emphasisRegex2, emphasisReplacement);
+        html = html.replaceAll(linkRegex, linkReplacement);
+
+        String headerRegex = "(#+)([^\\n]*)\\n";
+        StringBuffer headerOutput = new StringBuffer();
+        Pattern headerPattern = Pattern.compile(headerRegex);
+        Matcher headerMatcher = headerPattern.matcher(html);
+        while (headerMatcher.find()) {
+            headerMatcher.appendReplacement(headerOutput, createHeaderReplacement(headerMatcher));
+        }
+        headerMatcher.appendTail(headerOutput);
+        html = headerOutput.toString();
+
+        return html;
+    }
+
+    public static String createHeaderReplacement(Matcher matcher) {
+        int level = matcher.group(1).length();
+        return "<h" + level + ">" + matcher.group(2).replaceAll("#+$", "").trim() + "</h" + level + ">\n";
+    }
+
+    public static CharSequence textToHtml(String text) {
+
+        // There's some terrible bug that displays all the text as the
         // opening tag if a tag is the first thing in the string
         // so we hack around it so it begins with something else
         // when we convert it
-        
+
         // terrible hack, just add some chars
-        Spanned html = Html.fromHtml("aa" + brokenHtml);
+        Spanned brokenHtml = Html.fromHtml("x" + markdownToHtml(text));
         // after we have the good html, remove the chars
-        CharSequence fixedText = html.subSequence(2, html.length());
-        return fixedText;
+        CharSequence fixedHtml = brokenHtml.subSequence(1, brokenHtml.length());
+
+        return fixedHtml;
     }
+
 } 

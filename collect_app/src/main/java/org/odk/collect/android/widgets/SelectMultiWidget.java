@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.method.LinkMovementMethod;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -83,7 +84,8 @@ public class SelectMultiWidget extends QuestionWidget {
                 CheckBox c = new CheckBox(getContext());
                 c.setTag(Integer.valueOf(i));
                 c.setId(QuestionWidget.newUniqueId());
-                c.setText(TextUtils.fixHtml(prompt.getSelectChoiceText(mItems.get(i))));
+                c.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mItems.get(i))));
+                c.setMovementMethod(LinkMovementMethod.getInstance());
                 c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
