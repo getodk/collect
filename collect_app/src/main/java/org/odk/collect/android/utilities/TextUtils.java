@@ -30,40 +30,59 @@ public class TextUtils {
 
     private static String markdownToHtml(String html) {
 
-        // Regular expressions should match https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
-        String strongRegex1 = "__(.*?)__";
-        String strongRegex2 = "\\*\\*(.*?)\\*\\*";
-        String strongReplacement = "<strong>$1</strong>";
+        // Regular expressions match https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
+        html = html.replaceAll("__(.*?)__", "<strong>$1</strong>");
+        html = html.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+        html = html.replaceAll("_([^\\s][^_\\n]*)_", "<em>$1</em>");
+        html = html.replaceAll( "\\*([^\\s][^\\*\\n]*)\\*", "<em>$1</em>");
+        html = html.replaceAll("\\[([^\\]]*)\\]\\(([^\\)]+)\\)", "<a href=\"$2\">$1</a>");
 
-        String emphasisRegex1 = "_([^\\s][^_\\n]*)_";
-        String emphasisRegex2 = "\\*([^\\s][^\\*\\n]*)\\*";
-        String emphasisReplacement = "<em>$1</em>";
-
-        String linkRegex = "\\[([^\\]]*)\\]\\(([^\\)]+)\\)";
-        String linkReplacement = "<a href=\"$2\">$1</a>";
-
-        html = html.replaceAll(strongRegex1, strongReplacement);
-        html = html.replaceAll(strongRegex2, strongReplacement);
-        html = html.replaceAll(emphasisRegex1, emphasisReplacement);
-        html = html.replaceAll(emphasisRegex2, emphasisReplacement);
-        html = html.replaceAll(linkRegex, linkReplacement);
-
-        String headerRegex = "(#+)([^\\n]*)\\n";
         StringBuffer headerOutput = new StringBuffer();
-        Pattern headerPattern = Pattern.compile(headerRegex);
-        Matcher headerMatcher = headerPattern.matcher(html);
+        Matcher headerMatcher = Pattern.compile("(#+)([^\\n]*)\\n").matcher(html);
         while (headerMatcher.find()) {
             headerMatcher.appendReplacement(headerOutput, createHeaderReplacement(headerMatcher));
         }
-        headerMatcher.appendTail(headerOutput);
-        html = headerOutput.toString();
+        html = headerMatcher.appendTail(headerOutput).toString();
+
+        StringBuffer paragraphOutput = new StringBuffer();
+        Matcher paragraphMatcher = Pattern.compile("([^\\n]+)\\n").matcher(html);
+        while (paragraphMatcher.find()) {
+            paragraphMatcher.appendReplacement(paragraphOutput, createParagraphReplacement(paragraphMatcher));
+        }
+        html =  paragraphMatcher.appendTail(paragraphOutput).toString();
+
+        StringBuffer spanOutput = new StringBuffer();
+        Matcher spanMatcher = Pattern.compile("(?i)&lt;\\s?span(.*)&gt;(.+)&lt;\\/\\s?span\\s?&gt;").matcher(html);
+        while (spanMatcher.find()) {
+            spanMatcher.appendReplacement(spanOutput, createSpanReplacement(spanMatcher));
+        }
+        html =  spanMatcher.appendTail(spanOutput).toString();
 
         return html;
     }
 
     public static String createHeaderReplacement(Matcher matcher) {
+
         int level = matcher.group(1).length();
         return "<h" + level + ">" + matcher.group(2).replaceAll("#+$", "").trim() + "</h" + level + ">\n";
+    }
+
+    public static String createParagraphReplacement(Matcher matcher) {
+
+        String line = matcher.group(1);
+        String trimmed = line.trim();
+        if (trimmed.matches("(?i)^<\\/?(ul|ol|li|h|p|bl)")) {
+            return line;
+        }
+        return "<p>" + trimmed + "</p>";
+    }
+
+    public static String createSpanReplacement(Matcher matcher) {
+
+        String attributes = matcher.group(1);
+        attributes = attributes.replaceAll("(?i)style\\s?=\\s?[\"'](.*)\\s?[\"']", "$1");
+        attributes = attributes.replaceAll("(?i)([a-z]+)\\s?:\\s?([a-z0-9]+)\\s?;?", "$1=\"$2\"");
+        return "<font" + attributes + ">" + matcher.group(2).trim() + "</font>";
     }
 
     public static CharSequence textToHtml(String text) {
