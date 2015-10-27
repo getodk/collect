@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.method.LinkMovementMethod;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -82,7 +83,8 @@ public class SelectOneWidget extends QuestionWidget implements
 			for (int i = 0; i < mItems.size(); i++) {
 				RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setText(TextUtils.fixHtml(prompt.getSelectChoiceText(mItems.get(i))));
+                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mItems.get(i))));
+				r.setMovementMethod(LinkMovementMethod.getInstance());
 				r.setTag(Integer.valueOf(i));
 				r.setId(QuestionWidget.newUniqueId());
 				r.setEnabled(!prompt.isReadOnly());

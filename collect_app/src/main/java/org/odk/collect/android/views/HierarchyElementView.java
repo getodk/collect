@@ -14,13 +14,12 @@
 
 package org.odk.collect.android.views;
 
+import android.text.method.LinkMovementMethod;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TextUtils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.Html;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -73,7 +72,8 @@ public class HierarchyElementView extends RelativeLayout {
 
 
     public void setPrimaryText(String text) {
-        mPrimaryTextView.setText(TextUtils.fixHtml(text));
+        mPrimaryTextView.setText(TextUtils.textToHtml(text));
+        mPrimaryTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 
