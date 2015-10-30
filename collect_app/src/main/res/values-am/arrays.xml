@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array 
+		name="ethiopian_months">
+		<item>መስከረም</item>
+		<item>ጥቅምት</item>
+		<item>ኅዳር</item>
+		<item>ታኅሣሥ</item>
+		<item>ጥር</item>
+		<item>የካቲት</item>
+		<item>መጋቢት</item>
+		<item>ሚያዝያ</item>
+		<item>ግንቦት</item>
+		<item>ሰኔ</item>
+		<item>ሐምሌ</item>
+		<item>ነሐሴ</item>
+		<item>ጳጐሜን</item>
+	</string-array>
+</resources>
