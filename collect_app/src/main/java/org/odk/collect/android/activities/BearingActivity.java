@@ -27,6 +27,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+import java.util.Locale;
+
 public class BearingActivity extends Activity implements SensorEventListener {
     private ProgressDialog mBearingDialog;
 
@@ -37,6 +39,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
     private static float[] mAccelerometer = null;
     private static float[] mGeomagnetic = null;
 
+    private String mBearingDecimal = null;
     private String mBearing = null;
 
     @Override
@@ -105,6 +108,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
                                 Collect.getInstance().getActivityLogger()
                                         .logInstanceAction(this, "cancelBearing", "cancel");
                                 mBearing = null;
+                                mBearingDecimal = null;
                                 finish();
                                 break;
                         }
@@ -124,10 +128,10 @@ public class BearingActivity extends Activity implements SensorEventListener {
     }
 
     private void returnBearing() {
-        if (mBearing != null) {
+        if (mBearingDecimal != null) {
             Intent i = new Intent();
             i.putExtra(
-                    FormEntryActivity.BEARING_RESULT, mBearing);
+                    FormEntryActivity.BEARING_RESULT, mBearingDecimal);
             setResult(RESULT_OK, i);
         }
         finish();
@@ -166,6 +170,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
                 // double roll = 180 * orientation[2] / Math.PI;
                 double degrees = normalizeDegree(azimuth);
                 mBearing = String.format("%.3f", degrees);
+                mBearingDecimal = String.format(Locale.US, "%.3f", degrees);
                 String dir = "N";
                 if ((degrees > 0 && degrees <= 22.5) || degrees > 337.5) {
                     dir = "N";
