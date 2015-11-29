@@ -9,7 +9,8 @@
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
 		License.
---><resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
@@ -331,9 +332,18 @@
 <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
 <string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
 <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
-    <string name="url_error_whitespace">whitespace is not allowed in urls</string>
-    <string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
-    <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
-    <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?
-    </string>
+<string name="url_error_whitespace">whitespace is not allowed in urls</string>
+<string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
+<string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
+<string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?
+</string>
+
+<!-- Geo string added in feature-geofeatures branch-->
+<string name="map_preferences">Mapping Options</string>
+<string name="map_sdk_selector_title">Mapping SDK</string>
+<string name="map_sdk_behavior">Mapping SDK</string>
+<string name="google_maps_sdk">Google Maps SDK</string>
+<string name="openstreetmap_sdk">OpenStreet Map SDK</string>
+<string name="show_map_sdk">Show Map SDK Options</string>
+
 </resources>

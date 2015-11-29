@@ -14,14 +14,6 @@
 
 package org.odk.collect.android.preferences;
 
-import java.util.ArrayList;
-
-import org.javarosa.core.services.IPropertyManager;
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.utilities.MediaUtils;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
@@ -44,6 +36,14 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
+
+import org.javarosa.core.services.IPropertyManager;
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.utilities.MediaUtils;
+
+import java.util.ArrayList;
 
 /**
  * Handles general preferences.
@@ -100,21 +100,24 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   public static final String KEY_NAVIGATION = "navigation";
   public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
-  private PreferenceScreen mSplashPathPreference;
+  // MAP SPECIFIC
+  public static final String KEY_SHOW_MAP_SDK = "show_map_sdk";
+  public static final String KEY_MAP_SDK = "map_sdk_behavior";
 
+
+  private PreferenceScreen mSplashPathPreference;
   private ListPreference mSelectedGoogleAccountPreference;
   private ListPreference mFontSizePreference;
   private ListPreference mNavigationPreference;
   private ListPreference mConstraintBehaviorPreference;
-
   private CheckBoxPreference mAutosendWifiPreference;
   private CheckBoxPreference mAutosendNetworkPreference;
   private ListPreference mProtocolPreference;
-
   private PreferenceScreen mProtocolSettings;
-
   protected EditTextPreference mUsernamePreference;
   protected EditTextPreference mPasswordPreference;
+
+  protected ListPreference mMapSdk;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +146,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
     mSelectedGoogleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
     PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
+    PreferenceCategory mapCategory = (PreferenceCategory) findPreference(getString(R.string.map_preferences));
     mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
     mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
     Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
@@ -154,6 +158,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
 
     mProtocolSettings = (PreferenceScreen) findPreference(KEY_PROTOCOL_SETTINGS);
+
+    mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
 
     boolean autosendWifiAvailable = adminPreferences.getBoolean(
         AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
@@ -437,6 +443,23 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
       getPreferenceScreen().removePreference(clientCategory);
     }
 
+    // MAP SPECIFIC
+    boolean mMapSdkAvailableAvailable = adminPreferences.getBoolean(
+            AdminPreferencesActivity.KEY_SHOW_MAP_SDK, true);
+    mMapSdk.setSummary(mMapSdk.getEntry());
+    mMapSdk.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+      @Override
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+        String entry = (String) ((ListPreference) preference).getEntries()[index];
+        ((ListPreference) preference).setSummary(entry);
+        return true;
+      }
+    });
+    if (!(mMapSdkAvailableAvailable || adminMode)) {
+      mapCategory.removePreference(mMapSdk);
+    }
   }
 
   @Override
