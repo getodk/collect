@@ -350,5 +350,8 @@
 <string name="mapquest_satellite">MapQuest Satellite</string>
 <string name="streets">Google Streets</string>
 <string name="satellite">Google Satellite</string>
+<string name="map_basemap_selector_title">Basemaps</string>
+<string name="map_basemap_behavior">Select a basemap</string>
+
 
 </resources>
