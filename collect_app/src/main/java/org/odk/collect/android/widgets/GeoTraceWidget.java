@@ -33,6 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.activities.GeoPointMapActivitySdk7;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
@@ -44,7 +45,7 @@ import java.text.DecimalFormat;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
+public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 	public static final String LOCATION = "gp";
 	public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
 	public static final String READ_ONLY = "readOnly";
@@ -62,7 +63,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private String mAppearance;
 	private double mAccuracyThreshold;
 
-	public GeoPointWidget(Context context, FormEntryPrompt prompt) {
+	public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 
 		// Determine the activity threshold to use
@@ -84,13 +85,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		}
 
 		if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
-			requestV2 = true; // Due to depercation of the v1 all maps should use v2 api
 			requestMaps = true;
 		}
 
 		// use mapsV2 if it is available and was requested
 		mUseMapsV2 = requestV2 && CompatibilityUtils.useMapsV2(context);
-//		mUseMapsV2 = true;
+
 		if ( mUseMapsV2 ) {
 			// if we are using mapsV2, we are using maps...
 			mUseMaps = true;
@@ -135,7 +135,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mViewButton.setLayoutParams(params);
 
 		// on play, launch the appropriate viewer
-		mViewButton.setOnClickListener(new View.OnClickListener() {
+		mViewButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance()
@@ -147,9 +147,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				if (mUseMapsV2 ) {
 					i = new Intent(getContext(), GeoPointMapActivity.class);
 				} else {
-					//i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
-					//All maps should be API v2
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
 				}
 
 				String s = mStringAnswer.getText().toString();
@@ -178,7 +176,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mGetLocationButton.setLayoutParams(params);
 
 		// when you press the button
-		mGetLocationButton.setOnClickListener(new View.OnClickListener() {
+		mGetLocationButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance()
@@ -189,9 +187,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				if ( mUseMapsV2 ) {
 					i = new Intent(getContext(), GeoPointMapActivity.class);
 				} else if (mUseMaps) {
-					//i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
-					//All maps should be API v2
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
 				} else {
 					i = new Intent(getContext(), GeoPointActivity.class);
 				}

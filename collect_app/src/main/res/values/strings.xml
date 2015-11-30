@@ -345,5 +345,10 @@
 <string name="google_maps_sdk">Google Maps SDK</string>
 <string name="openstreetmap_sdk">OpenStreet Map SDK</string>
 <string name="show_map_sdk">Show Map SDK Options</string>
+<string name="openstreetmap">OpenStreetMap</string>
+<string name="mapquest_streets">MapQuest Streets</string>
+<string name="mapquest_satellite">MapQuest Satellite</string>
+<string name="streets">Google Streets</string>
+<string name="satellite">Google Satellite</string>
 
 </resources>
