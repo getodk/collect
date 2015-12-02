@@ -101,8 +101,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
   // MAP SPECIFIC
-  public static final String KEY_SHOW_MAP_SDK = "show_map_sdk";
+
   public static final String KEY_MAP_SDK = "map_sdk_behavior";
+  public static final String KEY_MAP_BASEMAP = "map_basemap_behavior";
+
+  public static final int ARRAY_INDEX_GOOGLE_MAPS = 0 ;
+  public static final int ARRAY_INDEX_OSM_MAPS = 1 ;
+
 
 
   private PreferenceScreen mSplashPathPreference;
@@ -118,6 +123,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   protected EditTextPreference mPasswordPreference;
 
   protected ListPreference mMapSdk;
+  protected ListPreference mMapBasemap;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +166,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     mProtocolSettings = (PreferenceScreen) findPreference(KEY_PROTOCOL_SETTINGS);
 
     mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
+    mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
 
     boolean autosendWifiAvailable = adminPreferences.getBoolean(
         AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
@@ -444,11 +451,43 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     }
 
     // MAP SPECIFIC
-    boolean mMapSdkAvailableAvailable = adminPreferences.getBoolean(
+    boolean mMapSdkAvailable = adminPreferences.getBoolean(
             AdminPreferencesActivity.KEY_SHOW_MAP_SDK, true);
     mMapSdk.setSummary(mMapSdk.getEntry());
     mMapSdk.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
+      @Override
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        String name = newValue.toString();
+        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+        if (index == ARRAY_INDEX_GOOGLE_MAPS){
+          mMapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
+          mMapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+//          mMapBasemap.setDefaultValue("streets");
+          mMapBasemap.setValue("streets");
+          mMapBasemap.setSummary(mMapBasemap.getEntry());
+        }else{
+          // Else its OSM Maps
+          mMapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
+          mMapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+//          mMapBasemap.setDefaultValue("openstreetmap");
+          mMapBasemap.setValue("openstreetmap");
+          mMapBasemap.setSummary(mMapBasemap.getEntry());
+        }
+
+        String entry = (String) ((ListPreference) preference).getEntries()[index];
+        ((ListPreference) preference).setSummary(entry);
+        return true;
+      }
+    });
+    if (!(mMapSdkAvailable || adminMode)) {
+      mapCategory.removePreference(mMapSdk);
+    }
+
+    boolean mMapBasemapAvailable = adminPreferences.getBoolean(
+            AdminPreferencesActivity.KEY_SHOW_MAP_BASEMAP, true);
+    mMapBasemap.setSummary(mMapBasemap.getEntry());
+    mMapBasemap.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
       @Override
       public boolean onPreferenceChange(Preference preference, Object newValue) {
         int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
@@ -457,8 +496,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         return true;
       }
     });
-    if (!(mMapSdkAvailableAvailable || adminMode)) {
-      mapCategory.removePreference(mMapSdk);
+    if (!(mMapBasemapAvailable || adminMode)) {
+      mapCategory.removePreference(mMapBasemap);
     }
   }
 

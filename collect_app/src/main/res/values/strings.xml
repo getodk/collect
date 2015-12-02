@@ -335,8 +335,7 @@
 <string name="url_error_whitespace">whitespace is not allowed in urls</string>
 <string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
 <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
-<string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?
-</string>
+<string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
 <string name="map_preferences">Mapping Options</string>
@@ -352,6 +351,7 @@
 <string name="satellite">Google Satellite</string>
 <string name="map_basemap_selector_title">Basemaps</string>
 <string name="map_basemap_behavior">Select a basemap</string>
+<string name="show_map_basemap">Show Basemap Options</string>
 
 
 </resources>

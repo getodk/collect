@@ -87,6 +87,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_FORM_PROCESSING_LOGIC = "form_processing_logic";
 
 	public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
+	public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
