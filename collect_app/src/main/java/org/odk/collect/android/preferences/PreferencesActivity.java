@@ -463,14 +463,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         if (index == ARRAY_INDEX_GOOGLE_MAPS){
           mMapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
           mMapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-//          mMapBasemap.setDefaultValue("streets");
           mMapBasemap.setValue("streets");
           mMapBasemap.setSummary(mMapBasemap.getEntry());
         }else{
           // Else its OSM Maps
           mMapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
           mMapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-//          mMapBasemap.setDefaultValue("openstreetmap");
           mMapBasemap.setValue("openstreetmap");
           mMapBasemap.setSummary(mMapBasemap.getEntry());
         }
