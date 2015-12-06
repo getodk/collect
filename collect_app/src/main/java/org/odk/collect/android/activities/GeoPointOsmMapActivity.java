@@ -120,6 +120,26 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
 		}
 
+		mMap = (MapView) findViewById(R.id.omap);
+		mMap.setMultiTouchControls(true);
+		mMap.setBuiltInZoomControls(true);
+		mMarker = new Marker(mMap);
+		mMarker.setDraggable(true);
+		mMarker.setOnMarkerDragListener(this);
+//		mMap.getOverlays().add(mMarker);
+		overlayEventos = new MapEventsOverlay(getBaseContext(), this);
+
+		mMap.getOverlays().add(overlayEventos);
+
+		handler.postDelayed(new Runnable() {
+			public void run() {
+				//Do something after 100ms
+				GeoPoint point = new GeoPoint(34.08145, -39.85007);
+				mMap.getController().setZoom(4);
+				mMap.getController().setCenter(point);
+			}
+		}, 100);
+
 
 		Intent intent = getIntent();
 
@@ -128,6 +148,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
 				double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
 				mLatLng = new GeoPoint(location[0], location[1]);
+
 			}
 			if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
 				mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD, GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
@@ -141,7 +162,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
 
-		/*Zoom only if there's a previous location*/
+//		/*Zoom only if there's a previous location*/
 		if (mLatLng != null){
 			mLocationStatus.setVisibility(View.GONE);
 //			mMarkerOption.position(mLatLng);
@@ -255,10 +276,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
 						.logInstanceAction(this, "showLocation", "onClick");
-				//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,
-				//		16));
-				mMap.getController().animateTo(mLatLng);
-				mMap.getController().setZoom(16);
+				zoomTo();
 				mMap.invalidate();
 			}
 		});
@@ -266,25 +284,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		// not clickable until we have a marker set....
 		mShowLocation.setClickable(false);
 
-		mMap = (MapView) findViewById(R.id.omap);
-		mMap.setMultiTouchControls(true);
-		mMap.setBuiltInZoomControls(true);
-		mMarker = new Marker(mMap);
-		mMarker.setDraggable(true);
-		mMarker.setEnabled(false);
-		mMarker.setOnMarkerDragListener(this);
-		overlayEventos = new MapEventsOverlay(getBaseContext(), this);
 
-		mMap.getOverlays().add(overlayEventos);
-		mMap.getOverlays().add(mMarker);
-		handler.postDelayed(new Runnable() {
-			public void run() {
-				//Do something after 100ms
-				GeoPoint point = new GeoPoint(34.08145, -39.85007);
-				mMap.getController().setZoom(4);
-				mMap.getController().setCenter(point);
-			}
-		}, 100);
 
 
 	}
@@ -307,7 +307,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mShowLocation.setClickable(mMarker != null);
+
 		if ( mRefreshLocation ) {
 			mLocationStatus.setVisibility(View.VISIBLE);
 			if (mGPSOn) {
@@ -318,7 +318,33 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 				mLocationManager.requestLocationUpdates(
 						LocationManager.NETWORK_PROVIDER, 0, 0, this);
 			}
+			mShowLocation.setClickable(mMarker != null);
+		}else{
+
+			if(mLatLng != null){
+				mMap.getOverlays().add(mMarker);
+				mMarker.setPosition(mLatLng);
+				zoomTo();
+//				mMap.getController().setZoom(16);
+//				mMap.getController().setCenter(mLatLng);
+//				mMap.invalidate();
+
+			}
+			mShowLocation.setClickable(mMarker != null);
+
 		}
+	}
+
+	private void zoomTo(){
+		handler.postDelayed(new Runnable() {
+			public void run() {
+				//Do something after 100ms
+				mMap.getController().setZoom(16);
+				mMap.getController().setCenter(mLatLng);
+				mMap.invalidate();
+			}
+		}, 200);
+
 	}
 	
 
@@ -388,26 +414,29 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 						mLocation.getAccuracy() );
 
 				if (mLocationCount > 1) {
-					mMarker.setEnabled(true);
 					mLocationStatus.setText(getString(R.string.location_provider_accuracy,
 							mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
 					mLatLng = new GeoPoint(mLocation.getLatitude(),mLocation.getLongitude());
 					if ( !mZoomed ) {
 						mZoomed = true;
-						mMap.getController().setZoom(16);
-						mMap.getController().animateTo(mLatLng);
+						zoomTo();
+						mMap.invalidate();
+
 					} else {
-						mMap.getController().setZoom(mMap.getZoomLevel());
 						mMap.getController().animateTo(mLatLng);
+						mMap.getController().setZoom(mMap.getZoomLevel());
+
 					}
 
 					// create a marker on the map or move the existing marker to the
 					// new location
 					if (mMarker == null) {
-						mMarker.setPosition(mLatLng);
+						mMarker = new Marker(mMap);
 						mMap.getOverlays().add(mMarker);
+						mMarker.setPosition(mLatLng);
 						mShowLocation.setClickable(true);
 					} else {
+						mMap.getOverlays().add(mMarker);
 						mMarker.setPosition(mLatLng);
 					}
 
