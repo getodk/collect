@@ -347,11 +347,14 @@
 <string name="openstreetmap">OpenStreetMap</string>
 <string name="mapquest_streets">MapQuest Streets</string>
 <string name="mapquest_satellite">MapQuest Satellite</string>
-<string name="streets">Google Streets</string>
-<string name="satellite">Google Satellite</string>
+<string name="streets">Streets</string>
+<string name="terrain">Terrain</string>
+<string name="hybrid">Hybrid</string>
+<string name="satellite">Satellite</string>
 <string name="map_basemap_selector_title">Basemaps</string>
 <string name="map_basemap_behavior">Select a basemap</string>
 <string name="show_map_basemap">Show Basemap Options</string>
+
 
 
 </resources>

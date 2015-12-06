@@ -195,6 +195,9 @@
             android:name=".activities.GeoPointMapActivitySdk7"
             android:label="@string/app_name" />
         <activity
+            android:name=".activities.GeoPointGoogleMapActivity"
+            android:label="@string/app_name" />
+        <activity
             android:name=".activities.BearingActivity"
             android:label="@string/app_name" />
         <activity

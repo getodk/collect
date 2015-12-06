@@ -14,14 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.InfoLogger;
-import org.odk.collect.android.widgets.GeoPointWidget;
-
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -45,6 +37,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.InfoLogger;
+import org.odk.collect.android.widgets.GeoPointWidget;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -207,7 +207,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	    mReloadLocation = (Button) findViewById(R.id.reload_location);
 	    if (mCaptureLocation) {
 	    	mReloadLocation.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(View v) {
 					mRefreshLocation = true;
@@ -223,7 +222,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 					}
 				}
 
-	    	});
+			});
 	    	mReloadLocation.setVisibility(!mRefreshLocation ? View.VISIBLE : View.GONE);
 	    } else {
 	    	mReloadLocation.setVisibility(View.GONE);

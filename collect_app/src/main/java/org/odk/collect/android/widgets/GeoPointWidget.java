@@ -31,8 +31,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.activities.GeoPointGoogleMapActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
@@ -145,11 +144,11 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 				Intent i;
 				if (mUseMapsV2 ) {
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					i = new Intent(getContext(), GeoPointGoogleMapActivity.class);
 				} else {
 					//i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
 					//All maps should be API v2
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					i = new Intent(getContext(), GeoPointGoogleMapActivity.class);
 				}
 
 				String s = mStringAnswer.getText().toString();
@@ -187,13 +186,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 								mPrompt.getIndex());
 				Intent i = null;
 				if ( mUseMapsV2 ) {
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					i = new Intent(getContext(), GeoPointGoogleMapActivity.class);
 				} else if (mUseMaps) {
 					//i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
 					//All maps should be API v2
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					i = new Intent(getContext(), GeoPointGoogleMapActivity.class);
 				} else {
-					i = new Intent(getContext(), GeoPointActivity.class);
+//					i = new Intent(getContext(), GeoPointActivity.class);
+					i = new Intent(getContext(), GeoPointGoogleMapActivity.class);
 				}
 
 				String s = mStringAnswer.getText().toString();
