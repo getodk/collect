@@ -107,6 +107,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
   public static final int ARRAY_INDEX_GOOGLE_MAPS = 0 ;
   public static final int ARRAY_INDEX_OSM_MAPS = 1 ;
+  public static final String OSM_BASEMAP_KEY ="osmdroid";
+  public static final String GOOGLE_MAPS_BASEMAP_DEFAULT = "streets";
+  public static final String OSM_MAPS_BASEMAP_DEFAULT = "openstreetmap";
 
 
 
@@ -451,25 +454,24 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     }
 
     // MAP SPECIFIC
-    boolean mMapSdkAvailable = adminPreferences.getBoolean(
-            AdminPreferencesActivity.KEY_SHOW_MAP_SDK, true);
+    boolean mMapSdkAvailable = adminPreferences.getBoolean(AdminPreferencesActivity.KEY_SHOW_MAP_SDK, true);
     mMapSdk.setSummary(mMapSdk.getEntry());
     mMapSdk.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
       @Override
       public boolean onPreferenceChange(Preference preference, Object newValue) {
-        String name = newValue.toString();
+
         int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
         if (index == ARRAY_INDEX_GOOGLE_MAPS){
           mMapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
           mMapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-          mMapBasemap.setValue("streets");
+          mMapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
           mMapBasemap.setSummary(mMapBasemap.getEntry());
         }else{
           // Else its OSM Maps
           mMapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
           mMapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-          mMapBasemap.setValue("openstreetmap");
+          mMapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
           mMapBasemap.setSummary(mMapBasemap.getEntry());
         }
 
@@ -478,12 +480,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         return true;
       }
     });
+
     if (!(mMapSdkAvailable || adminMode)) {
       mapCategory.removePreference(mMapSdk);
     }
 
-    boolean mMapBasemapAvailable = adminPreferences.getBoolean(
-            AdminPreferencesActivity.KEY_SHOW_MAP_BASEMAP, true);
+    boolean mMapBasemapAvailable = adminPreferences.getBoolean(AdminPreferencesActivity.KEY_SHOW_MAP_BASEMAP, true);
+
+    if (mMapSdk.getValue().equals(OSM_BASEMAP_KEY)){
+      mMapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
+      mMapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+    }else{
+      mMapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
+      mMapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+    }
     mMapBasemap.setSummary(mMapBasemap.getEntry());
     mMapBasemap.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
       @Override
