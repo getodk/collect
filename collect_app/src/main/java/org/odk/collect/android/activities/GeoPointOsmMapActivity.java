@@ -21,6 +21,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -29,45 +30,56 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
+
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
+import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
+import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
+import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 import java.text.DecimalFormat;
 import java.util.List;
 
+//import com.google.android.gms.maps.CameraUpdateFactory;
+//import com.google.android.gms.maps.GoogleMap;
+//import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+//import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+//import com.google.android.gms.maps.SupportMapFragment;
+//import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.Marker;
+//import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
+
+public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, MapEventsReceiver {
 
 	private SharedPreferences sharedPreferences;
 	private String basemap;
 
-	private static final String GOOGLE_MAP_STREETS = "streets";
-	private static final String GOOGLE_MAP_SATELLITE = "satellite";
-	private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
-	private static final String GOOGLE_MAP_HYBRID = "hybrid";
+	private static final String MAPQUEST_MAP_STREETS = "streets";
+	private static final String MAPQUEST_MAP_SATELLITE = "satellite";
 
 	private static final String LOCATION_COUNT = "locationCount";
 
-	private GoogleMap mMap;
+	//private GoogleMap mMap;
+	private MapView mMap;
 
-
+	private Handler handler = new Handler();
 	private MarkerOptions mMarkerOption;
 	private Marker mMarker;
-	private LatLng mLatLng;
+
+	private GeoPoint mLatLng;
 
 	private TextView mLocationStatus;
 
 	private LocationManager mLocationManager;
+	private MapEventsOverlay overlayEventos;
 
 	private Location mLocation;
 	private Button mAcceptLocation;
@@ -96,7 +108,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		try {
-				setContentView(R.layout.geopoint_google_layout);
+				setContentView(R.layout.geopoint_osm_layout);
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
@@ -115,7 +127,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		if (intent != null && intent.getExtras() != null) {
 			if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
 				double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
-				mLatLng = new LatLng(location[0], location[1]);
+				mLatLng = new GeoPoint(location[0], location[1]);
 			}
 			if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
 				mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD, GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
@@ -124,14 +136,17 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			mRefreshLocation = mCaptureLocation;
 		}
 		/* Set up the map and the marker */
-		mMarkerOption = new MarkerOptions();
+//		mMarkerOption = new MarkerOptions();
+
 
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
 
 		/*Zoom only if there's a previous location*/
 		if (mLatLng != null){
 			mLocationStatus.setVisibility(View.GONE);
-			mMarkerOption.position(mLatLng);
+//			mMarkerOption.position(mLatLng);
+			mMarker.setPosition(mLatLng);
+			mMap.invalidate();
 			mRefreshLocation = false; // just show this position; don't change it...
 			mZoomed = true;
 		}
@@ -240,17 +255,39 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
 						.logInstanceAction(this, "showLocation", "onClick");
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,
-						16));
+				//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,
+				//		16));
+				mMap.getController().animateTo(mLatLng);
+				mMap.getController().setZoom(16);
+				mMap.invalidate();
 			}
 		});
 
 		// not clickable until we have a marker set....
 		mShowLocation.setClickable(false);
 
+		mMap = (MapView) findViewById(R.id.omap);
+		mMap.setMultiTouchControls(true);
+		mMap.setBuiltInZoomControls(true);
+		mMarker = new Marker(mMap);
+		mMarker.setDraggable(true);
+		mMarker.setEnabled(false);
+		mMarker.setOnMarkerDragListener(this);
+		overlayEventos = new MapEventsOverlay(getBaseContext(), this);
+
+		mMap.getOverlays().add(overlayEventos);
+		mMap.getOverlays().add(mMarker);
+		handler.postDelayed(new Runnable() {
+			public void run() {
+				//Do something after 100ms
+				GeoPoint point = new GeoPoint(34.08145, -39.85007);
+				mMap.getController().setZoom(4);
+				mMap.getController().setCenter(point);
+			}
+		}, 100);
+
 
 	}
-
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -270,47 +307,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		if ( mMap == null ) {
-			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
-			basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
-			if (basemap.equals(GOOGLE_MAP_STREETS)) {
-				mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-			}else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
-				mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-			}else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
-				mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-			}else if(basemap.equals(GOOGLE_MAP_HYBRID)){
-				mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-			}else{
-				mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-			}
-
-			if ( mMap == null ) {
-				Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-						Toast.LENGTH_SHORT).show();
-				finish();
-				return;
-			}
-
-			// possibly enable clear value action...
-			if (mCaptureLocation) {
-				mMap.setOnMarkerDragListener(this);
-				mMap.setOnMapLongClickListener(this);
-			}
-
-			/*Zoom only if there's a previous location*/
-			if (mLatLng != null){
-				mMarkerOption.position(mLatLng);
-				mMarker = mMap.addMarker(mMarkerOption);
-				mMarker.setDraggable(mCaptureLocation);
-				mZoomed = true;
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
-			}
-
-			mShowLocation.setClickable(mMarker != null);
-		}
-
+		mShowLocation.setClickable(mMarker != null);
 		if ( mRefreshLocation ) {
 			mLocationStatus.setVisibility(View.VISIBLE);
 			if (mGPSOn) {
@@ -349,7 +346,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			Intent i = new Intent();
 			i.putExtra(
 					FormEntryActivity.LOCATION_RESULT,
-					mLatLng.latitude + " " + mLatLng.longitude + " "
+					mLatLng.getLatitude() + " " + mLatLng.getLongitude() + " "
 							+ 0 + " " + 0);
 			setResult(RESULT_OK, i);
 		} else if (mLocation != null) {
@@ -391,22 +388,24 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 						mLocation.getAccuracy() );
 
 				if (mLocationCount > 1) {
+					mMarker.setEnabled(true);
 					mLocationStatus.setText(getString(R.string.location_provider_accuracy,
 							mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
-					mLatLng = new LatLng(mLocation.getLatitude(),
-							mLocation.getLongitude());
+					mLatLng = new GeoPoint(mLocation.getLatitude(),mLocation.getLongitude());
 					if ( !mZoomed ) {
 						mZoomed = true;
-						mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
+						mMap.getController().setZoom(16);
+						mMap.getController().animateTo(mLatLng);
 					} else {
-						mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
+						mMap.getController().setZoom(mMap.getZoomLevel());
+						mMap.getController().animateTo(mLatLng);
 					}
 
 					// create a marker on the map or move the existing marker to the
 					// new location
 					if (mMarker == null) {
-						mMarkerOption.position(mLatLng);
-						mMarker = mMap.addMarker(mMarkerOption);
+						mMarker.setPosition(mLatLng);
+						mMap.getOverlays().add(mMarker);
 						mShowLocation.setClickable(true);
 					} else {
 						mMarker.setPosition(mLatLng);
@@ -416,6 +415,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 					if (mLocation.getAccuracy() <= mLocationAccuracy) {
 						stopGeolocating();
 					}
+
+
+
 				}
 
 			} else {
@@ -441,7 +443,12 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		mLatLng = marker.getPosition();
 		mAcceptLocation.setClickable(true);
 		mIsDragged = true;
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, mMap.getCameraPosition().zoom));
+		mMap.getController().animateTo(mLatLng);
+		mMap.getController().setZoom(mMap.getZoomLevel());
+
+
+
+		//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, mMap.getCameraPosition().zoom));
 	}
 
 	@Override
@@ -449,20 +456,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		stopGeolocating();
 	}
 
-	@Override
-	public void onMapLongClick(LatLng latLng) {
-		if (mMarker == null) {
-			mMarkerOption.position(latLng);
-			mMarker = mMap.addMarker(mMarkerOption);
-			mShowLocation.setClickable(true);
-		} else {
-			mMarker.setPosition(latLng);
-		}
-		mLatLng=latLng;
-		mIsDragged = true;
-		stopGeolocating();
-		mMarker.setDraggable(true);
-	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
@@ -475,4 +468,26 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	}
 
 
+	@Override
+	public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
+		return false;
+	}
+
+	@Override
+	public boolean longPressHelper(GeoPoint geoPoint) {
+		if (mMarker == null) {
+			mMarker.setPosition(geoPoint);
+			//mMarker = mMap.addMarker(mMarkerOption);
+			mShowLocation.setClickable(true);
+		} else {
+			mMarker.setPosition(geoPoint);
+			//mMarker.setPosition(latLng);
+		}
+		mMap.invalidate();
+		mLatLng=geoPoint;
+		mIsDragged = true;
+		stopGeolocating();
+		mMarker.setDraggable(true);
+		return false;
+	}
 }

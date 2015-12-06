@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2011 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -48,9 +49,16 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 import java.text.DecimalFormat;
 import java.util.List;
 
-
+/**
+ * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
+ * specifying a location via placing a tracker on a map.
+ *
+ * @author guisalmon@gmail.com
+ *
+ */
 public class GeoPointGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 
+	private static final String LOCATION_COUNT = "locationCount";
 	private SharedPreferences sharedPreferences;
 	private String basemap;
 
@@ -58,16 +66,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 	private static final String GOOGLE_MAP_SATELLITE = "satellite";
 	private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
 	private static final String GOOGLE_MAP_HYBRID = "hybrid";
-
-
-
-
-
-	private static final String LOCATION_COUNT = "locationCount";
-
 	private GoogleMap mMap;
-
-
 	private MarkerOptions mMarkerOption;
 	private Marker mMarker;
 	private LatLng mLatLng;
@@ -94,27 +93,25 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 	private boolean mZoomed = false;
 
-
-
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-		try {
-				setContentView(R.layout.geopoint_google_layout);
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
-			finish();
-			return;
-		}
 
 		if ( savedInstanceState != null ) {
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
 		}
 
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		try {
+			setContentView(R.layout.geopoint_google_layout);
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+			Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
+					Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
 
 		Intent intent = getIntent();
 
@@ -130,7 +127,8 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 			mCaptureLocation = !intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
 			mRefreshLocation = mCaptureLocation;
 		}
-		/* Set up the map and the marker */
+
+        /* Set up the map and the marker */
 		mMarkerOption = new MarkerOptions();
 
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
@@ -144,7 +142,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		}
 
 		mCancelLocation = (Button) findViewById(R.id.cancel_location);
-		mCancelLocation.setOnClickListener(new View.OnClickListener() {
+		mCancelLocation.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -179,7 +177,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 						" lastKnownLocation(GPS) lat: " +
 						loc.getLatitude() + " long: " +
 						loc.getLongitude() + " acc: " +
-						loc.getAccuracy());
+						loc.getAccuracy() );
 			} else {
 				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
 						" lastKnownLocation(GPS) null location");
@@ -203,7 +201,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		mAcceptLocation = (Button) findViewById(R.id.accept_location);
 		if (mCaptureLocation){
-			mAcceptLocation.setOnClickListener(new View.OnClickListener() {
+			mAcceptLocation.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -217,7 +215,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		mReloadLocation = (Button) findViewById(R.id.reload_location);
 		if (mCaptureLocation) {
-			mReloadLocation.setOnClickListener(new View.OnClickListener() {
+			mReloadLocation.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					mRefreshLocation = true;
@@ -242,7 +240,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		// Focuses on marked location
 		mShowLocation = ((Button) findViewById(R.id.show_location));
 		mShowLocation.setVisibility(View.VISIBLE);
-		mShowLocation.setOnClickListener(new View.OnClickListener() {
+		mShowLocation.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
@@ -254,22 +252,59 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		// not clickable until we have a marker set....
 		mShowLocation.setClickable(false);
-
-
 	}
 
+	private void stopGeolocating() {
+		mRefreshLocation = false;
+		mReloadLocation.setVisibility(View.VISIBLE);
+		mLocationManager.removeUpdates(this);
+		mMarker.setDraggable(true);
+		mLocationStatus.setVisibility(View.GONE);
+	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt(LOCATION_COUNT, mLocationCount);
+	protected void onStart() {
+		super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this);
 	}
+
+	@Override
+	protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this);
+		super.onStop();
+	}
+
+
+	private void returnLocation() {
+		if (mIsDragged){
+			Log.i(getClass().getName(), "IsDragged !!!");
+			Intent i = new Intent();
+			i.putExtra(
+					FormEntryActivity.LOCATION_RESULT,
+					mLatLng.latitude + " " + mLatLng.longitude + " "
+							+ 0 + " " + 0);
+			setResult(RESULT_OK, i);
+		} else if (mLocation != null) {
+			Log.i(getClass().getName(), "IsNotDragged !!!");
+			Intent i = new Intent();
+			i.putExtra(
+					FormEntryActivity.LOCATION_RESULT,
+					mLocation.getLatitude() + " " + mLocation.getLongitude() + " "
+							+ mLocation.getAltitude() + " " + mLocation.getAccuracy());
+			setResult(RESULT_OK, i);
+		}
+		finish();
+	}
+
+
+	private String truncateFloat(float f) {
+		return new DecimalFormat("#.##").format(f);
+	}
+
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
-		// stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
 		mLocationManager.removeUpdates(this);
 	}
 
@@ -292,7 +327,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 			}else{
 				mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 			}
-
 			if ( mMap == null ) {
 				Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
 						Toast.LENGTH_SHORT).show();
@@ -330,58 +364,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 			}
 		}
 	}
-	
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this);
-	}
-
-	@Override
-	protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this);
-		super.onStop();
-	}
-
-	/**
-	 * Sets up the look and actions for the progress dialog while the GPS is searching.
-	 */
-
-
-
-	private void returnLocation() {
-		if (mIsDragged){
-			Log.i(getClass().getName(), "IsDragged !!!");
-			Intent i = new Intent();
-			i.putExtra(
-					FormEntryActivity.LOCATION_RESULT,
-					mLatLng.latitude + " " + mLatLng.longitude + " "
-							+ 0 + " " + 0);
-			setResult(RESULT_OK, i);
-		} else if (mLocation != null) {
-			Log.i(getClass().getName(), "IsNotDragged !!!");
-			Intent i = new Intent();
-			i.putExtra(
-					FormEntryActivity.LOCATION_RESULT,
-					mLocation.getLatitude() + " " + mLocation.getLongitude() + " "
-							+ mLocation.getAltitude() + " " + mLocation.getAccuracy());
-			setResult(RESULT_OK, i);
-		}
-		finish();
-	}
-
-	private String truncateFloat(float f) {
-		return new DecimalFormat("#.##").format(f);
-	}
-
-	private void stopGeolocating() {
-		mRefreshLocation = false;
-		mReloadLocation.setVisibility(View.VISIBLE);
-		mLocationManager.removeUpdates(this);
-		mMarker.setDraggable(true);
-		mLocationStatus.setVisibility(View.GONE);
-	}
 
 	@Override
 	public void onLocationChanged(Location location) {
@@ -423,6 +406,9 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 					if (mLocation.getAccuracy() <= mLocationAccuracy) {
 						stopGeolocating();
 					}
+
+
+
 				}
 
 			} else {
@@ -435,7 +421,16 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 	@Override
 	public void onProviderDisabled(String provider) {
+	}
 
+
+	@Override
+	public void onProviderEnabled(String provider) {
+	}
+
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
 	}
 
 	@Override
@@ -471,15 +466,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		mMarker.setDraggable(true);
 	}
 
-	@Override
-	public void onProviderEnabled(String provider) {
-
-	}
-
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
 
 
 }
