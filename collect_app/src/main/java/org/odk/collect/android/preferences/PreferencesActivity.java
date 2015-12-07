@@ -109,7 +109,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   public static final int ARRAY_INDEX_OSM_MAPS = 1 ;
   public static final String OSM_BASEMAP_KEY ="osmdroid";
   public static final String GOOGLE_MAPS_BASEMAP_DEFAULT = "streets";
-  public static final String OSM_MAPS_BASEMAP_DEFAULT = "openstreetmap";
+  public static final String OSM_MAPS_BASEMAP_DEFAULT = "mapquest_streets";
 
 
 
