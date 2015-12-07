@@ -35,12 +35,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
@@ -62,8 +64,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private SharedPreferences sharedPreferences;
 	private String basemap;
 
-	private static final String MAPQUEST_MAP_STREETS = "streets";
-	private static final String MAPQUEST_MAP_SATELLITE = "satellite";
+	private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
+	private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
 
 	private static final String LOCATION_COUNT = "locationCount";
 
@@ -307,6 +309,17 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+
+		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+
+		if (basemap.equals(MAPQUEST_MAP_STREETS)) {
+			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		}else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
+			mMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
+		}else{
+			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		}
 
 		if ( mRefreshLocation ) {
 			mLocationStatus.setVisibility(View.VISIBLE);
