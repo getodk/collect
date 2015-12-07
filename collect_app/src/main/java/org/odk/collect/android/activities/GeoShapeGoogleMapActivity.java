@@ -29,71 +29,70 @@ import org.odk.collect.android.application.Collect;
  * @author guisalmon@gmail.com
  *
  */
-public class GeoTraceActivity extends Activity implements LocationListener{
+public class GeoShapeGoogleMapActivity extends Activity implements LocationListener{
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 		setContentView(R.layout.geopoint_layout);
+    }
 
-	}
+    private void stopGeolocating() {
 
-	private void stopGeolocating() {
+    }
 
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
+    @Override
+    protected void onStart() {
+    	super.onStart();
 		Collect.getInstance().getActivityLogger().logOnStart(this);
-	}
+    }
 
-	@Override
-	protected void onStop() {
+    @Override
+    protected void onStop() {
 		Collect.getInstance().getActivityLogger().logOnStop(this);
-		super.onStop();
-	}
+    	super.onStop();
+    }
 
 
-	private void returnLocation() {
-		finish();
-	}
+    private void returnLocation() {
+        finish();
+    }
 
 
 
 
-	@Override
-	protected void onPause() {
-		super.onPause();
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-	}
-
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-	}
+    }
 
 
-	@Override
-	public void onLocationChanged(Location location) {
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
 
-	@Override
-	public void onProviderDisabled(String provider) {
-	}
+    @Override
+    public void onLocationChanged(Location location) {
+    }
 
 
-	@Override
-	public void onProviderEnabled(String provider) {
-	}
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
 
 
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
 
 
