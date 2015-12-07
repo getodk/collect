@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/geoshape_mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+    <ImageButton
+        android:id="@+id/geoshape_gps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:src="@drawable/ic_menu_mylocation_blue" />
+    <ImageButton
+        android:id="@+id/geoShape_layers_button"
+        android:layout_below="@+id/geoshape_gps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:src="@drawable/layers" />
+    <ImageButton
+        android:id="@+id/clear_button"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="20dp"
+        android:src="@drawable/sweep" />
+    <ImageButton
+        android:id="@+id/polygon_button"
+        android:layout_below="@+id/clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="20dp"
+        android:src="@drawable/polygon" />
+    <ImageButton
+        android:id="@+id/geoshape_Button"
+        android:layout_below="@+id/polygon_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="20dp"
+        android:src="@drawable/ic_menu_save" />
+</RelativeLayout>
