@@ -14,7 +14,12 @@
 
 package org.odk.collect.android.application;
 
-import java.io.File;
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
@@ -30,12 +35,7 @@ import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Environment;
-import android.preference.PreferenceManager;
+import java.io.File;
 
 /**
  * Extends the Application class to implement
@@ -57,6 +57,7 @@ public class Collect extends Application {
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
 
     public static final String DEFAULT_FONTSIZE = "21";
+    public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "OfflineLayers";
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
@@ -128,7 +129,7 @@ public class Collect extends Application {
         }
 
         String[] dirs = {
-                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH
+                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH,OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
