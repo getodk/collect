@@ -14,44 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryController;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.FormSavedListener;
-import org.odk.collect.android.listeners.SavePointListener;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.tasks.SavePointTask;
-import org.odk.collect.android.tasks.SaveResult;
-import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.CompatibilityUtils;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.views.ODKView;
-import org.odk.collect.android.widgets.QuestionWidget;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -101,6 +63,44 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.listeners.SavePointListener;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SavePointTask;
+import org.odk.collect.android.tasks.SaveResult;
+import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.QuestionWidget;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
@@ -145,10 +145,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int BEARING_CAPTURE = 17;
     public static final int EX_GROUP_CAPTURE = 18;
     public static final int OSM_CAPTURE = 19;
+	public static final int GEOSHAPE_CAPTURE = 20;
+	public static final int GEOTRACE_CAPTURE = 21;
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";
 	public static final String BEARING_RESULT = "BEARING_RESULT";
+	public static final String GEOSHAPE_RESULTS ="GEOSHAPE_RESULTS";
+	public static final String GEOTRACE_RESULTS ="GEOTRACE_RESULTS";
 
 	public static final String KEY_INSTANCES = "instances";
 	public static final String KEY_SUCCESS = "success";
@@ -707,6 +711,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case LOCATION_CAPTURE:
 			String sl = intent.getStringExtra(LOCATION_RESULT);
 			((ODKView) mCurrentView).setBinaryData(sl);
+			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			break;
+		case GEOSHAPE_CAPTURE:
+			//String ls = intent.getStringExtra(GEOSHAPE_RESULTS);
+			String gshr = intent.getStringExtra(GEOSHAPE_RESULTS);
+			((ODKView) mCurrentView).setBinaryData(gshr);
+			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			break;
+		case GEOTRACE_CAPTURE:
+			String traceExtra = intent.getStringExtra(GEOTRACE_RESULTS);
+			((ODKView) mCurrentView).setBinaryData(traceExtra);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			break;
 		case BEARING_CAPTURE:

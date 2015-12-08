@@ -354,6 +354,10 @@
 <string name="map_basemap_selector_title">Basemaps</string>
 <string name="map_basemap_behavior">Select a basemap</string>
 <string name="show_map_basemap">Show Basemap Options</string>
+<string name="record_geoshape">Record GeoShape</string>
+<string name="view_shape">Edit Shape</string>
+<string name="record_trace">Record GeoTrace</string>
+<string name="view_trace">View GeoTrace</string>
 
 
 
