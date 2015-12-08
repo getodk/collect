@@ -105,4 +105,15 @@
 		<item>@string/mapquest_streets</item>
 		<item>@string/mapquest_satellite</item>
 	</string-array>
+	<string-array name="delay_scale" translatable="false">
+		<item>1</item>
+		<item>5</item>
+		<item>10</item>
+		<item>20</item>
+		<item>30</item>
+	</string-array>
+	<string-array name="time_scale" translatable="false">
+		<item>Seconds</item>
+		<item>Minutes</item>
+	</string-array>
 </resources>
