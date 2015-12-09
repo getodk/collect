@@ -15,26 +15,28 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.location.Location;
-import android.location.LocationListener;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.view.View;
+import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.osmdroid.tileprovider.IRegisterReceiver;
-
-/**
- * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
- * specifying a location via placing a tracker on a map.
- *
- * @author jonnordling@gmail.com
- *
- */
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.spatial.MBTileProvider;
+import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
@@ -53,33 +55,23 @@ import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.MapSettings;
-import org.odk.collect.android.spatial.MBTileProvider;
-import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.widgets.GeoShapeWidget;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.location.LocationManager;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.view.View;
-import android.widget.ImageButton;
+/**
+ * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
+ * specifying a location via placing a tracker on a map.
+ *
+ * @author jonnordling@gmail.com
+ */
 
 
 public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
     private MapView mapView;
-    private ArrayList<Marker> map_markers = new ArrayList<>();
+    private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private PathOverlay pathOverlay;
     private ITileSource baseTiles;
     public DefaultResourceProxyImpl resource_proxy;
@@ -104,16 +96,17 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private String[] OffilineOverlays;
     public MyLocationNewOverlay mMyLocationOverlay;
     public Boolean data_loaded = false;
+    private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
-        String basemap = sharedPreferences.getString(MapSettings.KEY_map_basemap, "MAPQUESTOSM");
+//        Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
+        String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
         baseTiles = MapHelper.getTileSource(basemap);
         mapView.setTileSource(baseTiles);
-        mapView.setUseDataConnection(online);
+//        mapView.setUseDataConnection(online);
         setGPSStatus();
     }
 
@@ -139,7 +132,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 			Setting Content  & initiating the main button id
 			for the activity
 		  */
-        setContentView(R.layout.geoshape_layout);
+        setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
         return_button = (ImageButton) findViewById(R.id.geoshape_Button);
         polygon_button = (ImageButton) findViewById(R.id.polygon_button);
@@ -150,8 +143,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 		  */
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
-        String basemap = sharedPreferences.getString(MapSettings.KEY_map_basemap, "MAPQUESTOSM");
+//        Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
+        String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
         baseTiles = MapHelper.getTileSource(basemap);
 
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
@@ -159,7 +152,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         mapView.setTileSource(baseTiles);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
-        mapView.setUseDataConnection(online);
+//        mapView.setUseDataConnection(online);
         mapView.setMapListener(mapViewListner);
 
         overlayPointPathListner();
@@ -302,7 +295,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void setGPSStatus(){
         if(gpsStatus ==false){
-            gps_button.setImageResource(R.drawable.ic_menu_mylocation_blue);
+            gps_button.setImageResource(R.drawable.ic_menu_mylocation);
             upMyLocationOverlayLayers();
             //enableMyLocation();
             //zoomToMyLocation();
@@ -651,7 +644,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
     private String[] getOfflineLayerList() {
         File files = new File(Collect.OFFLINE_LAYERS);
-        ArrayList<String> results = new ArrayList<>();
+        ArrayList<String> results = new ArrayList<String>();
         results.add("None");
 //		 String[] overlay_folders =  files.list();
         for(String folder : files.list()){

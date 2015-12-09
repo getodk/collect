@@ -358,6 +358,16 @@
 <string name="view_shape">Edit Shape</string>
 <string name="record_trace">Record GeoTrace</string>
 <string name="view_trace">View GeoTrace</string>
+<string name="geoshape_title">GeoShape</string>
+<string name="mbtiles_not_found">No .mbtiles file found in the directory \'%s\'.</string>
+<string name="geotrace_instruction">"GeoTrace Instructions"</string>
+<string name="geotrace_instruction_message">"Select Mode: Automatic mode or Manual Mode"</string>
+<string name="start">Start</string>
+<string name="enable_gps">Enable GPS</string>
+<string name="enable_gps_message">"GPS is disabled in your device. Would you like to enable it?"</string>
+<string name="geotrace_title">GeoTrace</string>
+<string name="polygon_save">Save as Polygon</string>
+<string name="polyline_save">Save as Polyline</string>
 
 
 
