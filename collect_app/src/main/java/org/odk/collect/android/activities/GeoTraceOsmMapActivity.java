@@ -645,7 +645,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		Long time_delay;
 		TimeUnit time_units_value;
 		if (units =="Minutes"){
-			time_delay = Long.parseLong(delay) * 60;
+			time_delay = Long.parseLong(delay) * (60*60);
 			time_units_value = TimeUnit.SECONDS;
 
 		}else{

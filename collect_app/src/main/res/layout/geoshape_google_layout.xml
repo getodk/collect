@@ -4,10 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/geoshape_mapview"
+    <fragment
+        android:id="@+id/gmap"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        class="com.google.android.gms.maps.SupportMapFragment" />
 
     <ImageButton
         android:id="@+id/geoshape_gps_button"

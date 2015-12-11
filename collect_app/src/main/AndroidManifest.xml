@@ -198,6 +198,18 @@
             android:name=".activities.GeoPointOsmMapActivity"
             android:label="@string/app_name" />
         <activity
+            android:name=".activities.GeoShapeOsmMapActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.GeoShapeGoogleMapActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.GeoTraceOsmMapActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.GeoTraceGoogleMapActivity"
+            android:label="@string/app_name" />
+        <activity
             android:name=".activities.BearingActivity"
             android:label="@string/app_name" />
         <activity

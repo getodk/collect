@@ -70,27 +70,20 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 	private MarkerOptions mMarkerOption;
 	private Marker mMarker;
 	private LatLng mLatLng;
-
 	private TextView mLocationStatus;
-
 	private LocationManager mLocationManager;
-
 	private Location mLocation;
 	private Button mAcceptLocation;
 	private Button mCancelLocation;
 	private Button mReloadLocation;
-
 	private boolean mCaptureLocation = true;
 	private boolean mRefreshLocation = true;
 	private boolean mIsDragged = false;
 	private Button mShowLocation;
-
 	private boolean mGPSOn = false;
 	private boolean mNetworkOn = false;
-
 	private double mLocationAccuracy;
 	private int mLocationCount = 0;
-
 	private boolean mZoomed = false;
 
 	@Override
@@ -164,6 +157,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 				mNetworkOn = true;
 			}
 		}
+
 		if (!mGPSOn && !mNetworkOn) {
 			Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
 					Toast.LENGTH_SHORT).show();
@@ -202,7 +196,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		mAcceptLocation = (Button) findViewById(R.id.accept_location);
 		if (mCaptureLocation){
 			mAcceptLocation.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(View v) {
 					Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
