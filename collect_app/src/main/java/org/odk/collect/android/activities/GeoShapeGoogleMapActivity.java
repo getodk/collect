@@ -14,14 +14,19 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +42,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +52,7 @@ import java.util.List;
  * specifying a location via placing a tracker on a map.
  *
  * @author jonnordling@gmail.com
+ * @date 12/12/15
  *
  */
 
@@ -63,6 +70,13 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private Polygon polygon;
     private ArrayList<LatLng> latLngsArray = new ArrayList<LatLng>();
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private ImageButton gps_button;
+    private ImageButton clear_button;
+    private ImageButton polygon_button;
+    private ImageButton return_button;
+    private String final_return_string;
+    private Boolean data_loaded;
+    private Boolean clear_button_test;
 
 
     @Override
@@ -93,7 +107,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         }
 
 
-
         // If there is a last know location go there
         if(curLocation !=null){
             curlatLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
@@ -101,11 +114,41 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             initZoom = true;
         }
 
+        gps_button = (ImageButton)findViewById(R.id.geoshape_gps_button);
+        polygon_button = (ImageButton) findViewById(R.id.polygon_button);
+        clear_button = (ImageButton) findViewById(R.id.clear_button);
+        clear_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (markerArray.size() != 0){
+                    showClearDialog();
+                }
+            }
+        });
+        return_button = (ImageButton) findViewById(R.id.geoshape_Button);
+        return_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnLocation();
+            }
+        });
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null) {
+            if ( intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION) ) {
+                data_loaded =true;
+                String s = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
+                overlayIntentPolygon(s);
+                zoomToCentroid();
+            }
+        }
+
     }
 
-//    private void stopGeolocating() {
-//
-//    }
+    private void stopGeolocating() {
+        // Inititated on pause to stop geoLocations
+
+    }
 
     @Override
     protected void onStart() {
@@ -119,10 +162,53 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     	super.onStop();
     }
 
-    private void returnLocation() {
+    private void returnLocation(){
+        final_return_string = generateReturnString();
+        Intent i = new Intent();
+        i.putExtra(
+                FormEntryActivity.GEOSHAPE_RESULTS,
+                final_return_string);
+        setResult(RESULT_OK, i);
         finish();
     }
 
+    private void overlayIntentPolygon(String str){
+        clear_button.setVisibility(View.VISIBLE);
+        clear_button_test = true;
+        String s = str.replace("; ",";");
+        String[] sa = s.split(";");
+        // Set the Marker Array
+//        polygonOptions.add(latLng);
+//        polygon = mMap.addPolygon(polygonOptions);
+        for (int i=0;i<(sa.length);i++){
+            String[] sp = sa[i].split(" ");
+            double gp[] = new double[4];
+            String lat = sp[0].replace(" ", "");
+            String lng = sp[1].replace(" ", "");
+            gp[0] = Double.parseDouble(lat);
+            gp[1] = Double.parseDouble(lng);
+            LatLng point = new LatLng(gp[0], gp[1]);
+            polygonOptions.add(point);
+            MarkerOptions mMarkerOptions = new MarkerOptions().position(point).draggable(true);
+            Marker marker= mMap.addMarker(mMarkerOptions);
+            markerArray.add(marker);
+        }
+        polygon = mMap.addPolygon(polygonOptions);
+        update_polygon();
+
+    }
+
+    private String generateReturnString() {
+        String temp_string = "";
+        for (int i = 0 ; i < markerArray.size();i++){
+            String lat = Double.toString(markerArray.get(i).getPosition().latitude);
+            String lng = Double.toString(markerArray.get(i).getPosition().longitude);
+            String alt ="0.0";
+            String acu = "0.0";
+            temp_string = temp_string+lat+" "+lng +" "+alt+" "+acu+";";
+        }
+        return temp_string;
+    }
 
     @Override
     protected void onPause() {
@@ -151,7 +237,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             initZoom = true;
         }
     }
-
 
     @Override
     public void onProviderDisabled(String provider) {
@@ -199,13 +284,69 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     @Override
     public void onMarkerDrag(Marker marker) {
-        Log.w("onMarkerDrag","IS HAPPENING");
         update_polygon();
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        Log.w("onMarkerDragEnd","IS HAPPENING");
         update_polygon();
+    }
+
+
+    private void zoomToCentroid(){
+
+        /*
+            Calculate Centroid of Polygon
+         */
+
+        Handler handler=new Handler();
+        Runnable r = new Runnable(){
+            public void run() {
+                Integer size  = markerArray.size();
+                Double x_value = 0.0;
+                Double y_value = 0.0;
+                for(int i=0; i<size; i++){
+                    LatLng temp_marker = markerArray.get(i).getPosition();
+                    Double x_marker = temp_marker.latitude;
+                    Double y_marker = temp_marker.longitude;
+                    x_value += x_marker;
+                    y_value += y_marker;
+                }
+
+                Double x_cord = x_value/size;
+                Double y_cord = y_value/size;
+                LatLng centroid = new LatLng(x_cord,y_cord);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroid,16));
+
+            }
+        };
+        handler.post(r);
+
+    }
+    private void clearFeatures(){
+        // Clear all the features
+        mMap.clear();
+        polygon = null;
+        polygonOptions = new PolygonOptions();
+        polygonOptions.strokeColor(Color.RED);
+        markerArray.clear();
+
+    }
+    private void showClearDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Polygon already created. Would you like to CLEAR the feature?")
+                .setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                        clearFeatures();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+
+                    }
+                }).show();
+
     }
 }
