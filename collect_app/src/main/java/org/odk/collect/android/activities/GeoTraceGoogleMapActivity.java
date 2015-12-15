@@ -14,10 +14,15 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -26,15 +31,15 @@ import org.odk.collect.android.application.Collect;
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
  *
- * @author guisalmon@gmail.com
+ * @author jonnordling@gmail.com
  *
  */
-public class GeoTraceGoogleMapActivity extends Activity implements LocationListener{
+public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.geopoint_layout);
+		setContentView(R.layout.geotrace_google_layout);
 
 	}
 
@@ -95,8 +100,23 @@ public class GeoTraceGoogleMapActivity extends Activity implements LocationListe
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 	}
 
+	@Override
+	public void onMapLongClick(LatLng latLng) {
 
+	}
 
+	@Override
+	public void onMarkerDragStart(Marker marker) {
 
+	}
 
+	@Override
+	public void onMarkerDrag(Marker marker) {
+
+	}
+
+	@Override
+	public void onMarkerDragEnd(Marker marker) {
+
+	}
 }

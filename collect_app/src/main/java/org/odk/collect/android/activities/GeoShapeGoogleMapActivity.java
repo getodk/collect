@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -75,7 +76,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private ImageButton polygon_button;
     private ImageButton return_button;
     private String final_return_string;
-    private Boolean data_loaded;
+    private Boolean data_loaded = false;
     private Boolean clear_button_test;
 
 
@@ -88,6 +89,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
+
 
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(false);
@@ -115,7 +117,16 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         }
 
         gps_button = (ImageButton)findViewById(R.id.geoshape_gps_button);
+        gps_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(curLocation !=null){
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
+                }
+            }
+        });
         polygon_button = (ImageButton) findViewById(R.id.polygon_button);
+        polygon_button.setVisibility(View.GONE);
         clear_button = (ImageButton) findViewById(R.id.clear_button);
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,6 +230,12 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (data_loaded){
+            // turn of the GPS and Polygon button
+            polygon_button.setVisibility(View.GONE);
+
+        }
         if (mGPSOn) {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
@@ -270,6 +287,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         markerArray.add(marker);
 
         if (polygon == null){
+            clear_button.setVisibility(View.VISIBLE);
+            clear_button_test = true;
             polygonOptions.add(latLng);
             polygon = mMap.addPolygon(polygonOptions);
         }else{
@@ -305,10 +324,13 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 Integer size  = markerArray.size();
                 Double x_value = 0.0;
                 Double y_value = 0.0;
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for(int i=0; i<size; i++){
                     LatLng temp_marker = markerArray.get(i).getPosition();
                     Double x_marker = temp_marker.latitude;
                     Double y_marker = temp_marker.longitude;
+                    LatLng ll = new LatLng(x_marker,y_marker);
+                    builder.include(ll);
                     x_value += x_marker;
                     y_value += y_marker;
                 }
@@ -316,16 +338,24 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 Double x_cord = x_value/size;
                 Double y_cord = y_value/size;
                 LatLng centroid = new LatLng(x_cord,y_cord);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroid,16));
+                LatLngBounds bounds = builder.build();
+                int width = getResources().getDisplayMetrics().widthPixels;
+                int height = getResources().getDisplayMetrics().heightPixels;
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,width, height,20));
+                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroid,16));
 
             }
         };
+
         handler.post(r);
 
     }
     private void clearFeatures(){
         // Clear all the features
         mMap.clear();
+        clear_button.setVisibility(View.GONE);
+        clear_button_test = false;
         polygon = null;
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
