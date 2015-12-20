@@ -29,8 +29,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.spatial.MBTileProvider;
-import org.odk.collect.android.spatial.MapHelper;
-
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -38,6 +36,7 @@ import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -102,6 +101,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	private MBTileProvider mbprovider;
 	private AlertDialog mAlertDialog;
 	private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
+	private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
+	private String basemap;
 
 	@Override
 	protected void onStart() {
@@ -117,9 +118,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	protected void onResume() {
 		//setGPSStatus();
 		super.onResume();
-		String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-		baseTiles = MapHelper.getTileSource(basemap);
-		mapView.setTileSource(baseTiles);
+		setBasemap();
 		setGPSStatus();
 	}
 
@@ -161,15 +160,10 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		setTitle(getString(R.string.geotrace_title)); // Setting title of the action
 
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//		Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
-		String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-		baseTiles = MapHelper.getTileSource(basemap);
 		resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
 		mapView = (MapView)findViewById(R.id.geotrace_mapview);
-		//mapView.setTileSource(baseTiles);
 		mapView.setMultiTouchControls(true);
 		mapView.setBuiltInZoomControls(true);
-//		mapView.setUseDataConnection(online);
 		mapView.getController().setZoom(zoom_level);
 		mMyLocationOverlay = new MyLocationNewOverlay(this, mapView);
 		mMyLocationOverlay.runOnFirstFix(centerAroundFix);
@@ -348,7 +342,17 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	/*
 		This functions handels the delay and the Runable for
 	*/
-
+	// The should be added to the MapHelper Class to be reused
+	private void setBasemap(){
+		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+		if (basemap.equals(MAPQUEST_MAP_STREETS)) {
+			mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		}else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
+			mapView.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
+		}else{
+			mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		}
+	}
 	public void setGeoTraceScheuler(long delay, TimeUnit units){
 		schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override

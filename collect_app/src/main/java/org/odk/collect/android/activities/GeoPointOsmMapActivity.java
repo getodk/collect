@@ -309,18 +309,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-
-		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-
-		if (basemap.equals(MAPQUEST_MAP_STREETS)) {
-			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-		}else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
-			mMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-		}else{
-			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-		}
-
+		setBasemap();
 		if ( mRefreshLocation ) {
 			mLocationStatus.setVisibility(View.VISIBLE);
 			if (mGPSOn) {
@@ -345,6 +334,19 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			}
 			mShowLocation.setClickable(mMarker != null);
 
+		}
+	}
+
+	// The should be added to the MapHelper Class to be reused
+	private void setBasemap(){
+		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+
+		if (basemap.equals(MAPQUEST_MAP_STREETS)) {
+			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		}else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
+			mMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
+		}else{
+			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		}
 	}
 

@@ -48,6 +48,7 @@ import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -88,6 +89,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public Boolean layerStatus = false;
     private int selected_layer= -1;
     private ProgressDialog progress;
+    private String basemap;
 
     private MBTileProvider mbprovider;
     private TilesOverlay mbTileOverlay;
@@ -97,6 +99,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public MyLocationNewOverlay mMyLocationOverlay;
     public Boolean data_loaded = false;
     private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
+    private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
 
 
 
@@ -124,7 +127,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView)findViewById(R.id.geoshape_mapview);
-        mapView.setTileSource(baseTiles);
+//        mapView.setTileSource(baseTiles);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
 //        mapView.setUseDataConnection(online);
@@ -219,9 +222,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-        String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-        baseTiles = MapHelper.getTileSource(basemap);
-        mapView.setTileSource(baseTiles);
+        setBasemap();
         setGPSStatus();
     }
 
@@ -239,6 +240,18 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     protected void onStop() {
         super.onStop();
         disableMyLocation();
+    }
+    // The should be added to the MapHelper Class to be reused
+    private void setBasemap(){
+        basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+
+        if (basemap.equals(MAPQUEST_MAP_STREETS)) {
+            mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+        }else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
+            mapView.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
+        }else{
+            mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+        }
     }
 
     private void buildPolygon(){
