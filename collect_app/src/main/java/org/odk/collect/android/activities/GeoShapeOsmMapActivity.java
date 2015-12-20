@@ -417,8 +417,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void showClearDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Polygon already created. Would you like to CLEAR the feature?")
-                .setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.geo_clear_warning))
+                .setPositiveButton(getString(R.string.clear), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
                         clearFeatures();
@@ -434,8 +434,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
     private void showPolyonErrorDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Must have at least 3 points to create Polygon")
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.polygon_validator))
+                .setPositiveButton(getString(R.string.dialog_continue), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
                     }
@@ -536,7 +536,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         //FrameLayout fl = (ScrollView) findViewById(R.id.layer_scroll);
         //View view=fl.inflate(self, R.layout.showlayers_layout, null);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Select Offline Layer");
+        alertDialog.setTitle(getString(R.string.select_offline_layer));
         OffilineOverlays = getOfflineLayerList(); // Maybe this should only be done once. Have not decided yet.
         //alertDialog.setItems(list, new  DialogInterface.OnClickListener() {
         alertDialog.setSingleChoiceItems(OffilineOverlays,selected_layer,new  DialogInterface.OnClickListener() {

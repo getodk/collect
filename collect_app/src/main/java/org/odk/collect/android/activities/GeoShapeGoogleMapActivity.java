@@ -399,7 +399,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private void showClearDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.geo_clear_warning))
-                .setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.clear), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
                         clearFeatures();

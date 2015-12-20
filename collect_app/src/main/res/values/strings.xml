@@ -373,6 +373,9 @@
 <string name="polygon_or_polyline">"Select Polygon/Polyline"</string>
 <string name="minutes">Minutes</string>
 <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
+<string name="polygon_validator">Must have at least 3 points to create Polygon</string>
+<string name="dialog_continue">Continue</string>
+<string name="clear">Clear</string>
 
 
 
