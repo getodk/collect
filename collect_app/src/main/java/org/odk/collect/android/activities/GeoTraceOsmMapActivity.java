@@ -116,7 +116,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 	@Override
 	protected void onResume() {
-		//setGPSStatus();
 		super.onResume();
 		setBasemap();
 		setGPSStatus();

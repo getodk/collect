@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.Marker;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.osmdroid.DefaultResourceProxyImpl;
 
 import java.util.List;
@@ -94,6 +95,12 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private Location curLocation;
 	private LatLng curlatLng;
 	private Boolean initZoom = false;
+	private String basemap;
+
+	private static final String GOOGLE_MAP_STREETS = "streets";
+	private static final String GOOGLE_MAP_SATELLITE = "satellite";
+	private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
+	private static final String GOOGLE_MAP_HYBRID = "hybrid";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -235,6 +242,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setBasemap();
 
 	}
 
@@ -368,6 +376,21 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 					time_units.invalidate();
 				}
 				break;
+		}
+	}
+	// The should be added to the MapHelper Class to be reused
+	public void setBasemap(){
+		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+		if (basemap.equals(GOOGLE_MAP_STREETS)) {
+			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+		}else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
+			mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		}else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
+			mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+		}else if(basemap.equals(GOOGLE_MAP_HYBRID)){
+			mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		}else{
+			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 		}
 	}
 
