@@ -639,10 +639,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		String units = time_units.getSelectedItem().toString();
 		Long time_delay;
 		TimeUnit time_units_value;
-		if (units =="Minutes"){
-			time_delay = Long.parseLong(delay) * (60*60);
+		if (units == getString(R.string.minutes)){
+			time_delay = Long.parseLong(delay) * (60); //Convert minutes to seconds
 			time_units_value = TimeUnit.SECONDS;
-
 		}else{
 			//in Seconds
 			time_delay = Long.parseLong(delay);
@@ -676,8 +675,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	}
 	private void showPolyonErrorDialog(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Must have at least 3 points to create Polygon")
-				.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+		builder.setMessage(getString(R.string.polygon_validator))
+				.setPositiveButton(getString(R.string.dialog_continue), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						// FIRE ZE MISSILES!
 					}
