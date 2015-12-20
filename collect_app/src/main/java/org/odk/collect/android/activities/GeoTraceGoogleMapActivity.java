@@ -23,6 +23,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,12 +41,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.osmdroid.DefaultResourceProxyImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -96,6 +101,10 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private LatLng curlatLng;
 	private Boolean initZoom = false;
 	private String basemap;
+	private PolylineOptions polylineOptions;
+	private Polyline polygon;
+	private ArrayList<LatLng> latLngsArray = new ArrayList<LatLng>();
+	private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 
 	private static final String GOOGLE_MAP_STREETS = "streets";
 	private static final String GOOGLE_MAP_SATELLITE = "satellite";
@@ -106,7 +115,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.geotrace_google_layout);
-
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
 		mMap.setMyLocationEnabled(true);
@@ -150,8 +159,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		play_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
-				//setGPSStatus();
-				//We are not in trace mode
 				if (!play_check){
 					if (curLocation == null){
 //						mMyLocationOverlay.runOnFirstFix(centerAroundFix);
@@ -196,7 +203,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		manual_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//addLocationMarker();
+				addLocationMarker();
 
 			}
 		});
@@ -405,11 +412,22 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						//addLocationMarker();
+						addLocationMarker();
 					}
 				});
 			}
 		},delay, delay, units);
+
+	}
+
+	private void addLocationMarker(){
+		LatLng latLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
+		//curLocation.getAccuracy();
+		//curLocation.getAltitude();
+		//Figure out how to retain the Accuracy for Google Map Marker
+		MarkerOptions mMarkerOptions = new MarkerOptions().position(latLng).draggable(false);
+		Marker marker= mMap.addMarker(mMarkerOptions);
+		markerArray.add(marker);
 
 	}
 
@@ -419,6 +437,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		if (progress.isShowing()){
 			progress.dismiss();
 		}
+		curLocation = location;
+
 	}
 
 
