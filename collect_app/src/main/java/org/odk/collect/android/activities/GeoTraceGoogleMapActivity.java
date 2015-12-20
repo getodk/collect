@@ -276,7 +276,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 
 		p_builder = new AlertDialog.Builder(this);
-		p_builder.setTitle("Select Polygon/Polyline");
+		p_builder.setTitle(getString(R.string.polygon_or_polyline));
 //		p_builder.setMessage(getString(R.string.polygon_conection_message));
 		p_builder.setView(polygonPolylineView)
 				// Add action buttons
@@ -334,7 +334,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		String units = time_units.getSelectedItem().toString();
 		Long time_delay;
 		TimeUnit time_units_value;
-		if (units =="Minutes"){
+		if (units == getString(R.string.minutes)){
 			time_delay = Long.parseLong(delay) * (60*60);
 			time_units_value = TimeUnit.SECONDS;
 

@@ -102,11 +102,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-//        Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
         String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
         baseTiles = MapHelper.getTileSource(basemap);
         mapView.setTileSource(baseTiles);
-//        mapView.setUseDataConnection(online);
         setGPSStatus();
     }
 
@@ -154,10 +152,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         mapView.setBuiltInZoomControls(true);
 //        mapView.setUseDataConnection(online);
         mapView.setMapListener(mapViewListner);
-
         overlayPointPathListner();
-
-
         return_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,8 +208,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         mMyLocationOverlay.runOnFirstFix(centerAroundFix);
 
         progress = new ProgressDialog(this);
-        progress.setTitle("Loading Location");
-        progress.setMessage("Wait while loading...");
+        progress.setTitle(getString(R.string.getting_location));
+        progress.setMessage(getString(R.string.please_wait_long));
 
 
         Intent intent = getIntent();
@@ -322,9 +317,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void showGPSDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+        alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
                 .setCancelable(false)
-                .setPositiveButton("Enable GPS",
+                .setPositiveButton(getString(R.string.enable_gps),
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 // Intent callGPSSettingIntent = new Intent(
@@ -386,7 +381,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
 
     private void saveGeoShape(){
-        //Toast.makeText(this, "Do Save Stuff", Toast.LENGTH_LONG).show();
         returnLocation();
         finish();
     }

@@ -224,6 +224,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     protected void onPause() {
         super.onPause();
+        mLocationManager.removeUpdates(this);
 
     }
 
@@ -364,7 +365,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     }
     private void showClearDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Polygon already created. Would you like to CLEAR the feature?")
+        builder.setMessage(getString(R.string.geo_clear_warning))
                 .setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!

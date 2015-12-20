@@ -117,11 +117,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	protected void onResume() {
 		//setGPSStatus();
 		super.onResume();
-//		Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
 		String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
 		baseTiles = MapHelper.getTileSource(basemap);
 		mapView.setTileSource(baseTiles);
-//		mapView.setUseDataConnection(online);
 		setGPSStatus();
 	}
 
@@ -234,7 +232,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 			}
 		});
-
 		manual_button = (Button)findViewById(R.id.manual_button);
 		manual_button.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -243,9 +240,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 			}
 		});
-
 		pause_button =(ImageButton)findViewById(R.id.geotrace_pause_button);
-
 		play_button = (ImageButton)findViewById(R.id.geotrace_play_button);
 		beenPaused =false;
 		TRACE_MODE = 1;
@@ -785,7 +780,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 	private void showLayersDialog() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		alertDialog.setTitle("Select Offline Layer");
+		alertDialog.setTitle(getString(R.string.select_offline_layer));
 		OffilineOverlays = getOfflineLayerList(); // Maybe this should only be done once. Have not decided yet.
 		alertDialog.setSingleChoiceItems(OffilineOverlays, selected_layer, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {

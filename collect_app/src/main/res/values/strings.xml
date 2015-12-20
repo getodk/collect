@@ -368,6 +368,13 @@
 <string name="geotrace_title">GeoTrace</string>
 <string name="polygon_save">Save as Polygon</string>
 <string name="polyline_save">Save as Polyline</string>
+<string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
+<string name="select_offline_layer">Select Offline Layer</string>
+<string name="polygon_or_polyline">"Select Polygon/Polyline"</string>
+<string name="minutes">Minutes</string>
+<string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
+
+
 
 
 
