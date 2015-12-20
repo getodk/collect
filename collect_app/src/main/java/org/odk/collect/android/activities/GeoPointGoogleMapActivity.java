@@ -308,18 +308,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		if ( mMap == null ) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
-			basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
-			if (basemap.equals(GOOGLE_MAP_STREETS)) {
-				mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-			}else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
-				mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-			}else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
-				mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-			}else if(basemap.equals(GOOGLE_MAP_HYBRID)){
-				mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-			}else{
-				mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-			}
+			setBasemap();
 			if ( mMap == null ) {
 				Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
 						Toast.LENGTH_SHORT).show();
@@ -355,6 +344,22 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 				mLocationManager.requestLocationUpdates(
 						LocationManager.NETWORK_PROVIDER, 0, 0, this);
 			}
+		}
+	}
+
+	// The should be added to the MapHelper Class to be reused
+	public void setBasemap(){
+		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+		if (basemap.equals(GOOGLE_MAP_STREETS)) {
+			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+		}else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
+			mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		}else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
+			mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+		}else if(basemap.equals(GOOGLE_MAP_HYBRID)){
+			mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		}else{
+			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 		}
 	}
 

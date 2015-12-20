@@ -99,30 +99,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-        baseTiles = MapHelper.getTileSource(basemap);
-        mapView.setTileSource(baseTiles);
-        setGPSStatus();
-    }
 
-    @Override
-    public void onBackPressed() {
-        saveGeoShape();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        disableMyLocation();
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        disableMyLocation();
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,7 +202,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    //Do something after 100ms
                     GeoPoint  point = new GeoPoint(34.08145, -39.85007);
                     mapView.getController().setZoom(3);
                     mapView.getController().setCenter(point);
@@ -238,6 +214,31 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
 
         mapView.invalidate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+        baseTiles = MapHelper.getTileSource(basemap);
+        mapView.setTileSource(baseTiles);
+        setGPSStatus();
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveGeoShape();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        disableMyLocation();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        disableMyLocation();
     }
 
     private void buildPolygon(){

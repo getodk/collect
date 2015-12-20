@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
+ * Version of the GeoTraceMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
  *
  * @author jonnordling@gmail.com

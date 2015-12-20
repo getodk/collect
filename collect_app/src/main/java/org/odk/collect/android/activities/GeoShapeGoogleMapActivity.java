@@ -18,12 +18,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -43,6 +45,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
@@ -59,7 +62,10 @@ import java.util.List;
 
 public class GeoShapeGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 
+    private SharedPreferences sharedPreferences;
+
     private GoogleMap mMap;
+    private String basemap;
     private UiSettings gmapSettings;
     private LocationManager mLocationManager;
     private Boolean mGPSOn = false;
@@ -79,16 +85,23 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean data_loaded = false;
     private Boolean clear_button_test;
 
+    private static final String GOOGLE_MAP_STREETS = "streets";
+    private static final String GOOGLE_MAP_SATELLITE = "satellite";
+    private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
+    private static final String GOOGLE_MAP_HYBRID = "hybrid";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geoshape_google_layout);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
+        setBasemap();
 
 
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -156,70 +169,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     }
 
-    private void stopGeolocating() {
-        // Inititated on pause to stop geoLocations
-
-    }
-
-    @Override
-    protected void onStart() {
-    	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this);
-    	super.onStop();
-    }
-
-    private void returnLocation(){
-        final_return_string = generateReturnString();
-        Intent i = new Intent();
-        i.putExtra(
-                FormEntryActivity.GEOSHAPE_RESULTS,
-                final_return_string);
-        setResult(RESULT_OK, i);
-        finish();
-    }
-
-    private void overlayIntentPolygon(String str){
-        clear_button.setVisibility(View.VISIBLE);
-        clear_button_test = true;
-        String s = str.replace("; ",";");
-        String[] sa = s.split(";");
-        // Set the Marker Array
-//        polygonOptions.add(latLng);
-//        polygon = mMap.addPolygon(polygonOptions);
-        for (int i=0;i<(sa.length);i++){
-            String[] sp = sa[i].split(" ");
-            double gp[] = new double[4];
-            String lat = sp[0].replace(" ", "");
-            String lng = sp[1].replace(" ", "");
-            gp[0] = Double.parseDouble(lat);
-            gp[1] = Double.parseDouble(lng);
-            LatLng point = new LatLng(gp[0], gp[1]);
-            polygonOptions.add(point);
-            MarkerOptions mMarkerOptions = new MarkerOptions().position(point).draggable(true);
-            Marker marker= mMap.addMarker(mMarkerOptions);
-            markerArray.add(marker);
-        }
-        polygon = mMap.addPolygon(polygonOptions);
-        update_polygon();
-
-    }
-
-    private String generateReturnString() {
-        String temp_string = "";
-        for (int i = 0 ; i < markerArray.size();i++){
-            String lat = Double.toString(markerArray.get(i).getPosition().latitude);
-            String lng = Double.toString(markerArray.get(i).getPosition().longitude);
-            String alt ="0.0";
-            String acu = "0.0";
-            temp_string = temp_string+lat+" "+lng +" "+alt+" "+acu+";";
-        }
-        return temp_string;
-    }
 
     @Override
     protected void onPause() {
@@ -242,6 +191,89 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         }
         if (mNetworkOn) {
             mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        }
+    }
+    @Override
+    protected void onStart() {
+    	super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this);
+    	super.onStop();
+    }
+
+    private void stopGeolocating() {
+        // Inititated on pause to stop geoLocations
+
+    }
+
+    private void returnLocation(){
+        final_return_string = generateReturnString();
+        Intent i = new Intent();
+        i.putExtra(
+                FormEntryActivity.GEOSHAPE_RESULTS,
+                final_return_string);
+        setResult(RESULT_OK, i);
+        finish();
+    }
+
+    private void overlayIntentPolygon(String str){
+        mMap.setOnMapLongClickListener(null);
+        clear_button.setVisibility(View.VISIBLE);
+        clear_button_test = true;
+        String s = str.replace("; ",";");
+        String[] sa = s.split(";");
+        for (int i=0;i<(sa.length -1 );i++){
+            String[] sp = sa[i].split(" ");
+            double gp[] = new double[4];
+            String lat = sp[0].replace(" ", "");
+            String lng = sp[1].replace(" ", "");
+            gp[0] = Double.parseDouble(lat);
+            gp[1] = Double.parseDouble(lng);
+            LatLng point = new LatLng(gp[0], gp[1]);
+            polygonOptions.add(point);
+            MarkerOptions mMarkerOptions = new MarkerOptions().position(point).draggable(true);
+            Marker marker= mMap.addMarker(mMarkerOptions);
+            markerArray.add(marker);
+        }
+        polygon = mMap.addPolygon(polygonOptions);
+        update_polygon();
+
+    }
+
+    private String generateReturnString() {
+        String temp_string = "";
+        //Add the first marker to the end of the array, so the first and the last are the same
+        if (markerArray.size() > 1 ){
+            markerArray.add(markerArray.get(1));
+            for (int i = 0 ; i < markerArray.size();i++){
+                String lat = Double.toString(markerArray.get(i).getPosition().latitude);
+                String lng = Double.toString(markerArray.get(i).getPosition().longitude);
+                String alt ="0.0";
+                String acu = "0.0";
+                temp_string = temp_string+lat+" "+lng +" "+alt+" "+acu+";";
+            }
+        }
+        return temp_string;
+    }
+
+
+    // The should be added to the MapHelper Class to be reused
+    public void setBasemap(){
+        basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+        if (basemap.equals(GOOGLE_MAP_STREETS)) {
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }else if(basemap.equals(GOOGLE_MAP_HYBRID)){
+            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }else{
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
     }
 
@@ -353,7 +385,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     }
     private void clearFeatures(){
-        // Clear all the features
+        // Clear all the features and listners
         mMap.clear();
         clear_button.setVisibility(View.GONE);
         clear_button_test = false;
@@ -361,6 +393,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
         markerArray.clear();
+        mMap.setOnMapLongClickListener(this);
 
     }
     private void showClearDialog(){
