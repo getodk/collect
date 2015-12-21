@@ -195,6 +195,13 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		});
 		layers_button = (ImageButton) findViewById(R.id.geoTrace_layers_button);
 		clear_button= (ImageButton) findViewById(R.id.geotrace_clear_button);
+		clear_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v){
+				clearFeatures();
+			}
+		});
+
 		save_button= (ImageButton) findViewById(R.id.geotrace_save);
 		save_button.setOnClickListener(new View.OnClickListener() {
 
@@ -640,6 +647,23 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 						// FIRE ZE MISSILES!
 					}
 				}).show();
+
+	}
+
+	private void clearFeatures(){
+		// Clear all the features and listners
+		mMap.clear();
+		clear_button.setVisibility(View.GONE);
+		clear_button_test = false;
+		polyline = null;
+		polylineOptions = new PolylineOptions();
+		polylineOptions.color(Color.RED);
+		markerArray.clear();
+		pause_button.setVisibility(View.GONE);
+		clear_button.setVisibility(View.GONE);
+		save_button.setVisibility(View.GONE);
+		manual_button.setVisibility(View.GONE);
+		play_button.setVisibility(View.VISIBLE);
 
 	}
 
