@@ -25,6 +25,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -50,6 +52,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 
 import java.util.ArrayList;
@@ -93,6 +96,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private SharedPreferences sharedPreferences;
 	public DefaultResourceProxyImpl resource_proxy;
 	private Boolean inital_location_found = false;
+	private Boolean clear_button_test = false;
 
 
 	private GoogleMap mMap;
@@ -129,10 +133,19 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		mMap.setOnMarkerDragListener(this);
 		mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-
-
 		polylineOptions = new PolylineOptions();
 		polylineOptions.color(Color.RED);
+
+		progress = new ProgressDialog(this);
+		progress.setTitle(getString(R.string.getting_location));
+		progress.setMessage(getString(R.string.please_wait_long));
+		progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				play_button.setImageResource(R.drawable.ic_menu_mylocation);
+			}
+		});
+
 
 		List<String> providers = mLocationManager.getProviders(true);
 		for (String provider : providers) {
@@ -146,20 +159,12 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 			}
 		}
 
-		// If there is a last know location go there
-		if(curLocation !=null){
-			curlatLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 16));
-			initZoom = true;
-		}
 
 		if (mGPSOn) {
-			mLocationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 0, 0, GeoTraceGoogleMapActivity.this);
+			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, GeoTraceGoogleMapActivity.this);
 		}
 		if (mNetworkOn) {
-			mLocationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, 0, 0, GeoTraceGoogleMapActivity.this);
+			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, GeoTraceGoogleMapActivity.this);
 		}
 
 
@@ -203,41 +208,32 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		play_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
-				if (!play_check){
-					if (curLocation == null){
+				if (!play_check) {
+					if (curLocation == null) {
 						progress.show();
-					}else{
-						if(!beenPaused){
+					} else {
+						if (!beenPaused) {
 							alert.show();
-						}else{
+						} else {
 							RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(R.id.radio_group);
 							int radioButtonID = rb.getCheckedRadioButtonId();
 							View radioButton = rb.findViewById(radioButtonID);
 							int idx = rb.indexOfChild(radioButton);
 							TRACE_MODE = idx;
-							if (TRACE_MODE ==0){
+							if (TRACE_MODE == 0) {
 								setupManualMode();
-							}else if (TRACE_MODE ==1){
+							} else if (TRACE_MODE == 1) {
 								setupAutomaticMode();
-							}else{
+							} else {
 								reset_trace_settings();
 							}
 						}
-						play_check=true;
+						play_check = true;
 					}
-				}else{
-					play_check=false;
+				} else {
+					play_check = false;
 					startGeoTrace();
 				}
-			}
-		});
-		progress = new ProgressDialog(this);
-		progress.setTitle(getString(R.string.getting_location));
-		progress.setMessage(getString(R.string.please_wait_long));
-		progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				play_button.setImageResource(R.drawable.ic_menu_mylocation);
 			}
 		});
 
@@ -280,8 +276,54 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 		// Build ui of the dialog up front
 		buildDialogs();
+		Intent intent = getIntent();
+		if (intent != null && intent.getExtras() != null) {
+			if ( intent.hasExtra(GeoTraceWidget.TRACE_LOCATION) ) {
+				String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
+				play_button.setVisibility(View.GONE);
+				clear_button.setVisibility(View.VISIBLE);
+				overlayIntentTrace(s);
+				zoomToCentroid();
+			}
+		}else{
+			// If there is a last know location go there
+			if(curLocation !=null){
+				curlatLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 16));
+				initZoom = true;
+				progress.hide();
+			}else{
+				// There is no progress for searching
+				progress.show();
+			}
+
+		}
 
 
+
+	}
+
+	private void overlayIntentTrace(String str){
+		mMap.setOnMapLongClickListener(null);
+		clear_button.setVisibility(View.VISIBLE);
+		clear_button_test = true;
+		String s = str.replace("; ",";");
+		String[] sa = s.split(";");
+		for (int i=0;i<(sa.length -1 );i++){
+			String[] sp = sa[i].split(" ");
+			double gp[] = new double[4];
+			String lat = sp[0].replace(" ", "");
+			String lng = sp[1].replace(" ", "");
+			gp[0] = Double.parseDouble(lat);
+			gp[1] = Double.parseDouble(lng);
+			LatLng point = new LatLng(gp[0], gp[1]);
+			polylineOptions.add(point);
+			MarkerOptions mMarkerOptions = new MarkerOptions().position(point).draggable(true);
+			Marker marker= mMap.addMarker(mMarkerOptions);
+			markerArray.add(marker);
+		}
+		polyline = mMap.addPolyline(polylineOptions);
+		update_polyline();
 
 	}
 
@@ -377,11 +419,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 		alert = builder.create();
 
-
-
 		p_builder = new AlertDialog.Builder(this);
 		p_builder.setTitle(getString(R.string.polygon_or_polyline));
-//		p_builder.setMessage(getString(R.string.polygon_conection_message));
 		p_builder.setView(polygonPolylineView)
 				// Add action buttons
 				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -601,6 +640,46 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 						// FIRE ZE MISSILES!
 					}
 				}).show();
+
+	}
+
+
+	private void zoomToCentroid(){
+
+        /*
+            Calculate Centroid of Polyline
+         */
+
+		Handler handler=new Handler();
+		Runnable r = new Runnable(){
+			public void run() {
+				Integer size  = markerArray.size();
+				Double x_value = 0.0;
+				Double y_value = 0.0;
+				LatLngBounds.Builder builder = new LatLngBounds.Builder();
+				for(int i=0; i<size; i++){
+					LatLng temp_marker = markerArray.get(i).getPosition();
+					Double x_marker = temp_marker.latitude;
+					Double y_marker = temp_marker.longitude;
+					LatLng ll = new LatLng(x_marker,y_marker);
+					builder.include(ll);
+					x_value += x_marker;
+					y_value += y_marker;
+				}
+
+				Double x_cord = x_value/size;
+				Double y_cord = y_value/size;
+				LatLng centroid = new LatLng(x_cord,y_cord);
+				LatLngBounds bounds = builder.build();
+				int width = getResources().getDisplayMetrics().widthPixels;
+				int height = getResources().getDisplayMetrics().heightPixels;
+
+				mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,width, height,20));
+
+			}
+		};
+
+		handler.post(r);
 
 	}
 }
