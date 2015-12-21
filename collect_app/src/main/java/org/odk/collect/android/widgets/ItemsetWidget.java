@@ -165,7 +165,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 e.printStackTrace();
                 TextView error = new TextView(context);
                 error.setText("XPathParser Exception:  \"" + arguments.get(i) + "\"");
-                addView(error);
+                addAnswerView(error);
                 break;
             }
 
@@ -248,11 +248,11 @@ public class ItemsetWidget extends QuestionWidget implements
                 ida.close();
             }
 
-            addView(mButtons);
+            addAnswerView(mButtons);
         } else {
             TextView error = new TextView(context);
             error.setText(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
-            addView(error);
+            addAnswerView(error);
         }
 
     }

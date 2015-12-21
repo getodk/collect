@@ -14,9 +14,16 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.text.method.LinkMovementMethod;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -31,15 +38,8 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.MediaLayout;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -71,13 +71,13 @@ public class SelectMultiWidget extends QuestionWidget {
             mItems = prompt.getSelectChoices();
         }
 
-        setOrientation(LinearLayout.VERTICAL);
-
         List<Selection> ve = new ArrayList<Selection>();
         if (prompt.getAnswerValue() != null) {
             ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
 
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
         if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
                 // no checkbox group so id by answer + offset
@@ -137,17 +137,18 @@ public class SelectMultiWidget extends QuestionWidget {
 
                 MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
                 mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), c, audioURI, imageURI, videoURI, bigImageURI);
-                addView(mediaLayout);
+
                 playList.add(mediaLayout);
 
                 // Last, add the dividing line between elements (except for the last element)
-                ImageView divider = new ImageView(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 if (i != mItems.size() - 1) {
-                    addView(divider);
+                    ImageView divider = new ImageView(getContext());
+                    divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                    mediaLayout.addDivider(divider);
                 }
-
+                answerLayout.addView(mediaLayout);
             }
+            addAnswerView(answerLayout);
         }
 
         mCheckboxInit = false;

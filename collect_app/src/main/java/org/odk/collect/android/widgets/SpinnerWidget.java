@@ -117,7 +117,7 @@ public class SpinnerWidget extends QuestionWidget {
 				
 			}});
         
-        addView(spinner);
+        addAnswerView(spinner);
 
     }
 

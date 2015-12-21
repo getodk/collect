@@ -355,7 +355,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
             if (mImageView != null || mMissingImage != null) {
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                imageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                if (mVideoButton != null) {
+                    imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
+                } else if (mAudioButton != null) {
+                    imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                }
                 imageParams.addRule(RelativeLayout.BELOW, mView_Text.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);

@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -29,11 +31,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
@@ -46,7 +43,6 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
 	public BarcodeWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
-		setOrientation(LinearLayout.VERTICAL);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
@@ -100,8 +96,11 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 			mStringAnswer.setText(s);
 		}
 		// finish complex layout
-		addView(mGetBarcodeButton);
-		addView(mStringAnswer);
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(mGetBarcodeButton);
+		answerLayout.addView(mStringAnswer);
+		addAnswerView(answerLayout);
 	}
 
 	@Override
