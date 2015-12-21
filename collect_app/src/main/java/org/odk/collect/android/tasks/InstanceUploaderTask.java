@@ -317,6 +317,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 files.add(f);
             } else if (extension.equals("mp4")) { // legacy 0.9x
                 files.add(f);
+            } else if (extension.equals("osm")) { // legacy 0.9x
+                files.add(f);
             } else {
                 Log.w(t, "unrecognized file type " + f.getName());
             }
