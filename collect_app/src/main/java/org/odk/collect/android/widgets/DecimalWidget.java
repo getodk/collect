@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -70,7 +71,7 @@ public class DecimalWidget extends StringWidget {
 
         Double d = getDoubleAnswerValue();
 
-        NumberFormat nf = NumberFormat.getNumberInstance();
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
         nf.setMaximumFractionDigits(15);
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
