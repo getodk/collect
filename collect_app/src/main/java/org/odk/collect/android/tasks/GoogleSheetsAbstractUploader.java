@@ -208,6 +208,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             return false;
         }
 
+        // make sure column names are legal
+        for (String n : columnNames) {
+            if (!isValidGoogleSheetsString(n)) {
+                mResults.put(id, "'" + n + "' is an invalid column name. Google Sheets only allows alphanumeric characters in column names");
+                return false;
+            }
+        }
+
         // parses the instance file and populates the answers and photos
         // hashmaps.
         try {
@@ -957,6 +965,18 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 mStateListener.progressUpdate(values[0].intValue(), values[1].intValue());
             }
         }
+    }
+
+    /**
+     * Google sheets currently only allows a-zA-Z0-9 and dash
+     * @param name
+     * @return
+     */
+    private boolean isValidGoogleSheetsString (String name) {
+        Pattern p = Pattern
+                .compile("^[a-zA-Z0-9\\-]+$");
+        Matcher m = p.matcher(name);
+        return m.matches();
     }
 
 }
