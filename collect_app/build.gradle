@@ -62,6 +62,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     if (playServicesPath.exists() && gradle.useLocal) { // Local project is favoured
         compile project(playServicesName)
+        compile 'com.google.maps.android:android-maps-utils:0.4+'
     } else {
         releaseCompile(group: groupId, name: playServicesArtifactName, version: playServicesRelease, ext: 'aar')
         snapshotCompile(group: groupId, name: playServicesArtifactName, version: playServicesSnapshot, ext: 'aar')
