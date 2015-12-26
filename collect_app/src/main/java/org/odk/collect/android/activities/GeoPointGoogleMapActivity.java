@@ -71,6 +71,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 	private boolean mRefreshLocation = true;
 	private boolean mIsDragged = false;
 	private Button mShowLocation;
+	private Button mLayers;
 	private boolean mGPSOn = false;
 	private boolean mNetworkOn = false;
 	private double mLocationAccuracy;
@@ -238,6 +239,16 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		// not clickable until we have a marker set....
 		mShowLocation.setClickable(false);
+
+		// Menu Layer Toggle
+		mLayers = ((Button) findViewById(R.id.layer_menu));
+		mLayers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mHelper.showLayersDialog();
+			}
+		});
+
 	}
 
 	private void stopGeolocating() {

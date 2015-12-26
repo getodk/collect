@@ -1,11 +1,14 @@
 package org.odk.collect.android.spatial;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -29,6 +32,7 @@ public class MapHelper {
     //OSM MAP BASEMAPS
     private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
     private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
+    private int selected_layer = 0;
 
 
     public MapHelper(Context pContext){
@@ -87,6 +91,17 @@ public class MapHelper {
         String[] finala = new String[results.size()];
         finala = results.toArray(finala);
         return finala;
+    }
+    public void showLayersDialog(){
+        AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
+        layerDialod.setTitle(context.getString(R.string.select_offline_layer));
+        layerDialod.setSingleChoiceItems(offilineOverlays,selected_layer,new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selected_layer = item;
+                dialog.dismiss();
+            }
+        });
+        layerDialod.show();
     }
 
 //    public static String getMBTileFromItem(final int item) {
