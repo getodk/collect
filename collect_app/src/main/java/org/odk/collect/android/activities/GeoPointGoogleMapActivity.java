@@ -16,12 +16,10 @@ package org.odk.collect.android.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +40,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -59,13 +57,6 @@ import java.util.List;
 public class GeoPointGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 
 	private static final String LOCATION_COUNT = "locationCount";
-	private SharedPreferences sharedPreferences;
-	private String basemap;
-
-	private static final String GOOGLE_MAP_STREETS = "streets";
-	private static final String GOOGLE_MAP_SATELLITE = "satellite";
-	private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
-	private static final String GOOGLE_MAP_HYBRID = "hybrid";
 	private GoogleMap mMap;
 	private MarkerOptions mMarkerOption;
 	private Marker mMarker;
@@ -85,17 +76,19 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 	private double mLocationAccuracy;
 	private int mLocationCount = 0;
 	private boolean mZoomed = false;
-
+	private MapHelper mHelper;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Kick Starting the MapHelper Class
+		mHelper = new MapHelper(this);
+
 
 		if ( savedInstanceState != null ) {
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
 		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		try {
 			setContentView(R.layout.geopoint_google_layout);
 		} catch (NoClassDefFoundError e) {
@@ -308,7 +301,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		if ( mMap == null ) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
-			setBasemap();
+			mHelper.setGoogleBasemap(mMap);
 			if ( mMap == null ) {
 				Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
 						Toast.LENGTH_SHORT).show();
@@ -347,22 +340,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		}
 	}
 
-	// The should be added to the MapHelper Class to be reused
-	public void setBasemap(){
-		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
-		if (basemap.equals(GOOGLE_MAP_STREETS)) {
-			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-		}else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
-			mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		}else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
-			mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-		}else if(basemap.equals(GOOGLE_MAP_HYBRID)){
-			mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-		}else{
-			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-		}
-	}
-
 
 	@Override
 	public void onLocationChanged(Location location) {
@@ -390,8 +367,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 						mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
 					}
 
-					// create a marker on the map or move the existing marker to the
-					// new location
 					if (mMarker == null) {
 						mMarkerOption.position(mLatLng);
 						mMarker = mMap.addMarker(mMarkerOption);
@@ -400,7 +375,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 						mMarker.setPosition(mLatLng);
 					}
 
-					//If location is accurate enough, stop updating position and make the marker draggable
 					if (mLocation.getAccuracy() <= mLocationAccuracy) {
 						stopGeolocating();
 					}

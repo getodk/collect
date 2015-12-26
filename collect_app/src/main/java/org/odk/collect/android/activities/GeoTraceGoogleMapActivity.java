@@ -26,7 +26,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +50,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 
@@ -115,17 +114,13 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 	private Button polygon_save;
 	private Button polyline_save;
-
-	private static final String GOOGLE_MAP_STREETS = "streets";
-	private static final String GOOGLE_MAP_SATELLITE = "satellite";
-	private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
-	private static final String GOOGLE_MAP_HYBRID = "hybrid";
+	private MapHelper mHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.geotrace_google_layout);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		mHelper = new MapHelper(this);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
 		mMap.setMyLocationEnabled(true);
@@ -387,7 +382,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setBasemap();
+		mHelper.setGoogleBasemap(mMap);
 
 	}
 
@@ -523,21 +518,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private void createPolygon(){
 		markerArray.add(markerArray.get(0));
 		update_polyline();
-	}
-	// The should be added to the MapHelper Class to be reused
-	public void setBasemap(){
-		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
-		if (basemap.equals(GOOGLE_MAP_STREETS)) {
-			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-		}else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
-			mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		}else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
-			mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-		}else if(basemap.equals(GOOGLE_MAP_HYBRID)){
-			mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-		}else{
-			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-		}
 	}
 
 	/*

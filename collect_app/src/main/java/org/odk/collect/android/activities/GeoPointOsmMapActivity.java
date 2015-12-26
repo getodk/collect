@@ -22,7 +22,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -31,18 +30,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
@@ -73,7 +69,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private MapView mMap;
 
 	private Handler handler = new Handler();
-	private MarkerOptions mMarkerOption;
 	private Marker mMarker;
 
 	private GeoPoint mLatLng;
@@ -100,6 +95,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private int mLocationCount = 0;
 
 	private boolean mZoomed = false;
+	private MapHelper mHelper;
 
 
 
@@ -107,7 +103,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		mHelper = new MapHelper(this);
 
 		try {
 				setContentView(R.layout.geopoint_osm_layout);
@@ -128,14 +124,12 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		mMarker = new Marker(mMap);
 		mMarker.setDraggable(true);
 		mMarker.setOnMarkerDragListener(this);
-//		mMap.getOverlays().add(mMarker);
 		overlayEventos = new MapEventsOverlay(getBaseContext(), this);
 
 		mMap.getOverlays().add(overlayEventos);
 
 		handler.postDelayed(new Runnable() {
 			public void run() {
-				//Do something after 100ms
 				GeoPoint point = new GeoPoint(34.08145, -39.85007);
 				mMap.getController().setZoom(4);
 				mMap.getController().setCenter(point);
@@ -158,16 +152,11 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			mCaptureLocation = !intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
 			mRefreshLocation = mCaptureLocation;
 		}
-		/* Set up the map and the marker */
-//		mMarkerOption = new MarkerOptions();
-
 
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
 
-//		/*Zoom only if there's a previous location*/
 		if (mLatLng != null){
 			mLocationStatus.setVisibility(View.GONE);
-//			mMarkerOption.position(mLatLng);
 			mMarker.setPosition(mLatLng);
 			mMap.invalidate();
 			mRefreshLocation = false; // just show this position; don't change it...
@@ -286,9 +275,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		// not clickable until we have a marker set....
 		mShowLocation.setClickable(false);
 
-
-
-
 	}
 
 	@Override
@@ -300,8 +286,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onPause() {
 		super.onPause();
-
-		// stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
 		mLocationManager.removeUpdates(this);
 	}
 
@@ -309,16 +293,14 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setBasemap();
+		mHelper.setOsmBasemap(mMap);
 		if ( mRefreshLocation ) {
 			mLocationStatus.setVisibility(View.VISIBLE);
 			if (mGPSOn) {
-				mLocationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 0, 0, this);
+				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 			}
 			if (mNetworkOn) {
-				mLocationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 0, 0, this);
+				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 			}
 			mShowLocation.setClickable(mMarker != null);
 		}else{
@@ -327,9 +309,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 				mMap.getOverlays().add(mMarker);
 				mMarker.setPosition(mLatLng);
 				zoomTo();
-//				mMap.getController().setZoom(16);
-//				mMap.getController().setCenter(mLatLng);
-//				mMap.invalidate();
 
 			}
 			mShowLocation.setClickable(mMarker != null);
@@ -337,23 +316,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		}
 	}
 
-	// The should be added to the MapHelper Class to be reused
-	private void setBasemap(){
-		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-
-		if (basemap.equals(MAPQUEST_MAP_STREETS)) {
-			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-		}else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
-			mMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-		}else{
-			mMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-		}
-	}
-
 	private void zoomTo(){
 		handler.postDelayed(new Runnable() {
 			public void run() {
-				//Do something after 100ms
 				mMap.getController().setZoom(16);
 				mMap.getController().setCenter(mLatLng);
 				mMap.invalidate();
@@ -521,11 +486,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	public boolean longPressHelper(GeoPoint geoPoint) {
 		if (mMarker == null) {
 			mMarker.setPosition(geoPoint);
-			//mMarker = mMap.addMarker(mMarkerOption);
 			mShowLocation.setClickable(true);
 		} else {
 			mMarker.setPosition(geoPoint);
-			//mMarker.setPosition(latLng);
 		}
 		mMap.invalidate();
 		mLatLng=geoPoint;

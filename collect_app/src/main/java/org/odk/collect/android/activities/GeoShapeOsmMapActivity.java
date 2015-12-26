@@ -26,14 +26,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.spatial.MBTileProvider;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -48,7 +46,6 @@ import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -98,8 +95,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private String[] OffilineOverlays;
     public MyLocationNewOverlay mMyLocationOverlay;
     public Boolean data_loaded = false;
-    private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
-    private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
+
+    private MapHelper mHelper;
 
 
 
@@ -112,6 +109,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 		  */
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
+        mHelper = new MapHelper(this);
         return_button = (ImageButton) findViewById(R.id.geoshape_Button);
         polygon_button = (ImageButton) findViewById(R.id.polygon_button);
         clear_button = (ImageButton) findViewById(R.id.clear_button);
@@ -120,17 +118,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 			Defining the System prefereces from the mapSetting
 		  */
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        Boolean online = sharedPreferences.getBoolean(MapSettings.KEY_online_offlinePrefernce, true);
-        String basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-        baseTiles = MapHelper.getTileSource(basemap);
-
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView)findViewById(R.id.geoshape_mapview);
-//        mapView.setTileSource(baseTiles);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
-//        mapView.setUseDataConnection(online);
         mapView.setMapListener(mapViewListner);
         overlayPointPathListner();
         return_button.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +213,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-        setBasemap();
+        mHelper.setOsmBasemap(mapView);
         setGPSStatus();
     }
 
@@ -241,18 +232,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         super.onStop();
         disableMyLocation();
     }
-    // The should be added to the MapHelper Class to be reused
-    private void setBasemap(){
-        basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
 
-        if (basemap.equals(MAPQUEST_MAP_STREETS)) {
-            mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
-        }else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
-            mapView.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-        }else{
-            mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
-        }
-    }
 
     private void buildPolygon(){
         if (polygon_connection){
@@ -283,8 +263,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             String lng = sp[1].replace(" ", "");
             gp[0] = Double.parseDouble(lat);
             gp[1] = Double.parseDouble(lng);
-//			gp[0] = Double.valueOf(lat).doubleValue();
-//			gp[1] = Double.valueOf(lng).doubleValue();
             Marker marker = new Marker(mapView);
             GeoPoint point = new GeoPoint(gp[0], gp[1]);
             marker.setPosition(point);

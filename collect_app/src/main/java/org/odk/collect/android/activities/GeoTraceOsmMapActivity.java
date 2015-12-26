@@ -27,8 +27,8 @@ import android.widget.Spinner;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.spatial.MBTileProvider;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -36,7 +36,6 @@ import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -100,55 +99,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	private TilesOverlay mbTileOverlay;
 	private MBTileProvider mbprovider;
 	private AlertDialog mAlertDialog;
-	private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
-	private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
-	private String basemap;
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-	}
-
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		setBasemap();
-		setGPSStatus();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mMyLocationOverlay.enableMyLocation();
-
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		disableMyLocation();
-	}
-	@Override
-	public void finish() {
-		ViewGroup view = (ViewGroup) getWindow().getDecorView();
-		view.removeAllViews();
-		super.finish();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onBackPressed() {
-		saveGeoTrace();
-	}
+	private MapHelper mHelper;
 
 
 	@Override
@@ -157,7 +108,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 		setContentView(R.layout.geotrace_osm_layout);
 		setTitle(getString(R.string.geotrace_title)); // Setting title of the action
-
+		mHelper = new MapHelper(this);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
 		mapView = (MapView)findViewById(R.id.geotrace_mapview);
@@ -338,20 +289,52 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		mapView.invalidate();
 	}
 
-	/*
-		This functions handels the delay and the Runable for
-	*/
-	// The should be added to the MapHelper Class to be reused
-	private void setBasemap(){
-		basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
-		if (basemap.equals(MAPQUEST_MAP_STREETS)) {
-			mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
-		}else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
-			mapView.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-		}else{
-			mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
-		}
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mHelper.setOsmBasemap(mapView);
+		setGPSStatus();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mMyLocationOverlay.enableMyLocation();
+
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		disableMyLocation();
+	}
+	@Override
+	public void finish() {
+		ViewGroup view = (ViewGroup) getWindow().getDecorView();
+		view.removeAllViews();
+		super.finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
+	public void onBackPressed() {
+		saveGeoTrace();
+	}
+
 	public void setGeoTraceScheuler(long delay, TimeUnit units){
 		schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override

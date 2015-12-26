@@ -25,7 +25,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -45,7 +44,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
@@ -84,26 +83,19 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private String final_return_string;
     private Boolean data_loaded = false;
     private Boolean clear_button_test;
-
-    private static final String GOOGLE_MAP_STREETS = "streets";
-    private static final String GOOGLE_MAP_SATELLITE = "satellite";
-    private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
-    private static final String GOOGLE_MAP_HYBRID = "hybrid";
+    private MapHelper mHelper;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geoshape_google_layout);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mHelper = new MapHelper(this);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
-        setBasemap();
-
-
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(false);
         polygonOptions = new PolygonOptions();
@@ -180,7 +172,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     protected void onResume() {
         super.onResume();
-
+        mHelper.setGoogleBasemap(mMap);
         if (data_loaded){
             // turn of the GPS and Polygon button
             polygon_button.setVisibility(View.GONE);
@@ -258,23 +250,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
         return temp_string;
-    }
-
-
-    // The should be added to the MapHelper Class to be reused
-    public void setBasemap(){
-        basemap = sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
-        if (basemap.equals(GOOGLE_MAP_STREETS)) {
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
-            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        }else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
-            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        }else if(basemap.equals(GOOGLE_MAP_HYBRID)){
-            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        }else{
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }
     }
 
 
