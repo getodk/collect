@@ -15,6 +15,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class MapHelper {
@@ -34,6 +35,9 @@ public class MapHelper {
     private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
     private int selected_layer = 0;
 
+    public static String[] geofileTypes = new String[] {".mbtiles",".kml",".kmz"};
+    private final static String slash = File.separator;
+
 
     public MapHelper(Context pContext){
         context = pContext;
@@ -41,10 +45,6 @@ public class MapHelper {
         offilineOverlays = getOfflineLayerList();
 
     }
-
-//    public String[] getOffilineOverlays() {
-//        return offilineOverlays;
-//    }
 
     private static String _getGoogleBasemap(){
         return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
@@ -97,11 +97,34 @@ public class MapHelper {
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
         layerDialod.setSingleChoiceItems(offilineOverlays,selected_layer,new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
+                switch (item){
+                    case 0:
+                        break;
+                    default:
+                        //That the none option was selected
+
+                        break;
+                }
                 selected_layer = item;
                 dialog.dismiss();
             }
         });
         layerDialod.show();
+    }
+
+    private File getFileFromSelectedItem(int item){
+        File directory = new File(Collect.OFFLINE_LAYERS+slash+offilineOverlays[item]);
+
+        File[] files = directory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return (filename.toLowerCase().endsWith(".kmz") ||
+                        filename.toLowerCase().endsWith("kml") ||
+                        filename.toLowerCase().endsWith(".mbtiles"));
+            }
+        });
+        //Return the file
+        return files[0];
     }
 
 //    public static String getMBTileFromItem(final int item) {
