@@ -211,7 +211,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // make sure column names are legal
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, "'" + n + "' is an invalid column name. Google Sheets only allows alphanumeric characters in column names");
+                mResults.put(id, "'" + n + "' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names");
                 return false;
             }
         }
@@ -242,6 +242,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
             e3.printStackTrace();
+        }
+
+        // make sure column names in submission are legal (may be different than form)
+        for (String n : answersToUpload.keySet()) {
+            if (!isValidGoogleSheetsString(n)) {
+                mResults.put(id, "'" + n + "' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names");
+                return false;
+            }
         }
 
         // if we have any photos to upload,
