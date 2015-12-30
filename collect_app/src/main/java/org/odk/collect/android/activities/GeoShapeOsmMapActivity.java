@@ -109,7 +109,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 		  */
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-        mHelper = new MapHelper(this);
+
         return_button = (ImageButton) findViewById(R.id.geoshape_Button);
         polygon_button = (ImageButton) findViewById(R.id.polygon_button);
         clear_button = (ImageButton) findViewById(R.id.clear_button);
@@ -120,6 +120,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView)findViewById(R.id.geoshape_mapview);
+        mHelper = new MapHelper(this,mapView);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.setMapListener(mapViewListner);
@@ -213,7 +214,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-        mHelper.setOsmBasemap(mapView);
+        mHelper.setBasemap();
         setGPSStatus();
     }
 

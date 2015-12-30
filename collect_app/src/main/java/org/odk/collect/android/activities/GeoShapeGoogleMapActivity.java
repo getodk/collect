@@ -90,9 +90,10 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geoshape_google_layout);
-        mHelper = new MapHelper(this);
+
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
+        mHelper = new MapHelper(this,mMap);
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
@@ -172,7 +173,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     protected void onResume() {
         super.onResume();
-        mHelper.setGoogleBasemap(mMap);
+        mHelper.setBasemap();
         if (data_loaded){
             // turn of the GPS and Polygon button
             polygon_button.setVisibility(View.GONE);

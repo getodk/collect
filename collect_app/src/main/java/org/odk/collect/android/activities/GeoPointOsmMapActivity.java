@@ -103,7 +103,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		mHelper = new MapHelper(this);
+
+
 
 		try {
 				setContentView(R.layout.geopoint_osm_layout);
@@ -119,6 +120,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		}
 
 		mMap = (MapView) findViewById(R.id.omap);
+		mHelper = new MapHelper(this,mMap);
 		mMap.setMultiTouchControls(true);
 		mMap.setBuiltInZoomControls(true);
 		mMarker = new Marker(mMap);
@@ -293,7 +295,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mHelper.setOsmBasemap(mMap);
+		mHelper.setBasemap();
 		if ( mRefreshLocation ) {
 			mLocationStatus.setVisibility(View.VISIBLE);
 			if (mGPSOn) {

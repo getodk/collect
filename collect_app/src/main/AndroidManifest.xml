@@ -9,9 +9,11 @@
 	the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.odk.collect.android"
     android:versionCode="1058"
     android:versionName="1.4.8"
+
     >
 
     <uses-feature android:name="android.hardware.location" android:required="false" />
@@ -33,7 +35,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
     <!--  for Maps v2 functionality, want:
     <uses-feature android:glEsVersion="0x00020000" android:required="false"/>
     	uses-feature android:glEsVersion="0x00020000" android:required="false"
@@ -64,7 +68,8 @@
         android:installLocation="auto"
         android:icon="@drawable/notes"
         android:label="@string/app_name"
-        android:theme="@style/Collect" >
+        android:theme="@style/Collect"
+        >
 
         <provider
             android:exported="true"
@@ -188,9 +193,9 @@
         <activity
             android:name=".activities.GeoPointActivity"
             android:label="@string/app_name" />
-        <activity
-            android:name=".activities.GeoPointMapActivitySdk7"
-            android:label="@string/app_name" />
+        <!--<activity-->
+            <!--android:name=".activities.GeoPointMapActivitySdk7"-->
+            <!--android:label="@string/app_name" />-->
         <activity
             android:name=".activities.GeoPointGoogleMapActivity"
             android:label="@string/app_name" />
@@ -250,8 +255,9 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyC4RNAJZ-QI583l4BI5g6OZFj3Et1D53XA"/>
         <meta-data
+            tools:replace="android:value"
             android:name="com.google.android.gms.version"
-            android:value="7571000" />  <!-- integer/google_play_services_version -->
+            android:value="7571000" />  <!-- integer/google_play_services_version 7571000-->
 
         <uses-library
             android:name="com.google.android.maps"

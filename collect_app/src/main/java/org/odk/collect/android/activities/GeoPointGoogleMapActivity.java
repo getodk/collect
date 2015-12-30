@@ -47,6 +47,7 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 import java.text.DecimalFormat;
 import java.util.List;
 
+
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
@@ -78,12 +79,15 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 	private int mLocationCount = 0;
 	private boolean mZoomed = false;
 	private MapHelper mHelper;
+//	private KmlLayer kk;
+
+	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Kick Starting the MapHelper Class
-		mHelper = new MapHelper(this);
-
 
 		if ( savedInstanceState != null ) {
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
@@ -118,12 +122,14 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
         /* Set up the map and the marker */
 		mMarkerOption = new MarkerOptions();
 
+
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
 
 		/*Zoom only if there's a previous location*/
 		if (mLatLng != null){
 			mLocationStatus.setVisibility(View.GONE);
 			mMarkerOption.position(mLatLng);
+
 			mRefreshLocation = false; // just show this position; don't change it...
 			mZoomed = true;
 		}
@@ -298,7 +304,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		return new DecimalFormat("#.##").format(f);
 	}
 
-
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -312,7 +317,15 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 
 		if ( mMap == null ) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
-			mHelper.setGoogleBasemap(mMap);
+			mHelper = new MapHelper(this,mMap);
+			mHelper.setBasemap();
+//			try{
+//				GeoJsonLayer gjson = new GeoJsonLayer(mMap,R.raw.unitedstates,getBaseContext());
+//				gjson.addLayerToMap();
+//			}catch (Exception e){
+//				Log.e("Cant Load GeoJSON", e.toString());
+//			}
+
 			if ( mMap == null ) {
 				Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
 						Toast.LENGTH_SHORT).show();
@@ -389,7 +402,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 					if (mLocation.getAccuracy() <= mLocationAccuracy) {
 						stopGeolocating();
 					}
-
+//					KmlLayer layer = new KmlLayer(mMap, spfile, this);
 
 
 				}

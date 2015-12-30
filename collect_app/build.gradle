@@ -16,24 +16,17 @@ apply plugin: 'com.android.application'
 
 android {
     // The following are set in the common.gradle file
-    signingConfigs {
-        config {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('/Users/jnordling/.android/debug.keystore')
-            storePassword 'android'
-        }
-    }
     compileSdkVersion("Google Inc.:Google APIs:19")
     buildToolsVersion("22.0.1")
+
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(8)
         targetSdkVersion(8)
         versionCode(1057)
         versionName("1.4.8")
-        signingConfig signingConfigs.config
     }
+
     buildTypes {
         release {
             minifyEnabled(minify)
@@ -44,17 +37,13 @@ android {
         }
         debug {
             testCoverageEnabled(testCoverage) // Allows AndroidTest JaCoCo reports to be generated
-            signingConfig signingConfigs.config
-            debuggable true
         }
     }
-    packagingOptions {
-        // Pick first occurrence of any files that cause conflicts, as defined in common.gradle
+
+    packagingOptions { // Pick first occurrence of any files that cause conflicts, as defined in common.gradle
         packageList.each {
             pickFirst it
         }
-    }
-    productFlavors {
     }
 }
 
@@ -62,7 +51,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     if (playServicesPath.exists() && gradle.useLocal) { // Local project is favoured
         compile project(playServicesName)
-        compile 'com.google.maps.android:android-maps-utils:0.4+'
     } else {
         releaseCompile(group: groupId, name: playServicesArtifactName, version: playServicesRelease, ext: 'aar')
         snapshotCompile(group: groupId, name: playServicesArtifactName, version: playServicesSnapshot, ext: 'aar')

@@ -108,10 +108,11 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 		setContentView(R.layout.geotrace_osm_layout);
 		setTitle(getString(R.string.geotrace_title)); // Setting title of the action
-		mHelper = new MapHelper(this);
+
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
 		mapView = (MapView)findViewById(R.id.geotrace_mapview);
+		mHelper = new MapHelper(this,mapView);
 		mapView.setMultiTouchControls(true);
 		mapView.setBuiltInZoomControls(true);
 		mapView.getController().setZoom(zoom_level);
@@ -302,7 +303,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mHelper.setOsmBasemap(mapView);
+		mHelper.setBasemap();
 		setGPSStatus();
 	}
 
