@@ -27,8 +27,8 @@ import android.widget.Spinner;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.spatial.MBTileProvider;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.spatial.OsmMBTileProvider;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -71,6 +71,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	public ImageButton polygon_button;
 	public ImageButton layers_button;
 	public ImageButton clear_button;
+	public ImageButton layers;
 	private Button manual_button;
 	private ImageButton pause_button;
 	private ProgressDialog progress;
@@ -97,7 +98,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	private String[] OffilineOverlays;
 	private int selected_layer= -1;
 	private TilesOverlay mbTileOverlay;
-	private MBTileProvider mbprovider;
+	private OsmMBTileProvider mbprovider;
 	private AlertDialog mAlertDialog;
 	private MapHelper mHelper;
 
@@ -112,7 +113,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
 		mapView = (MapView)findViewById(R.id.geotrace_mapview);
-		mHelper = new MapHelper(this,mapView);
+		mHelper = new MapHelper(this,mapView,GeoTraceOsmMapActivity.this);
 		mapView.setMultiTouchControls(true);
 		mapView.setBuiltInZoomControls(true);
 		mapView.getController().setZoom(zoom_level);
@@ -129,7 +130,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 			@Override
 			public void onClick(View v) {
-				showLayersDialog();
+				mHelper.showLayersDialog();
 
 			}
 		});
@@ -153,6 +154,14 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 				clearAndReturnEmpty();
 			}
 
+		});
+		layers = (ImageButton) findViewById(R.id.layers);
+		layers.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mHelper.showLayersDialog();
+			}
 		});
 
 		polygon_button = (ImageButton) findViewById(R.id.geotrace_polygon_button);
@@ -783,7 +792,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 						String mbFilePath = getMBTileFromItem(item);
 						//File mbFile = new File(Collect.OFFLINE_LAYERS+"/GlobalLights/control-room.mbtiles");
 						File mbFile = new File(mbFilePath);
-						mbprovider = new MBTileProvider(GeoTraceOsmMapActivity.this, mbFile);
+						mbprovider = new OsmMBTileProvider(GeoTraceOsmMapActivity.this, mbFile);
 						mbTileOverlay = new TilesOverlay(mbprovider, GeoTraceOsmMapActivity.this);
 						mbTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
 						//updateMapOverLayOrder();

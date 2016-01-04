@@ -33,7 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
  
-public class MBTileSource extends BitmapTileSourceBase {
+public class OsmMBTileSource extends BitmapTileSourceBase {
  
     // Log log log log ...
 //    private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
@@ -66,11 +66,11 @@ public class MBTileSource extends BitmapTileSourceBase {
      * @param tileSizePixels
      * @param file
      */
-    protected MBTileSource(int minZoom,
-                           int maxZoom,
-                           int tileSizePixels,
-                           File file,
-                           SQLiteDatabase db) {
+    protected OsmMBTileSource(int minZoom,
+                              int maxZoom,
+                              int tileSizePixels,
+                              File file,
+                              SQLiteDatabase db) {
         super("MBTiles", resourceId, minZoom, maxZoom, tileSizePixels, ".png");
  
         archive = file;
@@ -87,7 +87,7 @@ public class MBTileSource extends BitmapTileSourceBase {
      * @param file
      * @return
      */
-    public static MBTileSource createFromFile(File file) {
+    public static OsmMBTileSource createFromFile(File file) {
         SQLiteDatabase db;
         int flags = SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READONLY;
  
@@ -124,7 +124,7 @@ public class MBTileSource extends BitmapTileSourceBase {
         cursor.close();
         // db.close();
  
-        return new MBTileSource(minZoomLevel, maxZoomLevel, tileSize, file, db);
+        return new OsmMBTileSource(minZoomLevel, maxZoomLevel, tileSize, file, db);
     }
  
     protected static int getInt(SQLiteDatabase db, String sql) {

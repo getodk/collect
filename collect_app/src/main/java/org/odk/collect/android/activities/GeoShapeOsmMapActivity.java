@@ -31,9 +31,8 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.spatial.MBTileProvider;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.spatial.OsmMBTileProvider;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
@@ -48,16 +47,12 @@ import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -82,13 +77,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private ImageButton clear_button;
     private ImageButton return_button;
     private ImageButton polygon_button;
+    private ImageButton layers_button;
     private SharedPreferences sharedPreferences;
     public Boolean layerStatus = false;
     private int selected_layer= -1;
     private ProgressDialog progress;
     private String basemap;
 
-    private MBTileProvider mbprovider;
+    private OsmMBTileProvider mbprovider;
     private TilesOverlay mbTileOverlay;
     public Boolean gpsStatus = true;
     private ImageButton gps_button;
@@ -120,7 +116,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView)findViewById(R.id.geoshape_mapview);
-        mHelper = new MapHelper(this,mapView);
+        mHelper = new MapHelper(this,mapView,GeoShapeOsmMapActivity.this);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.setMapListener(mapViewListner);
@@ -154,12 +150,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }
             }
         });
-        ImageButton layers_button = (ImageButton)findViewById(R.id.geoShape_layers_button);
+        layers_button = (ImageButton)findViewById(R.id.geoShape_layers_button);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                showLayersDialog();
+                mHelper.showLayersDialog();
 
             }
         });
@@ -524,130 +520,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
     };
 
-    private void showLayersDialog() {
-        //FrameLayout fl = (ScrollView) findViewById(R.id.layer_scroll);
-        //View view=fl.inflate(self, R.layout.showlayers_layout, null);
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getString(R.string.select_offline_layer));
-        OffilineOverlays = getOfflineLayerList(); // Maybe this should only be done once. Have not decided yet.
-        //alertDialog.setItems(list, new  DialogInterface.OnClickListener() {
-        alertDialog.setSingleChoiceItems(OffilineOverlays,selected_layer,new  DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                //Toast.makeText(OSM_Map.this,item, Toast.LENGTH_LONG).show();
-                // The 'which' argument contains the index position
-                // of the selected item
-                //Toast.makeText(OSM_Map.this,item +" ", Toast.LENGTH_LONG).show();
-
-                switch(item){
-                    case 0 :
-                        mapView.getOverlays().remove(mbTileOverlay);
-                        layerStatus =false;
-                        // Reset max zoom level to max level of baseMap tile layer
-                        int baseMapMaxZoomLevel = baseTiles.getMaximumZoomLevel();
-                        mapView.setMaxZoomLevel(baseMapMaxZoomLevel);
-                        break;
-                    default:
-                        layerStatus = true;
-                        mapView.getOverlays().remove(mbTileOverlay);
-                        //String mbTileLocation = getMBTileFromItem(item);
-                        String mbFilePath = getMBTileFromItem(item);
-                        //File mbFile = new File(Collect.OFFLINE_LAYERS+"/GlobalLights/control-room.mbtiles");
-                        File mbFile = new File(mbFilePath);
-                        mbprovider = new MBTileProvider(GeoShapeOsmMapActivity.this, mbFile);
-                        int newMaxZoomLevel = mbprovider.getMaximumZoomLevel();
-                        mbTileOverlay = new TilesOverlay(mbprovider,GeoShapeOsmMapActivity.this);
-                        mbTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-                        mapView.getOverlays().add(mbTileOverlay);
-                        updateMapOverLayOrder();
-                        mapView.setMaxZoomLevel(newMaxZoomLevel);
-                        mapView.invalidate();
-                }
-                //This resets the map and sets the selected Layer
-                selected_layer =item;
-                dialog.dismiss();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mapView.invalidate();
-                    }
-                }, 400);
-
-            }
-        });
-        //alertDialog.setView(view);
-        alertDialog.show();
-
-    }
-
-    private void updateMapOverLayOrder(){
-        List<Overlay> overlays = mapView.getOverlays();
-        if (layerStatus){
-            mapView.getOverlays().remove(mbTileOverlay);
-            mapView.getOverlays().remove(pathOverlay);
-            mapView.getOverlays().add(mbTileOverlay);
-            mapView.getOverlays().add(pathOverlay);
-
-        }
-        for (Overlay overlay : overlays){
-            //Class x = overlay.getClass();
-            final Overlay o = overlay;
-            if (overlay.getClass() == Marker.class){
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        mapView.getOverlays().remove(o);
-                        mapView.invalidate();
-                    }
-                }, 100);
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        mapView.getOverlays().add(o);
-                        mapView.invalidate();
-                    }
-                }, 100);
-                //mapView.getOverlays().remove(overlay);
-                //mapView.getOverlays().add(overlay);
-
-            }
-        }
-        mapView.invalidate();
-
-    }
-
-    private String getMBTileFromItem(int item) {
-        String foldername = OffilineOverlays[item];
-        File dir = new File(Collect.OFFLINE_LAYERS+File.separator+foldername);
-        String mbtilePath;
-        File[] files = dir.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".mbtiles");
-            }
-        });
-        mbtilePath =Collect.OFFLINE_LAYERS+File.separator+foldername+File.separator+files[0].getName();
-        //returnFile = new File(Collect.OFFLINE_LAYERS+File.separator+foldername+files[0]);
-
-        return mbtilePath;
-    }
-    private String[] getOfflineLayerList() {
-        File files = new File(Collect.OFFLINE_LAYERS);
-        ArrayList<String> results = new ArrayList<String>();
-        results.add("None");
-//		 String[] overlay_folders =  files.list();
-        for(String folder : files.list()){
-            results.add(folder);
-        }
-//		 for(int i =0;i<overlay_folders.length;i++){
-//			 results.add(overlay_folders[i]);
-//			 //Toast.makeText(self, overlay_folders[i]+" ", Toast.LENGTH_LONG).show();
-//		 }
-        String[] finala = new String[results.size()];
-        finala = results.toArray(finala);
-		 /*for(int j = 0;j<finala.length;j++){
-			 Toast.makeText(self, finala[j]+" ", Toast.LENGTH_LONG).show();
-		 }*/
-        return finala;
-    }
 
     private OnMarkerClickListener nullmarkerlistner= new Marker.OnMarkerClickListener() {
 

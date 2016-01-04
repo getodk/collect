@@ -6,7 +6,6 @@ package org.odk.collect.android.spatial;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Tile;
@@ -15,7 +14,7 @@ import com.google.android.gms.maps.model.TileProvider;
 import java.io.Closeable;
 import java.io.File;
 
-public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
+public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closeable {
 
     // ------------------------------------------------------------------------
     // Instance Variables
@@ -33,11 +32,11 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     // Constructors
     // ------------------------------------------------------------------------
 
-    public MapBoxOfflineTileProvider(File file) {
+    public GoogleMapsMapBoxOfflineTileProvider(File file) {
         this(file.getAbsolutePath());
     }
 
-    public MapBoxOfflineTileProvider(String pathToFile) {
+    public GoogleMapsMapBoxOfflineTileProvider(String pathToFile) {
         int flags = SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
         this.mDatabase = SQLiteDatabase.openDatabase(pathToFile, null, flags);
         this.calculateZoomConstraints();

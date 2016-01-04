@@ -114,6 +114,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 	private Button polygon_save;
 	private Button polyline_save;
+	public ImageButton layers;
 	private MapHelper mHelper;
 
 	@Override
@@ -127,6 +128,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		mMap.setMyLocationEnabled(true);
 		mMap.setOnMapLongClickListener(this);
 		mMap.setOnMarkerDragListener(this);
+		mMap.getUiSettings().setZoomControlsEnabled(false);
 		mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 		polylineOptions = new PolylineOptions();
@@ -301,6 +303,14 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 			}
 
 		}
+		layers = (ImageButton) findViewById(R.id.layers);
+		layers.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mHelper.showLayersDialog();
+			}
+		});
+
 
 
 
@@ -369,8 +379,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		}
 		return temp_string;
 	}
-
-
 
 
 	@Override

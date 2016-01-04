@@ -80,10 +80,12 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private ImageButton clear_button;
     private ImageButton polygon_button;
     private ImageButton return_button;
+    private ImageButton layers_button;
     private String final_return_string;
     private Boolean data_loaded = false;
     private Boolean clear_button_test;
     private MapHelper mHelper;
+
 
 
     @Override
@@ -159,6 +161,16 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 zoomToCentroid();
             }
         }
+
+        layers_button = (ImageButton)findViewById(R.id.geoShape_layers_button);
+        layers_button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mHelper.showLayersDialog();
+
+            }
+        });
 
     }
 

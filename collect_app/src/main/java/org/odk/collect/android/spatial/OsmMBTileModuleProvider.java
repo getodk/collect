@@ -34,13 +34,13 @@ import java.io.InputStream;
  
 
  
-public class MBTileModuleProvider extends MapTileFileStorageProviderBase {
+public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
  
-    protected MBTileSource tileSource;
+    protected OsmMBTileSource tileSource;
     private static final String t = "MBTileModuleProvider";
 
-    public MBTileModuleProvider(IRegisterReceiver receiverRegistrar,
-                                File file, MBTileSource tileSource) {
+    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar,
+                                   File file, OsmMBTileSource tileSource) {
  
         // Call the super constructor
         super(receiverRegistrar,
@@ -85,8 +85,8 @@ public class MBTileModuleProvider extends MapTileFileStorageProviderBase {
     @Override
     public void setTileSource(ITileSource tileSource) {
         Log.w(t, "*** Warning: someone's trying to reassign MBTileModuleProvider's tileSource!");
-        if (tileSource instanceof MBTileSource) {
-            this.tileSource = (MBTileSource) tileSource;
+        if (tileSource instanceof OsmMBTileSource) {
+            this.tileSource = (OsmMBTileSource) tileSource;
         } else {
 //            logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
              

@@ -39,6 +39,7 @@ import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
@@ -55,7 +56,7 @@ import java.util.List;
 //import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, MapEventsReceiver {
+public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, MapEventsReceiver ,IRegisterReceiver {
 
 	private SharedPreferences sharedPreferences;
 	private String basemap;
@@ -82,6 +83,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private Button mAcceptLocation;
 	private Button mCancelLocation;
 	private Button mReloadLocation;
+	private Button mLayers;
 
 	private boolean mCaptureLocation = true;
 	private boolean mRefreshLocation = true;
@@ -118,9 +120,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		if ( savedInstanceState != null ) {
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
 		}
-
 		mMap = (MapView) findViewById(R.id.omap);
-		mHelper = new MapHelper(this,mMap);
+		mHelper = new MapHelper(this,mMap,GeoPointOsmMapActivity.this);
 		mMap.setMultiTouchControls(true);
 		mMap.setBuiltInZoomControls(true);
 		mMarker = new Marker(mMap);
@@ -276,6 +277,16 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
 		// not clickable until we have a marker set....
 		mShowLocation.setClickable(false);
+
+		// Menu Layer Toggle
+		mLayers = ((Button) findViewById(R.id.layer_menu));
+		mLayers.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mHelper.showLayersDialog();
+
+			}
+		});
 
 	}
 
@@ -487,16 +498,16 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	public boolean longPressHelper(GeoPoint geoPoint) {
 		if (mMarker == null) {
-			mMarker.setPosition(geoPoint);
-			mShowLocation.setClickable(true);
-		} else {
-			mMarker.setPosition(geoPoint);
+			mMarker = new Marker(mMap);
+
 		}
 		mMap.invalidate();
+		mMarker.setPosition(geoPoint);
+		mMarker.setDraggable(true);
 		mLatLng=geoPoint;
 		mIsDragged = true;
+		mMap.getOverlays().add(mMarker);
 		stopGeolocating();
-		mMarker.setDraggable(true);
 		return false;
 	}
 }

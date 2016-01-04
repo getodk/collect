@@ -31,9 +31,9 @@ import java.util.Collections;
  * This class is a simplification of the the MapTileProviderArray: it only
  * allows a single provider.
  */
-public class MBTileProvider extends MapTileProviderArray {
+public class OsmMBTileProvider extends MapTileProviderArray {
  
-    public MBTileProvider(IRegisterReceiver receiverRegistrar, File file) {
+    public OsmMBTileProvider(IRegisterReceiver receiverRegistrar, File file) {
  
         /**
          * Call the super-constructor.
@@ -48,14 +48,14 @@ public class MBTileProvider extends MapTileProviderArray {
          * sources, then the parameter should be obtained from a different
          * location, From TileSystem for example.
          */
-        super(MBTileSource.createFromFile(file), receiverRegistrar);
+        super(OsmMBTileSource.createFromFile(file), receiverRegistrar);
  
         // Create the module provider; this class provides a TileLoader that
         // actually loads the tile from the DB.
-        MBTileModuleProvider moduleProvider;
-        moduleProvider = new MBTileModuleProvider(receiverRegistrar,
+        OsmMBTileModuleProvider moduleProvider;
+        moduleProvider = new OsmMBTileModuleProvider(receiverRegistrar,
                                                   file,
-                                                  (MBTileSource) getTileSource());
+                                                  (OsmMBTileSource) getTileSource());
  
         MapTileModuleProviderBase[] pTileProviderArray;
         pTileProviderArray = new MapTileModuleProviderBase[] { moduleProvider };
