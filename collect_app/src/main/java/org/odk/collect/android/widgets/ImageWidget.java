@@ -16,6 +16,8 @@ package org.odk.collect.android.widgets;
 
 import java.io.File;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -39,12 +41,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -71,8 +67,6 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
 
         mInstanceFolder =
                 Collect.getInstance().getFormController().getInstancePath().getParent();
-
-        setOrientation(LinearLayout.VERTICAL);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -159,10 +153,12 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // finish complex layout
-        addView(mCaptureButton);
-        addView(mChooseButton);
-        addView(mErrorTextView);
-     
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mCaptureButton);
+        answerLayout.addView(mChooseButton);
+        answerLayout.addView(mErrorTextView);
+
         // and hide the capture and choose button if read-only
         if ( prompt.isReadOnly() ) {
         	mCaptureButton.setVisibility(View.GONE);
@@ -217,9 +213,9 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                     }
                 }
             });
-
-            addView(mImageView);
+            answerLayout.addView(mImageView);
         }
+        addAnswerView(answerLayout);
     }
 
 

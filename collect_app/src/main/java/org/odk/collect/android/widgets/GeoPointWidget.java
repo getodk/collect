@@ -16,6 +16,8 @@ package org.odk.collect.android.widgets;
 
 import java.text.DecimalFormat;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -34,10 +36,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -113,7 +111,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mReadOnly = prompt.isReadOnly();
 
 		// assemble the widget...
-		setOrientation(LinearLayout.VERTICAL);
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 
@@ -213,9 +210,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		// finish complex layout
 		// control what gets shown with setVisibility(View.GONE)
-		addView(mGetLocationButton);
-		addView(mViewButton);
-		addView(mAnswerDisplay);
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(mGetLocationButton);
+		answerLayout.addView(mViewButton);
+		answerLayout.addView(mAnswerDisplay);
+		addAnswerView(answerLayout);
 
 		// figure out what text and buttons to enable or to show...
 		boolean dataAvailable = false;

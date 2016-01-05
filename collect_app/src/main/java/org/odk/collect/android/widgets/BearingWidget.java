@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -29,10 +31,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
 
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
@@ -46,8 +44,6 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        setOrientation(LinearLayout.VERTICAL);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -99,8 +95,11 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        addView(mGetBearingButton);
-        addView(mAnswerDisplay);
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mGetBearingButton);
+        answerLayout.addView(mAnswerDisplay);
+        addAnswerView(answerLayout);
     }
 
     @Override

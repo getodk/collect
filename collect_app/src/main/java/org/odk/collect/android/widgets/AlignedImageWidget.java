@@ -101,8 +101,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         mInstanceFolder =
                 Collect.getInstance().getFormController().getInstancePath().getParent();
 
-        setOrientation(LinearLayout.VERTICAL);
-
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
@@ -193,9 +191,11 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         });
 
         // finish complex layout
-        addView(mCaptureButton);
-        addView(mChooseButton);
-        addView(mErrorTextView);
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mCaptureButton);
+        answerLayout.addView(mChooseButton);
+        answerLayout.addView(mErrorTextView);
 
         // and hide the capture and choose button if read-only
         if ( prompt.isReadOnly() ) {
@@ -252,8 +252,9 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 }
             });
 
-            addView(mImageView);
+            answerLayout.addView(mImageView);
         }
+        addAnswerView(answerLayout);
     }
 
 

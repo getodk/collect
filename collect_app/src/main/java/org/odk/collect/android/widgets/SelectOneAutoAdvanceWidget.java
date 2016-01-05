@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.ViewGroup;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -83,6 +84,8 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                								R.drawable.expander_ic_right);
 
         if (mItems != null) {
+            LinearLayout answerLayout = new LinearLayout(getContext());
+            answerLayout.setOrientation(LinearLayout.VERTICAL);
             for (int i = 0; i < mItems.size(); i++) {
 
                 RelativeLayout thisParentLayout =
@@ -137,8 +140,9 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                     mediaLayout.addDivider(divider);
                 }
                 questionLayout.addView(mediaLayout);
-                addView(thisParentLayout);
+                answerLayout.addView(thisParentLayout);
             }
+            addAnswerView(answerLayout);
         }
     }
 
