@@ -188,7 +188,7 @@
             android:name=".activities.GeoPointMapActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.GeoPointMapActivitySdk7"
+            android:name=".activities.GeoPointMapNotDraggableActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.BearingActivity"
