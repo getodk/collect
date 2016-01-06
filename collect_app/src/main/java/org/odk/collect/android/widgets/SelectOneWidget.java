@@ -81,9 +81,16 @@ public class SelectOneWidget extends QuestionWidget implements
 
 		if (mItems != null) {
 			for (int i = 0; i < mItems.size(); i++) {
+                String choiceName = prompt.getSelectChoiceText(mItems.get(i));
+                CharSequence choiceDisplayName;
+                if ( choiceName != null ) {
+                  choiceDisplayName = TextUtils.textToHtml(choiceName);
+                } else {
+                  choiceDisplayName = "";
+                }
 				RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mItems.get(i))));
+                r.setText(choiceDisplayName);
 				r.setMovementMethod(LinkMovementMethod.getInstance());
 				r.setTag(Integer.valueOf(i));
 				r.setId(QuestionWidget.newUniqueId());

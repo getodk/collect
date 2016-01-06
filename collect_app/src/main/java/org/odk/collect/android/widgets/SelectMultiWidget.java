@@ -80,11 +80,18 @@ public class SelectMultiWidget extends QuestionWidget {
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
+                String choiceName = prompt.getSelectChoiceText(mItems.get(i));
+                CharSequence choiceDisplayName;
+                if ( choiceName != null ) {
+                  choiceDisplayName = TextUtils.textToHtml(choiceName);
+                } else {
+                  choiceDisplayName = "";
+                }
                 // no checkbox group so id by answer + offset
                 CheckBox c = new CheckBox(getContext());
                 c.setTag(Integer.valueOf(i));
                 c.setId(QuestionWidget.newUniqueId());
-                c.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mItems.get(i))));
+                c.setText(choiceDisplayName);
                 c.setMovementMethod(LinkMovementMethod.getInstance());
                 c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
