@@ -211,7 +211,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // make sure column names are legal
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, "'" + n + "' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names");
+                mResults.put(id, Collect.getInstance().getString(R.string.google_sheets_invalid_column_form, n));
                 return false;
             }
         }
@@ -247,7 +247,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, "'" + n + "' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names");
+                mResults.put(id, Collect.getInstance().getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
         }
@@ -632,7 +632,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 mResults.put(
                         id,
                         form_fail
-                                + "Access denied. Please make sure the spreadsheet owner has granted you access permission.");
+                                + Collect.getInstance().getString(R.string.google_sheets_access_denied));
             } else {
                 mResults.put(id, form_fail + Html.fromHtml(e.getResponseBody()));
             }
