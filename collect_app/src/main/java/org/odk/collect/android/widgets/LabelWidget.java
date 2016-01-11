@@ -15,10 +15,14 @@
 package org.odk.collect.android.widgets;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import android.view.*;
+import android.widget.*;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
@@ -34,15 +38,8 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 /**
  * The Label Widget does not return an answer. The purpose of this widget is to be the top entry in
@@ -55,14 +52,8 @@ import android.widget.TextView;
 public class LabelWidget extends QuestionWidget {
     private static final String t = "LabelWidget";
 
-    LinearLayout buttonLayout;
-    LinearLayout questionLayout;
     List<SelectChoice> mItems;
-
-    private TextView mQuestionText;
-    private TextView mMissingImage;
-    private ImageView mImageView;
-    private TextView label;
+    View center;
 
 
     public LabelWidget(Context context, FormEntryPrompt prompt) {
@@ -75,9 +66,14 @@ public class LabelWidget extends QuestionWidget {
         } else {
             mItems = prompt.getSelectChoices();
         }
-        mPrompt = prompt;
 
-        buttonLayout = new LinearLayout(context);
+        // Layout holds the horizontal list of buttons
+        LinearLayout buttonLayout = new LinearLayout(context);
+
+        String s = null;
+        if (prompt.getAnswerValue() != null) {
+            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+        }
 
         if (mItems != null) {
             for (int i = 0; i < mItems.size(); i++) {
@@ -90,8 +86,8 @@ public class LabelWidget extends QuestionWidget {
                 }
 
                 // build image view (if an image is provided)
-                mImageView = null;
-                mMissingImage = null;
+                ImageView mImageView = null;
+                TextView mMissingImage = null;
 
                 final int labelId = QuestionWidget.newUniqueId();
 
@@ -100,19 +96,19 @@ public class LabelWidget extends QuestionWidget {
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                            ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;
                             try {
                                 Display display =
-                                    ((WindowManager) getContext().getSystemService(
-                                        Context.WINDOW_SERVICE)).getDefaultDisplay();
+                                        ((WindowManager) getContext().getSystemService(
+                                                Context.WINDOW_SERVICE)).getDefaultDisplay();
                                 int screenWidth = display.getWidth();
                                 int screenHeight = display.getHeight();
                                 b =
-                                    FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                        screenWidth);
+                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
+                                                screenWidth);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
@@ -156,55 +152,49 @@ public class LabelWidget extends QuestionWidget {
 
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
-                label = new TextView(getContext());
+                TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 // answer layout holds the label text/image on top and the radio button on bottom
-                RelativeLayout answer = new RelativeLayout(getContext());
-                RelativeLayout.LayoutParams headerParams =
-                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                headerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                
+                LinearLayout answer = new LinearLayout(getContext());
+                answer.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams headerParams =
+                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                headerParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+                LinearLayout.LayoutParams buttonParams =
+                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
+
                 if (mImageView != null) {
-                	mImageView.setScaleType(ScaleType.CENTER);
+                    mImageView.setScaleType(ScaleType.CENTER);
                     answer.addView(mImageView, headerParams);
                 } else if (mMissingImage != null) {
                     answer.addView(mMissingImage, headerParams);
                 } else {
-                	label.setId(labelId);
-                    answer.addView(label, headerParams);
+                        label.setId(labelId);
+                        answer.addView(label, headerParams);
                 }
                 answer.setPadding(4, 0, 4, 0);
 
                 // Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
-                    new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-                            LayoutParams.WRAP_CONTENT);
+                        new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
 
                 buttonLayout.addView(answer, answerParams);
-
             }
         }
 
-        // Align the buttons so that they appear horizonally and are right justified
-        // buttonLayout.setGravity(Gravity.RIGHT);
+
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        // LinearLayout.LayoutParams params = new
-        // LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        // buttonLayout.setLayoutParams(params);
 
-        // The buttons take up the right half of the screen
-        LinearLayout.LayoutParams buttonParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        buttonParams.weight = 1;
-
-        questionLayout.addView(buttonLayout, buttonParams);
-        addView(questionLayout);
-
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
+        addView(buttonLayout, params);
     }
 
 
@@ -229,66 +219,21 @@ public class LabelWidget extends QuestionWidget {
     }
 
 
-    // Override QuestionWidget's add question text. Build it the same
-    // but add it to the relative layout
-    protected void addQuestionText(FormEntryPrompt p) {
-
-        // Add the text view. Textview always exists, regardless of whether there's text.
-        mQuestionText = new TextView(getContext());
-        mQuestionText.setText(p.getLongText());
-        mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
-        mQuestionText.setTypeface(null, Typeface.BOLD);
-        mQuestionText.setPadding(0, 0, 0, 7);
-        mQuestionText.setId(QuestionWidget.newUniqueId()); // assign random id
-
-        // Wrap to the size of the parent view
-        mQuestionText.setHorizontallyScrolling(false);
-
-        if (p.getLongText() == null) {
-            mQuestionText.setVisibility(GONE);
-        }
-
-        // Put the question text on the left half of the screen
-        LinearLayout.LayoutParams labelParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        labelParams.weight = 1;
-
-        questionLayout = new LinearLayout(getContext());
-        questionLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        questionLayout.addView(mQuestionText, labelParams);
-    }
-
-
     @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        mQuestionText.cancelLongPress();
+    protected void addQuestionMediaLayout(View v) {
+        center = new View(getContext());
+        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
+        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        center.setId(QuestionWidget.newUniqueId());
+        addView(center, centerParams);
 
-        if (mMissingImage != null) {
-            mMissingImage.cancelLongPress();
-        }
-        if (mImageView != null) {
-            mImageView.cancelLongPress();
-        }
-        if (label != null) {
-            label.cancelLongPress();
-        }
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.LEFT_OF, center.getId());
+        addView(v, params);
     }
-
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mQuestionText.setOnLongClickListener(l);
-        if (mMissingImage != null) {
-            mMissingImage.setOnLongClickListener(l);
-        }
-        if (mImageView != null) {
-            mImageView.setOnLongClickListener(l);
-        }
-        if (label != null) {
-            label.setOnLongClickListener(l);
-        }
     }
 
 }

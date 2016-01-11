@@ -16,6 +16,8 @@ package org.odk.collect.android.widgets;
 
 import java.util.Map;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -37,10 +39,6 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.Toast;
 
 
 /**
@@ -187,8 +185,11 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // finish complex layout
-        addView(mLaunchIntentButton);
-        addView(mAnswer);
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mLaunchIntentButton);
+        answerLayout.addView(mAnswer);
+        addAnswerView(answerLayout);
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

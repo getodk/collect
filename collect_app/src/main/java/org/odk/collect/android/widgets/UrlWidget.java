@@ -14,12 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,11 +21,12 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -44,7 +39,6 @@ public class UrlWidget extends QuestionWidget {
 
     public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        setOrientation(LinearLayout.VERTICAL);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -89,8 +83,11 @@ public class UrlWidget extends QuestionWidget {
             mStringAnswer.setText(s);
         }
         // finish complex layout
-        addView(mOpenUrlButton);
-        addView(mStringAnswer);
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mOpenUrlButton);
+        answerLayout.addView(mStringAnswer);
+        addAnswerView(answerLayout);
     }
 
     @Override

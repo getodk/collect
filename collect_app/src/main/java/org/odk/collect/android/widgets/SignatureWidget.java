@@ -16,6 +16,8 @@ package org.odk.collect.android.widgets;
 
 import java.io.File;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -40,12 +42,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Signature widget.
@@ -68,8 +64,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 		mInstanceFolder = 
 				Collect.getInstance().getFormController().getInstancePath().getParent();
 
-		setOrientation(LinearLayout.VERTICAL);
-		
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 		
@@ -99,9 +93,11 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         
         
         // finish complex layout
-        addView(mSignButton);
-        addView(mErrorTextView);
-     
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mSignButton);
+        answerLayout.addView(mErrorTextView);
+
         // and hide the sign button if read-only
         if ( prompt.isReadOnly() ) {
         	mSignButton.setVisibility(View.GONE);
@@ -146,6 +142,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
             addView(mImageView);
         }
+        addAnswerView(answerLayout);
 
 	}
 	

@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.android.tools.build:gradle:1.5.0'
     }
 }
 
@@ -12,11 +12,11 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-release/'
+            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-release'
         }
-        maven {
-            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-snapshot/'
+        ivy {
+            url 'http://cwe.cs.washington.edu:8082/artifactory/libs-snapshot'
         }
-		mavenLocal()
     }
 }
+

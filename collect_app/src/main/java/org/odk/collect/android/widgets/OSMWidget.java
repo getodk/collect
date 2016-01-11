@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.ViewGroup;
+import android.widget.*;
 import org.apache.http.protocol.HTTP;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
@@ -27,10 +29,6 @@ import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -75,9 +73,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 		mInstanceDirectory = formController.getInstancePath().getParent();
 		mInstanceId = formController.getSubmissionMetadata().instanceId;
 		mFormId = formController.getFormDef().getID();
-		
-		setOrientation(LinearLayout.VERTICAL);
-        
+
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
         mErrorTextView.setText("Something went wrong. We did not get valid OSM data.");
@@ -145,10 +141,13 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 
         
         // finish complex layout
-        addView(mLaunchOpenMapKitButton);
-        addView(mErrorTextView);
-        addView(mOSMFileNameHeaderTextView);
-        addView(mOSMFileNameTextView);
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(mLaunchOpenMapKitButton);
+        answerLayout.addView(mErrorTextView) ;
+        answerLayout.addView(mOSMFileNameHeaderTextView);
+        answerLayout.addView(mOSMFileNameTextView);
+		addAnswerView(answerLayout);
         
         // Hide Launch button if read-only
         if ( prompt.isReadOnly() ) {

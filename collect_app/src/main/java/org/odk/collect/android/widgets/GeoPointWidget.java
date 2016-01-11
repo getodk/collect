@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import java.text.DecimalFormat;
 
+import android.widget.*;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -23,7 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
-import org.odk.collect.android.activities.GeoPointMapActivitySdk7;
+import org.odk.collect.android.activities.GeoPointMapNotDraggableActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
@@ -34,10 +35,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -95,16 +92,9 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 			// if we are using mapsV2, we are using maps...
 			mUseMaps = true;
 		} else if ( requestMaps ) {
-			// using the legacy maps widget... if MapActivity is available
+			// using the mapsV2 widget if supported
 			// otherwise just use the plain widget
-			try {
-				// do google maps exist on the device
-				Class.forName("com.google.android.maps.MapActivity");
-				mUseMaps = true;
-			} catch (ClassNotFoundException e) {
-				// use the plain geolocation activity
-				mUseMaps = false;
-			}
+      mUseMaps = CompatibilityUtils.useMapsV2(context);
 		} else {
 			// use the plain geolocation activity
 			mUseMaps = false;
@@ -113,7 +103,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mReadOnly = prompt.isReadOnly();
 
 		// assemble the widget...
-		setOrientation(LinearLayout.VERTICAL);
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 
@@ -147,7 +136,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				if (mUseMapsV2 ) {
 					i = new Intent(getContext(), GeoPointMapActivity.class);
 				} else {
-					i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
+					i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
 				}
 
 				String s = mStringAnswer.getText().toString();
@@ -187,7 +176,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				if ( mUseMapsV2 ) {
 					i = new Intent(getContext(), GeoPointMapActivity.class);
 				} else if (mUseMaps) {
-					i = new Intent(getContext(), GeoPointMapActivitySdk7.class);
+					i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
 				} else {
 					i = new Intent(getContext(), GeoPointActivity.class);
 				}
@@ -213,9 +202,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		// finish complex layout
 		// control what gets shown with setVisibility(View.GONE)
-		addView(mGetLocationButton);
-		addView(mViewButton);
-		addView(mAnswerDisplay);
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(mGetLocationButton);
+		answerLayout.addView(mViewButton);
+		answerLayout.addView(mAnswerDisplay);
+		addAnswerView(answerLayout);
 
 		// figure out what text and buttons to enable or to show...
 		boolean dataAvailable = false;
