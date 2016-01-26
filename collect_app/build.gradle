@@ -34,9 +34,6 @@ android {
             minifyEnabled(minify)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
-        snapshot {
-            // Build type for snapshots
-        }
         debug {
             testCoverageEnabled(testCoverage) // Allows AndroidTest JaCoCo reports to be generated
         }
@@ -67,12 +64,8 @@ dependencies {
     if (playServicesPath.exists() && gradle.useLocal) { // Local project is favoured
         compile project(playServicesName)
     } else {
-        releaseCompile(group: groupId, name: playServicesArtifactName,
-                version: playServicesRelease, ext: 'aar')
-        snapshotCompile(group: groupId, name: playServicesArtifactName,
-                version: playServicesSnapshot, ext: 'aar')
-        debugCompile(group: groupId, name: playServicesArtifactName,
-                version: playServicesSnapshot, ext: 'aar')
+        compile(group: groupId, name: playServicesArtifactName,
+                version: (useLatestPlayServices ? latestVersion : playServicesSnapshot), ext: 'aar')
     }
 
     // Testing-only dependencies
