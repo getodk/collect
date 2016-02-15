@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -66,14 +65,14 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	public DefaultResourceProxyImpl resource_proxy;
 	private ITileSource baseTiles;
 	public MyLocationNewOverlay mMyLocationOverlay;
-	private ImageButton play_button;
-	private ImageButton save_button;
-	public ImageButton polygon_button;
-	public ImageButton layers_button;
-	public ImageButton clear_button;
-	public ImageButton layers;
+	private Button play_button;
+	private Button save_button;
+	public Button polygon_button;
+	public Button layers_button;
+	public Button clear_button;
+	public Button layers;
 	private Button manual_button;
-	private ImageButton pause_button;
+	private Button pause_button;
 	private ProgressDialog progress;
 	public AlertDialog.Builder builder;
 	public AlertDialog.Builder p_builder;
@@ -125,7 +124,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
 		time_delay.setSelection(3);
 		time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-		layers_button = (ImageButton) findViewById(R.id.geoTrace_layers_button);
+		layers_button = (Button) findViewById(R.id.layers);
 		layers_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -141,12 +140,12 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		progress.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				play_button.setImageResource(R.drawable.ic_menu_mylocation);
+				//play_button.setImageResource(R.drawable.ic_menu_mylocation);
 			}
 		});
 
 
-		clear_button= (ImageButton) findViewById(R.id.geotrace_clear_button);
+		clear_button= (Button) findViewById(R.id.geotrace_clear_button);
 		clear_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -155,7 +154,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 			}
 
 		});
-		layers = (ImageButton) findViewById(R.id.layers);
+		layers = (Button) findViewById(R.id.layers);
 		layers.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -164,7 +163,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 			}
 		});
 
-		polygon_button = (ImageButton) findViewById(R.id.geotrace_polygon_button);
+		polygon_button = (Button) findViewById(R.id.geotrace_polygon_button);
 		polygon_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -177,7 +176,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 			}
 		});
-		save_button= (ImageButton) findViewById(R.id.geotrace_save);
+		save_button= (Button) findViewById(R.id.geotrace_save);
 		save_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -194,8 +193,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 			}
 		});
-		pause_button =(ImageButton)findViewById(R.id.geotrace_pause_button);
-		play_button = (ImageButton)findViewById(R.id.geotrace_play_button);
+		pause_button =(Button)findViewById(R.id.geotrace_pause_button);
+		play_button = (Button)findViewById(R.id.geotrace_play_button);
 		beenPaused =false;
 		TRACE_MODE = 1;
 		play_button.setOnClickListener(new View.OnClickListener() {
@@ -455,7 +454,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 				public void run() {
 					zoomToMyLocation();
 					progress.dismiss();
-					play_button.setImageResource(R.drawable.play_button);
+					//play_button.setImageResource(R.drawable.play_button);
 				}
 			});
 		}
@@ -593,7 +592,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 
 	private void reset_trace_settings(){
-		play_button.setImageResource(R.drawable.play_button);
+		//play_button.setImageResource(R.drawable.play_button);
 		play_check=false;
 	}
 

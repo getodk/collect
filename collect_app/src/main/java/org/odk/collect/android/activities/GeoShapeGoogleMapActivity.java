@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -76,11 +76,11 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private Polygon polygon;
     private ArrayList<LatLng> latLngsArray = new ArrayList<LatLng>();
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
-    private ImageButton gps_button;
-    private ImageButton clear_button;
-    private ImageButton polygon_button;
-    private ImageButton return_button;
-    private ImageButton layers_button;
+    private Button gps_button;
+    private Button clear_button;
+    private Button polygon_button;
+    private Button return_button;
+    private Button layers_button;
     private String final_return_string;
     private Boolean data_loaded = false;
     private Boolean clear_button_test;
@@ -124,7 +124,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             initZoom = true;
         }
 
-        gps_button = (ImageButton)findViewById(R.id.geoshape_gps_button);
+        gps_button = (Button)findViewById(R.id.geoshape_gps_button);
         gps_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -133,9 +133,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        polygon_button = (ImageButton) findViewById(R.id.polygon_button);
+        polygon_button = (Button) findViewById(R.id.polygon_button);
         polygon_button.setVisibility(View.GONE);
-        clear_button = (ImageButton) findViewById(R.id.clear_button);
+        clear_button = (Button) findViewById(R.id.clear_button);
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +144,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        return_button = (ImageButton) findViewById(R.id.geoshape_Button);
+        return_button = (Button) findViewById(R.id.geoshape_Button);
         return_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +162,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        layers_button = (ImageButton)findViewById(R.id.geoShape_layers_button);
+        layers_button = (Button)findViewById(R.id.geoShape_layers_button);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -9,42 +9,58 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         class="com.google.android.gms.maps.SupportMapFragment" />
-
-    <ImageButton
-        android:id="@+id/geoshape_gps_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:src="@drawable/ic_menu_mylocation" />
-    <ImageButton
+        android:gravity="right"
+        android:paddingBottom="60dip">
+
+    <Button
+        android:id="@+id/geoshape_gps_button"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:drawableRight="@drawable/ic_menu_mylocation"
+        android:layout_weight="1" />
+    <Button
         android:id="@+id/geoShape_layers_button"
         android:layout_below="@+id/geoshape_gps_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:src="@drawable/layers" />
-    <ImageButton
+        android:layout_height="fill_parent"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:drawableRight="@drawable/layers"
+        android:layout_weight="1"/>
+    <Button
         android:id="@+id/clear_button"
         android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
-        android:padding="20dp"
-        android:src="@drawable/sweep" />
-    <ImageButton
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:drawableRight="@drawable/sweep"
+        android:layout_weight="1"/>
+    <Button
         android:id="@+id/polygon_button"
         android:layout_below="@+id/clear_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:padding="20dp"
-        android:src="@drawable/polygon" />
-    <ImageButton
+        android:layout_height="fill_parent"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:drawableRight="@drawable/polygon"
+        android:layout_weight="1"/>
+    <Button
         android:id="@+id/geoshape_Button"
         android:layout_below="@+id/polygon_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
-        android:padding="20dp"
-        android:src="@drawable/ic_menu_save" />
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:drawableRight="@drawable/ic_menu_save"
+        android:layout_weight="1"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -28,7 +28,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
@@ -74,10 +74,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private MapEventsOverlay OverlayEventos;
     private boolean polygon_connection = false;
     private boolean clear_button_test = false;
-    private ImageButton clear_button;
-    private ImageButton return_button;
-    private ImageButton polygon_button;
-    private ImageButton layers_button;
+    private Button clear_button;
+    private Button return_button;
+    private Button polygon_button;
+    private Button layers_button;
     private SharedPreferences sharedPreferences;
     public Boolean layerStatus = false;
     private int selected_layer= -1;
@@ -87,7 +87,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private OsmMBTileProvider mbprovider;
     private TilesOverlay mbTileOverlay;
     public Boolean gpsStatus = true;
-    private ImageButton gps_button;
+    private Button gps_button;
     private String[] OffilineOverlays;
     public MyLocationNewOverlay mMyLocationOverlay;
     public Boolean data_loaded = false;
@@ -106,9 +106,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
 
-        return_button = (ImageButton) findViewById(R.id.geoshape_Button);
-        polygon_button = (ImageButton) findViewById(R.id.polygon_button);
-        clear_button = (ImageButton) findViewById(R.id.clear_button);
+        return_button = (Button) findViewById(R.id.geoshape_Button);
+        polygon_button = (Button) findViewById(R.id.polygon_button);
+        clear_button = (Button) findViewById(R.id.clear_button);
 
 		/*
 			Defining the System prefereces from the mapSetting
@@ -150,7 +150,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }
             }
         });
-        layers_button = (ImageButton)findViewById(R.id.geoShape_layers_button);
+        layers_button = (Button)findViewById(R.id.geoShape_layers_button);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -160,7 +160,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        gps_button = (ImageButton)findViewById(R.id.geoshape_gps_button);
+        gps_button = (Button)findViewById(R.id.geoshape_gps_button);
         gps_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -279,13 +279,11 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void setGPSStatus(){
         if(gpsStatus ==false){
-            gps_button.setImageResource(R.drawable.ic_menu_mylocation);
             upMyLocationOverlayLayers();
             //enableMyLocation();
             //zoomToMyLocation();
             gpsStatus = true;
         }else{
-            gps_button.setImageResource(R.drawable.ic_menu_mylocation);
             disableMyLocation();
             gpsStatus = false;
         }

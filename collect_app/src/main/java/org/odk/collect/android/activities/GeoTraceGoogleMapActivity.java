@@ -30,7 +30,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -72,13 +71,13 @@ import java.util.concurrent.TimeUnit;
 public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture schedulerHandler;
-	private ImageButton play_button;
-	private ImageButton save_button;
-	public ImageButton polygon_button;
-	public ImageButton layers_button;
-	public ImageButton clear_button;
+	private Button play_button;
+	private Button save_button;
+	public Button polygon_button;
+	public Button layers_button;
+	public Button clear_button;
 	private Button manual_button;
-	private ImageButton pause_button;
+	private Button pause_button;
 	private ProgressDialog progress;
 	public AlertDialog.Builder builder;
 	private View traceSettingsView;
@@ -114,7 +113,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 	private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 	private Button polygon_save;
 	private Button polyline_save;
-	public ImageButton layers;
+	public Button layers;
 	private MapHelper mHelper;
 
 	@Override
@@ -140,7 +139,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				play_button.setImageResource(R.drawable.ic_menu_mylocation);
+				//play_button.setImageResource(R.drawable.ic_menu_mylocation);
 			}
 		});
 
@@ -173,7 +172,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
 		time_delay.setSelection(3);
 		time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-		pause_button =(ImageButton)findViewById(R.id.geotrace_pause_button);
+		pause_button =(Button)findViewById(R.id.geotrace_pause_button);
 		pause_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -191,8 +190,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 			}
 		});
-		layers_button = (ImageButton) findViewById(R.id.geoTrace_layers_button);
-		clear_button= (ImageButton) findViewById(R.id.geotrace_clear_button);
+		layers_button = (Button) findViewById(R.id.layers);
+		clear_button= (Button) findViewById(R.id.geotrace_clear_button);
 		clear_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v){
@@ -200,7 +199,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 			}
 		});
 
-		save_button= (ImageButton) findViewById(R.id.geotrace_save);
+		save_button= (Button) findViewById(R.id.geotrace_save);
 		save_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -209,7 +208,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 			}
 		});
-		play_button = (ImageButton)findViewById(R.id.geotrace_play_button);
+		play_button = (Button)findViewById(R.id.geotrace_play_button);
 		play_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -303,7 +302,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 			}
 
 		}
-		layers = (ImageButton) findViewById(R.id.layers);
+		layers = (Button) findViewById(R.id.layers);
 		layers.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -475,7 +474,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 	}
 	private void reset_trace_settings(){
-		play_button.setImageResource(R.drawable.play_button);
+		//play_button.setImageResource(R.drawable.play_button);
 		play_check=false;
 	}
 	private void setupManualMode(){
