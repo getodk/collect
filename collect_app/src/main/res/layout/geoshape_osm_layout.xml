@@ -17,7 +17,7 @@
         android:paddingBottom="60dip">
 
         <Button
-            android:id="@+id/geoshape_gps_button"
+            android:id="@+id/gps"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
@@ -25,8 +25,7 @@
             android:drawableRight="@drawable/ic_menu_mylocation"
             android:layout_weight="1" />
         <Button
-            android:id="@+id/geoShape_layers_button"
-            android:layout_below="@+id/geoshape_gps_button"
+            android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:padding="15dp"
@@ -38,17 +37,14 @@
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:drawableRight="@drawable/ic_menu_refresh"
             android:layout_weight="1"/>
         <Button
             android:id="@+id/geoshape_Button"
-            android:layout_below="@+id/polygon_button"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:drawableRight="@drawable/ic_menu_save"

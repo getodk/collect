@@ -100,10 +100,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.geotrace_osm_layout);
 		setTitle(getString(R.string.geotrace_title)); // Setting title of the action
-
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
 		mapView = (MapView)findViewById(R.id.geotrace_mapview);
@@ -135,7 +133,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		progress.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				//play_button.setImageResource(R.drawable.ic_menu_mylocation);
+				play_button.setCompoundDrawables( null, null, getResources().getDrawable(R.drawable.ic_menu_mylocation), null );
 			}
 		});
 
@@ -210,9 +208,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 							View radioButton = rb.findViewById(radioButtonID);
 							int idx = rb.indexOfChild(radioButton);
 							TRACE_MODE = idx;
-							if (TRACE_MODE ==0){
+							if (TRACE_MODE == 0){
 								setupManualMode();
-							}else if (TRACE_MODE ==1){
+							}else if (TRACE_MODE == 1){
 								setupAutomaticMode();
 							}else{
 								reset_trace_settings();
@@ -226,6 +224,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 				}
 			}
 		});
+
 		pause_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -239,8 +238,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 				} catch (Exception e) {
 					// Do nothing
 				}
-
-
 			}
 		});
 
@@ -742,5 +739,5 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		}
 
 	} ;
-	
+
 }

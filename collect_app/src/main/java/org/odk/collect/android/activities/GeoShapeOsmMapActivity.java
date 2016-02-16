@@ -32,7 +32,6 @@ import android.widget.Button;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.spatial.OsmMBTileProvider;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
@@ -44,11 +43,9 @@ import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.IRegisterReceiver;
-import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
-import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -66,7 +63,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private MapView mapView;
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private PathOverlay pathOverlay;
-    private ITileSource baseTiles;
     public DefaultResourceProxyImpl resource_proxy;
     public int zoom_level = 3;
     public static final int stroke_width = 5;
@@ -82,38 +78,20 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public Boolean layerStatus = false;
     private int selected_layer= -1;
     private ProgressDialog progress;
-    private String basemap;
-
-    private OsmMBTileProvider mbprovider;
-    private TilesOverlay mbTileOverlay;
     public Boolean gpsStatus = true;
     private Button gps_button;
-    private String[] OffilineOverlays;
     public MyLocationNewOverlay mMyLocationOverlay;
     public Boolean data_loaded = false;
 
     private MapHelper mHelper;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		/*
-			Setting Content  & initiating the main button id
-			for the activity
-		  */
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-
         return_button = (Button) findViewById(R.id.geoshape_Button);
-        polygon_button = (Button) findViewById(R.id.polygon_button);
         clear_button = (Button) findViewById(R.id.clear);
-
-		/*
-			Defining the System prefereces from the mapSetting
-		  */
-
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView)findViewById(R.id.geoshape_mapview);
         mHelper = new MapHelper(this,mapView,GeoShapeOsmMapActivity.this);
@@ -127,12 +105,13 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 returnLocation();
             }
         });
-        polygon_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buildPolygon();
-            }
-        });
+//        polygon_button = (Button) findViewById(R.id.polygon_button);
+//        polygon_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                buildPolygon();
+//            }
+//        });
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +129,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }
             }
         });
-        layers_button = (Button)findViewById(R.id.geoShape_layers_button);
+        layers_button = (Button)findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -160,7 +139,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        gps_button = (Button)findViewById(R.id.geoshape_gps_button);
+        gps_button = (Button)findViewById(R.id.gps);
         gps_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -341,6 +320,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         mMyLocationOverlay.enableMyLocation();
         mMyLocationOverlay.enableFollowLocation();
     }
+
     private void zoomToMyLocation(){
         if (mMyLocationOverlay.getMyLocation()!= null){
             if (zoom_level ==3){
@@ -355,6 +335,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
 
     }
+
     private void disableMyLocation(){
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)){
@@ -364,8 +345,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             gpsStatus =false;
         }
     }
-
-
 
     private void saveGeoShape(){
         returnLocation();
@@ -381,13 +360,13 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         mapView.getOverlays().add(OverlayEventos);
         mapView.invalidate();
     }
+
     private void clearFeatures(){
         polygon_connection = false;
         clear_button_test = false;
         map_markers.clear();
         pathOverlay.clearPath();
         mapView.getOverlays().clear();
-        //clearMarkersOverlay();
         polygon_button.setVisibility(View.VISIBLE);
         clear_button.setVisibility(View.GONE);
         if(gpsStatus){
@@ -395,24 +374,20 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
         }
         overlayPointPathListner();
-
         mapView.invalidate();
 
     }
-
 
     private void showClearDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.geo_clear_warning))
                 .setPositiveButton(getString(R.string.clear), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
                         clearFeatures();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
 
                     }
                 }).show();
@@ -423,7 +398,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         builder.setMessage(getString(R.string.polygon_validator))
                 .setPositiveButton(getString(R.string.dialog_continue), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+
                     }
                 }).show();
 
@@ -450,7 +425,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         finish();
     }
 
-
     private void update_polygon(){
         pathOverlay.clearPath();
         for (int i =0;i<map_markers.size();i++){
@@ -458,11 +432,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
         mapView.invalidate();
     }
+
     private MapEventsReceiver mReceive = new MapEventsReceiver() {
         @Override
         public boolean longPressHelper(GeoPoint point) {
-            //Toast.makeText(GeoShapeActivity.this, point.getLatitude()+" ", Toast.LENGTH_LONG).show();
-            //map_points.add(point);
             if (!clear_button_test){
                 clear_button.setVisibility(View.VISIBLE);
                 clear_button_test = true;
@@ -527,16 +500,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
     };
 
+    /*
+        This functions should be added to the mapHelper Class
+
+     */
     private void zoomToCentroid(){
-
-			/*
-				Calculate Centroid of Polygon
-			 */
-
-        //----- This should be hard coded but based on the extent of the points
         mapView.getController().setZoom(15);
-        //-----
-
         mapView.invalidate();
         Handler handler=new Handler();
         Runnable r = new Runnable(){
@@ -559,7 +528,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         };
         handler.post(r);
         mapView.invalidate();
-
     }
 
 
