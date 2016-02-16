@@ -60,13 +60,13 @@
             android:layout_margin="5dp"
             android:drawableRight="@drawable/polygon" />
         <Button
-            android:id="@+id/geotrace_clear_button"
+            android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:visibility="gone"
-            android:drawableRight="@drawable/sweep" />
+            android:visibility="visible"
+            android:drawableRight="@drawable/ic_menu_refresh" />
 
         <Button
             android:id="@+id/layers"

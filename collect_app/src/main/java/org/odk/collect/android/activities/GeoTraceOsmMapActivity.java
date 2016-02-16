@@ -145,7 +145,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		});
 
 
-		clear_button= (Button) findViewById(R.id.geotrace_clear_button);
+		clear_button= (Button) findViewById(R.id.clear);
 		clear_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override

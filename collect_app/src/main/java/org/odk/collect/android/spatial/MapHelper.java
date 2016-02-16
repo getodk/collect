@@ -125,13 +125,13 @@ public class MapHelper {
                 switch (item) {
                     case 0:
                         if (mGoogleMap != null) {
-                            if(!googleTileOverlay.equals(null)){
+                            if(googleTileOverlay != null){
                                 googleTileOverlay.remove();
                             }
 
                         }else{
                             //OSM
-                            if(!osmTileOverlay.equals(null)){
+                            if(osmTileOverlay != null){
                                 mOsmMap.getOverlays().remove(osmTileOverlay);
                                 mOsmMap.invalidate();
                             }

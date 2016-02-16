@@ -108,7 +108,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
         return_button = (Button) findViewById(R.id.geoshape_Button);
         polygon_button = (Button) findViewById(R.id.polygon_button);
-        clear_button = (Button) findViewById(R.id.clear_button);
+        clear_button = (Button) findViewById(R.id.clear);
 
 		/*
 			Defining the System prefereces from the mapSetting

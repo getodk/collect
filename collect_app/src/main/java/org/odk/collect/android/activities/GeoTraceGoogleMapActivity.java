@@ -191,7 +191,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 			}
 		});
 		layers_button = (Button) findViewById(R.id.layers);
-		clear_button= (Button) findViewById(R.id.geotrace_clear_button);
+		clear_button= (Button) findViewById(R.id.clear);
 		clear_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v){

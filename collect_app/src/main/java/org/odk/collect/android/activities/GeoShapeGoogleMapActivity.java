@@ -135,7 +135,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         });
         polygon_button = (Button) findViewById(R.id.polygon_button);
         polygon_button.setVisibility(View.GONE);
-        clear_button = (Button) findViewById(R.id.clear_button);
+        clear_button = (Button) findViewById(R.id.clear);
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

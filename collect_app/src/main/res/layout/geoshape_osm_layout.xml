@@ -34,23 +34,14 @@
             android:drawableRight="@drawable/layers"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/clear_button"
+            android:id="@+id/clear"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/sweep"
-            android:layout_weight="1"/>
-        <Button
-            android:id="@+id/polygon_button"
-            android:layout_below="@+id/clear_button"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:layout_margin="5dp"
-            android:drawableRight="@drawable/polygon"
+            android:drawableRight="@drawable/ic_menu_refresh"
             android:layout_weight="1"/>
         <Button
             android:id="@+id/geoshape_Button"
