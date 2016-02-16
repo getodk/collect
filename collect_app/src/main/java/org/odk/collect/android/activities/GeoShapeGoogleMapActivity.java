@@ -124,7 +124,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             initZoom = true;
         }
 
-        gps_button = (Button)findViewById(R.id.geoshape_gps_button);
+        gps_button = (Button)findViewById(R.id.gps);
         gps_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -133,8 +133,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        polygon_button = (Button) findViewById(R.id.polygon_button);
-        polygon_button.setVisibility(View.GONE);
+//        polygon_button = (Button) findViewById(R.id.polygon_button);
+//        polygon_button.setVisibility(View.GONE);
         clear_button = (Button) findViewById(R.id.clear);
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +162,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        layers_button = (Button)findViewById(R.id.geoShape_layers_button);
+        layers_button = (Button)findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
