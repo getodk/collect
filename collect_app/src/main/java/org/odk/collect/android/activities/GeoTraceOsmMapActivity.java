@@ -25,7 +25,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.spatial.OsmMBTileProvider;
 import org.odk.collect.android.widgets.GeoTraceWidget;
@@ -37,15 +36,11 @@ import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -584,11 +579,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 	}
 
-	private void createPolygon(){
-		map_markers.add(map_markers.get(0));
-		pathOverlay.addPoint(map_markers.get(0).getPosition());
-		mapView.invalidate();
-	}
+
 
 
 	private void reset_trace_settings(){
@@ -719,6 +710,11 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		finish();
 
 	}
+	private void createPolygon(){
+		map_markers.add(map_markers.get(0));
+		pathOverlay.addPoint(map_markers.get(0).getPosition());
+		mapView.invalidate();
+	}
 	private void update_polygon(){
 		pathOverlay.clearPath();
 		for (int i =0;i<map_markers.size();i++){
@@ -746,135 +742,5 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		}
 
 	} ;
-	private String getMBTileFromItem(int item) {
-		String foldername = OffilineOverlays[item];
-		File dir = new File(Collect.OFFLINE_LAYERS+File.separator+foldername);
-		String mbtilePath;
-		File[] files = dir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".mbtiles");
-			}
-		});
-		mbtilePath =Collect.OFFLINE_LAYERS+File.separator+foldername+File.separator+files[0].getName();
-
-		return mbtilePath;
-	}
-	private String[] getOfflineLayerList() {
-		File files = new File(Collect.OFFLINE_LAYERS);
-		ArrayList<String> results = new ArrayList<String>();
-		results.add("None");
-		for(String folder : files.list()){
-			results.add(folder);
-		}
-		String[] finala = new String[results.size()];
-		finala = results.toArray(finala);
-		return finala;
-	}
-
-
-	private void showLayersDialog() {
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		alertDialog.setTitle(getString(R.string.select_offline_layer));
-		OffilineOverlays = getOfflineLayerList(); // Maybe this should only be done once. Have not decided yet.
-		alertDialog.setSingleChoiceItems(OffilineOverlays, selected_layer, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				switch (item) {
-					case 0:
-						mapView.getOverlays().remove(mbTileOverlay);
-						layerStatus = false;
-						//updateMapOverLayOrder();
-						break;
-					default:
-						layerStatus = true;
-						mapView.getOverlays().remove(mbTileOverlay);
-						//String mbTileLocation = getMBTileFromItem(item);
-						String mbFilePath = getMBTileFromItem(item);
-						//File mbFile = new File(Collect.OFFLINE_LAYERS+"/GlobalLights/control-room.mbtiles");
-						File mbFile = new File(mbFilePath);
-						mbprovider = new OsmMBTileProvider(GeoTraceOsmMapActivity.this, mbFile);
-						mbTileOverlay = new TilesOverlay(mbprovider, GeoTraceOsmMapActivity.this);
-						mbTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-						//updateMapOverLayOrder();
-						mapView.getOverlays().add(mbTileOverlay);
-						updateMapOverLayOrder();
-						mapView.invalidate();
-				}
-				//This resets the map and sets the selected Layer
-				selected_layer = item;
-				dialog.dismiss();
-				final Handler handler = new Handler();
-				handler.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						mapView.invalidate();
-					}
-				}, 400);
-
-			}
-		});
-
-		alertDialog.show();
-	}
-
-
-
-
-	private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-		Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-		mAlertDialog = new AlertDialog.Builder(this).create();
-		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-		mAlertDialog.setMessage(errorMsg);
-		DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int i) {
-				switch (i) {
-					case DialogInterface.BUTTON_POSITIVE:
-						Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog",
-								shouldExit ? "exitApplication" : "OK");
-						if (shouldExit) {
-							finish();
-						}
-						break;
-				}
-			}
-		};
-		mAlertDialog.setCancelable(false);
-		mAlertDialog.setButton(getString(R.string.ok), errorListener);
-		mAlertDialog.show();
-	}
-	private void updateMapOverLayOrder(){
-		List<Overlay> overlays = mapView.getOverlays();
-		if (layerStatus){
-			mapView.getOverlays().remove(mbTileOverlay);
-			mapView.getOverlays().remove(pathOverlay);
-			mapView.getOverlays().remove(mMyLocationOverlay);
-			mapView.getOverlays().add(mbTileOverlay);
-			mapView.getOverlays().add(pathOverlay);
-			mapView.getOverlays().add(mMyLocationOverlay);
-
-		}
-		for (Overlay overlay : overlays){
-			//Class x = overlay.getClass();
-			final Overlay o = overlay;
-			if (overlay.getClass() == Marker.class){
-				Handler handler = new Handler();
-				handler.postDelayed(new Runnable() {
-					public void run() {
-						mapView.getOverlays().remove(o);
-						mapView.invalidate();
-					}
-				}, 100);
-				handler.postDelayed(new Runnable() {
-					public void run() {
-						mapView.getOverlays().add(o);
-						mapView.invalidate();
-					}
-				}, 100);
-
-
-			}
-		}
-		mapView.invalidate();
-
-	}
+	
 }
