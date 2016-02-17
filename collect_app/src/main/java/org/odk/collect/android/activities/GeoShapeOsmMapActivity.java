@@ -29,7 +29,6 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -110,17 +109,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             public void onClick(View v) {
                 if (map_markers.size() != 0){
                     showClearDialog();
-//                    clearFeatures();
-//                    if (polygon_connection){
-//                        //clearFeatures();
-//                        showClearDialog();
-//                    }else{
-//                        Marker c_mark = map_markers.get(map_markers.size()-1);
-//                        mapView.getOverlays().remove(c_mark);
-//                        map_markers.remove(map_markers.size()-1);
-//                        update_polygon();
-//                        mapView.invalidate();
-//                    }
                 }
             }
         });
@@ -139,7 +127,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             @Override
             public void onClick(final View v) {
                 zoomToMyLocation();
-                //setGPSStatus();
             }
         });
 
@@ -174,7 +161,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }
             }, 100);
             upMyLocationOverlayLayers();
-//            setGPSStatus();
             progress.show();
 
         }
@@ -219,8 +205,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             gp[0] = Double.parseDouble(lat);
             gp[1] = Double.parseDouble(lng);
             Marker marker = new Marker(mapView);
-            GeoPoint point = new GeoPoint(gp[0], gp[1]);
-            marker.setPosition(point);
+            marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
             marker.setIcon(getResources().getDrawable(R.drawable.map_marker));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -231,13 +216,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setOnMarkerDragListener(draglistner);
             mapView.getOverlays().add(marker);
         }
-        buildPolygon();
+//        buildPolygon();
+        update_polygon();
         mapView.getOverlays().remove(OverlayEventos);
     }
 
-    private void setGPSStatus(){
-        upMyLocationOverlayLayers();
-    }
+//    private void setGPSStatus(){
+//        upMyLocationOverlayLayers();
+//    }
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -278,7 +264,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)){
             overlayMyLocationLayers();
-            //zoomToMyLocation();
         }else{
             showGPSDisabledAlertToUser();
         }
@@ -352,16 +337,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }).show();
 
     }
-    private void showPolyonErrorDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.polygon_validator))
-                .setPositiveButton(getString(R.string.dialog_continue), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
 
-                    }
-                }).show();
-
-    }
     private String generateReturnString() {
         String temp_string = "";
         for (int i = 0 ; i < map_markers.size();i++){
@@ -383,21 +359,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         setResult(RESULT_OK, i);
         finish();
     }
-    private void buildPolygon(){
-        if (polygon_connection){
-            showClearDialog();
-        }else{
-            if (map_markers.size()>2){
-                //map_markers.add(map_markers.get(0));
-                pathOverlay.addPoint(map_markers.get(0).getPosition());
-                mapView.invalidate();
-                mapView.getOverlays().remove(OverlayEventos);
-            }else{
-                showPolyonErrorDialog();
-            }
-        }
 
-    }
     private void update_polygon(){
         pathOverlay.clearPath();
         for (int i =0;i<map_markers.size();i++){
