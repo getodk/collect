@@ -105,27 +105,22 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 returnLocation();
             }
         });
-//        polygon_button = (Button) findViewById(R.id.polygon_button);
-//        polygon_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                buildPolygon();
-//            }
-//        });
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (map_markers.size() != 0){
-                    if (polygon_connection){
-                        //clearFeatures();
-                        showClearDialog();
-                    }else{
-                        Marker c_mark = map_markers.get(map_markers.size()-1);
-                        mapView.getOverlays().remove(c_mark);
-                        map_markers.remove(map_markers.size()-1);
-                        update_polygon();
-                        mapView.invalidate();
-                    }
+                    showClearDialog();
+//                    clearFeatures();
+//                    if (polygon_connection){
+//                        //clearFeatures();
+//                        showClearDialog();
+//                    }else{
+//                        Marker c_mark = map_markers.get(map_markers.size()-1);
+//                        mapView.getOverlays().remove(c_mark);
+//                        map_markers.remove(map_markers.size()-1);
+//                        update_polygon();
+//                        mapView.invalidate();
+//                    }
                 }
             }
         });
@@ -143,7 +138,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         gps_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                setGPSStatus();
+                zoomToMyLocation();
+                //setGPSStatus();
             }
         });
 
@@ -172,13 +168,13 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    GeoPoint  point = new GeoPoint(34.08145, -39.85007);
+                    GeoPoint point = new GeoPoint(34.08145, -39.85007);
                     mapView.getController().setZoom(3);
                     mapView.getController().setCenter(point);
                 }
             }, 100);
-
-            setGPSStatus();
+            upMyLocationOverlayLayers();
+//            setGPSStatus();
             progress.show();
 
         }
@@ -190,7 +186,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     protected void onResume() {
         super.onResume();
         mHelper.setBasemap();
-        setGPSStatus();
+        upMyLocationOverlayLayers();
     }
 
     @Override
@@ -210,29 +206,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
 
-    private void buildPolygon(){
-        if (polygon_connection){
-            showClearDialog();
-        }else{
-            if (map_markers.size()>2){
-                map_markers.add(map_markers.get(0));
-                pathOverlay.addPoint(map_markers.get(0).getPosition());
-                mapView.invalidate();
-                polygon_connection= true;
-                polygon_button.setVisibility(View.GONE);
-                mapView.getOverlays().remove(OverlayEventos);
-            }else{
-                showPolyonErrorDialog();
-            }
-        }
-
-    }
     private void overlayIntentPolygon(String str){
         clear_button.setVisibility(View.VISIBLE);
         clear_button_test = true;
         String s = str.replace("; ",";");
         String[] sa = s.split(";");
-        for (int i=0;i<(sa.length -1);i++){
+        for (int i=0;i<(sa.length);i++){
             String[] sp = sa[i].split(" ");
             double gp[] = new double[4];
             String lat = sp[0].replace(" ", "");
@@ -257,15 +236,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void setGPSStatus(){
-        if(gpsStatus ==false){
-            upMyLocationOverlayLayers();
-            //enableMyLocation();
-            //zoomToMyLocation();
-            gpsStatus = true;
-        }else{
-            disableMyLocation();
-            gpsStatus = false;
-        }
+        upMyLocationOverlayLayers();
     }
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -293,7 +264,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                                 //startActivity(callGPSSettingIntent);
                             }
                         });
-        alertDialogBuilder.setNegativeButton("Cancel",
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
                 new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         dialog.cancel();
@@ -323,17 +294,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void zoomToMyLocation(){
         if (mMyLocationOverlay.getMyLocation()!= null){
-            if (zoom_level ==3){
-                mapView.getController().setZoom(15);
-            }else{
-                mapView.getController().setZoom(zoom_level);
-            }
+            mapView.getController().setZoom(15);
             mapView.getController().setCenter(mMyLocationOverlay.getMyLocation());
-            //mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
-        }else{
-            mapView.getController().setZoom(zoom_level);
         }
-
     }
 
     private void disableMyLocation(){
@@ -367,13 +330,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         map_markers.clear();
         pathOverlay.clearPath();
         mapView.getOverlays().clear();
-        polygon_button.setVisibility(View.VISIBLE);
         clear_button.setVisibility(View.GONE);
-        if(gpsStatus){
-            upMyLocationOverlayLayers();
-
-        }
         overlayPointPathListner();
+        overlayMyLocationLayers();
         mapView.invalidate();
 
     }
@@ -424,12 +383,27 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         setResult(RESULT_OK, i);
         finish();
     }
+    private void buildPolygon(){
+        if (polygon_connection){
+            showClearDialog();
+        }else{
+            if (map_markers.size()>2){
+                //map_markers.add(map_markers.get(0));
+                pathOverlay.addPoint(map_markers.get(0).getPosition());
+                mapView.invalidate();
+                mapView.getOverlays().remove(OverlayEventos);
+            }else{
+                showPolyonErrorDialog();
+            }
+        }
 
+    }
     private void update_polygon(){
         pathOverlay.clearPath();
         for (int i =0;i<map_markers.size();i++){
             pathOverlay.addPoint(map_markers.get(i).getPosition());
         }
+        pathOverlay.addPoint(map_markers.get(0).getPosition());
         mapView.invalidate();
     }
 
@@ -451,6 +425,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setOnMarkerDragListener(draglistner);
             mapView.getOverlays().add(marker);
             pathOverlay.addPoint(marker.getPosition());
+            update_polygon();
             mapView.invalidate();
             return false;
         }
