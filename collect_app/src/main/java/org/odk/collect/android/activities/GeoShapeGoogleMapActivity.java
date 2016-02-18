@@ -133,8 +133,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-//        polygon_button = (Button) findViewById(R.id.polygon_button);
-//        polygon_button.setVisibility(View.GONE);
+
         clear_button = (Button) findViewById(R.id.clear);
         clear_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +187,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         mHelper.setBasemap();
         if (data_loaded){
             // turn of the GPS and Polygon button
-            polygon_button.setVisibility(View.GONE);
+//            polygon_button.setVisibility(View.GONE);
 
         }
         if (mGPSOn) {

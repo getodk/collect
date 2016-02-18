@@ -17,73 +17,61 @@
         android:gravity="right"
         android:paddingBottom="60dip">
 
-    <Button
-        android:text="Record Location Point"
-        android:id="@+id/manual_button"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:padding="15dp"
-        android:layout_margin="5dp"
+        <Button
+            android:text="Record Location Point"
+            android:id="@+id/manual_button"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:visibility="gone"
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:drawableRight="@drawable/distance"
+            />
 
-        android:textColor="#005229"
-        android:textStyle="bold"
-        android:drawableRight="@drawable/distance"
-        />
+        <Button
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:drawableRight="@drawable/play_button" />
 
-    <Button
-        android:id="@+id/geotrace_play_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:drawableRight="@drawable/play_button" />
 
         <!-- android:visibility="gone"-->
+        <Button
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            android:drawableRight="@drawable/pause_button" />
 
-    <Button
-        android:id="@+id/geotrace_pause_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:drawableRight="@drawable/pause_button" />
-    <Button
-        android:id="@+id/geotrace_polygon_button"
-        android:layout_below="@+id/geotrace_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            android:drawableRight="@drawable/ic_menu_refresh" />
 
-        android:layout_alignParentRight="true"
+        <Button
+            android:id="@+id/layers"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:drawableRight="@drawable/layers" />
 
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:drawableRight="@drawable/polygon" />
-    <Button
-        android:id="@+id/clear"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:visibility="gone"
-        android:drawableRight="@drawable/ic_menu_refresh" />
-
-    <Button
-        android:id="@+id/layers"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:drawableRight="@drawable/layers" />
-
-    <Button
-        android:id="@+id/geotrace_save"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:drawableRight="@drawable/ic_menu_save" />
-
-
+        <Button
+            android:id="@+id/geotrace_save"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:drawableRight="@drawable/ic_menu_save" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -62,7 +62,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	public MyLocationNewOverlay mMyLocationOverlay;
 	private Button play_button;
 	private Button save_button;
-	public Button polygon_button;
 	public Button layers_button;
 	public Button clear_button;
 	public Button layers;
@@ -133,7 +132,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 		progress.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				play_button.setCompoundDrawables( null, null, getResources().getDrawable(R.drawable.ic_menu_mylocation), null );
+				play_button.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.ic_menu_mylocation), null);
 			}
 		});
 
@@ -156,26 +155,12 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 			}
 		});
 
-		polygon_button = (Button) findViewById(R.id.geotrace_polygon_button);
-		polygon_button.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-//				if (map_markers.size()>2){
-//					openPolygonDialog();
-//				}else{
-//					showPolyonErrorDialog();
-//				}
-
-			}
-		});
 		save_button= (Button) findViewById(R.id.geotrace_save);
 		save_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				p_alert.show();
-
 			}
 		});
 		manual_button = (Button)findViewById(R.id.manual_button);
@@ -183,11 +168,10 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 			@Override
 			public void onClick(View v) {
 				addLocationMarker();
-
 			}
 		});
-		pause_button =(Button)findViewById(R.id.geotrace_pause_button);
-		play_button = (Button)findViewById(R.id.geotrace_play_button);
+		pause_button =(Button)findViewById(R.id.pause);
+		play_button = (Button)findViewById(R.id.play);
 		beenPaused =false;
 		TRACE_MODE = 1;
 		play_button.setOnClickListener(new View.OnClickListener() {
@@ -551,7 +535,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 
 		p_builder = new AlertDialog.Builder(this);
-		p_builder.setTitle("Select Polygon/Polyline");
+		p_builder.setTitle(getString(R.string.polyline_polygon_text));
 //		p_builder.setMessage(getString(R.string.polygon_conection_message));
 		p_builder.setView(polygonPolylineView)
 				// Add action buttons

@@ -127,7 +127,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		mMap.setMyLocationEnabled(true);
 		mMap.setOnMapLongClickListener(this);
 		mMap.setOnMarkerDragListener(this);
-		mMap.getUiSettings().setZoomControlsEnabled(false);
+		mMap.getUiSettings().setZoomControlsEnabled(true);
 		mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 		polylineOptions = new PolylineOptions();
@@ -172,7 +172,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
 		time_delay.setSelection(3);
 		time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-		pause_button =(Button)findViewById(R.id.geotrace_pause_button);
+		pause_button =(Button)findViewById(R.id.pause);
 		pause_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -208,7 +208,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
 			}
 		});
-		play_button = (Button)findViewById(R.id.geotrace_play_button);
+		play_button = (Button)findViewById(R.id.play);
 		play_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -321,7 +321,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 		clear_button_test = true;
 		String s = str.replace("; ",";");
 		String[] sa = s.split(";");
-		for (int i=0;i<(sa.length -1 );i++){
+		for (int i=0;i<(sa.length );i++){
 			String[] sp = sa[i].split(" ");
 			double gp[] = new double[4];
 			String lat = sp[0].replace(" ", "");
