@@ -416,8 +416,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 						mMap.invalidate();
 
 					} else {
-						mMap.getController().animateTo(mLatLng);
-						mMap.getController().setZoom(mMap.getZoomLevel());
+						//mMap.getController().animateTo(mLatLng);
+						//mMap.getController().setZoom(mMap.getZoomLevel());
 
 					}
 

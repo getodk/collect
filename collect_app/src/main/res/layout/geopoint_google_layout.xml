@@ -35,62 +35,62 @@
 
 	</LinearLayout>
 	<LinearLayout
-			android:orientation="vertical"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:gravity="right"
-			android:paddingTop="40dip"
-			android:paddingBottom="60dip">
-			<Button
-				android:id="@+id/cancel_location"
-				android:drawableRight="@+drawable/ic_menu_close_clear_cancel"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1" />
-			<Button
-				android:id="@+id/accept_location"
-				android:drawableRight="@+drawable/ic_menu_save"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1" />
-			<Button
-				android:id="@+id/reload_location"
-				android:drawableRight="@+drawable/ic_menu_refresh"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1" />
-						<Button
-				android:id="@+id/show_location"
-				android:drawableRight="@drawable/ic_menu_mylocation"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1"
-				android:visibility="gone" />
-			<Button
-				android:id="@+id/refresh_location"
-				android:drawableRight="@+drawable/ic_menu_refresh"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1"
-				android:visibility="gone" />
-			<Button
-				android:id="@+id/layer_menu"
-				android:drawableRight="@+drawable/layers"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1"
-				android:visibility="visible" />
-		</LinearLayout>
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right"
+		android:paddingTop="40dip"
+		android:paddingBottom="60dip">
+		<Button
+			android:id="@+id/show_location"
+			android:drawableRight="@drawable/ic_menu_mylocation"
+			android:padding="15dp"
+			android:layout_margin="5dp"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"/>
+		<Button
+			android:id="@+id/cancel_location"
+			android:drawableRight="@+drawable/ic_menu_close_clear_cancel"
+			android:padding="15dp"
+			android:layout_margin="5dp"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1" />
+
+		<Button
+			android:id="@+id/reload_location"
+			android:drawableRight="@+drawable/ic_menu_refresh"
+			android:padding="15dp"
+			android:layout_margin="5dp"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1" />
+		<Button
+			android:id="@+id/refresh_location"
+			android:drawableRight="@+drawable/ic_menu_refresh"
+			android:padding="15dp"
+			android:layout_margin="5dp"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"
+			android:visibility="gone" />
+		<Button
+			android:id="@+id/layer_menu"
+			android:drawableRight="@+drawable/layers"
+			android:padding="15dp"
+			android:layout_margin="5dp"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"
+			android:visibility="visible" />
+		<Button
+			android:id="@+id/accept_location"
+			android:drawableRight="@+drawable/ic_menu_save"
+			android:padding="15dp"
+			android:layout_margin="5dp"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1" />
+	</LinearLayout>
 </FrameLayout>

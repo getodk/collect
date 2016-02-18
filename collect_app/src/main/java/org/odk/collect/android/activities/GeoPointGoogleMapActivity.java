@@ -386,9 +386,9 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 							mLocation.getLongitude());
 					if ( !mZoomed ) {
 						mZoomed = true;
-						mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
+						//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
 					} else {
-						mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
+						//mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
 					}
 
 					if (mMarker == null) {

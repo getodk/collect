@@ -20,14 +20,6 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 
-		<!-- For Google Maps-->
-
-		<!--<fragment-->
-        	<!--android:id="@+id/gmap"-->
-        	<!--android:layout_width="fill_parent"-->
-        	<!--android:layout_height="fill_parent"-->
-        	<!--class="com.google.android.gms.maps.SupportMapFragment" />-->
-
 		<org.osmdroid.views.MapView
 			android:id="@+id/omap"
 			android:layout_width="fill_parent"
@@ -40,8 +32,16 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:gravity="right"
-			android:paddingTop="40dip"
+			android:paddingTop="20dip"
 			android:paddingBottom="60dip">
+			<Button
+				android:id="@+id/show_location"
+				android:drawableRight="@drawable/ic_menu_mylocation"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"/>
 			<Button
 				android:id="@+id/cancel_location"
 				android:drawableRight="@+drawable/ic_menu_close_clear_cancel"
@@ -50,14 +50,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
 				android:layout_weight="1" />
-			<Button
-				android:id="@+id/accept_location"
-				android:drawableRight="@+drawable/ic_menu_save"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1" />
+
 			<Button
 				android:id="@+id/reload_location"
 				android:drawableRight="@+drawable/ic_menu_refresh"
@@ -66,15 +59,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
 				android:layout_weight="1" />
-						<Button
-				android:id="@+id/show_location"
-				android:drawableRight="@drawable/ic_menu_mylocation"
-				android:padding="15dp"
-				android:layout_margin="5dp"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_weight="1"
-				android:visibility="gone" />
 			<Button
 				android:id="@+id/refresh_location"
 				android:drawableRight="@+drawable/ic_menu_refresh"
@@ -93,5 +77,13 @@
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
 				android:visibility="visible" />
+			<Button
+				android:id="@+id/accept_location"
+				android:drawableRight="@+drawable/ic_menu_save"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1" />
 		</LinearLayout>
 </FrameLayout>

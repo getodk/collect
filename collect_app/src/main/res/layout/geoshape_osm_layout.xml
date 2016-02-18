@@ -25,6 +25,14 @@
             android:drawableRight="@drawable/ic_menu_mylocation"
             android:layout_weight="1" />
         <Button
+            android:id="@+id/cancel_location"
+            android:drawableRight="@+drawable/ic_menu_close_clear_cancel"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
+        <Button
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -42,7 +50,7 @@
             android:drawableRight="@drawable/ic_menu_refresh"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/geoshape_Button"
+            android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:padding="15dp"
