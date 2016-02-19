@@ -47,7 +47,6 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 import java.text.DecimalFormat;
 import java.util.List;
 
-
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
@@ -55,19 +54,24 @@ import java.util.List;
  * @author guisalmon@gmail.com
  *
  */
-public class GeoPointGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
+public class GeoPointMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 
 	private static final String LOCATION_COUNT = "locationCount";
+
 	private GoogleMap mMap;
 	private MarkerOptions mMarkerOption;
 	private Marker mMarker;
 	private LatLng mLatLng;
+
 	private TextView mLocationStatus;
+
 	private LocationManager mLocationManager;
+
 	private Location mLocation;
 	private Button mAcceptLocation;
 	private Button mCancelLocation;
 	private Button mReloadLocation;
+
 	private boolean mCaptureLocation = true;
 	private boolean mRefreshLocation = true;
 	private boolean mIsDragged = false;
@@ -75,27 +79,26 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 	private Button mLayers;
 	private boolean mGPSOn = false;
 	private boolean mNetworkOn = false;
+
 	private double mLocationAccuracy;
 	private int mLocationCount = 0;
+
 	private boolean mZoomed = false;
 	private MapHelper mHelper;
 //	private KmlLayer kk;
 
-	
-
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Kick Starting the MapHelper Class
 
 		if ( savedInstanceState != null ) {
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
 		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		try {
-			setContentView(R.layout.geopoint_google_layout);
+			setContentView(R.layout.geopoint_layout);
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
@@ -122,14 +125,12 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
         /* Set up the map and the marker */
 		mMarkerOption = new MarkerOptions();
 
-
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
 
 		/*Zoom only if there's a previous location*/
 		if (mLatLng != null){
 			mLocationStatus.setVisibility(View.GONE);
 			mMarkerOption.position(mLatLng);
-
 			mRefreshLocation = false; // just show this position; don't change it...
 			mZoomed = true;
 		}
@@ -157,7 +158,6 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 				mNetworkOn = true;
 			}
 		}
-
 		if (!mGPSOn && !mNetworkOn) {
 			Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
 					Toast.LENGTH_SHORT).show();
@@ -196,6 +196,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		mAcceptLocation = (Button) findViewById(R.id.accept_location);
 		if (mCaptureLocation){
 			mAcceptLocation.setOnClickListener(new OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
 					Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
@@ -209,6 +210,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		mReloadLocation = (Button) findViewById(R.id.reload_location);
 		if (mCaptureLocation) {
 			mReloadLocation.setOnClickListener(new OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
 					mRefreshLocation = true;
@@ -216,11 +218,11 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 					mLocationStatus.setVisibility(View.VISIBLE);
 					if (mGPSOn) {
 						mLocationManager.requestLocationUpdates(
-								LocationManager.GPS_PROVIDER, 0, 0, GeoPointGoogleMapActivity.this);
+								LocationManager.GPS_PROVIDER, 0, 0, GeoPointMapActivity.this);
 					}
 					if (mNetworkOn) {
 						mLocationManager.requestLocationUpdates(
-								LocationManager.NETWORK_PROVIDER, 0, 0, GeoPointGoogleMapActivity.this);
+								LocationManager.NETWORK_PROVIDER, 0, 0, GeoPointMapActivity.this);
 					}
 				}
 
@@ -316,15 +318,9 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 		super.onResume();
 
 		if ( mMap == null ) {
-			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
+			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			mHelper = new MapHelper(this,mMap);
 			mHelper.setBasemap();
-//			try{
-//				GeoJsonLayer gjson = new GeoJsonLayer(mMap,R.raw.unitedstates,getBaseContext());
-//				gjson.addLayerToMap();
-//			}catch (Exception e){
-//				Log.e("Cant Load GeoJSON", e.toString());
-//			}
 
 			if ( mMap == null ) {
 				Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
@@ -386,11 +382,13 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 							mLocation.getLongitude());
 					if ( !mZoomed ) {
 						mZoomed = true;
-						//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
+						mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
 					} else {
-						//mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
+						mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
 					}
 
+					// create a marker on the map or move the existing marker to the
+					// new location
 					if (mMarker == null) {
 						mMarkerOption.position(mLatLng);
 						mMarker = mMap.addMarker(mMarkerOption);
@@ -399,10 +397,11 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
 						mMarker.setPosition(mLatLng);
 					}
 
+					//If location is accurate enough, stop updating position and make the marker draggable
 					if (mLocation.getAccuracy() <= mLocationAccuracy) {
 						stopGeolocating();
 					}
-//					KmlLayer layer = new KmlLayer(mMap, spfile, this);
+
 
 
 				}

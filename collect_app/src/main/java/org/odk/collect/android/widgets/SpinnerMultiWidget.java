@@ -17,6 +17,9 @@ package org.odk.collect.android.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -175,9 +178,11 @@ public class SpinnerMultiWidget extends QuestionWidget {
             }
         }
 
-        addView(button);
-        addView(selectionText);
-
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(button);
+        answerLayout.addView(selectionText);
+        addAnswerView(answerLayout);
     }
 
 

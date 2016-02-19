@@ -17,6 +17,8 @@ package org.odk.collect.android.widgets;
 import java.io.File;
 import java.util.Date;
 
+import android.view.*;
+import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -35,18 +37,9 @@ import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -131,8 +124,6 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();
-
-		setOrientation(LinearLayout.VERTICAL);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
@@ -231,9 +222,11 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 		});
 
 		// finish complex layout
-		addView(mCaptureButton);
-		addView(mChooseButton);
-		addView(mErrorTextView);
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(mCaptureButton);
+		answerLayout.addView(mChooseButton);
+		answerLayout.addView(mErrorTextView);
 
 		// and hide the capture and choose button if read-only
 		if (prompt.isReadOnly()) {
@@ -261,8 +254,9 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
 			mImageDisplay.loadDataWithBaseURL("file:///" + mInstanceFolder
 					+ File.separator, html, "text/html", "utf-8", "");
-			addView(mImageDisplay);
+			answerLayout.addView(mImageDisplay);
 		}
+		addAnswerView(answerLayout);
 	}
 
     private void deleteMedia() {

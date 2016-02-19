@@ -69,7 +69,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 	public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
 		// assemble the widget...
-		setOrientation(LinearLayout.VERTICAL);
+
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -84,38 +84,12 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 		mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mAnswerDisplay.setGravity(Gravity.CENTER);
 
-		// setup view-edit shape button
-		/*viewShapeButton = new Button(getContext());
-		viewShapeButton.setId(QuestionWidget.newUniqueId());
-		viewShapeButton.setText(getContext().getString(R.string.view_shape));
-		viewShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		viewShapeButton.setPadding(20, 20, 20, 20);
-		viewShapeButton.setLayoutParams(params);
-		
-		viewShapeButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-		});*/
-
-
-		// setup play button
 		createShapeButton = new Button(getContext());
 		createShapeButton.setId(QuestionWidget.newUniqueId());
 		createShapeButton.setText(getContext().getString(R.string.record_geoshape));
 		createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		createShapeButton.setPadding(20, 20, 20, 20);
 		createShapeButton.setLayoutParams(params);
-		// finish complex layout
-		// control what gets shown with setVisibility(View.GONE)
-		//addView(mGetLocationButton);
-		//mReadOnly = prompt.isReadOnly();
-
-
-		//Toast.makeText(getContext(), temp+" ", Toast.LENGTH_LONG).show();
 
 		createShapeButton.setOnClickListener(new OnClickListener() {
 
@@ -124,7 +98,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 				// TODO Auto-generated method stub
 				Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
 				Intent i = null;
-//				i = new Intent(getContext(), GeoShapeActivity.class);
 				if (mapSDK.equals(GOOGLE_MAP_KEY)){
 					i = new Intent(getContext(), GeoShapeGoogleMapActivity.class);
 				}else {
@@ -134,24 +107,23 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 				if ( s.length() != 0 ) {
 					i.putExtra(SHAPE_LOCATION, s);
 				}
-				//((Activity) getContext()).startActivity(i);
 				((Activity) getContext()).startActivityForResult(i,FormEntryActivity.GEOSHAPE_CAPTURE);
 			}
 		});
-		addView(createShapeButton);
-		addView(mAnswerDisplay);
+
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(createShapeButton);
+		answerLayout.addView(mAnswerDisplay);
+		addAnswerView(answerLayout);
 
 		boolean dataAvailable = false;
 		String s = prompt.getAnswerText();
 		if (s != null && !s.equals("")) {
-			//Toast.makeText(getContext(), prompt.getAnswerText()+" ", Toast.LENGTH_LONG).show();
 			dataAvailable = true;
 			setBinaryData(s);
 		}else{
-			//Toast.makeText(getContext(), "Nothing", Toast.LENGTH_LONG).show();
 		}
-		//addView(mStringAnswer);
-
 
 		updateButtonLabelsAndVisibility(dataAvailable);
 	}
@@ -159,7 +131,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
 	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
 		if (dataAvailable == true){
-			// There is already a shape recorded
 			createShapeButton.setText(getContext().getString(R.string.view_shape));
 		}else{
 			createShapeButton.setText(getContext().getString(R.string.record_geoshape));
@@ -169,13 +140,10 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 	@Override
 	public void setBinaryData(Object answer) {
 		// TODO Auto-generated method stub
-		//Toast.makeText(getContext(), answer.toString(), Toast.LENGTH_LONG).show();
 		String s = (String) answer.toString();
 		mStringAnswer.setText(s);
-		//mStringAnswer.setText(s);
 		mAnswerDisplay.setText(s);
 		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-		//updateButtonLabelsAndVisibility(true);
 	}
 
 	@Override
@@ -217,7 +185,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 					list.add(gp);
 				}
 				GeoShape shape = new GeoShape(list);
-				//return new GeoShapeData(shape);
 				return new StringData(s);
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block

@@ -102,7 +102,7 @@ public class StringWidget extends QuestionWidget {
             mAnswer.setClickable(false);
         }
 
-        addView(mAnswer);
+        addAnswerView(mAnswer);
     }
 
     protected void setupChangeListener() {

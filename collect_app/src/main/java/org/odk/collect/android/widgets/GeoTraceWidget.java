@@ -50,7 +50,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
 	public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
-		setOrientation(LinearLayout.VERTICAL);
+		LinearLayout layout = new LinearLayout(getContext());
+		layout.setOrientation(LinearLayout.VERTICAL);
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -72,39 +73,37 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 		createTraceButton.setLayoutParams(params);
 		
 		createTraceButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
 				Intent i = null;
-//				i = new Intent(getContext(), GeoTraceActivity.class);
-				if (mapSDK.equals(GOOGLE_MAP_KEY)){
+				if (mapSDK.equals(GOOGLE_MAP_KEY)) {
 					i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
-				}else {
+				} else {
 					i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
 				}
 				String s = mStringAnswer.getText().toString();
-				if ( s.length() != 0 ) {
+				if (s.length() != 0) {
 					i.putExtra(TRACE_LOCATION, s);
 				}
-				//((Activity) getContext()).startActivity(i);
-				((Activity) getContext()).startActivityForResult(i,FormEntryActivity.GEOTRACE_CAPTURE);
-				
+				((Activity) getContext()).startActivityForResult(i, FormEntryActivity.GEOTRACE_CAPTURE);
+
 			}
 		});
-		
-		addView(createTraceButton);
-		addView(mAnswerDisplay);
+		LinearLayout answerLayout = new LinearLayout(getContext());
+		answerLayout.setOrientation(LinearLayout.VERTICAL);
+		answerLayout.addView(createTraceButton);
+		answerLayout.addView(mAnswerDisplay);
+		addAnswerView(answerLayout);
 		
 		boolean dataAvailable = false;
 		String s = prompt.getAnswerText();
 		if (s != null && !s.equals("")) {
-			//Toast.makeText(getContext(), prompt.getAnswerText()+" ", Toast.LENGTH_LONG).show();
 			dataAvailable = true;
 			createTraceButton.setText(getContext().getString(R.string.view_trace));
 			setBinaryData(s);
 		}else{
-			//Toast.makeText(getContext(), "Nothing", Toast.LENGTH_LONG).show();
 		}
 		updateButtonLabelsAndVisibility(dataAvailable);
 		
@@ -118,7 +117,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 	public void setBinaryData(Object answer) {
 		String s = answer.toString();
 		mStringAnswer.setText(s);
-		//mStringAnswer.setText(s);
 		mAnswerDisplay.setText(s);
 		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
@@ -135,7 +133,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 		Boolean test = mPrompt.getIndex().equals(
 				Collect.getInstance().getFormController()
 						.getIndexWaitingForData());
-		//Toast.makeText(getContext(), test+" ", Toast.LENGTH_LONG).show();
 		return mPrompt.getIndex().equals(
 				Collect.getInstance().getFormController()
 				.getIndexWaitingForData());
@@ -158,10 +155,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 					gp[1] = Double.valueOf(sp[1]).doubleValue();
 					gp[2] = Double.valueOf(sp[2]).doubleValue();
 					gp[3] = Double.valueOf(sp[3]).doubleValue();
-					//list.add(gp);
 				}
-				//GeoShape shape = new GeoShape(list);
-				//return new GeoShapeData(shape);
 				return new StringData(s);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();

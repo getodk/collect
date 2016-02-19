@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.*;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -38,10 +39,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -74,6 +71,7 @@ public class ListMultiWidget extends QuestionWidget {
     private List<SelectChoice> mItems; // may take a while to compute...
 
     private ArrayList<CheckBox> mCheckboxes;
+    private View center;
 
 
     @SuppressWarnings("unchecked")
@@ -249,29 +247,20 @@ public class ListMultiWidget extends QuestionWidget {
 
                 // /Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
-                    new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-                            LayoutParams.WRAP_CONTENT);
+                    new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
 
                 buttonLayout.addView(answer, answerParams);
-
             }
         }
 
         // Align the buttons so that they appear horizonally and are right justified
-        // buttonLayout.setGravity(Gravity.RIGHT);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        // LinearLayout.LayoutParams params = new
-        // LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        // buttonLayout.setLayoutParams(params);
 
-        // The buttons take up the right half of the screen
-        LinearLayout.LayoutParams buttonParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        buttonParams.weight = 1;
-
-        questionLayout.addView(buttonLayout, buttonParams);
-        addView(questionLayout);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
+        addView(buttonLayout, params);
 
     }
 
@@ -338,11 +327,6 @@ public class ListMultiWidget extends QuestionWidget {
         LinearLayout.LayoutParams labelParams =
             new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         labelParams.weight = 1;
-
-        questionLayout = new LinearLayout(getContext());
-        questionLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        questionLayout.addView(questionText, labelParams);
     }
 
 
@@ -360,5 +344,18 @@ public class ListMultiWidget extends QuestionWidget {
         for (CheckBox c : mCheckboxes) {
             c.cancelLongPress();
         }
+    }
+
+    @Override
+    protected void addQuestionMediaLayout(View v) {
+        center = new View(getContext());
+        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
+        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        center.setId(QuestionWidget.newUniqueId());
+        addView(center, centerParams);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.LEFT_OF, center.getId());
+        addView(v, params);
     }
 }

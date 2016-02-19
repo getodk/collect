@@ -33,16 +33,27 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.views.MediaLayout;
 
-public abstract class QuestionWidget extends LinearLayout implements AudioPlayListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
 
     @SuppressWarnings("unused")
     private final static String t = "QuestionWidget";
@@ -58,15 +69,13 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
         return ++idGenerator;
     }
 
-    private LinearLayout.LayoutParams mLayout;
     protected FormEntryPrompt mPrompt;
 
     protected final int mQuestionFontsize;
     protected final int mAnswerFontsize;
 
-    private TextView mQuestionText;
-    private MediaLayout mediaLayout;
-    private TextView mHelpText;
+    private MediaLayout mQuestionMediaLayout;
+    private TextView mHelpTextView;
 
     protected MediaPlayer mPlayer;
 
@@ -80,7 +89,7 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
         mPlayer.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaLayout.resetTextFormatting();
+                mQuestionMediaLayout.resetTextFormatting();
                 mediaPlayer.reset();
             }
 
@@ -90,16 +99,44 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
 
         mPrompt = p;
 
-        setOrientation(LinearLayout.VERTICAL);
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        mLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        mLayout.setMargins(10, 0, 10, 0);
+        mQuestionMediaLayout = createQuestionMediaLayout(p);
+        mHelpTextView = createHelpText(p);
 
-        addQuestionText(p);
-        addHelpText(p);
+        addQuestionMediaLayout(mQuestionMediaLayout);
+        addHelpTextView(mHelpTextView);
+    }
+
+    private MediaLayout createQuestionMediaLayout(FormEntryPrompt p) {
+        String imageURI = p.getImageText();
+        String audioURI = p.getAudioText();
+        String videoURI = p.getSpecialFormQuestionText("video");
+
+        // shown when image is clicked
+        String bigImageURI = p.getSpecialFormQuestionText("big-image");
+
+        String promptText = p.getLongText();
+        // Add the text view. Textview always exists, regardless of whether there's text.
+        TextView questionText = new TextView(getContext());
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        questionText.setTypeface(null, Typeface.BOLD);
+        questionText.setPadding(0, 0, 0, 7);
+        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+
+        // Wrap to the size of the parent view
+        questionText.setHorizontallyScrolling(false);
+
+        if (promptText == null || promptText.length() == 0) {
+            questionText.setVisibility(GONE);
+        }
+
+        // Create the layout for audio, image, text
+        MediaLayout questionMediaLayout = new MediaLayout(getContext(), mPlayer);
+        questionMediaLayout.setId(QuestionWidget.newUniqueId()); // assign random id
+        questionMediaLayout.setAVT(p.getIndex(), "", questionText, audioURI, imageURI, videoURI, bigImageURI);
+        questionMediaLayout.setAudioListener(this);
 
         String playColorString = p.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -108,9 +145,9 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
-        } 
-        mediaLayout.setPlayTextColor(mPlayColor);
-        
+        }
+        questionMediaLayout.setPlayTextColor(mPlayColor);
+
         String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null, "playBackgroundColor");
         if (playBackgroundColorString != null) {
             try {
@@ -118,8 +155,18 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
-        } 
-        mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+        }
+        questionMediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+
+        return questionMediaLayout;
+    }
+
+    public MediaLayout getQuestionMediaLayout() {
+        return mQuestionMediaLayout;
+    }
+
+    public TextView getHelpTextView () {
+        return mHelpTextView;
     }
 
     public void playAudio() {
@@ -127,11 +174,15 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
     }
 
     public void playVideo() {
-        mediaLayout.playVideo();
+        mQuestionMediaLayout.playVideo();
     }
 
     public FormEntryPrompt getPrompt() {
         return mPrompt;
+    }
+
+    public MediaLayout getQuestionMediaView () {
+        return mQuestionMediaLayout;
     }
 
     // http://code.google.com/p/android/issues/detail?id=8488
@@ -194,58 +245,86 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
      * To satisfy the RelativeLayout constraints, we add the audio first if it exists, then the
      * TextView to fit the rest of the space, then the image if applicable.
      */
-    protected void addQuestionText(FormEntryPrompt p) {
-        String imageURI = p.getImageText();
-        String audioURI = p.getAudioText();
-        String videoURI = p.getSpecialFormQuestionText("video");
-
-        // shown when image is clicked
-        String bigImageURI = p.getSpecialFormQuestionText("big-image");
-
-        String promptText = p.getLongText();
-        // Add the text view. Textview always exists, regardless of whether there's text.
-        mQuestionText = new TextView(getContext());
-        mQuestionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
-        mQuestionText.setTypeface(null, Typeface.BOLD);
-        mQuestionText.setPadding(0, 0, 0, 7);
-        mQuestionText.setId(QuestionWidget.newUniqueId()); // assign random id
-        mQuestionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
-        mQuestionText.setMovementMethod(LinkMovementMethod.getInstance());
-
-        // Wrap to the size of the parent view
-        mQuestionText.setHorizontallyScrolling(false);
-
-        if (promptText == null || promptText.length() == 0) {
-            mQuestionText.setVisibility(GONE);
-        }
-
-        // Create the layout for audio, image, text
-        mediaLayout = new MediaLayout(getContext(), mPlayer);
-        mediaLayout.setAVT(p.getIndex(), "", mQuestionText, audioURI, imageURI, videoURI, bigImageURI);
-        mediaLayout.setAudioListener(this);
-
-        addView(mediaLayout, mLayout);
-    }
 
     /**
-     * Add a TextView containing the help text.
+     * Defaults to adding questionlayout to the top of the screen.
+     * Overwrite to reposition.
      */
-    private void addHelpText(FormEntryPrompt p) {
+    protected void addQuestionMediaLayout(View v) {
+        if (v == null) {
+            Log.e(t, "cannot add a null view as questionMediaLayout");
+            return;
+        }
+            // default for questionmedialayout
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        params.setMargins(10, 0, 10, 0);
+        addView(v, params);
+    }
 
+
+
+    /**
+     * Add a TextView containing the help text to the default location.
+     * Override to reposition.
+     */
+    protected void addHelpTextView(View v) {
+        if (v == null) {
+            Log.e(t, "cannot add a null view as helpTextView");
+            return;
+        }
+
+        // default for helptext
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.BELOW, mQuestionMediaLayout.getId());
+        params.setMargins(10, 0, 10, 0);
+        addView(v, params);
+    }
+
+    private TextView createHelpText(FormEntryPrompt p) {
+        TextView helpText = new TextView(getContext());
         String s = p.getHelpText();
 
         if (s != null && !s.equals("")) {
-            mHelpText = new TextView(getContext());
-            mHelpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize - 3);
-            mHelpText.setPadding(0, -5, 0, 7);
+            helpText.setId(QuestionWidget.newUniqueId());
+            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize - 3);
+            helpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
-            mHelpText.setHorizontallyScrolling(false);
-            mHelpText.setTypeface(null, Typeface.ITALIC);
-            mHelpText.setText(TextUtils.textToHtml(s));
-            mHelpText.setMovementMethod(LinkMovementMethod.getInstance());
-
-            addView(mHelpText, mLayout);
+            helpText.setHorizontallyScrolling(false);
+            helpText.setTypeface(null, Typeface.ITALIC);
+            helpText.setText(TextUtils.textToHtml(s));
+            helpText.setMovementMethod(LinkMovementMethod.getInstance());
+            return helpText;
+        } else {
+            helpText.setVisibility(View.GONE);
+            return helpText;
         }
+    }
+
+    /**
+     * Default place to put the answer
+     * (below the help text or question text if there is no help text)
+     * If you have many elements, use this first
+     * and use the standard addView(view, params) to place the rest
+     * @param v
+     */
+    protected void addAnswerView(View v) {
+        if (v == null) {
+            Log.e(t, "cannot add a null view as an answerView");
+            return;
+        }
+            // default place to add answer
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        if (mHelpTextView.getVisibility() == View.VISIBLE) {
+            params.addRule(RelativeLayout.BELOW, mHelpTextView.getId());
+        } else {
+            params.addRule(RelativeLayout.BELOW, mQuestionMediaLayout.getId());
+        }
+        params.setMargins(10, 0, 10, 0);
+        addView(v, params);
     }
 
     /**
@@ -254,11 +333,11 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (mQuestionText != null) {
-            mQuestionText.cancelLongPress();
+        if (mQuestionMediaLayout != null) {
+            mQuestionMediaLayout.cancelLongPress();
         }
-        if (mHelpText != null) {
-            mHelpText.cancelLongPress();
+        if (mHelpTextView != null) {
+            mHelpTextView.cancelLongPress();
         }
     }
 
@@ -266,27 +345,31 @@ public abstract class QuestionWidget extends LinearLayout implements AudioPlayLi
      * Prompts with items must override this
      */
     public void playAllPromptText() {
-        mediaLayout.playAudio();
+        mQuestionMediaLayout.playAudio();
     }
 
     public void setQuestionTextColor(int color) {
-        mediaLayout.setTextcolor(color);
+        mQuestionMediaLayout.setTextcolor(color);
     }
 
     public void resetQuestionTextColor() {
-        mediaLayout.resetTextFormatting();
+        mQuestionMediaLayout.resetTextFormatting();
     }
 
     @Override
     protected void onWindowVisibilityChanged (int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
-            mPlayer.stop();
-            mPlayer.reset();
+            if (mPlayer.isPlaying()) {
+                mPlayer.stop();
+                mPlayer.reset();
+            }
         }
     }
     
     public void stopAudio() {
-        mPlayer.stop();
-        mPlayer.reset();
+        if (mPlayer.isPlaying()) {
+            mPlayer.stop();
+            mPlayer.reset();
+        }
     }
 }

@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.res.Resources;
+import android.widget.*;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -27,11 +28,6 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CalendarView;
-import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import android.widget.TimePicker;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
@@ -118,17 +114,20 @@ public class DateTimeWidget extends QuestionWidget {
 		});
 
         setGravity(Gravity.LEFT);
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
         if ( showCalendar ) {
         	scrollView = new HorizontalScrollView(context);
         	LinearLayout ll = new LinearLayout(context);
         	ll.addView(mDatePicker);
         	ll.setPadding(10, 10, 10, 10);
         	scrollView.addView(ll);
-        	addView(scrollView);
+            answerLayout.addView(scrollView);
         } else {
-        	addView(mDatePicker);
+            answerLayout.addView(mDatePicker);
         }
-        addView(mTimePicker);
+        answerLayout.addView(mTimePicker);
+        addAnswerView(answerLayout);
 
         // If there's an answer, use it.
         setAnswer();

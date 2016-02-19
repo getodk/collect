@@ -102,9 +102,9 @@ public class DateWidget extends QuestionWidget {
         	ll.addView(mDatePicker);
         	ll.setPadding(10, 10, 10, 10);
         	scrollView.addView(ll);
-        	addView(scrollView);
+        	addAnswerView(scrollView);
         } else {
-        	addView(mDatePicker);
+            addAnswerView(mDatePicker);
         }
 
         // If there's an answer, use it.

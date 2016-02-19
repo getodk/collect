@@ -52,8 +52,6 @@ public class TriggerWidget extends QuestionWidget {
         super(context, prompt);
         mPrompt = prompt;
 
-        this.setOrientation(LinearLayout.VERTICAL);
-
         mTriggerButton = new CheckBox(getContext());
         mTriggerButton.setId(QuestionWidget.newUniqueId());
         mTriggerButton.setText(getContext().getString(R.string.trigger));
@@ -93,8 +91,7 @@ public class TriggerWidget extends QuestionWidget {
         }
 
         // finish complex layout
-        this.addView(mTriggerButton);
-        // this.addView(mStringAnswer);
+        addAnswerView(mTriggerButton);
     }
 
 

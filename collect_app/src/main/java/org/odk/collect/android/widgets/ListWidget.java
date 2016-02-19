@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.*;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -38,10 +39,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -72,6 +69,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     List<SelectChoice> mItems; // may take a while to compute
     
     ArrayList<RadioButton> buttons;
+    View center;
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
@@ -192,15 +190,16 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 }
 
                 // answer layout holds the label text/image on top and the radio button on bottom
-                RelativeLayout answer = new RelativeLayout(getContext());
-                RelativeLayout.LayoutParams headerParams =
-                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                headerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                
-                RelativeLayout.LayoutParams buttonParams =
-                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                LinearLayout answer = new LinearLayout(getContext());
+                answer.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams headerParams =
+                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                headerParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+
+                LinearLayout.LayoutParams buttonParams =
+                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
 
                 if (mImageView != null) {
                 	mImageView.setScaleType(ScaleType.CENTER);
@@ -217,40 +216,25 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                     }
 
                 }
-                if ( displayLabel ) {
-                	buttonParams.addRule(RelativeLayout.BELOW, labelId );
-                }
                 answer.addView(r, buttonParams);
                 answer.setPadding(4, 0, 4, 0);
 
                 // Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
-                    new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-                            LayoutParams.WRAP_CONTENT);
+                    new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
 
                 buttonLayout.addView(answer, answerParams);
-
             }
         }
 
-        // Align the buttons so that they appear horizonally and are right justified
-        // buttonLayout.setGravity(Gravity.RIGHT);
+
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        // LinearLayout.LayoutParams params = new
-        // LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        // buttonLayout.setLayoutParams(params);
 
-        // The buttons take up the right half of the screen
-        LinearLayout.LayoutParams buttonParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        buttonParams.weight = 1;
-
-        // questionLayout is created and populated with the question text in the
-        // super() constructor via a call to addQuestionText
-        questionLayout.addView(buttonLayout, buttonParams);
-        addView(questionLayout);
-
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
+        addView(buttonLayout, params);
     }
 
 
@@ -314,37 +298,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     }
 
 
-    // Override QuestionWidget's add question text. Build it the same
-    // but add it to the relative layout
-    protected void addQuestionText(FormEntryPrompt p) {
-
-        // Add the text view. Textview always exists, regardless of whether there's text.
-        TextView questionText = new TextView(getContext());
-        questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
-        questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(QuestionWidget.newUniqueId()); // assign random id
-
-        // Wrap to the size of the parent view
-        questionText.setHorizontallyScrolling(false);
-
-        if (p.getLongText() == null) {
-            questionText.setVisibility(GONE);
-        }
-
-        // Put the question text on the left half of the screen
-        LinearLayout.LayoutParams labelParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        labelParams.weight = 1;
-
-        questionLayout = new LinearLayout(getContext());
-        questionLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        questionLayout.addView(questionText, labelParams);
-    }
-
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         for (RadioButton r : buttons) {
@@ -361,4 +314,16 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         }
     }
 
+    @Override
+    protected void addQuestionMediaLayout(View v) {
+        center = new View(getContext());
+        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
+        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        center.setId(QuestionWidget.newUniqueId());
+        addView(center, centerParams);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.LEFT_OF, center.getId());
+        addView(v, params);
+    }
 }
