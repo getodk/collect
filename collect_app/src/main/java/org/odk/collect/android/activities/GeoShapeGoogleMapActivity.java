@@ -143,7 +143,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        return_button = (Button) findViewById(R.id.geoshape_Button);
+        return_button = (Button) findViewById(R.id.save);
         return_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

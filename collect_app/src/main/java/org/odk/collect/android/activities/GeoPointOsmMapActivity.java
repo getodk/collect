@@ -29,7 +29,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
@@ -46,14 +45,6 @@ import org.osmdroid.views.MapView;
 import java.text.DecimalFormat;
 import java.util.List;
 
-//import com.google.android.gms.maps.CameraUpdateFactory;
-//import com.google.android.gms.maps.GoogleMap;
-//import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-//import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-//import com.google.android.gms.maps.SupportMapFragment;
-//import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.maps.model.Marker;
-//import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, MapEventsReceiver ,IRegisterReceiver {
@@ -126,6 +117,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		mMap.setBuiltInZoomControls(true);
 		mMarker = new Marker(mMap);
 		mMarker.setDraggable(true);
+		mMarker.setIcon(getResources().getDrawable(R.drawable.map_marker));
 		mMarker.setOnMarkerDragListener(this);
 		overlayEventos = new MapEventsOverlay(getBaseContext(), this);
 
@@ -330,13 +322,15 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	}
 
 	private void zoomTo(){
-		handler.postDelayed(new Runnable() {
-			public void run() {
-				mMap.getController().setZoom(16);
-				mMap.getController().setCenter(mLatLng);
-				mMap.invalidate();
-			}
-		}, 200);
+		if(mLatLng != null) {
+			handler.postDelayed(new Runnable() {
+				public void run() {
+					mMap.getController().setZoom(16);
+					mMap.getController().setCenter(mLatLng);
+					mMap.invalidate();
+				}
+			}, 200);
+		}
 
 	}
 	
@@ -467,9 +461,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		mIsDragged = true;
 		mMap.getController().animateTo(mLatLng);
 		mMap.getController().setZoom(mMap.getZoomLevel());
-
-
-
 		//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, mMap.getCameraPosition().zoom));
 	}
 
@@ -503,6 +494,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 		}
 		mMap.invalidate();
 		mMarker.setPosition(geoPoint);
+		mMarker.setIcon(getResources().getDrawable(R.drawable.map_marker));
 		mMarker.setDraggable(true);
 		mLatLng=geoPoint;
 		mIsDragged = true;

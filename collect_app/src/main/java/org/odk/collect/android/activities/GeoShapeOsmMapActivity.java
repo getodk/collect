@@ -89,7 +89,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-        return_button = (Button) findViewById(R.id.geoshape_Button);
+        return_button = (Button) findViewById(R.id.save);
         clear_button = (Button) findViewById(R.id.clear);
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView)findViewById(R.id.geoshape_mapview);
