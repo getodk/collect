@@ -25,10 +25,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -55,7 +58,6 @@ import java.util.List;
  * specifying a location via placing a tracker on a map.
  *
  * @author jonnordling@gmail.com
- * @date 12/12/15
  *
  */
 
@@ -85,13 +87,21 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean data_loaded = false;
     private Boolean clear_button_test;
     private MapHelper mHelper;
+    private AlertDialog zoomDialog;
+    private View zoomDialogView;
+    private Button zoomPointButton;
+    private Button zoomLocationButton;
+    private Boolean foundFirstLocation = false;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.geoshape_google_layout);
+
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMap();
@@ -100,7 +110,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
 
@@ -116,21 +127,19 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-
-        // If there is a last know location go there
-        if(curLocation !=null){
-            curlatLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
-            initZoom = true;
+        if(!mGPSOn & !mNetworkOn){
+            showGPSDisabledAlertToUser();
         }
 
         gps_button = (Button)findViewById(R.id.gps);
-        gps_button.setOnClickListener(new View.OnClickListener(){
+        gps_button.setEnabled(false);
+        gps_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                if(curLocation !=null){
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
-                }
+            public void onClick(View v) {
+//                if(curLocation !=null){
+//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
+//                }
+                showZoomDialog();
             }
         });
 
@@ -151,15 +160,18 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
+
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             if ( intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION) ) {
                 data_loaded =true;
+                clear_button.setEnabled(true);
                 String s = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
+                gps_button.setEnabled(true);
                 overlayIntentPolygon(s);
-                zoomToCentroid();
             }
         }
+
 
         layers_button = (Button)findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +182,39 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
             }
         });
+
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+
+        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(curLocation !=null){
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,17));
+                }
+                zoomDialog.dismiss();
+            }
+        });
+
+        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+//                zoomToCentroid();
+                zoomtoBounds();
+                zoomDialog.dismiss();
+            }
+        });
+        // If there is a last know location go there
+        if(curLocation !=null){
+            curlatLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
+            foundFirstLocation = true;
+            initZoom = true;
+            gps_button.setEnabled(true);
+            showZoomDialog();
+        }
 
     }
 
@@ -185,17 +230,32 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     protected void onResume() {
         super.onResume();
         mHelper.setBasemap();
-        if (data_loaded){
-            // turn of the GPS and Polygon button
-//            polygon_button.setVisibility(View.GONE);
+        List<String> providers = mLocationManager.getProviders(true);
 
+        for (String provider : providers) {
+            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
+                mGPSOn = true;
+                curLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+//                gps_button.setEnabled(true);
+            }
+            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+                mNetworkOn = true;
+                curLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+//                gps_button.setEnabled(true);
+            }
         }
+
         if (mGPSOn) {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+//            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            gps_button.setEnabled(true);
         }
         if (mNetworkOn) {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            gps_button.setEnabled(true);
         }
+
     }
     @Override
     protected void onStart() {
@@ -209,10 +269,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     	super.onStop();
     }
 
-    private void stopGeolocating() {
-        // Inititated on pause to stop geoLocations
-
-    }
 
     private void returnLocation(){
         final_return_string = generateReturnString();
@@ -226,7 +282,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     private void overlayIntentPolygon(String str){
         mMap.setOnMapLongClickListener(null);
-        clear_button.setVisibility(View.VISIBLE);
+        clear_button.setEnabled(true);
         clear_button_test = true;
         String s = str.replace("; ",";");
         String[] sa = s.split(";");
@@ -264,15 +320,19 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         return temp_string;
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
-
-        if(!initZoom){
-            LatLng mLatLng = new LatLng(location.getLatitude(),location.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,16));
-            initZoom = true;
+        // If there is a location allow for user to be able to fly there
+        gps_button.setEnabled(true);
+        curLocation = location;
+        curLocation = location;
+        curlatLng = new LatLng(curLocation.getLatitude(),curLocation.getLongitude());
+        if(!foundFirstLocation){
+            showZoomDialog();
+            foundFirstLocation = true;
         }
+
+
     }
 
     @Override
@@ -307,7 +367,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         markerArray.add(marker);
 
         if (polygon == null){
-            clear_button.setVisibility(View.VISIBLE);
+            clear_button.setEnabled(true);
             clear_button_test = true;
             polygonOptions.add(latLng);
             polygon = mMap.addPolygon(polygonOptions);
@@ -331,50 +391,26 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         update_polygon();
     }
 
-
-    private void zoomToCentroid(){
-
-        /*
-            Calculate Centroid of Polygon
-         */
-
-        Handler handler=new Handler();
-        Runnable r = new Runnable(){
+    private void zoomtoBounds(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             public void run() {
-                Integer size  = markerArray.size();
-                Double x_value = 0.0;
-                Double y_value = 0.0;
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                for(int i=0; i<size; i++){
-                    LatLng temp_marker = markerArray.get(i).getPosition();
-                    Double x_marker = temp_marker.latitude;
-                    Double y_marker = temp_marker.longitude;
-                    LatLng ll = new LatLng(x_marker,y_marker);
-                    builder.include(ll);
-                    x_value += x_marker;
-                    y_value += y_marker;
+                for (Marker marker : markerArray) {
+                    builder.include(marker.getPosition());
                 }
-
-                Double x_cord = x_value/size;
-                Double y_cord = y_value/size;
-                LatLng centroid = new LatLng(x_cord,y_cord);
                 LatLngBounds bounds = builder.build();
-                int width = getResources().getDisplayMetrics().widthPixels;
-                int height = getResources().getDisplayMetrics().heightPixels;
-
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,width, height,20));
-                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroid,16));
-
+                int padding = 200; // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mMap.animateCamera(cu);
             }
-        };
-
-        handler.post(r);
+        }, 100);
 
     }
+
+
     private void clearFeatures(){
-        // Clear all the features and listners
         mMap.clear();
-        clear_button.setVisibility(View.GONE);
         clear_button_test = false;
         polygon = null;
         polygonOptions = new PolygonOptions();
@@ -388,7 +424,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         builder.setMessage(getString(R.string.geo_clear_warning))
                 .setPositiveButton(getString(R.string.clear), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
                         clearFeatures();
                     }
                 })
@@ -399,5 +434,67 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                     }
                 }).show();
 
+    }
+
+    public void showZoomDialog() {
+        if (zoomDialog == null) {
+            AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
+            p_builder.setTitle(getString(R.string.fly_to_where));
+            p_builder.setView(zoomDialogView)
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.cancel();
+                            zoomDialog.dismiss();
+                        }
+                    });
+            zoomDialog = p_builder.create();
+        }
+
+        if (curLocation!= null){
+            zoomLocationButton.setEnabled(true);
+            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+        }else{
+            zoomLocationButton.setEnabled(false);
+            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+        }
+
+        if (markerArray.size() != 0){
+            zoomPointButton.setEnabled(true);
+            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+        }else{
+            zoomPointButton.setEnabled(false);
+            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+        }
+        zoomDialog.show();
+    }
+
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.enable_gps),
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }

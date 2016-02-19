@@ -11,16 +11,21 @@
         <RadioButton android:id="@+id/trace_manual"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
             android:onClick="setGeoTraceMode"
             android:checked="true"
-            android:text="Manual Mode"/>
+            android:text="@string/manual_mode"/>
 
         <RadioButton android:id="@+id/trace_automatic"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
             android:onClick="setGeoTraceMode"
-            android:text="Automatic Mode"/>
+            android:text="@string/automatic_mode"/>
 
     </RadioGroup>
 

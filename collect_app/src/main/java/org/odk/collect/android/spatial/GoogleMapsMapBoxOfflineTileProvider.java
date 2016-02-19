@@ -2,6 +2,7 @@ package org.odk.collect.android.spatial;
 
 /**
  * Created by jnordling on 12/29/15.
+ * @author jonnordling@gmail.com
  */
 
 import android.database.Cursor;

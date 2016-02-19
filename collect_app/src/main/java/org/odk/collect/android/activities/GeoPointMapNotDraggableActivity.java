@@ -67,7 +67,6 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
 
     private Location mLocation;
     private Button mAcceptLocation;
-    private Button mCancelLocation;
     private Button mReloadLocation;
 
     private boolean mCaptureLocation = true;
@@ -86,12 +85,11 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if ( savedInstanceState != null ) {
         	mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
         }
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         try {
             setContentView(R.layout.geopoint_layout);
@@ -130,16 +128,6 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
 			mRefreshLocation = false; // just show this position; don't change it...
 			mZoomed = true;
 		}
-
-        mCancelLocation = (Button) findViewById(R.id.cancel_location);
-        mCancelLocation.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
-                finish();
-            }
-        });
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 

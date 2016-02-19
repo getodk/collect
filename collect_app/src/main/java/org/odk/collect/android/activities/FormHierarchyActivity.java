@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -279,6 +280,7 @@ public class FormHierarchyActivity extends ListActivity {
                         if ( !fp.isReadOnly() || (label != null && label.length() > 0) ) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
+                            String answerDisplay = fp.getAnswerText();
                             formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
                                     Color.WHITE, QUESTION, fp.getIndex()));
                         }

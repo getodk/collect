@@ -354,14 +354,16 @@
 <string name="map_basemap_selector_title">Basemaps</string>
 <string name="map_basemap_behavior">Select a basemap</string>
 <string name="show_map_basemap">Show Basemap Options</string>
-<string name="record_geoshape">Record GeoShape</string>
-<string name="view_shape">Edit Shape</string>
-<string name="record_trace">Record GeoTrace</string>
-<string name="view_trace">View GeoTrace</string>
+
+<string name="save_point">Save GeoPoint</string>
+<string name="get_point">Start GeoPoint</string>
+
+<string name="get_shape">Start GeoShape</string>
+<string name="get_trace">Start GeoTrace</string>
+
 <string name="geoshape_title">GeoShape</string>
 <string name="mbtiles_not_found">No .mbtiles file found in the directory \'%s\'.</string>
-<string name="geotrace_instruction">"GeoTrace Instructions"</string>
-<string name="geotrace_instruction_message">"Select Mode: Automatic mode or Manual Mode"</string>
+<string name="select_geotrace_mode">"Select GeoTrace Mode"</string>
 <string name="start">Start</string>
 <string name="enable_gps">Enable GPS</string>
 <string name="enable_gps_message">"GPS is disabled in your device. Would you like to enable it?"</string>
@@ -370,16 +372,23 @@
 <string name="polyline_save">Save as Polyline</string>
 <string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
 <string name="select_offline_layer">Select Offline Layer</string>
-<string name="polygon_or_polyline">"Select Polygon/Polyline"</string>
+<string name="polygon_or_polyline">"Save GeoTrace As"</string>
 <string name="minutes">Minutes</string>
 <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
+<string name="geo_exit_warning">Discard changes and return to ODK?</string>
 <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
 <string name="dialog_continue">Continue</string>
 <string name="clear">Clear</string>
-<string name="polyline_polygon_text">Select Polygon/Polyline</string>
-
-
-
-
+<string name="polyline_polygon_text">Save GeoTrace As</string>
+<string name="manual_mode">Manual Mode</string>
+<string name="automatic_mode">Automatic Mode</string>
+<string name="geoshape_instruction">Long press to place marks.</string>
+<string name="geotrace_instruction">Wait for lock, then tap add mark button to start.</string>
+<string name="geopoint_instruction">Long press to place mark or tap add mark button.</string>
+<string name="discard">Discard</string>
+<string name="fly_to_where">Fly To Where?</string>
+<string name="fly_to_location">Fly to current location</string>
+<string name="fly_to_feature">Fly to saved feature</string>
+<string name="points_captured">%s points captured</string>
 
 </resources>

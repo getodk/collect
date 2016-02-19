@@ -1,5 +1,10 @@
 package org.odk.collect.android.spatial;
 
+/**
+ * Created by jnordling on 12/29/15.
+ * @author jonnordling@gmail.com
+ */
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -192,26 +197,6 @@ public class MapHelper {
         });
         return files;
     }
-//    public static String getMBTileFromItem(final int item) {
-//        String folderName = OffilineOverlays[item];
-//        File dir = new File(Collect.OFFLINE_LAYERS+File.separator+folderName);
-//        if (dir.isFile()) {
-//            // we already have a file
-//            return dir.getAbsolutePath();
-//        }
-//        // search first mbtiles file in the directory
-//        String mbtilePath;
-//        final File[] files = dir.listFiles(new FilenameFilter() {
-//            @Override
-//            public boolean accept(final File dir, final String name) {
-//                return name.toLowerCase().endsWith(".mbtiles");
-//            }
-//        });
-//        if (files.length == 0) {
-//            throw new RuntimeException(Collect.getInstance().getString(R.string.mbtiles_not_found, dir.getAbsolutePath()));
-//        }
-//        mbtilePath = files[0].getAbsolutePath();
-//        return mbtilePath;
-//    }
+
 
 }

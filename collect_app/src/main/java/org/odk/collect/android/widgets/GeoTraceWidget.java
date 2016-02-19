@@ -67,7 +67,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 		mAnswerDisplay.setGravity(Gravity.CENTER);
 		createTraceButton = new Button(getContext());
 		createTraceButton.setId(QuestionWidget.newUniqueId());
-		createTraceButton.setText(getContext().getString(R.string.record_trace));
+		createTraceButton.setText(getContext().getString(R.string.get_trace));
 		createTraceButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		createTraceButton.setPadding(20, 20, 20, 20);
 		createTraceButton.setLayoutParams(params);
@@ -101,7 +101,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 		String s = prompt.getAnswerText();
 		if (s != null && !s.equals("")) {
 			dataAvailable = true;
-			createTraceButton.setText(getContext().getString(R.string.view_trace));
+			createTraceButton.setText(getContext().getString(R.string.get_trace));
 			setBinaryData(s);
 		}else{
 		}

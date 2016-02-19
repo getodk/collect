@@ -32,6 +32,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.Toast;
 
 public class GeoPointActivity extends Activity implements LocationListener {
@@ -50,6 +51,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if ( savedInstanceState != null ) {
         	mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
@@ -191,7 +193,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
         mLocationDialog.setIcon(android.R.drawable.ic_dialog_info);
         mLocationDialog.setTitle(getString(R.string.getting_location));
         mLocationDialog.setMessage(getString(R.string.please_wait_long));
-        mLocationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.accept_location),
+        mLocationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
             geopointButtonListener);
         mLocationDialog.setButton(DialogInterface. BUTTON_NEGATIVE, getString(R.string.cancel_location),
             geopointButtonListener);

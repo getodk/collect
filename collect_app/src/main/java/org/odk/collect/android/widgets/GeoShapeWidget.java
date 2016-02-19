@@ -86,7 +86,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
 		createShapeButton = new Button(getContext());
 		createShapeButton.setId(QuestionWidget.newUniqueId());
-		createShapeButton.setText(getContext().getString(R.string.record_geoshape));
+		createShapeButton.setText(getContext().getString(R.string.get_shape));
 		createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		createShapeButton.setPadding(20, 20, 20, 20);
 		createShapeButton.setLayoutParams(params);
@@ -131,9 +131,9 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
 	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
 		if (dataAvailable == true){
-			createShapeButton.setText(getContext().getString(R.string.view_shape));
+			createShapeButton.setText(getContext().getString(R.string.get_shape));
 		}else{
-			createShapeButton.setText(getContext().getString(R.string.record_geoshape));
+			createShapeButton.setText(getContext().getString(R.string.get_shape));
 		}
 	}
 
@@ -157,7 +157,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 		Boolean test = mPrompt.getIndex().equals(
 				Collect.getInstance().getFormController()
 						.getIndexWaitingForData());
-		//Toast.makeText(getContext(), test+" ", Toast.LENGTH_LONG).show();
+
 		return mPrompt.getIndex().equals(
 				Collect.getInstance().getFormController()
 						.getIndexWaitingForData());

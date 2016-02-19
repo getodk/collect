@@ -57,7 +57,7 @@ public class Collect extends Application {
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
 
     public static final String DEFAULT_FONTSIZE = "21";
-    public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "OfflineLayers";
+    public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();

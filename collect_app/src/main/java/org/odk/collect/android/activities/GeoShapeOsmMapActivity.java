@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +27,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -42,6 +43,7 @@ import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.IRegisterReceiver;
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
@@ -59,7 +61,7 @@ import java.util.ArrayList;
 
 
 public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
-    private MapView mapView;
+    private MapView mMap;
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private PathOverlay pathOverlay;
     public DefaultResourceProxyImpl resource_proxy;
@@ -69,51 +71,56 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private MapEventsOverlay OverlayEventos;
     private boolean polygon_connection = false;
     private boolean clear_button_test = false;
-    private Button clear_button;
-    private Button return_button;
-    private Button polygon_button;
-    private Button layers_button;
+    private Button mClearButton;
+    private Button mSaveButton;
+    private Button mLayersButton;
     private SharedPreferences sharedPreferences;
     public Boolean layerStatus = false;
     private int selected_layer= -1;
-    private ProgressDialog progress;
     public Boolean gpsStatus = true;
-    private Button gps_button;
+    private Button mLocationButton;
     public MyLocationNewOverlay mMyLocationOverlay;
     public Boolean data_loaded = false;
 
     private MapHelper mHelper;
 
+    private AlertDialog zoomDialog;
+    private View zoomDialogView;
+
+    private Button zoomPointButton;
+    private Button zoomLocationButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-        return_button = (Button) findViewById(R.id.save);
-        clear_button = (Button) findViewById(R.id.clear);
+        mSaveButton = (Button) findViewById(R.id.save);
+        mClearButton = (Button) findViewById(R.id.clear);
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
-        mapView = (MapView)findViewById(R.id.geoshape_mapview);
-        mHelper = new MapHelper(this,mapView,GeoShapeOsmMapActivity.this);
-        mapView.setMultiTouchControls(true);
-        mapView.setBuiltInZoomControls(true);
-        mapView.setMapListener(mapViewListner);
+        mMap = (MapView)findViewById(R.id.geoshape_mapview);
+        mHelper = new MapHelper(this, mMap,GeoShapeOsmMapActivity.this);
+        mMap.setMultiTouchControls(true);
+        mMap.setBuiltInZoomControls(true);
+        mMap.setMapListener(mapViewListner);
         overlayPointPathListner();
-        return_button.setOnClickListener(new View.OnClickListener() {
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 returnLocation();
             }
         });
-        clear_button.setOnClickListener(new View.OnClickListener() {
+        mClearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (map_markers.size() != 0){
+                if (map_markers.size() != 0) {
                     showClearDialog();
                 }
             }
         });
-        layers_button = (Button)findViewById(R.id.layers);
-        layers_button.setOnClickListener(new View.OnClickListener() {
+        mLayersButton = (Button)findViewById(R.id.layers);
+        mLayersButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -121,12 +128,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
             }
         });
-
-        gps_button = (Button)findViewById(R.id.gps);
-        gps_button.setOnClickListener(new View.OnClickListener() {
+        mLocationButton = (Button)findViewById(R.id.gps);
+        mLocationButton.setEnabled(false);
+        mLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                zoomToMyLocation();
+                showZoomDialog();
             }
         });
 
@@ -134,38 +141,60 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         GpsMyLocationProvider imlp = new GpsMyLocationProvider(this.getBaseContext());
         imlp.setLocationUpdateMinDistance(1000);
         imlp.setLocationUpdateMinTime(60000);
-        mMyLocationOverlay = new MyLocationNewOverlay(this, mapView);
-        mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-
-        progress = new ProgressDialog(this);
-        progress.setTitle(getString(R.string.getting_location));
-        progress.setMessage(getString(R.string.please_wait_long));
+        mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
 
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             if ( intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION) ) {
+                mClearButton.setEnabled(true);
                 data_loaded =true;
                 String s = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
                 overlayIntentPolygon(s);
-                zoomToCentroid();
+                //zoomToCentroid();
+                mLocationButton.setEnabled(true);
+                zoomtoBounds();
             }
         }else{
-
+            mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+            mClearButton.setEnabled(false);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
                     GeoPoint point = new GeoPoint(34.08145, -39.85007);
-                    mapView.getController().setZoom(3);
-                    mapView.getController().setCenter(point);
+                    mMap.getController().setZoom(3);
+                    mMap.getController().setCenter(point);
                 }
             }, 100);
-            upMyLocationOverlayLayers();
-            progress.show();
 
         }
 
-        mapView.invalidate();
+        mMap.invalidate();
+
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+
+        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                zoomToMyLocation();
+                mMap.invalidate();
+                zoomDialog.dismiss();
+            }
+        });
+
+        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //zoomToCentroid();
+                zoomtoBounds();
+                mMap.invalidate();
+                zoomDialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -177,7 +206,11 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     public void onBackPressed() {
-        saveGeoShape();
+        if (map_markers != null && map_markers.size() > 0) {
+            showBackDialog();
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -185,6 +218,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         super.onPause();
         disableMyLocation();
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -193,7 +227,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
 
     private void overlayIntentPolygon(String str){
-        clear_button.setVisibility(View.VISIBLE);
+        mClearButton.setEnabled(true);
         clear_button_test = true;
         String s = str.replace("; ",";");
         String[] sa = s.split(";");
@@ -204,26 +238,22 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             String lng = sp[1].replace(" ", "");
             gp[0] = Double.parseDouble(lat);
             gp[1] = Double.parseDouble(lng);
-            Marker marker = new Marker(mapView);
+            Marker marker = new Marker(mMap);
             marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
-            marker.setIcon(getResources().getDrawable(R.drawable.map_marker));
+            marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
             pathOverlay.addPoint(marker.getPosition());
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
-            mapView.getOverlays().add(marker);
+            mMap.getOverlays().add(marker);
         }
-//        buildPolygon();
         update_polygon();
-        mapView.getOverlays().remove(OverlayEventos);
+        mMap.getOverlays().remove(OverlayEventos);
     }
 
-//    private void setGPSStatus(){
-//        upMyLocationOverlayLayers();
-//    }
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -231,8 +261,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         public void run() {
             mHandler.post(new Runnable() {
                 public void run() {
-                    zoomToMyLocation();
-                    progress.dismiss();
+                    mLocationButton.setEnabled(true);
+                    showZoomDialog();
                 }
             });
         }
@@ -245,9 +275,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 .setPositiveButton(getString(R.string.enable_gps),
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
-                                // Intent callGPSSettingIntent = new Intent(
                                 startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-                                //startActivity(callGPSSettingIntent);
                             }
                         });
         alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
@@ -271,16 +299,15 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void overlayMyLocationLayers(){
-        mapView.getOverlays().add(mMyLocationOverlay);
+        mMap.getOverlays().add(mMyLocationOverlay);
         mMyLocationOverlay.setEnabled(true);
         mMyLocationOverlay.enableMyLocation();
-        mMyLocationOverlay.enableFollowLocation();
     }
 
     private void zoomToMyLocation(){
         if (mMyLocationOverlay.getMyLocation()!= null){
-            mapView.getController().setZoom(15);
-            mapView.getController().setCenter(mMyLocationOverlay.getMyLocation());
+            mMap.getController().setZoom(15);
+            mMap.getController().setCenter(mMyLocationOverlay.getMyLocation());
         }
     }
 
@@ -294,19 +321,15 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
     }
 
-    private void saveGeoShape(){
-        returnLocation();
-        finish();
-    }
 
     private void overlayPointPathListner(){
         OverlayEventos = new MapEventsOverlay(getBaseContext(), mReceive);
         pathOverlay= new PathOverlay(Color.RED, this);
         Paint pPaint = pathOverlay.getPaint();
         pPaint.setStrokeWidth(stroke_width);
-        mapView.getOverlays().add(pathOverlay);
-        mapView.getOverlays().add(OverlayEventos);
-        mapView.invalidate();
+        mMap.getOverlays().add(pathOverlay);
+        mMap.getOverlays().add(OverlayEventos);
+        mMap.invalidate();
     }
 
     private void clearFeatures(){
@@ -314,11 +337,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         clear_button_test = false;
         map_markers.clear();
         pathOverlay.clearPath();
-        mapView.getOverlays().clear();
-        clear_button.setVisibility(View.GONE);
+        mMap.getOverlays().clear();
+        mClearButton.setEnabled(false);
+        //mSaveButton.setEnabled(false);
         overlayPointPathListner();
         overlayMyLocationLayers();
-        mapView.invalidate();
+        mMap.invalidate();
 
     }
 
@@ -328,6 +352,22 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 .setPositiveButton(getString(R.string.clear), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         clearFeatures();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                }).show();
+
+    }
+
+    private void showBackDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.geo_exit_warning))
+                .setPositiveButton(getString(R.string.discard), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -366,29 +406,29 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             pathOverlay.addPoint(map_markers.get(i).getPosition());
         }
         pathOverlay.addPoint(map_markers.get(0).getPosition());
-        mapView.invalidate();
+        mMap.invalidate();
     }
 
     private MapEventsReceiver mReceive = new MapEventsReceiver() {
         @Override
         public boolean longPressHelper(GeoPoint point) {
             if (!clear_button_test){
-                clear_button.setVisibility(View.VISIBLE);
+                mClearButton.setEnabled(true);
                 clear_button_test = true;
             }
-            Marker marker = new Marker(mapView);
+            Marker marker = new Marker(mMap);
             marker.setPosition(point);
             marker.setDraggable(true);
-            marker.setIcon(getResources().getDrawable(R.drawable.map_marker));
+            marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
-            mapView.getOverlays().add(marker);
+            mMap.getOverlays().add(marker);
             pathOverlay.addPoint(marker.getPosition());
             update_polygon();
-            mapView.invalidate();
+            mMap.invalidate();
             return false;
         }
 
@@ -441,31 +481,78 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         This functions should be added to the mapHelper Class
 
      */
-    private void zoomToCentroid(){
-        mapView.getController().setZoom(15);
-        mapView.invalidate();
-        Handler handler=new Handler();
-        Runnable r = new Runnable(){
+    private void zoomtoBounds(){
+        mMap.getController().setZoom(4);
+        mMap.invalidate();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             public void run() {
+                int minLat = Integer.MAX_VALUE;
+                int maxLat = Integer.MIN_VALUE;
+                int minLong = Integer.MAX_VALUE;
+                int maxLong = Integer.MIN_VALUE;
                 Integer size  = map_markers.size();
-                Double x_value = 0.0;
-                Double y_value = 0.0;
                 for(int i=0; i<size; i++){
                     GeoPoint temp_marker = map_markers.get(i).getPosition();
-                    Double x_marker = temp_marker.getLatitude();
-                    Double y_marker = temp_marker.getLongitude();
-                    x_value += x_marker;
-                    y_value += y_marker;
+                    if (temp_marker.getLatitudeE6() < minLat)
+                        minLat = temp_marker.getLatitudeE6();
+                    if (temp_marker.getLatitudeE6() > maxLat)
+                        maxLat = temp_marker.getLatitudeE6();
+                    if (temp_marker.getLongitudeE6() < minLong)
+                        minLong = temp_marker.getLongitudeE6();
+                    if (temp_marker.getLongitudeE6() > maxLong)
+                        maxLong = temp_marker.getLongitudeE6();
                 }
-                Double x_cord = x_value/size;
-                Double y_cord = y_value/size;
-                GeoPoint centroid = new GeoPoint(x_cord,y_cord);
-                mapView.getController().setCenter(centroid);
+                BoundingBoxE6 boundingBox = new BoundingBoxE6(maxLat, maxLong, minLat, minLong);
+                mMap.zoomToBoundingBox(boundingBox);
+                mMap.invalidate();
             }
-        };
-        handler.post(r);
-        mapView.invalidate();
+        }, 100);
+        mMap.invalidate();
+
     }
 
+    public void showZoomDialog() {
+
+        if (zoomDialog == null) {
+            AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
+            p_builder.setTitle(getString(R.string.fly_to_where));
+            p_builder.setView(zoomDialogView)
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.cancel();
+                            zoomDialog.dismiss();
+                        }
+                    });
+            zoomDialog = p_builder.create();
+        }
+        //If feature enable zoom to button else disable
+        if (mMyLocationOverlay.getMyLocation()!= null){
+            zoomLocationButton.setEnabled(true);
+            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+        }else{
+            zoomLocationButton.setEnabled(false);
+            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+        }
+
+        if (map_markers.size() != 0){
+            zoomPointButton.setEnabled(true);
+            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+        }else{
+            zoomPointButton.setEnabled(false);
+            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+        }
+        zoomDialog.show();
+    }
 
 }

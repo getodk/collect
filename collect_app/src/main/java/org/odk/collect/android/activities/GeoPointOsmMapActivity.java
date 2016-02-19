@@ -14,21 +14,26 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
@@ -41,12 +46,17 @@ import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-
-
+/**
+ * Version of the GeoPointMapActivity that uses the new OSMDDroid
+ *
+ * @author jonnordling@gmail.com
+ *
+ */
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, MapEventsReceiver ,IRegisterReceiver {
 
 	private SharedPreferences sharedPreferences;
@@ -71,15 +81,15 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private MapEventsOverlay overlayEventos;
 
 	private Location mLocation;
-	private Button mAcceptLocation;
-	private Button mCancelLocation;
-	private Button mReloadLocation;
-	private Button mLayers;
+	private Button mSaveLocationButton;
+	private Button mReloadLocationButton;
+	private Button mLayersButton;
 
-	private boolean mCaptureLocation = true;
+	private boolean mCaptureLocation = false;
 	private boolean mRefreshLocation = true;
+	private boolean setClear = false;
 	private boolean mIsDragged = false;
-	private Button mShowLocation;
+	private Button mShowLocationButton;
 
 	private boolean mGPSOn = false;
 	private boolean mNetworkOn = false;
@@ -90,17 +100,27 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private boolean mZoomed = false;
 	private MapHelper mHelper;
 
+	private AlertDialog zoomDialog;
+	private View zoomDialogView;
 
+	private Button zoomPointButton;
+	private Button zoomLocationButton;
+
+	private Button clearPointButton;
+
+	public MyLocationNewOverlay mMyLocationOverlay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-
+		if ( savedInstanceState != null ) {
+			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
+		}
 
 		try {
-				setContentView(R.layout.geopoint_osm_layout);
+			setContentView(R.layout.geopoint_osm_layout);
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
@@ -108,18 +128,19 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			return;
 		}
 
-		if ( savedInstanceState != null ) {
-			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
-		}
+
 		mMap = (MapView) findViewById(R.id.omap);
 		mHelper = new MapHelper(this,mMap,GeoPointOsmMapActivity.this);
 		mMap.setMultiTouchControls(true);
 		mMap.setBuiltInZoomControls(true);
 		mMarker = new Marker(mMap);
 		mMarker.setDraggable(true);
-		mMarker.setIcon(getResources().getDrawable(R.drawable.map_marker));
+		mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
 		mMarker.setOnMarkerDragListener(this);
 		overlayEventos = new MapEventsOverlay(getBaseContext(), this);
+		mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
+
+		mMyLocationOverlay.runOnFirstFix(centerAroundFix);
 
 		mMap.getOverlays().add(overlayEventos);
 
@@ -139,144 +160,119 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
 				double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
 				mLatLng = new GeoPoint(location[0], location[1]);
+				mCaptureLocation = true;
+				mIsDragged = true;
 
 			}
 			if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
 				mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD, GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
 			}
-			mCaptureLocation = !intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
-			mRefreshLocation = mCaptureLocation;
+
+			mRefreshLocation = true;
+
 		}
 
 		mLocationStatus = (TextView) findViewById(R.id.location_status);
-
 		if (mLatLng != null){
-			mLocationStatus.setVisibility(View.GONE);
 			mMarker.setPosition(mLatLng);
 			mMap.invalidate();
-			mRefreshLocation = false; // just show this position; don't change it...
-			mZoomed = true;
+			mRefreshLocation = true; // just show this position; don't change it...
+			zoomToPoint();
 		}
+		overlayMyLocationLayers();
+		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-		mCancelLocation = (Button) findViewById(R.id.cancel_location);
-		mCancelLocation.setOnClickListener(new View.OnClickListener() {
+		mSaveLocationButton = (Button) findViewById(R.id.accept_location);
+		mSaveLocationButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
-				finish();
+				Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
+				returnLocation();
 			}
 		});
 
-		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
-		// make sure we have a good location provider before continuing
-		List<String> providers = mLocationManager.getProviders(true);
-		for (String provider : providers) {
-			if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-				mGPSOn = true;
+		mReloadLocationButton = (Button) findViewById(R.id.reload_location);
+		mReloadLocationButton.setEnabled(false);
+		mReloadLocationButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mMap.getOverlays().add(mMarker);
+				mRefreshLocation = true;
+				setClear = false;
+				mLatLng = new GeoPoint(mLocation.getLatitude(),mLocation.getLongitude());
+				mMarker.setPosition(mLatLng);
+				mCaptureLocation = true;
+				mIsDragged = false;
+				zoomToPoint();
 			}
-			if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-				mNetworkOn = true;
-			}
-		}
-		if (!mGPSOn && !mNetworkOn) {
-			Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
-					Toast.LENGTH_SHORT).show();
-			finish();
-		}
 
-		if ( mGPSOn ) {
-			Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if ( loc != null ) {
-				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-						" lastKnownLocation(GPS) lat: " +
-						loc.getLatitude() + " long: " +
-						loc.getLongitude() + " acc: " +
-						loc.getAccuracy());
-			} else {
-				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-						" lastKnownLocation(GPS) null location");
-			}
-		}
-
-		if ( mNetworkOn ) {
-			Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			if ( loc != null ) {
-				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-						" lastKnownLocation(Network) lat: " +
-						loc.getLatitude() + " long: " +
-						loc.getLongitude() + " acc: " +
-						loc.getAccuracy() );
-			} else {
-				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-						" lastKnownLocation(Network) null location");
-			}
-		}
-
-
-		mAcceptLocation = (Button) findViewById(R.id.accept_location);
-		if (mCaptureLocation){
-			mAcceptLocation.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
-					returnLocation();
-				}
-			});
-		}else{
-			mAcceptLocation.setVisibility(View.GONE);
-		}
-
-		mReloadLocation = (Button) findViewById(R.id.reload_location);
-		if (mCaptureLocation) {
-			mReloadLocation.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					mRefreshLocation = true;
-					mReloadLocation.setVisibility(View.GONE);
-					mLocationStatus.setVisibility(View.VISIBLE);
-					if (mGPSOn) {
-						mLocationManager.requestLocationUpdates(
-								LocationManager.GPS_PROVIDER, 0, 0, GeoPointOsmMapActivity.this);
-					}
-					if (mNetworkOn) {
-						mLocationManager.requestLocationUpdates(
-								LocationManager.NETWORK_PROVIDER, 0, 0, GeoPointOsmMapActivity.this);
-					}
-				}
-
-			});
-			mReloadLocation.setVisibility(!mRefreshLocation ? View.VISIBLE : View.GONE);
-		} else {
-			mReloadLocation.setVisibility(View.GONE);
-		}
+		});
 
 		// Focuses on marked location
-		mShowLocation = ((Button) findViewById(R.id.show_location));
-		mShowLocation.setVisibility(View.VISIBLE);
-		mShowLocation.setOnClickListener(new View.OnClickListener() {
+		mShowLocationButton = ((Button) findViewById(R.id.show_location));
+		mShowLocationButton.setVisibility(View.VISIBLE);
+		mShowLocationButton.setEnabled(false);
+		mShowLocationButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
 						.logInstanceAction(this, "showLocation", "onClick");
-				zoomTo();
-				mMap.invalidate();
+				showZoomDialog();
 			}
 		});
 
 		// not clickable until we have a marker set....
-		mShowLocation.setClickable(false);
+		mShowLocationButton.setClickable(false);
 
 		// Menu Layer Toggle
-		mLayers = ((Button) findViewById(R.id.layer_menu));
-		mLayers.setOnClickListener(new View.OnClickListener() {
+		mLayersButton = ((Button) findViewById(R.id.layer_menu));
+		mLayersButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mHelper.showLayersDialog();
 
+			}
+		});
+
+
+		zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+
+		zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+		zoomLocationButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				zoomToLocation();
+				mMap.invalidate();
+				zoomDialog.dismiss();
+			}
+		});
+
+		zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
+		zoomPointButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				zoomToPoint();
+				mMap.invalidate();
+				zoomDialog.dismiss();
+			}
+		});
+
+		clearPointButton = (Button) findViewById(R.id.clear);
+		clearPointButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mMap.invalidate();
+//				mLocation = null;
+				setClear = true;
+				mIsDragged = false;
+				mCaptureLocation = false;
+				mMap.getOverlays().remove(mMarker);
+				mMarker.remove(mMap);
+				mMap.invalidate();
+				//mSaveLocationButton.setEnabled(false);
 			}
 		});
 
@@ -299,29 +295,49 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	protected void onResume() {
 		super.onResume();
 		mHelper.setBasemap();
-		if ( mRefreshLocation ) {
-			mLocationStatus.setVisibility(View.VISIBLE);
-			if (mGPSOn) {
+		upMyLocationOverlayLayers();
+
+	}
+	private void upMyLocationOverlayLayers(){
+		// make sure we have a good location provider before continuing
+		List<String> providers = mLocationManager.getProviders(true);
+		for (String provider : providers) {
+			if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
+				mGPSOn = true;
 				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 			}
-			if (mNetworkOn) {
+			if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+				mNetworkOn = true;
 				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 			}
-			mShowLocation.setClickable(mMarker != null);
+		}
+		mShowLocationButton.setClickable(mMarker != null);
+		if (!mGPSOn && !mNetworkOn) {
+			showGPSDisabledAlertToUser();
 		}else{
-
-			if(mLatLng != null){
-				mMap.getOverlays().add(mMarker);
-				mMarker.setPosition(mLatLng);
-				zoomTo();
-
-			}
-			mShowLocation.setClickable(mMarker != null);
-
+			overlayMyLocationLayers();
 		}
 	}
+	private void overlayMyLocationLayers(){
+		mMap.getOverlays().add(mMyLocationOverlay);
+		if(mLatLng != null){
+			mMap.getOverlays().add(mMarker);
+		}
+		mMyLocationOverlay.setEnabled(true);
+		mMyLocationOverlay.enableMyLocation();
+	}
+	private Handler mHandler = new Handler(Looper.getMainLooper());
+	private Runnable centerAroundFix = new Runnable() {
+		public void run() {
+			mHandler.post(new Runnable() {
+				public void run() {
+					showZoomDialog();
+				}
+			});
+		}
+	};
 
-	private void zoomTo(){
+	private void zoomToPoint(){
 		if(mLatLng != null) {
 			handler.postDelayed(new Runnable() {
 				public void run() {
@@ -354,21 +370,25 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
 
 	private void returnLocation() {
-		if (mIsDragged){
-			Log.i(getClass().getName(), "IsDragged !!!");
-			Intent i = new Intent();
+		Intent i = new Intent();
+		if(setClear){
+			i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
+			setResult(RESULT_OK, i);
+
+		}else if (mIsDragged){
 			i.putExtra(
 					FormEntryActivity.LOCATION_RESULT,
 					mLatLng.getLatitude() + " " + mLatLng.getLongitude() + " "
 							+ 0 + " " + 0);
 			setResult(RESULT_OK, i);
 		} else if (mLocation != null) {
-			Log.i(getClass().getName(), "IsNotDragged !!!");
-			Intent i = new Intent();
 			i.putExtra(
 					FormEntryActivity.LOCATION_RESULT,
 					mLocation.getLatitude() + " " + mLocation.getLongitude() + " "
 							+ mLocation.getAltitude() + " " + mLocation.getAccuracy());
+			setResult(RESULT_OK, i);
+		}else{
+			i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
 			setResult(RESULT_OK, i);
 		}
 		finish();
@@ -379,68 +399,39 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	}
 
 	private void stopGeolocating() {
-		mRefreshLocation = false;
-		mReloadLocation.setVisibility(View.VISIBLE);
-		mLocationManager.removeUpdates(this);
-		mMarker.setDraggable(true);
-		mLocationStatus.setVisibility(View.GONE);
+//		mRefreshLocation = false;
+//		mReloadLocationButton.setEnabled(true);
+//		mLocationManager.removeUpdates(this);
+//		mMarker.setDraggable(true);
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if (mRefreshLocation) {
 			mLocation = location;
+			mReloadLocationButton.setEnabled(true);
+			mShowLocationButton.setEnabled(true);
 			if (mLocation != null) {
-				// Bug report: cached GeoPoint is being returned as the first value.
-				// Wait for the 2nd value to be returned, which is hopefully not cached?
-				++mLocationCount;
-				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-						" onLocationChanged(" + mLocationCount + ") lat: " +
-						mLocation.getLatitude() + " long: " +
-						mLocation.getLongitude() + " acc: " +
-						mLocation.getAccuracy() );
-
-				if (mLocationCount > 1) {
-					mLocationStatus.setText(getString(R.string.location_provider_accuracy,
-							mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
+				mLocationStatus.setText(getString(R.string.location_provider_accuracy, mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
+				if (!mCaptureLocation & !setClear){
 					mLatLng = new GeoPoint(mLocation.getLatitude(),mLocation.getLongitude());
-					if ( !mZoomed ) {
-						mZoomed = true;
-						zoomTo();
-						mMap.invalidate();
+					mMap.getOverlays().add(mMarker);
+					mMarker.setPosition(mLatLng);
+					mCaptureLocation = true;
+				}
 
-					} else {
-						//mMap.getController().animateTo(mLatLng);
-						//mMap.getController().setZoom(mMap.getZoomLevel());
+//				if (mLocation.getLatitude() != mMarker.getPosition().getLatitude() & mLocation.getLongitude() != mMarker.getPosition().getLongitude()) {
+//					mReloadLocationButton.setEnabled(true);
+//				}
 
-					}
-
-					// create a marker on the map or move the existing marker to the
-					// new location
-					if (mMarker == null) {
-						mMarker = new Marker(mMap);
-						mMap.getOverlays().add(mMarker);
-						mMarker.setPosition(mLatLng);
-						mShowLocation.setClickable(true);
-					} else {
-						mMap.getOverlays().add(mMarker);
-						mMarker.setPosition(mLatLng);
-					}
-
-					//If location is accurate enough, stop updating position and make the marker draggable
-					if (mLocation.getAccuracy() <= mLocationAccuracy) {
-						stopGeolocating();
-					}
-
-
-
+				//If location is accurate enough, stop updating position and make the marker draggable
+				if (mLocation.getAccuracy() <= mLocationAccuracy) {
+//					stopGeolocating();
 				}
 
 			} else {
 				InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
 						" onLocationChanged(" + mLocationCount + ") null location");
 			}
-		}
 	}
 
 
@@ -457,16 +448,16 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
 		mLatLng = marker.getPosition();
-		mAcceptLocation.setClickable(true);
 		mIsDragged = true;
+		mCaptureLocation = true;
+		setClear = false;
 		mMap.getController().animateTo(mLatLng);
 		mMap.getController().setZoom(mMap.getZoomLevel());
-		//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, mMap.getCameraPosition().zoom));
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker arg0) {
-		stopGeolocating();
+//		stopGeolocating();
 	}
 
 
@@ -492,14 +483,94 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			mMarker = new Marker(mMap);
 
 		}
+		mShowLocationButton.setEnabled(true);
 		mMap.invalidate();
 		mMarker.setPosition(geoPoint);
-		mMarker.setIcon(getResources().getDrawable(R.drawable.map_marker));
+		mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
 		mMarker.setDraggable(true);
 		mLatLng=geoPoint;
 		mIsDragged = true;
+		setClear = false;
+		mCaptureLocation = true;
 		mMap.getOverlays().add(mMarker);
-		stopGeolocating();
+//		stopGeolocating();
 		return false;
 	}
+
+	public void showZoomDialog() {
+
+		if (zoomDialog == null) {
+			AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
+			p_builder.setTitle(getString(R.string.fly_to_where));
+			p_builder.setView(zoomDialogView)
+					.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					})
+					.setOnCancelListener(new DialogInterface.OnCancelListener() {
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							dialog.cancel();
+							zoomDialog.dismiss();
+						}
+					});
+			zoomDialog = p_builder.create();
+		}
+		//If feature enable zoom to button else disable
+		if (mMyLocationOverlay.getMyLocation()!= null){
+			zoomLocationButton.setEnabled(true);
+			zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+			zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+		}else{
+			zoomLocationButton.setEnabled(false);
+			zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+			zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+		}
+
+		if (mLatLng != null & !setClear) {
+			zoomPointButton.setEnabled(true);
+			zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+			zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+		}else{
+			zoomPointButton.setEnabled(false);
+			zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+			zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+		}
+		zoomDialog.show();
+	}
+
+	private void zoomToLocation() {
+		if(mMyLocationOverlay.getMyLocation() != null) {
+			final GeoPoint location = new GeoPoint(mLocation.getLatitude(), mLocation.getLongitude());
+			handler.postDelayed(new Runnable() {
+				public void run() {
+					mMap.getController().setZoom(16);
+					mMap.getController().setCenter(location);
+					mMap.invalidate();
+				}
+			}, 200);
+		}
+	}
+
+	private void showGPSDisabledAlertToUser(){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.enable_gps),
+						new DialogInterface.OnClickListener(){
+							public void onClick(DialogInterface dialog, int id){
+								startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+							}
+						});
+		alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
+				new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int id){
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
+	}
+
 }

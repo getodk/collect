@@ -3,18 +3,45 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <fragment
-        android:id="@+id/gmap"
+    <LinearLayout
+        android:id="@+id/outer_linear"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        class="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="0dip"
+        android:background="#BF000000">
+
+        <TextView
+            android:id="@+id/geoshape_instruction"
+            android:text="@string/geoshape_instruction"
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:paddingTop="5dip"
+            android:paddingBottom="3dip"
+            android:layout_height="wrap_content" />
+
+        <fragment
+            android:id="@+id/gmap"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            class="com.google.android.gms.maps.SupportMapFragment" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="26dip"
+        android:layout_alignParentRight="true"
+        >
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingBottom="60dip">
+        android:paddingTop="4dip"
+        >
 
         <Button
             android:id="@+id/gps"
@@ -22,32 +49,24 @@
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:drawableRight="@drawable/ic_menu_mylocation"
+            android:drawableRight="@drawable/ic_flight_black_36dp"
             android:layout_weight="1" />
-        <!--<Button-->
-            <!--android:id="@+id/cancel_location"-->
-            <!--android:drawableRight="@+drawable/ic_menu_close_clear_cancel"-->
-            <!--android:padding="15dp"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:layout_weight="1" />-->
+
         <Button
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/layers"
+            android:drawableRight="@drawable/ic_layers_black_36dp"
             android:layout_weight="1"/>
         <Button
             android:id="@+id/clear"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/ic_menu_refresh"
+            android:drawableRight="@drawable/ic_delete_black_36dp"
             android:layout_weight="1"/>
         <Button
             android:id="@+id/save"
@@ -55,8 +74,9 @@
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/ic_menu_save"
+            android:drawableRight="@drawable/ic_save_black_36dp"
             android:layout_weight="1"/>
     </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

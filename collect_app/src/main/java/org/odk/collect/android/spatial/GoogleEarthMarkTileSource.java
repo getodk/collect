@@ -1,7 +1,7 @@
 package org.odk.collect.android.spatial;
 
 /**
- * Created by jnordling on 10/14/15.
+ * @author jonnordling@gmail.com
  */
 import org.osmdroid.ResourceProxy.string;
 import org.osmdroid.tileprovider.MapTile;

@@ -194,6 +194,7 @@
             android:name=".activities.GeoPointActivity"
             android:label="@string/app_name" />
         <activity android:name=".activities.GeoPointMapActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" />
         <activity android:name=".activities.GeoPointMapNotDraggableActivity"
             android:label="@string/app_name" />
@@ -202,18 +203,23 @@
             <!--android:label="@string/app_name" />-->
         <activity
             android:name=".activities.GeoPointOsmMapActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GeoShapeOsmMapActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GeoShapeGoogleMapActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GeoTraceOsmMapActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GeoTraceGoogleMapActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" />
 
         <activity
