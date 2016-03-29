@@ -231,7 +231,7 @@
                 android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI"/>
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="7571000" />  <!-- integer/google_play_services_version -->
+            android:value="@integer/google_play_services_version" />  <!-- integer/google_play_services_version -->
 
         <uses-library
             android:name="com.google.android.maps"
