@@ -23,6 +23,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
+import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.ClientContext;
@@ -44,6 +45,10 @@ import android.preference.PreferenceManager;
  */
 public class Collect extends Application {
 
+    static {
+		PRNGFixes.apply();
+	}
+	
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
             + File.separator + "odk";
