@@ -331,9 +331,10 @@
 <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
 <string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
 <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
-    <string name="url_error_whitespace">whitespace is not allowed in urls</string>
-    <string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
-    <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
-    <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?
-    </string>
+<string name="url_error_whitespace">whitespace is not allowed in urls</string>
+<string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
+<string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
+<string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
+<string name="google_sheets_invalid_column_form">\'n%1$s\' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
+<string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
 </resources>
