@@ -26,7 +26,7 @@ import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.protocol.ClientContext;
+import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
@@ -192,8 +192,8 @@ public class Collect extends Application {
         // shared across independent activities.
         HttpContext localContext = new BasicHttpContext();
 
-        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-        localContext.setAttribute(ClientContext.CREDS_PROVIDER, credsProvider);
+        localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
+        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, credsProvider);
 
         return localContext;
     }

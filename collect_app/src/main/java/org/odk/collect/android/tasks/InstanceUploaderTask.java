@@ -48,7 +48,8 @@ import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
 import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
-import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntity;
+import org.opendatakit.httpclientandroidlib.entity.ContentType;
+import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
@@ -83,13 +84,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
     /**
      * Uploads to urlString the submission identified by id with filepath of instance
+     *
      * @param urlString destination URL
      * @param id
      * @param instanceFilePath
      * @param toUpdate - Instance URL for recording status update.
-     * @param httpclient - client connection
      * @param localContext - context (e.g., credentials, cookies) for client connection
      * @param uriRemap - mapping of Uris to avoid redirects on subsequent invocations
+     * @param outcome
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
@@ -338,11 +340,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             long byteCount = 0L;
 
             // mime post
-            MultipartEntity entity = new MultipartEntity();
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
             // add the submission file first...
-            FileBody fb = new FileBody(submissionFile, "text/xml");
-            entity.addPart("xml_submission_file", fb);
+            FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
+            builder.addPart("xml_submission_file", fb);
             Log.i(t, "added xml_submission_file: " + submissionFile.getName());
             byteCount += submissionFile.length();
 
@@ -359,54 +361,54 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 // we will be processing every one of these, so
                 // we only need to deal with the content type determination...
                 if (extension.equals("xml")) {
-                    fb = new FileBody(f, "text/xml");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.TEXT_XML);
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added xml file " + f.getName());
                 } else if (extension.equals("jpg")) {
-                    fb = new FileBody(f, "image/jpeg");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("image/jpeg"));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added image file " + f.getName());
                 } else if (extension.equals("3gpp")) {
-                    fb = new FileBody(f, "audio/3gpp");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("audio/3gpp"));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added audio file " + f.getName());
                 } else if (extension.equals("3gp")) {
-                    fb = new FileBody(f, "video/3gpp");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("video/3gpp"));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added video file " + f.getName());
                 } else if (extension.equals("mp4")) {
-                    fb = new FileBody(f, "video/mp4");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("video/mp4"));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added video file " + f.getName());
                 } else if (extension.equals("csv")) {
-                    fb = new FileBody(f, "text/csv");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("text/csv"));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added csv file " + f.getName());
                 } else if (f.getName().endsWith(".amr")) {
-                    fb = new FileBody(f, "audio/amr");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("audio/amr"));
+                    builder.addPart(f.getName(), fb);
                     Log.i(t, "added audio file " + f.getName());
                 } else if (extension.equals("xls")) {
-                    fb = new FileBody(f, "application/vnd.ms-excel");
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create("application/vnd.ms-excel"));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added xls file " + f.getName());
                 } else if (contentType != null) {
-                    fb = new FileBody(f, contentType);
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.create(contentType));
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t,
                         "added recognized filetype (" + contentType + ") " + f.getName());
                 } else {
                     contentType = "application/octet-stream";
-                    fb = new FileBody(f, contentType);
-                    entity.addPart(f.getName(), fb);
+                    fb = new FileBody(f, ContentType.APPLICATION_OCTET_STREAM);
+                    builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.w(t, "added unrecognized file (" + contentType + ") " + f.getName());
                 }
@@ -417,8 +419,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         // the next file would exceed the 10MB threshold...
                         Log.i(t, "Extremely long post is being split into multiple posts");
                         try {
-                            StringBody sb = new StringBody("yes", Charset.forName("UTF-8"));
-                            entity.addPart("*isIncomplete*", sb);
+                            StringBody sb = new StringBody("yes",
+                                ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                            builder.addPart("*isIncomplete*", sb);
                         } catch (Exception e) {
                             e.printStackTrace(); // never happens...
                         }
@@ -428,7 +431,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 }
             }
 
-            httppost.setEntity(entity);
+            httppost.setEntity(builder.build());
 
             // prepare response and return uploaded
             HttpResponse response = null;
