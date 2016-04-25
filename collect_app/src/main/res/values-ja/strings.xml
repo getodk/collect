@@ -292,6 +292,7 @@
   <string name="survey_saving_encrypting_message">データを暗号化中…</string>
   <string name="high_resolution_summary">高解像度のビデオ録画を有効にします</string>
   <string name="high_resolution">高解像度ビデオを有効</string>
+  <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
   <string name="google_drive">Google ドライブ</string>
   <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
@@ -299,9 +300,14 @@
   <string name="protocol_settings">プラットフォーム設定を構成</string>
   <string name="aggregate_preferences">ODK Aggregate 設定</string>
   <string name="other_preferences">その他のプラットフォーム設定</string>
+  <string name="google_preferences">Google スプレッドシート設定</string>
   <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
+  <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="invalid_oauth">OAuth 2 トークンが正しくありません</string>
+  <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
+  <string name="google_audio_error">この時点では Google スプレッドシートでオーディオファイルはサポートされていません。</string>
+  <string name="google_video_error">この時点では Google スプレッドシートでビデオファイルはサポートされていません。</string>
   <string name="picasa_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
@@ -311,4 +317,17 @@
   <string name="change_server_url">サーバー URL</string>
   <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="no_blank_search">検索フィールドは空にできません。</string>
-  </resources>
+  <string name="google_sheets_url">Google スプレッドシート URL</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
+  <string name="sheets_google_account_needed">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
+  <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %1%s あります。スプレッドシートにアップロードできません。</string>
+  <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
+  <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
+  <string name="google_sheets_update_error">スプレッドシートの更新中にエラー。スプレッドシートの所有者が、書き込みアクセス許可を与えていることを確認してください。</string>
+  <string name="google_sheets_missing_columns">スプレッドシートの次の列が見つかりません: %1$s</string>
+  <string name="url_error_whitespace">URL に空白は使用できません</string>
+  <string name="password_error_whitespace">パスワードは、先頭または末尾に空白は使用できません</string>
+  <string name="username_error_whitespace">ユーザー名は、先頭または末尾に空白は使用できません</string>
+  <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
+</resources>

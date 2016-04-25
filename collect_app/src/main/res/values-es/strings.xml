@@ -294,6 +294,7 @@
   <string name="survey_saving_encrypting_message">Encriptando datos...</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
   <string name="high_resolution">Activa vídeo HD</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mi Drive</string>
   <string name="go_shared">Compartido conmigo</string>
@@ -301,9 +302,14 @@
   <string name="protocol_settings">Configurar Ajustes de Plataforma</string>
   <string name="aggregate_preferences">Ajustes de ODK Aggregate</string>
   <string name="other_preferences">Ajustes de Otras Plataformas</string>
+  <string name="google_preferences">Características de Google Sheets</string>
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
+  <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
+  <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
+  <string name="google_audio_error">Archivos de audio no admitidos por Google Sheets de momento.</string>
+  <string name="google_video_error">Archivos de vídeo no admitidos por Google Sheets de momento.</string>
   <string name="picasa_upload_error">Error al cargar la foto que no existe: %1$s</string>
   <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
   <string name="odk_auto_note">Notificación de ODK Autosend</string>
@@ -311,6 +317,19 @@
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="change_server_url">URL del Servidor</string>
-  <string name="google_search_browse">Búsqueda de formularios. O Seleccione \'My Drive\' abajo para navegar.</string>
+  <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
-  </resources>
+  <string name="google_sheets_url">URL de Google Sheets</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
+  <string name="sheets_google_account_needed">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
+  <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %1%s. No se puede subir la hoja.</string>
+  <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
+  <string name="google_sheets_access_denied">Acceso denegado. Asegurese de que dispone de permisos de acceso.</string>
+  <string name="google_sheets_update_error">Error al actualizar la hoja. Asegurese de que dispone de permisos de acceso.</string>
+  <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
+  <string name="url_error_whitespace">Espacios no permitidos en URL</string>
+  <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
+  <string name="username_error_whitespace">Espacios delante o detras no permitidos en nombre de usuario</string>
+  <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Hay el servicio instalado?</string>
+</resources>

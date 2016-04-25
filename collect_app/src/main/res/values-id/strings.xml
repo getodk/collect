@@ -299,7 +299,6 @@
   <string name="other_preferences">Pengaturan platform lainnya</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
-  <string name="google_set_account">Kamu telah memilih Google Map Engine sebagai server pilihan, Silahkan pilih Akun Google terkait dalam Pengaturan Umum sebelum melanjutkan</string>
   <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
   <string name="picasa_upload_error">Gagal mengunggah foto yang tidak ada: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikasi pengiriman otomatis ODK gagal, pastikan pengaturan anda sudah benar</string>
@@ -308,6 +307,6 @@
   <string name="delete_after_send">Hapus setelah mengirim</string>
   <string name="delete_after_send_summary">Menghapus media dan formulir yang sempurna setelah mengirim ke server  </string>
   <string name="change_server_url">Tautan server (URL)</string>
-  <string name="google_search_browse">Mencari formulir. Atau pilih \'Drive Saya\' dibawah untuk browse</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
-  </resources>
+  <string name="default_google_sheets_url"></string>
+</resources>

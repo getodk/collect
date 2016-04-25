@@ -307,6 +307,6 @@
   <string name="delete_after_send">Удалить после отправки</string>
   <string name="delete_after_send_summary">Удаляет завершённые формы и их медиа после отправки данных на сервер</string>
   <string name="change_server_url">URL сервера</string>
-  <string name="google_search_browse">Поиск форм. Или выберите \'Мой диск\' ниже для просмотра.</string>
   <string name="no_blank_search">Поле поиска не может быть пустым.</string>
-  </resources>
+  <string name="default_google_sheets_url"></string>
+</resources>

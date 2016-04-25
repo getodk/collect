@@ -241,4 +241,5 @@
   <string name="replace_bearing">替代方位</string>
   <string name="getting_bearing">加载方位</string>
   <string name="accept_bearing">记录方位</string>
+  <string name="default_google_sheets_url"></string>
 </resources>
