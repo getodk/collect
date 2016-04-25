@@ -201,7 +201,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 outcome.mResults.put(id, fail + "Client Protocol Exception");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -209,7 +208,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (ConnectTimeoutException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 outcome.mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -217,7 +215,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -225,7 +222,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (SocketTimeoutException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 outcome.mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -233,7 +229,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (HttpHostConnectException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 outcome.mResults.put(id, fail + "Network Connection Refused");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -241,7 +236,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
@@ -465,7 +459,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
-                WebUtils.clearHttpConnectionManager();
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
