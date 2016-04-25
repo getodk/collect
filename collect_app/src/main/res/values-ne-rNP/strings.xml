@@ -300,6 +300,6 @@
   <string name="delete_after_send">पठाए पछि डिलिट गर्नुहोस् </string>
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="change_server_url">सर्भर URL</string>
-  <string name="google_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
   <string name="no_blank_search">सर्च क्षेत्र रिक्त हुनु हुदैन।</string>
-  </resources>
+  <string name="default_google_sheets_url"></string>
+</resources>

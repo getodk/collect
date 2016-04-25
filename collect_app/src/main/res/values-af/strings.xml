@@ -310,4 +310,5 @@
   <string name="delete_after_send_summary">Verwyder gefinaliseerde vorms en media nadat dit server toe gestuur is</string>
   <string name="change_server_url">Server URL</string>
   <string name="no_blank_search">Soek-veld mag nie leeg wees nie.</string>
+  <string name="default_google_sheets_url"></string>
 </resources>

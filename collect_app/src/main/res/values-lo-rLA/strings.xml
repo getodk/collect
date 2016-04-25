@@ -301,6 +301,6 @@
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
-  <string name="google_search_browse">ຊອກຫາຟອມ. ຫຼື ເລືອກ \'ຊ້ອງຂອງຂ້ອຍ\' ຂ້າງລຸ່ມ.</string>
   <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
-  </resources>
+  <string name="default_google_sheets_url"></string>
+</resources>
