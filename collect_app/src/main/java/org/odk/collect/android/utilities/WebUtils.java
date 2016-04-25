@@ -27,17 +27,12 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.http.HttpStatus;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpHost;
-import org.opendatakit.httpclientandroidlib.HttpRequest;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
+import org.opendatakit.httpclientandroidlib.*;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
@@ -52,7 +47,6 @@ import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
-import org.opendatakit.httpclientandroidlib.conn.ClientConnectionManager;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.CloseableHttpClient;
@@ -85,8 +79,6 @@ public final class WebUtils {
 
 	public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
 	public static final String GZIP_CONTENT_ENCODING = "gzip";
-
-	private static ClientConnectionManager httpConnectionManager = null;
 
 	public static final List<AuthScope> buildAuthScopes(String host) {
 		List<AuthScope> asList = new ArrayList<AuthScope>();
@@ -448,7 +440,6 @@ public final class WebUtils {
 			}
 			return new DocumentFetchResult(doc, isOR);
 		} catch (Exception e) {
-			clearHttpConnectionManager();
 			e.printStackTrace();
 			String cause;
 			Throwable c = e;
@@ -461,18 +452,6 @@ public final class WebUtils {
 
 			Log.w(t, error);
 			return new DocumentFetchResult(error, 0);
-		}
-	}
-
-	public static void clearHttpConnectionManager() {
-		// If we get an unexpected exception, the safest thing is to close
-		// all connections
-		// so that if there is garbage on the connection we ensure it is
-		// removed. This
-		// is especially important if the connection times out.
-		if ( httpConnectionManager != null ) {
-			httpConnectionManager.shutdown();
-			httpConnectionManager = null;
 		}
 	}
 }
