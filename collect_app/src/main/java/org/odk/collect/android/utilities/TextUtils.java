@@ -103,6 +103,9 @@ public class TextUtils {
         // opening tag if a tag is the first thing in the string
         // so we hack around it so it begins with something else
         // when we convert it
+	    if ( text == null ) {
+			return null;
+		}
 
         // terrible hack, just add some chars
         Spanned brokenHtml = Html.fromHtml("x" + markdownToHtml(text));
