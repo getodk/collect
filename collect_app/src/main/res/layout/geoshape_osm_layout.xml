@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:id="@+id/outer_linear"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="0dip"
+        android:paddingRight="0dip"
+        android:paddingTop="5dip"
+        android:paddingBottom="0dip"
+        android:background="#BF000000">
+
+        <TextView
+            android:id="@+id/geoshape_instruction"
+            android:text="@string/geoshape_instruction"
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:paddingBottom="5dip"
+            android:layout_height="wrap_content" />
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/geoshape_mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="26dip"
+        android:layout_alignParentRight="true"
+        >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dip">
+
+        <Button
+            android:id="@+id/gps"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:drawableRight="@drawable/ic_flight_black_36dp"
+            android:layout_weight="1" />
+        <Button
+            android:id="@+id/layers"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:drawableRight="@drawable/ic_layers_black_36dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:drawableRight="@drawable/ic_delete_black_36dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:drawableRight="@drawable/ic_save_black_36dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
