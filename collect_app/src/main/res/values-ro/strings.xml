@@ -292,6 +292,7 @@
   <string name="survey_saving_encrypting_message">Criptez datele...</string>
   <string name="high_resolution_summary">Activați înregistrările video high-resolution</string>
   <string name="high_resolution">Activați video hi-res</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>
@@ -299,9 +300,14 @@
   <string name="protocol_settings">Configurați setările platformei</string>
   <string name="aggregate_preferences">Setări ODK Aggregate</string>
   <string name="other_preferences">Setările altor platforme</string>
+  <string name="google_preferences">Setări Google Sheets</string>
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
+  <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
+  <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
+  <string name="google_audio_error">Fișierele audio nu sunt suportate de Google Sheets în acest moment.</string>
+  <string name="google_video_error">Fișierele video nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="picasa_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
   <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
   <string name="odk_auto_note">Notificare ODK Autosend</string>
@@ -309,6 +315,19 @@
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
   <string name="change_server_url">URL server</string>
-  <string name="google_search_browse">Căutați formulare. Sau selectați \'My Drive\' de mai jos pentru a naviga către ele.</string>
+  <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
   <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
-  </resources>
+  <string name="google_sheets_url">URL Google Sheets</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
+  <string name="sheets_google_account_needed">Ați selectat  Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
+  <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %1%s. Nu am putut încărca datele în tabel.</string>
+  <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
+  <string name="google_sheets_access_denied">Acces interzis. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
+  <string name="google_sheets_update_error">Eroare la actualizarea foii de calcul. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
+  <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
+  <string name="url_error_whitespace">spațiile nu sunt permise în adresele url</string>
+  <string name="password_error_whitespace">nu sunt permise spații în parole</string>
+  <string name="username_error_whitespace">nu sunt permise spații în numele de utilizator</string>
+  <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Este instalat Google Play Services?</string>
+</resources>

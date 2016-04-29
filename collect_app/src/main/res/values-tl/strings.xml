@@ -233,4 +233,5 @@
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">URL ng Server</string>
+  <string name="default_google_sheets_url"></string>
 </resources>

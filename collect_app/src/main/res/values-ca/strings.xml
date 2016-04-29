@@ -20,6 +20,8 @@
   <string name="cannot_edit_completed_form">El formulari no pot ser editat un cop marcat com complert. Pot haver-se encriptat.</string>
   <string name="capture_audio">Enregistrar so</string>
   <string name="capture_image">Pren foto</string>
+  <string name="capture_osm">Executa OpenMapKit</string>
+  <string name="recapture_osm">Refer signatura OSM</string>
   <string name="capture_video">Enregistrar Vídeo</string>
   <string name="change_language">Canvia idioma</string>
   <string name="change_password">Clau d\'accés ODK</string>
@@ -290,6 +292,7 @@
   <string name="survey_saving_encrypting_message">Encriptant dades...</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
   <string name="high_resolution">Activar vídeo HD</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
@@ -297,9 +300,14 @@
   <string name="protocol_settings">Configurar característiques de la plataforma</string>
   <string name="aggregate_preferences">Paràmetres d\'ODK Aggregate</string>
   <string name="other_preferences">Paràmetres d\'altres plataformes</string>
+  <string name="google_preferences">Configuració Google Sheets</string>
   <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
   <string name="no_google_account">Compte Google no seleccionada!</string>
+  <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
+  <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
+  <string name="google_audio_error">Arxius d\'audio no s\'admeten a Google Sheets de moment</string>
+  <string name="google_video_error">Arxius de vídeo no s\'admeten a Google Sheets de moment</string>
   <string name="picasa_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
@@ -307,6 +315,19 @@
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
   <string name="change_server_url">URL Servidor</string>
-  <string name="google_search_browse">Buscar formularis. O seleccionar \'My Drive\' per visualitzat.</string>
+  <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="no_blank_search">Camp de cerca no pot ser blanc.</string>
-  </resources>
+  <string name="google_sheets_url">Google Sheets URL</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
+  <string name="sheets_google_account_needed">Heu seleccionat Google Sheets com servidor, seleccioneu el compte Google a Configuració general abans de continuar</string>
+  <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %1%. No es pot carregar la fulla de càlcul.</string>
+  <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
+  <string name="google_sheets_access_denied">Accés denegat. Si us plau, assegureu-vos que teniu permís d\'accés a la fulla de càlcul.</string>
+  <string name="google_sheets_update_error">Error actualitzant fulla. Comproveu que el propietari de la fulla de càlcul us ha atorgat permís d\'accés.</string>
+  <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
+  <string name="url_error_whitespace">Espais en blanc no permesos en una URL</string>
+  <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
+  <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
+  <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
+</resources>

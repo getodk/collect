@@ -1,8 +1,8 @@
-gradle.ext.gradleConfigVersion = 21
+gradle.ext.gradleConfigVersion = 40
 
 if ( !gradle.ext.has('workspacePath') ) {
-	def env = System.getProperties();
-	logger.warn("collect/settings.gradle System.getProperties().stringPropertyNames(): " + env.stringPropertyNames());
+    def env = System.getProperties();
+    logger.warn("collect/settings.gradle System.getProperties().stringPropertyNames(): " + env.stringPropertyNames());
     def path = System.getProperty('com.android.studio.gradle.project.path');
     if ( path != null ) {
         logger.warn("collect/settings.gradle Found value for System.getProperty('com.android.studio.gradle.project.path')");
@@ -32,8 +32,3 @@ settingsScripts.each {
 }
 
 include(collectProjectChild)
-
-if (playServicesPath.exists() && gradle.ext.useLocal) { // check if local play services project is present
-    include playServicesName
-    project(playServicesName).setProjectDir(playServicesPath) // set local location
-}

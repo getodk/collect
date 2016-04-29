@@ -292,6 +292,7 @@
   <string name="survey_saving_encrypting_message">Krypterer data...</string>
   <string name="high_resolution_summary">Slå på høyoppløst videoopptak.</string>
   <string name="high_resolution">Slå på høyoppløst video.</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Min Drive</string>
   <string name="go_shared">Delt med meg</string>
@@ -299,9 +300,14 @@
   <string name="protocol_settings">Angi plattforminnstillinger</string>
   <string name="aggregate_preferences">Innstillinger for ODK Aggregate</string>
   <string name="other_preferences">Andre plattforminnstillinger</string>
+  <string name="google_preferences">Innstillinger for Google Sheets</string>
   <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
+  <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
+  <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
+  <string name="google_audio_error">Google Sheets støtter ikke lydfiler. </string>
+  <string name="google_video_error">Google Sheets støtter ikke videofiler. </string>
   <string name="picasa_upload_error">Feil ved opplasting av bilde: %1$s</string>
   <string name="odk_auth_auth_fail">Feil ved autentisering av ODK Autosend. Sjekk innstillingene dine.</string>
   <string name="odk_auto_note">ODK Autosend kvittering</string>
@@ -309,5 +315,19 @@
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
   <string name="change_server_url">Server URL</string>
+  <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="no_blank_search">Søkefeltet kan ikke være tomt.</string>
+  <string name="google_sheets_url">Google Sheets URL</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
+  <string name="sheets_google_account_needed">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
+  <string name="sheets_max_columns">Maks antall kolonner er 255, ditt skjema har %1%s. Det er ikke mulig å laste opp dette regnearket.</string>
+  <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
+  <string name="google_sheets_access_denied">Tilgang avvist. Pass på at eieren av regnearket har gitt deg tilgang.</string>
+  <string name="google_sheets_update_error">Feil ved oppdatering av regnearket. Pass på at eieren av regnearket har gitt deg skrivetilgang.</string>
+  <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
+  <string name="url_error_whitespace">mellomrom er ikke tillatt i URLs</string>
+  <string name="password_error_whitespace">mellomrom er ikke tillatt før eller etter passord</string>
+  <string name="username_error_whitespace">mellomrom er ikke tillatt før eller etter brukernavn</string>
+  <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
 </resources>

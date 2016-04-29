@@ -49,11 +49,11 @@
   <string name="discard_answer">Видалити відповідь</string>
   <string name="discard_group">Видалити групу</string>
   <string name="download">Отримати обране</string>
-  <string name="download_forms_result">Завантажити результат</string>
+  <string name="download_forms_result">Стан завантаження</string>
   <string name="downloading_data">Під`єднуюсь до сервера</string>
   <string name="do_not_change">Скасувати</string>
   <string name="do_not_exit">Скасувати</string>
-  <string name="do_not_save">Ігнорувати зміни</string>
+  <string name="do_not_save">Не зберігати</string>
   <string name="entering_repeat">Додати групу</string>
   <string name="entering_repeat_ask">Додати нову групу?</string>
   <string name="enter_data">Заповнити анкету</string>
@@ -102,8 +102,8 @@
   <string name="password">Пароль</string>
   <string name="play_audio">Відтворити звук</string>
   <string name="play_video">Відтворити відео</string>
-  <string name="please_wait">Будь ласка, трохи почекайте.</string>
-  <string name="please_wait_long">Будь ласка, почекайте. Це може зайняти кілька хвилин.</string>
+  <string name="please_wait">Будь ласка, зачекайте.</string>
+  <string name="please_wait_long">Будь ласка, зачекайте. Це може зайняти кілька хвилин.</string>
   <string name="quit_application">Вийти з %s</string>
   <string name="quit_entry">Зберегти анкету та вийти</string>
   <string name="refresh">Оновити</string>
@@ -184,15 +184,15 @@
   <string name="change_view">Змінити вигляд</string>
   <string name="show_sent_and_unsent_forms">Показати надіслані та ненадіслані анкети</string>
   <string name="show_unsent_forms">Показати ненадіслані анкети</string>
-  <string name="added_on_date_at_time">\'Додано\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="added_on_date_at_time">\'Додано\' EEE, dd MMM, yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Збережено\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="saved_on_date_at_time">\'Збережено\' EEE, dd MMM, yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Завершено\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="finalized_on_date_at_time">\'Завершено\' EEE, dd MMM, yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Надіслано\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="sent_on_date_at_time">\'Надіслано\' EEE, dd MMM, yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Помилка надсилання\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'Помилка надсилання\' EEE, dd MMM, yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Версія:</string>
   <string name="parent_form_not_present">Неможливо відредагувати збережену анкету бо відповідна незаповнена анкета відсутня або була видалена.\n\nID анкети: %1$s</string>
@@ -273,14 +273,62 @@
   <string name="ext_import_cancelled_message">Читання даних відмінене!</string>
   <string name="ext_import_finalizing_message">Завершення передзавантажених даних...</string>
   <string name="ext_import_completed_message">Читання даних завершене!</string>
-  <string name="google_drive">Google диск</string>
+  <string name="ext_not_initialized_error">ExternalDataManager не ініціалізований.</string>
+  <string name="ext_import_csv_missing_error">Зовнішні дані для %1$s не імпортовані. Можливо ви забули підключити в анкеті %2$s.csv файл?</string>
+  <string name="ext_search_generic_error">Синтаксична помилка в функціі search(): %s</string>
+  <string name="ext_assign_value_error">Неможливо присвоїти значення в \'%s\'.</string>
+  <string name="fs_delete_media_path_if_file_error">Не можу видалити\'%s\'. Будь ласка, видаліть файл вручну та завантажте анкету знову.</string>
+  <string name="fs_create_media_folder_error">Неможливо створити медіа директорію \'%s\'.</string>
+  <string name="fs_file_copy_error">Неможливо скопіювати \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
+  <string name="survey_internal_error">Внутрішня помилка: невдалий перехід.</string>
+  <string name="survey_multiple_forms_error">Ви завантажили дві різні анкети однакової версії з однаковим ID. Можливо це та сама акета опублікована в різний час або на різних серверах. В будь-якому разі одну треба видалити.</string>
+  <string name="survey_loading_reading_form_message">Читання анкети...</string>
+  <string name="survey_loading_reading_data_message">Читання даних опитування...</string>
+  <string name="survey_loading_reading_csv_message">Читання CSV файлів...</string>
+  <string name="survey_saving_validating_message">Перевірка відповіді...</string>
+  <string name="survey_saving_collecting_message">Збір даних...</string>
+  <string name="survey_saving_saving_message">Збереження на SD картку...</string>
+  <string name="survey_saving_finalizing_message">Завершення на SD картку...</string>
+  <string name="survey_saving_encrypting_message">Шифрування даних...</string>
+  <string name="high_resolution_summary">Дозволяє запис відео високої якості</string>
+  <string name="high_resolution">Відео високої якості</string>
+  <string name="server_platform_google_sheets">Google Диск, Google Сторінки</string>
+  <string name="google_drive">Google Диск</string>
   <string name="go_drive">Мій диск</string>
+  <string name="go_shared">Розділене зі мною</string>
+  <string name="modified_on_date_at_time">\'Зімінено в\' EEE, dd MMM, yyyy \'at\' HH:mm</string>
+  <string name="protocol_settings">Змінити налаштування платформи</string>
   <string name="aggregate_preferences">Налаштування ODK Aggregate</string>
   <string name="other_preferences">Налаштування інших платформ</string>
+  <string name="google_preferences">Налаштування Google Сторінок</string>
+  <string name="drive_get_file">Отримання %1$s та медіа файлів.</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
+  <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
+  <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
+  <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
+  <string name="google_audio_error">Аудіо файли, наразі, Google Сторінками не підтримуються.</string>
+  <string name="google_video_error">Відео файли, наразі, Google Сторінками не підтримуються.</string>
+  <string name="picasa_upload_error">Неможливо надіслати неіснуючу фотографію: %1$s</string>
+  <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
+  <string name="odk_auto_note">Повідомлення ODK Autosend</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
   <string name="delete_after_send">Видалити після надсилання</string>
   <string name="delete_after_send_summary">Видаляє завершені анкети та медіа файли після надсилання на сервер</string>
   <string name="change_server_url">Адреса серверу URL</string>
+  <string name="google_search_browse">Шукайте анкети. Або натисніть \'Мій диск\' для навігації.</string>
   <string name="no_blank_search">Поле пошуку не може бути порожнім</string>
+  <string name="google_sheets_url">Адреса Google Сторінок</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
+  <string name="sheets_google_account_needed">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
+  <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %1%s. Неможливо вивантажити в Сторінки.</string>
+  <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
+  <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
+  <string name="google_sheets_update_error">Помилка оновлення Сторінок. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
+  <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
+  <string name="url_error_whitespace">посилання не може містити пробілів</string>
+  <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
+  <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
+  <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?
+</string>
 </resources>

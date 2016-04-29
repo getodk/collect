@@ -174,6 +174,8 @@ public class WidgetFactory {
                     questionWidget = new ListWidget(context, fep, true);
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
+                } else if (appearance.contains("search")) {
+                    questionWidget = new SelectOneSearchWidget(context, fep);
                 } else {
                     questionWidget = new SelectOneWidget(context, fep);
                 }
