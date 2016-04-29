@@ -14,9 +14,20 @@
 
 package org.odk.collect.android.widgets;
 
-import java.text.DecimalFormat;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
-import android.widget.*;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -25,22 +36,19 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointMapNotDraggableActivity;
+import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import java.text.DecimalFormat;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
+ * @author Jon Nordling (jonnordling@gmail.com)
  */
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	public static final String LOCATION = "gp";
@@ -51,7 +59,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 	private Button mGetLocationButton;
 	private Button mViewButton;
-
+	private SharedPreferences sharedPreferences;
+	private String mapSDK;
+	private String GOOGLE_MAP_KEY = "google_maps";
+	private String OSM_MAP_KEY = "osmdroid";
 	private TextView mStringAnswer;
 	private TextView mAnswerDisplay;
 	private final boolean mReadOnly;
@@ -87,20 +98,23 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		// use mapsV2 if it is available and was requested
 		mUseMapsV2 = requestV2 && CompatibilityUtils.useMapsV2(context);
-
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+//		mUseMapsV2 = true;
 		if ( mUseMapsV2 ) {
 			// if we are using mapsV2, we are using maps...
 			mUseMaps = true;
 		} else if ( requestMaps ) {
 			// using the mapsV2 widget if supported
 			// otherwise just use the plain widget
-      mUseMaps = CompatibilityUtils.useMapsV2(context);
+			mUseMaps = CompatibilityUtils.useMapsV2(context);
 		} else {
 			// use the plain geolocation activity
 			mUseMaps = false;
 		}
 
 		mReadOnly = prompt.isReadOnly();
+
 
 		// assemble the widget...
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -118,7 +132,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		// setup play button
 		mViewButton = new Button(getContext());
 		mViewButton.setId(QuestionWidget.newUniqueId());
-		mViewButton.setText(getContext().getString(R.string.show_location));
+		mViewButton.setText(getContext().getString(R.string.get_point));
 		mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mViewButton.setPadding(20, 20, 20, 20);
 		mViewButton.setLayoutParams(params);
@@ -134,9 +148,18 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 				Intent i;
 				if (mUseMapsV2 ) {
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					if (mapSDK.equals(GOOGLE_MAP_KEY)){
+						i = new Intent(getContext(), GeoPointMapActivity.class);
+					}else{
+						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
+					}
 				} else {
-					i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
+					if (mapSDK.equals(GOOGLE_MAP_KEY)){
+						i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
+					}else{
+						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
+					}
+
 				}
 
 				String s = mStringAnswer.getText().toString();
@@ -174,11 +197,20 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 								mPrompt.getIndex());
 				Intent i = null;
 				if ( mUseMapsV2 ) {
-					i = new Intent(getContext(), GeoPointMapActivity.class);
+					if (mapSDK.equals(GOOGLE_MAP_KEY)){
+						i = new Intent(getContext(), GeoPointMapActivity.class);
+					}else{
+						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
+					}
 				} else if (mUseMaps) {
-					i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
+					if (mapSDK.equals(GOOGLE_MAP_KEY)){
+						i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
+					}else{
+						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
+					}
 				} else {
 					i = new Intent(getContext(), GeoPointActivity.class);
+
 				}
 
 				String s = mStringAnswer.getText().toString();
@@ -223,27 +255,27 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
 		// BUT for mapsV2, we only show the mGetLocationButton, altering its text.
 		// for maps, we show the view button.
-		if ( mUseMapsV2 ) {
+		if (mUseMapsV2) {
 			// show the GetLocation button
 			mGetLocationButton.setVisibility(View.VISIBLE);
 			// hide the view button
 			mViewButton.setVisibility(View.GONE);
-			if ( mReadOnly ) {
+			if (mReadOnly) {
 				mGetLocationButton.setText(getContext()
-						.getString(R.string.show_location));
+						.getString(R.string.get_point));
 			} else {
 				mGetLocationButton.setText(getContext()
-						.getString(R.string.view_change_location));
+						.getString(R.string.get_point));
 			}
 		} else {
 			// if it is read-only, hide the get-location button...
-			if ( mReadOnly ) {
+			if (mReadOnly) {
 				mGetLocationButton.setVisibility(View.GONE);
 			} else {
 				mGetLocationButton.setVisibility(View.VISIBLE);
 				mGetLocationButton.setText(getContext()
 						.getString(dataAvailable ?
-							R.string.replace_location : R.string.get_location));
+								R.string.get_point : R.string.get_point));
 			}
 
 			if (mUseMaps) {
@@ -329,17 +361,22 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	@Override
 	public void setBinaryData(Object answer) {
 		String s = (String) answer;
-		mStringAnswer.setText(s);
+		if (!s.equals("") || s == null){
+			mStringAnswer.setText(s);
+			String[] sa = s.split(" ");
+			mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
+					+ formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
+					+ getContext().getString(R.string.longitude) + ": "
+					+ formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
+					+ getContext().getString(R.string.altitude) + ": "
+					+ truncateDouble(sa[2]) + "m\n"
+					+ getContext().getString(R.string.accuracy) + ": "
+					+ truncateDouble(sa[3]) + "m");
+		}else{
+			mStringAnswer.setText(s);
+			mAnswerDisplay.setText("");
 
-		String[] sa = s.split(" ");
-		mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
-				+ formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
-				+ getContext().getString(R.string.longitude) + ": "
-				+ formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
-				+ getContext().getString(R.string.altitude) + ": "
-				+ truncateDouble(sa[2]) + "m\n"
-				+ getContext().getString(R.string.accuracy) + ": "
-				+ truncateDouble(sa[3]) + "m");
+		}
 		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 		updateButtonLabelsAndVisibility(true);
 	}

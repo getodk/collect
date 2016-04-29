@@ -9,7 +9,8 @@
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
 		License.
---><resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
@@ -335,6 +336,60 @@
 <string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
 <string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
 <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
+
+<!-- Geo string added in feature-geofeatures branch-->
+<string name="map_preferences">Mapping Options</string>
+<string name="map_sdk_selector_title">Mapping SDK</string>
+<string name="map_sdk_behavior">Mapping SDK</string>
+<string name="google_maps_sdk">Google Maps SDK</string>
+<string name="openstreetmap_sdk">OpenStreet Map SDK</string>
+<string name="show_map_sdk">Show Map SDK Options</string>
+<string name="openstreetmap">OpenStreetMap</string>
+<string name="mapquest_streets">MapQuest Streets</string>
+<string name="mapquest_satellite">MapQuest Satellite</string>
+<string name="streets">Streets</string>
+<string name="terrain">Terrain</string>
+<string name="hybrid">Hybrid</string>
+<string name="satellite">Satellite</string>
+<string name="map_basemap_selector_title">Basemaps</string>
+<string name="map_basemap_behavior">Select a basemap</string>
+<string name="show_map_basemap">Show Basemap Options</string>
+
+<string name="save_point">Save GeoPoint</string>
+<string name="get_point">Start GeoPoint</string>
+
+<string name="get_shape">Start GeoShape</string>
+<string name="get_trace">Start GeoTrace</string>
+
+<string name="geoshape_title">GeoShape</string>
+<string name="mbtiles_not_found">No .mbtiles file found in the directory \'%s\'.</string>
+<string name="select_geotrace_mode">"Select GeoTrace Mode"</string>
+<string name="start">Start</string>
+<string name="enable_gps">Enable GPS</string>
+<string name="enable_gps_message">"GPS is disabled in your device. Would you like to enable it?"</string>
+<string name="geotrace_title">GeoTrace</string>
+<string name="polygon_save">Save as Polygon</string>
+<string name="polyline_save">Save as Polyline</string>
+<string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
+<string name="select_offline_layer">Select Offline Layer</string>
+<string name="polygon_or_polyline">"Save GeoTrace As"</string>
+<string name="minutes">Minutes</string>
+<string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
+<string name="geo_exit_warning">Discard changes and return to ODK?</string>
+<string name="polygon_validator">Must have at least 3 points to create Polygon</string>
+<string name="dialog_continue">Continue</string>
+<string name="clear">Clear</string>
+<string name="polyline_polygon_text">Save GeoTrace As</string>
+<string name="manual_mode">Manual Mode</string>
+<string name="automatic_mode">Automatic Mode</string>
+<string name="geoshape_instruction">Long press to place marks.</string>
+<string name="geotrace_instruction">Wait for lock, then tap add mark button to start.</string>
+<string name="geopoint_instruction">Long press to place mark or tap add mark button.</string>
+<string name="discard">Discard</string>
+<string name="fly_to_where">Fly To Where?</string>
+<string name="fly_to_location">Fly to current location</string>
+<string name="fly_to_feature">Fly to saved feature</string>
+<string name="points_captured">%s points captured</string>
 <string name="google_sheets_invalid_column_form">\'n%1$s\' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
 <string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
 </resources>

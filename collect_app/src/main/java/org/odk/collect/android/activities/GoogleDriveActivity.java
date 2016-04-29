@@ -18,29 +18,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
-import org.odk.collect.android.listeners.TaskListener;
-import org.odk.collect.android.logic.DriveListItem;
-import org.odk.collect.android.preferences.PreferencesActivity;
-
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -86,6 +63,29 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.FileArrayAdapter;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
+import org.odk.collect.android.listeners.TaskListener;
+import org.odk.collect.android.logic.DriveListItem;
+import org.odk.collect.android.preferences.PreferencesActivity;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 
 public class GoogleDriveActivity extends ListActivity implements OnConnectionFailedListener,
         TaskListener, GoogleDriveFormDownloadListener {
@@ -669,7 +669,10 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                         dirs);
                 GoogleDriveActivity.this.setListAdapter(adapter);
             } else {
-                adapter.addAll(dirs);
+                for  (DriveListItem d : dirs) {
+                    adapter.add(d);
+                }
+//                adapter.addAll(dirs);
             }
             adapter.sort(new Comparator<DriveListItem>() {
                 @Override

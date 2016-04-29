@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -66,13 +67,12 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
 
     private Location mLocation;
     private Button mAcceptLocation;
-    private Button mCancelLocation;
     private Button mReloadLocation;
 
     private boolean mCaptureLocation = true;
     private boolean mRefreshLocation = true;
     private Button mShowLocation;
-
+	private Button mLayers;
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
 
@@ -80,16 +80,16 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
     private int mLocationCount = 0;
 
     private boolean mZoomed = false;
+	private MapHelper mHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if ( savedInstanceState != null ) {
         	mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
         }
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         try {
             setContentView(R.layout.geopoint_layout);
@@ -128,16 +128,6 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
 			mRefreshLocation = false; // just show this position; don't change it...
 			mZoomed = true;
 		}
-
-        mCancelLocation = (Button) findViewById(R.id.cancel_location);
-        mCancelLocation.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
-                finish();
-            }
-        });
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -239,9 +229,19 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
      		}
      	});
 
-        // not clickable until we have a marker set....
-     	mShowLocation.setClickable(false);
-    }
+		// not clickable until we have a marker set....
+		mShowLocation.setClickable(false);
+
+		// Menu Layer Toggle
+		mLayers = ((Button) findViewById(R.id.layer_menu));
+		mLayers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mHelper.showLayersDialog();
+			}
+		});
+
+	}
 
     private void stopGeolocating() {
     	mRefreshLocation = false;
@@ -295,8 +295,9 @@ public class GeoPointMapNotDraggableActivity extends FragmentActivity implements
         super.onResume();
 
 		if ( mMap == null ) {
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
+			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+			mHelper = new MapHelper(this,mMap);
+			mHelper.setBasemap();
 
       if ( mMap == null ) {
           Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
