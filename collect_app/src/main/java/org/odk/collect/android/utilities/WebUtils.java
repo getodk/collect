@@ -27,39 +27,30 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.http.HttpStatus;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpHost;
-import org.opendatakit.httpclientandroidlib.HttpRequest;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
+import org.opendatakit.httpclientandroidlib.*;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
-import org.opendatakit.httpclientandroidlib.auth.params.AuthPNames;
 import org.opendatakit.httpclientandroidlib.client.AuthCache;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.client.config.AuthSchemes;
+import org.opendatakit.httpclientandroidlib.client.config.CookieSpecs;
+import org.opendatakit.httpclientandroidlib.client.config.RequestConfig;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
-import org.opendatakit.httpclientandroidlib.client.params.AuthPolicy;
-import org.opendatakit.httpclientandroidlib.client.params.ClientPNames;
-import org.opendatakit.httpclientandroidlib.client.params.CookiePolicy;
-import org.opendatakit.httpclientandroidlib.client.params.HttpClientParams;
-import org.opendatakit.httpclientandroidlib.client.protocol.ClientContext;
-import org.opendatakit.httpclientandroidlib.conn.ClientConnectionManager;
+import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
+import org.opendatakit.httpclientandroidlib.config.SocketConfig;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
-import org.opendatakit.httpclientandroidlib.impl.client.DefaultHttpClient;
-import org.opendatakit.httpclientandroidlib.params.BasicHttpParams;
-import org.opendatakit.httpclientandroidlib.params.HttpConnectionParams;
-import org.opendatakit.httpclientandroidlib.params.HttpParams;
+import org.opendatakit.httpclientandroidlib.impl.client.CloseableHttpClient;
+import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -89,19 +80,17 @@ public final class WebUtils {
 	public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
 	public static final String GZIP_CONTENT_ENCODING = "gzip";
 
-	private static ClientConnectionManager httpConnectionManager = null;
-
 	public static final List<AuthScope> buildAuthScopes(String host) {
 		List<AuthScope> asList = new ArrayList<AuthScope>();
 
 		AuthScope a;
 		// allow digest auth on any port...
-		a = new AuthScope(host, -1, null, AuthPolicy.DIGEST);
+		a = new AuthScope(host, -1, null, AuthSchemes.DIGEST);
 		asList.add(a);
 		// and allow basic auth on the standard TLS/SSL ports...
-		a = new AuthScope(host, 443, null, AuthPolicy.BASIC);
+		a = new AuthScope(host, 443, null, AuthSchemes.BASIC);
 		asList.add(a);
-		a = new AuthScope(host, 8443, null, AuthPolicy.BASIC);
+		a = new AuthScope(host, 8443, null, AuthSchemes.BASIC);
 		asList.add(a);
 
 		return asList;
@@ -178,15 +167,15 @@ public final class WebUtils {
 	public static final void enablePreemptiveBasicAuth(
 			HttpContext localContext, String host) {
 		AuthCache ac = (AuthCache) localContext
-				.getAttribute(ClientContext.AUTH_CACHE);
+				.getAttribute(HttpClientContext.AUTH_CACHE);
 		HttpHost h = new HttpHost(host);
 		if (ac == null) {
 			ac = new BasicAuthCache();
-			localContext.setAttribute(ClientContext.AUTH_CACHE, ac);
+			localContext.setAttribute(HttpClientContext.AUTH_CACHE, ac);
 		}
 		List<AuthScope> asList = buildAuthScopes(host);
 		for (AuthScope a : asList) {
-			if (a.getScheme() == AuthPolicy.BASIC) {
+			if (a.getScheme() == AuthSchemes.BASIC) {
 				ac.put(h, new BasicScheme());
 			}
 		}
@@ -246,39 +235,33 @@ public final class WebUtils {
 	 */
 	public static final synchronized HttpClient createHttpClient(int timeout) {
 		// configure connection
-		HttpParams params = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(params, timeout);
-		HttpConnectionParams.setSoTimeout(params, 2 * timeout);
-		// support redirecting to handle http: => https: transition
-		HttpClientParams.setRedirecting(params, true);
-		// support authenticating
-		HttpClientParams.setAuthenticating(params, true);
-		HttpClientParams.setCookiePolicy(params,
-				CookiePolicy.BROWSER_COMPATIBILITY);
+		SocketConfig socketConfig = SocketConfig.copy(SocketConfig.DEFAULT).setSoTimeout(2*timeout)
+				.build();
+
 		// if possible, bias toward digest auth (may not be in 4.0 beta 2)
-		List<String> authPref = new ArrayList<String>();
-		authPref.add(AuthPolicy.DIGEST);
-		authPref.add(AuthPolicy.BASIC);
-		// does this work in Google's 4.0 beta 2 snapshot?
-		params.setParameter(AuthPNames.TARGET_AUTH_PREF, authPref);
-		params.setParameter(ClientPNames.MAX_REDIRECTS, 1);
-		params.setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+		List<String> targetPreferredAuthSchemes = new ArrayList<String>();
+		targetPreferredAuthSchemes.add(AuthSchemes.DIGEST);
+		targetPreferredAuthSchemes.add(AuthSchemes.BASIC);
 
-		// setup client
-		DefaultHttpClient httpclient;
+		RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
+				.setConnectTimeout(timeout)
+				// support authenticating
+				.setAuthenticationEnabled(true)
+				// support redirecting to handle http: => https: transition
+				.setRedirectsEnabled(true)
+				.setMaxRedirects(1)
+				.setCircularRedirectsAllowed(true)
+				.setTargetPreferredAuthSchemes(targetPreferredAuthSchemes)
+				.setCookieSpec(CookieSpecs.DEFAULT)
+				.build();
 
-		// reuse the connection manager across all clients this ODK Collect
-		// creates.
-		if (httpConnectionManager == null) {
-			// let Apache stack create a connection manager.
-			httpclient = new DefaultHttpClient(params);
-			httpConnectionManager = httpclient.getConnectionManager();
-		} else {
-			// reuse the connection manager we already got.
-			httpclient = new DefaultHttpClient(httpConnectionManager, params);
-		}
+		CloseableHttpClient httpClient = HttpClientBuilder.create()
+				.setDefaultSocketConfig(socketConfig)
+				.setDefaultRequestConfig(requestConfig)
+				.build();
 
-		return httpclient;
+		return httpClient;
+
 	}
 
 	/**
@@ -457,7 +440,6 @@ public final class WebUtils {
 			}
 			return new DocumentFetchResult(doc, isOR);
 		} catch (Exception e) {
-			clearHttpConnectionManager();
 			e.printStackTrace();
 			String cause;
 			Throwable c = e;
@@ -470,18 +452,6 @@ public final class WebUtils {
 
 			Log.w(t, error);
 			return new DocumentFetchResult(error, 0);
-		}
-	}
-
-	public static void clearHttpConnectionManager() {
-		// If we get an unexpected exception, the safest thing is to close
-		// all connections
-		// so that if there is garbage on the connection we ensure it is
-		// removed. This
-		// is especially important if the connection times out.
-		if ( httpConnectionManager != null ) {
-			httpConnectionManager.shutdown();
-			httpConnectionManager = null;
 		}
 	}
 }

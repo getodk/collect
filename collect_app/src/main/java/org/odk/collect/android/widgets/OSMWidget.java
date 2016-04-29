@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.view.ViewGroup;
 import android.widget.*;
-import org.apache.http.protocol.HTTP;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -29,6 +28,7 @@ import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -160,7 +160,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 		try {
 			//launch with intent that sends plain text
             Intent launchIntent = new Intent(Intent.ACTION_SEND);
-            launchIntent.setType(HTTP.PLAIN_TEXT_TYPE);
+            launchIntent.setType(ContentType.TEXT_PLAIN.getMimeType());
 
             //send form id
             launchIntent.putExtra("FORM_ID", String.valueOf(mFormId));

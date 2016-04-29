@@ -390,5 +390,6 @@
 <string name="fly_to_location">Fly to current location</string>
 <string name="fly_to_feature">Fly to saved feature</string>
 <string name="points_captured">%s points captured</string>
-
+<string name="google_sheets_invalid_column_form">\'n%1$s\' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
+<string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
 </resources>

@@ -8,11 +8,11 @@
   <string name="add_more">Ajouter plus</string>
   <string name="add_repeat">Ajouter un nouveau groupe \"%s\" ?</string>
   <string name="add_repeat_no">Ne pas ajouter</string>
-  <string name="advance">Avancer à la ligne de saisie\nnext </string>
+  <string name="advance">Avancer à\nla question\nsuivante </string>
   <string name="altitude">Altitude</string>
   <string name="audio_file_error">Aucun fichier audio spécifié.</string>
   <string name="audio_file_invalid">%s n\'est pas un fichier audio valable.</string>
-  <string name="backup">Reculer à la ligne de saisie\nprevious</string>
+  <string name="backup">Reculer à\nla question\nprécédente</string>
   <string name="barcode_scanner_error">Désolé, Barcode Scanner n\'est pas installé.</string>
   <string name="cancel">Annuler</string>
   <string name="cancel_loading_form">Annuler</string>
@@ -20,6 +20,8 @@
   <string name="cannot_edit_completed_form">Ce formulaire ne peut pas être édité une fois marqué complet. Il se peut, qu\'il soit encrypté.</string>
   <string name="capture_audio">Enregistrer de l\'audio</string>
   <string name="capture_image">Prendre une photo</string>
+  <string name="capture_osm">Lancer OpenMapKit</string>
+  <string name="recapture_osm">Refaire le balisage d\'OSM</string>
   <string name="capture_video">Enregistrer une vidéo</string>
   <string name="change_language">Changer la Langue</string>
   <string name="change_password">Mot de passe</string>
@@ -290,6 +292,7 @@
   <string name="survey_saving_encrypting_message">Chiffrement des données...</string>
   <string name="high_resolution_summary">Activer l\'option vidéos en haute résolution</string>
   <string name="high_resolution">Activer l\'option vidéo HD</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mon Drive</string>
   <string name="go_shared">Partagé avec moi</string>
@@ -297,9 +300,15 @@
   <string name="protocol_settings">Configurer les paramètres de la plate-forme</string>
   <string name="aggregate_preferences">Paramètres d\'ODK Aggregate</string>
   <string name="other_preferences">Autres paramètres de la plate-forme</string>
+  <string name="google_preferences">Paramettres de Google Sheets</string>
   <string name="drive_get_file">Récupération des %1$s et fichiers médias. </string>
   <string name="no_google_account">Pas de compte Google choisi!</string>
+  <string name="google_set_account">
+Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
   <string name="invalid_oauth">OAuth 2 token non valable</string>
+  <string name="google_repeat_error">Les répétitions ne sont pas prises en charge par les Google Sheets en ce moment.</string>
+  <string name="google_audio_error">Les fichiers audio ne sont pas pris en charge par les Google Sheets en ce moment.</string>
+  <string name="google_video_error">Les fichiers vidéo ne sont pas pris en charge par les Google Sheets en ce moment.</string>
   <string name="picasa_upload_error">Échec de téléchargement de photo qui n\'existe pas: %1$s</string>
   <string name="odk_auth_auth_fail">Échec d\'authentification d\'ODK Auto-envoi. Merci de vous assurez que vos paramètres sont corrects.</string>
   <string name="odk_auto_note">Notification d\'ODK Auto-envoi</string>
@@ -307,6 +316,19 @@
   <string name="delete_after_send">Supprimer après l\'envoi</string>
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
   <string name="change_server_url">URL du serveur</string>
-  <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour le parcourir.  </string>
+  <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'My Drive\' ci-dessous pour parcourir des formulaires.</string>
   <string name="no_blank_search">Le champ de recherche ne peut pas être vide.</string>
-  </resources>
+  <string name="google_sheets_url">URL des Google Sheets</string>
+  <string name="default_google_sheets_url"></string>
+  <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
+  <string name="sheets_google_account_needed">Vous avez sélectionné Google Sheets comme serveur. Avant de continuer, merci de sélectionner le compte Google correspondant dans les paramètres généraux avant de continuer.</string>
+  <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %1%s. </string>
+  <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
+  <string name="google_sheets_access_denied">Accès refusé. Merci d’assurer que le propriétaire de la feuille de calcul vous a accordé l\'autorisation d\'accès.</string>
+  <string name="google_sheets_update_error">Erreur de mis à jour de la feuille de calcul. Demandez le propriétaire d\'assurer votre accès en autorisation d\'écriture.</string>
+  <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
+  <string name="url_error_whitespace">Des espaces ne sont pas autorisées dan l\'URL.</string>
+  <string name="password_error_whitespace">Des espaces avant ou après le mot de passe ne sont pas autorisées.</string>
+  <string name="username_error_whitespace">Des espaces avant ou après le nom de l\'utilisateur ne sont pas autorisées.</string>
+  <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>
+</resources>

@@ -208,6 +208,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             return false;
         }
 
+        // make sure column names are legal
+        for (String n : columnNames) {
+            if (!isValidGoogleSheetsString(n)) {
+                mResults.put(id, Collect.getInstance().getString(R.string.google_sheets_invalid_column_form, n));
+                return false;
+            }
+        }
+
         // parses the instance file and populates the answers and photos
         // hashmaps.
         try {
@@ -234,6 +242,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
             e3.printStackTrace();
+        }
+
+        // make sure column names in submission are legal (may be different than form)
+        for (String n : answersToUpload.keySet()) {
+            if (!isValidGoogleSheetsString(n)) {
+                mResults.put(id, Collect.getInstance().getString(R.string.google_sheets_invalid_column_instance, n));
+                return false;
+            }
         }
 
         // if we have any photos to upload,
@@ -616,7 +632,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 mResults.put(
                         id,
                         form_fail
-                                + "Access denied. Please make sure the spreadsheet owner has granted you access permission.");
+                                + Collect.getInstance().getString(R.string.google_sheets_access_denied));
             } else {
                 mResults.put(id, form_fail + Html.fromHtml(e.getResponseBody()));
             }
@@ -957,6 +973,18 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 mStateListener.progressUpdate(values[0].intValue(), values[1].intValue());
             }
         }
+    }
+
+    /**
+     * Google sheets currently only allows a-zA-Z0-9 and dash
+     * @param name
+     * @return
+     */
+    private boolean isValidGoogleSheetsString (String name) {
+        Pattern p = Pattern
+                .compile("^[a-zA-Z0-9\\-]+$");
+        Matcher m = p.matcher(name);
+        return m.matches();
     }
 
 }

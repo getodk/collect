@@ -308,4 +308,5 @@
   <string name="delete_after_send_summary">Menghapus media dan formulir yang sempurna setelah mengirim ke server  </string>
   <string name="change_server_url">Tautan server (URL)</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
+  <string name="default_google_sheets_url"></string>
 </resources>

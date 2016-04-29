@@ -38,7 +38,8 @@
   <string name="delete_confirm">%s formulier(en) verwijderen?</string>
   <string name="delete_file">Verwijder selectie</string>
   <string name="delete_no">Niet verwijderen</string>
-  <string name="delete_repeat">Groep verwijderen</string>
+  <string name="delete_repeat">Groep verwijderen
+</string>
   <string name="delete_repeat_ask">Deze groep verwijderen?</string>
   <string name="delete_repeat_confirm">Groep \"%s\" en alle subgroepen verwijderen?</string>
   <string name="delete_repeat_no">Annuleer</string>
@@ -288,6 +289,6 @@
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>
-  <string name="google_search_browse">Zoek naar formulieren. Of kies \'Mijn Drive\' om te bladeren.</string>
   <string name="no_blank_search">Zoekveld mag niet leeg zijn.</string>
-  </resources>
+  <string name="default_google_sheets_url"></string>
+</resources>
