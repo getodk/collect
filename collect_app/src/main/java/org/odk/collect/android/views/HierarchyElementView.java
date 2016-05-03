@@ -77,7 +77,7 @@ public class HierarchyElementView extends RelativeLayout {
 
 
     public void setSecondaryText(String text) {
-        mSecondaryTextView.setText(text);
+        mSecondaryTextView.setText(TextUtils.textToHtml(text));
     }
 
 
