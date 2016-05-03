@@ -124,6 +124,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+        questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
