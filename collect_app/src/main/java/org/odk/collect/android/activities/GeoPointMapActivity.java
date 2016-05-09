@@ -521,7 +521,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
 		if (zoomDialog == null) {
 			AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
-			p_builder.setTitle(getString(R.string.fly_to_where));
+			p_builder.setTitle(getString(R.string.zoom_to_where));
 			p_builder.setView(zoomDialogView)
 					.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
