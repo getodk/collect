@@ -20,7 +20,7 @@
         android:layout_marginRight="20dp"
         />
     <Button
-        android:text="@string/zoom_to_location"
+        android:text="@string/zoom_to_feature"
         android:id="@+id/zoom_point"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
