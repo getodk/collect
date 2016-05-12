@@ -54,6 +54,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	public static final String LOCATION = "gp";
 	public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
 	public static final String READ_ONLY = "readOnly";
+	public static final String DRAGGABLE_ONLY = "draggable";
 
 	public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
@@ -70,6 +71,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private boolean mUseMaps;
 	private String mAppearance;
 	private double mAccuracyThreshold;
+	private boolean draggable = true;
 
 	public GeoPointWidget(Context context, FormEntryPrompt prompt) {
 		super(context, prompt);
@@ -84,37 +86,23 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		// Determine whether or not to use the plain, maps, or mapsV2 activity
 		mAppearance = prompt.getAppearanceHint();
-
-		boolean requestV2 = false;
-		boolean requestMaps = false;
-		if ( mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") ) {
-			requestV2 = true;
-			requestMaps = true;
-		}
-
-		if (mAppearance != null && mAppearance.equalsIgnoreCase("maps")) {
-			requestMaps = true;
-		}
-
-		// use mapsV2 if it is available and was requested
-		mUseMapsV2 = requestV2 && CompatibilityUtils.useMapsV2(context);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
-//		mUseMapsV2 = true;
-		if ( mUseMapsV2 ) {
-			// if we are using mapsV2, we are using maps...
+		// use mapsV2 if it is available and was requested;
+		mUseMapsV2 = CompatibilityUtils.useMapsV2(context);
+		if ( mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2 ) {
+			draggable = true;
 			mUseMaps = true;
-		} else if ( requestMaps ) {
-			// using the mapsV2 widget if supported
-			// otherwise just use the plain widget
-			mUseMaps = CompatibilityUtils.useMapsV2(context);
-		} else {
-			// use the plain geolocation activity
+		}else if (mAppearance != null && mAppearance.equalsIgnoreCase("maps") && mUseMapsV2) {
+			draggable = false;
+			mUseMaps = true;
+		}else{
 			mUseMaps = false;
 		}
 
-		mReadOnly = prompt.isReadOnly();
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
+
+		mReadOnly = prompt.isReadOnly();
 
 		// assemble the widget...
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -122,11 +110,9 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		mStringAnswer = new TextView(getContext());
 		mStringAnswer.setId(QuestionWidget.newUniqueId());
-
 		mAnswerDisplay = new TextView(getContext());
 		mAnswerDisplay.setId(QuestionWidget.newUniqueId());
-		mAnswerDisplay
-				.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+		mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mAnswerDisplay.setGravity(Gravity.CENTER);
 
 		// setup play button
@@ -137,53 +123,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mViewButton.setPadding(20, 20, 20, 20);
 		mViewButton.setLayoutParams(params);
 
-		// on play, launch the appropriate viewer
-		mViewButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Collect.getInstance()
-						.getActivityLogger()
-						.logInstanceAction(this, "showLocation", "click",
-								mPrompt.getIndex());
-
-				Intent i;
-				if (mUseMapsV2 ) {
-					if (mapSDK.equals(GOOGLE_MAP_KEY)){
-						i = new Intent(getContext(), GeoPointMapActivity.class);
-					}else{
-						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
-					}
-				} else {
-					if (mapSDK.equals(GOOGLE_MAP_KEY)){
-						i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
-					}else{
-						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
-					}
-
-				}
-
-				String s = mStringAnswer.getText().toString();
-				if ( s.length() != 0 ) {
-					String[] sa = s.split(" ");
-					double gp[] = new double[4];
-					gp[0] = Double.valueOf(sa[0]).doubleValue();
-					gp[1] = Double.valueOf(sa[1]).doubleValue();
-					gp[2] = Double.valueOf(sa[2]).doubleValue();
-					gp[3] = Double.valueOf(sa[3]).doubleValue();
-					i.putExtra(LOCATION, gp);
-				}
-				i.putExtra(READ_ONLY, true);
-				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
-				((Activity) getContext()).startActivity(i);
-
-			}
-		});
-
 		mGetLocationButton = new Button(getContext());
 		mGetLocationButton.setId(QuestionWidget.newUniqueId());
 		mGetLocationButton.setPadding(20, 20, 20, 20);
-		mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-				mAnswerFontsize);
+		mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mGetLocationButton.setEnabled(!prompt.isReadOnly());
 		mGetLocationButton.setLayoutParams(params);
 
@@ -196,21 +139,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 						.logInstanceAction(this, "recordLocation", "click",
 								mPrompt.getIndex());
 				Intent i = null;
-				if ( mUseMapsV2 ) {
+				if ( mUseMapsV2 && mUseMaps ) {
 					if (mapSDK.equals(GOOGLE_MAP_KEY)){
 						i = new Intent(getContext(), GeoPointMapActivity.class);
 					}else{
 						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
 					}
-				} else if (mUseMaps) {
-					if (mapSDK.equals(GOOGLE_MAP_KEY)){
-						i = new Intent(getContext(), GeoPointMapNotDraggableActivity.class);
-					}else{
-						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
-					}
-				} else {
+				}else{
 					i = new Intent(getContext(), GeoPointActivity.class);
-
 				}
 
 				String s = mStringAnswer.getText().toString();
@@ -224,6 +160,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 					i.putExtra(LOCATION, gp);
 				}
 				i.putExtra(READ_ONLY, mReadOnly);
+				i.putExtra(DRAGGABLE_ONLY, draggable);
 				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
 				Collect.getInstance().getFormController()
 						.setIndexWaitingForData(mPrompt.getIndex());
@@ -241,7 +178,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		answerLayout.addView(mAnswerDisplay);
 		addAnswerView(answerLayout);
 
-		// figure out what text and buttons to enable or to show...
+		// Set vars Label/text for button enable view or collect...
 		boolean dataAvailable = false;
 		String s = prompt.getAnswerText();
 		if (s != null && !s.equals("")) {
@@ -255,17 +192,22 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
 		// BUT for mapsV2, we only show the mGetLocationButton, altering its text.
 		// for maps, we show the view button.
-		if (mUseMapsV2) {
+
+		if (mUseMapsV2 && mUseMaps) {
 			// show the GetLocation button
 			mGetLocationButton.setVisibility(View.VISIBLE);
 			// hide the view button
 			mViewButton.setVisibility(View.GONE);
 			if (mReadOnly) {
-				mGetLocationButton.setText(getContext()
-						.getString(R.string.get_point));
+				//READ_ONLY View
+				mGetLocationButton.setText(getContext().getString(R.string.geopoint_view_read_only));
 			} else {
-				mGetLocationButton.setText(getContext()
-						.getString(R.string.get_point));
+				String s = mStringAnswer.getText().toString();
+				if (s.length() != 0){
+					mGetLocationButton.setText(getContext().getString(R.string.view_change_location));
+				}else{
+					mGetLocationButton.setText(getContext().getString(R.string.get_point));
+				}
 			}
 		} else {
 			// if it is read-only, hide the get-location button...
@@ -273,9 +215,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				mGetLocationButton.setVisibility(View.GONE);
 			} else {
 				mGetLocationButton.setVisibility(View.VISIBLE);
-				mGetLocationButton.setText(getContext()
-						.getString(dataAvailable ?
-								R.string.get_point : R.string.get_point));
+				mGetLocationButton.setText(getContext().getString(dataAvailable ? R.string.get_point : R.string.get_point));
 			}
 
 			if (mUseMaps) {
