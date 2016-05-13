@@ -81,7 +81,7 @@
 
         <Button
             android:id="@+id/show_location"
-            android:drawableRight="@drawable/ic_flight_black_36dp"
+            android:drawableRight="@drawable/ic_my_location_black_36dp"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
