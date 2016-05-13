@@ -109,7 +109,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	private Boolean intent_draggable =false;
 	private Boolean location_from_intent = false;
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -141,8 +140,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 		mMap.getUiSettings().setMyLocationButtonEnabled(false);
 		mMap.getUiSettings().setZoomControlsEnabled(false);
 		mMarkerOption = new MarkerOptions();
-		mHelper = new MapHelper(this,mMap);
-		mHelper.setBasemap();
+		mHelper = new MapHelper(this, mMap);
 
 		mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
 
@@ -178,6 +176,9 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 				mMarkerOption.position(mLatLng);
 				if (mMarker == null){
 					mMarker = mMap.addMarker(mMarkerOption);
+					if (draggable && !read_only){
+						mMarker.setDraggable(true);
+					}
 				}
 				mCaptureLocation = true;
 				mIsDragged = false;
@@ -277,7 +278,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 				mLatLng = new LatLng(location[0], location[1]);
 				mCaptureLocation = true;
 				mReloadLocation.setEnabled(false);
-				draggable =false;
+				draggable =false; // If data loaded, must clear first
 				location_from_intent = true;
 
 			}
@@ -354,6 +355,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mHelper.setBasemap();
 		upMyLocationOverlayLayers();
 	}
 
@@ -386,6 +388,9 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 		if(draggable & !read_only){
 			mMap.setOnMarkerDragListener(this);
 			mMap.setOnMapLongClickListener(this);
+			if(mMarker!=null){
+				mMarker.setDraggable(true);
+			}
 		}
 
 	}
