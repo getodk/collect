@@ -71,6 +71,8 @@ public class MapHelper {
 
 
     public MapHelper(Context pContext,GoogleMap pGoogleMap){
+        this.mGoogleMap = null;
+        this.mOsmMap = null;
         context = pContext;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
@@ -79,6 +81,8 @@ public class MapHelper {
     }
 
     public MapHelper(Context pContext,MapView pOsmMap,IRegisterReceiver pIregisterReceiver){
+        this.mGoogleMap = null;
+        this.mOsmMap = null;
         context = pContext;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
