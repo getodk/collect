@@ -647,13 +647,13 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
             List<DriveListItem> forms = new ArrayList<DriveListItem>();
 
             for (com.google.api.services.drive.model.File f : fileList) {
-                if (f.getMimeType().equals("application/xml")) {
+                String type = f.getMimeType();
+                if (type.equals("application/xml") || type.equals("text/xml") ||
+                        type.equals("application/xhtml") || type.equals("text/xhtml") ||
+                        type.equals("application/xhtml+xml")) {
                     forms.add(new DriveListItem(f.getTitle(), "", f.getModifiedDate(), "", "",
                             DriveListItem.FILE, f.getId(), currentDir));
-                } else if (f.getMimeType().equals("application/xhtml")) {
-                    forms.add(new DriveListItem(f.getTitle(), "", f.getModifiedDate(), "", "",
-                            DriveListItem.FILE, f.getId(), currentDir));
-                } else if (f.getMimeType().equals("application/vnd.google-apps.folder")) {
+                } else if (type.equals("application/vnd.google-apps.folder")) {
                     dirs.add(new DriveListItem(f.getTitle(), "", f.getModifiedDate(), "", "",
                             DriveListItem.DIR, f.getId(), parentId));
                 } else {

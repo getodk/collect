@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2015 Nafundi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
@@ -804,7 +818,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 	public void showZoomDialog() {
 		if (zoomDialog == null) {
 			AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
-			p_builder.setTitle(getString(R.string.fly_to_where));
+			p_builder.setTitle(getString(R.string.zoom_to_where));
 			p_builder.setView(zoomDialogView)
 					.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
