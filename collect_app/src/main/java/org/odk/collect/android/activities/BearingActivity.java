@@ -189,7 +189,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                mBearingDialog.setMessage("Dir: " + dir + " Bearing: " + mBearing);
+                mBearingDialog.setMessage(getString(R.string.direction) + ": " + dir + "\n" + getString(R.string.bearing) + ": " + mBearing);
 
             }
         }
