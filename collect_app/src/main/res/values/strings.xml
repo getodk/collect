@@ -393,4 +393,6 @@
 <string name="points_captured">%s points captured</string>
 <string name="google_sheets_invalid_column_form">\'n%1$s\' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
 <string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
+<string name="geoshape_view_change_location">View or Change GeoShape</string>
+<string name="geotrace_view_change_location">View or Change GeoTrace</string>
 </resources>

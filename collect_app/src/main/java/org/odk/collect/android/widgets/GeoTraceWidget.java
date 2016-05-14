@@ -115,16 +115,18 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 		String s = prompt.getAnswerText();
 		if (s != null && !s.equals("")) {
 			dataAvailable = true;
-			createTraceButton.setText(getContext().getString(R.string.get_trace));
 			setBinaryData(s);
-		}else{
 		}
+
 		updateButtonLabelsAndVisibility(dataAvailable);
-		
 	}
 	
 	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-		
+		if(dataAvailable){
+			createTraceButton.setText(getContext().getString(R.string.geotrace_view_change_location));
+		}else{
+			createTraceButton.setText(getContext().getString(R.string.get_trace));
+		}
 	}
 
 	@Override
