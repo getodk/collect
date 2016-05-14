@@ -270,7 +270,7 @@
 <string name="ext_file_no_data_error">The file contains no data!</string>
 <string name="ext_conflicting_columns_error">Columns %s match!</string>
 <string name="ext_sortBy_numeric_error">Your sortby column should contain only numeric values. Conflicting value was \'%s\'.</string>
-<string name="ext_search_wrong_arguments_error">"Syntax error in search() function: The function needs 1, 4 or 6 arguments."</string>
+<string name="ext_search_wrong_arguments_error">Syntax error in search() function: The function needs 1, 4 or 6 arguments.</string>
 <string name="ext_search_wrong_function_error">Syntax error in search() function : Unrecognised function \'%s\'.</string>
 <string name="ext_search_bad_function_error">Syntax error in search() function: \'%s\' was not evaluated as a function.</string>
 <string name="ext_search_return_error">The search handler returned a object of type \'%s\'.</string>
