@@ -385,8 +385,8 @@
 <string name="automatic_mode">Automatic Mode</string>
 <string name="geoshape_instruction">Long press to place marks.</string>
 <string name="geotrace_instruction">Wait for lock, then tap add marker button to start.</string>
-<string name="geopoint_instruction">Long press to place mark or tap add mark button.</string>
-<string name="geopoint_no_draggable_instruction">Tap add mark button.</string>
+<string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
+<string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
 <string name="discard">Discard</string>
 <string name="zoom_to_where">Zoom to...</string>
 <string name="zoom_to_location">Zoom to current location</string>
