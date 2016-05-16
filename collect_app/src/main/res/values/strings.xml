@@ -262,8 +262,6 @@
 <string name="constraint_behavior_on_finalize">Defer validation until finalized</string>
 <string name="view_change_location">View or Change Location</string>
 <string name="open_url">Open Url</string>
-<string name="bearing">Bearing</string>
-<string name="direction">Direction</string>
 <string name="get_bearing">Record Bearing</string>
 <string name="replace_bearing">Replace Bearing</string>
 <string name="getting_bearing">Loading Bearing</string>
@@ -397,4 +395,6 @@
 <string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
 <string name="geoshape_view_change_location">View or Change GeoShape</string>
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
+<string name="bearing">Bearing</string>
+<string name="direction">Direction</string>
 </resources>
