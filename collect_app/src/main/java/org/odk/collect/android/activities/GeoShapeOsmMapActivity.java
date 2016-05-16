@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University of Washington
+ * Copyright (C) 2016 GeoODK
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -231,7 +231,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         clear_button_test = true;
         String s = str.replace("; ",";");
         String[] sa = s.split(";");
-        for (int i=0;i<(sa.length);i++){
+        for (int i=0;i<(sa.length -1 );i++){
             String[] sp = sa[i].split(" ");
             double gp[] = new double[4];
             String lat = sp[0].replace(" ", "");
@@ -245,7 +245,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
-            pathOverlay.addPoint(marker.getPosition());
+//            pathOverlay.addPoint(marker.getPosition());
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
             mMap.getOverlays().add(marker);
@@ -380,12 +380,15 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private String generateReturnString() {
         String temp_string = "";
-        for (int i = 0 ; i < map_markers.size();i++){
-            String lat = Double.toString(map_markers.get(i).getPosition().getLatitude());
-            String lng = Double.toString(map_markers.get(i).getPosition().getLongitude());
-            String alt ="0.0";
-            String acu = "0.0";
-            temp_string = temp_string+lat+" "+lng +" "+alt+" "+acu+";";
+        if (map_markers.size() > 1 ) {
+            map_markers.add(map_markers.get(0));
+            for (int i = 0; i < map_markers.size(); i++) {
+                String lat = Double.toString(map_markers.get(i).getPosition().getLatitude());
+                String lng = Double.toString(map_markers.get(i).getPosition().getLongitude());
+                String alt = "0.0";
+                String acu = "0.0";
+                temp_string = temp_string + lat + " " + lng + " " + alt + " " + acu + ";";
+            }
         }
         return temp_string;
     }

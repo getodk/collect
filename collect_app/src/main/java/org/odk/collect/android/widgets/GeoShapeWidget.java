@@ -122,7 +122,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 		if (s != null && !s.equals("")) {
 			dataAvailable = true;
 			setBinaryData(s);
-		}else{
 		}
 
 		updateButtonLabelsAndVisibility(dataAvailable);
@@ -130,8 +129,8 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
 
 	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-		if (dataAvailable == true){
-			createShapeButton.setText(getContext().getString(R.string.get_shape));
+		if (dataAvailable){
+			createShapeButton.setText(getContext().getString(R.string.geoshape_view_change_location));
 		}else{
 			createShapeButton.setText(getContext().getString(R.string.get_shape));
 		}
