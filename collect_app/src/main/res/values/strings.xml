@@ -10,7 +10,8 @@
 		the specific language governing permissions and limitations under the
 		License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en"
+           tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
