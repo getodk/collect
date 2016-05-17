@@ -359,11 +359,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added xml file " + f.getName());
-                } else if (extension.equals("jpg")) {
-                    fb = new FileBody(f, ContentType.create("image/jpeg"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
-                    Log.i(t, "added image file " + f.getName());
                 } else if (extension.equals("3gpp")) {
                     fb = new FileBody(f, ContentType.create("audio/3gpp"));
                     builder.addPart(f.getName(), fb);
@@ -374,20 +369,60 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added video file " + f.getName());
-                } else if (extension.equals("mp4")) {
-                    fb = new FileBody(f, ContentType.create("video/mp4"));
+                } else if (extension.equals("avi")) {
+                    fb = new FileBody(f, ContentType.create("video/avi"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added video file " + f.getName());
+                } else if (extension.equals("amr")) {
+                    fb = new FileBody(f, ContentType.create("audio/amr"));
+                    builder.addPart(f.getName(), fb);
+                    Log.i(t, "added audio file " + f.getName());
                 } else if (extension.equals("csv")) {
                     fb = new FileBody(f, ContentType.create("text/csv"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added csv file " + f.getName());
-                } else if (f.getName().endsWith(".amr")) {
-                    fb = new FileBody(f, ContentType.create("audio/amr"));
+                } else if (extension.equals("jpg")) {
+                    fb = new FileBody(f, ContentType.create("image/jpeg"));
                     builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added image file " + f.getName());
+                } else if (extension.equals("mp3")) {
+                    fb = new FileBody(f, ContentType.create("audio/mp3"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
                     Log.i(t, "added audio file " + f.getName());
+                } else if (extension.equals("mp4")) {
+                    fb = new FileBody(f, ContentType.create("video/mp4"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added video file " + f.getName());
+                } else if (extension.equals("oga")) {
+                    fb = new FileBody(f, ContentType.create("audio/ogg"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added audio file " + f.getName());
+                } else if (extension.equals("ogg")) {
+                    fb = new FileBody(f, ContentType.create("video/ogg"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added video file " + f.getName());
+                } else if (extension.equals("ogv")) {
+                    fb = new FileBody(f, ContentType.create("video/ogg"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added video file " + f.getName());
+                } else if (extension.equals("wav")) {
+                    fb = new FileBody(f, ContentType.create("audio/wav"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added audio file " + f.getName());
+                } else if (extension.equals("webm")) {
+                    fb = new FileBody(f, ContentType.create("video/webm"));
+                    builder.addPart(f.getName(), fb);
+                    byteCount += f.length();
+                    Log.i(t, "added video file " + f.getName());
                 } else if (extension.equals("xls")) {
                     fb = new FileBody(f, ContentType.create("application/vnd.ms-excel"));
                     builder.addPart(f.getName(), fb);
