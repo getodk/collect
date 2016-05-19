@@ -404,7 +404,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     byteCount += f.length();
                     Log.i(t, "added audio file " + f.getName());
                 } else if (extension.equals("ogg")) {
-                    fb = new FileBody(f, ContentType.create("video/ogg"));
+                    fb = new FileBody(f, ContentType.create("audio/ogg"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
                     Log.i(t, "added video file " + f.getName());
