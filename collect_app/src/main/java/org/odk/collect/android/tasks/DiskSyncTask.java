@@ -113,13 +113,14 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		                // For each element in the provider, see if the file already exists
 		                String sqlFilename =
 		                    mCursor.getString(mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-		                String md5 = mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
+                    String md5 = mCursor.getString(mCursor.getColumnIndex(FormsColumns.MD5_HASH));
 		                File sqlFile = new File(sqlFilename);
 		                if (sqlFile.exists()) {
 		                    // remove it from the list of forms (we only want forms 
 		                	// we haven't added at the end)
 		                    xFormsToAdd.remove(sqlFile);
-		                    if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
+		                    String md5Computed = FileUtils.getMd5Hash(sqlFile);
+		                    if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
 		                        // Probably someone overwrite the file on the sdcard
 		                        // So re-parse it and update it's information
 		                        String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
