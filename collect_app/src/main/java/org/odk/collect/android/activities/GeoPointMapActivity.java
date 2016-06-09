@@ -368,14 +368,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 			if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
 				mGPSOn = true;
 				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-				location_count_found_limit = 1;
+				location_count_found_limit = 0;
 			}
-//			else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-//				// Only if GPS Providor is not avaibe use network location. bug (well know android bug) http://stackoverflow.com/questions/6719207/locationmanager-returns-old-cached-wifi-location-with-current-timestamp
-//				mNetworkOn = true;
-//				location_count_found_limit = 5; // increase count due to network location bug (well know android bug)
-//				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-//			}
+			else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+				// Only if GPS Providor is not avaibe use network location. bug (well know android bug) http://stackoverflow.com/questions/6719207/locationmanager-returns-old-cached-wifi-location-with-current-timestamp
+				mNetworkOn = true;
+				location_count_found_limit = 1; // increase count due to network location bug (well know android bug)
+				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+			}
 		}
 //		mShowLocation.setClickable(mMarker != null);
 		if (!mGPSOn && !mNetworkOn) {
@@ -402,7 +402,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 			mReloadLocation.setEnabled(true);
 		}
 		if (mLocation != null) {
-			mLocationStatus.setText(getString(R.string.location_provider_accuracy, mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
+
 			if (location_count_num >= location_count_found_limit){
 				mShowLocation.setEnabled(true);
 				if (!mCaptureLocation & !setClear){
@@ -413,9 +413,11 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 					mReloadLocation.setEnabled(true);
 				}
 				if(!foundFirstLocation){
-					zoomToPoint();
+//					zoomToPoint();
+					showZoomDialog();
 					foundFirstLocation = true;
 				}
+				mLocationStatus.setText(getString(R.string.location_provider_accuracy, mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
 			}else{
 				// Prevent from forever increasing
 				if (location_count_num <= 100){
