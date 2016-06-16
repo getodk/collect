@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IntegerData;
@@ -93,9 +94,9 @@ public class ExternalAppsUtils {
     }
 
     public static void populateParameters(Intent intent, Map<String, String> exParams, TreeReference reference) throws ExternalParamsException {
-        FormInstance formInstance = Collect.getInstance().getFormController().getFormDef().getInstance();
-        EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
-        EvaluationContext evaluationContext = new EvaluationContext(baseEvaluationContext, reference);
+        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+        FormInstance formInstance = formDef.getInstance();
+        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
 
         if (exParams != null) {
             for (Map.Entry<String, String> paramEntry : exParams.entrySet()) {
