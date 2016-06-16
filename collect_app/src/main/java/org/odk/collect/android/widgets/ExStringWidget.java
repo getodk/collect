@@ -128,10 +128,9 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             mAnswer.setClickable(false);
         }
 
-        String appearance = prompt.getAppearanceHint();
-        String[] attrs = appearance.split(":");
-        final String intentName = ExternalAppsUtils.extractIntentName(attrs[1]);
-        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(attrs[1]);
+        String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
+        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
+        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
         final String buttonText;
         final String errorString;
     	String v = mPrompt.getSpecialFormQuestionText("buttonText");
