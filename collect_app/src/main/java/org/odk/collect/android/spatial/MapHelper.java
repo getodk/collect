@@ -128,17 +128,16 @@ public class MapHelper {
     }
 
     public static String[] getOfflineLayerList() {
-        // TODO Auto-generated method stub
-        File files = new File(Collect.OFFLINE_LAYERS);
+        File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> results = new ArrayList<String>();
         results.add(no_folder_key);
-        String[] overlay_folders =  files.list();
-        for(int i =0;i<overlay_folders.length;i++){
-            results.add(overlay_folders[i]);
+        for (File f : files) {
+            if (f.isDirectory() && !f.isHidden()) {
+                results.add(f.getName());
+            }
         }
-        String[] finala = new String[results.size()];
-        finala = results.toArray(finala);
-        return finala;
+
+        return results.toArray(new String[0]);
     }
     public void showLayersDialog(){
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
