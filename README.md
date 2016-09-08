@@ -12,18 +12,14 @@ The Google group for software engineering questions is: [opendatakit-developers@
 
 ## Setting up your environment
 
-This project depends upon the gradle-config and google-play-services projects
-
+This project depends upon the gradle-config project. The necessary gradle files will be downloaded and used automatically from the github repository at the tag specified in settings.gradle. If you wish to modify your gradle-config yourself, you must clone the project into the same parent directory as Collect. Your directory structure should resemble the following: 
 
         |-- odk
             |-- gradle-config
-            |-- google-play-services
             |-- collect
 
 The `gradle-config` project should be checked out at the tag number declared at the 
 top of the `collect/settings.gradle` file.
-
-The `google-play-services` project should be pulled and at the tip.
 
 Then, import the `collect/build.gradle` file into Android Studio.
 
