@@ -196,8 +196,6 @@
         <activity android:name=".activities.GeoPointMapActivity"
             android:configChanges="orientation"
             android:label="@string/app_name" />
-        <activity android:name=".activities.GeoPointMapNotDraggableActivity"
-            android:label="@string/app_name" />
         <!--<activity-->
             <!--android:name=".activities.GeoPointMapActivitySdk7"-->
             <!--android:label="@string/app_name" />-->

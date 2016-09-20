@@ -336,11 +336,10 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 			if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
 				mGPSOn = true;
 				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+			}else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+				mNetworkOn = true;
+				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 			}
-//			if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-//				mNetworkOn = true;
-//				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-//			}
 		}
 
 		mShowLocationButton.setClickable(mMarker != null);
@@ -429,13 +428,12 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
 	@Override
 	public void onLocationChanged(Location location) {
-			mLocation = location;
 
+			mLocation = location;
 			if(setClear){
 				mReloadLocationButton.setEnabled(true);
 			}
 			if (mLocation != null) {
-                mLocationStatus.setText(getString(R.string.location_provider_accuracy, mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
                 if (location_count_num >= location_count_found_limit){
                     mShowLocationButton.setEnabled(true);
                     if (!mCaptureLocation & !setClear){
@@ -446,9 +444,11 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                         mReloadLocationButton.setEnabled(true);
                     }
                     if(!foundFirstLocation){
-                        zoomToPoint();
+//                        zoomToPoint();
+						showZoomDialog();
                         foundFirstLocation = true;
                     }
+					mLocationStatus.setText(getString(R.string.location_provider_accuracy, mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
                 }else{
                     // Prevent from forever increasing
                     if (location_count_num <= 100){
