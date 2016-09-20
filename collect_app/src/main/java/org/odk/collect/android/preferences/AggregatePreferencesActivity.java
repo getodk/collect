@@ -80,7 +80,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				});
 		mServerUrlPreference.setSummary(mServerUrlPreference.getText());
 		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+				new InputFilter[] { new CarriageReturnFilter(), new WhitespaceFilter() });
 
 		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
@@ -107,8 +107,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
             }
         });
 		mUsernamePreference.setSummary(mUsernamePreference.getText());
-		mUsernamePreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
+		mUsernamePreference.getEditText().setFilters(new InputFilter[] { new CarriageReturnFilter() });
 
 		mPasswordPreference
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -144,44 +143,37 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				&& mPasswordPreference.getText().length() > 0) {
 			mPasswordPreference.setSummary("********");
 		}
-		mPasswordPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
+		mPasswordPreference.getEditText().setFilters(new InputFilter[] { new CarriageReturnFilter() });
 	}
 
-	/**
-	 * Disallows carriage returns from user entry
-	 * 
-	 * @return
-	 */
-	protected InputFilter getReturnFilter() {
-		return new CarriageReturnFilter();
-	}
+}
 
-	protected InputFilter getWhitespaceFilter() {
-		return new WhitespaceFilter();
-	}
-
-	static class CarriageReturnFilter implements InputFilter {
-		public CharSequence filter(CharSequence source, int start, int end,
-								   Spanned dest, int dstart, int dend) {
-			for (int i = start; i < end; i++) {
-				if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-					return "";
-				}
+/**
+ * Rejects edits that contain whitespace.
+ */
+class WhitespaceFilter implements InputFilter {
+	public CharSequence filter(CharSequence source, int start, int end,
+							   Spanned dest, int dstart, int dend) {
+		for (int i = start; i < end; i++) {
+			if (Character.isWhitespace(source.charAt(i))) {
+				return "";
 			}
-			return null;
 		}
+		return null;
 	}
+}
 
-	static class WhitespaceFilter implements InputFilter {
-		public CharSequence filter(CharSequence source, int start, int end,
-								   Spanned dest, int dstart, int dend) {
-			for (int i = start; i < end; i++) {
-				if (Character.isWhitespace(source.charAt(i))) {
-					return "";
-				}
+/**
+ * Rejects edits that contain control characters, including linefeed and carriage return.
+ */
+class CarriageReturnFilter implements InputFilter {
+	public CharSequence filter(CharSequence source, int start, int end,
+							   Spanned dest, int dstart, int dend) {
+		for (int i = start; i < end; i++) {
+			if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+				return "";
 			}
-			return null;
 		}
+		return null;
 	}
 }
