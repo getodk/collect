@@ -51,13 +51,15 @@ public class OtherPreferencesActivity extends AggregatePreferencesActivity
 
 		InputFilter[] filters = { new ControlCharacterFilter(), new WhitespaceFilter() };
 
+		mServerUrlPreference.getEditText().setFilters(filters);
+
 		mFormListUrlPreference.setOnPreferenceChangeListener(this);
 		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(filters);
+		mFormListUrlPreference.getEditText().setFilters(filters);
 
 		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
 		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(filters);
+		mSubmissionUrlPreference.getEditText().setFilters(filters);
 	}
 
 	/**
