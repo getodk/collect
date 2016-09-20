@@ -80,7 +80,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				});
 		mServerUrlPreference.setSummary(mServerUrlPreference.getText());
 		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { new CarriageReturnFilter(), new WhitespaceFilter() });
+				new InputFilter[] { new ControlCharacterFilter(), new WhitespaceFilter() });
 
 		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
@@ -107,7 +107,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
             }
         });
 		mUsernamePreference.setSummary(mUsernamePreference.getText());
-		mUsernamePreference.getEditText().setFilters(new InputFilter[] { new CarriageReturnFilter() });
+		mUsernamePreference.getEditText().setFilters(new InputFilter[] { new ControlCharacterFilter() });
 
 		mPasswordPreference
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -143,7 +143,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				&& mPasswordPreference.getText().length() > 0) {
 			mPasswordPreference.setSummary("********");
 		}
-		mPasswordPreference.getEditText().setFilters(new InputFilter[] { new CarriageReturnFilter() });
+		mPasswordPreference.getEditText().setFilters(new InputFilter[] { new ControlCharacterFilter() });
 	}
 
 }
@@ -166,7 +166,7 @@ class WhitespaceFilter implements InputFilter {
 /**
  * Rejects edits that contain control characters, including linefeed and carriage return.
  */
-class CarriageReturnFilter implements InputFilter {
+class ControlCharacterFilter implements InputFilter {
 	public CharSequence filter(CharSequence source, int start, int end,
 							   Spanned dest, int dstart, int dend) {
 		for (int i = start; i < end; i++) {
