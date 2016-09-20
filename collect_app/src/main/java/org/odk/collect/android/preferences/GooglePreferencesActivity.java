@@ -17,8 +17,6 @@ package org.odk.collect.android.preferences;
 import java.util.ArrayList;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.AggregatePreferencesActivity.CarriageReturnFilter;
-import org.odk.collect.android.preferences.AggregatePreferencesActivity.WhitespaceFilter;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import android.accounts.Account;

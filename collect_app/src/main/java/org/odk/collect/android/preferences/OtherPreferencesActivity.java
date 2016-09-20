@@ -49,15 +49,15 @@ public class OtherPreferencesActivity extends AggregatePreferencesActivity
 
 		PreferenceCategory otherPreferences = (PreferenceCategory) findPreference(getString(R.string.other_preferences));
 
+		InputFilter[] filters = { new CarriageReturnFilter(), new WhitespaceFilter() };
+
 		mFormListUrlPreference.setOnPreferenceChangeListener(this);
 		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+		mServerUrlPreference.getEditText().setFilters(filters);
 
 		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
 		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+		mServerUrlPreference.getEditText().setFilters(filters);
 	}
 
 	/**
