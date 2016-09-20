@@ -115,7 +115,7 @@ public class GooglePreferencesActivity extends PreferenceActivity {
         });
         mGoogleSheetsUrlPreference.setSummary(mGoogleSheetsUrlPreference.getText());
         mGoogleSheetsUrlPreference.getEditText().setFilters(new InputFilter[] {
-            new CarriageReturnFilter(), new WhitespaceFilter()
+            new ControlCharacterFilter(), new WhitespaceFilter()
         });
 
     }
