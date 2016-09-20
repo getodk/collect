@@ -62,14 +62,6 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 							Object newValue) {
 						String url = newValue.toString();
 
-						// disallow any whitespace
-						if ( url.contains(" ") || !url.equals(url.trim()) ) {
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.url_error_whitespace, Toast.LENGTH_SHORT)
-                                    .show();
-                            return false;
-                        }
-
 						// remove all trailing "/"s
 						while (url.endsWith("/")) {
 							url = url.substring(0, url.length() - 1);
@@ -88,7 +80,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				});
 		mServerUrlPreference.setSummary(mServerUrlPreference.getText());
 		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
+				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
 
 		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
@@ -162,33 +154,34 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 	 * @return
 	 */
 	protected InputFilter getReturnFilter() {
-		InputFilter returnFilter = new InputFilter() {
-			public CharSequence filter(CharSequence source, int start, int end,
-					Spanned dest, int dstart, int dend) {
-				for (int i = start; i < end; i++) {
-					if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-						return "";
-					}
-				}
-				return null;
-			}
-		};
-		return returnFilter;
+		return new CarriageReturnFilter();
 	}
 
 	protected InputFilter getWhitespaceFilter() {
-		InputFilter whitespaceFilter = new InputFilter() {
-			public CharSequence filter(CharSequence source, int start, int end,
-					Spanned dest, int dstart, int dend) {
-				for (int i = start; i < end; i++) {
-					if (Character.isWhitespace(source.charAt(i))) {
-						return "";
-					}
-				}
-				return null;
-			}
-		};
-		return whitespaceFilter;
+		return new WhitespaceFilter();
 	}
 
+	static class CarriageReturnFilter implements InputFilter {
+		public CharSequence filter(CharSequence source, int start, int end,
+								   Spanned dest, int dstart, int dend) {
+			for (int i = start; i < end; i++) {
+				if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+					return "";
+				}
+			}
+			return null;
+		}
+	}
+
+	static class WhitespaceFilter implements InputFilter {
+		public CharSequence filter(CharSequence source, int start, int end,
+								   Spanned dest, int dstart, int dend) {
+			for (int i = start; i < end; i++) {
+				if (Character.isWhitespace(source.charAt(i))) {
+					return "";
+				}
+			}
+			return null;
+		}
+	}
 }
