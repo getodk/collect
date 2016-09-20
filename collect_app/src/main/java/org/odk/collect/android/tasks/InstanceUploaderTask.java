@@ -74,6 +74,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     // it can take up to 27 seconds to spin up Aggregate
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
+    private static final String URL_PATH_SEP = "/";
 
     private InstanceUploaderListener mStateListener;
 
@@ -552,26 +553,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 	                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
 	                Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx);
-	                if (urlString == null) {
-	                    SharedPreferences settings =
-	                        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-	                    urlString = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-	                    				Collect.getInstance().getString(R.string.default_server_url));
-	                    if ( urlString.charAt(urlString.length()-1) == '/') {
-	                    	urlString = urlString.substring(0, urlString.length()-1);
-	                    }
-	                    // NOTE: /submission must not be translated! It is the well-known path on the server.
-	                    String submissionUrl =
-	                        settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
-	                        		Collect.getInstance().getString(R.string.default_odk_submission));
-	                    if ( submissionUrl.charAt(0) != '/') {
-	                    	submissionUrl = "/" + submissionUrl;
-	                    }
-
-	                    urlString = urlString + submissionUrl;
-	                }
+                    // Use the app's configured URL unless the form included a submission URL
+                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+                    String urlString = c.isNull(subIdx) ? getServerSubmissionURL() : c.getString(subIdx);
 
 	                // add the deviceID to the request...
 	                try {
@@ -594,6 +578,28 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         return outcome;
     }
 
+    private String getServerSubmissionURL() {
+
+        Collect app = Collect.getInstance();
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        String serverBase = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                app.getString(R.string.default_server_url));
+
+        if (serverBase.endsWith(URL_PATH_SEP)) {
+            serverBase = serverBase.substring(0, serverBase.length() - 1);
+        }
+
+        // NOTE: /submission must not be translated! It is the well-known path on the server.
+        String submissionPath = settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
+                app.getString(R.string.default_odk_submission));
+
+        if (!submissionPath.startsWith(URL_PATH_SEP)) {
+            submissionPath = URL_PATH_SEP + submissionPath;
+        }
+
+        return serverBase + submissionPath;
+    }
 
     @Override
     protected void onPostExecute(Outcome outcome) {
