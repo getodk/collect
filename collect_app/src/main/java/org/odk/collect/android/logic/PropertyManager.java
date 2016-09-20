@@ -39,6 +39,8 @@ import android.util.Log;
 
 public class PropertyManager implements IPropertyManager {
 
+    public static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
+
     private String t = "PropertyManager";
 
     private Context mContext;
@@ -94,7 +96,7 @@ public class PropertyManager implements IPropertyManager {
 
     		// Get WiFi status
     		WifiInfo info = wifi.getConnectionInfo();
-    		if ( info != null ) {
+    		if ( info != null && !ANDROID6_FAKE_MAC.equals(info.getMacAddress())) {
     			deviceId = info.getMacAddress();
     			orDeviceId = "mac:" + deviceId;
     		}
