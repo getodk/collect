@@ -83,7 +83,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 String choiceName = prompt.getSelectChoiceText(mItems.get(i));
                 CharSequence choiceDisplayName;
                 if ( choiceName != null ) {
-                  choiceDisplayName = TextUtils.textToHtml(choiceName);
+                  choiceDisplayName = new TextUtils().textToHtml(choiceName);
                 } else {
                   choiceDisplayName = "";
                 }
