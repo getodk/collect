@@ -72,12 +72,12 @@ public class HierarchyElementView extends RelativeLayout {
 
 
     public void setPrimaryText(String text) {
-        mPrimaryTextView.setText(TextUtils.textToHtml(text));
+        mPrimaryTextView.setText(new TextUtils().textToHtml(text));
     }
 
 
     public void setSecondaryText(String text) {
-        mSecondaryTextView.setText(TextUtils.textToHtml(text));
+        mSecondaryTextView.setText(new TextUtils().textToHtml(text));
     }
 
 

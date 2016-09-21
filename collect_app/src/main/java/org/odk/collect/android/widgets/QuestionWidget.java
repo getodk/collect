@@ -123,7 +123,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+        questionText.setText(promptText == null ? "" : new TextUtils().textToHtml(promptText));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
@@ -295,7 +295,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
-            helpText.setText(TextUtils.textToHtml(s));
+            helpText.setText(new TextUtils().textToHtml(s));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
