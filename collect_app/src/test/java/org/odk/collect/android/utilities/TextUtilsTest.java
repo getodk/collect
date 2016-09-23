@@ -2,8 +2,6 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertNotNull;
@@ -12,9 +10,6 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(RobolectricTestRunner.class)
 public class TextUtilsTest {
-
-    @Captor
-    private ArgumentCaptor<String> captor;
 
     /**
      * Should return null if provided with null and not throw a NPE.
