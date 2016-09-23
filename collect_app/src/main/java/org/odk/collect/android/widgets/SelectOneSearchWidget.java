@@ -125,7 +125,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
             for (int i = 0; i < mSearchedItems.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setText(new TextUtils().textToHtml(prompt.getSelectChoiceText(mSearchedItems.get(i))));
+                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mSearchedItems.get(i))));
 
                 if (tagList == null) {
                     r.setTag(Integer.valueOf(i));

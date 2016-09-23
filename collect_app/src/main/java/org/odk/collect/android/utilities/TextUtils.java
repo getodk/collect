@@ -15,8 +15,6 @@
 package org.odk.collect.android.utilities;
 
 import android.text.Html;
-import android.text.Spanned;
-
 import java.util.regex.MatchResult;
 
 public class TextUtils {
@@ -88,29 +86,14 @@ public class TextUtils {
         return text;
     }
 
-    public CharSequence textToHtml(String text) {
+    public static CharSequence textToHtml(String text) {
 
         if ( text == null ) {
             return null;
         }
 
-        return htmlWrapper.toHtml(markdownToHtml(text));
+        return Html.fromHtml(markdownToHtml(text));
 
-    }
-
-    public static class HtmlWrapper {
-        public Spanned toHtml(String text) {
-            return Html.fromHtml(text);
-        }
-    }
-    private final HtmlWrapper htmlWrapper;
-
-    public TextUtils() {
-        this(new HtmlWrapper());
-    }
-
-    TextUtils(HtmlWrapper htmlWrapper){
-        this.htmlWrapper = htmlWrapper;
     }
 
 } 
