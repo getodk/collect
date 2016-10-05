@@ -333,8 +333,8 @@
 <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
 <string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
 <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
-<string name="password_error_whitespace">leading or trailing whitespace not allowed in passwords</string>
-<string name="username_error_whitespace">leading or trailing whitespace not allowed in usernames</string>
+<string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
+<string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
 <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
