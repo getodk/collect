@@ -327,7 +327,6 @@
   <string name="google_sheets_access_denied">Accesso negato. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso.</string>
   <string name="google_sheets_update_error">Errore di caricamento del foglio. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso in modalità scrittura.</string>
   <string name="google_sheets_missing_columns">Il foglio è mancante delle seguenti colonne: %1$s</string>
-  <string name="url_error_whitespace">spazi vuoti non sono ammessi negli URL</string>
   <string name="password_error_whitespace">spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="google_play_services_error_occured">Impossible accedere a Google Maps. Hai installato Google Play Services?</string>
