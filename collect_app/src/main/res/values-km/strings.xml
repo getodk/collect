@@ -327,7 +327,6 @@
   <string name="google_sheets_access_denied">ការចូលដំណើរការត្រូវបានបដិសេធ។  ​សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីបាន​ផ្តល់​ការអនុញ្ញាតឲ្យអ្នកចូលដំណើរការ។</string>
   <string name="google_sheets_update_error">មាន​កំហុស​ក្នុង​ធ្វើ​បច្ចុប្បន្ន​ភាព​លើ​សៀវភៅ​បញ្ជី ។ សូម​ប្រាកដ​ថា​ម្ចាស់​​សៀវភៅ​បញ្ជី​​បាន​ផ្តល់​ការ​អនុញ្ញាតិ​ឲ្យ​អ្នក មាន​សិទ្ធិសរសេរ ។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
-  <string name="url_error_whitespace">ការដកឃ្លាមិនត្រូវបានអនុញ្ញាតិនៅក្នុងអាសយដ្ឋាន</string>
   <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>

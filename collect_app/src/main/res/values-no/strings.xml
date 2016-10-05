@@ -326,7 +326,6 @@
   <string name="google_sheets_access_denied">Tilgang avvist. Pass på at eieren av regnearket har gitt deg tilgang.</string>
   <string name="google_sheets_update_error">Feil ved oppdatering av regnearket. Pass på at eieren av regnearket har gitt deg skrivetilgang.</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
-  <string name="url_error_whitespace">mellomrom er ikke tillatt i URLs</string>
   <string name="password_error_whitespace">mellomrom er ikke tillatt før eller etter passord</string>
   <string name="username_error_whitespace">mellomrom er ikke tillatt før eller etter brukernavn</string>
   <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
