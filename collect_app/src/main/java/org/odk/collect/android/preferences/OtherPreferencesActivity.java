@@ -16,12 +16,10 @@ package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceCategory;
 import android.text.InputFilter;
 
 /**
@@ -41,23 +39,20 @@ public class OtherPreferencesActivity extends AggregatePreferencesActivity
 
 		addPreferencesFromResource(R.xml.other_preferences);
 
-		SharedPreferences adminPreferences = getSharedPreferences(
-				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
 		mFormListUrlPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_FORMLIST_URL);
 		mSubmissionUrlPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_SUBMISSION_URL);
 
-		PreferenceCategory otherPreferences = (PreferenceCategory) findPreference(getString(R.string.other_preferences));
+		InputFilter[] filters = { new ControlCharacterFilter(), new WhitespaceFilter() };
+
+		mServerUrlPreference.getEditText().setFilters(filters);
 
 		mFormListUrlPreference.setOnPreferenceChangeListener(this);
 		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+		mFormListUrlPreference.getEditText().setFilters(filters);
 
 		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
 		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter(), getWhitespaceFilter() });
+		mSubmissionUrlPreference.getEditText().setFilters(filters);
 	}
 
 	/**

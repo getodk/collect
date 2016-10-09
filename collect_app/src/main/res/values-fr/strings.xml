@@ -327,7 +327,6 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="google_sheets_access_denied">Accès refusé. Merci d’assurer que le propriétaire de la feuille de calcul vous a accordé l\'autorisation d\'accès.</string>
   <string name="google_sheets_update_error">Erreur de mis à jour de la feuille de calcul. Demandez le propriétaire d\'assurer votre accès en autorisation d\'écriture.</string>
   <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
-  <string name="url_error_whitespace">Des espaces ne sont pas autorisées dan l\'URL.</string>
   <string name="password_error_whitespace">Des espaces avant ou après le mot de passe ne sont pas autorisées.</string>
   <string name="username_error_whitespace">Des espaces avant ou après le nom de l\'utilisateur ne sont pas autorisées.</string>
   <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>

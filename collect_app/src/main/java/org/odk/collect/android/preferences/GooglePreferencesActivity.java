@@ -30,7 +30,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.widget.Toast;
 
 /**
@@ -116,29 +115,9 @@ public class GooglePreferencesActivity extends PreferenceActivity {
         });
         mGoogleSheetsUrlPreference.setSummary(mGoogleSheetsUrlPreference.getText());
         mGoogleSheetsUrlPreference.getEditText().setFilters(new InputFilter[] {
-            getReturnFilter()
+            new ControlCharacterFilter(), new WhitespaceFilter()
         });
 
-    }
-
-    /**
-     * Disallows carriage returns from user entry
-     * 
-     * @return
-     */
-    protected InputFilter getReturnFilter() {
-        InputFilter returnFilter = new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
-                    int dstart, int dend) {
-                for (int i = start; i < end; i++) {
-                    if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-                        return "";
-                    }
-                }
-                return null;
-            }
-        };
-        return returnFilter;
     }
 
 }

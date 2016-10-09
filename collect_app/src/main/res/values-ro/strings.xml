@@ -326,8 +326,7 @@
   <string name="google_sheets_access_denied">Acces interzis. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
   <string name="google_sheets_update_error">Eroare la actualizarea foii de calcul. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
-  <string name="url_error_whitespace">spațiile nu sunt permise în adresele url</string>
-  <string name="password_error_whitespace">nu sunt permise spații în parole</string>
-  <string name="username_error_whitespace">nu sunt permise spații în numele de utilizator</string>
+  <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
+  <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
   <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Este instalat Google Play Services?</string>
 </resources>

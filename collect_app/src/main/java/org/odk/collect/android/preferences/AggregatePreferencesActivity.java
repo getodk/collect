@@ -62,14 +62,6 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 							Object newValue) {
 						String url = newValue.toString();
 
-						// disallow any whitespace
-						if ( url.contains(" ") || !url.equals(url.trim()) ) {
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.url_error_whitespace, Toast.LENGTH_SHORT)
-                                    .show();
-                            return false;
-                        }
-
 						// remove all trailing "/"s
 						while (url.endsWith("/")) {
 							url = url.substring(0, url.length() - 1);
@@ -88,7 +80,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				});
 		mServerUrlPreference.setSummary(mServerUrlPreference.getText());
 		mServerUrlPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
+				new InputFilter[] { new ControlCharacterFilter(), new WhitespaceFilter() });
 
 		mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
@@ -115,8 +107,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
             }
         });
 		mUsernamePreference.setSummary(mUsernamePreference.getText());
-		mUsernamePreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
+		mUsernamePreference.getEditText().setFilters(new InputFilter[] { new ControlCharacterFilter() });
 
 		mPasswordPreference
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -152,43 +143,37 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 				&& mPasswordPreference.getText().length() > 0) {
 			mPasswordPreference.setSummary("********");
 		}
-		mPasswordPreference.getEditText().setFilters(
-				new InputFilter[] { getReturnFilter() });
+		mPasswordPreference.getEditText().setFilters(new InputFilter[] { new ControlCharacterFilter() });
 	}
 
-	/**
-	 * Disallows carriage returns from user entry
-	 * 
-	 * @return
-	 */
-	protected InputFilter getReturnFilter() {
-		InputFilter returnFilter = new InputFilter() {
-			public CharSequence filter(CharSequence source, int start, int end,
-					Spanned dest, int dstart, int dend) {
-				for (int i = start; i < end; i++) {
-					if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-						return "";
-					}
-				}
-				return null;
+}
+
+/**
+ * Rejects edits that contain whitespace.
+ */
+class WhitespaceFilter implements InputFilter {
+	public CharSequence filter(CharSequence source, int start, int end,
+							   Spanned dest, int dstart, int dend) {
+		for (int i = start; i < end; i++) {
+			if (Character.isWhitespace(source.charAt(i))) {
+				return "";
 			}
-		};
-		return returnFilter;
+		}
+		return null;
 	}
+}
 
-	protected InputFilter getWhitespaceFilter() {
-		InputFilter whitespaceFilter = new InputFilter() {
-			public CharSequence filter(CharSequence source, int start, int end,
-					Spanned dest, int dstart, int dend) {
-				for (int i = start; i < end; i++) {
-					if (Character.isWhitespace(source.charAt(i))) {
-						return "";
-					}
-				}
-				return null;
+/**
+ * Rejects edits that contain control characters, including linefeed and carriage return.
+ */
+class ControlCharacterFilter implements InputFilter {
+	public CharSequence filter(CharSequence source, int start, int end,
+							   Spanned dest, int dstart, int dend) {
+		for (int i = start; i < end; i++) {
+			if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+				return "";
 			}
-		};
-		return whitespaceFilter;
+		}
+		return null;
 	}
-
 }

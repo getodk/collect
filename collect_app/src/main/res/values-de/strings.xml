@@ -328,7 +328,6 @@
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_update_error">Fehler beim Aktualisieren der Tabelle.Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Schreibzugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_missing_columns">Die folgenden Spalten fehlen in der Tabelle: %1$s</string>
-  <string name="url_error_whitespace">Leerzeichen in URLs nicht erlaubt</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
