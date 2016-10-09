@@ -326,7 +326,6 @@
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
   <string name="google_sheets_update_error">スプレッドシートの更新中にエラー。スプレッドシートの所有者が、書き込みアクセス許可を与えていることを確認してください。</string>
   <string name="google_sheets_missing_columns">スプレッドシートの次の列が見つかりません: %1$s</string>
-  <string name="url_error_whitespace">URL に空白は使用できません</string>
   <string name="password_error_whitespace">パスワードは、先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名は、先頭または末尾に空白は使用できません</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>

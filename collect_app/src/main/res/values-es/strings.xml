@@ -328,7 +328,6 @@
   <string name="google_sheets_access_denied">Acceso denegado. Asegurese de que dispone de permisos de acceso.</string>
   <string name="google_sheets_update_error">Error al actualizar la hoja. Asegurese de que dispone de permisos de acceso.</string>
   <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
-  <string name="url_error_whitespace">Espacios no permitidos en URL</string>
   <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
   <string name="username_error_whitespace">Espacios delante o detras no permitidos en nombre de usuario</string>
   <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Hay el servicio instalado?</string>
