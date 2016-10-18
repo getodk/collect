@@ -94,6 +94,15 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             }
 
         });
+
+        mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.e(t, String.format("Error occured in MediaPlayer. what = %1$d, extra = %2$d", what, extra));
+                return false;
+            }
+        });
+
         mQuestionFontsize = Collect.getQuestionFontsize();
         mAnswerFontsize = mQuestionFontsize + 2;
 
