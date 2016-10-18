@@ -88,6 +88,7 @@ public class AudioButton extends ImageButton {
             }
 
             try {
+                mPlayer.reset();
                 mPlayer.setDataSource(audioFilename);
                 mPlayer.prepare();
                 mPlayer.start();
