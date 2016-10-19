@@ -28,13 +28,19 @@ import java.util.Set;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.DeleteFormsListener;
+import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.listeners.FetchUserGroupListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.DeleteFormsTask;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
@@ -78,7 +84,8 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends Activity implements FormListDownloaderListener,FormDownloaderListener {
+public class MainMenuActivity extends Activity implements FormListDownloaderListener,FormDownloaderListener,
+        FetchUserGroupListener, DeleteInstancesListener, DeleteFormsListener {
     private static final String t = "MainMenuActivity";
 
     private static final int PASSWORD_DIALOG = 1;
@@ -575,6 +582,16 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
         }
     }
 
+    @Override
+    public void deleteComplete(int deletedInstances) {
+
+    }
+
+    @Override
+    public void fetchUserGroupDataCompleteListener(String result) {
+
+    }
+
     /**
      * notifies us that something changed
      */
@@ -864,4 +881,97 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
         String mAlertMsg = getString(R.string.fetching_file, currentFile, progress, total);
         mProgressDialog.setMessage(mAlertMsg);
     }
+
+
+    private void deleteSelectedInstances() {
+        mEditedFormList.clear();
+
+        Cursor sendFormManagerCursor = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
+                InstanceColumns.DISPLAY_NAME + " ASC");
+
+        while (sendFormManagerCursor.moveToNext()) {
+            mEditedFormList.add(sendFormManagerCursor.getLong(sendFormManagerCursor.getColumnIndex(InstanceColumns._ID)));
+        }
+        if (mEditedFormList.size() > 0) {
+            if (mDeleteInstancesTask == null) {
+                mDeleteInstancesTask = new DeleteInstancesTask();
+                mDeleteInstancesTask.setContentResolver(getContentResolver());
+                mDeleteInstancesTask.setDeleteListener(this);
+                mDeleteInstancesTask.execute(mEditedFormList.toArray(new Long[mEditedFormList
+                        .size()]));
+            } else {
+                Toast.makeText(this, getString(R.string.file_delete_in_progress),
+                        Toast.LENGTH_LONG).show();
+            }
+        } else {
+            /*deleteLocalForms();*/
+            logout();
+        }
+    }
+
+
+    /*@Override
+    public void deleteComplete(int deletedInstances) {
+        Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedInstances));
+        if (deletedInstances == mEditedFormList.size()) {
+            mDeleteInstancesTask = null;
+            mEditedFormList.clear();
+            *//*deleteLocalForms();*//*
+            logout();
+        } else {
+            // had some failures
+            Log.e(t, "Failed to delete "
+                    + (mLocalFormList.size() - deletedInstances) + " instances");
+            *//*Toast.makeText(
+                    this,
+                    getString(R.string.file_deleted_error, mEditedFormList.size()
+                            - deletedInstances, mEditedFormList.size()),
+                    Toast.LENGTH_LONG).show();*//*
+        }
+    }*/
+
+
+    private void deleteLocalForms() {
+
+        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " DESC";
+        Cursor formManagerCursor = managedQuery(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null, null, sortOrder);
+
+        while (formManagerCursor.moveToNext()) {
+            mLocalFormList.add(formManagerCursor.getLong(formManagerCursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
+        }
+
+        if (mDeleteFormsTask == null) {
+            mDeleteFormsTask = new DeleteFormsTask();
+            mDeleteFormsTask.setContentResolver(getContentResolver());
+            mDeleteFormsTask.setDeleteListener(this);
+            mDeleteFormsTask.execute(mLocalFormList
+                    .toArray(new Long[mLocalFormList.size()]));
+        } else {
+            Toast.makeText(this, getString(R.string.file_delete_in_progress),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*@Override
+    public void deleteCompleteForm(int deletedForms) {
+        mDeleteFormsTask = null;
+        mLocalFormList.clear();
+        deleteSelectedInstances();
+        *//*logout();*//*
+    }*/
+
+    private void logout() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Editor edit = preferences.edit();
+        edit.putString(PreferencesActivity.KEY_TOKEN, "");
+        edit.apply();
+        //deleteForms(new File(Collect.ODK_ROOT));
+        startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
+        finish();
+    }
+
+    DeleteInstancesTask mDeleteInstancesTask = null;
+    private ArrayList<Long> mEditedFormList = new ArrayList<Long>();
+    private ArrayList<Long> mLocalFormList = new ArrayList<Long>();
+    DeleteFormsTask mDeleteFormsTask;
 }
