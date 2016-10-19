@@ -22,7 +22,7 @@ android {
     buildToolsVersion(buildTools)
 
     defaultConfig {
-        applicationId("org.odk.collect.android")
+        applicationId("org.odk.nexleaf.collect")
         minSdkVersion(9)
         targetSdkVersion(9)
         versionCode(1061)

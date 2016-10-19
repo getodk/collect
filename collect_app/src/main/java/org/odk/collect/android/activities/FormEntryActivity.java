@@ -781,7 +781,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						.setIcon(R.drawable.ic_menu_goto),
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-		CompatibilityUtils.setShowAsAction(
+		/*CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_LANGUAGES, 0, R.string.change_language)
 						.setIcon(R.drawable.ic_menu_start_conversation),
 				MenuItem.SHOW_AS_ACTION_NEVER);
@@ -789,7 +789,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
 						.setIcon(R.drawable.ic_menu_preferences),
-				MenuItem.SHOW_AS_ACTION_NEVER);
+				MenuItem.SHOW_AS_ACTION_NEVER);*/
 		return true;
 	}
 
@@ -818,14 +818,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				&& formController.getLanguages() != null
 				&& formController.getLanguages().length > 1;
 
-		menu.findItem(MENU_LANGUAGES).setVisible(useability)
+		/*menu.findItem(MENU_LANGUAGES).setVisible(useability)
 				.setEnabled(useability);
 
 		useability = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true);
 
 		menu.findItem(MENU_PREFERENCES).setVisible(useability)
-				.setEnabled(useability);
+				.setEnabled(useability);*/
 		return true;
 	}
 

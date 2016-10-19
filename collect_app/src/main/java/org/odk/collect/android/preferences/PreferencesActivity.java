@@ -111,7 +111,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   public static final String GOOGLE_MAPS_BASEMAP_DEFAULT = "streets";
   public static final String OSM_MAPS_BASEMAP_DEFAULT = "mapquest_streets";
 
-
+  //Code added for nexleaf
+  public static final String KEY_TOKEN = "user_token";
+  public static final String KEY_FROM_LOGIN = "loginFirst";
+  public static final String KEY_OPTION_SELECTED = "option";
 
   private PreferenceScreen mSplashPathPreference;
   private ListPreference mSelectedGoogleAccountPreference;
