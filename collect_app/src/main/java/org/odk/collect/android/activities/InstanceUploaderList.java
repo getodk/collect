@@ -14,16 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.util.ArrayList;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.receivers.NetworkReceiver;
-import org.odk.collect.android.utilities.CompatibilityUtils;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -45,6 +35,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.receivers.NetworkReceiver;
+
+import java.util.ArrayList;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -262,21 +261,21 @@ public class InstanceUploaderList extends ListActivity implements
 				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
 
-		CompatibilityUtils.setShowAsAction(
+		/*CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
 						.setIcon(R.drawable.ic_menu_preferences),
 				MenuItem.SHOW_AS_ACTION_NEVER);
 		CompatibilityUtils.setShowAsAction(
 				menu.add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
 						.setIcon(R.drawable.ic_menu_manage),
-				MenuItem.SHOW_AS_ACTION_NEVER);
+				MenuItem.SHOW_AS_ACTION_NEVER);*/
 		return true;
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case MENU_PREFERENCES:
+		/*switch (item.getItemId()) {
+		*//*case MENU_PREFERENCES:
 			Collect.getInstance().getActivityLogger()
 					.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
 			createPreferencesMenu();
@@ -284,9 +283,9 @@ public class InstanceUploaderList extends ListActivity implements
 		case MENU_SHOW_UNSENT:
 			Collect.getInstance().getActivityLogger()
 					.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
-			showSentAndUnsentChoices();
+			showSentAndUnsentChoices();*//*
 			return true;
-		}
+		}*/
 		return super.onMenuItemSelected(featureId, item);
 	}
 

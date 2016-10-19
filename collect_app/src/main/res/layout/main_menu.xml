@@ -89,7 +89,7 @@
 
             <View
                 android:layout_width="fill_parent"
-                android:layout_height="20dp" />
+                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/get_forms"
@@ -108,6 +108,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
+                android:visibility="gone"
                 android:textSize="21sp" />
         </LinearLayout>
     </ScrollView>

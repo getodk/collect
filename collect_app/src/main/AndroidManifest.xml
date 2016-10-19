@@ -245,6 +245,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize" />
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true" >
