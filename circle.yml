@@ -12,7 +12,7 @@ dependencies:
 test:
     override:
         - ./gradlew assembleRelease
-        - cp -r collect_app/build/outputs $CIRCLE_ARTIFACTS
+        - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
 
     post:
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
