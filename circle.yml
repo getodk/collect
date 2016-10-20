@@ -1,7 +1,3 @@
-general:
-    artifacts:
-        - /home/ubuntu/collect/app/build/outputs/apk/
-
 machine:
     environment:
         ANDROID_HOME: /usr/local/android-sdk-linux
@@ -15,8 +11,8 @@ dependencies:
         
 test:
     override:
-        - ./gradlew assembleRelease
-        - cp -r collect/build/outputs $CIRCLE_ARTIFACTS
+        - ./gradlew testMasterDebugUnitTest
+        - cp -r collect/collect_app/build/outputs $CIRCLE_ARTIFACTS
 
     post:
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
