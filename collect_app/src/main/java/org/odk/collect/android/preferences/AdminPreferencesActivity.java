@@ -38,6 +38,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import analytics.Analytics;
+import analytics.ScreenType;
+
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
@@ -242,4 +245,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         return mode;
     }
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Analytics.getInstance().logScreenView(ScreenType.AdminSettings);
+	}
 }

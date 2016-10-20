@@ -59,6 +59,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import analytics.Analytics;
+import analytics.ScreenType;
+
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
  * caveat. If the server requires authentication, a dialog will pop up asking when you request the
@@ -553,6 +556,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             createAlertDialog(mAlertTitle, mAlertMsg, mShouldExit);
         }
         super.onResume();
+        Analytics.getInstance().logScreenView(ScreenType.GetBlankForm);
     }
 
 

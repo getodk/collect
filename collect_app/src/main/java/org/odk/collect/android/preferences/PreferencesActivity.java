@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import java.util.ArrayList;
 
 import analytics.Analytics;
+import analytics.ScreenType;
 
 /**
  * Handles general preferences.
@@ -536,6 +537,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   @Override
   protected void onResume() {
     super.onResume();
+    Analytics.getInstance().logScreenView(ScreenType.GeneralSettings);
 
     // has to go in onResume because it may get updated by
     // a sub-preference screen

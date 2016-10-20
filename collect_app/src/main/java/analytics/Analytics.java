@@ -2,6 +2,7 @@ package analytics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -44,5 +45,38 @@ public class Analytics {
 
     public void enableDataCollection(boolean enabled) {
         firebase.setAnalyticsCollectionEnabled(enabled);
+    }
+
+    public void logScreenView(ScreenType type) {
+        Bundle bundle = new Bundle();
+        bundle.putString(EventConfig.SCREEN_VIEW_SCREEN_ID, getScreenId(type));
+        firebase.logEvent(EventConfig.SCREEN_VIEW, bundle);
+    }
+
+    private String getScreenId(ScreenType type) {
+        switch(type) {
+            case Main:                      return "main";
+            case FillBlankFormList:         return "fill_blank";
+            case FillBlankFormSelected:     return "fill_start";
+            case FormFinalized:             return "fill_end";
+            case EditSavedForm:             return "edit";
+            case StartedEditingSavedForm:   return "edit_start";
+            case SendFinalizedForm:         return "send_finalized";
+            case GetBlankForm:              return "get_blank";
+            case DeleteSavedForm:           return "delete_saved";
+            case DeleteBlankForm:           return "delete_blank";
+            case GeneralSettings:           return "settings_general";
+            case AdminSettings:             return "settings_admin";
+        }
+
+        return "unknown";
+    }
+
+    /**
+     * Holds keys passed to analytics.
+     */
+    private class EventConfig {
+        final static String SCREEN_VIEW = "screenview";
+        final static String SCREEN_VIEW_SCREEN_ID= "screen";
     }
 }

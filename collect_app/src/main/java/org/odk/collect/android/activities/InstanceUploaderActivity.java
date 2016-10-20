@@ -44,6 +44,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import analytics.Analytics;
+import analytics.ScreenType;
+
 /**
  * Activity to upload completed forms.
  *

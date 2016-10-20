@@ -36,6 +36,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import analytics.Analytics;
+import analytics.ScreenType;
+
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
  * selected form for use by {@link MainMenuActivity}.
@@ -132,6 +135,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             setResult(RESULT_OK, new Intent().setData(formUri));
         } else {
             // caller wants to view/edit a form, so launch formentryactivity
+            Analytics.getInstance().logScreenView(ScreenType.FillBlankFormSelected);
             startActivity(new Intent(Intent.ACTION_EDIT, formUri));
         }
 
@@ -143,6 +147,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     protected void onResume() {
         mDiskSyncTask.setDiskSyncListener(this);
         super.onResume();
+        Analytics.getInstance().logScreenView(ScreenType.FillBlankFormList);
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
         	SyncComplete(mDiskSyncTask.getStatusMessage());

@@ -57,6 +57,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import analytics.Analytics;
+import analytics.ScreenType;
+
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
  * some activities based on returns of others.
@@ -210,7 +213,7 @@ public class MainMenuActivity extends Activity {
 							FormDownloadList.class);
 				}
 				startActivity(i);
-				
+
 			}
 		});
 
@@ -274,6 +277,9 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+        Analytics.getInstance().logScreenView(ScreenType.Main);
+
 		SharedPreferences sharedPreferences = this.getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 

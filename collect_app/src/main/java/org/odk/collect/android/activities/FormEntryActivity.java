@@ -32,6 +32,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -100,6 +101,9 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+
+import analytics.Analytics;
+import analytics.ScreenType;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -995,209 +999,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 		switch (event) {
 		case FormEntryController.EVENT_BEGINNING_OF_FORM:
-			View startView = View
-					.inflate(this, R.layout.form_entry_start, null);
-			setTitle(getString(R.string.app_name) + " > "
-					+ formController.getFormTitle());
+			return createFormStartView(formController);
 
-			Drawable image = null;
-			File mediaFolder = formController.getMediaFolder();
-			String mediaDir = mediaFolder.getAbsolutePath();
-			BitmapDrawable bitImage = null;
-			// attempt to load the form-specific logo...
-			// this is arbitrarily silly
-			bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
-					+ "form_logo.png");
-
-			if (bitImage != null && bitImage.getBitmap() != null
-					&& bitImage.getIntrinsicHeight() > 0
-					&& bitImage.getIntrinsicWidth() > 0) {
-				image = bitImage;
-			}
-
-			if (image == null) {
-				// show the opendatakit zig...
-				// image =
-				// getResources().getDrawable(R.drawable.opendatakit_zig);
-				((ImageView) startView.findViewById(R.id.form_start_bling))
-						.setVisibility(View.GONE);
-			} else {
-				ImageView v = ((ImageView) startView
-						.findViewById(R.id.form_start_bling));
-				v.setImageDrawable(image);
-				v.setContentDescription(formController.getFormTitle());
-			}
-
-			// change start screen based on navigation prefs
-			String navigationChoice = PreferenceManager
-					.getDefaultSharedPreferences(this).getString(
-							PreferencesActivity.KEY_NAVIGATION,
-							PreferencesActivity.KEY_NAVIGATION);
-			Boolean useSwipe = false;
-			Boolean useButtons = false;
-			ImageView ia = ((ImageView) startView
-					.findViewById(R.id.image_advance));
-			ImageView ib = ((ImageView) startView
-					.findViewById(R.id.image_backup));
-			TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
-			TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
-			TextView d = ((TextView) startView.findViewById(R.id.description));
-
-			if (navigationChoice != null) {
-				if (navigationChoice
-						.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
-					useSwipe = true;
-				}
-				if (navigationChoice
-						.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
-					useButtons = true;
-				}
-			}
-			if (useSwipe && !useButtons) {
-				d.setText(getString(R.string.swipe_instructions,
-						formController.getFormTitle()));
-			} else if (useButtons && !useSwipe) {
-				ia.setVisibility(View.GONE);
-				ib.setVisibility(View.GONE);
-				ta.setVisibility(View.GONE);
-				tb.setVisibility(View.GONE);
-				d.setText(getString(R.string.buttons_instructions,
-						formController.getFormTitle()));
-			} else {
-				d.setText(getString(R.string.swipe_buttons_instructions,
-						formController.getFormTitle()));
-			}
-
-			if (mBackButton.isShown()) {
-				mBackButton.setEnabled(false);
-			}
-			if (mNextButton.isShown()) {
-				mNextButton.setEnabled(true);
-			}
-
-			return startView;
 		case FormEntryController.EVENT_END_OF_FORM:
-			View endView = View.inflate(this, R.layout.form_entry_end, null);
-			((TextView) endView.findViewById(R.id.description))
-					.setText(getString(R.string.save_enter_data_description,
-							formController.getFormTitle()));
+			Analytics.getInstance().logScreenView(ScreenType.FormFinalized);
+			return createFormEndView(formController);
 
-			// checkbox for if finished or ready to send
-			final CheckBox instanceComplete = ((CheckBox) endView
-					.findViewById(R.id.mark_finished));
-			instanceComplete.setChecked(isInstanceComplete(true));
-
-			if (!mAdminPreferences.getBoolean(
-					AdminPreferencesActivity.KEY_MARK_AS_FINALIZED, true)) {
-				instanceComplete.setVisibility(View.GONE);
-			}
-
-			// edittext to change the displayed name of the instance
-			final EditText saveAs = (EditText) endView
-					.findViewById(R.id.save_name);
-
-			// disallow carriage returns in the name
-			InputFilter returnFilter = new InputFilter() {
-				public CharSequence filter(CharSequence source, int start,
-						int end, Spanned dest, int dstart, int dend) {
-					for (int i = start; i < end; i++) {
-						if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-							return "";
-						}
-					}
-					return null;
-				}
-			};
-			saveAs.setFilters(new InputFilter[] { returnFilter });
-
-			String saveName = formController.getSubmissionMetadata().instanceName;
-			if (saveName == null) {
-				// no meta/instanceName field in the form -- see if we have a
-				// name for this instance from a previous save attempt...
-				if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
-					Uri instanceUri = getIntent().getData();
-					Cursor instance = null;
-					try {
-						instance = getContentResolver().query(instanceUri,
-								null, null, null, null);
-						if (instance.getCount() == 1) {
-							instance.moveToFirst();
-							saveName = instance
-									.getString(instance
-											.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-						}
-					} finally {
-						if (instance != null) {
-							instance.close();
-						}
-					}
-				}
-				if (saveName == null) {
-					// last resort, default to the form title
-					saveName = formController.getFormTitle();
-				}
-				// present the prompt to allow user to name the form
-				TextView sa = (TextView) endView
-						.findViewById(R.id.save_form_as);
-				sa.setVisibility(View.VISIBLE);
-				saveAs.setText(saveName);
-				saveAs.setEnabled(true);
-				saveAs.setVisibility(View.VISIBLE);
-			} else {
-				// if instanceName is defined in form, this is the name -- no
-				// revisions
-				// display only the name, not the prompt, and disable edits
-				TextView sa = (TextView) endView
-						.findViewById(R.id.save_form_as);
-				sa.setVisibility(View.GONE);
-				saveAs.setText(saveName);
-				saveAs.setEnabled(false);
-				saveAs.setBackgroundColor(Color.WHITE);
-				saveAs.setVisibility(View.VISIBLE);
-			}
-
-			// override the visibility settings based upon admin preferences
-			if (!mAdminPreferences.getBoolean(
-					AdminPreferencesActivity.KEY_SAVE_AS, true)) {
-				saveAs.setVisibility(View.GONE);
-				TextView sa = (TextView) endView
-						.findViewById(R.id.save_form_as);
-				sa.setVisibility(View.GONE);
-			}
-
-			// Create 'save' button
-			((Button) endView.findViewById(R.id.save_exit_button))
-					.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							Collect.getInstance()
-									.getActivityLogger()
-									.logInstanceAction(
-											this,
-											"createView.saveAndExit",
-											instanceComplete.isChecked() ? "saveAsComplete"
-													: "saveIncomplete");
-							// Form is marked as 'saved' here.
-							if (saveAs.getText().length() < 1) {
-								Toast.makeText(FormEntryActivity.this,
-										R.string.save_as_error,
-										Toast.LENGTH_SHORT).show();
-							} else {
-								saveDataToDisk(EXIT, instanceComplete
-										.isChecked(), saveAs.getText()
-										.toString());
-							}
-						}
-					});
-
-			if (mBackButton.isShown()) {
-				mBackButton.setEnabled(true);
-			}
-			if (mNextButton.isShown()) {
-				mNextButton.setEnabled(false);
-			}
-
-			return endView;
 		case FormEntryController.EVENT_QUESTION:
 		case FormEntryController.EVENT_GROUP:
 		case FormEntryController.EVENT_REPEAT:
@@ -1241,6 +1048,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				mNextButton.setEnabled(true);
 			}
 			return odkv;
+
 		default:
 			Log.e(t, "Attempted to create a view that does not exist.");
 			// this is badness to avoid a crash.
@@ -1253,6 +1061,216 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
             return createView(event, advancingPage);
 		}
+	}
+
+	@NonNull
+	private View createFormEndView(FormController formController) {
+		View endView = View.inflate(this, R.layout.form_entry_end, null);
+		((TextView) endView.findViewById(R.id.description))
+                .setText(getString(R.string.save_enter_data_description,
+                        formController.getFormTitle()));
+
+		// checkbox for if finished or ready to send
+		final CheckBox instanceComplete = ((CheckBox) endView
+                .findViewById(R.id.mark_finished));
+		instanceComplete.setChecked(isInstanceComplete(true));
+
+		if (!mAdminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_MARK_AS_FINALIZED, true)) {
+            instanceComplete.setVisibility(View.GONE);
+        }
+
+		// edittext to change the displayed name of the instance
+		final EditText saveAs = (EditText) endView
+                .findViewById(R.id.save_name);
+
+		// disallow carriage returns in the name
+		InputFilter returnFilter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start,
+									   int end, Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+		saveAs.setFilters(new InputFilter[] { returnFilter });
+
+		String saveName = formController.getSubmissionMetadata().instanceName;
+		if (saveName == null) {
+            // no meta/instanceName field in the form -- see if we have a
+            // name for this instance from a previous save attempt...
+            if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
+                Uri instanceUri = getIntent().getData();
+                Cursor instance = null;
+                try {
+                    instance = getContentResolver().query(instanceUri,
+                            null, null, null, null);
+                    if (instance.getCount() == 1) {
+                        instance.moveToFirst();
+                        saveName = instance
+                                .getString(instance
+                                        .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                    }
+                } finally {
+                    if (instance != null) {
+                        instance.close();
+                    }
+                }
+            }
+            if (saveName == null) {
+                // last resort, default to the form title
+                saveName = formController.getFormTitle();
+            }
+            // present the prompt to allow user to name the form
+            TextView sa = (TextView) endView
+                    .findViewById(R.id.save_form_as);
+            sa.setVisibility(View.VISIBLE);
+            saveAs.setText(saveName);
+            saveAs.setEnabled(true);
+            saveAs.setVisibility(View.VISIBLE);
+        } else {
+            // if instanceName is defined in form, this is the name -- no
+            // revisions
+            // display only the name, not the prompt, and disable edits
+            TextView sa = (TextView) endView
+                    .findViewById(R.id.save_form_as);
+            sa.setVisibility(View.GONE);
+            saveAs.setText(saveName);
+            saveAs.setEnabled(false);
+            saveAs.setBackgroundColor(Color.WHITE);
+            saveAs.setVisibility(View.VISIBLE);
+        }
+
+		// override the visibility settings based upon admin preferences
+		if (!mAdminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_SAVE_AS, true)) {
+            saveAs.setVisibility(View.GONE);
+            TextView sa = (TextView) endView
+                    .findViewById(R.id.save_form_as);
+            sa.setVisibility(View.GONE);
+        }
+
+		// Create 'save' button
+		((Button) endView.findViewById(R.id.save_exit_button))
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Collect.getInstance()
+                                .getActivityLogger()
+                                .logInstanceAction(
+                                        this,
+                                        "createView.saveAndExit",
+                                        instanceComplete.isChecked() ? "saveAsComplete"
+                                                : "saveIncomplete");
+                        // Form is marked as 'saved' here.
+                        if (saveAs.getText().length() < 1) {
+                            Toast.makeText(FormEntryActivity.this,
+                                    R.string.save_as_error,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            saveDataToDisk(EXIT, instanceComplete
+                                    .isChecked(), saveAs.getText()
+                                    .toString());
+                        }
+                    }
+                });
+
+		if (mBackButton.isShown()) {
+            mBackButton.setEnabled(true);
+        }
+		if (mNextButton.isShown()) {
+            mNextButton.setEnabled(false);
+        }
+
+		return endView;
+	}
+
+	@NonNull
+	private View createFormStartView(FormController formController) {
+		View startView = View
+                .inflate(this, R.layout.form_entry_start, null);
+		setTitle(getString(R.string.app_name) + " > "
+                + formController.getFormTitle());
+
+		Drawable image = null;
+		File mediaFolder = formController.getMediaFolder();
+		String mediaDir = mediaFolder.getAbsolutePath();
+		BitmapDrawable bitImage = null;
+		// attempt to load the form-specific logo...
+		// this is arbitrarily silly
+		bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
+                + "form_logo.png");
+
+		if (bitImage != null && bitImage.getBitmap() != null
+                && bitImage.getIntrinsicHeight() > 0
+                && bitImage.getIntrinsicWidth() > 0) {
+            image = bitImage;
+        }
+
+		if (image == null) {
+            // show the opendatakit zig...
+            // image =
+            // getResources().getDrawable(R.drawable.opendatakit_zig);
+            ((ImageView) startView.findViewById(R.id.form_start_bling))
+                    .setVisibility(View.GONE);
+        } else {
+            ImageView v = ((ImageView) startView
+                    .findViewById(R.id.form_start_bling));
+            v.setImageDrawable(image);
+            v.setContentDescription(formController.getFormTitle());
+        }
+
+		// change start screen based on navigation prefs
+		String navigationChoice = PreferenceManager
+                .getDefaultSharedPreferences(this).getString(
+                        PreferencesActivity.KEY_NAVIGATION,
+                        PreferencesActivity.KEY_NAVIGATION);
+		Boolean useSwipe = false;
+		Boolean useButtons = false;
+		ImageView ia = ((ImageView) startView
+                .findViewById(R.id.image_advance));
+		ImageView ib = ((ImageView) startView
+                .findViewById(R.id.image_backup));
+		TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
+		TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
+		TextView d = ((TextView) startView.findViewById(R.id.description));
+
+		if (navigationChoice != null) {
+            if (navigationChoice
+                    .contains(PreferencesActivity.NAVIGATION_SWIPE)) {
+                useSwipe = true;
+            }
+            if (navigationChoice
+                    .contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
+                useButtons = true;
+            }
+        }
+		if (useSwipe && !useButtons) {
+            d.setText(getString(R.string.swipe_instructions,
+                    formController.getFormTitle()));
+        } else if (useButtons && !useSwipe) {
+            ia.setVisibility(View.GONE);
+            ib.setVisibility(View.GONE);
+            ta.setVisibility(View.GONE);
+            tb.setVisibility(View.GONE);
+            d.setText(getString(R.string.buttons_instructions,
+                    formController.getFormTitle()));
+        } else {
+            d.setText(getString(R.string.swipe_buttons_instructions,
+                    formController.getFormTitle()));
+        }
+
+		if (mBackButton.isShown()) {
+            mBackButton.setEnabled(false);
+        }
+		if (mNextButton.isShown()) {
+            mNextButton.setEnabled(true);
+        }
+
+		return startView;
 	}
 
 	@Override

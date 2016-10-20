@@ -46,6 +46,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import analytics.Analytics;
+import analytics.ScreenType;
+
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenuActivity}.
@@ -224,6 +227,12 @@ public class InstanceUploaderList extends ListActivity implements
 	protected void onStop() {
 		Collect.getInstance().getActivityLogger().logOnStop(this);
 		super.onStop();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Analytics.getInstance().logScreenView(ScreenType.SendFinalizedForm);
 	}
 
 	private void uploadSelectedFiles() {
