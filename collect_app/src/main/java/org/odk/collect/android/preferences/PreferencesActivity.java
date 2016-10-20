@@ -45,6 +45,8 @@ import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 
+import analytics.Analytics;
+
 /**
  * Handles general preferences.
  *
@@ -127,6 +129,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
   protected ListPreference mMapSdk;
   protected ListPreference mMapBasemap;
+
+  private CheckBoxPreference mSendStats;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -507,6 +511,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     if (!(mMapBasemapAvailable || adminMode)) {
       mapCategory.removePreference(mMapBasemap);
     }
+
+    // Send stats
+    mSendStats = (CheckBoxPreference) findPreference(AdminPreferencesActivity.KEY_COLLECT_USAGE);
+    mSendStats.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      @Override
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Analytics.getInstance().enableDataCollection((boolean) newValue);
+        return true;
+      }
+    });
   }
 
   @Override

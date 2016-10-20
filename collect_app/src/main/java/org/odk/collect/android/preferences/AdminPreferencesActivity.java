@@ -89,6 +89,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 	public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
 	public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
 
+	public static String KEY_COLLECT_USAGE = "send_stats";
+
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     @Override

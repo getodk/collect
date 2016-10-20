@@ -40,6 +40,8 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 
+import analytics.Analytics;
+
 /**
  * Extends the Application class to implement
  *
@@ -228,6 +230,8 @@ public class Collect extends Application {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
+
+        Analytics.init(this);
 
         PropertyManager mgr = new PropertyManager(this);
 
