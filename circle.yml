@@ -11,7 +11,7 @@ dependencies:
         
 test:
     override:
-        - ./gradlew testMasterDebugUnitTest
+        - ./gradlew assembleRelease
         - cp -r collect_app/build/outputs $CIRCLE_ARTIFACTS
 
     post:
