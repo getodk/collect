@@ -52,8 +52,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -87,7 +87,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class GoogleDriveActivity extends ListActivity implements OnConnectionFailedListener,
+public class GoogleDriveActivity extends ListActivity implements GoogleApiClient.OnConnectionFailedListener,
         TaskListener, GoogleDriveFormDownloadListener {
 
     private final static int PROGRESS_DIALOG = 1;

@@ -27,6 +27,7 @@ android {
         targetSdkVersion(9)
         versionCode(1061)
         versionName("1.4.10")
+        multiDexEnabled true
     }
 
     productFlavors {
@@ -96,7 +97,11 @@ allprojects {
 }
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
-    compile 'com.google.android.gms:play-services:9.6.1'
+    compile 'com.google.android.gms:play-services-base:9.6.1'
+    compile 'com.google.android.gms:play-services-analytics:9.6.1'
+    compile 'com.google.android.gms:play-services-maps:9.6.1'
+    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.android.support:multidex:1.0.0'
     // Testing-only dependencies
     testCompile 'junit:junit:4.12'
 }

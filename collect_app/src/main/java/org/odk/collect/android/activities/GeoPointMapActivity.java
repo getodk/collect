@@ -37,6 +37,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -128,19 +129,28 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 			return;
 		}
 
-		mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		if ( mMap == null ) {
-			Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-					Toast.LENGTH_SHORT).show();
-			finish();
-			return;
-		}
-		mMap.setMyLocationEnabled(true);
-		mMap.getUiSettings().setCompassEnabled(true);
-		mMap.getUiSettings().setMyLocationButtonEnabled(false);
-		mMap.getUiSettings().setZoomControlsEnabled(false);
+		((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
+			@Override
+			public void onMapReady(GoogleMap googleMap) {
+				mMap = googleMap;
+
+				if (mMap == null) {
+					Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
+							Toast.LENGTH_SHORT).show();
+					finish();
+					return;
+				}
+
+				mHelper = new MapHelper(GeoPointMapActivity.this, mMap);
+				mMap.setMyLocationEnabled(true);
+				mMap.getUiSettings().setCompassEnabled(true);
+				mMap.getUiSettings().setMyLocationButtonEnabled(false);
+				mMap.getUiSettings().setZoomControlsEnabled(false);
+			}
+		});
+
 		mMarkerOption = new MarkerOptions();
-		mHelper = new MapHelper(this, mMap);
+
 
 		mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
 
