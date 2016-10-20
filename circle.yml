@@ -15,8 +15,8 @@ dependencies:
         
 test:
     override:
-        - (./gradlew test):
-            timeout: 1200
+		- ./gradlew assembleRelease
+		- cp -r collect/build/outputs $CIRCLE_ARTIFACTS
 
     post:
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
