@@ -12,7 +12,7 @@ dependencies:
 test:
     override:
         - ./gradlew testMasterDebugUnitTest
-        - cp -r collect/collect_app/build/outputs $CIRCLE_ARTIFACTS
+        - cp -r collect_app/build/outputs $CIRCLE_ARTIFACTS
 
     post:
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
