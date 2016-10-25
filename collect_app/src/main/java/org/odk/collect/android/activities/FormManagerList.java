@@ -323,4 +323,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 		}
 		mDeleteButton.setEnabled(false);
 	}
+
+	@Override
+	public void deleteDownloadedForms(int deletedForms) {
+		// no-op
+	}
 }

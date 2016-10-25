@@ -14,9 +14,11 @@
 
 package org.odk.collect.android.activities;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
@@ -26,6 +28,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
@@ -43,6 +48,8 @@ import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
+import org.odk.collect.android.tasks.FetchUserGroupDataTask;
+import org.odk.collect.android.utilities.CDL;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.TextUtils;
 
@@ -94,6 +101,9 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
     // menu options
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_ADMIN = Menu.FIRST + 1;
+    private static final String CSV_HEADER = "Groups";
+    private static final String COLDTRACE = "CT";
+    private static final String STOVETRACE = "ST";
 
     // buttons
     private Button mEnterDataButton;
@@ -131,7 +141,10 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
     ArrayList<HashMap<String, String>> mFormList = new ArrayList<HashMap<String, String>>();
     private DownloadFormsTask mDownloadFormsTask;
     private SharedPreferences preferences;
-    // private static boolean DO_NOT_EXIT = false;
+    private DeleteInstancesTask mDeleteInstancesTask = null;
+    private ArrayList<Long> mEditedFormList = new ArrayList<>();
+    private ArrayList<Long> mLocalFormList = new ArrayList<>();
+    private DeleteFormsTask mDeleteFormsTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -521,13 +534,7 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
-                                //deleteLocalForms();
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                Editor edit = preferences.edit();
-                                edit.putString(PreferencesActivity.KEY_TOKEN, "");
-                                edit.apply();
-                                startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
-                                finish();
+                                deleteLocalForms();
                             }
                         });
 
@@ -580,16 +587,6 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
             mReviewDataButton.setText(getString(R.string.review_data));
             Log.w(t, "Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
         }
-    }
-
-    @Override
-    public void deleteComplete(int deletedInstances) {
-
-    }
-
-    @Override
-    public void fetchUserGroupDataCompleteListener(String result) {
-
     }
 
     /**
@@ -791,7 +788,7 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
                         mFormList.add(j, item);
                     }
                 } else {
-                    Log.i("Test", " ------> " + details.formName);
+                    Log.i(t, "Unsort forms " + details.formName);
                 }
             }
 
@@ -805,16 +802,15 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
 
         String option;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int selected = preferences.getInt(PreferencesActivity.KEY_OPTION_SELECTED,0);
+        int selected = preferences.getInt(PreferencesActivity.KEY_OPTION_SELECTED, 0);
         switch (selected) {
+            case 2:
+                option = STOVETRACE;
+                break;
             case R.id.rb_coldtrace:
-                option = "CT";
-                break;
-            case R.id.rb_stovetrace:
-                option = "ST";
-                break;
+                // falls through
             default:
-                option = "CT";
+                option = COLDTRACE;
                 break;
         }
         return option;
@@ -870,10 +866,13 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
             b.append("\n\n");
         }
 
-        /*preferences.getString(PreferencesActivity.KEY_TOKEN, "");
-        FetchUserGroupDataTask task = new FetchUserGroupDataTask();
-        task.setFetchUserGroupListener(this);
-        task.execute(preferences.getString(PreferencesActivity.KEY_TOKEN, ""));*/
+        String token = preferences.getString(PreferencesActivity.KEY_TOKEN, "");
+        if (!token.equalsIgnoreCase("Guest")) {
+            mProgressDialog.show();
+            FetchUserGroupDataTask task = new FetchUserGroupDataTask();
+            task.setFetchUserGroupListener(this);
+            task.execute(preferences.getString(PreferencesActivity.KEY_TOKEN, ""));
+        }
     }
 
     @Override
@@ -904,31 +903,30 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
                         Toast.LENGTH_LONG).show();
             }
         } else {
-            /*deleteLocalForms();*/
             logout();
         }
     }
 
 
-    /*@Override
+    @Override
     public void deleteComplete(int deletedInstances) {
         Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedInstances));
         if (deletedInstances == mEditedFormList.size()) {
             mDeleteInstancesTask = null;
             mEditedFormList.clear();
-            *//*deleteLocalForms();*//*
+            deleteLocalForms();
             logout();
         } else {
             // had some failures
             Log.e(t, "Failed to delete "
                     + (mLocalFormList.size() - deletedInstances) + " instances");
-            *//*Toast.makeText(
+            /*Toast.makeText(
                     this,
                     getString(R.string.file_deleted_error, mEditedFormList.size()
                             - deletedInstances, mEditedFormList.size()),
-                    Toast.LENGTH_LONG).show();*//*
+                    Toast.LENGTH_LONG).show();*/
         }
-    }*/
+    }
 
 
     private void deleteLocalForms() {
@@ -946,32 +944,338 @@ public class MainMenuActivity extends Activity implements FormListDownloaderList
             mDeleteFormsTask.setDeleteListener(this);
             mDeleteFormsTask.execute(mLocalFormList
                     .toArray(new Long[mLocalFormList.size()]));
-        } else {
-            Toast.makeText(this, getString(R.string.file_delete_in_progress),
-                    Toast.LENGTH_LONG).show();
         }
     }
 
-    /*@Override
-    public void deleteCompleteForm(int deletedForms) {
+    @Override
+    public void deleteDownloadedForms(int deletedForms) {
         mDeleteFormsTask = null;
         mLocalFormList.clear();
         deleteSelectedInstances();
-        *//*logout();*//*
-    }*/
+        logout();
+    }
 
     private void logout() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Editor edit = preferences.edit();
         edit.putString(PreferencesActivity.KEY_TOKEN, "");
         edit.apply();
-        //deleteForms(new File(Collect.ODK_ROOT));
         startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
         finish();
     }
 
-    DeleteInstancesTask mDeleteInstancesTask = null;
-    private ArrayList<Long> mEditedFormList = new ArrayList<Long>();
-    private ArrayList<Long> mLocalFormList = new ArrayList<Long>();
-    DeleteFormsTask mDeleteFormsTask;
+    @Override
+    public void fetchUserGroupDataCompleteListener(String result) {
+        if (result.contains(CSV_HEADER)) {
+            convertJsonToCsv(result, CSV_HEADER);
+        } else if (result.contains("message")) {
+            Toast.makeText(this, "User group data not available", Toast.LENGTH_LONG).show();
+        } else { //TODO: Need to hard code the data if local server is not available
+            convertJsonToCsv(jsonSample, CSV_HEADER);
+        }
+
+        mProgressDialog.dismiss();
+    }
+
+    private void convertJsonToCsv(String jsonData, String header) {
+        try {
+            JSONObject output = new JSONObject(jsonData);
+            JSONArray docs = output.getJSONArray(header);
+            String csv = CDL.toString(docs);
+            writeToFile(Collect.ODK_ROOT, csv);
+        } catch (FileNotFoundException e) {
+            Log.e(t, "---> " + e.getLocalizedMessage());
+        } catch (JSONException ex) {
+            Log.e(t, "---> " + ex.getMessage());
+        }
+    }
+
+    private void writeToFile(String filePath, String inputData) throws FileNotFoundException {
+        File folder = new File(filePath);
+        String fileName = TextUtils.CSV_FILE;
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        File tmpFile = new File(filePath, fileName);
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(tmpFile));
+            writer.write(inputData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            close(writer);
+        }
+    }
+
+    private void close(BufferedWriter writer) {
+        try {
+            if (writer != null) {
+                writer.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String jsonSample = "{\n" +
+            "  \"status\": 200,\n" +
+            "  \"Groups\": [\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"pirbhavti_chaundoli\",\n" +
+            "          \"district\": \"\",\n" +
+            "          \"equipmentname\": \"ACE_14005\",\n" +
+            "          \"facility Id\": \"57dbf2f524476c5d1c95d451\",\n" +
+            "          \"facilityname\": \"new some demo\",\n" +
+            "          \"groupname\": \"ACE\",\n" +
+            "          \"imei\": \"869336019635919\",\n" +
+            "          \"equipment Id\": \"5708495bec1ff25b8427aaaa\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"Notarpalli\",\n" +
+            "          \"equipmentname\": \"Rambha Padhan_321604\",\n" +
+            "          \"facility Id\": \"57084aa3ec1ff25b8427b1cc\",\n" +
+            "          \"facilityname\": \"Rebati Padhan_258503\",\n" +
+            "          \"groupname\": \"Biolite\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"57084a94ec1ff25b8427b149\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"Rebati Padhan_Notarpalli\",\n" +
+            "          \"district\": \"Notarpalli\",\n" +
+            "          \"equipmentname\": \"Rebati Padhan_258503\",\n" +
+            "          \"facility Id\": \"57084aa3ec1ff25b8427b1cc\",\n" +
+            "          \"facilityname\": \"Rebati Padhan_258503\",\n" +
+            "          \"groupname\": \"Biolite\",\n" +
+            "          \"imei\": \"911337059258503\",\n" +
+            "          \"equipment Id\": \"57084aa3ec1ff25b8427b1cd\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"chaundoli\",\n" +
+            "          \"equipmentname\": \"ct phone swap fahim_691399\",\n" +
+            "          \"facility Id\": \"570849c7ec1ff25b8427ad6e\",\n" +
+            "          \"facilityname\": \"ramadhar_635703\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"57084969ec1ff25b8427ab21\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"chaundoli\",\n" +
+            "          \"equipmentname\": \"ct phone swap sandeep_693171\",\n" +
+            "          \"facility Id\": \"570849ccec1ff25b8427ad90\",\n" +
+            "          \"facilityname\": \"pirbhavti_635919\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"5708496aec1ff25b8427ab2d\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"azamgarh\",\n" +
+            "          \"equipmentname\": \"solar test 20 watt anita_633195\",\n" +
+            "          \"facility Id\": \"570849a0ec1ff25b8427ac76\",\n" +
+            "          \"facilityname\": \"solar test 20 watt anita_633195\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849a0ec1ff25b8427ac77\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"\",\n" +
+            "          \"equipmentname\": \"taiwan modified test bihari_634029\",\n" +
+            "          \"facility Id\": \"570849b0ec1ff25b8427ace2\",\n" +
+            "          \"facilityname\": \"taiwan modified test bihari_634029\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849b0ec1ff25b8427ace3\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"azamgarh\",\n" +
+            "          \"equipmentname\": \"ramadhar_635703\",\n" +
+            "          \"facility Id\": \"570849a0ec1ff25b8427ac76\",\n" +
+            "          \"facilityname\": \"solar test 20 watt anita_633195\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849c7ec1ff25b8427ad6f\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"chaundoli\",\n" +
+            "          \"equipmentname\": \"pirbhavti_635919\",\n" +
+            "          \"facility Id\": \"570849ccec1ff25b8427ad90\",\n" +
+            "          \"facilityname\": \"pirbhavti_635919\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849ccec1ff25b8427ad91\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    }\n" +
+            "  ]\n" +
+            ",\n" +
+            "\"Groups\": [\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"pirbhavti_chaundoli\",\n" +
+            "          \"district\": \"\",\n" +
+            "          \"equipmentname\": \"ACE_14005\",\n" +
+            "          \"facility Id\": \"57dbf2f524476c5d1c95d451\",\n" +
+            "          \"facilityname\": \"new some demo\",\n" +
+            "          \"groupname\": \"ACE\",\n" +
+            "          \"imei\": \"869336019635919\",\n" +
+            "          \"equipment Id\": \"5708495bec1ff25b8427aaaa\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"Notarpalli\",\n" +
+            "          \"equipmentname\": \"Rambha Padhan_321604\",\n" +
+            "          \"facility Id\": \"57084aa3ec1ff25b8427b1cc\",\n" +
+            "          \"facilityname\": \"Rebati Padhan_258503\",\n" +
+            "          \"groupname\": \"Biolite\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"57084a94ec1ff25b8427b149\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"Rebati Padhan_Notarpalli\",\n" +
+            "          \"district\": \"Notarpalli\",\n" +
+            "          \"equipmentname\": \"Rebati Padhan_258503\",\n" +
+            "          \"facility Id\": \"57084aa3ec1ff25b8427b1cc\",\n" +
+            "          \"facilityname\": \"Rebati Padhan_258503\",\n" +
+            "          \"groupname\": \"Biolite\",\n" +
+            "          \"imei\": \"911337059258503\",\n" +
+            "          \"equipment Id\": \"57084aa3ec1ff25b8427b1cd\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"chaundoli\",\n" +
+            "          \"equipmentname\": \"ct phone swap fahim_691399\",\n" +
+            "          \"facility Id\": \"570849c7ec1ff25b8427ad6e\",\n" +
+            "          \"facilityname\": \"ramadhar_635703\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"57084969ec1ff25b8427ab21\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"chaundoli\",\n" +
+            "          \"equipmentname\": \"ct phone swap sandeep_693171\",\n" +
+            "          \"facility Id\": \"570849ccec1ff25b8427ad90\",\n" +
+            "          \"facilityname\": \"pirbhavti_635919\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"5708496aec1ff25b8427ab2d\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"azamgarh\",\n" +
+            "          \"equipmentname\": \"solar test 20 watt anita_633195\",\n" +
+            "          \"facility Id\": \"570849a0ec1ff25b8427ac76\",\n" +
+            "          \"facilityname\": \"solar test 20 watt anita_633195\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849a0ec1ff25b8427ac77\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"\",\n" +
+            "          \"equipmentname\": \"taiwan modified test bihari_634029\",\n" +
+            "          \"facility Id\": \"570849b0ec1ff25b8427ace2\",\n" +
+            "          \"facilityname\": \"taiwan modified test bihari_634029\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849b0ec1ff25b8427ace3\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"azamgarh\",\n" +
+            "          \"equipmentname\": \"ramadhar_635703\",\n" +
+            "          \"facility Id\": \"570849a0ec1ff25b8427ac76\",\n" +
+            "          \"facilityname\": \"solar test 20 watt anita_633195\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849c7ec1ff25b8427ad6f\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"equipments\": [\n" +
+            "        {\n" +
+            "          \"devicename\": \"None\",\n" +
+            "          \"district\": \"chaundoli\",\n" +
+            "          \"equipmentname\": \"pirbhavti_635919\",\n" +
+            "          \"facility Id\": \"570849ccec1ff25b8427ad90\",\n" +
+            "          \"facilityname\": \"pirbhavti_635919\",\n" +
+            "          \"groupname\": \"fieldtesting\",\n" +
+            "          \"imei\": \"Unknown\",\n" +
+            "          \"equipment Id\": \"570849ccec1ff25b8427ad91\"\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
 }

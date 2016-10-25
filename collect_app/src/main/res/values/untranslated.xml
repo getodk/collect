@@ -16,7 +16,7 @@
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
     <item name="mapview" type="id" />
-    <string name="local_login_url">http://127.1.0.194:8000/accounts/api/v1/login/</string>
+    <string name="local_login_url">http://10.1.0.194:8000/accounts/api/v1/login/</string>
     <string name="default_server_url" translatable="false">http://playground.nexleaf.org:8080/ODKAggregate/</string>
     <string name="get_updated_form">Get Updated Form</string>
     <string name="logout_preferences">Logout</string>
