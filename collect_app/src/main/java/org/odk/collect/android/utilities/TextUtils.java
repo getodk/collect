@@ -19,6 +19,7 @@ import java.util.regex.MatchResult;
 
 public class TextUtils {
     private static final String t = "TextUtils";
+    public final static String CSV_FILE = "itemsets.csv";
 
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {

@@ -29,6 +29,8 @@ import org.odk.collect.android.tasks.LoginTask;
 public class LoginActivity extends Activity implements LoginCompleteListener {
     private ProgressDialog mProgressDialog;
     private SharedPreferences sharedPref;
+    private final static int COLDTRACE = 1;
+    private final static int STOVETRACE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class LoginActivity extends Activity implements LoginCompleteListener {
                 /*prefEditor.putString("username", "nlodkadmin");
                 prefEditor.putString("password", "nexleaf_odk_test");
                 prefEditor.apply();*/
-                prefEditor.putInt(PreferencesActivity.KEY_OPTION_SELECTED, selectionId);
+                prefEditor.putInt(PreferencesActivity.KEY_OPTION_SELECTED, setRadioSelection(selectionId));
                 prefEditor.putString("username", username);
                 prefEditor.putString("password", "nexleaf_odk_test");
                 prefEditor.apply();
@@ -87,9 +89,9 @@ public class LoginActivity extends Activity implements LoginCompleteListener {
                     return;
                 }
                 SharedPreferences.Editor prefEditor = sharedPref.edit();
-                prefEditor.putInt(PreferencesActivity.KEY_OPTION_SELECTED, selectionId);
+                prefEditor.putInt(PreferencesActivity.KEY_OPTION_SELECTED, setRadioSelection(selectionId));
                 prefEditor.apply();
-                navigateToHome();
+                navigateToHome("Guest");
             }
         });
     }
@@ -114,42 +116,39 @@ public class LoginActivity extends Activity implements LoginCompleteListener {
     @Override
     public void loginCompleteListener(String result) {
         mProgressDialog.dismiss();
-        SharedPreferences.Editor prefEditor = sharedPref.edit();
         try {
             JSONObject obj = new JSONObject(result);
             String token = obj.getString("token");
-            prefEditor.putString(PreferencesActivity.KEY_TOKEN, "17aec7a2eca3bde0060769a5fe6264743ad566ef652a");
-            /*prefEditor.putString(PreferencesActivity.KEY_TOKEN, token);*/
-            prefEditor.apply();
-            Log.i("Login response -> ", result + " token -> " + token);
-            //downloadFormList();
-            navigateToHome();
+            navigateToHome(token);
 
         } catch (JSONException e) {
             e.printStackTrace();
-            prefEditor.putString(PreferencesActivity.KEY_TOKEN, "17aec7a2eca3bde0060769a5fe6264743ad566ef652a");
-            prefEditor.putString(PreferencesActivity.KEY_NAVIGATION, "Use forward/backward buttons");
-            /*prefEditor.putString(PreferencesActivity.KEY_TOKEN, token);*/
-            prefEditor.apply();
-            navigateToHome();
-
+            navigateToHome("17aec7a2eca3bde0060769a5fe6264743ad566ef652a");
         }
     }
 
-    private void navigateToHome() {
+    private void navigateToHome(String token) {
         hideKeyboard();
         Intent home = new Intent(LoginActivity.this, MainMenuActivity.class);
         home.putExtra("loginFirst", 1);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(PreferencesActivity.KEY_FROM_LOGIN, 1);
+        editor.putString(PreferencesActivity.KEY_TOKEN, token);
         editor.apply();
         startActivity(home);
         finish();
     }
 
-    private void hideKeyboard()
-    {
+    private void hideKeyboard() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    private int setRadioSelection(int resourceId) {
+        if (resourceId == R.id.rb_coldtrace) {
+            return COLDTRACE;
+        } else if (resourceId == R.id.rb_stovetrace) {
+            return STOVETRACE;
+        }
+        return 0;
+    }
 }

@@ -88,10 +88,11 @@ public class SplashScreenActivity extends Activity {
         String splashPath =
             mSharedPreferences.getString(PreferencesActivity.KEY_SPLASH_PATH,
                 getString(R.string.default_splash_path));
-
+        String navigation = "Use forward/backward buttons";
         // if you've increased version code, then update the version number and set firstRun to true
         if (mSharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
             editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);
+            editor.putString(PreferencesActivity.KEY_NAVIGATION,navigation);
             editor.commit();
 
             firstRun = true;

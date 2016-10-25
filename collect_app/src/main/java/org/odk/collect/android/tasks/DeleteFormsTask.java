@@ -73,6 +73,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
       	cr = null;
         if (dl != null) {
             dl.deleteComplete(result);
+			dl.deleteDownloadedForms(result);
         }
         super.onPostExecute(result);
 	}
@@ -82,6 +83,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
 		cr = null;
 		if (dl != null) {
 			dl.deleteComplete(successCount);
+			dl.deleteDownloadedForms(successCount);
 		}
 	}
 	

@@ -90,11 +90,16 @@ import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -990,6 +995,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private View createView(int event, boolean advancingPage) {
 		FormController formController = Collect.getInstance()
 				.getFormController();
+		File source =  new File(Collect.ODK_ROOT + File.separator + TextUtils.CSV_FILE);
+		File destination =  new File(formController.getMediaFolder() + File.separator + TextUtils.CSV_FILE);
+		try {
+			replaceCsvFile(source, destination);
+		} catch (IOException e) {
+			Log.e(t, e.getMessage());
+			Toast.makeText(this, "Local file not found to replace user data", Toast.LENGTH_SHORT).show();
+		}
 		setTitle(getString(R.string.app_name) + " > "
 				+ formController.getFormTitle());
 
@@ -2804,4 +2817,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             Toast.makeText(this, getString(R.string.save_point_error, errorMessage), Toast.LENGTH_LONG).show();
         }
     }
+
+	private void replaceCsvFile(File src, File dst) throws IOException {
+		FileChannel inChannel = new FileInputStream(src).getChannel();
+		FileChannel outChannel = new FileOutputStream(dst).getChannel();
+		try {
+			inChannel.transferTo(0, inChannel.size(), outChannel);
+		} finally {
+			if (inChannel != null)
+				inChannel.close();
+			if (outChannel != null)
+				outChannel.close();
+		}
+	}
 }

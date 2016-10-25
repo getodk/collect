@@ -213,5 +213,26 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
-
+    /*c.moveToFirst();
+        String bookName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+        String jrVersion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
+        while(c.moveToNext()){
+            String value = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+            String jrVersion1 = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
+            if(value.equals(bookName)){
+                if(Integer.valueOf(jrVersion) > Integer.valueOf(jrVersion1))
+                {
+                    Log.i("test ","higher --> "+jrVersion);
+                    //TODO we need to implement our own logic here
+                }
+                else {
+                    jrVersion = jrVersion1;
+                }
+                break;
+            }
+            else {
+                bookName = value;
+                jrVersion = jrVersion1;
+            }
+        }*/
 }
