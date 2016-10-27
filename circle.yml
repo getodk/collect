@@ -10,8 +10,12 @@ dependencies:
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
         
 test:
-    override:
+    pre:
         - ./gradlew assembleRelease
+        - ./gradlew assembleReleaseUnitTest 
+
+    override:
+        - ./gradlew testMasterReleaseUnitTest
         - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
 
     post:
