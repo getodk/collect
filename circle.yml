@@ -11,8 +11,8 @@ dependencies:
         
 test:
     pre:
-        - ./gradlew assembleRelease
-        - ./gradlew assembleReleaseUnitTest 
+        - ./gradlew assembleMasterRelease
+        - ./gradlew assembleMasterReleaseUnitTest 
 
     override:
         - ./gradlew testMasterReleaseUnitTest
