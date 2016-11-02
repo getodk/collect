@@ -12,14 +12,14 @@ The Google group for software engineering questions is: [opendatakit-developers@
 
 ## Setting up your environment
 
-This project depends upon the gradle-config project. The necessary gradle files will be downloaded and used automatically from the github repository at the tag specified in settings.gradle. If you wish to modify your gradle-config yourself, you must clone the project into the same parent directory as Collect. Your directory structure should resemble the following: 
+1. Fork the collect project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
 
-        |-- odk
-            |-- gradle-config
-            |-- collect
+2. Clone your fork of the project locally. At the command line:
 
-The `gradle-config` project should be checked out at the tag number declared at the 
-top of the `collect/settings.gradle` file.
+        git clone https://github.com/YOUR-GITHUB-USERNAME/collect
 
-Then, import the `collect/build.gradle` file into Android Studio.
-
+ Alternately, you can use Android Studio to create a new project from version control. 
+ 
+## Troubleshooting
+#### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
+When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.
