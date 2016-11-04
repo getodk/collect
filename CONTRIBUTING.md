@@ -9,17 +9,17 @@ To contribute code to ODK Collect 1.0, you will need to open a [pull request](ht
 
 * Create a branch for the code you will be writing:
 
-    git checkout -b NAME_OF_YOUR_BRANCH
+        git checkout -b NAME_OF_YOUR_BRANCH
 
 * If there is an [issue](https://github.com/opendatakit/collect) corresponding to what you will work on, **comment on it** to say you are addressing it. 
 
 * Each time you make incremental progress towards your goal, commit your changes with a meaningful commit message:
 
-    git commit -m "add a description of the changes here"
+        git commit -m "add a description of the changes here"
 
 * Push changes to your fork:
 
-    git push
+        git push
 
 * [Open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues and tag any person you think might need to know about the changes.
 
