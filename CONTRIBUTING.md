@@ -1,9 +1,9 @@
-# Contributing code to ODK Collect 1.0
+# Contributing code to ODK Collect
 
 This is a living document. If you see something that could be improved, edit this document and submit a pull request following the instructions below!
 
 ## Submitting a pull request
-To contribute code to ODK Collect 1.0, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project.
+To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project.
 
 1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment). 
 
@@ -23,7 +23,7 @@ To contribute code to ODK Collect 1.0, you will need to open a [pull request](ht
 
         git push
 
-1. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues and tag any person you think might need to know about the changes.
+1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues and tag any person you think might need to know about the changes.
 
 ## Style guidelines
 For now, match the style of the code in the file you are editing. When creating new files, follow the [Android style rules](http://source.android.com/source/code-style.html).
