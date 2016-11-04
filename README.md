@@ -29,7 +29,7 @@ Any and all contributions to the project are welcome. ODK Collect is used across
 
 Issues tagged as [easy](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3A%22needs+reproduction%22) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
-If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.MD).
+If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
 ## Troubleshooting
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
