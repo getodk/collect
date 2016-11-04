@@ -5,23 +5,25 @@ This is a living document. If you see something that could be improved, edit thi
 ## Submitting a pull request
 To contribute code to ODK Collect 1.0, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project.
 
-* [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment). Make sure to set up this repository as [a remote for your fork](https://help.github.com/articles/configuring-a-remote-for-a-fork/) and then [sync your fork](https://help.github.com/articles/syncing-a-fork/).
+1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment). 
 
-* Create a branch for the code you will be writing:
+1. To make sure you have the latest version of the code, set up this repository as [a remote for your fork](https://help.github.com/articles/configuring-a-remote-for-a-fork/) and then [sync your fork](https://help.github.com/articles/syncing-a-fork/).
+
+1. Create a branch for the code you will be writing:
 
         git checkout -b NAME_OF_YOUR_BRANCH
 
-* If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. 
+1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. 
 
-* Each time you make incremental progress towards your goal, commit your changes with a meaningful commit message:
+1. Each time you make incremental progress towards your goal, commit your changes with a meaningful commit message:
 
         git commit -m "add a description of the changes here"
 
-* Push changes to your fork:
+1. Push changes to your fork to make them publicly available:
 
         git push
 
-* [Open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues and tag any person you think might need to know about the changes.
+1. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues and tag any person you think might need to know about the changes.
 
 ## Style guidelines
 For now, match the style of the code in the file you are editing. When creating new files, follow the [Android style rules](http://source.android.com/source/code-style.html).
