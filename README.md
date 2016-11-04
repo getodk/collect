@@ -8,26 +8,28 @@ ODK Collect 1.0 is an Android app for filling out forms. It is designed to be us
 
 * ODK website: [https://opendatakit.org](https://opendatakit.org)
 * ODK Collect usage instructions: [https://opendatakit.org/use/collect/](https://opendatakit.org/use/collect/)
-* ODK community mailing list: [http://groups.google.com/group/opendatakit](http://groups.google.com/group/opendatakit) (for discussing or getting help on using ODK tools)
-* ODK developer mailing list: [http://groups.google.com/group/opendatakit-developers](http://groups.google.com/group/opendatakit-developers) (for discussing the code behind ODK tools)
+* ODK community mailing list: [http://groups.google.com/group/opendatakit](http://groups.google.com/group/opendatakit)
+* ODK developer mailing list: [http://groups.google.com/group/opendatakit-developers](http://groups.google.com/group/opendatakit-developers)
 * ODK developer wiki: [https://github.com/opendatakit/opendatakit/wiki](https://github.com/opendatakit/opendatakit/wiki)
 
-## Setting up your environment
+## Setting up your development environment
 
-1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
+* Download and install [Android Studio](https://developer.android.com/studio/index.html) 
 
-2. Fork the collect project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
+* Fork the collect project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
 
-3. Clone your fork of the project locally. At the command line:
+* Clone your fork of the project locally. At the command line:
 
         git clone https://github.com/YOUR-GITHUB-USERNAME/collect
 
  If you prefer not to use the command line, you can use Android Studio to create a new project from version control. 
  
 ## Contributing
-Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so this is a place where your code can have real impact!
+Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
 Issues tagged as [easy](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3A%22needs+reproduction%22) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+
+If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.MD).
 
 ## Troubleshooting
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
