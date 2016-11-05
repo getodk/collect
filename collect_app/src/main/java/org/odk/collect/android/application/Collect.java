@@ -231,7 +231,7 @@ public class Collect extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
 
-        Analytics.init(this);
+        Analytics.init(getApplicationContext());
 
         PropertyManager mgr = new PropertyManager(this);
 
