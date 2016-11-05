@@ -46,8 +46,8 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import analytics.Analytics;
-import analytics.ScreenType;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores

@@ -28,8 +28,8 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import analytics.Analytics;
-import analytics.ScreenType;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
 
 /**
  * An example of tab content that launches an activity via

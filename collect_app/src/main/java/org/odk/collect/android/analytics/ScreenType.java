@@ -1,4 +1,4 @@
-package analytics;
+package org.odk.collect.android.analytics;
 
 /**
  * List of screens we will be logging as events.

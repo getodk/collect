@@ -40,7 +40,7 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 
-import analytics.Analytics;
+import org.odk.collect.android.analytics.Analytics;
 
 /**
  * Extends the Application class to implement

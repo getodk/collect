@@ -45,8 +45,8 @@ import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 
-import analytics.Analytics;
-import analytics.ScreenType;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
 
 /**
  * Handles general preferences.

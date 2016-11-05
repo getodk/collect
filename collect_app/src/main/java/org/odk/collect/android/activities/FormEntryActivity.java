@@ -102,8 +102,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
-import analytics.Analytics;
-import analytics.ScreenType;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating

@@ -1,4 +1,4 @@
-package analytics;
+package org.odk.collect.android.analytics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 
 /**
- * Handles all analytics functionality
+ * Handles all org.odk.collect.android.analytics functionality
  */
 public class Analytics {
     private static Analytics instance;
@@ -73,7 +73,7 @@ public class Analytics {
     }
 
     /**
-     * Holds keys passed to analytics.
+     * Holds keys passed to org.odk.collect.android.analytics.
      */
     private class EventConfig {
         final static String SCREEN_VIEW = "screenview";

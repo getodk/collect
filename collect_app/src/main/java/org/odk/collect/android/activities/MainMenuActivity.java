@@ -34,7 +34,6 @@ import org.odk.collect.android.utilities.CompatibilityUtils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,8 +60,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import analytics.Analytics;
-import analytics.ScreenType;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
