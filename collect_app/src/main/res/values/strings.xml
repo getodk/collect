@@ -399,5 +399,5 @@
 <string name="direction">Direction: %s</string>
     <string name="stats_preferences">Anonymous Usage Statistics</string>
     <string name="send_stats">Send anonymous usage data</string>
-    <string name="send_stats_summary">Anonymous aggregate user analytics allow us to prioritise fixes and features based on how, where and when people use ODK</string>
+    <string name="send_stats_summary">Anonymous aggregate user analytics allow us to prioritize fixes and features based on how, where and when people use ODK</string>
 </resources>
