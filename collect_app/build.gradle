@@ -2,83 +2,51 @@
  GRADLE CONFIG
  *************************************************************************************************/
 
-if ((new File(gradle.local)).exists()) {
-    apply from: gradle.local
-} else {
-    apply from: gradle.remote
-}
-
-applicationScripts.each {
-    apply from: it
-}
-
 apply plugin: 'com.android.application'
 
 com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
 android {
-    // The following are set in the common.gradle file
-    compileSdkVersion(23)
-    buildToolsVersion('23.0.3')
+    compileSdkVersion(22)
+    buildToolsVersion("23.0.3")
 
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(9)
         targetSdkVersion(9)
-        versionCode(1061)
-        versionName("1.4.10")
-        multiDexEnabled true
-    }
-
-    productFlavors {
-        demo {
-        }
-
-        master {
-        }
-
-        snapshot {
-        }
-
-        uitest {
-        }
-    }
-
-    signingConfigs {
-        release {
-            if (shouldSign) {
-                storeFile file(signStoreFilePath)
-                storePassword signStorePass
-                keyAlias signKeyAlias
-                keyPassword signKeyPass
-            }
-        }
+        versionCode(1062)
+        versionName("1.4.11")
     }
 
     buildTypes {
         release {
-            minifyEnabled(minify)
+            minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-
-            if (shouldSign) {
-                signingConfig signingConfigs.release
-            }
         }
         debug {
             debuggable(true)
-            testCoverageEnabled(testCoverage) // Allows AndroidTest JaCoCo reports to be generated
+            // Allows AndroidTest JaCoCo reports to be generated
+            testCoverageEnabled(true)
         }
     }
 
-    packagingOptions { // Pick first occurrence of any files that cause conflicts, as defined in common.gradle
-        packageList.each {
-            pickFirst it
-        }
+    packagingOptions {
+        // Pick first occurrence of any files that cause conflicts, as defined
+        // in common.gradle
+        pickFirst 'META-INF/DEPENDENCIES'
+        pickFirst 'META-INF/LICENSE'
+        pickFirst 'META-INF/LICENSE.txt'
+        pickFirst 'META-INF/NOTICE'
+        pickFirst 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
+        pickFirst 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec'
+        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
+        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
     }
 
     compileOptions {
-        sourceCompatibility javaVersion
-        targetCompatibility javaVersion
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
@@ -104,6 +72,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     // Testing-only dependencies
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile "org.robolectric:robolectric:3.1.2"
 }
 
 apply plugin: 'com.google.gms.google-services'
