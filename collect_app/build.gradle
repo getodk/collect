@@ -79,10 +79,6 @@ android {
         sourceCompatibility javaVersion
         targetCompatibility javaVersion
     }
-
-    lintOptions {
-        abortOnError false
-    }
 }
 
 configurations.all {
