@@ -28,7 +28,7 @@ ODK Collect is an Android app for filling out forms. It is designed to be used i
 ## Contributing
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
-Issues tagged as [easy](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3A%22needs+reproduction%22) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+Issues tagged as [quick win](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3Aquick%20win) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3A%22needs+reproduction%22) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
