@@ -32,9 +32,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--
-    Firebase Analytics relies on authentication tokens that have to be rotated periodically.
-    Firebase's team recommends treating new permissions as implementation detail and avoid messing with them.
-    https://groups.google.com/forum/#!topic/firebase-talk/CXgecSxgsRE
+    Without wake locks in Analytics, you run the risk of losing data in the face of
+    Android killing off your app's process before it's able to transmit collected data.
+
+    You won't be able to measure this loss or even know that it happened.
+    https://groups.google.com/d/msg/firebase-talk/CXgecSxgsRE/avud-Rt7AwAJ
     -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
