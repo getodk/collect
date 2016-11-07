@@ -11,11 +11,11 @@ dependencies:
         
 test:
     pre:
-        - ./gradlew assembleMasterRelease
-        - ./gradlew assembleMasterReleaseUnitTest 
+        - ./gradlew assembleRelease
+        - ./gradlew assembleAndroidTest
 
     override:
-        - ./gradlew testMasterReleaseUnitTest
+        - ./gradlew testReleaseUnitTest
         - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
 
     post:
