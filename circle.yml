@@ -1,0 +1,23 @@
+machine:
+    environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+        _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+        
+dependencies:
+    override:
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-22.0.0,build-tools-23.0.2,android-21,android-22,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+        
+test:
+    pre:
+        - ./gradlew assembleRelease
+        - ./gradlew assembleAndroidTest
+
+    override:
+        - ./gradlew testReleaseUnitTest
+        - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
+
+    post:
+        - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+        - find . -type f -regex ".*/build/test-results/.*.xml"  -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

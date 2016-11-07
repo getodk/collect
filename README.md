@@ -1,7 +1,6 @@
 # ODK Collect
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Test coverage](https://img.shields.io/codeclimate/coverage/github/opendatakit/collect.svg)](https://codeclimate.com/github/opendatakit/collect/issues)
 [![Build status](https://circleci.com/gh/opendatakit/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/opendatakit/collect)
 
 ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part of Open Data Kit (ODK), a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the Open Data Kit project and its history [here](https://opendatakit.org/about/) and read about example ODK deployments [here](https://opendatakit.org/about/deployments/).
@@ -29,7 +28,7 @@ ODK Collect is an Android app for filling out forms. It is designed to be used i
 ## Contributing
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
-Issues tagged as [easy](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/issues?q=is%3Aissue+is%3Aopen+label%3A%22needs+reproduction%22) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick%20win) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
