@@ -20,7 +20,7 @@
         android:dialogTitle="Change Admin Password"
         android:key="admin_pw"
         android:title="Admin Password" />
-    
+
     <PreferenceCategory android:title="@string/user_access_main_menu" >
         <CheckBoxPreference
             android:id="@+id/edit_saved"
