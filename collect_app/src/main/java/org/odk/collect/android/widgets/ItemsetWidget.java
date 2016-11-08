@@ -308,7 +308,7 @@ public class ItemsetWidget extends QuestionWidget implements
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            mAnswer = mAnswers.get((String) buttonView.getText());
+            mAnswer = mAnswers.get(buttonView.getText().toString());
         }
     }
 
