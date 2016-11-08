@@ -100,6 +100,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   public static final String KEY_NAVIGATION = "navigation";
   public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
+  public static final String KEY_SHOW_INTRO = "show_intro_screen";
+
   // MAP SPECIFIC
 
   public static final String KEY_MAP_SDK = "map_sdk_behavior";
