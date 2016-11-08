@@ -33,9 +33,9 @@ Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
 ## Downloading builds
-Per-commit builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your Github account, click the build you'd like, then find the APK in the Artifacts tab.
+Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your Github account, click the build you'd like, then find the APK in the Artifacts tab.
 
-If you need a production build, the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk) has current and previous production builds.
+Released production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk) has current and previous production builds.
 
 ## Troubleshooting
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
