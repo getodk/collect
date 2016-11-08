@@ -25,12 +25,17 @@ ODK Collect is an Android app for filling out forms. It is designed to be used i
 
 1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
  
-## Contributing
+## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
 Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick%20win) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
+
+## Downloading builds
+Per-commit builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your Github account, click the build you'd like, then find the APK in the Artifacts tab.
+
+If you need a production build, the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk) has current and previous production builds.
 
 ## Troubleshooting
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
