@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.picasa;
 
-import java.io.IOException;
-
 import com.google.api.client.googleapis.xml.atom.AtomPatchRelativeToOriginalContent;
 import com.google.api.client.googleapis.xml.atom.GoogleAtom;
 import com.google.api.client.http.GenericUrl;
@@ -25,6 +23,8 @@ import com.google.api.client.http.xml.atom.AtomContent;
 import com.google.api.client.xml.XmlNamespaceDictionary;
 import com.google.api.client.xml.XmlObjectParser;
 
+import java.io.IOException;
+
 /**
  * GData XML client.
  *
@@ -32,56 +32,57 @@ import com.google.api.client.xml.XmlObjectParser;
  */
 public abstract class GDataXmlClient extends GDataClient {
 
-  private final XmlNamespaceDictionary namespaceDictionary;
+    private final XmlNamespaceDictionary namespaceDictionary;
 
-  private boolean partialResponse = true;
+    private boolean partialResponse = true;
 
-  protected GDataXmlClient(String gdataVersion, HttpRequestFactory requestFactory,
-      XmlNamespaceDictionary namespaceDictionary) {
-    super(gdataVersion, requestFactory);
-    this.namespaceDictionary = namespaceDictionary;
-  }
-
-  public XmlNamespaceDictionary getNamespaceDictionary() {
-    return namespaceDictionary;
-  }
-
-  @Override
-  protected void prepare(HttpRequest request) throws IOException {
-    super.prepare(request);
-    request.setParser(new XmlObjectParser(namespaceDictionary));
-  }
-
-  public final boolean getPartialResponse() {
-    return partialResponse;
-  }
-
-  public final void setPartialResponse(boolean partialResponse) {
-    this.partialResponse = partialResponse;
-  }
-
-  @Override
-  protected void prepareUrl(GenericUrl url, Class<?> parseAsType) {
-    super.prepareUrl(url, parseAsType);
-    if (partialResponse && parseAsType != null) {
-      url.put("fields", GoogleAtom.getFieldsFor(parseAsType));
+    protected GDataXmlClient(String gdataVersion, HttpRequestFactory requestFactory,
+            XmlNamespaceDictionary namespaceDictionary) {
+        super(gdataVersion, requestFactory);
+        this.namespaceDictionary = namespaceDictionary;
     }
-  }
 
-  protected final <T> T executePatchRelativeToOriginal(
-      GenericUrl url, T original, T updated, String etag) throws IOException {
-    AtomPatchRelativeToOriginalContent content =
-        new AtomPatchRelativeToOriginalContent(namespaceDictionary, original, updated);
-    @SuppressWarnings("unchecked")
-    Class<T> parseAsType = (Class<T>) updated.getClass();
-    return executePatchRelativeToOriginal(url, content, parseAsType, etag);
-  }
+    public XmlNamespaceDictionary getNamespaceDictionary() {
+        return namespaceDictionary;
+    }
 
-  protected final <T> T executePost(GenericUrl url, boolean isFeed, T content) throws IOException {
-    AtomContent atomContent = isFeed ? AtomContent.forFeed(namespaceDictionary, content)
-        : AtomContent.forEntry(namespaceDictionary, content);
-    @SuppressWarnings("unchecked")
-    Class<T> parseAsType = (Class<T>) content.getClass();
-    return executePost(url, atomContent, parseAsType);
-  }
+    @Override
+    protected void prepare(HttpRequest request) throws IOException {
+        super.prepare(request);
+        request.setParser(new XmlObjectParser(namespaceDictionary));
+    }
+
+    public final boolean getPartialResponse() {
+        return partialResponse;
+    }
+
+    public final void setPartialResponse(boolean partialResponse) {
+        this.partialResponse = partialResponse;
+    }
+
+    @Override
+    protected void prepareUrl(GenericUrl url, Class<?> parseAsType) {
+        super.prepareUrl(url, parseAsType);
+        if (partialResponse && parseAsType != null) {
+            url.put("fields", GoogleAtom.getFieldsFor(parseAsType));
+        }
+    }
+
+    protected final <T> T executePatchRelativeToOriginal(
+            GenericUrl url, T original, T updated, String etag) throws IOException {
+        AtomPatchRelativeToOriginalContent content =
+                new AtomPatchRelativeToOriginalContent(namespaceDictionary, original, updated);
+        @SuppressWarnings("unchecked")
+        Class<T> parseAsType = (Class<T>) updated.getClass();
+        return executePatchRelativeToOriginal(url, content, parseAsType, etag);
+    }
+
+    protected final <T> T executePost(GenericUrl url, boolean isFeed, T content)
+            throws IOException {
+        AtomContent atomContent = isFeed ? AtomContent.forFeed(namespaceDictionary, content)
+                : AtomContent.forEntry(namespaceDictionary, content);
+        @SuppressWarnings("unchecked")
+        Class<T> parseAsType = (Class<T>) content.getClass();
+        return executePost(url, atomContent, parseAsType);
+    }
 }

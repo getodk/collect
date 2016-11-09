@@ -1,22 +1,5 @@
 package org.odk.collect.android.receivers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.NotificationActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
-import org.odk.collect.android.utilities.WebUtils;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -36,6 +19,23 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.WebUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
@@ -44,52 +44,54 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     GoogleSheetsAutoUploadTask mGoogleSheetsUploadTask;
 
-   @Override
-	public void onReceive(Context context, Intent intent) {
+    @Override
+    public void onReceive(Context context, Intent intent) {
         // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return;
         }
 
-		String action = intent.getAction();
-		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+        String action = intent.getAction();
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			if (currentNetworkInfo != null && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-				if (interfaceIsEnabled(context, currentNetworkInfo)) {
-					uploadForms(context);
-				}
-			}
-		} else if (action.equals("org.odk.collect.android.FormSaved")) {
-			ConnectivityManager connectivityManager = (ConnectivityManager) context
-					.getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            if (currentNetworkInfo != null
+                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                if (interfaceIsEnabled(context, currentNetworkInfo)) {
+                    uploadForms(context);
+                }
+            }
+        } else if (action.equals("org.odk.collect.android.FormSaved")) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-			if (ni == null || !ni.isConnected()) {
-				// not connected, do nothing
-			} else {
-				if (interfaceIsEnabled(context, ni)) {
-					uploadForms(context);
-				}
-			}
-		}
-	}
+            if (ni == null || !ni.isConnected()) {
+                // not connected, do nothing
+            } else {
+                if (interfaceIsEnabled(context, ni)) {
+                    uploadForms(context);
+                }
+            }
+        }
+    }
 
-	private boolean interfaceIsEnabled(Context context,
-			NetworkInfo currentNetworkInfo) {
-		// make sure autosend is enabled on the given connected interface
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		boolean sendwifi = sharedPreferences.getBoolean(
-				PreferencesActivity.KEY_AUTOSEND_WIFI, false);
-		boolean sendnetwork = sharedPreferences.getBoolean(
-				PreferencesActivity.KEY_AUTOSEND_NETWORK, false);
+    private boolean interfaceIsEnabled(Context context,
+            NetworkInfo currentNetworkInfo) {
+        // make sure autosend is enabled on the given connected interface
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        boolean sendwifi = sharedPreferences.getBoolean(
+                PreferencesActivity.KEY_AUTOSEND_WIFI, false);
+        boolean sendnetwork = sharedPreferences.getBoolean(
+                PreferencesActivity.KEY_AUTOSEND_NETWORK, false);
 
-		return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
-				&& sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-				&& sendnetwork);
-	}
+        return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
+                && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                && sendnetwork);
+    }
 
 
     private void uploadForms(Context context) {
@@ -98,10 +100,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
             String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
             String selectionArgs[] =
-                {
-                        InstanceProviderAPI.STATUS_COMPLETE,
-                        InstanceProviderAPI.STATUS_SUBMISSION_FAILED
-                };
+                    {
+                            InstanceProviderAPI.STATUS_COMPLETE,
+                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED
+                    };
 
             ArrayList<Long> toUpload = new ArrayList<Long>();
             Cursor c = context.getContentResolver().query(InstanceColumns.CONTENT_URI, null,
@@ -121,7 +123,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             }
 
             if (toUpload.size() < 1) {
-                running = false; 
+                running = false;
                 return;
             }
 
@@ -131,7 +133,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
             String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
-            		context.getString(R.string.protocol_odk_default));
+                    context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
                 mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
@@ -155,7 +157,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                         context.getString(R.string.default_server_url));
                 String url = server
                         + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
-                                context.getString(R.string.default_odk_formlist));
+                        context.getString(R.string.default_odk_formlist));
 
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
@@ -244,7 +246,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                         BitmapFactory.decodeResource(Collect.getInstance().getResources(),
                                 android.R.drawable.ic_dialog_info));
 
-        NotificationManager mNotificationManager = (NotificationManager)Collect.getInstance()
+        NotificationManager mNotificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1328974928, mBuilder.build());
     }

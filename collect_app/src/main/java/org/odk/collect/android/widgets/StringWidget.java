@@ -14,11 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +27,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
+
 /**
  * The most basic widget that allows for entry of any text.
  *
@@ -39,17 +39,18 @@ import android.widget.TableLayout;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class StringWidget extends QuestionWidget {
-	private static final String ROWS = "rows";
+    private static final String ROWS = "rows";
 
     boolean mReadOnly = false;
     protected EditText mAnswer;
 
     public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-    	this(context, prompt, readOnlyOverride, true);
-    	setupChangeListener();
+        this(context, prompt, readOnlyOverride, true);
+        setupChangeListener();
     }
 
-    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean derived) {
+    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
+            boolean derived) {
         super(context, prompt);
         mAnswer = new EditText(context);
         mAnswer.setId(QuestionWidget.newUniqueId());
@@ -71,14 +72,16 @@ public class StringWidget extends QuestionWidget {
          * will set the height of the EditText box to 5 rows high.
          */
         String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);
-        if ( height != null && height.length() != 0 ) {
-        	try {
-	        	int rows = Integer.valueOf(height);
-	        	mAnswer.setMinLines(rows);
-	        	mAnswer.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
-        	} catch (Exception e) {
-        		Log.e(this.getClass().getName(), "Unable to process the rows setting for the answer field: " + e.toString());
-        	}
+        if (height != null && height.length() != 0) {
+            try {
+                int rows = Integer.valueOf(height);
+                mAnswer.setMinLines(rows);
+                mAnswer.setGravity(
+                        Gravity.TOP); // to write test starting at the top of the edit area
+            } catch (Exception e) {
+                Log.e(this.getClass().getName(),
+                        "Unable to process the rows setting for the answer field: " + e.toString());
+            }
         }
 
         params.setMargins(7, 5, 7, 5);
@@ -107,25 +110,27 @@ public class StringWidget extends QuestionWidget {
 
     protected void setupChangeListener() {
         mAnswer.addTextChangedListener(new TextWatcher() {
-        	private String oldText = "";
+            private String oldText = "";
 
-			@Override
-			public void afterTextChanged(Editable s) {
-				if (!s.toString().equals(oldText)) {
-					Collect.getInstance().getActivityLogger()
-						.logInstanceAction(this, "answerTextChanged", s.toString(),	getPrompt().getIndex());
-				}
-			}
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(oldText)) {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "answerTextChanged", s.toString(),
+                                    getPrompt().getIndex());
+                }
+            }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				oldText = s.toString();
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+                oldText = s.toString();
+            }
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                    int count) {
+            }
         });
     }
 
@@ -137,8 +142,8 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-    	clearFocus();
-    	String s = mAnswer.getText().toString();
+        clearFocus();
+        String s = mAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -152,7 +157,7 @@ public class StringWidget extends QuestionWidget {
         // Put focus on text input field and display soft keyboard if appropriate.
         mAnswer.requestFocus();
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (!mReadOnly) {
             inputManager.showSoftInput(mAnswer, 0);
             /*

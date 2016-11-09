@@ -28,6 +28,7 @@ package org.odk.collect.android.exception;
 public class JavaRosaException extends Exception {
 
     public JavaRosaException(Throwable throwable) {
-        super(throwable.getMessage() == null ? throwable.getClass().getSimpleName() : throwable.getMessage(), throwable);
+        super(throwable.getMessage() == null ? throwable.getClass().getSimpleName()
+                : throwable.getMessage(), throwable);
     }
 }

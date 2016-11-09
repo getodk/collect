@@ -14,15 +14,15 @@
 
 package org.odk.collect.android.views;
 
-import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.TextUtils;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 public class HierarchyElementView extends RelativeLayout {
@@ -51,7 +51,8 @@ public class HierarchyElementView extends RelativeLayout {
         mPrimaryTextView.setId(QuestionWidget.newUniqueId());
         mPrimaryTextView.setGravity(Gravity.CENTER_VERTICAL);
         LayoutParams l =
-            new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT);
         l.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
         addView(mPrimaryTextView, l);
 
@@ -61,7 +62,8 @@ public class HierarchyElementView extends RelativeLayout {
         mSecondaryTextView.setGravity(Gravity.CENTER_VERTICAL);
 
         LayoutParams lp =
-            new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.BELOW, mPrimaryTextView.getId());
         lp.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
         addView(mSecondaryTextView, lp);
@@ -102,7 +104,7 @@ public class HierarchyElementView extends RelativeLayout {
 
         }
     }
-    
+
     public int dipToPx(int dip) {
         return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
     }

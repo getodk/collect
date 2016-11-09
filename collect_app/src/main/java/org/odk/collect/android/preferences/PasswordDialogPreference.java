@@ -1,4 +1,3 @@
-
 package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;

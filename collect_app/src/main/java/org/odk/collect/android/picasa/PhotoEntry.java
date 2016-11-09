@@ -21,12 +21,12 @@ import com.google.api.client.util.Key;
  */
 public class PhotoEntry extends Entry {
 
-  @Key
-  public Category category = Category.newKind("photo");
+    @Key
+    public Category category = Category.newKind("photo");
 
-  @Key("media:group")
-  public MediaGroup mediaGroup;
-  
-  @Key("gphoto:id")
-  public String id;
+    @Key("media:group")
+    public MediaGroup mediaGroup;
+
+    @Key("gphoto:id")
+    public String id;
 }

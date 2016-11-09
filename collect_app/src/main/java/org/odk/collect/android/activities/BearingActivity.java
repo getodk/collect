@@ -14,9 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -26,6 +23,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
@@ -61,8 +61,9 @@ public class BearingActivity extends Activity implements SensorEventListener {
         mSensorManager.unregisterListener(this, accelerometer);
         mSensorManager.unregisterListener(this, magnetometer);
 
-        if (mBearingDialog != null && mBearingDialog.isShowing())
+        if (mBearingDialog != null && mBearingDialog.isShowing()) {
             mBearingDialog.dismiss();
+        }
     }
 
     @Override
@@ -121,9 +122,11 @@ public class BearingActivity extends Activity implements SensorEventListener {
         mBearingDialog.setIcon(android.R.drawable.ic_dialog_info);
         mBearingDialog.setTitle(getString(R.string.getting_bearing));
         mBearingDialog.setMessage(getString(R.string.please_wait_long));
-        mBearingDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.accept_bearing),
+        mBearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                getString(R.string.accept_bearing),
                 geopointButtonListener);
-        mBearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel_location),
+        mBearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                getString(R.string.cancel_location),
                 geopointButtonListener);
     }
 
@@ -159,7 +162,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
             float rot[] = new float[9];
             float inclination[] = new float[9];
             boolean success = SensorManager.getRotationMatrix(rot, inclination, mAccelerometer,
-                mGeomagnetic);
+                    mGeomagnetic);
 
             if (success) {
                 float orientation[] = new float[3];
@@ -191,7 +194,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
                     dir = "NW";
                 }
                 mBearingDialog.setMessage(getString(R.string.direction, dir) +
-                    "\n" + getString(R.string.bearing, degrees));
+                        "\n" + getString(R.string.bearing, degrees));
 
             }
         }
