@@ -14,15 +14,15 @@
 
 package org.odk.collect.android.picasa;
 
-import java.util.List;
-
 import com.google.api.client.util.Key;
+
+import java.util.List;
 
 /**
  * @author Yaniv Inbar
  */
 public class UserFeed extends Feed {
 
-  @Key("entry")
-  public List<AlbumEntry> albums;
+    @Key("entry")
+    public List<AlbumEntry> albums;
 }

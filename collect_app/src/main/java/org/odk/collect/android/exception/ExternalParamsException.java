@@ -19,7 +19,6 @@
 package org.odk.collect.android.exception;
 
 /**
- *
  * Author: Meletis Margaritis
  * Date: 30/07/13
  * Time: 12:27

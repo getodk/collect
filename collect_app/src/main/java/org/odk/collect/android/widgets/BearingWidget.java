@@ -14,8 +14,18 @@
 
 package org.odk.collect.android.widgets;
 
-import android.view.ViewGroup;
-import android.widget.*;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -24,17 +34,9 @@ import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
- * 
+ *
  * @author Carl Hartung (chartung@nafundi.com)
  */
 public class BearingWidget extends QuestionWidget implements IBinaryWidget {

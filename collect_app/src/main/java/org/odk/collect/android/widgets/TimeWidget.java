@@ -14,22 +14,22 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.Context;
+import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TimePicker;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.application.Collect;
 
-import android.content.Context;
-import android.view.Gravity;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.TimePicker;
-
 import java.util.Date;
 
 /**
  * Displays a TimePicker widget.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class TimeWidget extends QuestionWidget {
@@ -46,8 +46,8 @@ public class TimeWidget extends QuestionWidget {
         mTimePicker.setEnabled(!prompt.isReadOnly());
 
         String clockType =
-            android.provider.Settings.System.getString(context.getContentResolver(),
-                android.provider.Settings.System.TIME_12_24);
+                android.provider.Settings.System.getString(context.getContentResolver(),
+                        android.provider.Settings.System.TIME_12_24);
         if (clockType == null || clockType.equalsIgnoreCase("24")) {
             mTimePicker.setIs24HourView(true);
         }
@@ -57,7 +57,8 @@ public class TimeWidget extends QuestionWidget {
 
             // create a new date time from date object using default time zone
             DateTime ldt =
-                new DateTime(((Date) ((TimeData) prompt.getAnswerValue()).getValue()).getTime());
+                    new DateTime(
+                            ((Date) ((TimeData) prompt.getAnswerValue()).getValue()).getTime());
             System.out.println("retrieving:" + ldt);
 
             mTimePicker.setCurrentHour(ldt.getHourOfDay());
@@ -69,12 +70,13 @@ public class TimeWidget extends QuestionWidget {
         }
 
         mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-			@Override
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-            	Collect.getInstance().getActivityLogger().logInstanceAction(TimeWidget.this, "onTimeChanged", 
-            			String.format("%1$02d:%2$02d",hourOfDay, minute), mPrompt.getIndex());
-			}
-		});
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                Collect.getInstance().getActivityLogger().logInstanceAction(TimeWidget.this,
+                        "onTimeChanged",
+                        String.format("%1$02d:%2$02d", hourOfDay, minute), mPrompt.getIndex());
+            }
+        });
 
         setGravity(Gravity.LEFT);
         addAnswerView(mTimePicker);
@@ -95,11 +97,12 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-    	clearFocus();
+        clearFocus();
         // use picker time, convert to today's date, store as utc
         DateTime ldt =
-            (new DateTime()).withTime(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(),
-                0, 0);
+                (new DateTime()).withTime(mTimePicker.getCurrentHour(),
+                        mTimePicker.getCurrentMinute(),
+                        0, 0);
         //DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
         System.out.println("storing:" + ldt);
         return new TimeData(ldt.toDate());
@@ -110,7 +113,7 @@ public class TimeWidget extends QuestionWidget {
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 

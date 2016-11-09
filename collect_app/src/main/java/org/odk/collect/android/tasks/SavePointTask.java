@@ -20,6 +20,7 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.SavePointListener;
@@ -50,7 +51,9 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         synchronized (lock) {
             if (priority < lastPriorityUsed) {
-                Log.w(t, "Savepoint thread (p=" + priority + ") was cancelled (a) because another one is waiting (p=" + lastPriorityUsed + ")");
+                Log.w(t, "Savepoint thread (p=" + priority
+                        + ") was cancelled (a) because another one is waiting (p="
+                        + lastPriorityUsed + ")");
                 return null;
             }
 
@@ -62,7 +65,9 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
                 ByteArrayPayload payload = formController.getFilledInFormXml();
 
                 if (priority < lastPriorityUsed) {
-                    Log.w(t, "Savepoint thread (p=" + priority + ") was cancelled (b) because another one is waiting (p=" + lastPriorityUsed + ")");
+                    Log.w(t, "Savepoint thread (p=" + priority
+                            + ") was cancelled (b) because another one is waiting (p="
+                            + lastPriorityUsed + ")");
                     return null;
                 }
 

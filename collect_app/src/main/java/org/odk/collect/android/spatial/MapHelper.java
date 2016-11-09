@@ -16,6 +16,7 @@ package org.odk.collect.android.spatial;
 
 /**
  * Created by jnordling on 12/29/15.
+ *
  * @author jonnordling@gmail.com
  */
 
@@ -62,7 +63,7 @@ public class MapHelper {
     private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
     private int selected_layer = 0;
 
-    public static String[] geofileTypes = new String[] {".mbtiles",".kml",".kmz"};
+    public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
     private final static String slash = File.separator;
 
     private TilesOverlay osmTileOverlay;
@@ -70,7 +71,7 @@ public class MapHelper {
     private IRegisterReceiver iRegisterReceiver;
 
 
-    public MapHelper(Context pContext,GoogleMap pGoogleMap){
+    public MapHelper(Context pContext, GoogleMap pGoogleMap) {
         this.mGoogleMap = null;
         this.mOsmMap = null;
         context = pContext;
@@ -80,7 +81,7 @@ public class MapHelper {
 
     }
 
-    public MapHelper(Context pContext,MapView pOsmMap,IRegisterReceiver pIregisterReceiver){
+    public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
         this.mGoogleMap = null;
         this.mOsmMap = null;
         context = pContext;
@@ -92,34 +93,37 @@ public class MapHelper {
 
     }
 
-    private static String _getGoogleBasemap(){
+    private static String _getGoogleBasemap() {
         return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
-    private static String _getOsmBasemap(){
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+
+    private static String _getOsmBasemap() {
+        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP,
+                MAPQUEST_MAP_STREETS);
     }
-    public void setBasemap(){
-        if(mGoogleMap != null){
+
+    public void setBasemap() {
+        if (mGoogleMap != null) {
             String basemap = _getGoogleBasemap();
             if (basemap.equals(GOOGLE_MAP_STREETS)) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            }else if (basemap.equals(GOOGLE_MAP_SATELLITE)){
+            } else if (basemap.equals(GOOGLE_MAP_SATELLITE)) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            }else if(basemap.equals(GOOGLE_MAP_TERRAIN)){
+            } else if (basemap.equals(GOOGLE_MAP_TERRAIN)) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            }else if(basemap.equals(GOOGLE_MAP_HYBRID)){
+            } else if (basemap.equals(GOOGLE_MAP_HYBRID)) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            }else{
+            } else {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
-        }else{
+        } else {
             //OSMMAP
             String basemap = _getOsmBasemap();
             if (basemap.equals(MAPQUEST_MAP_STREETS)) {
                 mOsmMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-            }else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
+            } else if (basemap.equals(MAPQUEST_MAP_SATELLITE)) {
                 mOsmMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-            }else{
+            } else {
                 mOsmMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
             }
 
@@ -139,73 +143,77 @@ public class MapHelper {
 
         return results.toArray(new String[0]);
     }
-    public void showLayersDialog(){
+
+    public void showLayersDialog() {
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
-        AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays, selected_layer, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                switch (item) {
-                    case 0:
-                        if (mGoogleMap != null) {
-                            if(googleTileOverlay != null){
-                                googleTileOverlay.remove();
-                            }
-
-                        }else{
-                            //OSM
-                            if(osmTileOverlay != null){
-                                mOsmMap.getOverlays().remove(osmTileOverlay);
-                                mOsmMap.invalidate();
-                            }
-                        }
-                        break;
-                    default:
-                        File[] spFiles = getFileFromSelectedItem(item);
-                        if (spFiles.length == 0) {
-                            break;
-                        } else {
-                            File spfile = spFiles[0];
-
-                            if (mGoogleMap != null) {
-                                try {
-                                    //mGoogleMap.clear();
-                                    if(googleTileOverlay != null){
+        AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
+                selected_layer, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        switch (item) {
+                            case 0:
+                                if (mGoogleMap != null) {
+                                    if (googleTileOverlay != null) {
                                         googleTileOverlay.remove();
                                     }
-                                    TileOverlayOptions opts = new TileOverlayOptions();
-                                    GoogleMapsMapBoxOfflineTileProvider provider = new GoogleMapsMapBoxOfflineTileProvider(spfile);
-                                    opts.tileProvider(provider);
-                                    googleTileOverlay = mGoogleMap.addTileOverlay(opts);
-                                } catch (Exception e) {
-                                    break;
-                                }
-                            } else {
-                                if(osmTileOverlay != null){
-                                    mOsmMap.getOverlays().remove(osmTileOverlay);
-                                    mOsmMap.invalidate();
-                                }
-                                mOsmMap.invalidate();
-                                OsmMBTileProvider mbprovider = new OsmMBTileProvider(iRegisterReceiver, spfile);
-                                osmTileOverlay = new TilesOverlay(mbprovider,context);
-                                osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-                                mOsmMap.getOverlays().add(0,osmTileOverlay);
-                                mOsmMap.invalidate();
 
-                            }
-                            dialog.dismiss();
+                                } else {
+                                    //OSM
+                                    if (osmTileOverlay != null) {
+                                        mOsmMap.getOverlays().remove(osmTileOverlay);
+                                        mOsmMap.invalidate();
+                                    }
+                                }
+                                break;
+                            default:
+                                File[] spFiles = getFileFromSelectedItem(item);
+                                if (spFiles.length == 0) {
+                                    break;
+                                } else {
+                                    File spfile = spFiles[0];
+
+                                    if (mGoogleMap != null) {
+                                        try {
+                                            //mGoogleMap.clear();
+                                            if (googleTileOverlay != null) {
+                                                googleTileOverlay.remove();
+                                            }
+                                            TileOverlayOptions opts = new TileOverlayOptions();
+                                            GoogleMapsMapBoxOfflineTileProvider provider =
+                                                    new GoogleMapsMapBoxOfflineTileProvider(spfile);
+                                            opts.tileProvider(provider);
+                                            googleTileOverlay = mGoogleMap.addTileOverlay(opts);
+                                        } catch (Exception e) {
+                                            break;
+                                        }
+                                    } else {
+                                        if (osmTileOverlay != null) {
+                                            mOsmMap.getOverlays().remove(osmTileOverlay);
+                                            mOsmMap.invalidate();
+                                        }
+                                        mOsmMap.invalidate();
+                                        OsmMBTileProvider mbprovider = new OsmMBTileProvider(
+                                                iRegisterReceiver, spfile);
+                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
+                                        osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+                                        mOsmMap.getOverlays().add(0, osmTileOverlay);
+                                        mOsmMap.invalidate();
+
+                                    }
+                                    dialog.dismiss();
+                                }
+                                break;
                         }
-                        break;
-                }
-                selected_layer = item;
-                dialog.dismiss();
-            }
-        });
+                        selected_layer = item;
+                        dialog.dismiss();
+                    }
+                });
         layerDialod.show();
 
     }
 
-    private File[] getFileFromSelectedItem(int item){
-        File directory = new File(Collect.OFFLINE_LAYERS+slash+offilineOverlays[item]);
+    private File[] getFileFromSelectedItem(int item) {
+        File directory = new File(Collect.OFFLINE_LAYERS + slash + offilineOverlays[item]);
         File[] files = directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {

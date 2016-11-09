@@ -28,30 +28,24 @@ import android.widget.GridView;
  *
  * @author tacone based on answer by Neil Traft
  * @author mitchellsundt@gmail.com
- *
  */
-public class ExpandedHeightGridView extends GridView
-{
+public class ExpandedHeightGridView extends GridView {
 
-    public ExpandedHeightGridView(Context context)
-    {
+    public ExpandedHeightGridView(Context context) {
         super(context);
     }
 
-    public ExpandedHeightGridView(Context context, AttributeSet attrs)
-    {
+    public ExpandedHeightGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     public ExpandedHeightGridView(Context context, AttributeSet attrs,
-            int defStyle)
-    {
+            int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // HACK! TAKE THAT ANDROID!
         // Calculate entire height by providing a very large height hint.
         // But do not use the highest 2 bits of this integer; those are
