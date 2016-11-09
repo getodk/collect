@@ -1183,7 +1183,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         View startView = View.inflate(this, R.layout.form_entry_start, null);
         setTitle(getString(R.string.app_name) + " > " + formController.getFormTitle());
 
-		if (shouldShowIntroScreenBecauseOfLogo(formController)) { // If image is specified, we will always show intro screen
+		if (shouldShowIntroScreenBecauseOfLogo(formController)) {
+			// If image is specified, we will always show intro screen
 			Drawable image = getFormLogo(formController);
 			ImageView v = ((ImageView) startView.findViewById(R.id.form_start_bling));
 			v.setImageDrawable(image);
@@ -1192,7 +1193,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		} else if (shouldShowIntroScreenBecauseOfSettings()) {
 			((ImageView) startView.findViewById(R.id.form_start_bling)).setVisibility(View.GONE);
 
-		} else { // Should not show intro screen, lets go to the next view
+		} else {
+			// Should not show intro screen, lets go to the next view
 
 			try {
 				int event = formController.stepToNextScreenEvent();
@@ -1266,19 +1268,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 	private Drawable getFormLogo(FormController formController) {
         Drawable image = null;
-        File mediaFolder = formController.getMediaFolder();
-        String mediaDir = mediaFolder.getAbsolutePath();
-        BitmapDrawable bitImage = null;
-        // attempt to load the form-specific logo...
-        // this is arbitrarily silly
-        bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
-                + "form_logo.png");
+		File logoFile = new File(formController.getMediaFolder(), "form_logo.png");
 
-        if (bitImage != null && bitImage.getBitmap() != null
-                && bitImage.getIntrinsicHeight() > 0
-                && bitImage.getIntrinsicWidth() > 0) {
-            image = bitImage;
-        }
+		if (logoFile.exists()) {
+			BitmapDrawable bitImage = new BitmapDrawable(getResources(), logoFile.getPath());
+			if (bitImage.getBitmap() != null
+					&& bitImage.getIntrinsicHeight() > 0
+					&& bitImage.getIntrinsicWidth() > 0) {
+				image = bitImage;
+			}
+		}
         return image;
     }
 
