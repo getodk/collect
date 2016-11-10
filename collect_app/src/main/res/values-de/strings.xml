@@ -339,8 +339,6 @@
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
   <string name="openstreetmap">OpenStreetMap</string>
-  <string name="mapquest_streets">MapQuest Streets</string>
-  <string name="mapquest_satellite">MapQuest Satellite</string>
   <string name="streets">Straßen</string>
   <string name="terrain">Gelände</string>
   <string name="hybrid">Hybrid</string>
