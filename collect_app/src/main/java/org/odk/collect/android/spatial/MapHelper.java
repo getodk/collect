@@ -114,15 +114,7 @@ public class MapHelper {
             }
         }else{
             //OSMMAP
-            String basemap = _getOsmBasemap();
-            if (basemap.equals(MAPQUEST_MAP_STREETS)) {
-                mOsmMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-            }else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
-                mOsmMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-            }else{
-                mOsmMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-            }
-
+            mOsmMap.setTileSource(TileSourceFactory.MAPNIK);
         }
 
     }
