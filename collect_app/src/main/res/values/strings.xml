@@ -342,11 +342,12 @@
 <string name="map_sdk_selector_title">Mapping SDK</string>
 <string name="map_sdk_behavior">Mapping SDK</string>
 <string name="google_maps_sdk">Google Maps SDK</string>
-<string name="openstreetmap_sdk">OpenStreet Map SDK</string>
+<string name="openstreetmap_sdk">Other Map SDKs</string>
 <string name="show_map_sdk">Show Map SDK Options</string>
 <string name="openstreetmap">OpenStreetMap</string>
-<string name="openmap_streets">Streets</string>
-<string name="openmap_usgs_topo">USGS Topographic</string>
+<string name="openmap_streets">OSM Streets</string>
+<string name="openmap_usgs_topo">USGS National Map Topo</string>
+<string name="openmap_usgs_sat">USGS National Map Sat</string>
 <string name="streets">Streets</string>
 <string name="terrain">Terrain</string>
 <string name="hybrid">Hybrid</string>
