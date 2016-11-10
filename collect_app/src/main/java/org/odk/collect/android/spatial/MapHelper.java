@@ -62,6 +62,7 @@ public class MapHelper {
     private static final String OPENMAP_STREETS = "openmap_streets";
     private static final String OPENMAP_USGS_TOPO = "openmap_usgs_topo";
     private static final String OPENMAP_USGS_SAT = "openmap_usgs_sat";
+    private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
     private int selected_layer = 0;
 
     public static String[] geofileTypes = new String[] {".mbtiles",".kml",".kmz"};
@@ -126,6 +127,10 @@ public class MapHelper {
 
                 case OPENMAP_USGS_SAT:
                     tileSource = org.odk.collect.android.spatial.TileSourceFactory.USGS_SAT;
+                    break;
+
+                case OPENMAP_STAMEN_TERRAIN:
+                    tileSource = org.odk.collect.android.spatial.TileSourceFactory.STAMEN_TERRAIN;
                     break;
 
                 case OPENMAP_STREETS:
