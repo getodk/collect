@@ -3,6 +3,7 @@ package org.odk.collect.android.spatial;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 
 /**
   * This factory augments Tile sources provides additional tile sources, some of which
@@ -30,4 +31,8 @@ public class TileSourceFactory {
             return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
         }
     };
+
+    public static final OnlineTileSourceBase STAMEN_TERRAIN = new XYTileSource("Stamen Terrain",
+            ResourceProxy.string.unknown, 0, 18, 256, ".jpg", new String[] {
+            "http://tile.stamen.com/terrain/" });
 }
