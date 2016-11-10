@@ -19,4 +19,15 @@ public class TileSourceFactory {
             return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
         }
     };
+
+    public static final OnlineTileSourceBase USGS_SAT = new OnlineTileSourceBase(
+            "USGS National Map Sat",
+            ResourceProxy.string.unknown,
+            0, 18, 256, "",
+            new String[]{"http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/"}) {
+        @Override
+        public String getTileURLString(MapTile aTile) {
+            return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
+        }
+    };
 }
