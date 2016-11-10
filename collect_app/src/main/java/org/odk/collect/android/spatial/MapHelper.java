@@ -34,6 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.osmdroid.tileprovider.IRegisterReceiver;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.TilesOverlay;
@@ -58,8 +59,8 @@ public class MapHelper {
     private static final String GOOGLE_MAP_HYBRID = "hybrid";
 
     //OSM MAP BASEMAPS
-    private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
-    private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
+    private static final String OPENMAP_STREETS = "openmap_streets";
+    private static final String OPENMAP_USGS_TOPO = "openmap_usgs_topo";
     private int selected_layer = 0;
 
     public static String[] geofileTypes = new String[] {".mbtiles",".kml",".kmz"};
@@ -96,7 +97,7 @@ public class MapHelper {
         return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
     private static String _getOsmBasemap(){
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
     public void setBasemap(){
         if(mGoogleMap != null){
@@ -114,7 +115,23 @@ public class MapHelper {
             }
         }else{
             //OSMMAP
-            mOsmMap.setTileSource(TileSourceFactory.MAPNIK);
+            String basemap = _getOsmBasemap();
+            ITileSource tileSource = null;
+
+            switch (basemap) {
+                case OPENMAP_USGS_TOPO:
+                    tileSource = org.odk.collect.android.spatial.TileSourceFactory.USGS_TOPO;
+                    break;
+
+                case OPENMAP_STREETS:
+                default:
+                    tileSource = TileSourceFactory.MAPNIK;
+                    break;
+            }
+
+            if (tileSource != null) {
+                mOsmMap.setTileSource(tileSource);
+            }
         }
 
     }
