@@ -2,7 +2,9 @@ package org.odk.collect.android.preferences;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +17,16 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import org.jdeferred.Deferred;
+import org.jdeferred.DoneCallback;
+import org.jdeferred.DonePipe;
+import org.jdeferred.FailCallback;
+import org.jdeferred.Promise;
+import org.jdeferred.impl.DeferredObject;
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.provider.DatabaseReader;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
 
 public class ResetDialogPreference extends DialogPreference implements
         DialogInterface.OnClickListener {
@@ -25,6 +36,7 @@ public class ResetDialogPreference extends DialogPreference implements
     CheckBox mPreferences;
     CheckBox mInstances;
     Context mContext;
+    ProgressDialog mProgressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,24 +52,103 @@ public class ResetDialogPreference extends DialogPreference implements
     }
 
     private void resetSelected() {
-        boolean resetPreferences = mPreferences.isChecked();
-        boolean resetInstances = mInstances.isChecked();
+        final boolean resetPreferences = mPreferences.isChecked();
+        final boolean resetInstances = mInstances.isChecked();
 
         if (!resetPreferences && !resetInstances) {
             Toast.makeText(getContext(), R.string.reset_dialog_nothing, Toast.LENGTH_LONG).show();
             return;
         }
 
+        showProgressDialog();
+
+        Deferred deferred = new DeferredObject<Void, String, Void>();
+        Promise promise = deferred.promise();
+
         if (resetPreferences) {
-            resetPreferences();
+            promise = promise
+                    .then(new DonePipe() {
+                        @Override
+                        public Deferred pipeDone(Object result) {
+                            resetPreferences();
+                            return new DeferredObject().resolve(null);
+                        }
+                    });
         }
 
-        Toast.makeText(getContext(), R.string.reset_dialog_finished, Toast.LENGTH_LONG).show();
+        if (resetInstances) {
+            promise = promise.then(new DonePipe() {
+                @Override
+                public Promise pipeDone(Object result) {
+                    DeferredObject dobj = new DeferredObject<>();
+                    resetInstances(dobj);
+
+                    return dobj;
+                }
+            });
+        }
+
+        promise
+                .done(new DoneCallback() {
+                    @Override
+                    public void onDone(Object result) {
+                        hideProgressDialog();
+                        showSuccessMessage();
+                        ((Activity) mContext).finish();
+                    }
+                })
+                .fail(new FailCallback<String>() {
+                    @Override
+                    public void onFail(String errorMessage) {
+                        hideProgressDialog();
+                        showErrorMessage(errorMessage);
+                    }
+                });
+
+        deferred.resolve(null);
     }
 
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        ((Activity) mContext).finish();
+    private void hideProgressDialog() {
+        mProgressDialog.dismiss();
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = ProgressDialog.show(getContext(), "Please wait ...", "Resetting...",
+                true);
+    }
+
+    private void showSuccessMessage() {
+        Toast.makeText(getContext(), R.string.reset_dialog_finished,
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void showErrorMessage(String errorMessage) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Error Occurred")
+                .setMessage(errorMessage)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    private void resetInstances(final DeferredObject deferred) {
+        final Long[] allInstances = new DatabaseReader().getAllInstancesIds(getContext());
+
+        DeleteInstancesTask task = new DeleteInstancesTask();
+        task.setContentResolver(getContext().getContentResolver());
+        task.setDeleteListener(new DeleteInstancesListener() {
+            @Override
+            public void deleteComplete(int deletedInstances) {
+                if (deletedInstances == allInstances.length) {
+                    deferred.resolve(null);
+                } else {
+                    deferred.reject(
+                            String.format("We've been able to delete only %d instances out of %d",
+                                    deletedInstances, allInstances.length));
+                }
+            }
+        });
+
+        task.execute(allInstances);
     }
 
     private void resetPreferences() {
@@ -67,56 +158,11 @@ public class ResetDialogPreference extends DialogPreference implements
                 .commit();
     }
 
-    private void restartApp(Context c) {
-        try {
-            //check if the context is given
-            if (c != null) {
-                //fetch the packagemanager so we can get the default launch activity
-                // (you can replace this intent with any other activity if you want
-                PackageManager pm = c.getPackageManager();
-                //check if we got the PackageManager
-                if (pm != null) {
-                    //create the intent with the default start activity for your application
-                    Intent mStartActivity = pm.getLaunchIntentForPackage(
-                            c.getPackageName()
-                    );
-                    if (mStartActivity != null) {
-                        mStartActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        //create a pending intent so the application is restarted after System
-                        // .exit(0) was called.
-                        // We use an AlarmManager to call this intent in 100ms
-                        int mPendingIntentId = 223344;
-                        PendingIntent mPendingIntent = PendingIntent
-                                .getActivity(c, mPendingIntentId, mStartActivity,
-                                        PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager mgr = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                        //kill the application
-                        System.exit(0);
-                    } else {
-                        Log.e(TAG, "Was not able to restart application, mStartActivity null");
-                    }
-                } else {
-                    Log.e(TAG, "Was not able to restart application, PM null");
-                }
-            } else {
-                Log.e(TAG, "Was not able to restart application, Context null");
-            }
-        } catch (Exception ex) {
-            Log.e(TAG, "Was not able to restart application");
-        }
-    }
-
     @Override
     public void onBindDialogView(View view) {
         mPreferences = (CheckBox) view.findViewById(R.id.preferences);
         mInstances = (CheckBox) view.findViewById(R.id.instances);
 
         super.onBindDialogView(view);
-    }
-
-    @Override
-    protected void onClick() {
-        super.onClick();
     }
 }

@@ -66,6 +66,7 @@ allprojects {
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.google.android.gms:play-services:4.1.32'
+    compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
 
     // Testing-only dependencies
     testCompile 'junit:junit:4.12'
