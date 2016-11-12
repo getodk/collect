@@ -9,14 +9,16 @@ import org.jdeferred.DonePipe;
 import org.jdeferred.FailCallback;
 import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
+import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.DatabaseReader;
+import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 
 public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-            final ResetResultCallback callback) {
+            boolean resetForms, final ResetResultCallback callback) {
 
         Deferred deferred = new DeferredObject<Void, String, Void>();
         Promise promise = deferred.promise();
@@ -36,10 +38,22 @@ public class ResetUtility {
             promise = promise.then(new DonePipe() {
                 @Override
                 public Promise pipeDone(Object result) {
-                    DeferredObject dobj = new DeferredObject<>();
-                    resetInstances(context, dobj);
+                    DeferredObject def = new DeferredObject<>();
+                    resetInstances(context, def);
 
-                    return dobj;
+                    return def;
+                }
+            });
+        }
+
+        if (resetForms) {
+            promise = promise.then(new DonePipe() {
+                @Override
+                public Promise pipeDone(Object result) {
+                    DeferredObject def = new DeferredObject<>();
+                    resetForms(context, def);
+
+                    return def;
                 }
             });
         }
@@ -61,8 +75,29 @@ public class ResetUtility {
         deferred.resolve(null);
     }
 
+    private void resetForms(Context context, final DeferredObject def) {
+        final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
+
+        DeleteFormsTask task = new DeleteFormsTask();
+        task.setContentResolver(context.getContentResolver());
+        task.setDeleteListener(new DeleteFormsListener() {
+            @Override
+            public void deleteComplete(int deletedForms) {
+                if (deletedForms == allForms.length) {
+                    def.resolve(null);
+                } else {
+                    def.reject(
+                            String.format("We've been able to delete only %d blank forms out of %d",
+                                    deletedForms, allForms.length));
+                }
+            }
+        });
+
+        task.execute(allForms);
+    }
+
     private void resetInstances(Context context, final DeferredObject deferred) {
-        final Long[] allInstances = new DatabaseReader().getAllInstancesIds(context);
+        final Long[] allInstances = new DatabaseReader().getAllInstancesIDs(context);
 
         DeleteInstancesTask task = new DeleteInstancesTask();
         task.setContentResolver(context.getContentResolver());

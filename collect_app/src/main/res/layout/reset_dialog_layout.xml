@@ -18,7 +18,16 @@
         android:id="@+id/instances"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/filled_out_forms"
+        android:text="@string/reset_filled_out_forms"
+        android:padding="5dp"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        />
+    <CheckBox
+        android:id="@+id/forms"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_blank_forms"
         android:padding="5dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"

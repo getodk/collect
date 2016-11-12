@@ -21,6 +21,7 @@ public class ResetDialogPreference extends DialogPreference implements
 
     CheckBox mPreferences;
     CheckBox mInstances;
+    CheckBox mForms;
     Context mContext;
     ProgressDialog mProgressDialog;
 
@@ -34,6 +35,7 @@ public class ResetDialogPreference extends DialogPreference implements
     public void onBindDialogView(View view) {
         mPreferences = (CheckBox) view.findViewById(R.id.preferences);
         mInstances = (CheckBox) view.findViewById(R.id.instances);
+        mForms = (CheckBox) view.findViewById(R.id.forms);
 
         super.onBindDialogView(view);
     }
@@ -61,15 +63,22 @@ public class ResetDialogPreference extends DialogPreference implements
     private void resetSelected() {
         final boolean resetPreferences = mPreferences.isChecked();
         final boolean resetInstances = mInstances.isChecked();
+        final boolean resetForms = mForms.isChecked();
 
-        if (!resetPreferences && !resetInstances) {
+        if (!resetPreferences
+                && !resetInstances
+                && !resetForms) {
             Toast.makeText(getContext(), R.string.reset_dialog_nothing, Toast.LENGTH_LONG).show();
             return;
         }
 
         showProgressDialog();
 
-        new ResetUtility().reset(getContext(), resetPreferences, resetInstances, this);
+        new ResetUtility().reset(getContext(),
+                resetPreferences,
+                resetInstances,
+                resetForms,
+                this);
     }
 
     private void showProgressDialog() {

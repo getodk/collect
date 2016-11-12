@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class DatabaseReader {
 
-    public Long[] getAllInstancesIds(Context context) {
+    public Long[] getAllInstancesIDs(Context context) {
         ArrayList<Long> result = new ArrayList<Long>();
 
         Cursor cursor = context.getContentResolver().query(
@@ -23,6 +23,27 @@ public class DatabaseReader {
         while (cursor.isAfterLast() == false) {
             Long id = cursor.getLong(
                     cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+            result.add(id);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return result.toArray(new Long[result.size()]);
+    }
+
+    public Long[] getAllFormsIDs(Context context) {
+        ArrayList<Long> result = new ArrayList<Long>();
+
+        Cursor cursor = context.getContentResolver().query(
+                FormsProviderAPI.FormsColumns.CONTENT_URI, null, null, null,
+                FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC");
+
+        cursor.moveToFirst();
+
+        while (cursor.isAfterLast() == false) {
+            Long id = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
             result.add(id);
 
             cursor.moveToNext();
