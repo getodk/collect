@@ -9,16 +9,19 @@ import org.jdeferred.DonePipe;
 import org.jdeferred.FailCallback;
 import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.DatabaseReader;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 
+import java.io.File;
+
 public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-            boolean resetForms, final ResetResultCallback callback) {
+            boolean resetForms, boolean resetLayers, final ResetResultCallback callback) {
 
         Deferred deferred = new DeferredObject<Void, String, Void>();
         Promise promise = deferred.promise();
@@ -58,6 +61,18 @@ public class ResetUtility {
             });
         }
 
+        if (resetLayers) {
+            promise = promise.then(new DonePipe() {
+                @Override
+                public Promise pipeDone(Object result) {
+                    DeferredObject def = new DeferredObject<>();
+                    resetLayers(def);
+
+                    return def;
+                }
+            });
+        }
+
         promise
                 .done(new DoneCallback() {
                     @Override
@@ -73,6 +88,32 @@ public class ResetUtility {
                 });
 
         deferred.resolve(null);
+    }
+
+    private void resetLayers(DeferredObject def) {
+        File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
+
+        for (File f : files) {
+            DeletionResult result = deleteRecursive(f);
+            if (result.isSuccessful() == false) {
+                def.reject(String.format("Could not delete file %s", result.getPath()));
+            }
+        }
+
+        def.resolve(null);
+    }
+
+    private DeletionResult deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                DeletionResult result = deleteRecursive(child);
+                if (result.isSuccessful() == false) {
+                    return result;
+                }
+            }
+        }
+
+        return new DeletionResult(fileOrDirectory.delete(), fileOrDirectory.getPath());
     }
 
     private void resetForms(Context context, final DeferredObject def) {
@@ -122,5 +163,23 @@ public class ResetUtility {
                 .edit()
                 .clear()
                 .commit();
+    }
+
+    private class DeletionResult {
+        private boolean mIsSuccessful;
+        private String mPath;
+
+        public DeletionResult(boolean isSuccessful, String path) {
+            mIsSuccessful = isSuccessful;
+            mPath = path;
+        }
+
+        public String getPath() {
+            return mPath;
+        }
+
+        public boolean isSuccessful() {
+            return mIsSuccessful;
+        }
     }
 }

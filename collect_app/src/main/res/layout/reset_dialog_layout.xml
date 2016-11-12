@@ -32,4 +32,13 @@
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         />
+    <CheckBox
+        android:id="@+id/layers"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_layers"
+        android:padding="5dp"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        />
 </LinearLayout>

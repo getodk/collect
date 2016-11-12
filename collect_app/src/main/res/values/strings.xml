@@ -402,4 +402,5 @@
 <string name="reset_dialog_nothing">You have not selected anything to reset.</string>
 <string name="reset_dialog_finished">Successfully reset the app</string>
 <string name="reset_blank_forms">Blank forms</string>
+<string name="reset_layers">Offline map layers</string>
 </resources>
