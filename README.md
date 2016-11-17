@@ -32,7 +32,7 @@ Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick
 
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
-## Other contributions
+## Contributing in other ways
 If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/odk-collect/).
 
 You can also help by improving this documentation.
