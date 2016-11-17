@@ -60,11 +60,22 @@ public class InstanceChooserList extends ListActivity {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
+        Intent i = this.getIntent();
+        String selection = null;
 
-        String selection = InstanceColumns.STATUS + " != ?";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        if(i.getStringExtra("Action").equalsIgnoreCase("EditSaved")){
+            setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+            selection = InstanceColumns.STATUS + " = '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'";
+        }
+        else{
+            setTitle(getString(R.string.app_name) + " > " + getString(R.string.view_data));
+            selection = InstanceColumns.STATUS + " = '" + InstanceProviderAPI.STATUS_SUBMITTED + "'";
+        }
+
         String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
+
+
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, null, sortOrder);
 
         String[] data = new String[] {
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
@@ -119,7 +130,15 @@ public class InstanceChooserList extends ListActivity {
             	return;
             }
             // caller wants to view/edit a form, so launch formentryactivity
-            startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
+            Intent parentIntent = this.getIntent();
+            Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+            if(parentIntent.getStringExtra("Action").equalsIgnoreCase("EditSaved")){
+                intent.putExtra("Action", "EditSaved");
+            }
+            else{
+                intent.putExtra("Action", "ViewSent");
+            }
+            startActivity(intent);
         }
         finish();
     }

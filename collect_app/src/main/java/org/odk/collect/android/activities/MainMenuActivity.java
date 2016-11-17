@@ -79,6 +79,7 @@ public class MainMenuActivity extends Activity {
 	private Button mSendDataButton;
 	private Button mReviewDataButton;
 	private Button mGetFormsButton;
+	private Button mViewSendFormsButton;
 
 	private View mReviewSpacer;
 	private View mGetFormsSpacer;
@@ -171,6 +172,7 @@ public class MainMenuActivity extends Activity {
 						.logAction(this, "editSavedForm", "click");
 				Intent i = new Intent(getApplicationContext(),
 						InstanceChooserList.class);
+				i.putExtra("Action", "EditSaved");
 				startActivity(i);
 			}
 		});
@@ -224,6 +226,19 @@ public class MainMenuActivity extends Activity {
 						.logAction(this, "deleteSavedForms", "click");
 				Intent i = new Intent(getApplicationContext(),
 						FileManagerTabs.class);
+				startActivity(i);
+			}
+		});
+
+		//View sent form
+		mViewSendFormsButton = (Button) findViewById(R.id.view_data);
+		mViewSendFormsButton.setText("View Sent Form");
+		mViewSendFormsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Collect.getInstance().getActivityLogger().logAction(this, "viewSentForm", "click");
+				Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+				i.putExtra("Action", "ViewSent");
 				startActivity(i);
 			}
 		});

@@ -858,6 +858,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			}
 			Intent i = new Intent(this, FormHierarchyActivity.class);
+			i.putExtra("Action", "EditSaved");
 			startActivityForResult(i, HIERARCHY_ACTIVITY);
 			return true;
 		case MENU_PREFERENCES:
@@ -2476,10 +2477,31 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			if (!showFirst) {
 				// we've just loaded a saved form, so start in the hierarchy
 				// view
-				Intent i = new Intent(this, FormHierarchyActivity.class);
-				startActivity(i);
-				return; // so we don't show the intro screen before jumping to
+				//Intent i = new Intent(this, FormHierarchyActivity.class);
+				//startActivity(i);
+				//return; // so we don't show the intro screen before jumping to
 						// the hierarchy
+
+				try {
+					Intent i = new Intent(this, FormHierarchyActivity.class);
+					if (reqIntent.getStringExtra("Action").equalsIgnoreCase("EditSaved")) {
+						i.putExtra("Action", "EditSaved");
+						startActivity(i);
+						return;// so we don't show the intro screen before
+						// jumping to
+						// the hierarchy
+					} else {
+						if (reqIntent.getStringExtra("Action").equalsIgnoreCase("ViewSent")) {
+							i.putExtra("Action", "ViewSent");
+							startActivity(i);
+							// return;
+						}
+						finish();
+					}
+				} catch (Exception e) {
+
+				}
+
 			}
 		}
 

@@ -32,6 +32,7 @@ import org.odk.collect.android.logic.HierarchyElement;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -87,16 +88,16 @@ public class FormHierarchyActivity extends ListActivity {
         });
 
         Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
-        jumpBeginningButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning", "click");
-                Collect.getInstance().getFormController().jumpToIndex(FormIndex
-                        .createBeginningOfFormIndex());
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+//        jumpBeginningButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning", "click");
+//                Collect.getInstance().getFormController().jumpToIndex(FormIndex
+//                        .createBeginningOfFormIndex());
+//                setResult(RESULT_OK);
+//                finish();
+//            }
+//        });
 
         Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
         jumpEndButton.setOnClickListener(new OnClickListener() {
@@ -108,6 +109,24 @@ public class FormHierarchyActivity extends ListActivity {
                 finish();
             }
         });
+
+        Intent parentIntent = this.getIntent();
+        if (!parentIntent.getStringExtra("Action").equalsIgnoreCase("EditSaved")) {
+
+            jumpBeginningButton.setText("Exit");
+            jumpBeginningButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning", "click");
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+
+            jumpEndButton.setEnabled(false);
+            jumpEndButton.setVisibility(View.GONE);
+
+        }
 
         refreshView();
 
@@ -412,7 +431,9 @@ public class FormHierarchyActivity extends ListActivity {
                     }
                 }
                 setResult(RESULT_OK);
-                finish();
+                if (this.getIntent().getStringExtra("Action").equalsIgnoreCase("EditSaved")) {
+                    finish();
+                }
                 return;
             case CHILD:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick", "REPEAT-JUMP", h.getFormIndex());

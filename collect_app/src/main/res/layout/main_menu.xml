@@ -109,6 +109,16 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textSize="21sp" />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="5dp" />
+
+            <Button
+                android:id="@+id/view_data"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textSize="21sp" />
         </LinearLayout>
     </ScrollView>
 
