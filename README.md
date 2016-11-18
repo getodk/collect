@@ -32,6 +32,11 @@ Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick
 
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
+## Contributing in other ways
+If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/odk-collect/).
+
+You can also help by improving this documentation.
+
 ## Downloading builds
 Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your Github account, click the build you'd like, then find the APK in the Artifacts tab.
 
