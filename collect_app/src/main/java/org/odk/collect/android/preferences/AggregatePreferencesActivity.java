@@ -18,6 +18,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.widgets.AutoCompleteTextViewPreference;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -39,7 +40,7 @@ import android.widget.Toast;
  */
 public class AggregatePreferencesActivity extends PreferenceActivity {
 
-	protected EditTextPreference mServerUrlPreference;
+	protected AutoCompleteTextViewPreference mServerUrlPreference;
 	protected EditTextPreference mUsernamePreference;
 	protected EditTextPreference mPasswordPreference;
 
@@ -49,7 +50,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 
 		addPreferencesFromResource(R.xml.aggregate_preferences);
 
-		mServerUrlPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_SERVER_URL);
+		mServerUrlPreference = (AutoCompleteTextViewPreference) findPreference(PreferencesActivity.KEY_SERVER_URL);
 		mUsernamePreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_USERNAME);
 		mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
 
