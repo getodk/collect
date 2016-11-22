@@ -16,6 +16,7 @@ android {
         targetSdkVersion(9)
         versionCode(1062)
         versionName("1.4.11")
+        testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
     }
 
     buildTypes {
@@ -71,4 +72,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile "org.robolectric:robolectric:3.1.2"
+    androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
 }
