@@ -993,7 +993,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 		switch (event) {
 		case FormEntryController.EVENT_BEGINNING_OF_FORM:
-            return createFormBeginningView(formController, advancingPage);
+			return createNextView(event, advancingPage, formController);
 
 		case FormEntryController.EVENT_END_OF_FORM:
             return createFormEndView(formController);
@@ -1041,21 +1041,25 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				mNextButton.setEnabled(true);
 			}
 			return odkv;
+
 		default:
 			Log.e(t, "Attempted to create a view that does not exist.");
-			// this is badness to avoid a crash.
-            try {
-                event = formController.stepToNextScreenEvent();
-                createErrorDialog(getString(R.string.survey_internal_error), EXIT);
-            } catch (JavaRosaException e) {
-                Log.e(t, e.getMessage(), e);
-                createErrorDialog(e.getCause().getMessage(), EXIT);
-            }
-            return createView(event, advancingPage);
+			return createNextView(event, advancingPage, formController);
 		}
 	}
 
-    private View createFormEndView(FormController formController) {
+	private View createNextView(int event, boolean advancingPage, FormController formController) {
+		try {
+            event  = formController.stepToNextScreenEvent();
+        } catch (JavaRosaException e) {
+            Log.e(t, e.getMessage(), e);
+            createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+        }
+
+		return createView(event, advancingPage);
+	}
+
+	private View createFormEndView(FormController formController) {
         View endView = View.inflate(this, R.layout.form_entry_end, null);
         ((TextView) endView.findViewById(R.id.description))
                 .setText(getString(R.string.save_enter_data_description,
@@ -1179,107 +1183,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         return endView;
     }
 
-    private View createFormBeginningView(FormController formController, boolean advancingPage) {
-        View startView = View.inflate(this, R.layout.form_entry_start, null);
-        setTitle(getString(R.string.app_name) + " > " + formController.getFormTitle());
-
-		if (shouldShowIntroScreenBecauseOfLogo(formController)) {
-			// If image is specified, we will always show intro screen
-			Drawable image = getFormLogo(formController);
-			ImageView v = ((ImageView) startView.findViewById(R.id.form_start_bling));
-			v.setImageDrawable(image);
-			v.setContentDescription(formController.getFormTitle());
-
-		} else if (shouldShowIntroScreenBecauseOfSettings()) {
-			((ImageView) startView.findViewById(R.id.form_start_bling)).setVisibility(View.GONE);
-
-		} else {
-			// Should not show intro screen, lets go to the next view
-
-			try {
-				int event = formController.stepToNextScreenEvent();
-				return createView(event, advancingPage);
-			} catch (JavaRosaException e) {
-				Log.e(t, e.getMessage(), e);
-				createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
-			}
-		}
-
-        // change start screen based on navigation prefs
-        String navigationChoice = getPreferences().getString(
-									PreferencesActivity.KEY_NAVIGATION,
-									PreferencesActivity.KEY_NAVIGATION);
-
-        ImageView imageAdvance = ((ImageView) startView.findViewById(R.id.image_advance));
-        ImageView imageBackup = ((ImageView) startView.findViewById(R.id.image_backup));
-        TextView textAdvance = ((TextView) startView.findViewById(R.id.text_advance));
-        TextView textBackup = ((TextView) startView.findViewById(R.id.text_backup));
-        TextView description = ((TextView) startView.findViewById(R.id.description));
-
-		Boolean useSwipe = false;
-		Boolean useButtons = false;
-
-		if (navigationChoice != null) {
-            if (navigationChoice.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
-                useSwipe = true;
-            }
-
-            if (navigationChoice.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
-                useButtons = true;
-            }
-        }
-
-        if (useSwipe && !useButtons) {
-            description.setText(getString(R.string.swipe_instructions, formController.getFormTitle()));
-        } else if (useButtons && !useSwipe) {
-            imageAdvance.setVisibility(View.GONE);
-            imageBackup.setVisibility(View.GONE);
-            textAdvance.setVisibility(View.GONE);
-            textBackup.setVisibility(View.GONE);
-            description.setText(getString(R.string.buttons_instructions, formController.getFormTitle()));
-        } else {
-            description.setText(getString(R.string.swipe_buttons_instructions, formController.getFormTitle()));
-        }
-
-        if (mBackButton.isShown()) {
-            mBackButton.setEnabled(false);
-        }
-        if (mNextButton.isShown()) {
-            mNextButton.setEnabled(true);
-        }
-
-		// Only show intro screen once, flip boolean flag so it wont be shown again
-		getPreferences().edit().putBoolean(PreferencesActivity.KEY_SHOW_INTRO, false).apply();
-
-        return startView;
-    }
-
 	private SharedPreferences getPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(this);
 	}
-
-	private boolean shouldShowIntroScreenBecauseOfSettings() {
-		return getPreferences().getBoolean(PreferencesActivity.KEY_SHOW_INTRO, true);
-	}
-
-	private boolean shouldShowIntroScreenBecauseOfLogo(FormController formController){
-		return getFormLogo(formController) != null;
-	}
-
-	private Drawable getFormLogo(FormController formController) {
-        Drawable image = null;
-		File logoFile = new File(formController.getMediaFolder(), "form_logo.png");
-
-		if (logoFile.exists()) {
-			BitmapDrawable bitImage = new BitmapDrawable(getResources(), logoFile.getPath());
-			if (bitImage.getBitmap() != null
-					&& bitImage.getIntrinsicHeight() > 0
-					&& bitImage.getIntrinsicWidth() > 0) {
-				image = bitImage;
-			}
-		}
-        return image;
-    }
 
     @Override
 	public boolean dispatchTouchEvent(MotionEvent mv) {
@@ -1374,17 +1280,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
 
-			if (formController.getEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                mBeenSwiped = false;
-				return;
-            }
-
 			int event = formController.stepToPreviousScreenEvent();
 
-			// May be we should not show intro screen?
-			if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
-					&& shouldShowIntroScreenBecauseOfSettings() == false
-					&& shouldShowIntroScreenBecauseOfLogo(formController) == false) {
+			// Do not show intro screen
+			if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
 				// Lets go one step forward because we just navigated back
 				formController.stepToNextScreenEvent();
 				mBeenSwiped = false;
