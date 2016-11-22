@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "886439590063",
+    "firebase_url": "https://odk-collect-850b5.firebaseio.com",
+    "project_id": "odk-collect-850b5",
+    "storage_bucket": "odk-collect-850b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886439590063:android:5e1d7c3c296329e8",
+        "android_client_info": {
+          "package_name": "org.odk.collect.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886439590063-hgpr1fi4urnl6c9nu47937h23400i32i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANJLGM2uwhNlL7mU8ZMiVqYF5bM8GT28Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

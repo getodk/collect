@@ -38,6 +38,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
+
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
@@ -88,6 +91,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
 	public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
 	public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
+
+	public static String KEY_COLLECT_USAGE = "send_stats";
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
@@ -240,4 +245,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         return mode;
     }
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Analytics.getInstance().logScreenView(ScreenType.AdminSettings);
+	}
 }

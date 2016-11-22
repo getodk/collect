@@ -57,6 +57,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
+
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
  * some activities based on returns of others.
@@ -210,7 +216,7 @@ public class MainMenuActivity extends Activity {
 							FormDownloadList.class);
 				}
 				startActivity(i);
-				
+
 			}
 		});
 
@@ -274,11 +280,35 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		SharedPreferences sharedPreferences = this.getSharedPreferences(
-				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-		boolean edit = sharedPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_EDIT_SAVED, true);
+        Analytics.getInstance().logScreenView(ScreenType.Main);
+		ensureGooglePlayServicesIsUpToDate();
+		adjustButtonsVisibility();
+	}
+
+	private void ensureGooglePlayServicesIsUpToDate() {
+		GoogleApiAvailability playServices = GoogleApiAvailability.getInstance();
+		int result = playServices.isGooglePlayServicesAvailable(this);
+
+		switch(result){
+			case ConnectionResult.SUCCESS:
+				return;
+
+			case ConnectionResult.SERVICE_MISSING:
+			case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+			case ConnectionResult.SERVICE_DISABLED:
+				Dialog errorDialog = playServices.getErrorDialog(this, result, 1);
+				if (errorDialog != null) {
+					errorDialog.show();
+				}
+				break;
+		}
+	}
+
+	private void adjustButtonsVisibility() {
+		SharedPreferences prefs = this.getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+		boolean edit = prefs.getBoolean(AdminPreferencesActivity.KEY_EDIT_SAVED, true);
 		if (!edit) {
 			mReviewDataButton.setVisibility(View.GONE);
 			mReviewSpacer.setVisibility(View.GONE);
@@ -287,16 +317,14 @@ public class MainMenuActivity extends Activity {
 			mReviewSpacer.setVisibility(View.VISIBLE);
 		}
 
-		boolean send = sharedPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_SEND_FINALIZED, true);
+		boolean send = prefs.getBoolean(AdminPreferencesActivity.KEY_SEND_FINALIZED, true);
 		if (!send) {
 			mSendDataButton.setVisibility(View.GONE);
 		} else {
 			mSendDataButton.setVisibility(View.VISIBLE);
 		}
 
-		boolean get_blank = sharedPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_GET_BLANK, true);
+		boolean get_blank = prefs.getBoolean(AdminPreferencesActivity.KEY_GET_BLANK, true);
 		if (!get_blank) {
 			mGetFormsButton.setVisibility(View.GONE);
 			mGetFormsSpacer.setVisibility(View.GONE);
@@ -305,8 +333,7 @@ public class MainMenuActivity extends Activity {
 			mGetFormsSpacer.setVisibility(View.VISIBLE);
 		}
 
-		boolean delete_saved = sharedPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_DELETE_SAVED, true);
+		boolean delete_saved = prefs.getBoolean(AdminPreferencesActivity.KEY_DELETE_SAVED, true);
 		if (!delete_saved) {
 			mManageFilesButton.setVisibility(View.GONE);
 		} else {

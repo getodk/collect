@@ -31,6 +31,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--
+    Without wake locks in Analytics, you run the risk of losing data in the face of
+    Android killing off your app's process before it's able to transmit collected data.
+
+    You won't be able to measure this loss or even know that it happened.
+    https://groups.google.com/d/msg/firebase-talk/CXgecSxgsRE/avud-Rt7AwAJ
+    -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -70,6 +78,8 @@
         android:label="@string/app_name"
         android:theme="@style/Collect"
         >
+
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
 
         <provider
             android:exported="true"

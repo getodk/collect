@@ -45,6 +45,9 @@ import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
+
 /**
  * Handles general preferences.
  *
@@ -127,6 +130,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
   protected ListPreference mMapSdk;
   protected ListPreference mMapBasemap;
+
+  private CheckBoxPreference mSendStats;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -507,6 +512,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     if (!(mMapBasemapAvailable || adminMode)) {
       mapCategory.removePreference(mMapBasemap);
     }
+
+    // Send stats
+    mSendStats = (CheckBoxPreference) findPreference(AdminPreferencesActivity.KEY_COLLECT_USAGE);
+    mSendStats.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      @Override
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Analytics.getInstance().enableDataCollection((boolean) newValue);
+        return true;
+      }
+    });
   }
 
   @Override
@@ -522,6 +537,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
   @Override
   protected void onResume() {
     super.onResume();
+    Analytics.getInstance().logScreenView(ScreenType.GeneralSettings);
 
     // has to go in onResume because it may get updated by
     // a sub-preference screen

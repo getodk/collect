@@ -28,6 +28,9 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
+
 /**
  * An example of tab content that launches an activity via
  * {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
@@ -59,6 +62,13 @@ public class FileManagerTabs extends TabActivity {
 		tabHost.addTab(tabHost.newTabSpec(FORMS_TAB)
 				.setIndicator(getString(R.string.forms)).setContent(local));
 
+		tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+			@Override
+			public void onTabChanged(String tabId) {
+				logScreenView(tabId);
+			}
+		});
+
 		// hack to set font size
 		LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
 		TabWidget tw = (TabWidget) ll.getChildAt(0);
@@ -82,6 +92,18 @@ public class FileManagerTabs extends TabActivity {
 		}
 	}
 
+	private void logScreenView(String tabId) {
+		switch (tabId) {
+            case DATA_TAB:
+                Analytics.getInstance().logScreenView(ScreenType.DeleteBlankForm);
+                break;
+
+            case FORMS_TAB:
+                Analytics.getInstance().logScreenView(ScreenType.DeleteSavedForm);
+                break;
+        }
+	}
+
 	private TextView getTextViewChild(ViewGroup viewGroup) {
 		for (int i = 0; i < viewGroup.getChildCount(); i++) {
 			View view = viewGroup.getChildAt(i);
@@ -92,10 +114,18 @@ public class FileManagerTabs extends TabActivity {
 		return null;
 	}
 
+
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		Collect.getInstance().getActivityLogger().logOnStart(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		logScreenView(getTabHost().getCurrentTabTag());
 	}
 
 	@Override

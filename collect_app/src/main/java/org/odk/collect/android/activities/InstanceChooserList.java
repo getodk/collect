@@ -32,6 +32,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.ScreenType;
+
 /**
  * Responsible for displaying all the valid instances in the instance directory.
  *
@@ -119,6 +122,7 @@ public class InstanceChooserList extends ListActivity {
             	return;
             }
             // caller wants to view/edit a form, so launch formentryactivity
+            Analytics.getInstance().logScreenView(ScreenType.StartedEditingSavedForm);
             startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
         }
         finish();
@@ -161,5 +165,9 @@ public class InstanceChooserList extends ListActivity {
         mAlertDialog.show();
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.getInstance().logScreenView(ScreenType.EditSavedForm);
+    }
 }

@@ -15,11 +15,13 @@
 package org.odk.collect.android.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
@@ -37,6 +39,8 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+
+import org.odk.collect.android.analytics.Analytics;
 
 /**
  * Extends the Application class to implement
@@ -227,6 +231,8 @@ public class Collect extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();
 
+        Analytics.init(getApplicationContext());
+
         PropertyManager mgr = new PropertyManager(this);
 
         FormController.initializeJavaRosa(mgr);
@@ -235,4 +241,9 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 }

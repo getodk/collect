@@ -64,11 +64,16 @@ allprojects {
     }
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.google.android.gms:play-services:4.1.32'
-
+    compile fileTree(include: '*.jar', dir: 'libs')
+    compile 'com.google.android.gms:play-services-base:9.6.1'
+    compile 'com.google.android.gms:play-services-analytics:9.6.1'
+    compile 'com.google.android.gms:play-services-maps:9.6.1'
+    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.android.support:multidex:1.0.0'
     // Testing-only dependencies
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile "org.robolectric:robolectric:3.1.2"
 }
+
+apply plugin: 'com.google.gms.google-services'

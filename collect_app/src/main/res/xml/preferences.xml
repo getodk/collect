@@ -137,4 +137,16 @@
             android:title="@string/map_basemap_behavior" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="@string/other_preferences"
+        android:title="@string/other_preferences" >
+
+        <CheckBoxPreference
+            android:id="@+id/send_stats"
+            android:defaultValue="true"
+            android:key="send_stats"
+            android:summary="@string/send_stats_summary"
+            android:title="@string/send_stats" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
