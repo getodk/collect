@@ -2,26 +2,20 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.DialogPreference;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
-import org.odk.collect.android.R;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 
@@ -62,6 +56,7 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
         mEditText.setEnabled(true);
         mEditText.setThreshold(0);
 
+
     }
 
 
@@ -72,10 +67,6 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
     }
 
 
-    /**
-     *
-     * @param text - text to persist
-     */
     public void setText(String text) {
         // Always persist/notify the first time.
         final boolean changed = !TextUtils.equals(mText, text);
@@ -94,19 +85,11 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
     }
 
 
-    /**
-     *
-     * @return saved text
-     */
     public String getText() {
         return mText;
     }
 
 
-    /**
-     *
-     * @param view
-     */
     @Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
@@ -126,7 +109,19 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
         mEditText.setLayoutParams(params);
         mEditText.setId(android.R.id.edit);
         mEditText.setText(curVal);
+
         loadHistory();
+
+        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    AutoCompleteTextViewPreference.this.mEditText.showDropDown();
+                }else {
+                    AutoCompleteTextViewPreference.this.mEditText.dismissDropDown();
+                }
+            }
+        });
 
         // add the new view to the layout
         vg.addView(mEditText);
@@ -137,10 +132,6 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
     }
 
 
-    /**
-     *
-     * @param positiveResult
-     */
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
@@ -153,59 +144,37 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
         }
     }
 
+    @Override
+    protected View onCreateDialogView() {
+        mEditText.showDropDown();
+        return super.onCreateDialogView();
+    }
 
-    /**
-     *
-     * @param a
-     * @param index
-     * @return
-     */
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getString(index);
     }
 
-    /**
-     *
-     * @param restorePersistedValue
-     * @param defaultValue
-     */
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
 
         setText(restorePersistedValue ? getPersistedString(mText) : (String) defaultValue);
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public boolean shouldDisableDependents() {
         return TextUtils.isEmpty(mText) || super.shouldDisableDependents();
     }
 
-    /**
-     *
-     * @return
-     */
     public AutoCompleteTextView getmEditText() {
         return mEditText;
     }
 
-    /**
-     *
-     * @param mEditText
-     */
     public void setmEditText(AutoCompleteTextView mEditText) {
         this.mEditText = mEditText;
     }
 
 
-    /**
-     *
-     * @return
-     */
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
@@ -219,10 +188,6 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
         return myState;
     }
 
-    /**
-     *
-     * @param state
-     */
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         if (state == null || !state.getClass().equals(SavedState.class)) {
@@ -236,17 +201,10 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
         setText(myState.text);
     }
 
-    /**
-     *
-     * @return
-     */
     public AutoCompleteTextView getEditText() {
         return mEditText;
     }
 
-    /**
-     *
-     */
     private static class SavedState extends BaseSavedState {
         String text;
 
@@ -278,9 +236,6 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
     }
 
 
-    /**
-     * Load previously stored urls.
-     */
     private void loadHistory(){
 
         SharedPreferences pref = PreferenceManager
@@ -299,11 +254,9 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
         mEditText.setAdapter(autocompletetextAdapter);
 
 
+
     }
 
-    /**
-     * Persist new and previous data
-     */
     private void storeHistory(){
 
         SharedPreferences pref = PreferenceManager
