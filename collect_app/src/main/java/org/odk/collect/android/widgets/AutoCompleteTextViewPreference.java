@@ -142,6 +142,7 @@ public class AutoCompleteTextViewPreference extends EditTextPreference {
                 setText(value);
             }
         }
+        mEditText.dismissDropDown();
     }
 
     @Override
