@@ -8,7 +8,7 @@ com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
 android {
     compileSdkVersion(22)
-    buildToolsVersion("23.0.3")
+    buildToolsVersion("25.0.0")
 
     defaultConfig {
         applicationId("org.odk.collect.android")
@@ -20,7 +20,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled(false)
+            minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
         debug {
