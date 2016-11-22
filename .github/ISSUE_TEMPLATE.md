@@ -13,7 +13,7 @@ For feature requests, please include the problem description (what problem do yo
 -->
 
 #### Software and hardware versions 
-_ODK Collect v1.x.x, Android vx.x.x, device used..._
+ODK Collect v1.x.x, Android vx.x.x, device used...
 
 #### Problem description
 
@@ -22,4 +22,4 @@ _ODK Collect v1.x.x, Android vx.x.x, device used..._
 #### Expected behavior
 
 #### Other information 
-_Things you tried, stack traces, related issues, suggestions on how to fix it..._
+Things you tried, stack traces, related issues, suggestions on how to fix it...
