@@ -12,14 +12,14 @@ For feature requests, please include the problem description (what problem do yo
 
 -->
 
-**Software and hardware versions**
+#### Software and hardware versions
 _(ODK Collect, Android, device used...)_
 
-**Problem description**
+#### Problem description
 
-**Steps to reproduce the problem**
+#### Steps to reproduce the problem
 
-**Expected behavior**
+#### Expected behavior
 
-**Other information**
+#### Other information
 _(Things you tried, stack traces, related issues, suggestions on how to fix it...)_
