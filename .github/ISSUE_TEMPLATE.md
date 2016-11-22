@@ -12,8 +12,7 @@ For feature requests, please include the problem description (what problem do yo
 
 -->
 
-#### Software and hardware versions
-_(ODK Collect, Android, device used...)_
+#### Software and hardware versions _(ODK Collect, Android, device used...)_
 
 #### Problem description
 
@@ -21,5 +20,4 @@ _(ODK Collect, Android, device used...)_
 
 #### Expected behavior
 
-#### Other information
-_(Things you tried, stack traces, related issues, suggestions on how to fix it...)_
+#### Other information _(Things you tried, stack traces, related issues, suggestions on how to fix it...)_
