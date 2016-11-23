@@ -326,5 +326,8 @@
   <string name="google_sheets_access_denied">Accés denegat. Si us plau, assegureu-vos que teniu permís d\'accés a la fulla de càlcul.</string>
   <string name="google_sheets_update_error">Error actualitzant fulla. Comproveu que el propietari de la fulla de càlcul us ha atorgat permís d\'accés.</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
+  <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
+  <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
+  <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <!--Geo string added in feature-geofeatures branch-->
 </resources>
