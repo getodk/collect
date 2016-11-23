@@ -407,4 +407,5 @@
 <string name="reset_blank_forms">Blank forms</string>
 <string name="reset_layers">Offline map layers</string>
 <string name="reset_metadata">Meta data</string>
+<string name="reset_cache">Cache</string>
 </resources>
