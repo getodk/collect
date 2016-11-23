@@ -50,7 +50,7 @@ public class TileSourceFactory {
                 ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
                 "http://1.basemaps.cartocdn.com/light_all/" });
 
-        mCartoDbDarkMatter = new XYTileSource(context.getString(R.string.openmap_cartodb_positron),
+        mCartoDbDarkMatter = new XYTileSource(context.getString(R.string.openmap_cartodb_darkmatter),
                 ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
                 "http://1.basemaps.cartocdn.com/dark_all/" });
     }
