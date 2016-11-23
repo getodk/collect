@@ -21,7 +21,8 @@ import java.io.File;
 public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-            boolean resetForms, boolean resetLayers, final ResetResultCallback callback) {
+            boolean resetForms, boolean resetLayers, boolean resetMetaData,
+            final ResetResultCallback callback) {
 
         Deferred deferred = new DeferredObject<Void, String, Void>();
         Promise promise = deferred.promise();
@@ -73,6 +74,18 @@ public class ResetUtility {
             });
         }
 
+        if (resetMetaData) {
+            promise = promise.then(new DonePipe() {
+                @Override
+                public Promise pipeDone(Object result) {
+                    DeferredObject def = new DeferredObject<>();
+                    resetMetaData(def);
+
+                    return def;
+                }
+            });
+        }
+
         promise
                 .done(new DoneCallback() {
                     @Override
@@ -90,9 +103,19 @@ public class ResetUtility {
         deferred.resolve(null);
     }
 
+    private void resetMetaData(DeferredObject def) {
+        File[] files = new File(Collect.METADATA_PATH).listFiles();
+
+        deleteRecursively(def, files);
+    }
+
     private void resetLayers(DeferredObject def) {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
 
+        deleteRecursively(def, files);
+    }
+
+    private void deleteRecursively(DeferredObject def, File[] files) {
         for (File f : files) {
             DeletionResult result = deleteRecursive(f);
             if (result.isSuccessful() == false) {

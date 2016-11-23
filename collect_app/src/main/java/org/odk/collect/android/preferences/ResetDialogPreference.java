@@ -19,12 +19,13 @@ public class ResetDialogPreference extends DialogPreference implements
         DialogInterface.OnClickListener, ResetResultCallback {
     final static String TAG = "ResetDialogPreference";
 
-    CheckBox mPreferences;
-    CheckBox mInstances;
-    CheckBox mForms;
-    CheckBox mLayers;
-    Context mContext;
-    ProgressDialog mProgressDialog;
+    private CheckBox mPreferences;
+    private CheckBox mInstances;
+    private CheckBox mForms;
+    private CheckBox mLayers;
+    private CheckBox mMetaData;
+    private Context mContext;
+    private ProgressDialog mProgressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +39,7 @@ public class ResetDialogPreference extends DialogPreference implements
         mInstances = (CheckBox) view.findViewById(R.id.instances);
         mForms = (CheckBox) view.findViewById(R.id.forms);
         mLayers = (CheckBox) view.findViewById(R.id.layers);
+        mMetaData = (CheckBox) view.findViewById(R.id.metadata);
 
         super.onBindDialogView(view);
     }
@@ -67,11 +69,13 @@ public class ResetDialogPreference extends DialogPreference implements
         final boolean resetInstances = mInstances.isChecked();
         final boolean resetForms = mForms.isChecked();
         final boolean resetLayers = mLayers.isChecked();
+        final boolean resetMetaData = mMetaData.isChecked();
 
         if (!resetPreferences
                 && !resetInstances
                 && !resetForms
-                && !resetLayers) {
+                && !resetLayers
+                && !resetMetaData) {
             Toast.makeText(getContext(), R.string.reset_dialog_nothing, Toast.LENGTH_LONG).show();
             return;
         }
@@ -83,6 +87,7 @@ public class ResetDialogPreference extends DialogPreference implements
                 resetInstances,
                 resetForms,
                 resetLayers,
+                resetMetaData,
                 this);
     }
 
