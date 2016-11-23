@@ -296,4 +296,5 @@ Escolher Imagem</string>
   <string name="change_server_url">Servidor URL</string>
   <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>

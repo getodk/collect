@@ -329,4 +329,5 @@
   <string name="password_error_whitespace">Mellomrom er ikke tillatt før eller etter passord</string>
   <string name="username_error_whitespace">Mellomrom er ikke tillatt før eller etter brukernavn</string>
   <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>
