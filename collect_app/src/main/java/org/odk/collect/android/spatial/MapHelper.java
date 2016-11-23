@@ -72,6 +72,8 @@ public class MapHelper {
     private TileOverlay googleTileOverlay;
     private IRegisterReceiver iRegisterReceiver;
 
+    private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
+
 
     public MapHelper(Context pContext,GoogleMap pGoogleMap){
         this.mGoogleMap = null;
@@ -80,7 +82,7 @@ public class MapHelper {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
         this.mGoogleMap = pGoogleMap;
-
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext,MapView pOsmMap,IRegisterReceiver pIregisterReceiver){
@@ -91,8 +93,7 @@ public class MapHelper {
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
         this.mOsmMap = pOsmMap;
-
-
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     private static String _getGoogleBasemap(){
@@ -122,15 +123,15 @@ public class MapHelper {
 
             switch (basemap) {
                 case OPENMAP_USGS_TOPO:
-                    tileSource = org.odk.collect.android.spatial.TileSourceFactory.USGS_TOPO;
+                    tileSource = tileFactory.getUSGSTopo();
                     break;
 
                 case OPENMAP_USGS_SAT:
-                    tileSource = org.odk.collect.android.spatial.TileSourceFactory.USGS_SAT;
+                    tileSource = tileFactory.getUsgsSat();
                     break;
 
                 case OPENMAP_STAMEN_TERRAIN:
-                    tileSource = org.odk.collect.android.spatial.TileSourceFactory.STAMEN_TERRAIN;
+                    tileSource = tileFactory.getStamenTerrain();
                     break;
 
                 case OPENMAP_STREETS:
