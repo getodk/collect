@@ -8,18 +8,18 @@ Before filling this form, visit https://github.com/opendatakit/collect/issues?q=
 
 For all problem reports, please use the template below. Also include any relevant stack traces or error messages.
 
-For feature requests, delete the template and discuss the high level problem you want to solve and how you think the new feature should behave.
+For feature requests, please include the problem description (what problem do you have that can't currently be solved?) and a proposed solution if you have one in mind (optional). You can delete the template. 
 
 -->
 
-### Software and hardware versions
-_(ODK Collect, Android, device used...)_
+#### Software and hardware versions 
+ODK Collect v1.x.x, Android vx.x.x, device used...
 
-### Problem description
+#### Problem description
 
-### Steps to reproduce the problem
+#### Steps to reproduce the problem
 
-### Expected behavior
+#### Expected behavior
 
-### Other information
-_(Things you tried, stack traces, related issues, suggestions on how to fix it...)_
+#### Other information 
+Things you tried, stack traces, related issues, suggestions on how to fix it...

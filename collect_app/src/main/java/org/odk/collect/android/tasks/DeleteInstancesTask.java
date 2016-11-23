@@ -30,10 +30,10 @@ import android.util.Log;
  *
  */
 public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
-	private static final String t = "DeleteInstancesTask";
+	private static final String TAG = "DeleteInstancesTask";
 	
-	private ContentResolver cr;
-	private DeleteInstancesListener dl;
+	private ContentResolver contentResolver;
+	private DeleteInstancesListener deleteInstancesListener;
 	
 	private int successCount = 0;
 	
@@ -41,7 +41,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 	protected Integer doInBackground(Long... params) {
 		int deleted = 0;
 
-		if (params == null ||cr == null || dl == null) {
+		if (params == null || contentResolver == null) {
 			return deleted;
 		}
 		
@@ -54,14 +54,14 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 	            Uri deleteForm =
 	                Uri.withAppendedPath(InstanceColumns.CONTENT_URI, params[i].toString());
 	            
-	            int wasDeleted = cr.delete(deleteForm, null, null); 
+	            int wasDeleted = contentResolver.delete(deleteForm, null, null);
 	            deleted += wasDeleted;
 	            
 	            if (wasDeleted > 0) {
 	            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
 	            }
 			} catch ( Exception ex ) {
-				Log.e(t,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());
+				Log.e(TAG,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());
 			}
 	    } 
 		successCount = deleted;
@@ -70,27 +70,27 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 	
 	@Override
 	protected void onPostExecute(Integer result) {
-	  	cr = null;
-        if (dl != null) {
-            dl.deleteComplete(result);
+	  	contentResolver = null;
+        if (deleteInstancesListener != null) {
+            deleteInstancesListener.deleteComplete(result);
         }
         super.onPostExecute(result);
 	}
 	
 	@Override
 	protected void onCancelled() {
-		cr = null;
-		if (dl != null) {
-			dl.deleteComplete(successCount);
+		contentResolver = null;
+		if (deleteInstancesListener != null) {
+			deleteInstancesListener.deleteComplete(successCount);
 		}
 	}
 
     public void setDeleteListener(DeleteInstancesListener listener) {
-        dl = listener;
+        deleteInstancesListener = listener;
     }
     
     public void setContentResolver(ContentResolver resolver){
-       	cr = resolver;
+       	contentResolver = resolver;
     }
 
     public int getDeleteCount() {
