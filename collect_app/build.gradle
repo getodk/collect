@@ -3,6 +3,7 @@
  *************************************************************************************************/
 
 apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
 
 com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
@@ -49,6 +50,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    classpath = files()
 }
 
 configurations.all {
