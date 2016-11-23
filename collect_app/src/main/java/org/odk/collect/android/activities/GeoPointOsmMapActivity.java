@@ -63,9 +63,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 	private SharedPreferences sharedPreferences;
 	private String basemap;
 
-	private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
-	private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
-
 	private static final String LOCATION_COUNT = "locationCount";
 
 	//private GoogleMap mMap;
