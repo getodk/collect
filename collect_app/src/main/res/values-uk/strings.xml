@@ -326,5 +326,8 @@
   <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
   <string name="google_sheets_update_error">Помилка оновлення Сторінок. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
   <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
+  <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
+  <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
+  <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
   <!--Geo string added in feature-geofeatures branch-->
 </resources>
