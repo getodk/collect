@@ -303,4 +303,5 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="change_server_url">URL Serveru</string>
   <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>
