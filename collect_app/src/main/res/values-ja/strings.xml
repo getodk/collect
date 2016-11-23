@@ -336,9 +336,6 @@
   <string name="google_maps_sdk">Google マップ SDK</string>
   <string name="openstreetmap_sdk">OpenStreet Map SDK</string>
   <string name="show_map_sdk">マップ SDK オプションを表示</string>
-  <string name="openstreetmap">OpenStreetMap</string>
-  <string name="mapquest_streets">MapQuest 道路</string>
-  <string name="mapquest_satellite">MapQuest 衛星</string>
   <string name="streets">道路</string>
   <string name="terrain">地形</string>
   <string name="hybrid">ハイブリッド</string>

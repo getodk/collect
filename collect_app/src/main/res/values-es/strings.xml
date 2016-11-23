@@ -338,7 +338,6 @@
   <string name="google_maps_sdk">Google Maps SDK</string>
   <string name="openstreetmap_sdk">Mapa SDK OpenStreet</string>
   <string name="show_map_sdk">Mostrar Opciones del Mapa SDK</string>
-  <string name="openstreetmap">OpenStreetMap</string>
   <string name="streets">Calles</string>
   <string name="terrain">Terreno</string>
   <string name="hybrid">Híbrido</string>

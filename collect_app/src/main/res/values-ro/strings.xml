@@ -336,9 +336,6 @@
   <string name="google_maps_sdk">SDK Google Maps</string>
   <string name="openstreetmap_sdk">SDK OpenStreet Map</string>
   <string name="show_map_sdk">Afișați opțiuni SDK hartă</string>
-  <string name="openstreetmap">OpenStreetMap</string>
-  <string name="mapquest_streets">Străzi MapQuest</string>
-  <string name="mapquest_satellite">Satelit MapQuest</string>
   <string name="streets">Străzi</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>

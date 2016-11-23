@@ -337,9 +337,6 @@
   <string name="google_maps_sdk">Google Maps SDK</string>
   <string name="openstreetmap_sdk">OpenStreet Map SDK</string>
   <string name="show_map_sdk">Näita Map SDK valikuid</string>
-  <string name="openstreetmap">OpenStreetMap</string>
-  <string name="mapquest_streets">MapQuest Streets</string>
-  <string name="mapquest_satellite">MapQuest Satellite</string>
   <string name="streets">Tänavad</string>
   <string name="terrain">Maastik</string>
   <string name="hybrid">Hübriid</string>
