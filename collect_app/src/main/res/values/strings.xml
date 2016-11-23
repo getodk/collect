@@ -348,6 +348,8 @@
 <string name="openmap_usgs_topo">USGS National Map Topo</string>
 <string name="openmap_usgs_sat">USGS National Map Sat</string>
 <string name="openmap_stamen_terrain">Stamen Terrain</string>
+<string name="openmap_cartodb_positron">CartoDB Positron</string>
+<string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
 <string name="streets">Streets</string>
 <string name="terrain">Terrain</string>
 <string name="hybrid">Hybrid</string>

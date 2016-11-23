@@ -63,6 +63,8 @@ public class MapHelper {
     private static final String OPENMAP_USGS_TOPO = "openmap_usgs_topo";
     private static final String OPENMAP_USGS_SAT = "openmap_usgs_sat";
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
+    private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
+    private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
     private int selected_layer = 0;
 
     public static String[] geofileTypes = new String[] {".mbtiles",".kml",".kmz"};
@@ -132,6 +134,14 @@ public class MapHelper {
 
                 case OPENMAP_STAMEN_TERRAIN:
                     tileSource = tileFactory.getStamenTerrain();
+                    break;
+
+                case OPENMAP_CARTODB_POSITRON:
+                    tileSource = tileFactory.getCartoDbPositron();
+                    break;
+
+                case OPENMAP_CARTODB_DARKMATTER:
+                    tileSource = tileFactory.getCartoDbDarkMatter();
                     break;
 
                 case OPENMAP_STREETS:

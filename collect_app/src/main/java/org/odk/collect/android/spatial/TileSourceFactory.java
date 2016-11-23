@@ -16,6 +16,8 @@ public class TileSourceFactory {
     public final OnlineTileSourceBase mUSGSTopo;
     public final OnlineTileSourceBase mUsgsSat;
     public final OnlineTileSourceBase mStamenTerrain;
+    public final OnlineTileSourceBase mCartoDbPositron;
+    public final OnlineTileSourceBase mCartoDbDarkMatter;
 
     public TileSourceFactory(Context context) {
         mUSGSTopo = new OnlineTileSourceBase(
@@ -43,6 +45,14 @@ public class TileSourceFactory {
         mStamenTerrain = new XYTileSource(context.getString(R.string.openmap_stamen_terrain),
                 ResourceProxy.string.unknown, 0, 18, 256, ".jpg", new String[] {
                 "http://tile.stamen.com/terrain/" });
+
+        mCartoDbPositron = new XYTileSource(context.getString(R.string.openmap_cartodb_positron),
+                ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
+                "http://1.basemaps.cartocdn.com/light_all/" });
+
+        mCartoDbDarkMatter = new XYTileSource(context.getString(R.string.openmap_cartodb_positron),
+                ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
+                "http://1.basemaps.cartocdn.com/dark_all/" });
     }
 
     public OnlineTileSourceBase getUSGSTopo() {
@@ -55,5 +65,13 @@ public class TileSourceFactory {
 
     public OnlineTileSourceBase getStamenTerrain() {
         return mStamenTerrain;
+    }
+
+    public OnlineTileSourceBase getCartoDbPositron() {
+        return mCartoDbPositron;
+    }
+
+    public OnlineTileSourceBase getCartoDbDarkMatter() {
+        return mCartoDbDarkMatter;
     }
 }
