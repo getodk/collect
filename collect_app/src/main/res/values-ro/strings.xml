@@ -328,5 +328,36 @@
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
   <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
   <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
-  <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Este instalat Google Play Services?</string>
+  <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_preferences">Opțiuni de cartografiere</string>
+  <string name="map_sdk_selector_title">SDK cartografiere</string>
+  <string name="map_sdk_behavior">SDK cartografiere</string>
+  <string name="google_maps_sdk">SDK Google Maps</string>
+  <string name="openstreetmap_sdk">SDK OpenStreet Map</string>
+  <string name="show_map_sdk">Afișați opțiuni SDK hartă</string>
+  <string name="openstreetmap">OpenStreetMap</string>
+  <string name="mapquest_streets">Străzi MapQuest</string>
+  <string name="mapquest_satellite">Satelit MapQuest</string>
+  <string name="streets">Străzi</string>
+  <string name="terrain">Teren</string>
+  <string name="hybrid">Hibrid</string>
+  <string name="satellite">Satelit</string>
+  <string name="map_basemap_selector_title">Hărți de bază</string>
+  <string name="map_basemap_behavior">Selectați o hartă de bază</string>
+  <string name="show_map_basemap">Afișați opțiunile hărții de bază</string>
+  <string name="save_point">Salvați GeoPoint</string>
+  <string name="get_point">Start GeoPoint</string>
+  <string name="get_shape">Start GeoShape</string>
+  <string name="get_trace">Start GeoTrace</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="mbtiles_not_found">Niciun fișier .mbtiles nu a fost găsit în directorul \'%s\'.</string>
+  <string name="select_geotrace_mode">Selectați modul GeoTrace</string>
+  <string name="start">Start</string>
+  <string name="enable_gps">Activați GPS</string>
+  <string name="enable_gps_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="polygon_save">Salvare ca poligon</string>
+  <string name="polyline_save">Salvare ca Polyline</string>
+  <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
 </resources>

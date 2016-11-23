@@ -303,4 +303,5 @@
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
   <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>
