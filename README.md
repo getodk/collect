@@ -10,7 +10,8 @@ ODK Collect is an Android app for filling out forms. It is designed to be used i
 * ODK Collect usage instructions: [https://opendatakit.org/use/collect](https://opendatakit.org/use/collect/)
 * ODK community mailing list: [http://groups.google.com/group/opendatakit](http://groups.google.com/group/opendatakit)
 * ODK developer mailing list: [http://groups.google.com/group/opendatakit-developers](http://groups.google.com/group/opendatakit-developers)
-* ODK developer Slack chat: [http://slack.opendatakit.org](http://slack.opendatakit.org)
+* ODK developer Slack chat: [http://slack.opendatakit.org](http://slack.opendatakit.org) 
+* ODK developer Slack archive: [http://opendatakit.slackarchive.io](http://opendatakit.slackarchive.io) 
 * ODK developer wiki: [https://github.com/opendatakit/opendatakit/wiki](https://github.com/opendatakit/opendatakit/wiki)
 
 ## Setting up your development environment
