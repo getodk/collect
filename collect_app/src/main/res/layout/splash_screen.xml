@@ -29,7 +29,8 @@
 			android:src="@drawable/notes"
 			android:contentDescription="@string/app_name"
 			android:layout_height="72dip"
-			android:layout_width="72dip" />
+			android:layout_width="72dip"
+			android:visibility="gone"/>
 		<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="wrap_content"
@@ -58,7 +59,8 @@
 				android:paddingStart="7dip"
 				android:paddingLeft="7dip"
 				android:paddingEnd="7dip"
-				android:paddingRight="7dip" />
+				android:paddingRight="7dip"
+				android:visibility="gone"/>
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

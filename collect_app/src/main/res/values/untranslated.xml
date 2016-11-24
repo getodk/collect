@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington Licensed under the Apache
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington Licensed under the Apache
 	License, Version 2.0 (the "License"); you may not use this file except in
 	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 	Unless required by applicable law or agreed to in writing, software distributed
@@ -8,13 +7,25 @@
 	the specific language governing permissions and limitations under the License. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- strings that should not be translated -->
-	<string translatable="false" name="app_name">ODK Collect</string>
-	<string translatable="false" name="protocol_odk_default">odk_default</string>
-	<string translatable="false" name="protocol_google_sheets">google_sheets</string>
-    <string translatable="false" name="default_form_processing_logic">-1</string>
-    <string translatable="false" name="protocol_other">other_protocol</string>
-	<string translatable="false" name="default_server_url">https://opendatakit.appspot.com</string>
-	<string translatable="false" name="default_odk_formlist">/formList</string>
-	<string translatable="false" name="default_odk_submission">/submission</string>
-    <item name="mapview" type="id"/>
+    <string name="app_name" translatable="false">Nexleaf Collect</string>
+    <string name="protocol_odk_default" translatable="false">odk_default</string>
+    <string name="protocol_google_sheets" translatable="false">google_sheets</string>
+    <string name="default_form_processing_logic" translatable="false">-1</string>
+    <string name="protocol_other" translatable="false">other_protocol</string>
+    <!--<string translatable="false" name="default_server_url">https://opendatakit.appspot.com</string>-->
+    <string name="default_odk_formlist" translatable="false">/formList</string>
+    <string name="default_odk_submission" translatable="false">/submission</string>
+    <item name="mapview" type="id" />
+    <string name="local_login_url">http://10.1.0.194:8000/accounts/api/v1/login/</string>
+    <string name="default_server_url" translatable="false">http://playground.nexleaf.org:8080/ODKAggregate/</string>
+    <string name="get_updated_form">Get Updated Form</string>
+    <string name="logout_preferences">Logout</string>
+    <string name="logout_alert_title">Are you sure?</string>
+    <string name="logout_alert_msg">If you log out, all saved/finalized forms will be deleted.</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button_text">Login</string>
+    <string name="login_guest_user">Guest Login</string>
+    <string name="login_option_cold">Coldtrace</string>
+    <string name="login_option_stove">Stovetrace</string>
 </resources>

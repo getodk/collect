@@ -14,10 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,10 +27,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,23 +88,24 @@ public class SplashScreenActivity extends Activity {
         String splashPath =
             mSharedPreferences.getString(PreferencesActivity.KEY_SPLASH_PATH,
                 getString(R.string.default_splash_path));
-
+        String navigation = "Use forward/backward buttons";
         // if you've increased version code, then update the version number and set firstRun to true
         if (mSharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
             editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);
+            editor.putString(PreferencesActivity.KEY_NAVIGATION,navigation);
             editor.commit();
 
             firstRun = true;
         }
 
         // do all the first run things
-        if (firstRun || showSplash) {
+        /*if (firstRun || showSplash) {
             editor.putBoolean(PreferencesActivity.KEY_FIRST_RUN, false);
-            editor.commit();
+            editor.commit();*/
             startSplashScreen(splashPath);
-        } else {
+        /*} else {
             endSplashScreen();
-        }
+        }*/
 
     }
 
@@ -111,7 +113,15 @@ public class SplashScreenActivity extends Activity {
     private void endSplashScreen() {
 
         // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        /*startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        finish();*/
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String token = sharedPreferences.getString(PreferencesActivity.KEY_TOKEN, "");
+        if (TextUtils.isEmpty(token)) {
+            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+        } else {
+            startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        }
         finish();
     }
 
