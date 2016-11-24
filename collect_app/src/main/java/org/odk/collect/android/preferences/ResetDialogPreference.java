@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -56,8 +55,7 @@ public class ResetDialogPreference extends DialogPreference implements
     @Override
     public void doneResetting() {
         hideProgressDialog();
-        showSuccessMessage();
-        ((Activity) mContext).finish();
+        showSuccessMessageAndRestart();
     }
 
     @Override
@@ -105,9 +103,17 @@ public class ResetDialogPreference extends DialogPreference implements
         mProgressDialog.dismiss();
     }
 
-    private void showSuccessMessage() {
-        Toast.makeText(getContext(), R.string.reset_dialog_finished,
-                Toast.LENGTH_LONG).show();
+    private void showSuccessMessageAndRestart() {
+        new AlertDialog.Builder(getContext())
+                .setMessage(R.string.reset_dialog_finished)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        System.exit(0);
+                    }
+                })
+                .create()
+                .show();
     }
 
     private void showErrorMessage(String errorMessage) {
