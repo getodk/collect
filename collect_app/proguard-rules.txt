@@ -3,3 +3,4 @@
 -dontwarn org.joda.time.**
 -dontwarn org.osmdroid.**
 -dontwarn org.xmlpull.v1.**
+-dontwarn org.slf4j.**
