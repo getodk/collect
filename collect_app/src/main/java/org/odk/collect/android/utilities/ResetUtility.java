@@ -95,6 +95,18 @@ public class ResetUtility {
         deferred.resolve(null);
     }
 
+    private Promise deleteFolderContents(Promise promise, final String path) {
+        return promise.then(new DonePipe() {
+            @Override
+            public Promise pipeDone(Object result) {
+                DeferredObject def = new DeferredObject<>();
+                deleteFolderContents(def, path);
+
+                return def;
+            }
+        });
+    }
+
     private void deleteFolderContents(DeferredObject def, String path) {
         File file = new File(path);
         if (file.exists() == false) {
@@ -109,22 +121,11 @@ public class ResetUtility {
             DeletionResult result = deleteRecursive(f);
             if (result.isSuccessful() == false) {
                 def.reject(String.format("Could not delete file %s", result.getPath()));
+                return;
             }
         }
 
         def.resolve(null);
-    }
-
-    private Promise deleteFolderContents(Promise promise, final String path) {
-        return promise.then(new DonePipe() {
-            @Override
-            public Promise pipeDone(Object result) {
-                DeferredObject def = new DeferredObject<>();
-                deleteFolderContents(def, path);
-
-                return def;
-            }
-        });
     }
 
     private DeletionResult deleteRecursive(File fileOrDirectory) {
@@ -193,7 +194,7 @@ public class ResetUtility {
         private boolean mIsSuccessful;
         private String mPath;
 
-        public DeletionResult(boolean isSuccessful, String path) {
+        DeletionResult(boolean isSuccessful, String path) {
             mIsSuccessful = isSuccessful;
             mPath = path;
         }
@@ -202,7 +203,7 @@ public class ResetUtility {
             return mPath;
         }
 
-        public boolean isSuccessful() {
+        boolean isSuccessful() {
             return mIsSuccessful;
         }
     }
