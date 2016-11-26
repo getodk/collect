@@ -22,7 +22,7 @@ public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
             boolean resetForms, boolean resetLayers, boolean resetMetaData,
-            boolean resetCache, final ResetResultCallback callback) {
+            boolean resetCache, boolean resetOsmDroid, final ResetResultCallback callback) {
 
         Deferred deferred = new DeferredObject<Void, String, Void>();
         Promise promise = deferred.promise();
@@ -63,39 +63,19 @@ public class ResetUtility {
         }
 
         if (resetLayers) {
-            promise = promise.then(new DonePipe() {
-                @Override
-                public Promise pipeDone(Object result) {
-                    DeferredObject def = new DeferredObject<>();
-                    deleteFolderContents(def, Collect.OFFLINE_LAYERS);
-
-                    return def;
-                }
-            });
+            promise = deleteFolderContents(promise, Collect.OFFLINE_LAYERS);
         }
 
         if (resetMetaData) {
-            promise = promise.then(new DonePipe() {
-                @Override
-                public Promise pipeDone(Object result) {
-                    DeferredObject def = new DeferredObject<>();
-                    deleteFolderContents(def, Collect.METADATA_PATH);
-
-                    return def;
-                }
-            });
+            promise = deleteFolderContents(promise, Collect.METADATA_PATH);
         }
 
         if (resetCache) {
-            promise = promise.then(new DonePipe() {
-                @Override
-                public Promise pipeDone(Object result) {
-                    DeferredObject def = new DeferredObject<>();
-                    deleteFolderContents(def, Collect.CACHE_PATH);
+            promise = deleteFolderContents(promise, Collect.CACHE_PATH);
+        }
 
-                    return def;
-                }
-            });
+        if (resetOsmDroid) {
+            promise = deleteFolderContents(promise, Collect.OSMDROID_PATH);
         }
 
         promise
@@ -116,7 +96,14 @@ public class ResetUtility {
     }
 
     private void deleteFolderContents(DeferredObject def, String path) {
-        File[] files = new File(path).listFiles();
+        File file = new File(path);
+        if (file.exists() == false) {
+            // Path does not exist, nothing to clean up
+            def.resolve(null);
+            return;
+        }
+
+        File[] files = file.listFiles();
 
         for (File f : files) {
             DeletionResult result = deleteRecursive(f);
@@ -126,6 +113,18 @@ public class ResetUtility {
         }
 
         def.resolve(null);
+    }
+
+    private Promise deleteFolderContents(Promise promise, final String path) {
+        return promise.then(new DonePipe() {
+            @Override
+            public Promise pipeDone(Object result) {
+                DeferredObject def = new DeferredObject<>();
+                deleteFolderContents(def, path);
+
+                return def;
+            }
+        });
     }
 
     private DeletionResult deleteRecursive(File fileOrDirectory) {

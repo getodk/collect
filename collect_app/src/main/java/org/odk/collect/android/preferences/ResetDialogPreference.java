@@ -24,6 +24,7 @@ public class ResetDialogPreference extends DialogPreference implements
     private CheckBox mLayers;
     private CheckBox mMetaData;
     private CheckBox mCache;
+    private CheckBox mOsmDroid;
     private Context mContext;
     private ProgressDialog mProgressDialog;
 
@@ -40,6 +41,7 @@ public class ResetDialogPreference extends DialogPreference implements
         mForms = (CheckBox) view.findViewById(R.id.forms);
         mLayers = (CheckBox) view.findViewById(R.id.layers);
         mMetaData = (CheckBox) view.findViewById(R.id.metadata);
+        mOsmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
         mCache = (CheckBox) view.findViewById(R.id.cache);
 
         super.onBindDialogView(view);
@@ -71,13 +73,15 @@ public class ResetDialogPreference extends DialogPreference implements
         final boolean resetLayers = mLayers.isChecked();
         final boolean resetMetaData = mMetaData.isChecked();
         final boolean resetCache = mCache.isChecked();
+        final boolean resetOsmDroid = mOsmDroid.isChecked();
 
         if (!resetPreferences
                 && !resetInstances
                 && !resetForms
                 && !resetLayers
                 && !resetMetaData
-                && !resetCache) {
+                && !resetCache
+                && !resetOsmDroid) {
             Toast.makeText(getContext(), R.string.reset_dialog_nothing, Toast.LENGTH_LONG).show();
             return;
         }
@@ -91,6 +95,7 @@ public class ResetDialogPreference extends DialogPreference implements
                 resetLayers,
                 resetMetaData,
                 resetCache,
+                resetOsmDroid,
                 this);
     }
 
