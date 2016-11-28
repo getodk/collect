@@ -265,4 +265,5 @@
   <string name="delete_after_send">Susa emva kokuthumela</string>
   <string name="delete_after_send_summary">Cima amafomu nezekuxhumana emuva kokuthumela ku seva</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>
