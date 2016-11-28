@@ -100,7 +100,9 @@ public class ResetDialogPreference extends DialogPreference implements
     }
 
     private void showProgressDialog() {
-        mProgressDialog = ProgressDialog.show(getContext(), "Please wait ...", "Resetting...",
+        mProgressDialog = ProgressDialog.show(getContext(),
+                mContext.getString(R.string.please_wait),
+                mContext.getString(R.string.reset_in_progress),
                 true);
     }
 

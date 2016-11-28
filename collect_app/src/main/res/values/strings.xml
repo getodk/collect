@@ -409,4 +409,11 @@
 <string name="reset_metadata">Meta data</string>
 <string name="reset_cache">Cache</string>
 <string name="reset_osmdroid">All OSM Tiles from the phone</string>
+<string name="reset_settings_dialog_title">Select what to reset</string>
+<string name="reset_settings_dialog">Reset App</string>
+<string name="reset_settings_button_reset">Reset</string>
+<string name="reset_in_progress">Resetting…</string>
+<string name="reset_result_instances_failure">We\'ve been able to delete only %d instances out of %d</string>
+<string name="reset_result_instances_success">We\'ve been able to delete only %d blank forms out of %d</string>
+<string name="reset_result_files_failure">Could not delete file %s</string>
 </resources>

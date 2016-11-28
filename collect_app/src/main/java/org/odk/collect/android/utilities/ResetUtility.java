@@ -9,6 +9,7 @@ import org.jdeferred.DonePipe;
 import org.jdeferred.FailCallback;
 import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
@@ -63,19 +64,19 @@ public class ResetUtility {
         }
 
         if (resetLayers) {
-            promise = deleteFolderContents(promise, Collect.OFFLINE_LAYERS);
+            promise = deleteFolderContents(context, promise, Collect.OFFLINE_LAYERS);
         }
 
         if (resetMetaData) {
-            promise = deleteFolderContents(promise, Collect.METADATA_PATH);
+            promise = deleteFolderContents(context, promise, Collect.METADATA_PATH);
         }
 
         if (resetCache) {
-            promise = deleteFolderContents(promise, Collect.CACHE_PATH);
+            promise = deleteFolderContents(context, promise, Collect.CACHE_PATH);
         }
 
         if (resetOsmDroid) {
-            promise = deleteFolderContents(promise, Collect.OSMDROID_PATH);
+            promise = deleteFolderContents(context, promise, Collect.OSMDROID_PATH);
         }
 
         promise
@@ -95,19 +96,20 @@ public class ResetUtility {
         deferred.resolve(null);
     }
 
-    private Promise deleteFolderContents(Promise promise, final String path) {
+    private Promise deleteFolderContents(final Context context, Promise promise,
+            final String path) {
         return promise.then(new DonePipe() {
             @Override
             public Promise pipeDone(Object result) {
                 DeferredObject def = new DeferredObject<>();
-                deleteFolderContents(def, path);
+                deleteFolderContents(context, def, path);
 
                 return def;
             }
         });
     }
 
-    private void deleteFolderContents(DeferredObject def, String path) {
+    private void deleteFolderContents(Context context, DeferredObject def, String path) {
         File file = new File(path);
         if (file.exists() == false) {
             // Path does not exist, nothing to clean up
@@ -120,7 +122,8 @@ public class ResetUtility {
         for (File f : files) {
             DeletionResult result = deleteRecursive(f);
             if (result.isSuccessful() == false) {
-                def.reject(String.format("Could not delete file %s", result.getPath()));
+                def.reject(String.format(context.getString(R.string.reset_result_files_failure),
+                        result.getPath()));
                 return;
             }
         }
@@ -141,7 +144,7 @@ public class ResetUtility {
         return new DeletionResult(fileOrDirectory.delete(), fileOrDirectory.getPath());
     }
 
-    private void resetForms(Context context, final DeferredObject def) {
+    private void resetForms(final Context context, final DeferredObject def) {
         final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
 
         DeleteFormsTask task = new DeleteFormsTask();
@@ -153,7 +156,8 @@ public class ResetUtility {
                     def.resolve(null);
                 } else {
                     def.reject(
-                            String.format("We've been able to delete only %d blank forms out of %d",
+                            String.format(
+                                    context.getString(R.string.reset_result_instances_success),
                                     deletedForms, allForms.length));
                 }
             }
@@ -162,7 +166,7 @@ public class ResetUtility {
         task.execute(allForms);
     }
 
-    private void resetInstances(Context context, final DeferredObject deferred) {
+    private void resetInstances(final Context context, final DeferredObject deferred) {
         final Long[] allInstances = new DatabaseReader().getAllInstancesIDs(context);
 
         DeleteInstancesTask task = new DeleteInstancesTask();
@@ -174,7 +178,8 @@ public class ResetUtility {
                     deferred.resolve(null);
                 } else {
                     deferred.reject(
-                            String.format("We've been able to delete only %d instances out of %d",
+                            String.format(
+                                    context.getString(R.string.reset_result_instances_failure),
                                     deletedInstances, allInstances.length));
                 }
             }
