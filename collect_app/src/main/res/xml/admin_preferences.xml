@@ -21,6 +21,11 @@
         android:key="admin_pw"
         android:title="Admin Password" />
 
+    <Preference
+        android:id="@+id/change_admin_password"
+        android:key="admin_password"
+        android:title="@string/admin_password" />
+
     <PreferenceCategory android:title="@string/user_access_main_menu" >
         <CheckBoxPreference
             android:id="@+id/edit_saved"
