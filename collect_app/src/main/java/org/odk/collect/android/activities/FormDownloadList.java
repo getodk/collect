@@ -115,7 +115,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private SimpleAdapter mFormListAdapter;
     private ArrayList<HashMap<String, String>> mFormList;
 
-    private boolean mToggled = false;
+    private boolean mToggled = true;
     private int mSelectedCount = 0;
 
     private static final boolean EXIT = true;
