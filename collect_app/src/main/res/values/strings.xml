@@ -231,6 +231,7 @@
 <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
+<string name="change_admin_password">Change Admin Password</string>
 <string name="found_in_menu">Uncheck to hide from menu in Form Entry</string>
 <string name="autosend">Auto Send</string>
 <string name="autosend_wifi">Auto send with Wi-Fi</string>
