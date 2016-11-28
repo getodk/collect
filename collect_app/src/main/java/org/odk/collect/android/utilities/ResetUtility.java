@@ -16,6 +16,7 @@ import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.DatabaseReader;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
+import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
 
@@ -76,7 +77,7 @@ public class ResetUtility {
         }
 
         if (resetOsmDroid) {
-            promise = deleteFolderContents(context, promise, Collect.OSMDROID_PATH);
+            promise = deleteFolderContents(context, promise, OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath());
         }
 
         promise

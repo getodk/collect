@@ -64,10 +64,6 @@ public class Collect extends Application {
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
 
-    public static final String OSMDROID_PATH = Environment.getExternalStorageDirectory()
-            + File.separator + "osmdroid"
-            + File.separator + "tiles";
-
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
     // retain credentials for 7 minutes...
