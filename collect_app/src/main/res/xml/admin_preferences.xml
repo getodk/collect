@@ -14,13 +14,6 @@
         </intent>
     </Preference>
 
-    <org.odk.collect.android.preferences.PasswordDialogPreference
-        android:id="@+id/admin_pw"
-        android:defaultValue=""
-        android:dialogTitle="Change Admin Password"
-        android:key="admin_pw"
-        android:title="Admin Password" />
-
     <Preference
         android:id="@+id/change_admin_password"
         android:key="admin_password"
