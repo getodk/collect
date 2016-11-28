@@ -14,11 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -30,6 +25,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.Toast;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 
 /**
@@ -73,7 +73,8 @@ import android.widget.Toast;
  *
  * <pre>
  *  &lt;bind nodeset="/printerForm/printme" type="string" readonly="true()"
- *     calculate="concat('123','&lt;br&gt;','mycode','&lt;br&gt;','line 1','&lt;br&gt;','line 2')" /&gt;
+ *     calculate="concat('123','&lt;br&gt;','mycode','&lt;br&gt;','line 1','&lt;br&gt;','line 2')"
+ * /&gt;
  * </pre>
  *
  * <p>Depending upon what you supply, the printer may print just a
@@ -88,8 +89,10 @@ import android.widget.Toast;
  * <p>or, to customize the button text and error strings with itext:
  * <pre>
  *      ...
- *      &lt;bind nodeset="/printerForm/printme" type="string" readonly="true()" calculate="concat('&lt;br&gt;',
- *       /printerForm/some_text ,'&lt;br&gt;Text: ', /printerForm/shortened_text ,'&lt;br&gt;Integer: ',
+ *      &lt;bind nodeset="/printerForm/printme" type="string" readonly="true()"
+ * calculate="concat('&lt;br&gt;',
+ *       /printerForm/some_text ,'&lt;br&gt;Text: ', /printerForm/shortened_text
+ * ,'&lt;br&gt;Integer: ',
  *       /printerForm/a_integer ,'&lt;br&gt;Decimal: ', /printerForm/a_decimal )"/&gt;
  *      ...
  *      &lt;itext&gt;
@@ -99,7 +102,8 @@ import android.widget.Toast;
  *            &lt;value form="long"&gt;Print your label&lt;/value&gt;
  *            &lt;value form="buttonText"&gt;Print now&lt;/value&gt;
  *            &lt;value form="noPrinterErrorString"&gt;ODK Sensors Zebra Printer is not installed!
- *             Please install ODK Sensors Framework and ODK Sensors Zebra Printer from Google Play.&lt;/value&gt;
+ *             Please install ODK Sensors Framework and ODK Sensors Zebra Printer from Google
+ * Play.&lt;/value&gt;
  *          &lt;/text&gt;
  *        &lt;/translation&gt;
  *      &lt;/itext&gt;
@@ -110,7 +114,6 @@ import android.widget.Toast;
  * </pre>
  *
  * @author mitchellsundt@gmail.com
- *
  */
 public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
@@ -124,13 +127,14 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
         String appearance = prompt.getAppearanceHint();
         String[] attrs = appearance.split(":");
-        final String intentName = (attrs.length < 2 || attrs[1].length() == 0) ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
+        final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
+                ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
         final String buttonText;
         final String errorString;
-    	String v = mPrompt.getSpecialFormQuestionText("buttonText");
-    	buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
-    	v = mPrompt.getSpecialFormQuestionText("noPrinterErrorString");
-    	errorString = (v != null) ? v : context.getString(R.string.no_printer);
+        String v = mPrompt.getSpecialFormQuestionText("buttonText");
+        buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
+        v = mPrompt.getSpecialFormQuestionText("noPrinterErrorString");
+        errorString = (v != null) ? v : context.getString(R.string.no_printer);
 
         // set button formatting
         mLaunchIntentButton = new Button(getContext());
@@ -144,12 +148,13 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onClick(View v) {
                 try {
-                	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
-                	firePrintingActivity(intentName);
+                    Collect.getInstance().getFormController().setIndexWaitingForData(
+                            mPrompt.getIndex());
+                    firePrintingActivity(intentName);
                 } catch (ActivityNotFoundException e) {
-                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
                     Toast.makeText(getContext(),
-                    		errorString, Toast.LENGTH_SHORT)
+                            errorString, Toast.LENGTH_SHORT)
                             .show();
                 }
             }
@@ -163,48 +168,48 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
         String s = mPrompt.getAnswerText();
 
-       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
-       			intentName, mPrompt.getIndex());
-       	Intent i = new Intent(intentName);
-       	((Activity) getContext()).startActivity(i);
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
+                intentName, mPrompt.getIndex());
+        Intent i = new Intent(intentName);
+        ((Activity) getContext()).startActivity(i);
 
-       	String[] splits;
-       	if ( s != null ) {
-       		splits = s.split("<br>");
-       	} else {
-       		splits = null;
-       	}
+        String[] splits;
+        if (s != null) {
+            splits = s.split("<br>");
+        } else {
+            splits = null;
+        }
 
-    	Bundle printDataBundle = new Bundle();
+        Bundle printDataBundle = new Bundle();
 
-    	String e;
-    	if (splits != null) {
-    		if ( splits.length >= 1 ) {
-    			e = splits[0];
-    			if ( e.length() > 0) {
-    				printDataBundle.putString("BARCODE", e);
-    			}
-    		}
-    		if ( splits.length >= 2 ) {
-    			e = splits[1];
-    			if ( e.length() > 0) {
-    				printDataBundle.putString("QRCODE", e);
-    			}
-    		}
-    		if ( splits.length > 2 ) {
-	    		String[] text = new String[splits.length-2];
-	    		for ( int j = 2 ; j < splits.length ; ++j ) {
-	    			e = splits[j];
-	    			text[j-2] = e;
-	    		}
-				printDataBundle.putStringArray("TEXT-STRINGS", text);
-    		}
-    	}
+        String e;
+        if (splits != null) {
+            if (splits.length >= 1) {
+                e = splits[0];
+                if (e.length() > 0) {
+                    printDataBundle.putString("BARCODE", e);
+                }
+            }
+            if (splits.length >= 2) {
+                e = splits[1];
+                if (e.length() > 0) {
+                    printDataBundle.putString("QRCODE", e);
+                }
+            }
+            if (splits.length > 2) {
+                String[] text = new String[splits.length - 2];
+                for (int j = 2; j < splits.length; ++j) {
+                    e = splits[j];
+                    text[j - 2] = e;
+                }
+                printDataBundle.putStringArray("TEXT-STRINGS", text);
+            }
+        }
 
-    	//send the printDataBundle to the activity via broadcast intent
-    	Intent bcastIntent = new Intent(intentName + ".data");
-    	bcastIntent.putExtra("DATA", printDataBundle);
-    	((Activity) getContext()).sendBroadcast(bcastIntent);
+        //send the printDataBundle to the activity via broadcast intent
+        Intent bcastIntent = new Intent(intentName + ".data");
+        bcastIntent.putExtra("DATA", printDataBundle);
+        ((Activity) getContext()).sendBroadcast(bcastIntent);
     }
 
     @Override
@@ -214,7 +219,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-    	return mPrompt.getAnswerValue();
+        return mPrompt.getAnswerValue();
     }
 
 
@@ -223,7 +228,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
@@ -235,13 +240,14 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
+        return mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    @Override
+    public void cancelWaitingForBinaryData() {
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

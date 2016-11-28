@@ -39,13 +39,13 @@
 
 package org.odk.collect.android.utilities;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.opendatakit.httpclientandroidlib.annotation.ThreadSafe;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Modified BasicCredentialsProvider that will clear the provider
@@ -53,11 +53,10 @@ import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
  * methods to manipulate the credentials in the local context.  You should
  * first check that the credentials exist (which will reset the expiration
  * date), then set them if they are missing.
- * 
- * Largely a cut-and-paste of BasicCredentialsProvider.
- * 
- * @author mitchellsundt@gmail.com
  *
+ * Largely a cut-and-paste of BasicCredentialsProvider.
+ *
+ * @author mitchellsundt@gmail.com
  */
 @ThreadSafe
 public class AgingCredentialsProvider implements CredentialsProvider {
@@ -87,20 +86,19 @@ public class AgingCredentialsProvider implements CredentialsProvider {
             clear();
         }
         nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-        if ( credentials == null ) {
-        	credMap.remove(authscope);
+        if (credentials == null) {
+            credMap.remove(authscope);
         } else {
-        	credMap.put(authscope, credentials);
+            credMap.put(authscope, credentials);
         }
     }
 
     /**
      * Find matching {@link Credentials credentials} for the given authentication scope.
      *
-     * @param map the credentials hash map
+     * @param map       the credentials hash map
      * @param authscope the {@link AuthScope authentication scope}
      * @return the credentials
-     *
      */
     private static Credentials matchCredentials(
             final Map<AuthScope, Credentials> map,
@@ -110,9 +108,9 @@ public class AgingCredentialsProvider implements CredentialsProvider {
         if (creds == null) {
             // Nope.
             // Do a full scan
-            int bestMatchFactor  = -1;
-            AuthScope bestMatch  = null;
-            for (AuthScope current: map.keySet()) {
+            int bestMatchFactor = -1;
+            AuthScope bestMatch = null;
+            for (AuthScope current : map.keySet()) {
                 int factor = authscope.match(current);
                 if (factor > bestMatchFactor) {
                     bestMatchFactor = factor;

@@ -19,6 +19,7 @@
 package org.odk.collect.android.utilities;
 
 import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -54,7 +55,8 @@ public final class ZipUtils {
         }
     }
 
-    public static File extractFirstZipEntry(File zipFile, boolean deleteAfterUnzip) throws IOException {
+    public static File extractFirstZipEntry(File zipFile, boolean deleteAfterUnzip)
+            throws IOException {
         ZipInputStream zipInputStream = null;
         File targetFile = null;
         try {
@@ -74,7 +76,8 @@ public final class ZipUtils {
         return targetFile;
     }
 
-    private static File doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream, ZipEntry zipEntry) throws IOException {
+    private static File doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
+            ZipEntry zipEntry) throws IOException {
         File targetFile;
         String fileName = zipEntry.getName();
 

@@ -14,59 +14,59 @@
 
 package org.odk.collect.android.picasa;
 
-import java.util.List;
-
 import com.google.api.client.util.Data;
 import com.google.api.client.util.Key;
+
+import java.util.List;
 
 /**
  * @author Yaniv Inbar
  */
 public class Entry implements Cloneable {
 
-  @Key("@gd:etag")
-  public String etag;
+    @Key("@gd:etag")
+    public String etag;
 
-  @Key("link")
-  public List<Link> links;
+    @Key("link")
+    public List<Link> links;
 
-  @Key
-  public String summary;
+    @Key
+    public String summary;
 
-  @Key
-  public String title;
+    @Key
+    public String title;
 
-  @Key
-  public String updated;
-  
-  @Key("content")
-  public Content content;
+    @Key
+    public String updated;
 
-  public String getFeedLink() {
-    return Link.find(links, "http://schemas.google.com/g/2005#feed");
-  }
+    @Key("content")
+    public Content content;
 
-  public String getSelfLink() {
-    return Link.find(links, "self");
-  }
-  
-  public String getImageLink() {
-      return content.src;
-  }
-
-  @Override
-  protected Entry clone() {
-    try {
-      @SuppressWarnings("unchecked")
-      Entry result = (Entry) super.clone();
-      Data.deepCopy(this, result);
-      return result;
-    } catch (CloneNotSupportedException e) {
-      throw new IllegalStateException(e);
+    public String getFeedLink() {
+        return Link.find(links, "http://schemas.google.com/g/2005#feed");
     }
-  }
 
-  public String getEditLink() {
-    return Link.find(links, "edit");
-  }
+    public String getSelfLink() {
+        return Link.find(links, "self");
+    }
+
+    public String getImageLink() {
+        return content.src;
+    }
+
+    @Override
+    protected Entry clone() {
+        try {
+            @SuppressWarnings("unchecked")
+            Entry result = (Entry) super.clone();
+            Data.deepCopy(this, result);
+            return result;
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public String getEditLink() {
+        return Link.find(links, "edit");
+    }
 }
