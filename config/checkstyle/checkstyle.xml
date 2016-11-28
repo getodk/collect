@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
+<!-- 
+Taken from 
+https://github.com/noveogroup/android-check/blob/master/android-check-plugin/src/main/resources/checkstyle/checkstyle-easy.xml
+-->
 <!DOCTYPE module PUBLIC
     "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
     "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
