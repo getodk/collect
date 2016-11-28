@@ -330,4 +330,5 @@
   <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>

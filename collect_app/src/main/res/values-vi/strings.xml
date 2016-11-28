@@ -243,4 +243,5 @@
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Địa chỉ máy chủ</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>

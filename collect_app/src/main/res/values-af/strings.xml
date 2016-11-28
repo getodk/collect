@@ -311,4 +311,5 @@
   <string name="change_server_url">Server URL</string>
   <string name="no_blank_search">Soek-veld mag nie leeg wees nie.</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>
