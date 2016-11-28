@@ -1001,87 +1001,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                View startView = View
-                        .inflate(this, R.layout.form_entry_start, null);
-                setTitle(getString(R.string.app_name) + " > "
-                        + formController.getFormTitle());
+                return createViewForFormBeginning(event, advancingPage, formController);
 
-                Drawable image = null;
-                File mediaFolder = formController.getMediaFolder();
-                String mediaDir = mediaFolder.getAbsolutePath();
-                BitmapDrawable bitImage = null;
-                // attempt to load the form-specific logo...
-                // this is arbitrarily silly
-                bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
-                        + "form_logo.png");
-
-                if (bitImage != null && bitImage.getBitmap() != null
-                        && bitImage.getIntrinsicHeight() > 0
-                        && bitImage.getIntrinsicWidth() > 0) {
-                    image = bitImage;
-                }
-
-                if (image == null) {
-                    // show the opendatakit zig...
-                    // image =
-                    // getResources().getDrawable(R.drawable.opendatakit_zig);
-                    ((ImageView) startView.findViewById(R.id.form_start_bling))
-                            .setVisibility(View.GONE);
-                } else {
-                    ImageView v = ((ImageView) startView
-                            .findViewById(R.id.form_start_bling));
-                    v.setImageDrawable(image);
-                    v.setContentDescription(formController.getFormTitle());
-                }
-
-                // change start screen based on navigation prefs
-                String navigationChoice = PreferenceManager
-                        .getDefaultSharedPreferences(this).getString(
-                                PreferencesActivity.KEY_NAVIGATION,
-                                PreferencesActivity.KEY_NAVIGATION);
-                Boolean useSwipe = false;
-                Boolean useButtons = false;
-                ImageView ia = ((ImageView) startView
-                        .findViewById(R.id.image_advance));
-                ImageView ib = ((ImageView) startView
-                        .findViewById(R.id.image_backup));
-                TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
-                TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
-                TextView d = ((TextView) startView.findViewById(R.id.description));
-
-                if (navigationChoice != null) {
-                    if (navigationChoice
-                            .contains(PreferencesActivity.NAVIGATION_SWIPE)) {
-                        useSwipe = true;
-                    }
-                    if (navigationChoice
-                            .contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
-                        useButtons = true;
-                    }
-                }
-                if (useSwipe && !useButtons) {
-                    d.setText(getString(R.string.swipe_instructions,
-                            formController.getFormTitle()));
-                } else if (useButtons && !useSwipe) {
-                    ia.setVisibility(View.GONE);
-                    ib.setVisibility(View.GONE);
-                    ta.setVisibility(View.GONE);
-                    tb.setVisibility(View.GONE);
-                    d.setText(getString(R.string.buttons_instructions,
-                            formController.getFormTitle()));
-                } else {
-                    d.setText(getString(R.string.swipe_buttons_instructions,
-                            formController.getFormTitle()));
-                }
-
-                if (mBackButton.isShown()) {
-                    mBackButton.setEnabled(false);
-                }
-                if (mNextButton.isShown()) {
-                    mNextButton.setEnabled(true);
-                }
-
-                return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 ((TextView) endView.findViewById(R.id.description))
@@ -1263,6 +1184,25 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
     }
 
+    private View createViewForFormBeginning(int event, boolean advancingPage,
+            FormController formController) {
+        try {
+            event  = formController.stepToNextScreenEvent();
+
+            if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                createRepeatDialog();
+                // Return blank view because code expects to add something to the layout
+                return new View(this);
+            }
+
+        } catch (JavaRosaException e) {
+            Log.e(t, e.getMessage(), e);
+            createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+        }
+
+        return createView(event, advancingPage);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent mv) {
         boolean handled = mGestureDetector.onTouchEvent(mv);
@@ -1360,6 +1300,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
             if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 int event = formController.stepToPreviousScreenEvent();
+
+                // If we are the begining of the form, lets revert our actions and ignore
+                // this swipe
+                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    event = formController.stepToNextScreenEvent();
+                    mBeenSwiped = false;
+                    return;
+                }
 
                 if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
                         || event == FormEntryController.EVENT_GROUP
@@ -1573,6 +1521,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .getFormController();
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createRepeatDialog", "show");
+
+        // In some cases dialog might be present twice because refreshView() is being called
+        // from onResume(). This ensures that we do not preset this modal dialog if it's already
+        // visible.
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            return;
+        }
+
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
