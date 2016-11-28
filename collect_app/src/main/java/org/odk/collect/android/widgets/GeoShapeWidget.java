@@ -53,167 +53,170 @@ import java.util.ArrayList;
  */
 
 public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
-	public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
-	public static final String READ_ONLY = "readOnly";
-	private final boolean mReadOnly;
-	public static final String SHAPE_LOCATION = "gp";
-	public static final String GOOGLE_MAP_KEY = "google_maps";
-	private Button createShapeButton;
-	private Button viewShapeButton;
-	public SharedPreferences sharedPreferences;
-	public String mapSDK;
+    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
+    public static final String READ_ONLY = "readOnly";
+    private final boolean mReadOnly;
+    public static final String SHAPE_LOCATION = "gp";
+    public static final String GOOGLE_MAP_KEY = "google_maps";
+    private Button createShapeButton;
+    private Button viewShapeButton;
+    public SharedPreferences sharedPreferences;
+    public String mapSDK;
 
-	private TextView mStringAnswer;
-	private TextView mAnswerDisplay;
+    private TextView mStringAnswer;
+    private TextView mAnswerDisplay;
 
-	public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
-		// assemble the widget...
+    public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        // assemble the widget...
 
-		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-		params.setMargins(7, 5, 7, 5);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
-		mReadOnly = prompt.isReadOnly();
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mReadOnly = prompt.isReadOnly();
 
-		mStringAnswer = new TextView(getContext());
-		mStringAnswer.setId(QuestionWidget.newUniqueId());
+        mStringAnswer = new TextView(getContext());
+        mStringAnswer.setId(QuestionWidget.newUniqueId());
 
-		mAnswerDisplay = new TextView(getContext());
-		mAnswerDisplay.setId(QuestionWidget.newUniqueId());
-		mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		mAnswerDisplay.setGravity(Gravity.CENTER);
+        mAnswerDisplay = new TextView(getContext());
+        mAnswerDisplay.setId(QuestionWidget.newUniqueId());
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mAnswerDisplay.setGravity(Gravity.CENTER);
 
-		createShapeButton = new Button(getContext());
-		createShapeButton.setId(QuestionWidget.newUniqueId());
-		createShapeButton.setText(getContext().getString(R.string.get_shape));
-		createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		createShapeButton.setPadding(20, 20, 20, 20);
-		createShapeButton.setLayoutParams(params);
+        createShapeButton = new Button(getContext());
+        createShapeButton.setId(QuestionWidget.newUniqueId());
+        createShapeButton.setText(getContext().getString(R.string.get_shape));
+        createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        createShapeButton.setPadding(20, 20, 20, 20);
+        createShapeButton.setLayoutParams(params);
 
-		createShapeButton.setOnClickListener(new OnClickListener() {
+        createShapeButton.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
-				Intent i = null;
-				if (mapSDK.equals(GOOGLE_MAP_KEY)){
-					i = new Intent(getContext(), GeoShapeGoogleMapActivity.class);
-				}else {
-					i = new Intent(getContext(), GeoShapeOsmMapActivity.class);
-				}
-				String s = mStringAnswer.getText().toString();
-				if ( s.length() != 0 ) {
-					i.putExtra(SHAPE_LOCATION, s);
-				}
-				((Activity) getContext()).startActivityForResult(i,FormEntryActivity.GEOSHAPE_CAPTURE);
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Collect.getInstance().getFormController().setIndexWaitingForData(
+                        mPrompt.getIndex());
+                Intent i = null;
+                if (mapSDK.equals(GOOGLE_MAP_KEY)) {
+                    i = new Intent(getContext(), GeoShapeGoogleMapActivity.class);
+                } else {
+                    i = new Intent(getContext(), GeoShapeOsmMapActivity.class);
+                }
+                String s = mStringAnswer.getText().toString();
+                if (s.length() != 0) {
+                    i.putExtra(SHAPE_LOCATION, s);
+                }
+                ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.GEOSHAPE_CAPTURE);
+            }
+        });
 
-		LinearLayout answerLayout = new LinearLayout(getContext());
-		answerLayout.setOrientation(LinearLayout.VERTICAL);
-		answerLayout.addView(createShapeButton);
-		answerLayout.addView(mAnswerDisplay);
-		addAnswerView(answerLayout);
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(createShapeButton);
+        answerLayout.addView(mAnswerDisplay);
+        addAnswerView(answerLayout);
 
-		boolean dataAvailable = false;
-		String s = prompt.getAnswerText();
-		if (s != null && !s.equals("")) {
-			dataAvailable = true;
-			setBinaryData(s);
-		}
+        boolean dataAvailable = false;
+        String s = prompt.getAnswerText();
+        if (s != null && !s.equals("")) {
+            dataAvailable = true;
+            setBinaryData(s);
+        }
 
-		updateButtonLabelsAndVisibility(dataAvailable);
-	}
+        updateButtonLabelsAndVisibility(dataAvailable);
+    }
 
 
-	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-		if (dataAvailable){
-			createShapeButton.setText(getContext().getString(R.string.geoshape_view_change_location));
-		}else{
-			createShapeButton.setText(getContext().getString(R.string.get_shape));
-		}
-	}
+    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+        if (dataAvailable) {
+            createShapeButton.setText(
+                    getContext().getString(R.string.geoshape_view_change_location));
+        } else {
+            createShapeButton.setText(getContext().getString(R.string.get_shape));
+        }
+    }
 
-	@Override
-	public void setBinaryData(Object answer) {
-		// TODO Auto-generated method stub
-		String s = (String) answer.toString();
-		mStringAnswer.setText(s);
-		mAnswerDisplay.setText(s);
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    @Override
+    public void setBinaryData(Object answer) {
+        // TODO Auto-generated method stub
+        String s = (String) answer.toString();
+        mStringAnswer.setText(s);
+        mAnswerDisplay.setText(s);
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-		// TODO Auto-generated method stub
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    @Override
+    public void cancelWaitingForBinaryData() {
+        // TODO Auto-generated method stub
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
-	@Override
-	public boolean isWaitingForBinaryData() {
-		Boolean test = mPrompt.getIndex().equals(
-				Collect.getInstance().getFormController()
-						.getIndexWaitingForData());
+    @Override
+    public boolean isWaitingForBinaryData() {
+        Boolean test = mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController()
+                        .getIndexWaitingForData());
 
-		return mPrompt.getIndex().equals(
-				Collect.getInstance().getFormController()
-						.getIndexWaitingForData());
-	}
+        return mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController()
+                        .getIndexWaitingForData());
+    }
 
-	@Override
-	public IAnswerData getAnswer() {
-		// TODO Auto-generated method stub
+    @Override
+    public IAnswerData getAnswer() {
+        // TODO Auto-generated method stub
 
-		GeoShapeData data = new GeoShapeData();
-		ArrayList<double[]> list = new ArrayList<double[]>();
-		String s = mStringAnswer.getText().toString();
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			try {
-				String[] sa = s.split(";");
-				for (int i=0;i<sa.length;i++){
-					String[] sp = sa[i].trim().split(" ");
-					double gp[] = new double[4];
-					gp[0] = Double.valueOf(sp[0]).doubleValue();
-					gp[1] = Double.valueOf(sp[1]).doubleValue();
-					gp[2] = Double.valueOf(sp[2]).doubleValue();
-					gp[3] = Double.valueOf(sp[3]).doubleValue();
-					list.add(gp);
-				}
-				GeoShape shape = new GeoShape(list);
-				return new StringData(s);
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}
-	}
+        GeoShapeData data = new GeoShapeData();
+        ArrayList<double[]> list = new ArrayList<double[]>();
+        String s = mStringAnswer.getText().toString();
+        if (s == null || s.equals("")) {
+            return null;
+        } else {
+            try {
+                String[] sa = s.split(";");
+                for (int i = 0; i < sa.length; i++) {
+                    String[] sp = sa[i].trim().split(" ");
+                    double gp[] = new double[4];
+                    gp[0] = Double.valueOf(sp[0]).doubleValue();
+                    gp[1] = Double.valueOf(sp[1]).doubleValue();
+                    gp[2] = Double.valueOf(sp[2]).doubleValue();
+                    gp[3] = Double.valueOf(sp[3]).doubleValue();
+                    list.add(gp);
+                }
+                GeoShape shape = new GeoShape(list);
+                return new StringData(s);
+            } catch (NumberFormatException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
 
-	@Override
-	public void clearAnswer() {
-		// TODO Auto-generated method stub
-		mStringAnswer.setText(null);
-		mAnswerDisplay.setText(null);
+    @Override
+    public void clearAnswer() {
+        // TODO Auto-generated method stub
+        mStringAnswer.setText(null);
+        mAnswerDisplay.setText(null);
 
-	}
+    }
 
-	@Override
-	public void setFocus(Context context) {
-		// TODO Auto-generated method stub
-		InputMethodManager inputManager = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    @Override
+    public void setFocus(Context context) {
+        // TODO Auto-generated method stub
+        InputMethodManager inputManager = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
 
-	}
+    }
 
-	@Override
-	public void setOnLongClickListener(OnLongClickListener l) {
-		// TODO Auto-generated method stub
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
 }

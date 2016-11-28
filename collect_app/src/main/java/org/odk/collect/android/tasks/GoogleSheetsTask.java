@@ -14,16 +14,16 @@
 
 package org.odk.collect.android.tasks;
 
-import java.io.IOException;
-
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+
+import org.odk.collect.android.listeners.InstanceUploaderListener;
+
+import java.io.IOException;
 
 /**
  * @author carlhartung (chartung@nafundi.com)
@@ -52,7 +52,8 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
     protected String authenticate(Context context, String mGoogleUserName) throws IOException,
             GoogleAuthException {
         // use google auth utils to get oauth2 token
-        String scope = "oauth2:https://spreadsheets.google.com/feeds https://picasaweb.google.com/data/";
+        String scope =
+                "oauth2:https://spreadsheets.google.com/feeds https://picasaweb.google.com/data/";
         String token = null;
 
         if (mGoogleUserName == null) {

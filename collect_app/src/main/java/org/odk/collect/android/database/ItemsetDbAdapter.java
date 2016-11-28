@@ -1,17 +1,16 @@
-
 package org.odk.collect.android.database;
-
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import org.odk.collect.android.application.Collect;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import org.odk.collect.android.application.Collect;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class ItemsetDbAdapter {
 
@@ -78,9 +77,9 @@ public class ItemsetDbAdapter {
      * Open the database. If it cannot be opened, try to create a new instance
      * of the database. If it cannot be created, throw an exception to signal
      * the failure
-     * 
+     *
      * @return this (self reference, allowing this to be chained in an
-     *         initialization call)
+     * initialization call)
      * @throws SQLException if the database could be neither opened or created
      */
     public ItemsetDbAdapter open() throws SQLException {
@@ -95,10 +94,10 @@ public class ItemsetDbAdapter {
 
     public boolean createTable(String formHash, String pathHash, String[] columns, String path) {
         StringBuilder sb = new StringBuilder();
-        
+
         // get md5 of the path to itemset.csv, which is unique per form
         // the md5 is easier to use because it doesn't have chars like '/'
-                
+
         sb.append("create table " + DATABASE_TABLE + pathHash
                 + " (_id integer primary key autoincrement ");
         for (int j = 0; j < columns.length; j++) {
@@ -170,7 +169,7 @@ public class ItemsetDbAdapter {
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-            path
+                path
         };
         mDb.delete(ITEMSET_TABLE, where, whereArgs);
     }
@@ -178,7 +177,7 @@ public class ItemsetDbAdapter {
     public Cursor getItemsets(String path) {
         String selection = KEY_PATH + "=?";
         String[] selectionArgs = {
-            path
+                path
         };
         Cursor c = mDb.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
         return c;
@@ -197,11 +196,11 @@ public class ItemsetDbAdapter {
 
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-            path
+                path
         };
         mDb.delete(ITEMSET_TABLE, where, whereArgs);
     }
-    
+
     public static String getMd5FromString(String toEncode) {
         MessageDigest md = null;
         try {
@@ -212,7 +211,7 @@ public class ItemsetDbAdapter {
         }
         md.update(toEncode.getBytes());
         byte[] digest = md.digest();
-        BigInteger bigInt = new BigInteger(1,digest);
+        BigInteger bigInt = new BigInteger(1, digest);
         String hashtext = bigInt.toString(16);
         return hashtext;
     }

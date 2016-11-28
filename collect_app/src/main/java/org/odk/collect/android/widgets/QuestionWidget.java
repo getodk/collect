@@ -14,17 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.text.method.LinkMovementMethod;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.AudioPlayListener;
-import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.views.MediaLayout;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -43,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
@@ -62,8 +52,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     /**
      * Generate a unique ID to keep Android UI happy when the screen orientation
      * changes.
-     * 
-     * @return
      */
     public static int newUniqueId() {
         return ++idGenerator;
@@ -98,7 +86,8 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.e(t, String.format("Error occured in MediaPlayer. what = %1$d, extra = %2$d", what, extra));
+                Log.e(t, String.format("Error occured in MediaPlayer. what = %1$d, extra = %2$d",
+                        what, extra));
                 return false;
             }
         });
@@ -145,7 +134,8 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext(), mPlayer);
         questionMediaLayout.setId(QuestionWidget.newUniqueId()); // assign random id
-        questionMediaLayout.setAVT(p.getIndex(), "", questionText, audioURI, imageURI, videoURI, bigImageURI);
+        questionMediaLayout.setAVT(p.getIndex(), "", questionText, audioURI, imageURI, videoURI,
+                bigImageURI);
         questionMediaLayout.setAudioListener(this);
 
         String playColorString = p.getFormElement().getAdditionalAttribute(null, "playColor");
@@ -158,7 +148,8 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         }
         questionMediaLayout.setPlayTextColor(mPlayColor);
 
-        String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null, "playBackgroundColor");
+        String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null,
+                "playBackgroundColor");
         if (playBackgroundColorString != null) {
             try {
                 mPlayBackgroundColor = Color.parseColor(playBackgroundColorString);
@@ -175,7 +166,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         return mQuestionMediaLayout;
     }
 
-    public TextView getHelpTextView () {
+    public TextView getHelpTextView() {
         return mHelpTextView;
     }
 
@@ -191,7 +182,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         return mPrompt;
     }
 
-    public MediaLayout getQuestionMediaView () {
+    public MediaLayout getQuestionMediaView() {
         return mQuestionMediaLayout;
     }
 
@@ -202,9 +193,9 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         for (int index = 0; index < childCount; index++) {
             View child = viewGroup.getChildAt(index);
             if (child instanceof ImageView) {
-                images.add((ImageView)child);
+                images.add((ImageView) child);
             } else if (child instanceof ViewGroup) {
-                recycleDrawablesRecursive((ViewGroup)child, images);
+                recycleDrawablesRecursive((ViewGroup) child, images);
             }
         }
         viewGroup.destroyDrawingCache();
@@ -220,7 +211,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             Drawable d = imageView.getDrawable();
             if (d != null && d instanceof BitmapDrawable) {
                 imageView.setImageDrawable(null);
-                BitmapDrawable bd = (BitmapDrawable)d;
+                BitmapDrawable bd = (BitmapDrawable) d;
                 Bitmap bmp = bd.getBitmap();
                 if (bmp != null) {
                     bmp.recycle();
@@ -240,14 +231,12 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
 
     /**
      * Override this to implement fling gesture suppression (e.g. for embedded WebView treatments).
-     * @param e1
-     * @param e2
-     * @param velocityX
-     * @param velocityY
+     *
      * @return true if the fling gesture should be suppressed
      */
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-       return false;
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
+            float velocityY) {
+        return false;
     }
 
     /**
@@ -265,14 +254,14 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             Log.e(t, "cannot add a null view as questionMediaLayout");
             return;
         }
-            // default for questionmedialayout
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        // default for questionmedialayout
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
-
 
 
     /**
@@ -286,7 +275,8 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         }
 
         // default for helptext
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, mQuestionMediaLayout.getId());
         params.setMargins(10, 0, 10, 0);
@@ -318,15 +308,15 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      * (below the help text or question text if there is no help text)
      * If you have many elements, use this first
      * and use the standard addView(view, params) to place the rest
-     * @param v
      */
     protected void addAnswerView(View v) {
         if (v == null) {
             Log.e(t, "cannot add a null view as an answerView");
             return;
         }
-            // default place to add answer
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        // default place to add answer
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         if (mHelpTextView.getVisibility() == View.VISIBLE) {
             params.addRule(RelativeLayout.BELOW, mHelpTextView.getId());
@@ -367,7 +357,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     }
 
     @Override
-    protected void onWindowVisibilityChanged (int visibility) {
+    protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
             if (mPlayer.isPlaying()) {
                 mPlayer.stop();
@@ -375,7 +365,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             }
         }
     }
-    
+
     public void stopAudio() {
         if (mPlayer.isPlaying()) {
             mPlayer.stop();

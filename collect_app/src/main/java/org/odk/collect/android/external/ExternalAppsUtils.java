@@ -18,10 +18,8 @@
 
 package org.odk.collect.android.external;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import android.content.Intent;
+import android.database.Cursor;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -40,11 +38,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
-import android.content.Intent;
-import android.database.Cursor;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- *
  * Author: Meletis Margaritis
  * Date: 30/07/13
  * Time: 10:44
@@ -93,10 +92,12 @@ public class ExternalAppsUtils {
         return parameters;
     }
 
-    public static void populateParameters(Intent intent, Map<String, String> exParams, TreeReference reference) throws ExternalParamsException {
+    public static void populateParameters(Intent intent, Map<String, String> exParams,
+            TreeReference reference) throws ExternalParamsException {
         FormDef formDef = Collect.getInstance().getFormController().getFormDef();
         FormInstance formInstance = formDef.getInstance();
-        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
+        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(),
+                reference);
 
         if (exParams != null) {
             for (Map.Entry<String, String> paramEntry : exParams.entrySet()) {
@@ -120,12 +121,15 @@ public class ExternalAppsUtils {
                     } else if (paramEntryValue.equals("instanceProviderID()")) {
                         // instanceProviderID returns -1 if the current instance has not been
                         // saved to disk already
-                        String path = Collect.getInstance().getFormController().getInstancePath().getAbsolutePath();
+                        String path =
+                                Collect.getInstance().getFormController().getInstancePath()
+                                        .getAbsolutePath();
                         String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
                         String selectionArgs[] = {path};
-                        
+
                         String instanceProviderID = "-1";
-                        Cursor c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                        Cursor c = Collect.getInstance().getContentResolver().query(
+                                InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
                         if (c != null && c.getCount() > 0) {
                             // should only ever be one
                             c.moveToFirst();
@@ -134,18 +138,20 @@ public class ExternalAppsUtils {
                         if (c != null) {
                             c.close();
                         }
-                       
+
                         result = instanceProviderID;
                     } else {
                         // treat this is a function
-                        XPathExpression xPathExpression = XPathParseTool.parseXPath(paramEntryValue);
+                        XPathExpression xPathExpression = XPathParseTool.parseXPath(
+                                paramEntryValue);
                         result = xPathExpression.eval(formInstance, evaluationContext);
                     }
                     if (result != null && result instanceof Serializable) {
                         intent.putExtra(paramEntry.getKey(), (Serializable) result);
                     }
                 } catch (Exception e) {
-                    throw new ExternalParamsException("Could not evaluate '" + paramEntryValue + "'", e);
+                    throw new ExternalParamsException(
+                            "Could not evaluate '" + paramEntryValue + "'", e);
                 }
             }
         }

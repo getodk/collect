@@ -21,7 +21,12 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -30,7 +35,7 @@ import org.odk.collect.android.application.Collect;
 
 /**
  * Widget that allows user to open URLs from within the form
- * 
+ *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class UrlWidget extends QuestionWidget {

@@ -50,303 +50,308 @@ import java.text.DecimalFormat;
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
-	public static final String LOCATION = "gp";
-	public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
-	public static final String READ_ONLY = "readOnly";
-	public static final String DRAGGABLE_ONLY = "draggable";
+    public static final String LOCATION = "gp";
+    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
+    public static final String READ_ONLY = "readOnly";
+    public static final String DRAGGABLE_ONLY = "draggable";
 
-	public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
+    public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
-	private Button mGetLocationButton;
-	private Button mViewButton;
-	private SharedPreferences sharedPreferences;
-	private String mapSDK;
-	private String GOOGLE_MAP_KEY = "google_maps";
-	private String OSM_MAP_KEY = "osmdroid";
-	private TextView mStringAnswer;
-	private TextView mAnswerDisplay;
-	private final boolean mReadOnly;
-	private final boolean mUseMapsV2;
-	private boolean mUseMaps;
-	private String mAppearance;
-	private double mAccuracyThreshold;
-	private boolean draggable = true;
+    private Button mGetLocationButton;
+    private Button mViewButton;
+    private SharedPreferences sharedPreferences;
+    private String mapSDK;
+    private String GOOGLE_MAP_KEY = "google_maps";
+    private String OSM_MAP_KEY = "osmdroid";
+    private TextView mStringAnswer;
+    private TextView mAnswerDisplay;
+    private final boolean mReadOnly;
+    private final boolean mUseMapsV2;
+    private boolean mUseMaps;
+    private String mAppearance;
+    private double mAccuracyThreshold;
+    private boolean draggable = true;
 
-	public GeoPointWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+    public GeoPointWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
 
-		// Determine the activity threshold to use
-		String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-		if ( acc != null && acc.length() != 0 ) {
-			mAccuracyThreshold = Double.parseDouble(acc);
-		} else {
-			mAccuracyThreshold = DEFAULT_LOCATION_ACCURACY;
-		}
+        // Determine the activity threshold to use
+        String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        if (acc != null && acc.length() != 0) {
+            mAccuracyThreshold = Double.parseDouble(acc);
+        } else {
+            mAccuracyThreshold = DEFAULT_LOCATION_ACCURACY;
+        }
 
-		// Determine whether or not to use the plain, maps, or mapsV2 activity
-		mAppearance = prompt.getAppearanceHint();
-		// use mapsV2 if it is available and was requested;
-		mUseMapsV2 = CompatibilityUtils.useMapsV2(context);
-		if ( mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2 ) {
-			draggable = true;
-			mUseMaps = true;
-		}else if (mAppearance != null && mAppearance.equalsIgnoreCase("maps") && mUseMapsV2) {
-			draggable = false;
-			mUseMaps = true;
-		}else{
-			mUseMaps = false;
-		}
+        // Determine whether or not to use the plain, maps, or mapsV2 activity
+        mAppearance = prompt.getAppearanceHint();
+        // use mapsV2 if it is available and was requested;
+        mUseMapsV2 = CompatibilityUtils.useMapsV2(context);
+        if (mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2) {
+            draggable = true;
+            mUseMaps = true;
+        } else if (mAppearance != null && mAppearance.equalsIgnoreCase("maps") && mUseMapsV2) {
+            draggable = false;
+            mUseMaps = true;
+        } else {
+            mUseMaps = false;
+        }
 
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
 
-		mReadOnly = prompt.isReadOnly();
+        mReadOnly = prompt.isReadOnly();
 
-		// assemble the widget...
-		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-		params.setMargins(7, 5, 7, 5);
+        // assemble the widget...
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
 
-		mStringAnswer = new TextView(getContext());
-		mStringAnswer.setId(QuestionWidget.newUniqueId());
-		mAnswerDisplay = new TextView(getContext());
-		mAnswerDisplay.setId(QuestionWidget.newUniqueId());
-		mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		mAnswerDisplay.setGravity(Gravity.CENTER);
+        mStringAnswer = new TextView(getContext());
+        mStringAnswer.setId(QuestionWidget.newUniqueId());
+        mAnswerDisplay = new TextView(getContext());
+        mAnswerDisplay.setId(QuestionWidget.newUniqueId());
+        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mAnswerDisplay.setGravity(Gravity.CENTER);
 
-		// setup play button
-		mViewButton = new Button(getContext());
-		mViewButton.setId(QuestionWidget.newUniqueId());
-		mViewButton.setText(getContext().getString(R.string.get_point));
-		mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		mViewButton.setPadding(20, 20, 20, 20);
-		mViewButton.setLayoutParams(params);
+        // setup play button
+        mViewButton = new Button(getContext());
+        mViewButton.setId(QuestionWidget.newUniqueId());
+        mViewButton.setText(getContext().getString(R.string.get_point));
+        mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mViewButton.setPadding(20, 20, 20, 20);
+        mViewButton.setLayoutParams(params);
 
-		mGetLocationButton = new Button(getContext());
-		mGetLocationButton.setId(QuestionWidget.newUniqueId());
-		mGetLocationButton.setPadding(20, 20, 20, 20);
-		mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		mGetLocationButton.setEnabled(!prompt.isReadOnly());
-		mGetLocationButton.setLayoutParams(params);
+        mGetLocationButton = new Button(getContext());
+        mGetLocationButton.setId(QuestionWidget.newUniqueId());
+        mGetLocationButton.setPadding(20, 20, 20, 20);
+        mGetLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mGetLocationButton.setEnabled(!prompt.isReadOnly());
+        mGetLocationButton.setLayoutParams(params);
 
-		// when you press the button
-		mGetLocationButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Collect.getInstance()
-						.getActivityLogger()
-						.logInstanceAction(this, "recordLocation", "click",
-								mPrompt.getIndex());
-				Intent i = null;
-				if ( mUseMapsV2 && mUseMaps ) {
-					if (mapSDK.equals(GOOGLE_MAP_KEY)){
-						i = new Intent(getContext(), GeoPointMapActivity.class);
-					}else{
-						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
-					}
-				}else{
-					i = new Intent(getContext(), GeoPointActivity.class);
-				}
+        // when you press the button
+        mGetLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "recordLocation", "click",
+                                mPrompt.getIndex());
+                Intent i = null;
+                if (mUseMapsV2 && mUseMaps) {
+                    if (mapSDK.equals(GOOGLE_MAP_KEY)) {
+                        i = new Intent(getContext(), GeoPointMapActivity.class);
+                    } else {
+                        i = new Intent(getContext(), GeoPointOsmMapActivity.class);
+                    }
+                } else {
+                    i = new Intent(getContext(), GeoPointActivity.class);
+                }
 
-				String s = mStringAnswer.getText().toString();
-				if ( s.length() != 0 ) {
-					String[] sa = s.split(" ");
-					double gp[] = new double[4];
-					gp[0] = Double.valueOf(sa[0]).doubleValue();
-					gp[1] = Double.valueOf(sa[1]).doubleValue();
-					gp[2] = Double.valueOf(sa[2]).doubleValue();
-					gp[3] = Double.valueOf(sa[3]).doubleValue();
-					i.putExtra(LOCATION, gp);
-				}
-				i.putExtra(READ_ONLY, mReadOnly);
-				i.putExtra(DRAGGABLE_ONLY, draggable);
-				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
-				Collect.getInstance().getFormController()
-						.setIndexWaitingForData(mPrompt.getIndex());
-				((Activity) getContext()).startActivityForResult(i,
-						FormEntryActivity.LOCATION_CAPTURE);
-			}
-		});
+                String s = mStringAnswer.getText().toString();
+                if (s.length() != 0) {
+                    String[] sa = s.split(" ");
+                    double gp[] = new double[4];
+                    gp[0] = Double.valueOf(sa[0]).doubleValue();
+                    gp[1] = Double.valueOf(sa[1]).doubleValue();
+                    gp[2] = Double.valueOf(sa[2]).doubleValue();
+                    gp[3] = Double.valueOf(sa[3]).doubleValue();
+                    i.putExtra(LOCATION, gp);
+                }
+                i.putExtra(READ_ONLY, mReadOnly);
+                i.putExtra(DRAGGABLE_ONLY, draggable);
+                i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
+                Collect.getInstance().getFormController()
+                        .setIndexWaitingForData(mPrompt.getIndex());
+                ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.LOCATION_CAPTURE);
+            }
+        });
 
-		// finish complex layout
-		// control what gets shown with setVisibility(View.GONE)
-		LinearLayout answerLayout = new LinearLayout(getContext());
-		answerLayout.setOrientation(LinearLayout.VERTICAL);
-		answerLayout.addView(mGetLocationButton);
-		answerLayout.addView(mViewButton);
-		answerLayout.addView(mAnswerDisplay);
-		addAnswerView(answerLayout);
+        // finish complex layout
+        // control what gets shown with setVisibility(View.GONE)
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mGetLocationButton);
+        answerLayout.addView(mViewButton);
+        answerLayout.addView(mAnswerDisplay);
+        addAnswerView(answerLayout);
 
-		// Set vars Label/text for button enable view or collect...
-		boolean dataAvailable = false;
-		String s = prompt.getAnswerText();
-		if (s != null && !s.equals("")) {
-			dataAvailable = true;
-			setBinaryData(s);
-		}
-		updateButtonLabelsAndVisibility(dataAvailable);
+        // Set vars Label/text for button enable view or collect...
+        boolean dataAvailable = false;
+        String s = prompt.getAnswerText();
+        if (s != null && !s.equals("")) {
+            dataAvailable = true;
+            setBinaryData(s);
+        }
+        updateButtonLabelsAndVisibility(dataAvailable);
 
-	}
+    }
 
-	private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-		// BUT for mapsV2, we only show the mGetLocationButton, altering its text.
-		// for maps, we show the view button.
+    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+        // BUT for mapsV2, we only show the mGetLocationButton, altering its text.
+        // for maps, we show the view button.
 
-		if (mUseMapsV2 && mUseMaps) {
-			// show the GetLocation button
-			mGetLocationButton.setVisibility(View.VISIBLE);
-			// hide the view button
-			mViewButton.setVisibility(View.GONE);
-			if (mReadOnly) {
-				//READ_ONLY View
-				mGetLocationButton.setText(getContext().getString(R.string.geopoint_view_read_only));
-			} else {
-				String s = mStringAnswer.getText().toString();
-				if (s.length() != 0){
-					mGetLocationButton.setText(getContext().getString(R.string.view_change_location));
-				}else{
-					mGetLocationButton.setText(getContext().getString(R.string.get_point));
-				}
-			}
-		} else {
-			// if it is read-only, hide the get-location button...
-			if (mReadOnly) {
-				mGetLocationButton.setVisibility(View.GONE);
-			} else {
-				mGetLocationButton.setVisibility(View.VISIBLE);
-				mGetLocationButton.setText(getContext().getString(dataAvailable ? R.string.get_point : R.string.get_point));
-			}
+        if (mUseMapsV2 && mUseMaps) {
+            // show the GetLocation button
+            mGetLocationButton.setVisibility(View.VISIBLE);
+            // hide the view button
+            mViewButton.setVisibility(View.GONE);
+            if (mReadOnly) {
+                //READ_ONLY View
+                mGetLocationButton.setText(
+                        getContext().getString(R.string.geopoint_view_read_only));
+            } else {
+                String s = mStringAnswer.getText().toString();
+                if (s.length() != 0) {
+                    mGetLocationButton.setText(
+                            getContext().getString(R.string.view_change_location));
+                } else {
+                    mGetLocationButton.setText(getContext().getString(R.string.get_point));
+                }
+            }
+        } else {
+            // if it is read-only, hide the get-location button...
+            if (mReadOnly) {
+                mGetLocationButton.setVisibility(View.GONE);
+            } else {
+                mGetLocationButton.setVisibility(View.VISIBLE);
+                mGetLocationButton.setText(getContext().getString(
+                        dataAvailable ? R.string.get_point : R.string.get_point));
+            }
 
-			if (mUseMaps) {
-				// show the view button
-				mViewButton.setVisibility(View.VISIBLE);
-				mViewButton.setEnabled(dataAvailable);
-			} else {
-				mViewButton.setVisibility(View.GONE);
-			}
-		}
-	}
+            if (mUseMaps) {
+                // show the view button
+                mViewButton.setVisibility(View.VISIBLE);
+                mViewButton.setEnabled(dataAvailable);
+            } else {
+                mViewButton.setVisibility(View.GONE);
+            }
+        }
+    }
 
-	@Override
-	public void clearAnswer() {
-		mStringAnswer.setText(null);
-		mAnswerDisplay.setText(null);
-		updateButtonLabelsAndVisibility(false);
-	}
+    @Override
+    public void clearAnswer() {
+        mStringAnswer.setText(null);
+        mAnswerDisplay.setText(null);
+        updateButtonLabelsAndVisibility(false);
+    }
 
-	@Override
-	public IAnswerData getAnswer() {
-		String s = mStringAnswer.getText().toString();
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			try {
-				// segment lat and lon
-				String[] sa = s.split(" ");
-				double gp[] = new double[4];
-				gp[0] = Double.valueOf(sa[0]).doubleValue();
-				gp[1] = Double.valueOf(sa[1]).doubleValue();
-				gp[2] = Double.valueOf(sa[2]).doubleValue();
-				gp[3] = Double.valueOf(sa[3]).doubleValue();
+    @Override
+    public IAnswerData getAnswer() {
+        String s = mStringAnswer.getText().toString();
+        if (s == null || s.equals("")) {
+            return null;
+        } else {
+            try {
+                // segment lat and lon
+                String[] sa = s.split(" ");
+                double gp[] = new double[4];
+                gp[0] = Double.valueOf(sa[0]).doubleValue();
+                gp[1] = Double.valueOf(sa[1]).doubleValue();
+                gp[2] = Double.valueOf(sa[2]).doubleValue();
+                gp[3] = Double.valueOf(sa[3]).doubleValue();
 
-				return new GeoPointData(gp);
-			} catch (Exception NumberFormatException) {
-				return null;
-			}
-		}
-	}
+                return new GeoPointData(gp);
+            } catch (Exception NumberFormatException) {
+                return null;
+            }
+        }
+    }
 
-	private String truncateDouble(String s) {
-		DecimalFormat df = new DecimalFormat("#.##");
-		return df.format(Double.valueOf(s));
-	}
+    private String truncateDouble(String s) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(Double.valueOf(s));
+    }
 
-	private String formatGps(double coordinates, String type) {
-		String location = Double.toString(coordinates);
-		String degreeSign = "\u00B0";
-		String degree = location.substring(0, location.indexOf("."))
-				+ degreeSign;
-		location = "0." + location.substring(location.indexOf(".") + 1);
-		double temp = Double.valueOf(location) * 60;
-		location = Double.toString(temp);
-		String mins = location.substring(0, location.indexOf(".")) + "'";
+    private String formatGps(double coordinates, String type) {
+        String location = Double.toString(coordinates);
+        String degreeSign = "\u00B0";
+        String degree = location.substring(0, location.indexOf("."))
+                + degreeSign;
+        location = "0." + location.substring(location.indexOf(".") + 1);
+        double temp = Double.valueOf(location) * 60;
+        location = Double.toString(temp);
+        String mins = location.substring(0, location.indexOf(".")) + "'";
 
-		location = "0." + location.substring(location.indexOf(".") + 1);
-		temp = Double.valueOf(location) * 60;
-		location = Double.toString(temp);
-		String secs = location.substring(0, location.indexOf(".")) + '"';
-		if (type.equalsIgnoreCase("lon")) {
-			if (degree.startsWith("-")) {
-				degree = "W " + degree.replace("-", "") + mins + secs;
-			} else
-				degree = "E " + degree.replace("-", "") + mins + secs;
-		} else {
-			if (degree.startsWith("-")) {
-				degree = "S " + degree.replace("-", "") + mins + secs;
-			} else
-				degree = "N " + degree.replace("-", "") + mins + secs;
-		}
-		return degree;
-	}
+        location = "0." + location.substring(location.indexOf(".") + 1);
+        temp = Double.valueOf(location) * 60;
+        location = Double.toString(temp);
+        String secs = location.substring(0, location.indexOf(".")) + '"';
+        if (type.equalsIgnoreCase("lon")) {
+            if (degree.startsWith("-")) {
+                degree = "W " + degree.replace("-", "") + mins + secs;
+            } else {
+                degree = "E " + degree.replace("-", "") + mins + secs;
+            }
+        } else {
+            if (degree.startsWith("-")) {
+                degree = "S " + degree.replace("-", "") + mins + secs;
+            } else {
+                degree = "N " + degree.replace("-", "") + mins + secs;
+            }
+        }
+        return degree;
+    }
 
-	@Override
-	public void setFocus(Context context) {
-		// Hide the soft keyboard if it's showing.
-		InputMethodManager inputManager = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-	}
+    @Override
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
 
-	@Override
-	public void setBinaryData(Object answer) {
-		String s = (String) answer;
-		if (!s.equals("") || s == null){
-			mStringAnswer.setText(s);
-			String[] sa = s.split(" ");
-			mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
-					+ formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
-					+ getContext().getString(R.string.longitude) + ": "
-					+ formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
-					+ getContext().getString(R.string.altitude) + ": "
-					+ truncateDouble(sa[2]) + "m\n"
-					+ getContext().getString(R.string.accuracy) + ": "
-					+ truncateDouble(sa[3]) + "m");
-		}else{
-			mStringAnswer.setText(s);
-			mAnswerDisplay.setText("");
+    @Override
+    public void setBinaryData(Object answer) {
+        String s = (String) answer;
+        if (!s.equals("") || s == null) {
+            mStringAnswer.setText(s);
+            String[] sa = s.split(" ");
+            mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
+                    + formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
+                    + getContext().getString(R.string.longitude) + ": "
+                    + formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
+                    + getContext().getString(R.string.altitude) + ": "
+                    + truncateDouble(sa[2]) + "m\n"
+                    + getContext().getString(R.string.accuracy) + ": "
+                    + truncateDouble(sa[3]) + "m");
+        } else {
+            mStringAnswer.setText(s);
+            mAnswerDisplay.setText("");
 
-		}
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-		updateButtonLabelsAndVisibility(true);
-	}
+        }
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        updateButtonLabelsAndVisibility(true);
+    }
 
-	@Override
-	public boolean isWaitingForBinaryData() {
-		return mPrompt.getIndex().equals(
-				Collect.getInstance().getFormController()
-						.getIndexWaitingForData());
-	}
+    @Override
+    public boolean isWaitingForBinaryData() {
+        return mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController()
+                        .getIndexWaitingForData());
+    }
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    @Override
+    public void cancelWaitingForBinaryData() {
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
-	@Override
-	public void setOnLongClickListener(OnLongClickListener l) {
-		mViewButton.setOnLongClickListener(l);
-		mGetLocationButton.setOnLongClickListener(l);
-		mStringAnswer.setOnLongClickListener(l);
-		mAnswerDisplay.setOnLongClickListener(l);
-	}
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        mViewButton.setOnLongClickListener(l);
+        mGetLocationButton.setOnLongClickListener(l);
+        mStringAnswer.setOnLongClickListener(l);
+        mAnswerDisplay.setOnLongClickListener(l);
+    }
 
-	@Override
-	public void cancelLongPress() {
-		super.cancelLongPress();
-		mViewButton.cancelLongPress();
-		mGetLocationButton.cancelLongPress();
-		mStringAnswer.cancelLongPress();
-		mAnswerDisplay.cancelLongPress();
-	}
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mViewButton.cancelLongPress();
+        mGetLocationButton.cancelLongPress();
+        mStringAnswer.cancelLongPress();
+        mAnswerDisplay.cancelLongPress();
+    }
 
 }

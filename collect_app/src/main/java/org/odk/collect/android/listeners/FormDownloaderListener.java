@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.listeners;
 
-import java.util.HashMap;
-
 import org.odk.collect.android.logic.FormDetails;
+
+import java.util.HashMap;
 
 
 /**
@@ -24,5 +24,6 @@ import org.odk.collect.android.logic.FormDetails;
  */
 public interface FormDownloaderListener {
     void formsDownloadingComplete(HashMap<FormDetails, String> result);
+
     void progressUpdate(String currentFile, int progress, int total);
 }

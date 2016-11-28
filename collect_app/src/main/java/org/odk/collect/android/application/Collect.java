@@ -46,9 +46,9 @@ import java.io.File;
 public class Collect extends Application {
 
     static {
-		PRNGFixes.apply();
-	}
-	
+        PRNGFixes.apply();
+    }
+
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
             + File.separator + "odk";
@@ -130,11 +130,12 @@ public class Collect extends Application {
     public static void createODKDirs() throws RuntimeException {
         String cardstatus = Environment.getExternalStorageState();
         if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
-            throw new RuntimeException(Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
+            throw new RuntimeException(
+                    Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
         }
 
         String[] dirs = {
-                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH,OFFLINE_LAYERS
+                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
@@ -160,32 +161,27 @@ public class Collect extends Application {
     /**
      * Predicate that tests whether a directory path might refer to an
      * ODK Tables instance data directory (e.g., for media attachments).
-     *
-     * @param directory
-     * @return
      */
     public static boolean isODKTablesInstanceDataDirectory(File directory) {
-		/**
-		 * Special check to prevent deletion of files that
-		 * could be in use by ODK Tables.
-		 */
-    	String dirPath = directory.getAbsolutePath();
-    	if ( dirPath.startsWith(Collect.ODK_ROOT) ) {
-    		dirPath = dirPath.substring(Collect.ODK_ROOT.length());
-    		String[] parts = dirPath.split(File.separator);
-    		// [appName, instances, tableId, instanceId ]
-    		if ( parts.length == 4 && parts[1].equals("instances") ) {
-    			return true;
-    		}
-    	}
-    	return false;
-	}
+        /**
+         * Special check to prevent deletion of files that
+         * could be in use by ODK Tables.
+         */
+        String dirPath = directory.getAbsolutePath();
+        if (dirPath.startsWith(Collect.ODK_ROOT)) {
+            dirPath = dirPath.substring(Collect.ODK_ROOT.length());
+            String[] parts = dirPath.split(File.separator);
+            // [appName, instances, tableId, instanceId ]
+            if (parts.length == 4 && parts[1].equals("instances")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
-     *
-     * @return
      */
     public synchronized HttpContext getHttpContext() {
 
@@ -206,7 +202,7 @@ public class Collect extends Application {
     public CookieStore getCookieStore() {
         return cookieStore;
     }
-    
+
     @Override
     public void onCreate() {
         singleton = this;
@@ -230,7 +226,7 @@ public class Collect extends Application {
         PropertyManager mgr = new PropertyManager(this);
 
         FormController.initializeJavaRosa(mgr);
-        
+
         mActivityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
     }

@@ -14,9 +14,14 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.content.Context;
+import android.database.Cursor;
+import android.view.KeyEvent;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -32,15 +37,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The most basic widget that allows for entry of any text.
@@ -171,7 +170,8 @@ public class ItemsetWidget extends QuestionWidget implements
 
             if (xpr != null) {
                 FormDef form = Collect.getInstance().getFormController().getFormDef();
-                TreeElement mTreeElement = form.getMainInstance().resolveReference(prompt.getIndex().getReference());
+                TreeElement mTreeElement = form.getMainInstance().resolveReference(
+                        prompt.getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                         mTreeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
@@ -179,17 +179,19 @@ public class ItemsetWidget extends QuestionWidget implements
                 if (value == null) {
                     nullArgs = true;
                 } else {
-	                if (value instanceof XPathNodeset) {
-	                    XPathNodeset xpn = (XPathNodeset) value;
-	                    value = xpn.getValAt(0);
-	                }
+                    if (value instanceof XPathNodeset) {
+                        XPathNodeset xpn = (XPathNodeset) value;
+                        value = xpn.getValAt(0);
+                    }
 
-	                selectionArgs[i + 1] = value.toString();
+                    selectionArgs[i + 1] = value.toString();
                 }
             }
         }
 
-        File itemsetFile = new File(Collect.getInstance().getFormController().getMediaFolder().getAbsolutePath() + "/itemsets.csv");
+        File itemsetFile = new File(
+                Collect.getInstance().getFormController().getMediaFolder().getAbsolutePath()
+                        + "/itemsets.csv");
         if (nullArgs) {
             // we can't try to query with null values else it blows up
             // so just leave the screen blank
@@ -199,7 +201,7 @@ public class ItemsetWidget extends QuestionWidget implements
             ida.open();
 
             // name of the itemset table for this form
-            String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath()); 
+            String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
             try {
                 Cursor c = ida.query(pathHash, selection.toString(), selectionArgs);
                 if (c != null) {
@@ -211,7 +213,8 @@ public class ItemsetWidget extends QuestionWidget implements
                         // string if that doen't exist, then just use label
                         String lang = "";
                         if (Collect.getInstance().getFormController().getLanguages() != null
-                                && Collect.getInstance().getFormController().getLanguages().length > 0) {
+                                && Collect.getInstance().getFormController().getLanguages().length
+                                > 0) {
                             lang = Collect.getInstance().getFormController().getLanguage();
                         }
 
@@ -251,7 +254,8 @@ public class ItemsetWidget extends QuestionWidget implements
             addAnswerView(mButtons);
         } else {
             TextView error = new TextView(context);
-            error.setText(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
+            error.setText(
+                    getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
             addAnswerView(error);
         }
 

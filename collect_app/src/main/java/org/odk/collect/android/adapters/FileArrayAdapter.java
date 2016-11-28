@@ -14,14 +14,6 @@
 
 package org.odk.collect.android.adapters;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.logic.DriveListItem;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -32,6 +24,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.logic.DriveListItem;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private Context c;
@@ -39,7 +39,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     private List<DriveListItem> items;
 
     public FileArrayAdapter(Context context, int textViewResourceId,
-                            List<DriveListItem> objects) {
+            List<DriveListItem> objects) {
         super(context, textViewResourceId, objects);
         c = context;
         id = textViewResourceId;
@@ -54,7 +54,8 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) c.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(id, null);
         }
               
@@ -91,10 +92,12 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 iv.setImageDrawable(d);
             }
 
-            if (t1 != null)
+            if (t1 != null) {
                 t1.setText(o.getName());
-            if (t2 != null)
+            }
+            if (t2 != null) {
                 t2.setText(dateModified);
+            }
 
         }
         return v;
