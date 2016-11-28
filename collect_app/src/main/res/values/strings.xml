@@ -225,6 +225,7 @@
 <string name="save_mid">Save Form</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
+<string name="admin_password">Admin Password</string>
 <string name="admin_password_changed">Admin password successfully changed</string>
 <string name="admin_password_disabled">Admin password disabled</string>
 <string name="admin_password_mismatch">Sorry, passwords do not match!</string>

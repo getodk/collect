@@ -8,12 +8,9 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 public class PasswordDialogPreference extends DialogPreference implements
         OnClickListener {
@@ -39,50 +36,50 @@ public class PasswordDialogPreference extends DialogPreference implements
             verifyEditText.setText(adminPW);
         }
 
-        Button positiveButton = (Button) view
-                .findViewById(R.id.positive_button);
-        positiveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String pw = passwordEditText.getText().toString();
-                String ver = verifyEditText.getText().toString();
-
-                if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
-                    // passwords are the same
-                    persistString(pw);
-                    Toast.makeText(PasswordDialogPreference.this.getContext(),
-                            R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
-                    PasswordDialogPreference.this.getDialog().dismiss();
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "AdminPasswordDialog", "CHANGED");
-                } else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
-                    persistString("");
-                    Toast.makeText(PasswordDialogPreference.this.getContext(),
-                            R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
-                    PasswordDialogPreference.this.getDialog().dismiss();
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "AdminPasswordDialog", "DISABLED");
-                } else {
-                    Toast.makeText(PasswordDialogPreference.this.getContext(),
-                            R.string.admin_password_mismatch, Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "AdminPasswordDialog", "MISMATCH");
-                }
-            }
-        });
-
-        Button negativeButton = (Button) view.findViewById(R.id.negative_button);
-        negativeButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                PasswordDialogPreference.this.getDialog().dismiss();
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "AdminPasswordDialog", "CANCELLED");
-            }
-
-        });
+//        Button positiveButton = (Button) view
+//                .findViewById(R.id.positive_button);
+//        positiveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                String pw = passwordEditText.getText().toString();
+//                String ver = verifyEditText.getText().toString();
+//
+//                if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
+//                    // passwords are the same
+//                    persistString(pw);
+//                    Toast.makeText(PasswordDialogPreference.this.getContext(),
+//                            R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
+//                    PasswordDialogPreference.this.getDialog().dismiss();
+//                    Collect.getInstance().getActivityLogger()
+//                            .logAction(this, "AdminPasswordDialog", "CHANGED");
+//                } else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
+//                    persistString("");
+//                    Toast.makeText(PasswordDialogPreference.this.getContext(),
+//                            R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
+//                    PasswordDialogPreference.this.getDialog().dismiss();
+//                    Collect.getInstance().getActivityLogger()
+//                            .logAction(this, "AdminPasswordDialog", "DISABLED");
+//                } else {
+//                    Toast.makeText(PasswordDialogPreference.this.getContext(),
+//                            R.string.admin_password_mismatch, Toast.LENGTH_SHORT).show();
+//                    Collect.getInstance().getActivityLogger()
+//                            .logAction(this, "AdminPasswordDialog", "MISMATCH");
+//                }
+//            }
+//        });
+//
+//        Button negativeButton = (Button) view.findViewById(R.id.negative_button);
+//        negativeButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                PasswordDialogPreference.this.getDialog().dismiss();
+//                Collect.getInstance().getActivityLogger()
+//                        .logAction(this, "AdminPasswordDialog", "CANCELLED");
+//            }
+//
+//        });
 
         super.onBindDialogView(view);
     }

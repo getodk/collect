@@ -14,29 +14,34 @@
 
 package org.odk.collect.android.preferences;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
@@ -61,6 +66,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_CHANGE_SERVER = "change_server";
     public static String KEY_CHANGE_USERNAME = "change_username";
     public static String KEY_CHANGE_PASSWORD = "change_password";
+	public static String KEY_CHANGE_ADMIN_PASSWORD = "admin_password";
     public static String KEY_CHANGE_GOOGLE_ACCOUNT = "change_google_account";
     public static String KEY_CHANGE_PROTOCOL_SETTINGS = "change_protocol_settings";
     // client
@@ -91,6 +97,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
+	private Preference mChangeAdminPwPreference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +123,52 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 return true;
             }
         });
+
+		mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+		mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				AlertDialog.Builder b = new AlertDialog.Builder(AdminPreferencesActivity.this);
+
+				LayoutInflater factory = LayoutInflater.from(AdminPreferencesActivity.this);
+				final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
+
+				// Get the server, username, and password from the settings
+				SharedPreferences settings =
+						PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+                EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
+                EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
+
+
+				b.setTitle("iandebug lalala");
+				b.setView(dialogView);
+				b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "OK");
+
+						EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
+						EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+
+						Log.d("iandebug", "ONCLICK positive button");
+					}
+				});
+				b.setNegativeButton(getString(R.string.cancel),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Log.d("iandebug", "ONCLICK negative button");
+							}
+						});
+
+				b.setCancelable(false);
+				AlertDialog dialog = b.create();
+                dialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                dialog.show();
+				return true;
+			}
+		});
     }
 
     @Override
@@ -165,6 +219,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 
 
 	public static boolean saveSharedPreferencesToFile(File dst, Context context) {
