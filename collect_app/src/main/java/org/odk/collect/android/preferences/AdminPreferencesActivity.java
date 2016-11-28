@@ -141,26 +141,44 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
 
 
-				b.setTitle("iandebug lalala");
+				b.setTitle(R.string.change_admin_password);
 				b.setView(dialogView);
 				b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Collect.getInstance().getActivityLogger().logAction(this, "onCreateDialog.AUTH_DIALOG", "OK");
+						String pw = passwordEditText.getText().toString();
+						String ver = verifyEditText.getText().toString();
 
-						EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-						EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-
-						Log.d("iandebug", "ONCLICK positive button");
+						if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
+							// passwords are the same
+							persistString(pw);
+							Toast.makeText(AdminPreferencesActivity.this,
+									R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
+							dialog.dismiss();
+							Collect.getInstance().getActivityLogger()
+									.logAction(this, "AdminPasswordDialog", "CHANGED");
+						} else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
+							persistString("");
+							Toast.makeText(AdminPreferencesActivity.this,
+									R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
+							dialog.dismiss();
+							Collect.getInstance().getActivityLogger()
+									.logAction(this, "AdminPasswordDialog", "DISABLED");
+						} else {
+							Toast.makeText(AdminPreferencesActivity.this,
+									R.string.admin_password_mismatch, Toast.LENGTH_SHORT).show();
+							Collect.getInstance().getActivityLogger()
+									.logAction(this, "AdminPasswordDialog", "MISMATCH");
+						}
 					}
 				});
-				b.setNegativeButton(getString(R.string.cancel),
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								Log.d("iandebug", "ONCLICK negative button");
-							}
-						});
+				b.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Collect.getInstance().getActivityLogger().logAction(this, "AdminPasswordDialog", "CANCELLED");
+                     }
+                });
 
 				b.setCancelable(false);
 				AlertDialog dialog = b.create();
