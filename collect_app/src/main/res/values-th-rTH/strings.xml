@@ -321,4 +321,5 @@
   <string name="username_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังชื่อผู้ใช้</string>
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่
 </string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>

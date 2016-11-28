@@ -34,6 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.osmdroid.tileprovider.IRegisterReceiver;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.TilesOverlay;
@@ -58,8 +59,12 @@ public class MapHelper {
     private static final String GOOGLE_MAP_HYBRID = "hybrid";
 
     //OSM MAP BASEMAPS
-    private static final String MAPQUEST_MAP_STREETS = "mapquest_streets";
-    private static final String MAPQUEST_MAP_SATELLITE = "mapquest_satellite";
+    private static final String OPENMAP_STREETS = "openmap_streets";
+    private static final String OPENMAP_USGS_TOPO = "openmap_usgs_topo";
+    private static final String OPENMAP_USGS_SAT = "openmap_usgs_sat";
+    private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
+    private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
+    private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
     private int selected_layer = 0;
 
     public static String[] geofileTypes = new String[] {".mbtiles",".kml",".kmz"};
@@ -69,6 +74,8 @@ public class MapHelper {
     private TileOverlay googleTileOverlay;
     private IRegisterReceiver iRegisterReceiver;
 
+    private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
+
 
     public MapHelper(Context pContext,GoogleMap pGoogleMap){
         this.mGoogleMap = null;
@@ -77,7 +84,7 @@ public class MapHelper {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
         this.mGoogleMap = pGoogleMap;
-
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext,MapView pOsmMap,IRegisterReceiver pIregisterReceiver){
@@ -88,15 +95,14 @@ public class MapHelper {
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
         this.mOsmMap = pOsmMap;
-
-
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     private static String _getGoogleBasemap(){
         return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
     private static String _getOsmBasemap(){
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, MAPQUEST_MAP_STREETS);
+        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
     public void setBasemap(){
         if(mGoogleMap != null){
@@ -115,14 +121,38 @@ public class MapHelper {
         }else{
             //OSMMAP
             String basemap = _getOsmBasemap();
-            if (basemap.equals(MAPQUEST_MAP_STREETS)) {
-                mOsmMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
-            }else if(basemap.equals(MAPQUEST_MAP_SATELLITE)){
-                mOsmMap.setTileSource(TileSourceFactory.MAPQUESTAERIAL);
-            }else{
-                mOsmMap.setTileSource(TileSourceFactory.MAPQUESTOSM);
+            ITileSource tileSource = null;
+
+            switch (basemap) {
+                case OPENMAP_USGS_TOPO:
+                    tileSource = tileFactory.getUSGSTopo();
+                    break;
+
+                case OPENMAP_USGS_SAT:
+                    tileSource = tileFactory.getUsgsSat();
+                    break;
+
+                case OPENMAP_STAMEN_TERRAIN:
+                    tileSource = tileFactory.getStamenTerrain();
+                    break;
+
+                case OPENMAP_CARTODB_POSITRON:
+                    tileSource = tileFactory.getCartoDbPositron();
+                    break;
+
+                case OPENMAP_CARTODB_DARKMATTER:
+                    tileSource = tileFactory.getCartoDbDarkMatter();
+                    break;
+
+                case OPENMAP_STREETS:
+                default:
+                    tileSource = TileSourceFactory.MAPNIK;
+                    break;
             }
 
+            if (tileSource != null) {
+                mOsmMap.setTileSource(tileSource);
+            }
         }
 
     }
