@@ -137,8 +137,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 				SharedPreferences settings =
 						PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-                EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
-                EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
+                final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
+                final EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
 
 
 				b.setTitle(R.string.change_admin_password);
@@ -151,14 +151,18 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
 						if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
 							// passwords are the same
-							persistString(pw);
+							SharedPreferences.Editor editor = getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+							editor.putString(AdminPreferencesActivity.KEY_ADMIN_PW, pw);
 							Toast.makeText(AdminPreferencesActivity.this,
 									R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
+							editor.commit();
 							dialog.dismiss();
 							Collect.getInstance().getActivityLogger()
 									.logAction(this, "AdminPasswordDialog", "CHANGED");
 						} else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
-							persistString("");
+							SharedPreferences.Editor editor = getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+							editor.putString(AdminPreferencesActivity.KEY_ADMIN_PW, "");
+							editor.commit();
 							Toast.makeText(AdminPreferencesActivity.this,
 									R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
