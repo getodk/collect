@@ -25,8 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,7 +55,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -1188,7 +1185,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private View createViewForFormBeginning(int event, boolean advancingPage,
             FormController formController) {
         try {
-            event  = formController.stepToNextScreenEvent();
+            event = formController.stepToNextScreenEvent();
 
             if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 createRepeatDialog();
@@ -2522,7 +2519,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
-                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the next question
+                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
+                // next question
                 if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 }
