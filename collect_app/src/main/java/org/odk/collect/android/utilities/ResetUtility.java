@@ -194,6 +194,8 @@ public class ResetUtility {
                 .edit()
                 .clear()
                 .commit();
+
+        PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
     }
 
     private class DeletionResult {
