@@ -22,5 +22,6 @@ import org.odk.collect.android.tasks.ProgressNotifier;
  */
 public interface FormLoaderListener extends ProgressNotifier {
     void loadingComplete(FormLoaderTask task);
+
     void loadingError(String errorMsg);
 }

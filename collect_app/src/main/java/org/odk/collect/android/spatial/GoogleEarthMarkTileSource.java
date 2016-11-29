@@ -17,6 +17,7 @@ package org.odk.collect.android.spatial;
 /**
  * @author jonnordling@gmail.com
  */
+
 import org.osmdroid.ResourceProxy.string;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;

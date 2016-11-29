@@ -16,10 +16,10 @@ package org.odk.collect.android.listeners;
 
 /**
  * Callback interface invoked upon the completion of a DeleteInstancesTask
- *  
+ *
  * @author norman86@gmail.com
  * @author mitchellsundt@gmail.com
  */
 public interface DeleteInstancesListener {
-	void deleteComplete(int deletedInstances);
+    void deleteComplete(int deletedInstances);
 }

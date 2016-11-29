@@ -16,11 +16,13 @@ package org.odk.collect.android.spatial;
 
 /**
  * Created by jnordling on 12/29/15.
+ *
  * @author jonnordling@gmail.com
  */
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Tile;
@@ -74,7 +76,8 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
             String[] values = {
                     String.valueOf(row), String.valueOf(x), String.valueOf(z)
             };
-            Cursor c = this.mDatabase.query("tiles", projection, predicate, values, null, null, null);
+            Cursor c = this.mDatabase.query("tiles", projection, predicate, values, null, null,
+                    null);
             if (c != null) {
                 c.moveToFirst();
                 if (!c.isAfterLast()) {
@@ -125,15 +128,15 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
     private void calculateZoomConstraints() {
         if (this.isDatabaseAvailable()) {
-            String[] projection = new String[] {
+            String[] projection = new String[]{
                     "value"
             };
 
-            String[] minArgs = new String[] {
+            String[] minArgs = new String[]{
                     "minzoom"
             };
 
-            String[] maxArgs = new String[] {
+            String[] maxArgs = new String[]{
                     "maxzoom"
             };
 
@@ -159,14 +162,15 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
     private void calculateBounds() {
         if (this.isDatabaseAvailable()) {
-            String[] projection = new String[] {
+            String[] projection = new String[]{
                     "value"
             };
 
-            String[] subArgs = new String[] {
+            String[] subArgs = new String[]{
                     "bounds"
             };
-            Cursor c = this.mDatabase.query("metadata", projection, "name = ?", subArgs, null, null, null);
+            Cursor c = this.mDatabase.query("metadata", projection, "name = ?", subArgs, null, null,
+                    null);
             c.moveToFirst();
             if (!c.isAfterLast()) {
                 String[] parts = c.getString(0).split(",\\s*");

@@ -16,12 +16,14 @@ package org.odk.collect.android.widgets;
 
 /**
  * Interface implemented by widgets that need binary data.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface IBinaryWidget {
     public void setBinaryData(Object answer);
+
     public void cancelWaitingForBinaryData();
+
     public boolean isWaitingForBinaryData();
 }
 

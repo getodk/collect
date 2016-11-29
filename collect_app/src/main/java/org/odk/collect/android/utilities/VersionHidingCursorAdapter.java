@@ -14,55 +14,56 @@
 
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.R;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import org.odk.collect.android.R;
+
 /**
  * Implementation of cursor adapter that displays the version of a form if a form has a version.
- * 
- * @author mitchellsundt@gmail.com
  *
+ * @author mitchellsundt@gmail.com
  */
 public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
-	
-	private final Context ctxt;
-	private final String versionColumnName;
-	private final ViewBinder originalBinder;
 
-	public VersionHidingCursorAdapter(String versionColumnName, Context context, int layout, Cursor c, String[] from, int[] to) {
-		super(context, layout, c, from, to);
-		this.versionColumnName = versionColumnName;
-		ctxt =  context;
-		originalBinder = getViewBinder();
-		setViewBinder( new ViewBinder(){
+    private final Context ctxt;
+    private final String versionColumnName;
+    private final ViewBinder originalBinder;
 
-			@Override
-			public boolean setViewValue(View view, Cursor cursor,
-					int columnIndex) {
-				String columnName = cursor.getColumnName(columnIndex);
-				if ( !columnName.equals(VersionHidingCursorAdapter.this.versionColumnName) ) {
-					if ( originalBinder != null ) {
-						return originalBinder.setViewValue(view, cursor, columnIndex);
-					}
-					return false;
-				} else {
-					String version = cursor.getString(columnIndex);
-					TextView v = (TextView) view;
-					if ( version != null ) {
-						v.setText(ctxt.getString(R.string.version) + " " + version);
-						v.setVisibility(View.VISIBLE);
-					} else {
-						v.setText(null);
-						v.setVisibility(View.GONE);
-					}
-				}
-				return true;
-			}} );
-	}
-	
+    public VersionHidingCursorAdapter(String versionColumnName, Context context, int layout,
+            Cursor c, String[] from, int[] to) {
+        super(context, layout, c, from, to);
+        this.versionColumnName = versionColumnName;
+        ctxt = context;
+        originalBinder = getViewBinder();
+        setViewBinder(new ViewBinder() {
+
+            @Override
+            public boolean setViewValue(View view, Cursor cursor,
+                    int columnIndex) {
+                String columnName = cursor.getColumnName(columnIndex);
+                if (!columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
+                    if (originalBinder != null) {
+                        return originalBinder.setViewValue(view, cursor, columnIndex);
+                    }
+                    return false;
+                } else {
+                    String version = cursor.getString(columnIndex);
+                    TextView v = (TextView) view;
+                    if (version != null) {
+                        v.setText(ctxt.getString(R.string.version) + " " + version);
+                        v.setVisibility(View.VISIBLE);
+                    } else {
+                        v.setText(null);
+                        v.setVisibility(View.GONE);
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
 }
