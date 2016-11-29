@@ -201,6 +201,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private String mErrorMessage;
+    private boolean mShownAlertDialogIsGroupRepeat;
 
     // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped = false;
@@ -1528,8 +1529,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         // In some cases dialog might be present twice because refreshView() is being called
         // from onResume(). This ensures that we do not preset this modal dialog if it's already
-        // visible.
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+        // visible. Checking for mShownAlertDialogIsGroupRepeat because the same field
+        // mAlertDialog is being used for all alert dialogs in this activity.
+        if (mAlertDialog != null && mAlertDialog.isShowing() && mShownAlertDialogIsGroupRepeat) {
             return;
         }
 
@@ -1538,6 +1540,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
+                mShownAlertDialogIsGroupRepeat = false;
                 FormController formController = Collect.getInstance()
                         .getFormController();
                 switch (i) {
@@ -1625,6 +1628,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
         mAlertDialog.setCancelable(false);
         mBeenSwiped = false;
+        mShownAlertDialogIsGroupRepeat = true;
         mAlertDialog.show();
     }
 
