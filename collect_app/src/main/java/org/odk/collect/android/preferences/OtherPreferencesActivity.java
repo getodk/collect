@@ -14,55 +14,57 @@
 
 package org.odk.collect.android.preferences;
 
-import org.odk.collect.android.R;
-
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.InputFilter;
 
+import org.odk.collect.android.R;
+
 /**
  * Handles 'other' specific preferences.
- * 
+ *
  * @author Carl Hartung (chartung@nafundi.com)
  */
 public class OtherPreferencesActivity extends AggregatePreferencesActivity
-		implements OnPreferenceChangeListener {
+        implements OnPreferenceChangeListener {
 
-	protected EditTextPreference mSubmissionUrlPreference;
-	protected EditTextPreference mFormListUrlPreference;
+    protected EditTextPreference mSubmissionUrlPreference;
+    protected EditTextPreference mFormListUrlPreference;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		addPreferencesFromResource(R.xml.other_preferences);
+        addPreferencesFromResource(R.xml.other_preferences);
 
-		mFormListUrlPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_FORMLIST_URL);
-		mSubmissionUrlPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_SUBMISSION_URL);
+        mFormListUrlPreference = (EditTextPreference) findPreference(
+                PreferencesActivity.KEY_FORMLIST_URL);
+        mSubmissionUrlPreference = (EditTextPreference) findPreference(
+                PreferencesActivity.KEY_SUBMISSION_URL);
 
-		InputFilter[] filters = { new ControlCharacterFilter(), new WhitespaceFilter() };
+        InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
 
-		mServerUrlPreference.getEditText().setFilters(filters);
+        mServerUrlPreference.getEditText().setFilters(filters);
 
-		mFormListUrlPreference.setOnPreferenceChangeListener(this);
-		mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-		mFormListUrlPreference.getEditText().setFilters(filters);
+        mFormListUrlPreference.setOnPreferenceChangeListener(this);
+        mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
+        mFormListUrlPreference.getEditText().setFilters(filters);
 
-		mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
-		mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-		mSubmissionUrlPreference.getEditText().setFilters(filters);
-	}
+        mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
+        mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
+        mSubmissionUrlPreference.getEditText().setFilters(filters);
+    }
 
-	/**
-	 * Generic listener that sets the summary to the newly selected/entered
-	 * value
-	 */
-	@Override
-	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		preference.setSummary((CharSequence) newValue);
-		return true;
-	}
+    /**
+     * Generic listener that sets the summary to the newly selected/entered
+     * value
+     */
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        preference.setSummary((CharSequence) newValue);
+        return true;
+    }
 
 }

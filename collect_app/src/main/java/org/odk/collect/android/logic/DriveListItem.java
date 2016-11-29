@@ -38,7 +38,8 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     public static final int MY_DRIVE = 4;
     public static final int SHARED_WITH_ME = 5;
 
-    public DriveListItem(String n, String d, DateTime dt, String p, String img, int type, String driveId, String parentId) {
+    public DriveListItem(String n, String d, DateTime dt, String p, String img, int type,
+            String driveId, String parentId) {
         name = n;
         data = d;
         date = dt;
@@ -82,50 +83,52 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     }
 
     public int compareTo(DriveListItem o) {
-        if (this.name != null)
+        if (this.name != null) {
             return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
-        else
+        } else {
             throw new IllegalArgumentException();
+        }
     }
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(this.name);
-		dest.writeString(this.data);
-		dest.writeString(this.path);
-		dest.writeString(this.image);
-		dest.writeString(this.driveId);
-		dest.writeString(this.parentId);
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.data);
+        dest.writeString(this.path);
+        dest.writeString(this.image);
+        dest.writeString(this.driveId);
+        dest.writeString(this.parentId);
 
-		 dest.writeLong(date.getValue());
-		 dest.writeInt(this.type);		
-	}
-	
-	public DriveListItem(Parcel pc) {
-		name = pc.readString();
-		data = pc.readString();
-		path = pc.readString();
-		image = pc.readString();
-		driveId = pc.readString();
-		parentId = pc.readString();
-		date = new DateTime(pc.readLong());
-		type = pc.readInt();
-	}
-	
-	public static final Parcelable.Creator<DriveListItem> CREATOR = new Parcelable.Creator<DriveListItem>() {
-		
-		public DriveListItem createFromParcel(Parcel pc) {
-			return new DriveListItem(pc);
-		}
-		
-		public DriveListItem[] newArray(int size) {
-			return new DriveListItem[size];
-		}
-	};
+        dest.writeLong(date.getValue());
+        dest.writeInt(this.type);
+    }
+
+    public DriveListItem(Parcel pc) {
+        name = pc.readString();
+        data = pc.readString();
+        path = pc.readString();
+        image = pc.readString();
+        driveId = pc.readString();
+        parentId = pc.readString();
+        date = new DateTime(pc.readLong());
+        type = pc.readInt();
+    }
+
+    public static final Parcelable.Creator<DriveListItem> CREATOR =
+            new Parcelable.Creator<DriveListItem>() {
+
+                public DriveListItem createFromParcel(Parcel pc) {
+                    return new DriveListItem(pc);
+                }
+
+                public DriveListItem[] newArray(int size) {
+                    return new DriveListItem[size];
+                }
+            };
 }

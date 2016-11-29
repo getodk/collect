@@ -20,6 +20,7 @@ package org.odk.collect.android.external;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.tasks.FormLoaderTask;
 
@@ -46,22 +47,28 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
             String dataSetName = stringFileEntry.getKey();
             File dataSetFile = stringFileEntry.getValue();
             if (dataSetFile.exists()) {
-                File dbFile = new File(dataSetFile.getParentFile().getAbsolutePath(), dataSetName + ".db");
+                File dbFile = new File(dataSetFile.getParentFile().getAbsolutePath(),
+                        dataSetName + ".db");
                 if (dbFile.exists()) {
                     // this means the someone updated the csv file, so we need to reload it
                     boolean deleted = dbFile.delete();
                     if (!deleted) {
-                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName() + " has changed but we could not delete the previous DB at " + dbFile.getAbsolutePath());
+                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName()
+                                + " has changed but we could not delete the previous DB at "
+                                + dbFile.getAbsolutePath());
                         continue;
                     }
                 }
-                ExternalSQLiteOpenHelper externalSQLiteOpenHelper = new ExternalSQLiteOpenHelper(dbFile);
+                ExternalSQLiteOpenHelper externalSQLiteOpenHelper = new ExternalSQLiteOpenHelper(
+                        dbFile);
                 externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, formLoaderTask);
 
                 if (formLoaderTask.isCancelled()) {
-                    Log.w(ExternalDataUtil.LOGGER_NAME, "The import was cancelled, so we need to rollback.");
+                    Log.w(ExternalDataUtil.LOGGER_NAME,
+                            "The import was cancelled, so we need to rollback.");
 
-                    // we need to drop the database file since it might be partially populated. It will be re-created next time.
+                    // we need to drop the database file since it might be partially populated.
+                    // It will be re-created next time.
 
                     Log.w(ExternalDataUtil.LOGGER_NAME, "Closing database to be deleted " + dbFile);
 
@@ -81,13 +88,19 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
                     return;
 
                 } else {
-                    // rename the dataSetFile into "dataSetFile.csv.imported" in order not to be loaded again
-                    File importedFile = new File(dataSetFile.getParentFile(), dataSetFile.getName() + ".imported");
+                    // rename the dataSetFile into "dataSetFile.csv.imported" in order not to be
+                    // loaded again
+                    File importedFile = new File(dataSetFile.getParentFile(),
+                            dataSetFile.getName() + ".imported");
                     boolean renamed = dataSetFile.renameTo(importedFile);
                     if (!renamed) {
-                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName() + " could not be renamed to be archived. It will be re-imported again! :(");
+                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName()
+                                + " could not be renamed to be archived. It will be re-imported "
+                                + "again! :(");
                     } else {
-                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName() + " was renamed to " + importedFile.getName());
+                        Log.e(ExternalDataUtil.LOGGER_NAME,
+                                dataSetFile.getName() + " was renamed to "
+                                        + importedFile.getName());
                     }
                 }
             }

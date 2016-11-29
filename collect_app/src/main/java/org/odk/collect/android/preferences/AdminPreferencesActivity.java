@@ -47,7 +47,8 @@ import java.io.ObjectOutputStream;
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
  *
- * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior option)
+ * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
+ *         option)
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
 
@@ -92,8 +93,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
     public static String KEY_FORM_PROCESSING_LOGIC = "form_processing_logic";
 
-	public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
-	public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
+    public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
+    public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
@@ -109,18 +110,21 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        ListPreference mFormProcessingLogicPreference = (ListPreference) findPreference(KEY_FORM_PROCESSING_LOGIC);
+        ListPreference mFormProcessingLogicPreference = (ListPreference) findPreference(
+                KEY_FORM_PROCESSING_LOGIC);
         mFormProcessingLogicPreference.setSummary(mFormProcessingLogicPreference.getEntry());
-        mFormProcessingLogicPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mFormProcessingLogicPreference.setOnPreferenceChangeListener(
+                new Preference.OnPreferenceChangeListener() {
 
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
-        });
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        int index = ((ListPreference) preference).findIndexOfValue(
+                                newValue.toString());
+                        String entry = (String) ((ListPreference) preference).getEntries()[index];
+                        preference.setSummary(entry);
+                        return true;
+                    }
+                });
 
 		Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
 		mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -186,56 +190,54 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 		});
     }
 
-    @Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Collect.getInstance().getActivityLogger()
-			.logAction(this, "onCreateOptionsMenu", "show");
+				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
 
 		CompatibilityUtils.setShowAsAction(
-    		menu.add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
-				.setIcon(R.drawable.ic_menu_save),
-			MenuItem.SHOW_AS_ACTION_NEVER);
+				menu.add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
+						.setIcon(R.drawable.ic_menu_save),
+				MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case SAVE_PREFS_MENU:
-			File writeDir = new File(Collect.ODK_ROOT + "/settings");
-			if (!writeDir.exists()) {
-				if (!writeDir.mkdirs()) {
-					Toast.makeText(
-							this,
-							"Error creating directory "
-									+ writeDir.getAbsolutePath(),
-							Toast.LENGTH_SHORT).show();
-					return false;
-				}
-			}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case SAVE_PREFS_MENU:
+                File writeDir = new File(Collect.ODK_ROOT + "/settings");
+                if (!writeDir.exists()) {
+                    if (!writeDir.mkdirs()) {
+                        Toast.makeText(
+                                this,
+                                "Error creating directory "
+                                        + writeDir.getAbsolutePath(),
+                                Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
 
-			File dst = new File(writeDir.getAbsolutePath()
-					+ "/collect.settings");
-			boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, this);
-			if (success) {
-				Toast.makeText(
-						this,
-						"Settings successfully written to "
-								+ dst.getAbsolutePath(), Toast.LENGTH_LONG)
-						.show();
-			} else {
-				Toast.makeText(this,
-						"Error writing settings to " + dst.getAbsolutePath(),
-						Toast.LENGTH_LONG).show();
-			}
-			return true;
+                File dst = new File(writeDir.getAbsolutePath()
+                        + "/collect.settings");
+                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, this);
+                if (success) {
+                    Toast.makeText(
+                            this,
+                            "Settings successfully written to "
+                                    + dst.getAbsolutePath(), Toast.LENGTH_LONG)
+                            .show();
+                } else {
+                    Toast.makeText(this,
+                            "Error writing settings to " + dst.getAbsolutePath(),
+                            Toast.LENGTH_LONG).show();
+                }
+                return true;
 
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 	public static boolean saveSharedPreferencesToFile(File dst, Context context) {
 		// this should be in a thread if it gets big, but for now it's tiny
@@ -273,38 +275,40 @@ public class AdminPreferencesActivity extends PreferenceActivity {
         FormDef.EvalBehavior mode;
 
         SharedPreferences adminPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
-        String formProcessingLoginIndex = adminPreferences.getString(KEY_FORM_PROCESSING_LOGIC, context.getString(R.string.default_form_processing_logic));
+        String formProcessingLoginIndex = adminPreferences.getString(KEY_FORM_PROCESSING_LOGIC,
+                context.getString(R.string.default_form_processing_logic));
         try {
             if ("-1".equals(formProcessingLoginIndex)) {
                 mode = FormDef.recommendedMode;
             } else {
-					int preferredModeIndex = Integer.parseInt(formProcessingLoginIndex);
-					switch (preferredModeIndex) {
-						case 0: {
-							mode = FormDef.EvalBehavior.Fast_2014;
-							break;
-						}
-						case 1: {
-							mode = FormDef.EvalBehavior.Safe_2014;
-							break;
-						}
-						case 2: {
-							mode = FormDef.EvalBehavior.April_2014;
-							break;
-						}
-						case 3: {
-							mode = FormDef.EvalBehavior.Legacy;
-							break;
-						}
-						default: {
-							mode = FormDef.recommendedMode;
-							break;
-						}
-					}
-				}
+                int preferredModeIndex = Integer.parseInt(formProcessingLoginIndex);
+                switch (preferredModeIndex) {
+                    case 0: {
+                        mode = FormDef.EvalBehavior.Fast_2014;
+                        break;
+                    }
+                    case 1: {
+                        mode = FormDef.EvalBehavior.Safe_2014;
+                        break;
+                    }
+                    case 2: {
+                        mode = FormDef.EvalBehavior.April_2014;
+                        break;
+                    }
+                    case 3: {
+                        mode = FormDef.EvalBehavior.Legacy;
+                        break;
+                    }
+                    default: {
+                        mode = FormDef.recommendedMode;
+                        break;
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.w("AdminPreferencesActivity", "Unable to get EvalBehavior -- defaulting to recommended mode");
+            Log.w("AdminPreferencesActivity",
+                    "Unable to get EvalBehavior -- defaulting to recommended mode");
             mode = FormDef.recommendedMode;
         }
 

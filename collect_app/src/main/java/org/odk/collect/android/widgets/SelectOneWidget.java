@@ -14,10 +14,18 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -32,227 +40,222 @@ import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.MediaLayout;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SelectOneWidget extends QuestionWidget implements
-		OnCheckedChangeListener, AudioPlayListener {
+        OnCheckedChangeListener, AudioPlayListener {
 
-	List<SelectChoice> mItems; // may take a while to compute
-	ArrayList<RadioButton> buttons;
-	ArrayList<MediaLayout> playList;
-	private int playcounter = 0;
+    List<SelectChoice> mItems; // may take a while to compute
+    ArrayList<RadioButton> buttons;
+    ArrayList<MediaLayout> playList;
+    private int playcounter = 0;
 
 
-	public SelectOneWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
-		playList = new ArrayList<MediaLayout>();
+    public SelectOneWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
+        playList = new ArrayList<MediaLayout>();
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
         if (xPathFuncExpr != null) {
             mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
         } else {
             mItems = prompt.getSelectChoices();
         }
-		buttons = new ArrayList<RadioButton>();
+        buttons = new ArrayList<RadioButton>();
 
-		// Layout holds the vertical list of buttons
-		LinearLayout buttonLayout = new LinearLayout(context);
+        // Layout holds the vertical list of buttons
+        LinearLayout buttonLayout = new LinearLayout(context);
 
-		String s = null;
-		if (prompt.getAnswerValue() != null) {
-			s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
-		}
+        String s = null;
+        if (prompt.getAnswerValue() != null) {
+            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+        }
 
-		if (mItems != null) {
-			for (int i = 0; i < mItems.size(); i++) {
+        if (mItems != null) {
+            for (int i = 0; i < mItems.size(); i++) {
                 String choiceName = prompt.getSelectChoiceText(mItems.get(i));
                 CharSequence choiceDisplayName;
-                if ( choiceName != null ) {
-                  choiceDisplayName = TextUtils.textToHtml(choiceName);
+                if (choiceName != null) {
+                    choiceDisplayName = TextUtils.textToHtml(choiceName);
                 } else {
-                  choiceDisplayName = "";
+                    choiceDisplayName = "";
                 }
-				RadioButton r = new RadioButton(getContext());
+                RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 r.setText(choiceDisplayName);
-				r.setMovementMethod(LinkMovementMethod.getInstance());
-				r.setTag(Integer.valueOf(i));
-				r.setId(QuestionWidget.newUniqueId());
-				r.setEnabled(!prompt.isReadOnly());
-				r.setFocusable(!prompt.isReadOnly());
+                r.setMovementMethod(LinkMovementMethod.getInstance());
+                r.setTag(Integer.valueOf(i));
+                r.setId(QuestionWidget.newUniqueId());
+                r.setEnabled(!prompt.isReadOnly());
+                r.setFocusable(!prompt.isReadOnly());
 
-				buttons.add(r);
+                buttons.add(r);
 
-				if (mItems.get(i).getValue().equals(s)) {
-					r.setChecked(true);
-				}
+                if (mItems.get(i).getValue().equals(s)) {
+                    r.setChecked(true);
+                }
 
-				r.setOnCheckedChangeListener(this);
+                r.setOnCheckedChangeListener(this);
 
-				String audioURI = null;
-				audioURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-						FormEntryCaption.TEXT_FORM_AUDIO);
+                String audioURI = null;
+                audioURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        FormEntryCaption.TEXT_FORM_AUDIO);
 
                 String imageURI;
                 if (mItems.get(i) instanceof ExternalSelectChoice) {
                     imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                            FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
-				String videoURI = null;
-				videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-						"video");
+                String videoURI = null;
+                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        "video");
 
-				String bigImageURI = null;
-				bigImageURI = prompt.getSpecialFormSelectChoiceText(
-						mItems.get(i), "big-image");
+                String bigImageURI = null;
+                bigImageURI = prompt.getSpecialFormSelectChoiceText(
+                        mItems.get(i), "big-image");
 
-				MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
-				mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, audioURI, imageURI,
-						videoURI, bigImageURI);
-				mediaLayout.setAudioListener(this);
-				mediaLayout.setPlayTextColor(mPlayColor);
-				mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
-				playList.add(mediaLayout);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, audioURI,
+                        imageURI,
+                        videoURI, bigImageURI);
+                mediaLayout.setAudioListener(this);
+                mediaLayout.setPlayTextColor(mPlayColor);
+                mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+                playList.add(mediaLayout);
 
-				if (i != mItems.size() - 1) {
-					// Last, add the dividing line (except for the last element)
-					ImageView divider = new ImageView(getContext());
-					divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-					mediaLayout.addDivider(divider);
-				}
-				buttonLayout.addView(mediaLayout);
-			}
-		}
-		buttonLayout.setOrientation(LinearLayout.VERTICAL);
+                if (i != mItems.size() - 1) {
+                    // Last, add the dividing line (except for the last element)
+                    ImageView divider = new ImageView(getContext());
+                    divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                    mediaLayout.addDivider(divider);
+                }
+                buttonLayout.addView(mediaLayout);
+            }
+        }
+        buttonLayout.setOrientation(LinearLayout.VERTICAL);
 
-		// The buttons take up the right half of the screen
-		addAnswerView(buttonLayout);
-	}
+        // The buttons take up the right half of the screen
+        addAnswerView(buttonLayout);
+    }
 
-	@Override
-	public void clearAnswer() {
-		for (RadioButton button : this.buttons) {
-			if (button.isChecked()) {
-				button.setChecked(false);
-				return;
-			}
-		}
-	}
+    @Override
+    public void clearAnswer() {
+        for (RadioButton button : this.buttons) {
+            if (button.isChecked()) {
+                button.setChecked(false);
+                return;
+            }
+        }
+    }
 
-	@Override
-	public IAnswerData getAnswer() {
-		int i = getCheckedId();
-		if (i == -1) {
-			return null;
-		} else {
-			SelectChoice sc = mItems.get(i);
-			return new SelectOneData(new Selection(sc));
-		}
-	}
+    @Override
+    public IAnswerData getAnswer() {
+        int i = getCheckedId();
+        if (i == -1) {
+            return null;
+        } else {
+            SelectChoice sc = mItems.get(i);
+            return new SelectOneData(new Selection(sc));
+        }
+    }
 
-	@Override
-	public void setFocus(Context context) {
-		// Hide the soft keyboard if it's showing.
-		InputMethodManager inputManager = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-	}
+    @Override
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
 
-	public int getCheckedId() {
-		for (int i = 0; i < buttons.size(); ++i) {
-			RadioButton button = buttons.get(i);
-			if (button.isChecked()) {
-				return i;
-			}
-		}
-		return -1;
-	}
+    public int getCheckedId() {
+        for (int i = 0; i < buttons.size(); ++i) {
+            RadioButton button = buttons.get(i);
+            if (button.isChecked()) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (!isChecked) {
-			// If it got unchecked, we don't care.
-			return;
-		}
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!isChecked) {
+            // If it got unchecked, we don't care.
+            return;
+        }
 
-		for (RadioButton button : buttons ) {
-			if (button.isChecked() && !(buttonView == button)) {
-				button.setChecked(false);
-			}
-		}
-		
-		SelectChoice choice = mItems.get((Integer)buttonView.getTag());
-		
-		if ( choice != null ) {
-       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
-     	      choice.getValue(), mPrompt.getIndex());
-		} else {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
-            "<no matching choice>", mPrompt.getIndex());
-		}
-	}
+        for (RadioButton button : buttons) {
+            if (button.isChecked() && !(buttonView == button)) {
+                button.setChecked(false);
+            }
+        }
 
-	@Override
-	public void setOnLongClickListener(OnLongClickListener l) {
-		for (RadioButton r : buttons) {
-			r.setOnLongClickListener(l);
-		}
-	}
+        SelectChoice choice = mItems.get((Integer) buttonView.getTag());
 
-	@Override
-	public void cancelLongPress() {
-		super.cancelLongPress();
-		for (RadioButton button : this.buttons) {
-			button.cancelLongPress();
-		}
-	}
-	
-	
-	public void playNextSelectItem() {
+        if (choice != null) {
+            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
+                    choice.getValue(), mPrompt.getIndex());
+        } else {
+            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
+                    "<no matching choice>", mPrompt.getIndex());
+        }
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        for (RadioButton r : buttons) {
+            r.setOnLongClickListener(l);
+        }
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        for (RadioButton button : this.buttons) {
+            button.cancelLongPress();
+        }
+    }
+
+
+    public void playNextSelectItem() {
         if (!this.isShown()) {
             return;
         }
         // if there's more, set up to play the next item
         if (playcounter < playList.size()) {
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                resetQuestionTextColor();
-                mediaPlayer.reset();
-                playNextSelectItem();
-            }
-        });
-        // play the current item
-        playList.get(playcounter).playAudio();
-        playcounter++;
-        
-     } else {
-         playcounter = 0;
-         mPlayer.setOnCompletionListener(null);
-         mPlayer.reset();
-     }
+            mPlayer.setOnCompletionListener(new OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    resetQuestionTextColor();
+                    mediaPlayer.reset();
+                    playNextSelectItem();
+                }
+            });
+            // play the current item
+            playList.get(playcounter).playAudio();
+            playcounter++;
+
+        } else {
+            playcounter = 0;
+            mPlayer.setOnCompletionListener(null);
+            mPlayer.reset();
+        }
 
     }
-    
-    
+
+
     @Override
     public void playAllPromptText() {
         // set up to play the items when the
@@ -275,7 +278,7 @@ public class SelectOneWidget extends QuestionWidget implements
         super.resetQuestionTextColor();
         for (MediaLayout layout : playList) {
             layout.resetTextFormatting();
-        }   
+        }
     }
- 
+
 }

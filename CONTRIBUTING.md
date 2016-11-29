@@ -15,7 +15,9 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. 
 
-1. Each time you make incremental progress towards your goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
+1. Once you've made an incremental progress towards you goal and are ready to commit, reformat all Java code using Android Studio and official [codestyle](https://github.com/android/platform_development/blob/master/ide/intellij/codestyles/AndroidStyle.xml).
+
+1. Commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
         git commit -m "Do a thing. Fix #1."
 

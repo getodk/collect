@@ -20,19 +20,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
-import org.odk.collect.android.tasks.GoogleSheetsTask;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -50,6 +37,19 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
+import org.odk.collect.android.tasks.GoogleSheetsTask;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener {
     private final static String tag = "GoogleSheetsUploaderActivity";
@@ -121,7 +121,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     }
 
     private void runTask() {
-        mUlTask = (GoogleSheetsInstanceUploaderTask)getLastNonConfigurationInstance();
+        mUlTask = (GoogleSheetsInstanceUploaderTask) getLastNonConfigurationInstance();
         if (mUlTask == null) {
             mUlTask = new GoogleSheetsInstanceUploaderTask();
 
@@ -291,17 +291,19 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
 
                 mProgressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Collect.getInstance().getActivityLogger()
-                                .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "cancel");
-                        dialog.dismiss();
-                        mUlTask.cancel(true);
-                        mUlTask.setUploaderListener(null);
-                        finish();
-                    }
-                };
+                DialogInterface.OnClickListener loadingButtonListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Collect.getInstance().getActivityLogger()
+                                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
+                                                "cancel");
+                                dialog.dismiss();
+                                mUlTask.cancel(true);
+                                mUlTask.setUploaderListener(null);
+                                finish();
+                            }
+                        };
                 mProgressDialog.setTitle(getString(R.string.uploading_data));
                 mProgressDialog.setMessage(mAlertMsg);
                 mProgressDialog.setIndeterminate(true);
