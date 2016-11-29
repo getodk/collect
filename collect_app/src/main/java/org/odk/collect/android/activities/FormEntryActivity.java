@@ -1306,6 +1306,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                     event = formController.stepToNextScreenEvent();
                     mBeenSwiped = false;
+
+                    if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                        createRepeatDialog();
+                    }
                     return;
                 }
 
