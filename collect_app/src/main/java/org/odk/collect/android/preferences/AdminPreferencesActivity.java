@@ -97,8 +97,6 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
-	private Preference mChangeAdminPwPreference;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +122,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
             }
         });
 
-		mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+		Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
 		mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -133,13 +131,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 				LayoutInflater factory = LayoutInflater.from(AdminPreferencesActivity.this);
 				final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
 
-				// Get the server, username, and password from the settings
-				SharedPreferences settings =
-						PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
                 final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
                 final EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
-
 
 				b.setTitle(R.string.change_admin_password);
 				b.setView(dialogView);
