@@ -413,7 +413,7 @@
 <string name="reset_settings_dialog">Reset App</string>
 <string name="reset_settings_button_reset">Reset</string>
 <string name="reset_in_progress">Resetting…</string>
-<string name="reset_result_instances_failure">We\'ve been able to delete only %%d saved forms out of %%d</string>
-<string name="reset_result_instances_success">We\'ve been able to delete only %%d blank forms out of %%d</string>
+<string name="reset_result_instances_failure">We\'ve been able to delete only %1$d saved forms out of %2$d</string>
+<string name="reset_result_forms_failure">We\'ve been able to delete only %1$d blank forms out of %2$d</string>
 <string name="reset_result_files_failure">Could not delete file %s</string>
 </resources>

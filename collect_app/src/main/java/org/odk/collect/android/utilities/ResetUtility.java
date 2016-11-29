@@ -158,7 +158,7 @@ public class ResetUtility {
                 } else {
                     def.reject(
                             String.format(
-                                    context.getString(R.string.reset_result_instances_success),
+                                    context.getString(R.string.reset_result_forms_failure),
                                     deletedForms, allForms.length));
                 }
             }
