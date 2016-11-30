@@ -240,5 +240,5 @@
   <string name="minutes">মিনিট</string>
   <string name="clear">মুছে ফেলুন।</string>
   <string name="points_captured">পয়েন্ট নির্ধারন করা</string>
-  <string name="direction">অভিমুখ</string>
+  <string name="direction">অভিমুখ: %s</string>
 </resources>
