@@ -279,7 +279,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
     @Override
     public void progressUpdate(int progress, int total) {
-        mAlertMsg = getString(R.string.sending_items, progress, total);
+        mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         mProgressDialog.setMessage(mAlertMsg);
     }
 
