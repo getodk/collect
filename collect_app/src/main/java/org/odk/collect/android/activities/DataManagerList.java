@@ -195,7 +195,7 @@ public class DataManagerList extends ListActivity implements
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(getString(R.string.delete_file));
         mAlertDialog.setMessage(getString(R.string.delete_confirm,
-                mSelected.size()));
+                String.valueOf(mSelected.size())));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -267,7 +267,7 @@ public class DataManagerList extends ListActivity implements
         if (deletedInstances == mSelected.size()) {
             // all deletes were successful
             Toast.makeText(this,
-                    getString(R.string.file_deleted_ok, deletedInstances),
+                    getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)),
                     Toast.LENGTH_SHORT).show();
         } else {
             // had some failures
@@ -275,8 +275,8 @@ public class DataManagerList extends ListActivity implements
                     + (mSelected.size() - deletedInstances) + " instances");
             Toast.makeText(
                     this,
-                    getString(R.string.file_deleted_error, mSelected.size()
-                            - deletedInstances, mSelected.size()),
+                    getString(R.string.file_deleted_error, String.valueOf(mSelected.size()
+                            - deletedInstances), String.valueOf(mSelected.size())),
                     Toast.LENGTH_LONG).show();
         }
         mDeleteInstancesTask = null;
