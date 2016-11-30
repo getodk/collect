@@ -249,7 +249,7 @@
   <string name="ext_import_finalizing_message">Kuqedelwa ulwazi obeluvele lukhona…</string>
   <string name="ext_import_completed_message">Ukufunda ulwazi kuqediwe</string>
   <string name="ext_not_initialized_error">ExternalDataManager wolwazi uqalisiwe</string>
-  <string name="fs_create_media_folder_error">Awenzeki umqulu wezokuxhumana</string>
+  <string name="fs_create_media_folder_error">Awenzeki umqulu wezokuxhumana '%s'.</string>
   <string name="survey_loading_reading_form_message">Ufunda encazelweni</string>
   <string name="survey_loading_reading_data_message">ufunda ulwazi lwenhlovo…</string>
   <string name="survey_loading_reading_csv_message">ufunda amafayili e CSV…</string>
