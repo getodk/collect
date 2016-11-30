@@ -24,7 +24,7 @@
   <string name="change_password">Inombolomfihlo ye ODK</string>
   <string name="change_protocol_settings_default">Ukuhlelwa kwenkundla</string>
   <string name="change_username">igamamfihlo le ODK</string>
-  <string name="clearanswer_confirm">Susa impendulo yoku \'\'%\'\'?</string>
+  <string name="clearanswer_confirm">Susa impendulo yoku \"%s\"?</string>
   <string name="clear_answer">Susa Impendulo</string>
   <string name="clear_answer_ask">Susa lempendulo?</string>
   <string name="clear_answer_no">Khansela</string>
