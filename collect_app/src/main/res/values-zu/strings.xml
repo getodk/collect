@@ -32,7 +32,6 @@
   <string name="data">Amafomu agciniwe</string>
   <string name="data_saved_error">Uxolo ifomu alilondolozekanga</string>
   <string name="data_saved_ok">Ifomu lilondolozeke ngempumelelo</string>
-  <string name="save_point_error">iphutha ekulondolozeni iphuzu lokuvuselela</string>
   <string name="default_completed">Ngokungenhloso kube sekuqediwe</string>
   <string name="default_completed_summary">Phawula ifomu njeseliphelile ngokungenhloso</string>
   <string name="delete_confirm">Ukususa %s ifomu?</string>
