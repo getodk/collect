@@ -144,7 +144,7 @@
   <string name="font_size">Usayizi wombhalo (Font)</string>
   <string name="change_font_size">Usayizi wombhalo (Font)</string>
   <string name="form_scan_starting">Ukuskena yamafomu…</string>
-  <string name="access_error">Iphutha ngenkathi kufinyelelwa % s :</string>
+  <string name="access_error">Iphutha ngenkathi kufinyelelwa %s :</string>
   <string name="manifest_server_error">Impendulo Manifest akusho ubike version OpenRosa - iseva bad ?</string>
   <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba % s</string>
   <string name="root_namespace_error">Okuwumsuka wegama akuyilona : %s</string>
