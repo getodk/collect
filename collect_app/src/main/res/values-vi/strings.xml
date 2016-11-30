@@ -109,7 +109,7 @@
   <string name="replace_location">Thay vị trí</string>
   <string name="required_answer_error">Xin lỗi, câu trả lời được yêu cầu điền!</string>
   <string name="review_data">Sửa biểu mẫu lưu</string>
-  <string name="review_data_button">Sửa biểu mẫu lưu</string>
+  <string name="review_data_button">Sửa biểu mẫu lưu (%s)</string>
   <string name="saved_data">Chưa hoàn thành (%s)</string>
   <string name="save_all_answers">Lưu biểu mẫu</string>
   <string name="save_enter_data_description">Bạn đang ở phần kết thúc của \"%s\".</string>
