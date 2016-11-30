@@ -146,7 +146,7 @@
   <string name="form_scan_starting">Ukuskena yamafomu…</string>
   <string name="access_error">Iphutha ngenkathi kufinyelelwa %s :</string>
   <string name="manifest_server_error">Impendulo Manifest akusho ubike version OpenRosa - iseva bad ?</string>
-  <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba % s</string>
+  <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba %s</string>
   <string name="root_namespace_error">Okuwumsuka wegama akuyilona : %s</string>
   <string name="manifest_tag_error">Manifest entry %s entulekayo eyodwa noma ngaphezulu tag: lefayela, hashi, noma downloadUrl</string>
   <string name="form_download_progress">%1$s. Ukuthola amafayela emidya: %2$s of %3$s</string>
