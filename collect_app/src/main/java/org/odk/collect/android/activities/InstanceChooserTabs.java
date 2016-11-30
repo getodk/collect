@@ -54,7 +54,7 @@ public class InstanceChooserTabs extends TabActivity {
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
         tabHost.addTab(tabHost.newTabSpec(SAVED_TAB)
-                .setIndicator(getString(R.string.saved_data, mSavedCount)).setContent(saved));
+                .setIndicator(getString(R.string.saved_data, String.valueOf(mSavedCount))).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
