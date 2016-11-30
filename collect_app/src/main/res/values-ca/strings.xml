@@ -111,14 +111,14 @@
   <string name="replace_location">Reemplaça Localització</string>
   <string name="required_answer_error">Aquesta dada és d\'entrada obligada!</string>
   <string name="review_data">Editar formulari desat</string>
-  <string name="review_data_button">Editar formulari desat</string>
+  <string name="review_data_button">Editar formulari desat (%s)</string>
   <string name="saved_data">Incomplert (%s)</string>
   <string name="save_all_answers">Desar formulari </string>
   <string name="save_enter_data_description">Formulari \"%s\" finalitzat.</string>
   <string name="saving_form">Desant formulari</string>
   <string name="sending_items">Enviant %1$s de %2$s formulari(s)</string>
   <string name="send_data">Enviar formulari finalitzat</string>
-  <string name="send_data_button">Enviar formulari finalitzat</string>
+  <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
   <string name="send_selected_data">Enviar seleccionats</string>
   <string name="server_auth_credentials">Si us plau, entrar nom d\'usuari i clau pel servidor:\n%s</string>
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
