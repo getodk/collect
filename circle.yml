@@ -11,8 +11,7 @@ dependencies:
         
 test:
     pre:
-        - ./gradlew assembleRelease
-        - ./gradlew assembleAndroidTest
+        - ./gradlew lint assembleRelease assembleAndroidTest
 
     override:
         - ./gradlew testReleaseUnitTest
