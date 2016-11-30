@@ -757,7 +757,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        mAlertMsg = getString(R.string.fetching_file, currentFile, progress, total);
+        mAlertMsg = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
         mProgressDialog.setMessage(mAlertMsg);
     }
 
