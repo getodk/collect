@@ -222,7 +222,6 @@
   <string name="buttons_navigation">buttons নেভিগেশান</string>
   <string name="swipe_buttons_navigation">swipe buttons নেভিগেশান</string>
   <string name="swipe_instructions">আপনি %s টি শুরুতে বিষয় ঠিক করতে পরদার নীচের দিকে উপর নীচ করে নিরধারণ করুন</string>
-  <string name="buttons_instructions">buttons ইন্সট্রাকশান</string>
   <string name="form_processing_logic">ফর্ম প্রসেসিং logic</string>
   <string name="launch_printer">প্রিন্টার চালু</string>
   <string name="no_printer">প্রিন্টার নেই</string>
