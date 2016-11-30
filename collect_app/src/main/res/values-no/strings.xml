@@ -111,14 +111,14 @@
   <string name="replace_location">Erstatt posisjon</string>
   <string name="required_answer_error">Beklager, svaret er påkrevd!</string>
   <string name="review_data">Rediger lagret skjema</string>
-  <string name="review_data_button">Rediger lagret skjema</string>
+  <string name="review_data_button">Rediger lagret skjema (%s)</string>
   <string name="saved_data">Inkomplett (%s)</string>
   <string name="save_all_answers">Lagre skjema</string>
   <string name="save_enter_data_description">Du er på slutten av \"%s\".</string>
   <string name="saving_form">Lagrer skjema</string>
   <string name="sending_items">Sender %1$s av %2$s skjema(er)</string>
   <string name="send_data">Send ferdig skjema</string>
-  <string name="send_data_button">Send ferdig skjema</string>
+  <string name="send_data_button">Send ferdig skjema (%s)</string>
   <string name="send_selected_data">Send utvalgte</string>
   <string name="server_auth_credentials">Skriv inn brukernavn og passord for serveren:\n%s</string>
   <string name="server_requires_auth">Server krever godkjenning</string>
