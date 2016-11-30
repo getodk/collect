@@ -111,14 +111,14 @@
   <string name="replace_location">Remplacer le Lieu</string>
   <string name="required_answer_error">Réponse obligatoire !</string>
   <string name="review_data">Éditer un Formulaire Sauvegardé</string>
-  <string name="review_data_button">Éditer un Formulaire Sauvegardé (%s)</string>
+  <string name="review_data_button">Éditer un formulaire sauvegardé (%s)</string>
   <string name="saved_data">Incomplet (%s)</string>
   <string name="save_all_answers">Sauvegarder le formulaire</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <string name="saving_form">Sauvegarde du Formulaire…</string>
   <string name="sending_items">Envoi de %1$s sur %2$s formulaire(s)</string>
-  <string name="send_data">Envoyer un Formulaire Finalisé</string>
-  <string name="send_data_button">Envoyer un Formulaire Finalisé</string>
+  <string name="send_data">Envoyer un formulaire finalisé</string>
+  <string name="send_data_button">Envoyer un formulaire finalisé (%s)</string>
   <string name="send_selected_data">Envoyer Eléments Sélectionnés</string>
   <string name="server_auth_credentials">Saisir le nom d\'utilisateur et mot de passe pour le serveur:\n%s</string>
   <string name="server_requires_auth">Le Serveur requiert une authentification</string>
