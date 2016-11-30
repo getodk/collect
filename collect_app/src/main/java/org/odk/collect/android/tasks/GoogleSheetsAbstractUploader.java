@@ -204,7 +204,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         if (columnNames.size() > 255) {
             mResults.put(id,
                     Collect.getInstance()
-                            .getString(R.string.sheets_max_columns, columnNames.size()));
+                            .getString(R.string.sheets_max_columns, String.valueOf(columnNames.size())));
             return false;
         }
 
