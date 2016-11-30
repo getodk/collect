@@ -111,14 +111,14 @@
   <string name="replace_location">Standort ersetzen</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
   <string name="review_data">Gespeichertes Formular ändern</string>
-  <string name="review_data_button">Gespeichertes Formular ändern</string>
+  <string name="review_data_button">Gespeichertes Formular ändern (%s)</string>
   <string name="saved_data">Unvollständig (%s)</string>
   <string name="save_all_answers">Formular speichern</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
   <string name="saving_form">Formular wird gespeichert</string>
   <string name="sending_items">%1$s von %2$s Formular(en) werden hochgeladen</string>
   <string name="send_data">Vollständiges Formular hochladen</string>
-  <string name="send_data_button">Vollständiges Formular hochladen</string>
+  <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <string name="send_selected_data">Auswahl hochladen</string>
   <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben:\n%s</string>
   <string name="server_requires_auth">Server verlangt Authentifizierung</string>
