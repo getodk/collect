@@ -59,7 +59,7 @@ public class InstanceChooserTabs extends TabActivity {
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
         tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB)
-                .setIndicator(getString(R.string.completed_data, mCompletedCount))
+                .setIndicator(getString(R.string.completed_data, String.valueOf(mCompletedCount)))
                 .setContent(completed));
 
         // hack to set font size and padding in tab headers
