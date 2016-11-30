@@ -116,7 +116,6 @@
   <string name="saving_form">Đang lưu biểu mẫu</string>
   <string name="sending_items">Gửi %1$s trong %2$s biểu mẫu</string>
   <string name="send_data">Gửi biểu mẫu đã hoàn thành</string>
-  <string name="send_data_button">Gửi biểu mẫu</string>
   <string name="send_selected_data">Gửi lựa chọn</string>
   <string name="server_auth_credentials">Vui lòng nhập tên và mật mã đăng nhập vào server:\n%s</string>
   <string name="server_requires_auth">Máy chủ yêu cầu xác thực</string>
