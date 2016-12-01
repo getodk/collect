@@ -47,7 +47,7 @@
           android:protectionLevel="signature" />
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    
+
     <supports-screens
         android:anyDensity="true"
         android:xlargeScreens="true"
