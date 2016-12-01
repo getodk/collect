@@ -53,7 +53,6 @@ android {
 
     lintOptions {
         abortOnError true
-        ignoreWarnings true
     }
 }
 
