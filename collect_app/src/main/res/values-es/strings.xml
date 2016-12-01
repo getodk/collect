@@ -323,7 +323,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_google_account_needed">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
-  <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %1%s. No se puede subir la hoja.</string>
+  <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="google_sheets_access_denied">Acceso denegado. Asegurese de que dispone de permisos de acceso.</string>
   <string name="google_sheets_update_error">Error al actualizar la hoja. Asegurese de que dispone de permisos de acceso.</string>
