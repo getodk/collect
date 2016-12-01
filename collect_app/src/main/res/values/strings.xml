@@ -328,7 +328,7 @@
 <string name="default_google_sheets_url"></string>
 <string name="send_in_progress">Background send running, please try again shortly</string>
 <string name="sheets_google_account_needed">You have selected Google Sheets as your server, please select a corresponding Google Account in the General Settings before continuing</string>
-<string name="sheets_max_columns">Max number of columns is 255, your form has %1%s. Unable to upload to spreadsheet.</string>
+<string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
 <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
 <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
 <string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
