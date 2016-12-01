@@ -11,9 +11,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.odk.collect.android"
-    android:versionCode="1058"
-    android:versionName="1.4.8"
-
     >
 
     <uses-feature android:name="android.hardware.location" android:required="false" />
@@ -50,9 +47,7 @@
           android:protectionLevel="signature" />
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
-
+    
     <supports-screens
         android:anyDensity="true"
         android:xlargeScreens="true"
