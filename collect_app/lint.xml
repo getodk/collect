@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
+	<!-- make sure classes referenced in the manifest or in a layout file are in the project -->
+    <issue id="MissingRegistered" severity="error" />
+
+    <!-- require inputType attribute on all text fields -->
+    <issue id="TextFields" severity="error" />
+
+    <issue id="StaticFieldLeak" severity="error" />
+
+    <issue id="GradleOverrides" severity="error" />
+
+    <issue id="SetTextI18n" severity="error" />
+    <issue id="HardcodedText" severity="error" />
 </lint>
