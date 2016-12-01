@@ -45,7 +45,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class MapHelper {
-    public static Context context;
     private static SharedPreferences sharedPreferences;
     public static String[] offilineOverlays;
     private static final String no_folder_key = "None";
@@ -81,8 +80,7 @@ public class MapHelper {
     public MapHelper(Context pContext, GoogleMap pGoogleMap) {
         this.mGoogleMap = null;
         this.mOsmMap = null;
-        context = pContext;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         this.mGoogleMap = pGoogleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
@@ -91,8 +89,7 @@ public class MapHelper {
     public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
         this.mGoogleMap = null;
         this.mOsmMap = null;
-        context = pContext;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
         this.mOsmMap = pOsmMap;
@@ -174,9 +171,9 @@ public class MapHelper {
         return results.toArray(new String[0]);
     }
 
-    public void showLayersDialog() {
-        AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
-        layerDialod.setTitle(context.getString(R.string.select_offline_layer));
+    public void showLayersDialog(final Context pContext) {
+        AlertDialog.Builder layerDialod = new AlertDialog.Builder(pContext);
+        layerDialod.setTitle(pContext.getString(R.string.select_offline_layer));
         AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
                 selected_layer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -224,7 +221,7 @@ public class MapHelper {
                                         mOsmMap.invalidate();
                                         OsmMBTileProvider mbprovider = new OsmMBTileProvider(
                                                 iRegisterReceiver, spfile);
-                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
+                                        osmTileOverlay = new TilesOverlay(mbprovider, pContext);
                                         osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
                                         mOsmMap.getOverlays().add(0, osmTileOverlay);
                                         mOsmMap.invalidate();
