@@ -285,7 +285,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         layers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog();
+                mHelper.showLayersDialog(GeoTraceGoogleMapActivity.this);
             }
         });
 
