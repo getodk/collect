@@ -397,4 +397,5 @@
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
+<string name="select_odk_shortcut">Select ODK Shortcut</string>
 </resources>
