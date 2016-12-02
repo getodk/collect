@@ -398,4 +398,7 @@
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
 <string name="select_odk_shortcut">Select ODK Shortcut</string>
+<string name="bad_uri">Bad URI: </string>
+<string name="unrecognized_uri">Unrecognized URI: </string>
+<string name="no_form_loaded">no form loaded</string>
 </resources>
