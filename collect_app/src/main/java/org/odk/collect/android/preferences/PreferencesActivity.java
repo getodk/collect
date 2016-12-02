@@ -39,6 +39,7 @@ import android.text.Spanned;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -63,6 +64,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_SPLASH_PATH = "splashPath";
     public static final String KEY_FONT_SIZE = "font_size";
     public static final String KEY_DELETE_AFTER_SEND = "delete_send";
+    public static final String KEY_INFO = "info";
 
     public static final String KEY_PROTOCOL = "protocol";
     public static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
@@ -174,6 +176,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
+
+        PreferenceScreen infoPreference = (PreferenceScreen) findPreference(KEY_INFO);
+        infoPreference.setTitle(Collect.getInstance().getVersionedAppNameWithBuildNumber());
 
         boolean autosendWifiAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
