@@ -402,4 +402,6 @@
 <string name="unrecognized_uri">Unrecognized URI: </string>
 <string name="no_form_loaded">no form loaded</string>
 <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
+<string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
+<string name="corrupt_settings_file_notification">Settings successfully loaded from file</string>
 </resources>

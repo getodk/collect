@@ -129,15 +129,11 @@ public class MainMenuActivity extends Activity {
 		if (f.exists()) {
 			boolean success = loadSharedPreferencesFromFile(f);
 			if (success) {
-				Toast.makeText(this,
-						"Settings successfully loaded from file",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getString(R.string.settings_successfully_loaded_file_notification), Toast.LENGTH_LONG).show();
 				f.delete();
 			} else {
 				Toast.makeText(
-						this,
-						"Sorry, settings file is corrupt and should be deleted or replaced",
-						Toast.LENGTH_LONG).show();
+						this, getString(R.string.corrupt_settings_file_notification), Toast.LENGTH_LONG).show();
 			}
 		}
 
