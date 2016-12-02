@@ -354,7 +354,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							instanceCursor = getContentResolver().query(uri,
 									null, null, null, null);
 							if (instanceCursor.getCount() != 1) {
-								this.createErrorDialog("Bad URI: " + uri, EXIT);
+								this.createErrorDialog(getString(R.string.bad_uri) + uri, EXIT);
 								return;
 							} else {
 								instanceCursor.moveToFirst();
@@ -441,7 +441,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						c = getContentResolver().query(uri, null, null, null,
 								null);
 						if (c.getCount() != 1) {
-							this.createErrorDialog("Bad URI: " + uri, EXIT);
+							this.createErrorDialog(getString(R.string.bad_uri) + uri, EXIT);
 							return;
 						} else {
 							c.moveToFirst();
@@ -504,7 +504,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					}
 				} else {
 					Log.e(t, "unrecognized URI");
-					this.createErrorDialog("Unrecognized URI: " + uri, EXIT);
+					this.createErrorDialog(getString(R.string.unrecognized_uri) + uri, EXIT);
 					return;
 				}
 
@@ -1790,7 +1790,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		   FormController formController = Collect.getInstance().getFormController();
 		   title = (formController == null) ? null : formController.getFormTitle();
 		   if ( title == null ) {
-		      title = "<no form loaded>";
+		      title = "<".concat(getString(R.string.no_form_loaded)).concat(">");
 		   }
 	   }
 
