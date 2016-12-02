@@ -757,8 +757,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                 } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
                 if (driveFileList.size() > 1) {
-                    results.put(fileItem.getName(),
-                            "More than one media folder detected, please remove one and try again");
+                    results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
                     return results;
                 } else if (driveFileList.size() == 1) {
                     requestString = "'" + driveFileList.get(0).getId()
