@@ -401,4 +401,5 @@
 <string name="bad_uri">Bad URI: </string>
 <string name="unrecognized_uri">Unrecognized URI: </string>
 <string name="no_form_loaded">no form loaded</string>
+<string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 </resources>
