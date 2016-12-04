@@ -18,31 +18,47 @@
 	android:paddingTop="4dip"
 	android:paddingBottom="8dip"
 	android:minHeight="?android:attr/listPreferredItemHeight">
-    <TextView
-            android:id="@+id/text1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:text="text1"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-    <TextView
-            android:id="@+id/text2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_below="@+id/text1"
-            android:layout_alignParentLeft="true"
-            android:text="text2"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
-	<CheckBox
-		android:id="@+id/checkbox"
-		android:layout_width="wrap_content"
+
+	<RelativeLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center_vertical"
-		android:focusable="false"
-		android:clickable="false"
-		android:layout_centerVertical="true"
-		android:layout_alignParentRight="true" />
+		android:layout_above="@+id/checkbox"
+		android:layout_centerHorizontal="true"
+		android:id="@+id/instance_item">
+
+		<TextView
+                android:id="@+id/text1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:text="text1"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_toLeftOf="@+id/checkbox"
+			android:ellipsize="end"
+			android:maxLines="2"
+			android:singleLine="false" />
+
+		<TextView
+                android:id="@+id/text2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/text1"
+                android:layout_alignParentLeft="true"
+                android:text="text2"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_toLeftOf="@+id/checkbox" />
+
+		<CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:focusable="false"
+            android:clickable="false"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true" />
+	</RelativeLayout>
 </org.odk.collect.android.views.TwoItemMultipleChoiceView>
