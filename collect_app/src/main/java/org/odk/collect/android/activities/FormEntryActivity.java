@@ -883,9 +883,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = Collect.getInstance()
                 .getFormController();
-        // only try to save if the current event is a question or a field-list
-        // group
-        if (formController.currentPromptIsQuestion()) {
+        // only try to save if the current event is a question or a field-list group
+        // and current view is an ODKView (occasionally we show blank views that do not have any
+        // controls to save data from)
+        if (formController.currentPromptIsQuestion() && mCurrentView instanceof ODKView) {
             LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView)
                     .getAnswers();
             try {
@@ -1168,7 +1169,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                 createRepeatDialog();
-                return new View(this);
+                return new EmptyView(this);
 
             default:
                 Log.e(t, "Attempted to create a view that does not exist.");
@@ -1307,7 +1308,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     event = formController.stepToNextScreenEvent();
                     mBeenSwiped = false;
 
-                    if (event == FormEntryController.EVENT_REPEAT) {
+                    // If we are not showing an empty view, then abort
+                    if (event == FormEntryController.EVENT_REPEAT && !(mCurrentView instanceof EmptyView)) {
                         // Returning here prevents the same view sliding in when
                         // - Form starts with a repeat group AND
                         // - User has added several groups AND
@@ -1685,6 +1687,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         "show");
         FormController formController = Collect.getInstance()
                 .getFormController();
+
+        showView(new EmptyView(this), AnimationType.FADE);
+
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = formController.getLastRepeatedGroupName();
@@ -1714,6 +1719,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "cancel");
+
+                        refreshCurrentView();
                         break;
                 }
             }
@@ -2788,6 +2795,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             Toast.makeText(this, getString(R.string.save_point_error, errorMessage),
                     Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Used whenever we need to show empty view and be able to recognize it from the code
+     */
+    class EmptyView extends View {
+
+        public EmptyView(Context context) {
+            super(context);
         }
     }
 }
