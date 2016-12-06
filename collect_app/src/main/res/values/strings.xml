@@ -417,4 +417,5 @@
 <string name="text2">text2</string>
 <string name="record_geopoint">Record GeoPoint</string>
 <string name="gps_result" formatted="false">%1$s: %2$s\n%3$s: %4$s\n%5$s: %6$sm\n%7$s: %8$sm</string>
+<string name="parser_exception">XPathParser Exception: " %s"</string>
 </resources>
