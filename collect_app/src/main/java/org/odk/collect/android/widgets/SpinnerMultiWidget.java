@@ -117,12 +117,12 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
                                     if (first) {
                                         first = false;
-                                        selectionText.setText(context.getString(R.string.selected)
-                                                + answer_items[i].toString());
+                                        selectionText.setText(String.format(context.getString(R.string.selected_answer),
+                                                context.getString(R.string.selected), answer_items[i].toString()));
                                         selectionText.setVisibility(View.VISIBLE);
                                     } else {
-                                        selectionText.setText(selectionText.getText() + ", "
-                                                + answer_items[i].toString());
+                                        selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
+                                                selectionText.getText().toString(), answer_items[i].toString()));
                                     }
                                 }
                             }
@@ -166,12 +166,12 @@ public class SpinnerMultiWidget extends QuestionWidget {
                 if (found) {
                     if (first) {
                         first = false;
-                        selectionText.setText(context.getString(R.string.selected)
-                                + answer_items[i].toString());
+                        selectionText.setText(String.format(context.getString(R.string.selected_answer),
+                                context.getString(R.string.selected), answer_items[i].toString()));
                         selectionText.setVisibility(View.VISIBLE);
                     } else {
-                        selectionText.setText(selectionText.getText() + ", "
-                                + answer_items[i].toString());
+                        selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
+                                selectionText.getText().toString(), answer_items[i].toString()));
                     }
                 }
 
