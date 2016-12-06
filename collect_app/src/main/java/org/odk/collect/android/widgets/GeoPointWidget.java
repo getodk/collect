@@ -303,14 +303,15 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		if (!s.equals("") || s == null){
 			mStringAnswer.setText(s);
 			String[] sa = s.split(" ");
-			mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
-					+ formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
-					+ getContext().getString(R.string.longitude) + ": "
-					+ formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
-					+ getContext().getString(R.string.altitude) + ": "
-					+ truncateDouble(sa[2]) + "m\n"
-					+ getContext().getString(R.string.accuracy) + ": "
-					+ truncateDouble(sa[3]) + "m");
+			mAnswerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
+					getContext().getString(R.string.latitude),
+					formatGps(Double.parseDouble(sa[0]), "lat"),
+					getContext().getString(R.string.longitude),
+					formatGps(Double.parseDouble(sa[1]), "lon"),
+					getContext().getString(R.string.altitude),
+					truncateDouble(sa[2]),
+					getContext().getString(R.string.accuracy),
+					truncateDouble(sa[3])));
 		}else{
 			mStringAnswer.setText(s);
 			mAnswerDisplay.setText("");
