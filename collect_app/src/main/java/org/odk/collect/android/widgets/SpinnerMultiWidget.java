@@ -118,7 +118,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
                                     if (first) {
                                         first = false;
                                         selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                                context.getString(R.string.selected), answer_items[i].toString()));
+                                                answer_items[i].toString()));
                                         selectionText.setVisibility(View.VISIBLE);
                                     } else {
                                         selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
@@ -167,7 +167,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
                     if (first) {
                         first = false;
                         selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                context.getString(R.string.selected), answer_items[i].toString()));
+                                answer_items[i].toString()));
                         selectionText.setVisibility(View.VISIBLE);
                     } else {
                         selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
