@@ -1244,8 +1244,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
 
             View next;
+
+            int originalEvent = formController.getEvent();
             int event = formController.stepToNextScreenEvent();
 
+            // Helps prevent transition animation at the end of the form (if user swipes left
+            // she will stay on the same screen)
+            if (originalEvent == event && originalEvent == FormEntryController.EVENT_END_OF_FORM) {
+                mBeenSwiped = false;
+                return;
+            }
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
