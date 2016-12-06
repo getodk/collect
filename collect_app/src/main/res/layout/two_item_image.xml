@@ -27,7 +27,7 @@
             android:layout_alignTop="@+id/image"
             android:layout_toRightOf="@+id/image"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="text1"/>
+            android:text="@string/text1"/>
     <TextView
             android:id="@+id/text2"
             android:layout_width="fill_parent"
@@ -36,7 +36,7 @@
             android:layout_alignLeft="@+id/text1"
             android:layout_alignRight="@+id/text1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="text2"/>
+            android:text="@string/text2"/>
 
     <CheckBox
             android:id="@+id/checkbox"

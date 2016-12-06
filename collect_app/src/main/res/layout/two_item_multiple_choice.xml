@@ -25,7 +25,7 @@
             android:gravity="center_vertical"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:text="text1"
+            android:text="@string/text1"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
     <TextView
             android:id="@+id/text2"
@@ -34,7 +34,7 @@
             android:gravity="center_vertical"
             android:layout_below="@+id/text1"
             android:layout_alignParentLeft="true"
-            android:text="text2"
+            android:text="@string/text2"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
 	<CheckBox
 		android:id="@+id/checkbox"
