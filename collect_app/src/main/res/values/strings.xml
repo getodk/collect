@@ -420,4 +420,5 @@
 <string name="parser_exception">XPathParser Exception: " %s"</string>
 <string name="selected_answer">%1$s%2$s</string>
 <string name="selected_answer_with_comma">%1$s, %2$s</string>
+<string name="version_number">Version: %1$s</string>
 </resources>
