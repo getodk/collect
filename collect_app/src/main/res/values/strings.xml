@@ -411,4 +411,6 @@
 <string name="install_openmapkit">Please install OpenMapKit!</string>
 <string name="go_back">Go back</string>
 <string name="download_selected">Download Selected</string>
+<string name="detection_frequency">detection frequency</string>
+<string name="two_hundred">200</string>
 </resources>
