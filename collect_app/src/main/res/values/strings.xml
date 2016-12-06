@@ -407,4 +407,6 @@
 <string name="selected_invalid_image">Selected file is not a valid image</string>
 <string name="edited_osm_file">Edited OSM XML File:</string>
 <string name="invalid_osm_data">Something went wrong. We did not get valid OSM data.</string>
+<string name="alert">Alert</string>
+<string name="install_openmapkit">Please install OpenMapKit!</string>
 </resources>
