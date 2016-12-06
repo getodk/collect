@@ -761,12 +761,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // field-lists,
         // repeat events, and indexes in field-lists that is not the containing
         // group.
-        if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-            createRepeatDialog();
-        } else {
-            View current = createView(event, false);
-            showView(current, AnimationType.FADE);
-        }
+
+        View current = createView(event, false);
+        showView(current, AnimationType.FADE);
     }
 
     @Override
@@ -1168,6 +1165,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     mNextButton.setEnabled(true);
                 }
                 return odkv;
+
+            case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                createRepeatDialog();
+                return new View(this);
+
             default:
                 Log.e(t, "Attempted to create a view that does not exist.");
                 // this is badness to avoid a crash.
@@ -1186,12 +1188,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController) {
         try {
             event = formController.stepToNextScreenEvent();
-
-            if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                createRepeatDialog();
-                // Return blank view because code expects to add something to the layout
-                return new View(this);
-            }
 
         } catch (JavaRosaException e) {
             Log.e(t, e.getMessage(), e);
@@ -1267,11 +1263,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     break;
                 case FormEntryController.EVENT_END_OF_FORM:
                 case FormEntryController.EVENT_REPEAT:
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
-                    break;
-                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                    createRepeatDialog();
                     break;
                 case FormEntryController.EVENT_REPEAT_JUNCTURE:
                     Log.i(t, "repeat juncture: "
@@ -1313,10 +1307,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     event = formController.stepToNextScreenEvent();
                     mBeenSwiped = false;
 
-                    if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                        createRepeatDialog();
+                    if (event == FormEntryController.EVENT_REPEAT) {
+                        // Returning here prevents the same view sliding in when
+                        // - Form starts with a repeat group AND
+                        // - User has added several groups AND
+                        // - She is on the first group and swipes back
+                        return;
                     }
-                    return;
                 }
 
                 if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
