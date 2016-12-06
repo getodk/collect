@@ -199,8 +199,8 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             }
 		} catch(Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Alert");
-            builder.setMessage("Please install OpenMapKit!");
+            builder.setTitle(R.string.alert);
+            builder.setMessage(R.string.install_openmapkit);
             DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
             	public void onClick(DialogInterface dialog, int id) {
                     //TODO: launch to app store?
