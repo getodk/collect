@@ -83,7 +83,7 @@ public class ExDecimalWidget extends ExStringWidget {
         	// truncate to 15 digits max...
             String dString = nf.format(d);
             d = Double.parseDouble(dString.replace(',', '.')); // in case , is decimal pt
-            mAnswer.setText(d.toString());
+            mAnswer.setText(String.format("%d", d.toString()));
         }
     }
 

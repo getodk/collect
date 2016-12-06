@@ -79,7 +79,7 @@ public class DecimalWidget extends StringWidget {
         	// truncate to 15 digits max...
             String dString = nf.format(d);
             d = Double.parseDouble(dString.replace(',', '.'));
-            mAnswer.setText(d.toString());
+            mAnswer.setText(String.format("%d", d.toString()));
         }
 
         // disable if read only
