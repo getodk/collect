@@ -73,7 +73,7 @@ public class ExIntegerWidget extends ExStringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(i.toString());
+            mAnswer.setText(String.format("%d", i.toString()));
         }
     }
 

@@ -74,7 +74,7 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(i.toString());
+            mAnswer.setText(String.format("%d", i.toString()));
         }
         
         setupChangeListener();
