@@ -413,4 +413,6 @@
 <string name="download_selected">Download Selected</string>
 <string name="detection_frequency">detection frequency</string>
 <string name="two_hundred">200</string>
+<string name="text1">text1</string>
+<string name="text2">text2</string>
 </resources>
