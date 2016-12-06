@@ -76,7 +76,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
-        mErrorTextView.setText("Something went wrong. We did not get valid OSM data.");
+        mErrorTextView.setText(R.string.invalid_osm_data);
         
         // Determine the tags required
         QuestionDef question = prompt.getQuestion();
@@ -125,7 +125,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         mOSMFileNameHeaderTextView.setTextSize(20);
         mOSMFileNameHeaderTextView.setTypeface(null, Typeface.BOLD);
         mOSMFileNameHeaderTextView.setPadding(10, 0, 0, 10);
-        mOSMFileNameHeaderTextView.setText("Edited OSM XML File:");
+        mOSMFileNameHeaderTextView.setText(R.string.edited_osm_file);
         
         // text view showing the resulting OSM file name
         mOSMFileNameTextView = new TextView(context);

@@ -405,4 +405,6 @@
 <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
 <string name="corrupt_settings_file_notification">Settings successfully loaded from file</string>
 <string name="selected_invalid_image">Selected file is not a valid image</string>
+<string name="edited_osm_file">Edited OSM XML File:</string>
+<string name="invalid_osm_data">Something went wrong. We did not get valid OSM data.</string>
 </resources>
