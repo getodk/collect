@@ -404,4 +404,5 @@
 <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
 <string name="corrupt_settings_file_notification">Settings successfully loaded from file</string>
+<string name="selected_invalid_image">Selected file is not a valid image</string>
 </resources>

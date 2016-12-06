@@ -63,7 +63,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
 		mErrorTextView = new TextView(context);
 		mErrorTextView.setId(QuestionWidget.newUniqueId());
-		mErrorTextView.setText("Selected file is not a valid image");
+		mErrorTextView.setText(R.string.selected_invalid_image);
 
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();
