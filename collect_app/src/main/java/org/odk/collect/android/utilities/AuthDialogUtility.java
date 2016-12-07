@@ -40,20 +40,15 @@ public class AuthDialogUtility {
             final AuthDialogUtilityResultListener resultListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        LayoutInflater factory = LayoutInflater.from(context);
-        final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
+        final View dialogView = LayoutInflater.from(context)
+                .inflate(R.layout.server_auth_dialog, null);
 
-        // Get the server, username, and password from the settings
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        final EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
+        final EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
 
-        String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-        String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-
-        EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-        EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-
-        username.setText(storedUsername);
-        password.setText(storedPassword);
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        username.setText(getUserName(settings));
+        password.setText(getPassword(settings));
 
         builder.setTitle(context.getString(R.string.server_requires_auth));
         builder.setMessage(context.getString(R.string.server_auth_credentials, url));
@@ -63,13 +58,11 @@ public class AuthDialogUtility {
             public void onClick(DialogInterface dialog, int which) {
                 Collect.getInstance().getActivityLogger().logAction(this, TAG, "OK");
 
-                EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-                EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+                String userNameValue = username.getText().toString();
+                String passwordValue = password.getText().toString();
 
-                Uri u = Uri.parse(url);
-
-                WebUtils.addCredentials(username.getText().toString(), password.getText()
-                        .toString(), u.getHost());
+                saveCredentials(settings, userNameValue, passwordValue);
+                WebUtils.addCredentials(userNameValue, passwordValue, Uri.parse(url).getHost());
 
                 resultListener.updatedCredentials();
             }
@@ -87,6 +80,22 @@ public class AuthDialogUtility {
         builder.setCancelable(false);
 
         return builder.create();
+    }
+
+    private String getPassword(SharedPreferences settings) {
+        return settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+    }
+
+    private String getUserName(SharedPreferences settings) {
+        return settings.getString(PreferencesActivity.KEY_USERNAME, null);
+    }
+
+    private void saveCredentials(SharedPreferences settings, String userName, String password) {
+        settings
+                .edit()
+                .putString(PreferencesActivity.KEY_USERNAME, userName)
+                .putString(PreferencesActivity.KEY_PASSWORD, password)
+                .commit();
     }
 
     public interface AuthDialogUtilityResultListener {
