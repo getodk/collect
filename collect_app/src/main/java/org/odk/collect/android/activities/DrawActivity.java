@@ -298,10 +298,10 @@ public class DrawActivity extends Activity {
         } else {
             FileOutputStream fos;
             fos = new FileOutputStream(f);
-            Bitmap bitmap = Bitmap.createBitmap(drawView.getWidth(),
-                    drawView.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap(drawView.getBitmapWidth(),
+                    drawView.getBitmapHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
-            drawView.draw(canvas);
+            drawView.drawOnCanvas(canvas, 0, 0);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
             try {
                 if (fos != null) {
@@ -433,6 +433,7 @@ public class DrawActivity extends Activity {
         private Bitmap mBitmap;
         private Canvas mCanvas;
         private Path mCurrentPath;
+        private Path mOffscreenPath; // Adjusted for position of the bitmap in the view
         private Paint mBitmapPaint;
         private File mBackgroundBitmapFile;
 
@@ -441,6 +442,7 @@ public class DrawActivity extends Activity {
             isSignature = false;
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
             mCurrentPath = new Path();
+            mOffscreenPath = new Path();
             setBackgroundColor(0xFFFFFFFF);
             mBackgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
         }
@@ -495,8 +497,12 @@ public class DrawActivity extends Activity {
 
         @Override
         protected void onDraw(Canvas canvas) {
+            drawOnCanvas(canvas, getBitmapLeft(), getBitmapTop());
+        }
+
+        public void drawOnCanvas(Canvas canvas, float left, float top) {
             canvas.drawColor(0xFFAAAAAA);
-            canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+            canvas.drawBitmap(mBitmap, left, top, mBitmapPaint);
             canvas.drawPath(mCurrentPath, paint);
         }
 
@@ -505,6 +511,10 @@ public class DrawActivity extends Activity {
         private void touch_start(float x, float y) {
             mCurrentPath.reset();
             mCurrentPath.moveTo(x, y);
+
+            mOffscreenPath.reset();
+            mOffscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
+
             mX = x;
             mY = y;
         }
@@ -516,6 +526,8 @@ public class DrawActivity extends Activity {
 
         private void touch_move(float x, float y) {
             mCurrentPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mOffscreenPath.quadTo(mX - getBitmapLeft(), mY - getBitmapTop(),
+                    (x + mX) / 2 - getBitmapLeft(), (y + mY) / 2 - getBitmapTop());
             mX = x;
             mY = y;
         }
@@ -525,8 +537,10 @@ public class DrawActivity extends Activity {
                 mCanvas.drawPoint(mX, mY, pointPaint);
             } else {
                 mCurrentPath.lineTo(mX, mY);
+                mOffscreenPath.lineTo(mX - getBitmapLeft(), mY - getBitmapTop());
+
                 // commit the path to our offscreen
-                mCanvas.drawPath(mCurrentPath, paint);
+                mCanvas.drawPath(mOffscreenPath, paint);
             }
             // kill this so we don't double draw
             mCurrentPath.reset();
@@ -554,6 +568,23 @@ public class DrawActivity extends Activity {
             return true;
         }
 
+        public int getBitmapHeight(){
+            return mBitmap.getHeight();
+        }
+
+        public int getBitmapWidth(){
+            return mBitmap.getWidth();
+        }
+
+        private int getBitmapLeft(){
+            // Centered horizontally
+            return (getWidth() - mBitmap.getWidth())/2;
+        }
+
+        private int getBitmapTop(){
+            // Centered vertically
+            return (getHeight() - mBitmap.getHeight())/2;
+        }
     }
 
 }
