@@ -99,13 +99,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 
                 preference.setSummary(username);
 
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                        getBaseContext());
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                        getString(R.string.default_server_url));
-                Uri u = Uri.parse(server);
-                WebUtils.clearHostCredentials(u.getHost());
-                Collect.getInstance().getCookieStore().clear();
+                clearCachedCrendentials();
 
                 return true;
             }
@@ -129,29 +123,32 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
                             return false;
                         }
 
-                        if (pw.length() > 0) {
-                            mPasswordPreference.setSummary("********");
-                        } else {
-                            mPasswordPreference.setSummary("");
-                        }
-
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                                getBaseContext());
-                        String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                                getString(R.string.default_server_url));
-                        Uri u = Uri.parse(server);
-                        WebUtils.clearHostCredentials(u.getHost());
-                        Collect.getInstance().getCookieStore().clear();
+                        maskPasswordSummary(pw);
+                        clearCachedCrendentials();
 
                         return true;
                     }
                 });
-        if (mPasswordPreference.getText() != null
-                && mPasswordPreference.getText().length() > 0) {
-            mPasswordPreference.setSummary("********");
-        }
+
+        maskPasswordSummary(mPasswordPreference.getText());
         mPasswordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
+    }
+
+    private void maskPasswordSummary(String password) {
+        mPasswordPreference.setSummary(password != null && password.length() > 0
+                ? "********"
+                : "");
+    }
+
+    private void clearCachedCrendentials() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getBaseContext());
+        String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                getString(R.string.default_server_url));
+        Uri u = Uri.parse(server);
+        WebUtils.clearHostCredentials(u.getHost());
+        Collect.getInstance().getCookieStore().clear();
     }
 
 }
