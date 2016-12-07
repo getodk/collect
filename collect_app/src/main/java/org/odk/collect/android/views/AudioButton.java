@@ -14,15 +14,6 @@
 
 package org.odk.collect.android.views;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +21,15 @@ import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.reference.InvalidReferenceException;
+import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author ctsims
@@ -42,9 +42,8 @@ public class AudioButton extends ImageButton {
      * Useful class for handling the playing and stopping of audio prompts.
      * This is used here, and also in the GridMultiWidget and GridWidget
      * to play prompts as items are selected.
-     * 
-     * @author mitchellsundt@gmail.com
      *
+     * @author mitchellsundt@gmail.com
      */
     public static class AudioHandler {
         private FormIndex index;
@@ -52,21 +51,23 @@ public class AudioButton extends ImageButton {
         private String URI;
         private MediaPlayer mPlayer;
 
-        public AudioHandler(FormIndex index, String selectionDesignator, String URI, MediaPlayer player) {
+        public AudioHandler(FormIndex index, String selectionDesignator, String URI,
+                MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
             this.URI = URI;
             mPlayer = player;
         }
-        
-        
+
+
         public void playAudio(Context c) {
-        	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick.playAudioPrompt", selectionDesignator, index);
+            Collect.getInstance().getActivityLogger().logInstanceAction(this,
+                    "onClick.playAudioPrompt", selectionDesignator, index);
             if (URI == null) {
                 // No audio file specified
                 Log.e(t, "No audio file was specified");
                 Toast.makeText(c, c.getString(R.string.audio_file_error),
-                    Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -98,22 +99,23 @@ public class AudioButton extends ImageButton {
                 Toast.makeText(c, errorMsg, Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        	
+
         }
     }
 
-    AudioHandler handler; 
-    
-    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI, MediaPlayer player) {
+    AudioHandler handler;
+
+    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI,
+            MediaPlayer player) {
         super(context);
-        handler = new AudioHandler( index, selectionDesignator, URI, player);
+        handler = new AudioHandler(index, selectionDesignator, URI, player);
         Bitmap b =
-            BitmapFactory.decodeResource(context.getResources(),
-                android.R.drawable.ic_lock_silent_mode_off);
+                BitmapFactory.decodeResource(context.getResources(),
+                        android.R.drawable.ic_lock_silent_mode_off);
         this.setImageBitmap(b);
     }
 
     public void playAudio() {
-    	handler.playAudio(getContext());
+        handler.playAudio(getContext());
     }
 }

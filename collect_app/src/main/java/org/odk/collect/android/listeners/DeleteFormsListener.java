@@ -16,10 +16,10 @@ package org.odk.collect.android.listeners;
 
 /**
  * Callback interface invoked upon completion of a DeleteFormsTask
- * 
+ *
  * @author norman86@gmail.com
  * @author mitchellsundt@gmail.com
  */
 public interface DeleteFormsListener {
-	void deleteComplete(int deletedForms);
+    void deleteComplete(int deletedForms);
 }

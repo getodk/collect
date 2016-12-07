@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.adapters;
 
-import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.views.HierarchyElementView;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.views.HierarchyElementView;
 
 import java.util.ArrayList;
 import java.util.List;

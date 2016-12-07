@@ -4,3 +4,4 @@ build
 local.properties
 *.iml
 .DS_Store
+*.sublime-project

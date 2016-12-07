@@ -14,29 +14,29 @@
 
 package org.odk.collect.android.picasa;
 
-import java.util.List;
-
 import com.google.api.client.util.Key;
+
+import java.util.List;
 
 /**
  * @author Yaniv Inbar
  */
 public class Feed {
 
-  @Key
-  public Author author;
+    @Key
+    public Author author;
 
-  @Key("openSearch:totalResults")
-  public int totalResults;
+    @Key("openSearch:totalResults")
+    public int totalResults;
 
-  @Key("link")
-  public List<Link> links;
+    @Key("link")
+    public List<Link> links;
 
-  public String getPostLink() {
-    return Link.find(links, "http://schemas.google.com/g/2005#post");
-  }
+    public String getPostLink() {
+        return Link.find(links, "http://schemas.google.com/g/2005#post");
+    }
 
-  public String getNextLink() {
-    return Link.find(links, "next");
-  }
+    public String getNextLink() {
+        return Link.find(links, "next");
+    }
 }

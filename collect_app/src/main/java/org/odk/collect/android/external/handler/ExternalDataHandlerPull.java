@@ -18,8 +18,9 @@
 
 package org.odk.collect.android.external.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -27,9 +28,8 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Meletis Margaritis
@@ -67,7 +67,8 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
         if (args.length != 4) {
-            Log.e(ExternalDataUtil.LOGGER_NAME, "4 arguments are needed to evaluate the " + HANDLER_NAME + " function");
+            Log.e(ExternalDataUtil.LOGGER_NAME,
+                    "4 arguments are needed to evaluate the " + HANDLER_NAME + " function");
             return "";
         }
 
@@ -82,7 +83,8 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
         Cursor c = null;
         try {
 
-            ExternalSQLiteOpenHelper sqLiteOpenHelper = getExternalDataManager().getDatabase(dataSetName, false);
+            ExternalSQLiteOpenHelper sqLiteOpenHelper = getExternalDataManager().getDatabase(
+                    dataSetName, false);
             if (sqLiteOpenHelper == null) {
                 return "";
             }
@@ -92,12 +94,15 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             String selection = ExternalDataUtil.toSafeColumnName(referenceColumn) + "=?";
             String[] selectionArgs = {referenceValue};
 
-            c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+            c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, columns, selection,
+                    selectionArgs, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 return ExternalDataUtil.nullSafe(c.getString(0));
             } else {
-                Log.e(ExternalDataUtil.LOGGER_NAME, "Could not find a value in " + queriedColumn + " where the column " + referenceColumn + " has the value " + referenceValue);
+                Log.e(ExternalDataUtil.LOGGER_NAME,
+                        "Could not find a value in " + queriedColumn + " where the column "
+                                + referenceColumn + " has the value " + referenceValue);
                 return "";
             }
         } catch (Exception e) {

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package org.odk.collect.android.logic;
@@ -16,8 +16,8 @@ public class FileReferenceFactory extends PrefixedRootFactory {
 
 
     public FileReferenceFactory(String localRoot) {
-        super(new String[] {
-            "file"
+        super(new String[]{
+                "file"
         });
         this.localRoot = localRoot;
     }

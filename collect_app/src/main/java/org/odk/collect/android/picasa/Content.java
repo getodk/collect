@@ -19,10 +19,10 @@ import com.google.api.client.util.Key;
 
 public class Content {
 
-  @Key("@type")
-  public String type;
+    @Key("@type")
+    public String type;
 
-  @Key("@src")
-  public String src;
+    @Key("@src")
+    public String src;
 
 }
