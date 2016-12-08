@@ -276,7 +276,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
 
         // default for helptext
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, mQuestionMediaLayout.getId());
         params.setMargins(10, 0, 10, 0);
