@@ -92,6 +92,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -936,26 +937,41 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-		/*
-		 * We don't have the right view here, so we store the View's ID as the
-		 * item ID and loop through the possible views to find the one the user
-		 * clicked on.
-		 */
-        for (QuestionWidget qw : ((ODKView) mCurrentView).getWidgets()) {
-            if (item.getItemId() == qw.getId()) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onContextItemSelected",
-                                "createClearDialog", qw.getPrompt().getIndex());
-                createClearDialog(qw);
-            }
-        }
         if (item.getItemId() == DELETE_REPEAT) {
             Collect.getInstance()
                     .getActivityLogger()
                     .logInstanceAction(this, "onContextItemSelected",
                             "createDeleteRepeatConfirmDialog");
             createDeleteRepeatConfirmDialog();
+        } else {
+            /*
+            * We don't have the right view here, so we store the View's ID as the
+            * item ID and loop through the possible views to find the one the user
+            * clicked on.
+            */
+            boolean shouldClearDialogBeShown;
+            for (QuestionWidget qw : ((ODKView) mCurrentView).getWidgets()) {
+                shouldClearDialogBeShown = false;
+                if (qw instanceof StringWidget) {
+                    for (int i = 0; i < qw.getChildCount(); i++) {
+                        if (item.getItemId() == qw.getChildAt(i).getId()) {
+                            shouldClearDialogBeShown = true;
+                            break;
+                        }
+                    }
+                } else if (item.getItemId() == qw.getId()) {
+                    shouldClearDialogBeShown = true;
+                }
+
+                if (shouldClearDialogBeShown) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "onContextItemSelected",
+                                    "createClearDialog", qw.getPrompt().getIndex());
+                    createClearDialog(qw);
+                    break;
+                }
+            }
         }
 
         return super.onContextItemSelected(item);
@@ -1240,7 +1256,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
                     if (!qw.getPrompt().isReadOnly()) {
-                        registerForContextMenu(qw);
+                        // If it's a StringWidget register all its elements apart from EditText as
+                        // we want to enable paste option after long click on the EditText
+                        if (qw instanceof StringWidget) {
+                            for (int i = 0; i < qw.getChildCount(); i++) {
+                                if (!(qw.getChildAt(i) instanceof EditText)) {
+                                    registerForContextMenu(qw.getChildAt(i));
+                                }
+                            }
+                        } else {
+                            registerForContextMenu(qw);
+                        }
                     }
                 }
 
