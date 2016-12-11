@@ -303,21 +303,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 SharedPreferences settings =
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-                String server = mUrl;
-                if (server == null) {
-                    Log.e(t, "onCreateDialog(AUTH_DIALOG): No failing mUrl specified for upload of "
-                            + mInstancesToSend.length + " instances!");
-                    // if the bundle is null, we're looking for a formlist
-                    String submissionUrl = getString(R.string.default_odk_submission);
-                    server =
-                            settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                                    getString(R.string.default_server_url))
-                                    + settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
-                                    submissionUrl);
-                }
-
-                final String url = server;
-                return new AuthDialogUtility().createDialog(this, url, this);
+                return new AuthDialogUtility().createDialog(this, this);
         }
 
         return null;

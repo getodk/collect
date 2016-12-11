@@ -36,7 +36,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 public class AuthDialogUtility {
     private static final String TAG = "AuthDialogUtility";
 
-    public AlertDialog createDialog(Context context, final String url,
+    public AlertDialog createDialog(final Context context,
             final AuthDialogUtilityResultListener resultListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -51,7 +51,7 @@ public class AuthDialogUtility {
         password.setText(getPassword(settings));
 
         builder.setTitle(context.getString(R.string.server_requires_auth));
-        builder.setMessage(context.getString(R.string.server_auth_credentials, url));
+        builder.setMessage(context.getString(R.string.server_auth_credentials));
         builder.setView(dialogView);
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
@@ -62,7 +62,7 @@ public class AuthDialogUtility {
                 String passwordValue = password.getText().toString();
 
                 saveCredentials(settings, userNameValue, passwordValue);
-                WebUtils.addCredentials(userNameValue, passwordValue, Uri.parse(url).getHost());
+                setWebCredentialsFromPreferences(context);
 
                 resultListener.updatedCredentials();
             }
@@ -82,11 +82,23 @@ public class AuthDialogUtility {
         return builder.create();
     }
 
-    private String getPassword(SharedPreferences settings) {
+    public static void setWebCredentialsFromPreferences(Context context) {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+
+        WebUtils.addCredentials(getUserName(settings), getPassword(settings),
+                Uri.parse(getServer(settings, context)).getHost());
+    }
+
+    private static String getServer(SharedPreferences settings, Context context) {
+        return settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                context.getString(R.string.default_server_url));
+    }
+
+    private static String getPassword(SharedPreferences settings) {
         return settings.getString(PreferencesActivity.KEY_PASSWORD, null);
     }
 
-    private String getUserName(SharedPreferences settings) {
+    private static String getUserName(SharedPreferences settings) {
         return settings.getString(PreferencesActivity.KEY_USERNAME, null);
     }
 

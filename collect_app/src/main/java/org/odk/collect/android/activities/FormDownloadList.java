@@ -433,12 +433,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
                 mAlertShowing = false;
 
-                final String url = PreferenceManager
-                        .getDefaultSharedPreferences(this)
-                        .getString(PreferencesActivity.KEY_SERVER_URL,
-                            this.getString(R.string.default_server_url));
-
-                return new AuthDialogUtility().createDialog(this, url, this);
+                return new AuthDialogUtility().createDialog(this, this);
         }
         return null;
     }
