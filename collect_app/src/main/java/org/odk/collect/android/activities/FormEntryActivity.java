@@ -1714,8 +1714,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         FormController formController = Collect.getInstance()
                 .getFormController();
 
-        showView(new EmptyView(this), AnimationType.FADE);
-
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = formController.getLastRepeatedGroupName();
@@ -1738,8 +1736,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
                         formController.deleteRepeat();
-                        showPreviousView();
+                        refreshCurrentView();
                         break;
+
                     case DialogInterface.BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
