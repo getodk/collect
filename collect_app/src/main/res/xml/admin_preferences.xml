@@ -19,6 +19,16 @@
         android:key="admin_password"
         android:title="@string/admin_password" />
 
+    <org.odk.collect.android.preferences.ResetDialogPreference
+        android:id="@+id/reset_settings_dialog"
+        android:defaultValue=""
+        android:dialogTitle="@string/reset_settings_dialog_title"
+        android:key="reset_settings"
+        android:title="@string/reset_settings_dialog"
+        android:positiveButtonText="@string/reset_settings_button_reset"
+        android:negativeButtonText="@string/cancel"
+        />
+
     <PreferenceCategory android:title="@string/user_access_main_menu" >
         <CheckBoxPreference
             android:id="@+id/edit_saved"

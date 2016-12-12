@@ -1,0 +1,218 @@
+package org.odk.collect.android.utilities;
+
+import android.content.Context;
+import android.preference.PreferenceManager;
+
+import org.jdeferred.Deferred;
+import org.jdeferred.DoneCallback;
+import org.jdeferred.DonePipe;
+import org.jdeferred.FailCallback;
+import org.jdeferred.Promise;
+import org.jdeferred.impl.DeferredObject;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.DeleteFormsListener;
+import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.provider.DatabaseReader;
+import org.odk.collect.android.tasks.DeleteFormsTask;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
+import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
+
+import java.io.File;
+
+public class ResetUtility {
+
+    public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
+            boolean resetForms, boolean resetLayers, boolean resetMetaData,
+            boolean resetCache, boolean resetOsmDroid, final ResetResultCallback callback) {
+
+        Deferred deferred = new DeferredObject<Void, String, Void>();
+        Promise promise = deferred.promise();
+
+        if (resetPreferences) {
+            promise = promise
+                    .then(new DonePipe() {
+                        @Override
+                        public Deferred pipeDone(Object result) {
+                            resetPreferences(context);
+                            return new DeferredObject().resolve(null);
+                        }
+                    });
+        }
+
+        if (resetInstances) {
+            promise = promise.then(new DonePipe() {
+                @Override
+                public Promise pipeDone(Object result) {
+                    DeferredObject def = new DeferredObject<>();
+                    resetInstances(context, def);
+
+                    return def;
+                }
+            });
+        }
+
+        if (resetForms) {
+            promise = promise.then(new DonePipe() {
+                @Override
+                public Promise pipeDone(Object result) {
+                    DeferredObject def = new DeferredObject<>();
+                    resetForms(context, def);
+
+                    return def;
+                }
+            });
+        }
+
+        if (resetLayers) {
+            promise = deleteFolderContents(context, promise, Collect.OFFLINE_LAYERS);
+        }
+
+        if (resetMetaData) {
+            promise = deleteFolderContents(context, promise, Collect.METADATA_PATH);
+        }
+
+        if (resetCache) {
+            promise = deleteFolderContents(context, promise, Collect.CACHE_PATH);
+        }
+
+        if (resetOsmDroid) {
+            promise = deleteFolderContents(context, promise, OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath());
+        }
+
+        promise
+                .done(new DoneCallback() {
+                    @Override
+                    public void onDone(Object result) {
+                        callback.doneResetting();
+                    }
+                })
+                .fail(new FailCallback<String>() {
+                    @Override
+                    public void onFail(String errorMessage) {
+                        callback.failedToReset(errorMessage);
+                    }
+                });
+
+        deferred.resolve(null);
+    }
+
+    private Promise deleteFolderContents(final Context context, Promise promise,
+            final String path) {
+        return promise.then(new DonePipe() {
+            @Override
+            public Promise pipeDone(Object result) {
+                DeferredObject def = new DeferredObject<>();
+                deleteFolderContents(context, def, path);
+
+                return def;
+            }
+        });
+    }
+
+    private void deleteFolderContents(Context context, DeferredObject def, String path) {
+        File file = new File(path);
+        if (file.exists() == false) {
+            // Path does not exist, nothing to clean up
+            def.resolve(null);
+            return;
+        }
+
+        File[] files = file.listFiles();
+
+        for (File f : files) {
+            DeletionResult result = deleteRecursive(f);
+            if (result.isSuccessful() == false) {
+                def.reject(String.format(context.getString(R.string.reset_result_files_failure),
+                        result.getPath()));
+                return;
+            }
+        }
+
+        def.resolve(null);
+    }
+
+    private DeletionResult deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                DeletionResult result = deleteRecursive(child);
+                if (result.isSuccessful() == false) {
+                    return result;
+                }
+            }
+        }
+
+        return new DeletionResult(fileOrDirectory.delete(), fileOrDirectory.getPath());
+    }
+
+    private void resetForms(final Context context, final DeferredObject def) {
+        final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
+
+        DeleteFormsTask task = new DeleteFormsTask();
+        task.setContentResolver(context.getContentResolver());
+        task.setDeleteListener(new DeleteFormsListener() {
+            @Override
+            public void deleteComplete(int deletedForms) {
+                if (deletedForms == allForms.length) {
+                    def.resolve(null);
+                } else {
+                    def.reject(
+                            String.format(
+                                    context.getString(R.string.reset_result_forms_failure),
+                                    deletedForms, allForms.length));
+                }
+            }
+        });
+
+        task.execute(allForms);
+    }
+
+    private void resetInstances(final Context context, final DeferredObject deferred) {
+        final Long[] allInstances = new DatabaseReader().getAllInstancesIDs(context);
+
+        DeleteInstancesTask task = new DeleteInstancesTask();
+        task.setContentResolver(context.getContentResolver());
+        task.setDeleteListener(new DeleteInstancesListener() {
+            @Override
+            public void deleteComplete(int deletedInstances) {
+                if (deletedInstances == allInstances.length) {
+                    deferred.resolve(null);
+                } else {
+                    deferred.reject(
+                            String.format(
+                                    context.getString(R.string.reset_result_instances_failure),
+                                    deletedInstances, allInstances.length));
+                }
+            }
+        });
+
+        task.execute(allInstances);
+    }
+
+    private void resetPreferences(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .clear()
+                .commit();
+
+        PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
+    }
+
+    private class DeletionResult {
+        private boolean mIsSuccessful;
+        private String mPath;
+
+        DeletionResult(boolean isSuccessful, String path) {
+            mIsSuccessful = isSuccessful;
+            mPath = path;
+        }
+
+        public String getPath() {
+            return mPath;
+        }
+
+        boolean isSuccessful() {
+            return mIsSuccessful;
+        }
+    }
+}

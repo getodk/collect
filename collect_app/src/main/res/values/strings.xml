@@ -402,4 +402,20 @@
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
+<string name="reset_settings">Settings</string>
+<string name="reset_filled_out_forms">Saved forms</string>
+<string name="reset_dialog_nothing">You have not selected anything to reset.</string>
+<string name="reset_dialog_finished">Successfully reset app state. Tap OK to close the app.</string>
+<string name="reset_blank_forms">Blank forms</string>
+<string name="reset_layers">Offline map layers</string>
+<string name="reset_metadata">Meta data</string>
+<string name="reset_cache">Form load cache</string>
+<string name="reset_osmdroid">All OSM tiles from the device</string>
+<string name="reset_settings_dialog_title">Select what to reset</string>
+<string name="reset_settings_dialog">Reset App</string>
+<string name="reset_settings_button_reset">Reset</string>
+<string name="reset_in_progress">Resetting…</string>
+<string name="reset_result_instances_failure">We\'ve been able to delete only %1$d saved forms out of %2$d</string>
+<string name="reset_result_forms_failure">We\'ve been able to delete only %1$d blank forms out of %2$d</string>
+<string name="reset_result_files_failure">Could not delete file %s</string>
 </resources>
