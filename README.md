@@ -1,50 +1,56 @@
-# ODK Collect
-![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Build status](https://circleci.com/gh/opendatakit/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/opendatakit/collect)
-[![Slack status](http://slack.opendatakit.org/badge.svg)](http://slack.opendatakit.org)
+[Smap fieldTask](http://www.smap.com.au) 
+======
+[![Build Status](https://travis-ci.org/nap2000/fieldTask2.svg)](https://travis-ci.org/nap2000/fieldTask2)
 
-ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part of Open Data Kit (ODK), a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the Open Data Kit project and its history [here](https://opendatakit.org/about/) and read about example ODK deployments [here](https://opendatakit.org/about/deployments/).
-
-* ODK website: [https://opendatakit.org](https://opendatakit.org)
-* ODK Collect usage instructions: [https://opendatakit.org/use/collect](https://opendatakit.org/use/collect/)
-* ODK community mailing list: [http://groups.google.com/group/opendatakit](http://groups.google.com/group/opendatakit)
-* ODK developer mailing list: [http://groups.google.com/group/opendatakit-developers](http://groups.google.com/group/opendatakit-developers)
-* ODK developer Slack chat: [http://slack.opendatakit.org](http://slack.opendatakit.org) 
-* ODK developer Slack archive: [http://opendatakit.slackarchive.io](http://opendatakit.slackarchive.io) 
-* ODK developer wiki: [https://github.com/opendatakit/opendatakit/wiki](https://github.com/opendatakit/opendatakit/wiki)
-
-## Setting up your development environment
-
-1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
-
-1. Fork the collect project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
-
-1. Clone your fork of the project locally. At the command line:
-
-        git clone https://github.com/YOUR-GITHUB-USERNAME/collect
-
- If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`. 
-
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
+fieldTask4 is a clone of [odkCollect](http://opendatakit.org/use/collect/) with Task Management functionality. It replaces fieldTask3 which used odkCollect as a library.
  
-## Contributing code
-Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
+Follow the latest news about Smap on our [blog](http://blog.smap.com.au) and on twitter [@dgmsot](https://twitter.com/dgmsot).
 
-Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick%20win) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+Frequently Asked Questions
+---------------------------
+##### How to install and run
+* Install Android Studio
+* In Android Studio open the SDK manager (from the tools menu)
+* Under "Extras" install:
+    * Android Support Repository
+    * Android Support Library
+    * Google Play Services
+    * Google Repository
+* Clone as a GIT project into Android Studio
+* Select fieldTask and run as an Android application
 
-If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
+Instructions on installing a Smap server can be found in the operations manual [here](http://www.smap.com.au/downloads.shtml)
 
-## Contributing in other ways
-If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/odk-collect/).
+Task Management 
+---------------
 
-You can also help by improving this documentation.
+A user of fieldTask can be assigned tasks to complete as per this [video](http://www.smap.com.au/taskManagement.shtml). 
 
-## Downloading builds
-Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your Github account, click the build you'd like, then find the APK in the Artifacts tab.
+Future Directions
+-----------------
 
-Released production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk) has current and previous production builds.
+<TBD>
 
-## Troubleshooting
-#### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
-When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.
+##### Get existing survey data as an XForm instance XML file
+https://hostname/instanceXML/{survey id}/0?datakey={key name}&datakeyvalue={value of key}
+
+##### Update existing results
+https://{hostname}/submission/{instanceid}
+
+Note the instance id of the existing data is included in the instanceXML.  It should be replaced with a new instance id before the results are submitted. However the instance id of the data to be replaced needs to be included in teh submission URL.
+
+This API allows you to maintain data using surveys. In the following video the data is published on a map, however it could also be published in a table as a patient registry or list of assets. fieldTask needs to be customised to access these links using the data keys in a similar way to web forms.
+
+[![ScreenShot](http://img.youtube.com/vi/FUNPOmMnt1I/0.jpg)](https://www.youtube.com/watch?v=FUNPOmMnt1I)
+
+Development
+-----------
+* Code contributions are very welcome. 
+* [Issue Tracker](https://github.com/nap2000/fieldTask2/issues)
+
+Acknowledgements
+----------------
+
+This project includes:
+* the odkCollect Library of (http://opendatakit.org/) from the University of Washington
+* the Android SDK from [MapBox] (https://www.mapbox.com/)
