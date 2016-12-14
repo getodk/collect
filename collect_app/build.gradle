@@ -7,15 +7,16 @@ apply plugin: 'com.android.application'
 com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
 android {
-    compileSdkVersion(22)
+    compileSdkVersion(23)
     buildToolsVersion("25.0.0")
 
+
     defaultConfig {
-        applicationId("org.odk.collect.android")
-        minSdkVersion(9)
-        targetSdkVersion(9)
-        versionCode(1063)
-        versionName("1.4.12")
+        applicationId "org.smap.smapTask.android"
+        minSdkVersion(15)
+        targetSdkVersion(15)
+        versionCode(2000)
+        versionName("4.0")
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
     }
 
@@ -49,6 +50,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
 }
 
 configurations.all {
@@ -67,12 +69,16 @@ allprojects {
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.google.android.gms:play-services:4.1.32'
+    //compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar'){
+    //    transitive=true
+    //}
 
     // Testing-only dependencies
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile "org.robolectric:robolectric:3.1.2"
-    androidTestCompile 'com.android.support:support-annotations:24.0.0'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    //testCompile 'junit:junit:4.12'
+    //testCompile 'org.mockito:mockito-core:1.10.19'
+    //testCompile "org.robolectric:robolectric:3.1.2"
+    //androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    //androidTestCompile 'com.android.support.test:runner:0.5'
+    //androidTestCompile 'com.android.support.test:rules:0.5'
+
 }

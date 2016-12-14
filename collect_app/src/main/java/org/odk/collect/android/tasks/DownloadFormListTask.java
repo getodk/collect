@@ -27,6 +27,7 @@ import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebUtils;
 
 import android.content.SharedPreferences;
+import android.net.Uri;                     // smap
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -80,6 +81,21 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
+        // ---------------- Smap Start
+        // Add credentials
+        String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+        String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+
+        String server =
+                settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
+        //final String url =
+        //        server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
+        if(username != null && password != null) {
+        	Uri u = Uri.parse(downloadListUrl);
+        	WebUtils.addCredentials(username, password, u.getHost());
+        }
+        // Smap End
 
         DocumentFetchResult result =
             WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
@@ -203,7 +219,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                             R.string.parse_openrosa_formlist_failed, error)));
                     return formList;
                 }
-                formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId, (version != null) ? version : majorMinorVersion));
+                formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId, (version != null) ? version : majorMinorVersion, false));  // smap add tasks_only=false
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -246,7 +262,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                 R.string.parse_legacy_formlist_failed, error)));
                         return formList;
                     }
-                    formList.put(formName, new FormDetails(formName, downloadUrl, null, formId, null));
+                    formList.put(formName, new FormDetails(formName, downloadUrl, null, formId, null, false));   // smap add tasks only = false
 
                     formId = null;
                 }

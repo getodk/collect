@@ -20,6 +20,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.location.Location;       // smap
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
@@ -51,7 +52,7 @@ public class Collect extends Application {
 	
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
-            + File.separator + "odk";
+            + File.separator + "fieldTask";   // smap
     public static final String FORMS_PATH = ODK_ROOT + File.separator + "forms";
     public static final String INSTANCES_PATH = ODK_ROOT + File.separator + "instances";
     public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
@@ -71,6 +72,9 @@ public class Collect extends Application {
     private ActivityLogger mActivityLogger;
     private FormController mFormController = null;
     private ExternalDataManager externalDataManager;
+
+    private Location location = null;       // smap
+    private boolean recordLocation = false; // smap
 
     private static Collect singleton = null;
 
@@ -234,5 +238,17 @@ public class Collect extends Application {
         mActivityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
     }
+
+    // Begin Smap
+    // start, set and get location
+    public void setLocation(Location l) {
+        location = l;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+    // End Smap
+
 
 }

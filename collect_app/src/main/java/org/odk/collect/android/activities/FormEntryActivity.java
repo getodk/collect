@@ -27,6 +27,9 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;               // smap
+import android.location.LocationListener;       // smap
+import android.location.LocationManager;        // smap
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -143,20 +146,28 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public static final int ANNOTATE_IMAGE = 15;
 	public static final int ALIGNED_IMAGE = 16;
 	public static final int BEARING_CAPTURE = 17;
-    public static final int EX_GROUP_CAPTURE = 18;
-    public static final int OSM_CAPTURE = 19;
-	public static final int GEOSHAPE_CAPTURE = 20;
-	public static final int GEOTRACE_CAPTURE = 21;
+ public static final int EX_GROUP_CAPTURE = 18;
+ public static final int OSM_CAPTURE = 19;
+ public static final int GEOSHAPE_CAPTURE = 20;
+ public static final int GEOTRACE_CAPTURE = 21;
+ public static final int NFC_CAPTURE = 22;   // smap
 
 	// Extra returned from gp activity
 	public static final String LOCATION_RESULT = "LOCATION_RESULT";
 	public static final String BEARING_RESULT = "BEARING_RESULT";
 	public static final String GEOSHAPE_RESULTS ="GEOSHAPE_RESULTS";
 	public static final String GEOTRACE_RESULTS ="GEOTRACE_RESULTS";
+ public static final String NFC_RESULT = "NFC_RESULT";   // smap
 
 	public static final String KEY_INSTANCES = "instances";
 	public static final String KEY_SUCCESS = "success";
 	public static final String KEY_ERROR = "error";
+    public static final String KEY_TASK = "task";		// SMAP
+    public static final String KEY_SURVEY_NOTES = "surveyNotes";		// SMAP
+    public static final String KEY_CAN_UPDATE = "canUpdate";		// SMAP
+    private long mTaskId;								// SMAP
+    private String mSurveyNotes = null;                 // SMAP
+    private boolean mCanUpdate = true;                 // SMAP
 
 	// Identifies the gp of the form used to launch form entry
 	public static final String KEY_FORMPATH = "formpath";
@@ -178,6 +189,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
 	private static final int MENU_SAVE = Menu.FIRST + 2;
 	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
+    private static final int MENU_COMMENT = Menu.FIRST + 4;     // smap
 
 	private static final int PROGRESS_DIALOG = 1;
 	private static final int SAVING_DIALOG = 2;
@@ -298,9 +310,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			if (savedInstanceState.containsKey(KEY_ERROR)) {
 				mErrorMessage = savedInstanceState.getString(KEY_ERROR);
 			}
-			if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
-			    mAutoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
-			}
+         if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
+             mAutoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
+         }
+         //-------- SMAP Start ---------
+         if (savedInstanceState.containsKey(KEY_TASK)) {
+             mTaskId = savedInstanceState.getLong(KEY_TASK);
+         }
+         //-------- SMAP End ---------
 		}
 
 		// If a parse error message is showing then nothing else is loaded
@@ -508,6 +525,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					return;
 				}
 
+                mTaskId = intent.getLongExtra(KEY_TASK, -1);	         // smap
+                mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);  // smap
+                mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);  // smap
 				mFormLoaderTask = new FormLoaderTask(instancePath, null, null);
 				Collect.getInstance().getActivityLogger()
 						.logAction(this, "formLoaded", mFormPath);
@@ -552,7 +572,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		outState.putBoolean(NEWFORM, false);
 		outState.putString(KEY_ERROR, mErrorMessage);
-		outState.putBoolean(KEY_AUTO_SAVED, mAutoSaved);
+     outState.putBoolean(KEY_AUTO_SAVED, mAutoSaved);
+     outState.putLong(KEY_TASK, mTaskId);	//-------- SMAP
 	}
 
 	@Override
@@ -724,10 +745,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			((ODKView) mCurrentView).setBinaryData(traceExtra);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 			break;
-		case BEARING_CAPTURE:
-            String bearing = intent.getStringExtra(BEARING_RESULT);
-            ((ODKView) mCurrentView).setBinaryData(bearing);
-            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+     case NFC_CAPTURE:       // smap
+         String nfcId = intent.getStringExtra(NFC_RESULT);
+         ((ODKView) mCurrentView).setBinaryData(nfcId);
+         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+         break;
+     case BEARING_CAPTURE:
+         String bearing = intent.getStringExtra(BEARING_RESULT);
+         ((ODKView) mCurrentView).setBinaryData(bearing);
+         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
 		case HIERARCHY_ACTIVITY:
 			// We may have jumped to a new index in hierarchy activity, so
 			// refresh
@@ -745,6 +771,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	public void refreshCurrentView() {
 		FormController formController = Collect.getInstance()
 				.getFormController();
+
+     // SMAP start - seems to be a bug onresume when edit is completed by different engine
+		if(formController == null) {
+    		return;
+    	}
+    	// SMAP end
 		int event = formController.getEvent();
 
 		// When we refresh, repeat dialog state isn't maintained, so step back
@@ -790,6 +822,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
 						.setIcon(R.drawable.ic_menu_preferences),
 				MenuItem.SHOW_AS_ACTION_NEVER);
+
+        // smap add survey comments option
+     CompatibilityUtils.setShowAsAction(
+             menu.add(0, MENU_COMMENT, 0, R.string.smap_add_comment),
+             MenuItem.SHOW_AS_ACTION_NEVER);
 		return true;
 	}
 
@@ -868,7 +905,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			Intent pref = new Intent(this, PreferencesActivity.class);
 			startActivity(pref);
 			return true;
-		}
+     case MENU_COMMENT:              // smap
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "onOptionsItemSelected",
+                        "MENU_COMMENT");
+        if (formController.currentPromptIsQuestion()) {
+            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+        }
+        Log.i("debug instance: ", getIntent().getData().toString());
+        Intent comment = new Intent(this, SurveyNotesActivity.class);
+        startActivity(comment);
+        return true;
+    }
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -1139,10 +1188,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				// present the prompt to allow user to name the form
 				TextView sa = (TextView) endView
 						.findViewById(R.id.save_form_as);
-				sa.setVisibility(View.VISIBLE);
+				// sa.setVisibility(View.VISIBLE);				// smap
 				saveAs.setText(saveName);
 				saveAs.setEnabled(true);
-				saveAs.setVisibility(View.VISIBLE);
+				// saveAs.setVisibility(View.VISIBLE);				// smap
 			} else {
 				// if instanceName is defined in form, this is the name -- no
 				// revisions
@@ -1153,7 +1202,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				saveAs.setText(saveName);
 				saveAs.setEnabled(false);
 				saveAs.setBackgroundColor(Color.WHITE);
-				saveAs.setVisibility(View.VISIBLE);
+				// saveAs.setVisibility(View.VISIBLE);			// smap
 			}
 
 			// override the visibility settings based upon admin preferences
@@ -1208,7 +1257,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				FormEntryCaption[] groups = formController
 						.getGroupsForCurrentIndex();
 				odkv = new ODKView(this, formController.getQuestionPrompts(),
-						groups, advancingPage);
+						groups, advancingPage, formController.getCanUpdate());   // smap pass parameter indicating if view is updatable
 				Log.i(t,
 						"created view for group "
 								+ (groups.length > 0 ? groups[groups.length - 1]
@@ -1767,10 +1816,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         }
 
+        // Smap start
+        String surveyNotes = null;
+        FormController formController = Collect.getInstance().getFormController();
+        if(formController != null) {
+            surveyNotes = formController.getSurveyNotes();
+        }
+        // Smap end
+
         synchronized (saveDialogLock) {
-            mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName);
-            mSaveToDiskTask.setFormSavedListener(this);
+		    mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit,
+					complete, updatedSaveName, mTaskId, mFormPath, surveyNotes, mCanUpdate); 	// SMAP added mTaskId, mFormPath, surveyNotes
+	    	mSaveToDiskTask.setFormSavedListener(this);
             mAutoSaved = true;
             showDialog(SAVING_DIALOG);
             // show dialog before we execute...
@@ -2219,17 +2276,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					t.cancel(true);
 					t.destroy();
 					// there is no formController -- fire MainMenu activity?
-					startActivity(new Intent(this, MainMenuActivity.class));
+					// startActivity(new Intent(this, MainMenuActivity.class));		// smap
 				}
 			}
 		} else {
-            if (formController == null) {
-                // there is no formController -- fire MainMenu activity?
-                startActivity(new Intent(this, MainMenuActivity.class));
-                return;
-            } else {
-                refreshCurrentView();
-            }
+			refreshCurrentView();  // smap don't start main menu activity
 		}
 
 		if (mSaveToDiskTask != null) {
@@ -2397,7 +2448,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
-		// Set the language if one has already been set in the past
+        formController.setSurveyNotes(mSurveyNotes);        // Smap
+        formController.setCanUpdate(mCanUpdate);
+
+        // Set the language if one has already been set in the past
 		String[] languageTest = formController.getLanguages();
 		if (languageTest != null) {
 			String defaultLanguage = formController.getLanguage();
@@ -2503,9 +2557,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * Called by SavetoDiskTask if everything saves correctly.
 	 */
 	@Override
-	public void savingComplete(SaveResult saveResult) {
+	public void savingComplete(SaveResult saveResult, long taskId) {		// smap added assignment_id
 		dismissDialog(SAVING_DIALOG);
 
+		mTaskId = taskId;				// smap
         int saveStatus = saveResult.getSaveResult();
         switch (saveStatus) {
 		case SaveToDiskTask.SAVED:

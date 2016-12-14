@@ -96,7 +96,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-    			Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap, Outcome outcome) {
+    			                        Uri toUpdate,
+                                        HttpContext localContext,
+                                        Map<Uri, Uri> uriRemap,
+                                        Outcome outcome,
+                                        String status,              // smap
+                                        String location_trigger,    // smap
+                                        String survey_notes) {		// smap add status
 
     	Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
@@ -115,17 +121,17 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             u = uriRemap.get(u);
 
             // if https then enable preemptive basic auth...
-            if ( u.getScheme().equals("https") ) {
-            	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
-            }
+            //if ( u.getScheme().equals("https") ) {	smap
+            //	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            //}
 
             Log.i(t, "Using Uri remap for submission " + id + ". Now: " + u.toString());
         } else {
 
             // if https then enable preemptive basic auth...
-            if ( u.getScheme() != null && u.getScheme().equals("https") ) {
-            	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
-            }
+            //if ( u.getScheme() != null && u.getScheme().equals("https") ) { smap
+            //	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            //}
 
             // we need to issue a head request
             HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
@@ -144,8 +150,20 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 	WebUtils.discardEntityBytes(response);
             		// we need authentication, so stop and return what we've
                     // done so far.
-                	outcome.mAuthRequestingServer = u;
-                    return false;
+                	/*
+                	 * Smap Start
+                	 *   just fail the request, the user will need to update userid and password in the parameters
+                	 *   Smap does not at this stage support submissionURL's per survey each with a different user id and password
+                	 *   The thinking is that this may be too complex and this type of function is better handled by subscribers
+                	 */
+                    //mAuthRequestingServer = u;
+                    //return false;
+                    outcome.mResults.put(id, fail
+                    			+ "Authentication failure.  You will need to fix the username, password or URL in the settings screen.  ");
+                    //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
+                    Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                    return true;
+                    // Smap end
                 } else if (statusCode == 204) {
                 	Header[] locations = response.getHeaders("Location");
                 	WebUtils.discardEntityBytes(response);
@@ -158,6 +176,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 // ... and possibly to use https instead.
                                 uriRemap.put(u, uNew);
                                 u = uNew;
+                                // Start Smap
+                                String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+                                        .getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
+                                u = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
+                                // End Smap
                             } else {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
@@ -166,8 +189,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                     fail
                                             + "Unexpected redirection attempt to a different host: "
                                             + uNew.toString());
-                                cv.put(InstanceColumns.STATUS,
-                                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                                //cv.put(InstanceColumns.STATUS,
+                                //    InstanceProviderAPI.STATUS_SUBMISSION_FAILED);  smap
                                 Collect.getInstance().getContentResolver()
                                         .update(toUpdate, cv, null, null);
                                 return true;
@@ -175,8 +198,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         } catch (Exception e) {
                             e.printStackTrace();
                             outcome.mResults.put(id, fail + urlString + " " + e.toString());
-                            cv.put(InstanceColumns.STATUS,
-                                InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                            //cv.put(InstanceColumns.STATUS,
+                            //    InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                             Collect.getInstance().getContentResolver()
                                     .update(toUpdate, cv, null, null);
                             return true;
@@ -192,8 +215,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                             id,
                             fail
                                     + "Invalid status code on Head request.  If you have a web proxy, you may need to login to your network. ");
-                        cv.put(InstanceColumns.STATUS,
-                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                        //cv.put(InstanceColumns.STATUS,
+                        //    InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                         Collect.getInstance().getContentResolver()
                                 .update(toUpdate, cv, null, null);
                         return true;
@@ -203,35 +226,43 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Client Protocol Exception");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+               // cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (ConnectTimeoutException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Connection Timeout");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (SocketTimeoutException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Connection Timeout");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);  smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (HttpHostConnectException e) {
                 e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Network Connection Refused");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
+                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                return true;
+            } catch (IllegalArgumentException e) {	// smap
+                e.printStackTrace();
+                Log.e(t, e.getMessage());
+                outcome.mResults.put(id,
+                    fail + "invalid url: " + urlString + " :: details: " + e.toString());
+                // cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (Exception e) {
@@ -242,7 +273,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     msg = e.toString();
                 }
                 outcome.mResults.put(id, fail + "Generic Exception: " + msg);
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                // cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             }
@@ -277,7 +308,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
         	outcome.mResults.put(id, fail + "instance XML file does not exist!");
-            cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+            // cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
             Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
             return true;
         }
@@ -329,6 +360,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             first = false;
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
+            httppost.setHeader("form_status", status);						// smap add form_status header
+            Log.i("uploadOneSubmission", "Post to: " + u.toString());
 
             MimeTypeMap m = MimeTypeMap.getSingleton();
 
@@ -461,6 +494,25 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 }
             }
 
+            // Start Smap - Add the location trigger and comments if they exist
+            if(location_trigger != null) {
+                try {
+                    StringBody sb = new StringBody(location_trigger, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("location_trigger", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            if(survey_notes != null) {
+                try {
+                    StringBody sb = new StringBody(survey_notes, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("survey_notes", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            // End Smap
+
             httppost.setEntity(builder.build());
 
             // prepare response and return uploaded
@@ -486,8 +538,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     	outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     }
-                    cv.put(InstanceColumns.STATUS,
-                        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                    //cv.put(InstanceColumns.STATUS,
+                    //    InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                     Collect.getInstance().getContentResolver()
                             .update(toUpdate, cv, null, null);
                     return true;
@@ -500,7 +552,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     msg = e.toString();
                 }
                 outcome.mResults.put(id, fail + "Generic Exception: " + msg);
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);    // smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             }
@@ -509,15 +561,35 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         // if it got here, it must have worked
         outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        cv.put(InstanceColumns.T_TASK_STATUS, InstanceProviderAPI.STATUS_SUBMITTED);     // smap
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
         return true;
     }
 
     // TODO: This method is like 350 lines long, down from 400.
     // still. ridiculous. make it smaller.
-    protected Outcome doInBackground(Long... values) {
+    public Outcome doInBackground(Long... values) {		// smap make public
     	Outcome outcome = new Outcome();
 
+        // Start smap
+        String selection = InstanceColumns._ID + " IN (";
+        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
+        if(values != null) {
+            for (int i = 0; i < values.length; i++) {
+                if(i > 0) {
+                    selection += ",";
+                }
+                selection += "?";
+                selectionArgs[i] = values[i].toString();
+            }
+        }
+        selection += ")";
+        Log.i(t, "Getting instances "  + selection);
+        // end smap
+
+        /*
+         * Commented out SMAP
+         *
         String selection = InstanceColumns._ID + "=?";
         String[] selectionArgs = new String[(values == null) ? 0 : values.length];
         if ( values != null ) {
@@ -528,6 +600,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 	            selectionArgs[i] = values[i].toString();
 	        }
         }
+        */
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
         						.getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
@@ -553,9 +626,51 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 	                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
 	                Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-                    // Use the app's configured URL unless the form included a submission URL
-                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx) ? getServerSubmissionURL() : c.getString(subIdx).trim();
+	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx);
+	                if (urlString == null) {
+	                    SharedPreferences settings =
+	                        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+	                    urlString = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+	                    				Collect.getInstance().getString(R.string.default_server_url));
+	                    if ( urlString.charAt(urlString.length()-1) == '/') {
+	                    	urlString = urlString.substring(0, urlString.length()-1);
+	                    }
+	                    // NOTE: /submission must not be translated! It is the well-known path on the server.
+	                    String submissionUrl =
+	                        settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
+	                        		Collect.getInstance().getString(R.string.default_odk_submission));
+	                    if ( submissionUrl.charAt(0) != '/') {
+	                    	submissionUrl = "/" + submissionUrl;
+	                    }
+
+	                    urlString = urlString + submissionUrl;
+
+	                    // ---------------- Smap Start
+	                    // Add credentials pre-emptively
+
+	                    String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+	                    String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+
+	                    if(username != null && password != null) {
+	                    	Uri u = Uri.parse(urlString);
+	                    	WebUtils.addCredentials(username, password, u.getHost());
+	                    }
+
+                        // Add updateid if this is a non repeating task
+                        boolean repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
+                        String updateid = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
+                        if(!repeat && updateid != null) {
+                            urlString = urlString + "/" + updateid;
+                        }
+	                    // Smap End
+	                }
+
+                    // Smap start get smap specific data values to send to the server
+	                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));	// smap get status
+                    String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));	// smap get location trigger
+                    String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));	// smap get survey notes
+                    // smap end
 
 	                // add the deviceID to the request...
 	                try {
@@ -564,7 +679,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 						// unreachable...
 					}
 
-	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap, outcome) ) {
+	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap, outcome,
+                            status, location_trigger, survey_notes) ) {	// smap add status
 	                	return outcome; // get credentials...
 	                }
 	            }

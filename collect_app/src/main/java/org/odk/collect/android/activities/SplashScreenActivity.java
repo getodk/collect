@@ -43,7 +43,9 @@ import java.io.IOException;
 
 public class SplashScreenActivity extends Activity {
 
-    private static final int mSplashTimeout = 2000; // milliseconds
+    @SuppressWarnings("rawtypes")
+    private Class mNextActivity = MainTabsActivity.class;
+    private int mSplashTimeout = 3000; // milliseconds
     private static final boolean EXIT = true;
 
     private int mImageMaxWidth;
@@ -111,7 +113,7 @@ public class SplashScreenActivity extends Activity {
     private void endSplashScreen() {
 
         // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        startActivity(new Intent(SplashScreenActivity.this, mNextActivity));
         finish();
     }
 

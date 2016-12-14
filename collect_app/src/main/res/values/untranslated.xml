@@ -8,13 +8,19 @@
 	the specific language governing permissions and limitations under the License. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- strings that should not be translated -->
-	<string translatable="false" name="app_name">ODK Collect</string>
+    <string translatable="false" name="app_name">FieldTask v4.00</string>
 	<string translatable="false" name="protocol_odk_default">odk_default</string>
 	<string translatable="false" name="protocol_google_sheets">google_sheets</string>
     <string translatable="false" name="default_form_processing_logic">-1</string>
     <string translatable="false" name="protocol_other">other_protocol</string>
-	<string translatable="false" name="default_server_url">https://opendatakit.appspot.com</string>
+    <string translatable="false" name="default_server_url">https://sg.smap.com.au</string>
 	<string translatable="false" name="default_odk_formlist">/formList</string>
 	<string translatable="false" name="default_odk_submission">/submission</string>
     <item name="mapview" type="id"/>
+
+    <string translatable="false" name="default_username">gplay</string>
+    <string translatable="false" name="default_password">gplay</string>
+    <string translatable="false" name="app_url">http://blog.smap.com.au</string>
+    <string translatable="false" name="accessToken">pk.eyJ1IjoibmFwMjAwMCIsImEiOiJjaWc1a3ZqdWI0NHJ4c3prdzZzM2k5YzhjIn0.QA_G2TYCN0fJM3VcZpLlOg</string>
+
 </resources>

@@ -54,6 +54,7 @@ public class FileUtils {
     public static final String FORMID = "formid";
     public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static final String TITLE = "title";
+    public static final String PROJECT = "project";			// smap
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
 
@@ -323,6 +324,7 @@ public class FileUtils {
                 String id = cur.getAttributeValue(null, "id");
                 String xmlns = cur.getNamespace();
 
+                String project = cur.getAttributeValue(null, "project");	// smap
                 String version = cur.getAttributeValue(null, "version");
                 String uiVersion = cur.getAttributeValue(null, "uiVersion");
                 if ( uiVersion != null ) {
@@ -330,6 +332,7 @@ public class FileUtils {
                 	Log.e(t, "Obsolete use of uiVersion -- IGNORED -- only using version: " + version);
                 }
 
+                fields.put(PROJECT, (project == null) ? null : project);	// smap
                 fields.put(FORMID, (id == null) ? xmlns : id);
                 fields.put(VERSION, (version == null) ? null : version);
             } else {

@@ -58,6 +58,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_GET_BLANK = "get_blank";
     public static String KEY_DELETE_SAVED = "delete_saved";
     // server
+    public static String KEY_CHANGE_URL = "change_url";    // SMAP
     public static String KEY_CHANGE_SERVER = "change_server";
     public static String KEY_CHANGE_USERNAME = "change_username";
     public static String KEY_CHANGE_PASSWORD = "change_password";
