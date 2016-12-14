@@ -114,7 +114,9 @@ public final class STFileUtils {
       
         String source = null;
         // Remove the protocol
-        if(url.startsWith("http")) {
+        if(url == null) {
+            source = "none";
+        } else if(url.startsWith("http")) {
         	int idx = url.indexOf("//");
         	if(idx > 0) {
         		source = url.substring(idx + 2);
@@ -124,6 +126,7 @@ public final class STFileUtils {
         } else {
             source = url;
         }
+
         // Only return the domain
         if(source.contains("/")) {
         	int idx = source.indexOf("/");
