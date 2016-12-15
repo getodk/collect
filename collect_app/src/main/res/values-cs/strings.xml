@@ -140,7 +140,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="use_odk_default">Použít výchozí obrázek</string>
   <string name="change_splash_path">Změnit obrázek</string>
   <string name="show_location">Ukázat pozici</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Uložit změny</string>
   <string name="go_to_location">Přejít na pozici</string>
   <string name="change_formlist_url">Cesta k seznamu dotazníků (přidat k URL)</string>

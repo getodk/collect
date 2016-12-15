@@ -141,7 +141,6 @@
   <string name="use_odk_default">Gebruik default prentjie</string>
   <string name="change_splash_path">Verander Prentjie</string>
   <string name="show_location">Vertoon Posisie</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Stoor Veranderinge</string>
   <string name="go_to_location">Gaan na Posisie</string>
   <string name="change_formlist_url">Vorm lys path (word bygevoeg tot URL)</string>

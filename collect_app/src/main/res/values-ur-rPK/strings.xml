@@ -137,7 +137,6 @@
   <string name="use_odk_default">Default  تصویر کو استعمال کریں</string>
   <string name="change_splash_path">عکس بدل دیں</string>
   <string name="show_location">مقام کو دکھایئں</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="go_to_location">مقام پر جایئں</string>
   <string name="change_formlist_url">فارم لیسٹ کا راستہ (ملحقہ ہو آر ایل)</string>

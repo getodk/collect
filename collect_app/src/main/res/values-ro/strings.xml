@@ -141,7 +141,6 @@
   <string name="use_odk_default">Utilizați imaginea implicită</string>
   <string name="change_splash_path">Schimbați imaginea</string>
   <string name="show_location">Afișați locația</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salvați modificările</string>
   <string name="go_to_location">Către localizare</string>
   <string name="change_formlist_url">Calea către lista formularelor (adăugată adresei URL a serverului)</string>

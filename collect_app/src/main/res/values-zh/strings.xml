@@ -131,7 +131,6 @@
   <string name="use_odk_default">使用默认图片</string>
   <string name="change_splash_path">修改图片</string>
   <string name="show_location">显示位置</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">保存修改</string>
   <string name="go_to_location">转到位置</string>
   <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>

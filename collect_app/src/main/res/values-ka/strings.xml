@@ -139,7 +139,6 @@
   <string name="use_odk_default">გამოიყენე დეფოლტ-სურათი</string>
   <string name="change_splash_path">სურათის შეცვლა</string>
   <string name="show_location">ადგილმდებარეობის ჩვენება</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ცვლილებების შენახვა</string>
   <string name="go_to_location">გადასვლა მდებარეობაზე</string>
   <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>

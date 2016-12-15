@@ -99,7 +99,7 @@ public class MapFragment extends Fragment implements LoaderManager.LoaderCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
     /*
-        View view = inflater.inflate(R.layout.map_fragment, container, false);
+        View view = inflater.inflate(R.layout.ft_map_fragment, container, false);
         mv = (MapView) view.findViewById(R.id.mapview);
         thisActvity = this;
         mv.onCreate(savedInstanceState);

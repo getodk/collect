@@ -87,10 +87,6 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
         String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
 
-        String server =
-                settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
-        //final String url =
-        //        server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL, "/formList");
         if(username != null && password != null) {
         	Uri u = Uri.parse(downloadListUrl);
         	WebUtils.addCredentials(username, password, u.getHost());

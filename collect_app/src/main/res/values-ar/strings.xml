@@ -141,7 +141,6 @@
   <string name="use_odk_default">استخدام الصورة الإفتراضية</string>
   <string name="change_splash_path">تغيير الصورة</string>
   <string name="show_location">إظهار الموقع</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">حفظ التعديلات</string>
   <string name="go_to_location">الذهاب إلى الموقع</string>
   <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>

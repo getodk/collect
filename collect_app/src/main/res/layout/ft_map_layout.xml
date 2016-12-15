@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/mainlayout"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout
+		android:id="@+id/location_buttons"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:padding="0dip"
+		android:background="#BF000000">
+
+		<fragment
+        	android:id="@+id/map"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	class="com.google.android.gms.maps.SupportMapFragment" />
+	</LinearLayout>
+
+	<ScrollView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="50dip"
+		android:paddingBottom="60dip"
+		android:layout_gravity="right"
+		>
+
+	</ScrollView>
+</FrameLayout>

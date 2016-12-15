@@ -132,7 +132,6 @@
   <string name="use_odk_default">Tumia picha ya kawaida</string>
   <string name="change_splash_path">Badilisha picha</string>
   <string name="show_location">Onyesha Eneo/Mahali</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="go_to_location">Enda kwa Eneo/Mahali</string>
   <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>

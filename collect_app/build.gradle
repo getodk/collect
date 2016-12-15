@@ -13,16 +13,16 @@ android {
 
     defaultConfig {
         applicationId "org.smap.smapTask.android"
-        minSdkVersion(15)
-        targetSdkVersion(15)
-        versionCode(2000)
-        versionName("4.0")
-        testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
+        minSdkVersion(9)
+        targetSdkVersion(9)
+        versionCode(3000)
+        versionName("4.1")
     }
 
     buildTypes {
         release {
-            minifyEnabled(true)
+            //minifyEnabled(true)
+            minifyEnabled(false)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
         debug {

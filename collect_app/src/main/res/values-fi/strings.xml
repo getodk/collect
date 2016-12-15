@@ -141,7 +141,6 @@
   <string name="use_odk_default">Käytä oletuskuvaa</string>
   <string name="change_splash_path">Vaihda kuva</string>
   <string name="show_location">Näytä sijainti</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="go_to_location">Mene sijaintiin</string>
   <string name="change_formlist_url">Lomakkeiden listan polku (lisätään URL:ään)</string>

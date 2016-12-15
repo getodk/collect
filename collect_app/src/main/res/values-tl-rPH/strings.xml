@@ -130,7 +130,6 @@
   <string name="use_odk_default">Gamitin ang Paunang natukoy na Imahe</string>
   <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="show_location">Ipakita ang Lokasyon</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="go_to_location">Pumunta sa Lokasyon</string>
   <string name="change_formlist_url">Form List Path (appended to Server URL)</string>

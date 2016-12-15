@@ -142,7 +142,6 @@
   <string name="use_odk_default">Kasuta vaikimisi pildina</string>
   <string name="change_splash_path">Muuda pilti</string>
   <string name="show_location">Näita asukohta</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="go_to_location">Liigu asukohta</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>

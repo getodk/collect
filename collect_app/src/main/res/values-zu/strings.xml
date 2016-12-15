@@ -135,7 +135,6 @@
   <string name="use_odk_default">Sebenzisa isithombe ngokungenhloso</string>
   <string name="change_splash_path">Shintsha umfanekiso</string>
   <string name="show_location">Khombisa indawo</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Gcina ushintsho</string>
   <string name="go_to_location">Iya endaweni</string>
   <string name="change_formlist_url">Uhla lendlela yefomu (appended to URL)</string>

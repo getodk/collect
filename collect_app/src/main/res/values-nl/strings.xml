@@ -138,7 +138,6 @@
   <string name="use_odk_default">Gebruik standaard afbeelding</string>
   <string name="change_splash_path">Wijzig afbeelding</string>
   <string name="show_location">Toon positie</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Wijzigingen opslaan</string>
   <string name="go_to_location">Ga naar positie</string>
   <string name="change_formlist_url">Form List Path (toegevoegd aan Server URL)</string>

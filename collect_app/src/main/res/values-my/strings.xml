@@ -130,7 +130,6 @@
   <string name="use_odk_default">ရိွရင္းစြဲပံုကိုသံုးရန္</string>
   <string name="change_splash_path">ပံုေျပာင္းရန္</string>
   <string name="show_location">တည္ေနရာျပရန္</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
   <string name="go_to_location">တည္ေနရာသို႔သြားရန္</string>
   <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>

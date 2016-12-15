@@ -139,7 +139,6 @@
   <string name="use_odk_default">Gunakan gambar bawaan</string>
   <string name="change_splash_path">Ubah gambar</string>
   <string name="show_location">Tunjukkan lokasi</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="go_to_location">Pilih lokasi</string>
   <string name="change_formlist_url">Tautan formulir (appended to Server URL)</string>

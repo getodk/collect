@@ -139,7 +139,6 @@
   <string name="use_odk_default">Chọn ảnh mặc định</string>
   <string name="change_splash_path">Đổi ảnh</string>
   <string name="show_location">Hiển thị vị trí</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="go_to_location">Đến vị trí</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>

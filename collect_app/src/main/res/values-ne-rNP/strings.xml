@@ -139,7 +139,6 @@
   <string name="use_odk_default">डिफल्ट तस्विर प्रयोग गर्नुहोस् </string>
   <string name="change_splash_path">तस्विर बदल्नुहोस् </string>
   <string name="show_location">स्थान देखाउनुहोस् </string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">परिवर्तनहरु संचित गर्नुहोस् </string>
   <string name="go_to_location">स्थानमा जानुहोस्</string>
   <string name="change_formlist_url">फारम सूचीको मार्ग (URL मा जोडिसकिएको छ )</string>

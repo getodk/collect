@@ -141,7 +141,6 @@
   <string name="use_odk_default">Użyj obraz domyślny</string>
   <string name="change_splash_path">Zmień obraz</string>
   <string name="show_location">Pokaż Lokalizację</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="go_to_location">Idź do Lokalizacji</string>
   <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>

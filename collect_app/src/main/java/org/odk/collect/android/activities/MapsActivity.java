@@ -23,6 +23,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Window;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.R;
@@ -36,6 +41,8 @@ import org.odk.collect.android.loaders.MapLocationObserver;
  */
 public class MapsActivity extends FragmentActivity  {
 
+    private GoogleMap mMap;
+
     private LocationManager locationManager;
     private LocationListener locationListener;
     private MapFragment mapFragment = null;
@@ -44,8 +51,28 @@ public class MapsActivity extends FragmentActivity  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        try {
+            setContentView(R.layout.ft_map_layout);
+        } catch (NoClassDefFoundError e) {
+            e.printStackTrace();
+            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        if ( mMap == null ) {
+            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Insert the fragment by replacing any existing fragment
+        /*
         FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentById(R.id.map_content_frame) == null) {
             mapFragment = new MapFragment();
@@ -55,7 +82,7 @@ public class MapsActivity extends FragmentActivity  {
             // Listen for new locations
             mo = new MapLocationObserver(getApplicationContext(), mapFragment);
         }
-
+        */
 
     }
 

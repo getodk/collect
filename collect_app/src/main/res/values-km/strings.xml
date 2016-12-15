@@ -141,7 +141,6 @@
   <string name="use_odk_default">ប្រើប្រាស់រូបលំនាំដើម</string>
   <string name="change_splash_path">ផ្លាស់ប្តូររូបថត</string>
   <string name="show_location">បង្ហាញទីតាំង</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
   <string name="go_to_location">ទៅកាន់ទីតាំង</string>
   <string name="change_formlist_url">ផ្លូវរបស់បញ្ជីសំណុំ​បែប​បទ​(បានបន្ថែមលើ URL)</string>

@@ -49,6 +49,7 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
+import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -74,6 +75,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,7 +100,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     ArrayList<TaskEntry> tasks = new ArrayList<TaskEntry>();
     HashMap<Long, TaskStatus> taskMap = new HashMap<Long, TaskStatus>();
     HttpResponse getResponse = null;
-    HttpClient client = null;
     Gson gson = null;
     TaskResponse tr = null;                         // Data returned from the server
     int statusCode;
@@ -256,25 +258,32 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 /*
 	        	 * Get tasks from the server
 	        	 */
-                client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+                HttpContext localContext = Collect.getInstance().getHttpContext();
+                HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+                Uri u = Uri.parse(taskURL);
                 if(username != null && password != null) {
-                    Uri u = Uri.parse(taskURL);
                     WebUtils.addCredentials(username, password, u.getHost());
                 }
 
-                // Call the service to get tasks from the server
+                URL url = new URL(taskURL);
+                URI uri = url.toURI();
+                HttpGet req = new HttpGet();
+                req.setURI(uri);
+                HttpResponse response = client.execute(req, localContext);
+
+                int statusCode = response.getStatusLine().getStatusCode();
+
+                HttpEntity entity = response.getEntity();
                 InputStream is = null;
-                HttpGet getRequest = new HttpGet(taskURL);
-                getResponse = client.execute(getRequest);
-                statusCode = getResponse.getStatusLine().getStatusCode();
                 if(statusCode != HttpStatus.SC_OK) {
                     Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
                     results.put("Get Assignments", getResponse.getStatusLine().getReasonPhrase());
                     throw new Exception(getResponse.getStatusLine().getReasonPhrase());
                 } else {
                     HttpEntity getResponseEntity = getResponse.getEntity();
-                    is = getResponseEntity.getContent();
+                    is = entity.getContent();
                 }
+
 
                 // De-serialise
                 GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());

@@ -130,7 +130,6 @@
   <string name="use_odk_default">Naudoti numatytąjį paveikslėlį</string>
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
   <string name="show_location">Rodyti vietovę</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="go_to_location">Aplankyti vietovę</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>

@@ -139,7 +139,6 @@
   <string name="use_odk_default">Использовать изображение по умолчанию</string>
   <string name="change_splash_path">Изменить изображение</string>
   <string name="show_location">Показать местоположение</string>
-  <string name="app_url">http://kyrgyz-roads.info</string>
   <string name="keep_changes">Сохранить изменения</string>
   <string name="go_to_location">Перейти к локации</string>
   <string name="change_formlist_url">Путь к списку форм (добавляется к URL)</string>

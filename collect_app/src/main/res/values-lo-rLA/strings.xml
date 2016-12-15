@@ -139,7 +139,6 @@
   <string name="use_odk_default">ເລືອກພາບທີ່ກຳນົດໄວ້</string>
   <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
   <string name="show_location">ສະແດງຈຸດທີ່ຕັ້ງ</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
   <string name="go_to_location">ໄປຫາຈຸດທີ່ຕັ້ງທີ່ຕ້ອງການ</string>
   <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>

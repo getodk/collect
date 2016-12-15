@@ -107,7 +107,6 @@
   <string name="use_odk_default">Geçerli görüntüyü kullan</string>
   <string name="change_splash_path">Görüntüyü Değiştir</string>
   <string name="show_location">Lokasyonu Göster</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="go_to_location">Lokasyona Git</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>

@@ -141,7 +141,6 @@
   <string name="use_odk_default">Standardbild verwenden</string>
   <string name="change_splash_path">Bild ändern</string>
   <string name="show_location">Standort anzeigen</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="go_to_location">Zum Standort</string>
   <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>

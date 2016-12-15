@@ -141,7 +141,6 @@
   <string name="use_odk_default">Використати стандартне</string>
   <string name="change_splash_path">Змінити зображення</string>
   <string name="show_location">Показати місцезнаходження</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Зберегти зміни</string>
   <string name="go_to_location">Перейти до місцезнаходження</string>
   <string name="change_formlist_url">Шлях до списку анкет (додається до URL)</string>
