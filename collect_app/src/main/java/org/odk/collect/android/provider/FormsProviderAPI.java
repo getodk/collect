@@ -23,7 +23,7 @@ import android.provider.BaseColumns;
  * Convenience definitions for NotePadProvider
  */
 public final class FormsProviderAPI {
-    public static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
+    public static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms.smap";
 
     // This class cannot be instantiated
     private FormsProviderAPI() {}
@@ -45,6 +45,9 @@ public final class FormsProviderAPI {
         public static final String DESCRIPTION = "description";  // can be null
         public static final String JR_FORM_ID = "jrFormId";
         public static final String JR_VERSION = "jrVersion"; // can be null
+        public static final String PROJECT = "project"; // smap (can be null)
+        public static final String TASKS_ONLY = "tasks_only"; // Set true if the form should not be available to the user
+        public static final String SOURCE = "source"; // smap (shouldn't be null but for migration can be)
         public static final String FORM_FILE_PATH = "formFilePath";
         public static final String SUBMISSION_URI = "submissionUri"; // can be null
         public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey"; // can be null

@@ -31,9 +31,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.STFileUtils;		// smap
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -44,9 +46,11 @@ import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -76,7 +80,7 @@ public class DownloadFormsTask extends
 
 
     @Override
-    protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
+    public HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {		// smap make public
         ArrayList<FormDetails> toDownload = values[0];
 
         int total = toDownload.size();
@@ -141,7 +145,7 @@ public class DownloadFormsTask extends
                 // install everything
                 UriResult uriResult = null;
                 try {
-                    uriResult = findExistingOrCreateNewUri(fileResult.getFile());
+                    uriResult = findExistingOrCreateNewUri(fileResult.getFile(), STFileUtils.getSource(fd.downloadUrl), fd.tasks_only);   // smap add source
                     Log.w(t, "Form uri = " + uriResult.getUri() + ", isNew = " + uriResult.isNew());
 
                     // move the media files in the media folder
@@ -217,7 +221,7 @@ public class DownloadFormsTask extends
      * @return a {@link org.odk.collect.android.tasks.DownloadFormsTask.UriResult} object
      * @throws TaskCancelledException if the user cancels the task during the download.
      */
-    private UriResult findExistingOrCreateNewUri(File formFile) throws TaskCancelledException {
+    private UriResult findExistingOrCreateNewUri(File formFile, String source, boolean tasks_only) throws TaskCancelledException {		// smap add source as a parameter
         Cursor cursor = null;
         Uri uri = null;
         String mediaPath;
@@ -257,6 +261,9 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
                 v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
                 v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
+                v.put(FormsColumns.PROJECT, formInfo.get(FileUtils.PROJECT));		// smap
+                v.put(FormsColumns.TASKS_ONLY, tasks_only ? "yes" : "no");		    // smap
+                v.put(FormsColumns.SOURCE, source);									// smap
                 v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
                 v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
                 uri =
@@ -290,7 +297,7 @@ public class DownloadFormsTask extends
      * @return
      * @throws Exception
      */
-    private FileResult downloadXform(String formName, String url) throws Exception {
+    public FileResult downloadXform(String formName, String url) throws Exception {	// Smap (made public)
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
@@ -360,7 +367,7 @@ public class DownloadFormsTask extends
      * @param downloadUrl the url to get the contents from.
      * @throws Exception
      */
-    private void downloadFile(File file, String downloadUrl) throws Exception {
+    public void downloadFile(File file, String downloadUrl) throws Exception {		// smap made public
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION, new File(Collect.CACHE_PATH));
 
         URI uri;
@@ -394,6 +401,23 @@ public class DownloadFormsTask extends
 	        HttpContext localContext = Collect.getInstance().getHttpContext();
 
 	        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
+	        // ---------------- Smap Start
+	        // Add credentials
+	        SharedPreferences settings =
+	            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+
+	        String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+	        String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+
+	        String server =
+	                settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
+
+	        if(username != null && password != null) {
+	        	Uri u = Uri.parse(downloadUrl);
+	        	WebUtils.addCredentials(username, password, u.getHost());
+	        }
+	        // Smap End
 
 	        // set up request...
 	        HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
@@ -516,21 +540,21 @@ public class DownloadFormsTask extends
         }
     }
 
-    private static class FileResult {
+    public static class FileResult {		// smap make public
 
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean aNew) {
+        public FileResult(File file, boolean aNew) {	// smap make public
             this.file = file;
             isNew = aNew;
         }
 
-        private File getFile() {
+        public File getFile() {				// smap make public
             return file;
         }
 
-        private boolean isNew() {
+        public boolean isNew() {			// smap make public
             return isNew;
         }
     }

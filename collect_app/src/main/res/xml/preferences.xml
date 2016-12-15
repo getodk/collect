@@ -1,48 +1,47 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <PreferenceScreen
-        android:id="@+id/info"
-        android:key="info"
-        android:summary="@string/click_to_web"
-        android:title="@string/app_name" >
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="http://opendatakit.org" />
-    </PreferenceScreen>
-
-    <PreferenceCategory
-        android:key="@string/server_preferences"
-        android:title="@string/server_preferences" >
-        <ListPreference
-            android:id="@+id/protocol"
-            android:defaultValue="odk_default"
-            android:dialogTitle="@string/change_protocol"
-            android:entries="@array/protocol_entries"
-            android:entryValues="@array/protocol_entry_values"
-            android:key="protocol"
-            android:title="@string/protocol" />
-        <PreferenceScreen
-        	android:key="protocol_settings"
-        	android:title="@string/protocol_settings"/>
-        <ListPreference
-            android:id="@+id/selected_google_account"
-            android:defaultValue=""
-            android:key="selected_google_account"
-            android:title="@string/selected_google_account_text" />
-        <EditTextPreference
-            android:id="@+id/username"
-            android:dialogTitle="@string/change_username"
-            android:inputType="textNoSuggestions"
-            android:key="username"
-            android:title="@string/username" />
-        <EditTextPreference
-            android:id="@+id/password"
-            android:dialogTitle="@string/change_password"
-            android:inputType="textNoSuggestions"
-            android:key="password"
-            android:title="@string/password" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceScreen
+		android:id="@+id/info"
+		android:key="info"
+		android:title="@string/app_name"
+		android:summary="@string/click_to_web">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:data="@string/app_url" />
+	</PreferenceScreen>
+	<PreferenceCategory android:title="@string/server_preferences">
+		<EditTextPreference
+			android:id="@+id/server_url"
+			android:key="server_url"
+			android:defaultValue="@string/default_server_url"
+			android:title="@string/server_url"
+			android:dialogTitle="@string/change_server_url" />
+		<EditTextPreference
+			android:id="@+id/username"
+			android:key="username"
+			android:defaultValue="@string/default_username"
+			android:title="@string/username"
+			android:dialogTitle="@string/change_username" />
+		<EditTextPreference
+			android:id="@+id/password"
+			android:key="password"
+			android:defaultValue="@string/default_password"
+			android:title="@string/password"
+			android:inputType="textPassword"
+			android:dialogTitle="@string/change_password" />
+		<!-- android:password="true" -->
     </PreferenceCategory>
+    -->
     <PreferenceCategory
+        android:key="data_collection"
+        android:title="@string/smap_data_collection" >
+        <CheckBoxPreference
+            android:id="@+id/smap_gps_trail"
+            android:defaultValue="false"
+            android:key="smap_gps_trail"
+            android:summary="@string/smap_gps_trail_summary"
+            android:title="@string/smap_gps_trail" />
+	</PreferenceCategory>
+	    <PreferenceCategory
         android:key="@string/autosend"
         android:title="@string/autosend" >
         <CheckBoxPreference
@@ -91,29 +90,11 @@
             android:summary="@string/default_completed_summary"
             android:title="@string/default_completed" />
         <CheckBoxPreference
-            android:id="@+id/delete_after_send"
-            android:key="delete_send"
-            android:summary="@string/delete_after_send_summary"
-            android:title="@string/delete_after_send"
-            android:defaultValue="false"/>
-        <CheckBoxPreference
             android:id="@+id/high_resolution"
             android:defaultValue="true"
             android:key="high_resolution"
             android:summary="@string/high_resolution_summary"
             android:title="@string/high_resolution" />
-        <CheckBoxPreference
-            android:id="@+id/show_splash"
-            android:key="showSplash"
-            android:summary="@string/show_splash_summary"
-            android:title="@string/show_splash" />
-        <PreferenceScreen
-            android:id="@+id/splash_path"
-            android:defaultValue="@string/default_splash_path"
-            android:dependency="showSplash"
-            android:key="splashPath"
-            android:layout="?android:attr/preferenceLayoutChild"
-            android:title="@string/splash_path" />
     </PreferenceCategory>
 
     <PreferenceCategory

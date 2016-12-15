@@ -75,6 +75,7 @@ public final class WebUtils {
 	private static final String DATE_HEADER = "Date";
 
 	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    public static final String HTTP_CONTENT_TYPE_APPLICATION_XML = "application/xml";	// smap
 	public static final int CONNECTION_TIMEOUT = 30000;
 
 	public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
@@ -352,13 +353,15 @@ public final class WebUtils {
 			}
 
 			if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH)
-					.contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
+					.contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML) &&
+		            !entity.getContentType().getValue().toLowerCase()
+		            .contains(WebUtils.HTTP_CONTENT_TYPE_APPLICATION_XML)) {	// SMAP add application_xml
 				WebUtils.discardEntityBytes(response);
 				String error = "ContentType: "
 						+ entity.getContentType().getValue()
 						+ " returned from: "
 						+ u.toString()
-						+ " is not text/xml.  This is often caused a network proxy.  Do you need to login to your network?";
+						+ " is not text/xml nor application/xml.  This is often caused by a network proxy.  Do you need to login to your network?"; //smap
 				Log.e(t, error);
 				return new DocumentFetchResult(error, 0);
 			}

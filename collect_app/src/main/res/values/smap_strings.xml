@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+		Copyright (C) 2013 Smap Consulting Pty Ltd Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+
+		This file contains strings that are specific to fieldTask
+-->
+<resources
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:ignore="MissingTranslation">
+
+    <string name="smap_task">Task</string>
+    <string name="smap_accept_task">Accept the task</string>
+    <string name="smap_accepted">: accepted. </string> 
+    <string name="smap_cannot_accept">Unable to accept task</string> 
+    <string name="smap_cannot_complete">Unable to complete task</string>  
+    <string name="smap_cannot_reject">Unable to reject task</string>
+    <string name="smap_complete_task">Complete Task</string>
+    <string name="smap_data_collection">Data Collection</string>
+    <string name="smap_destination_not_found">The destination for the route is not set</string>
+    <string name="smap_done">: done. </string>
+    <string name="smap_finding_route">Routing</string>
+    <string name="smap_found_route">Route to destination has been found!</string>
+    <string name="smap_get_tasks">Refresh Task List</string>
+    <string name="smap_gps_trail">GPS Trail</string>
+    <string name="smap_gps_trail_summary">Record the path taken by the user</string>
+    <string name="smap_menu_settings">Settings</string>
+    <string name="smap_missed">: rejected. </string>
+    <string name="smap_no_tasks">No tasks downloaded</string>
+    <string name="smap_no_tasks_display"></string>
+    <string name="smap_pending">: pending. </string>
+    <string name="smap_reject_task">Reject Task</string>
+    <string name="smap_route_finding_inprogress">Finding route to the task</string>
+    <string name="smap_routing_network_error">Failed to find a route due to networking error</string>
+    <string name="smap_route_parse_error">Fail to find the route due to error while parsing the route</string>
+    <string name="smap_synchronising">Synchronising with Server</string>
+    <string name="smap_task_preferences">Tasks</string>
+    <string name="smap_tasks_not_enabled">Tasks not enabled - Enable from the settings screen</string>
+    <string name="smap_taskList">Task List</string>
+    <string name="smap_taskMap">Task Map</string>
+    <string name="smap_zoom_data">Zoom to Tasks </string>
+    <string name="smap_project">Project </string>
+    <string name="smap_no_tasks_nfc">No tasks are started by NFC tags</string>
+    <string name="smap_no_matching_tasks_nfc">No tasks match this NFC  : %1$s</string>
+    <string name="smap_starting_task_from_nfc">Starting task from NFC  : %1$s</string>
+    <string name="smap_must_start_from_nfc">This task must be started by swiping an NFC</string>
+    <string name="smap_nfc_not_authorised">Tasks cannot be started using NFC</string>
+    <string name="smap_read_nfc">Read NFC</string>
+    <string name="smap_reading_nfc">Reading NFC</string>
+    <string name="smap_replace_nfc">Replace NFC</string>
+    <string name="smap_nfc_not_available">NFC not available</string>
+    <string name="smap_nfc_is_available">NFC is available</string>
+    <string name="smap_nfc_not_enabled">NFC is not enabled</string>
+    <string name="smap_swipe_nfc">Place phone against NFC</string>
+    <string name="read_only">This task is complete and only its comments can be changed</string>
+    <string name="smap_add_comment">Add Comment</string>
+</resources>

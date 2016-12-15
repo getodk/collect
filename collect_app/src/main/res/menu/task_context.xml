@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+    	android:title="@string/smap_reject_task" 
+    	android:id="@+id/reject" />
+    <item 
+    	android:title="@string/smap_complete_task" 
+    	android:id="@+id/complete_task" /> 
+    <item 
+    	android:title="@string/smap_accept_task" 
+    	android:id="@+id/accept_task" /> 
+    <item 
+    	android:title="@string/cancel" 
+    	android:id="@+id/cancel_task" />         
+</menu>
