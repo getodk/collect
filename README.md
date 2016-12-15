@@ -17,6 +17,7 @@ Frequently Asked Questions
     * Google Play Services
     * Google Repository
 * Clone as a GIT project into Android Studio
+* Checkout branch "smap"
 * Select fieldTask and run as an Android application
 
 Instructions on installing a Smap server can be found in the operations manual [here](http://www.smap.com.au/downloads.shtml)
@@ -26,10 +27,6 @@ Task Management
 
 A user of fieldTask can be assigned tasks to complete as per this [video](http://www.smap.com.au/taskManagement.shtml). 
 
-Future Directions
------------------
-
-<TBD>
 
 ##### Get existing survey data as an XForm instance XML file
 https://hostname/instanceXML/{survey id}/0?datakey={key name}&datakeyvalue={value of key}
@@ -46,7 +43,7 @@ This API allows you to maintain data using surveys. In the following video the d
 Development
 -----------
 * Code contributions are very welcome. 
-* [Issue Tracker](https://github.com/nap2000/fieldTask2/issues)
+* [Issue Tracker](https://github.com/smap-consulting/fieldTask4/issues)
 
 Acknowledgements
 ----------------
