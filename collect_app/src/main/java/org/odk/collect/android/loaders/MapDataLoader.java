@@ -29,7 +29,7 @@ import org.odk.collect.android.utilities.Utilities;
 import java.util.ArrayList;
 
 /**
- * An implementation of AsyncTaskLoader which loads a {@code List<PointEntry>}
+ * An implementation of AsyncTaskLoader which loads a {@code List<MapEntry>}
  * containing all tasks on the device.
  */
 public class MapDataLoader extends AsyncTaskLoader<MapEntry> {

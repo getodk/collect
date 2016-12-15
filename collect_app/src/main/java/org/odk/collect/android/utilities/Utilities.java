@@ -54,7 +54,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 public class Utilities {
 
@@ -634,6 +636,29 @@ public class Utilities {
                 }
             }
         }
+    }
+
+    /*
+     * Get a time to display for the task, either the planned start time or the actual finish time
+     */
+    public static String getTaskTime(String status, long actFinish, long taskStart) {
+
+        String s = null;
+        long theTime = 0;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        if(status.equals(Utilities.STATUS_T_COMPLETE) || status.equals(Utilities.STATUS_T_SUBMITTED)) {
+            theTime = actFinish;
+        } else if (taskStart >  0) {
+            theTime = taskStart;
+        } else {
+            theTime = actFinish;
+        }
+
+        df.setTimeZone(TimeZone.getDefault());
+        s = df.format(theTime);
+
+        return s;
     }
 
 }

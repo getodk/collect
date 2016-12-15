@@ -128,7 +128,7 @@ public class MainTabsActivity extends TabActivity implements
     private MainTabsListener listener = null;
     boolean listenerRegistered = false;
     private static List<TaskEntry> mTasks = null;
-    //private static List<TaskEntry> mMapTasks = null;  Disable map tab
+    private static List<TaskEntry> mMapTasks = null;
     private static SharedPreferences settings = null;
     private TabHost tabHost = null;
     
@@ -754,11 +754,11 @@ public class MainTabsActivity extends TabActivity implements
 
     /*
      * Get the tasks shown on the map
-     * Disable map tab
+     */
     public List<TaskEntry> getMapTasks() {
         return mMapTasks;
     }
-    */
+
 
     /*
      * Manage location triggers
@@ -769,9 +769,9 @@ public class MainTabsActivity extends TabActivity implements
         ArrayList<NfcTrigger> triggers = null;
 
         if(map) {
-            // mMapTasks = data;    Disable map tab
-            // nfcTriggersMap = new ArrayList<NfcTrigger> ();
-            // triggers = nfcTriggersMap;
+            mMapTasks = data;
+            nfcTriggersMap = new ArrayList<NfcTrigger> ();
+            triggers = nfcTriggersMap;
         } else {
             mTasks = data;
             nfcTriggersList = new ArrayList<NfcTrigger> ();
@@ -838,7 +838,7 @@ public class MainTabsActivity extends TabActivity implements
                 null, where, whereArgs, null);
 
         if(cInstanceProvider.getCount() != 1) {
-            Log.e("MainListActivity:completeTask", "Unique instance not found: count is:" +
+            Log.e("completeTask", "Unique instance not found: count is:" +
                     cInstanceProvider.getCount());
         } else {
             cInstanceProvider.moveToFirst();
@@ -905,12 +905,11 @@ public class MainTabsActivity extends TabActivity implements
                 }
             } else if (intent.getAction().equals("startMapTask")) {
 
-                // Disable map tab
-                // int position =  intent.getIntExtra("position", -1);
-                //if(position >= 0) {
-                //    TaskEntry entry = (TaskEntry) mMapTasks.get(position);
-                //    mActivity.completeTask(entry);
-                //}
+                int position =  intent.getIntExtra("position", -1);
+                if(position >= 0) {
+                    TaskEntry entry = (TaskEntry) mMapTasks.get(position);
+                    mActivity.completeTask(entry);
+                }
             }
         }
     }

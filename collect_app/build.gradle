@@ -13,8 +13,8 @@ android {
 
     defaultConfig {
         applicationId "org.smap.smapTask.android"
-        minSdkVersion(9)
-        targetSdkVersion(9)
+        minSdkVersion(10)
+        targetSdkVersion(10)
         versionCode(3000)
         versionName("4.1")
     }
@@ -68,7 +68,8 @@ allprojects {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.google.android.gms:play-services:4.1.32'
+    //compile 'com.google.android.gms:play-services:4.1.32'
+    compile 'com.google.android.gms:play-services:6.5.87'
     //compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar'){
     //    transitive=true
     //}

@@ -54,7 +54,6 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
     	View view;
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     	
     	if (convertView == null) {
     		view = mInflater.inflate(mLayout, parent, false);
@@ -98,26 +97,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 	    	if(item.type.equals("form")) {
                 taskStartText.setText(getContext().getString(R.string.smap_project) + ": " + item.project);
 	    	} else {
-                String line2 = null;
-                long theTime = 0;
-                Log.i(TAG, "task status: " + item.taskStatus);
-                Log.i(TAG, "actual finish: " + item.actFinish);
-                Log.i(TAG, "task start: " + item.taskStart);
-                if(item.taskStatus.equals(Utilities.STATUS_T_COMPLETE) || item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
-                    theTime = item.actFinish;
-                } else if (item.taskStart >  0) {
-                    theTime = item.taskStart;
-                } else {
-                    theTime = item.actFinish;
-                }
-
-                df.setTimeZone(TimeZone.getDefault());
-                line2 = df.format(theTime);
-
-                //String addressText = KeyValueJsonFns.getValues(item.taskAddress);
-                //if(addressText != null) {
-                //    line2 += " " + addressText;
-                //}
+                String line2 = Utilities.getTaskTime(item.taskStatus, item.actFinish, item.taskStart);
                 taskStartText.setText(line2);
 	    	}
     	}

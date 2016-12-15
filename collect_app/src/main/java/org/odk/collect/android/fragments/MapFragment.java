@@ -98,6 +98,8 @@ public class MapFragment extends Fragment implements LoaderManager.LoaderCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        thisActvity = this;
+        getLoaderManager().initLoader(MAP_LOADER_ID, null, thisActvity);       // Get the task locations
     /*
         View view = inflater.inflate(R.layout.ft_map_fragment, container, false);
         mv = (MapView) view.findViewById(R.id.mapview);

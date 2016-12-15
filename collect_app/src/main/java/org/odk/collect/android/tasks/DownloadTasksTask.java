@@ -269,18 +269,17 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 URI uri = url.toURI();
                 HttpGet req = new HttpGet();
                 req.setURI(uri);
-                HttpResponse response = client.execute(req, localContext);
 
+                HttpResponse response = client.execute(req, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
 
-                HttpEntity entity = response.getEntity();
                 InputStream is = null;
                 if(statusCode != HttpStatus.SC_OK) {
                     Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
-                    results.put("Get Assignments", getResponse.getStatusLine().getReasonPhrase());
-                    throw new Exception(getResponse.getStatusLine().getReasonPhrase());
+                    results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+                    throw new Exception(response.getStatusLine().getReasonPhrase());
                 } else {
-                    HttpEntity getResponseEntity = getResponse.getEntity();
+                    HttpEntity entity = response.getEntity();
                     is = entity.getContent();
                 }
 
@@ -431,7 +430,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	private void updateTaskStatusToServer() throws Exception {
 
         HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-        HttpResponse getResponse = null;
+
         TaskResponse updateResponse = new TaskResponse();
         updateResponse.forms = tr.forms;
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
