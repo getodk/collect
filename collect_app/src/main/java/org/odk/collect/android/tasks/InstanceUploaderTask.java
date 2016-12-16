@@ -572,18 +572,19 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     	Outcome outcome = new Outcome();
 
         // Start smap
-        String selection = InstanceColumns._ID + " IN (";
+        StringBuffer selectionBuf = new StringBuffer(InstanceColumns._ID + " IN (");
         String[] selectionArgs = new String[(values == null) ? 0 : values.length];
         if(values != null) {
             for (int i = 0; i < values.length; i++) {
                 if(i > 0) {
-                    selection += ",";
+                    selectionBuf.append(",");
                 }
-                selection += "?";
+                selectionBuf.append("?");
                 selectionArgs[i] = values[i].toString();
             }
         }
-        selection += ")";
+        selectionBuf.append(")");
+        String selection = selectionBuf.toString();
         Log.i(t, "Getting instances "  + selection);
         // end smap
 
