@@ -74,7 +74,6 @@ public class InstanceUploaderList extends ListActivity implements
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
-    private boolean mToggled = false;
 
     public Cursor getUnsentCursor() {
         // get all complete or failed submission instances
@@ -138,7 +137,6 @@ public class InstanceUploaderList extends ListActivity implements
                     if (mSelected.size() > 0) {
                         // items selected
                         uploadSelectedFiles();
-                        mToggled = false;
                         mSelected.clear();
                         InstanceUploaderList.this.getListView().clearChoices();
                         mUploadButton.setEnabled(false);
@@ -321,7 +319,6 @@ public class InstanceUploaderList extends ListActivity implements
         for (int i = 0; i < selectedArray.length; i++) {
             mSelected.add(selectedArray[i]);
         }
-        mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
         mRestored = true;
         mUploadButton.setEnabled(selectedArray.length > 0);
     }
@@ -334,7 +331,8 @@ public class InstanceUploaderList extends ListActivity implements
             selectedArray[i] = mSelected.get(i);
         }
         outState.putLongArray(BUNDLE_SELECTED_ITEMS_KEY, selectedArray);
-        outState.putBoolean(BUNDLE_TOGGLED_KEY, mToggled);
+        // TODO: Safe to delete TOGGLED_KEY?
+        outState.putBoolean(BUNDLE_TOGGLED_KEY, false);
     }
 
     @Override
@@ -395,7 +393,7 @@ public class InstanceUploaderList extends ListActivity implements
         Collect.getInstance()
                 .getActivityLogger()
                 .logAction(this, "toggleButton.longClick",
-                        Boolean.toString(mToggled));
+                        "");
         return showSentAndUnsentChoices();
     }
 
