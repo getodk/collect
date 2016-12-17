@@ -57,7 +57,7 @@ public class SelectMultiWidget extends QuestionWidget {
 
 
     @SuppressWarnings("unchecked")
-    public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
+    public SelectMultiWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {   // smap add readOnlyOverride
         super(context, prompt);
         mPrompt = prompt;
         mCheckboxes = new ArrayList<CheckBox>();
@@ -94,8 +94,8 @@ public class SelectMultiWidget extends QuestionWidget {
                 c.setText(choiceDisplayName);
                 c.setMovementMethod(LinkMovementMethod.getInstance());
                 c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                c.setFocusable(!prompt.isReadOnly());
-                c.setEnabled(!prompt.isReadOnly());
+                c.setFocusable(!prompt.isReadOnly() && !readOnlyOverride);  // smap
+                c.setEnabled(!prompt.isReadOnly() && !readOnlyOverride);    // smap
                 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key

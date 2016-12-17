@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +58,7 @@ import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -78,6 +81,9 @@ public class MapsActivity extends FragmentActivity
 
     private GoogleMap mMap;
     private Polyline mPath;
+    private MapHelper mHelper;
+    private Button layers_button;
+    private Button location_button;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -146,6 +152,35 @@ public class MapsActivity extends FragmentActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mHelper = new MapHelper(this,mMap);
+        mHelper.setBasemap();
+
+        location_button = (Button) findViewById(R.id.show_location);
+        location_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Location location = mMap.getMyLocation();
+
+                if (location != null) {
+                    LatLng myLocation = new LatLng(location.getLatitude(),
+                            location.getLongitude());
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
+                }
+
+            }
+        });
+
+
+        layers_button = (Button)findViewById(R.id.layers);
+        layers_button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mHelper.showLayersDialog();
+
+            }
+        });
 
         /*
          * Add multiline info window
@@ -236,6 +271,7 @@ public class MapsActivity extends FragmentActivity
 
     @Override
     public void onLoaderReset(Loader<MapEntry> loader) {
+
         clearTasks();
     }
 
@@ -250,28 +286,25 @@ public class MapsActivity extends FragmentActivity
 
     @Override
     protected void onPause() {
-        Log.i("mapsActivity", "---------------- onPause");
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        Log.i("mapsActivity", "---------------- onResume");
+        if(mHelper != null) {
+            mHelper.setBasemap();
+        }
         super.onResume();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("mapsActivity", "---------------- onStop");
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("mapsActivity", "---------------- onStart");
-
     }
 
     @Override
@@ -332,6 +365,9 @@ public class MapsActivity extends FragmentActivity
     private void showPoints(List<PointEntry> data) {
 
         mPoints = new ArrayList<LatLng> ();
+        if(mPath != null) {
+            mPath.remove();
+        }
         mPath = mMap.addPolyline((new PolylineOptions()));
 
         for(PointEntry p : data) {

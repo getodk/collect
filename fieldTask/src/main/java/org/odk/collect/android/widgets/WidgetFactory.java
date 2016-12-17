@@ -83,7 +83,11 @@ public class WidgetFactory {
                         questionWidget = new GeoTraceWidget(context, fep);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(context, fep);
+                        if (appearance.contains("read_nfc")) {
+                            questionWidget = new NfcWidget(context, fep);
+                        } else {
+                            questionWidget = new BarcodeWidget(context, fep);
+                        }
                         break;
                     case Constants.DATATYPE_TEXT:
                     	String query = fep.getQuestion().getAdditionalAttribute(null, "query");
@@ -111,7 +115,7 @@ public class WidgetFactory {
             		questionWidget = new ImageWebViewWidget(context, fep);
         		} else if(appearance.equals("signature")) {
             		questionWidget = new SignatureWidget(context, fep);
-            	} else if(appearance.equals("annotate")) {
+            	} else if(appearance.contains("annotate")) {    // smap change to contains rather than equals, may have other appearance settings
             		questionWidget = new AnnotateWidget(context, fep);
             	} else if(appearance.equals("draw")) {
             		questionWidget = new DrawWidget(context, fep);
@@ -177,7 +181,7 @@ public class WidgetFactory {
                 } else if (appearance.contains("search")) {
                     questionWidget = new SelectOneSearchWidget(context, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap - add readOnlyOverride
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
@@ -207,7 +211,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else {
-                    questionWidget = new SelectMultiWidget(context, fep);
+                    questionWidget = new SelectMultiWidget(context, fep,  readOnlyOverride);
                 }
                 break;
             case Constants.CONTROL_TRIGGER:

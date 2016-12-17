@@ -58,7 +58,7 @@ public class SelectOneWidget extends QuestionWidget implements
 	private int playcounter = 0;
 
 
-	public SelectOneWidget(Context context, FormEntryPrompt prompt) {
+    public SelectOneWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {  // smap - add readOnlyOverride
 		super(context, prompt);
 		playList = new ArrayList<MediaLayout>();
 
@@ -94,7 +94,7 @@ public class SelectOneWidget extends QuestionWidget implements
 				r.setMovementMethod(LinkMovementMethod.getInstance());
 				r.setTag(Integer.valueOf(i));
 				r.setId(QuestionWidget.newUniqueId());
-				r.setEnabled(!prompt.isReadOnly());
+				r.setEnabled(!prompt.isReadOnly() && !readOnlyOverride);        // smap - add read only override
 				r.setFocusable(!prompt.isReadOnly());
 
 				buttons.add(r);

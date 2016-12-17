@@ -106,8 +106,15 @@ public class PreferencesActivity extends PreferenceActivity implements
     public static final String KEY_STORE_LOCATION_TRIGGER = "smap_location_trigger";       // smap
 
     // Maps
+
     public static final String KEY_MAP_SDK = "map_sdk_behavior";
     public static final String KEY_MAP_BASEMAP = "map_basemap_behavior";
+
+    public static final int ARRAY_INDEX_GOOGLE_MAPS = 0;
+    public static final int ARRAY_INDEX_OSM_MAPS = 1;
+    public static final String OSM_BASEMAP_KEY = "osmdroid";
+    public static final String GOOGLE_MAPS_BASEMAP_DEFAULT = "streets";
+    public static final String OSM_MAPS_BASEMAP_DEFAULT = "mapquest_streets";
 
 	private PreferenceScreen mSplashPathPreference;
 	private EditTextPreference mSubmissionUrlPreference;
@@ -125,6 +132,9 @@ public class PreferencesActivity extends PreferenceActivity implements
     private CheckBoxPreference mStoreUserTrailPreference;                       // smap
     private CheckBoxPreference mStoreUserLocationTriggerPreference;             // smap
 	private ListPreference mProtocolPreference;
+
+    protected ListPreference mMapSdk;
+    protected ListPreference mMapBasemap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -524,6 +534,68 @@ public class PreferencesActivity extends PreferenceActivity implements
 				|| /* showSplashAvailable || */ navigationAvailable || adminMode || resolutionAvailable)) {	// Smap removed splash
 			getPreferenceScreen().removePreference(clientCategory);
 		}
+
+        // MAP SPECIFIC
+        mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
+        mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
+        PreferenceCategory mapCategory = (PreferenceCategory) findPreference(
+                getString(R.string.map_preferences));
+
+        boolean mMapSdkAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_SHOW_MAP_SDK, true);
+        mMapSdk.setSummary(mMapSdk.getEntry());
+        mMapSdk.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                if (index == ARRAY_INDEX_GOOGLE_MAPS) {
+                    mMapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
+                    mMapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+                    mMapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
+                    mMapBasemap.setSummary(mMapBasemap.getEntry());
+                } else {
+                    // Else its OSM Maps
+                    mMapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
+                    mMapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+                    mMapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
+                    mMapBasemap.setSummary(mMapBasemap.getEntry());
+                }
+
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                ((ListPreference) preference).setSummary(entry);
+                return true;
+            }
+        });
+
+        if (!(mMapSdkAvailable || adminMode)) {
+            mapCategory.removePreference(mMapSdk);
+        }
+
+        boolean mMapBasemapAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_SHOW_MAP_BASEMAP, true);
+
+        if (mMapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
+            mMapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
+            mMapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+        } else {
+            mMapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
+            mMapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+        }
+        mMapBasemap.setSummary(mMapBasemap.getEntry());
+        mMapBasemap.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                ((ListPreference) preference).setSummary(entry);
+                return true;
+            }
+        });
+        if (!(mMapBasemapAvailable || adminMode)) {
+            mapCategory.removePreference(mMapBasemap);
+        }
 
 	}
 

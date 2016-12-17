@@ -27,6 +27,29 @@
 		android:paddingBottom="60dip"
 		android:layout_gravity="right"
 		>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="0dip"
+            android:paddingBottom="60dip">
 
+            <Button
+                android:id="@+id/show_location"
+                android:drawableRight="@drawable/ic_my_location_black_36dp"
+                android:padding="15dp"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                />
+
+            <Button
+                android:id="@+id/layers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:layout_margin="5dp"
+                android:drawableRight="@drawable/ic_layers_black_36dp" />
+        </LinearLayout>
 	</ScrollView>
 </FrameLayout>
