@@ -245,7 +245,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 }
                 mDownloadFormsTask = null;
             }
-        } else if (getLastNonConfigurationInstance() == null) {
+        } else if (mFormNamesAndURLs.isEmpty() && getLastNonConfigurationInstance() == null) {
             // first time, so get the formlist
             downloadFormList();
         }
