@@ -33,11 +33,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
+import org.odk.collect.android.utilities.ListViewUtils;
 
 import java.util.ArrayList;
 
 /**
- * Responsible for displaying and deleting all the valid forms in the forms
+ * Responsible for displaying and deleting all the saved form instances
  * directory.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
@@ -82,26 +83,18 @@ public class DataManagerList extends ListActivity implements
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean checkAll = false;
-                // if everything is checked, uncheck
-                if (mSelected.size() == mInstances.getCount()) {
-                    checkAll = false;
-                    mSelected.clear();
-                    mDeleteButton.setEnabled(false);
-                } else {
-                    // otherwise check everything
-                    checkAll = true;
-                    for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
-                        Long id = getListAdapter().getItemId(pos);
-                        if (!mSelected.contains(id)) {
-                            mSelected.add(id);
-                        }
+                ListView lv = getListView();
+                boolean allChecked = ListViewUtils.toggleChecked(lv);
+
+                // sync up internal state
+                mSelected.clear();
+                if (allChecked) {
+                    // add all id's back to mSelected
+                    for (int pos = 0; pos < lv.getCount(); pos++) {
+                        mSelected.add(getListAdapter().getItemId(pos));
                     }
-                    mDeleteButton.setEnabled(true);
                 }
-                for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
-                    DataManagerList.this.getListView().setItemChecked(pos, checkAll);
-                }
+                mDeleteButton.setEnabled(allChecked);
             }
         });
 
