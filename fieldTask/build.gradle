@@ -1,0 +1,95 @@
+/**************************************************************************************************
+ GRADLE CONFIG
+ *************************************************************************************************/
+
+apply plugin: 'com.android.application'
+
+com.android.ddmlib.DdmPreferences.setTimeOut(60000)
+
+android {
+    compileSdkVersion(23)
+    buildToolsVersion("25.0.0")
+
+
+    defaultConfig {
+        applicationId "org.smap.smapTask.android"
+        minSdkVersion(10)
+        targetSdkVersion(10)
+        versionCode(3000)
+        versionName("4.1")
+    }
+
+    productFlavors {
+        standard {
+            applicationId "org.smap.smapTask.android"
+            versionName "4.00"
+        }
+        plan {
+            applicationId "org.smap.smapTask.android.plan"
+            versionName "4.00-plan"
+        }
+        kontrolid {
+            applicationId "org.smap.smapTask.android.kontrolid"
+            versionName "4.00-kontrolid"
+        }
+    }
+
+    buildTypes {
+        release {
+            //minifyEnabled(true)
+            minifyEnabled(false)
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    packagingOptions {
+        // Pick first occurrence of any files that cause conflicts, as defined
+        // in common.gradle
+        pickFirst 'META-INF/DEPENDENCIES'
+        pickFirst 'META-INF/LICENSE'
+        pickFirst 'META-INF/LICENSE.txt'
+        pickFirst 'META-INF/NOTICE'
+        pickFirst 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
+        pickFirst 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec'
+        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
+        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+}
+
+configurations.all {
+    resolutionStrategy {
+        cacheDynamicVersionsFor(0, 'seconds')
+        cacheChangingModulesFor(0, 'seconds')
+    }
+    transitive = true
+}
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    //compile 'com.google.android.gms:play-services:4.1.32'
+    compile 'com.google.android.gms:play-services:6.5.87'
+    //compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar'){
+    //    transitive=true
+    //}
+
+    // Testing-only dependencies
+    //testCompile 'junit:junit:4.12'
+    //testCompile 'org.mockito:mockito-core:1.10.19'
+    //testCompile "org.robolectric:robolectric:3.1.2"
+    //androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    //androidTestCompile 'com.android.support.test:runner:0.5'
+    //androidTestCompile 'com.android.support.test:rules:0.5'
+
+}
