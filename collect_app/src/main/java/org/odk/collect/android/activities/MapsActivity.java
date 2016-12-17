@@ -45,6 +45,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.R;
@@ -61,6 +63,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.odk.collect.android.R.id.map;
+
 /**
  * Responsible for displaying maps of tasks.
  * 
@@ -73,6 +77,7 @@ public class MapsActivity extends FragmentActivity
     private static final int MAP_LOADER_ID = 2;
 
     private GoogleMap mMap;
+    private Polyline mPath;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -85,6 +90,7 @@ public class MapsActivity extends FragmentActivity
 
     ArrayList<Marker> markers = null;
     HashMap<Marker, Integer> markerMap = null;
+    ArrayList<LatLng> mPoints = new ArrayList<LatLng> ();
 
     Marker userLocationMarker = null;
     BitmapDescriptor userLocationIcon = null;
@@ -130,14 +136,16 @@ public class MapsActivity extends FragmentActivity
         triggered_repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered_repeat);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
+        mo = new MapLocationObserver(getApplicationContext(), thisActivity);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
 
         /*
          * Add multiline info window
@@ -244,16 +252,12 @@ public class MapsActivity extends FragmentActivity
     protected void onPause() {
         Log.i("mapsActivity", "---------------- onPause");
         super.onPause();
-        //mapFragment.pauseMap();
     }
 
     @Override
     protected void onResume() {
         Log.i("mapsActivity", "---------------- onResume");
         super.onResume();
-       // mapFragment.resumeMap();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-       // mapFragment.setUserLocation(Collect.getInstance().getLocation(), false);
     }
 
     @Override
@@ -273,14 +277,12 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-       // mapFragment.lowMemoryMap();
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-      //  mapFragment.destroyMap();
     }
 
 
@@ -328,28 +330,19 @@ public class MapsActivity extends FragmentActivity
     }
 
     private void showPoints(List<PointEntry> data) {
-        /*
-        if(po == null) {
-            Log.i(TAG, "====== po null");
-            addPathOverlay();
-        } else {
-            Log.i(TAG, "====== Removed all points");
-            //po.removeAllPoints();
-            //mv.removeOverlay(po);
-            addPathOverlay();
-        }
 
+        mPoints = new ArrayList<LatLng> ();
+        mPath = mMap.addPolyline((new PolylineOptions()));
 
-        for(int i = 0; i < data.size(); i++) {
-            //po.addPoint(data.get(i).lat, data.get(i).lon);
+        for(PointEntry p : data) {
+            mPoints.add(new LatLng(p.lat, p.lon));
         }
-        if(data.size() > 0) {
-            lastPathPoint = new PointEntry();
-            PointEntry lastPoint = data.get(data.size() - 1);
-            lastPathPoint.lat = lastPoint.lat;
-            lastPathPoint.lon = lastPoint.lon;
-        }
-        */
+        mPath.setPoints(mPoints);
+    }
+
+    public void updatePath(LatLng point) {
+        mPoints.add(point);
+        mPath.setPoints(mPoints);
     }
 
     /*

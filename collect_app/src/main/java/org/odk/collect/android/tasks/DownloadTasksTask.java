@@ -60,6 +60,7 @@ import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.NameValuePair;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
@@ -69,6 +70,7 @@ import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
 import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
+import org.opendatakit.httpclientandroidlib.message.BasicNameValuePair;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.InputStream;
@@ -429,17 +431,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	 */
 	private void updateTaskStatusToServer() throws Exception {
 
-        HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         TaskResponse updateResponse = new TaskResponse();
         updateResponse.forms = tr.forms;
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        
-        // Add credentials
-        if(username != null && password != null) {
-            Uri u = Uri.parse(taskURL);
-            WebUtils.addCredentials(username, password, u.getHost());
-        }
         
         // Add device id to response
         updateResponse.deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
@@ -492,28 +486,37 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         }
 
         // Call the service
-        String taskURL = serverUrl + "/surveyKPI/myassignments";
-        HttpPost postRequest = new HttpPost(taskURL);
-        
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+        HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+        Uri u = Uri.parse(taskURL);
+        if(username != null && password != null) {
+            WebUtils.addCredentials(username, password, u.getHost());
+        }
+
+        HttpPost postRequest = new HttpPost(URI.create(u.toString()));
+
         Gson gson=  new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
 		String resp = gson.toJson(updateResponse);
 
-        StringBody sb = new StringBody(resp, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
-        builder.addPart("assignInput", sb);
-        
-        postRequest.setEntity(builder.build());
-    	getResponse = client.execute(postRequest);
-    	
-    	int statusCode = getResponse.getStatusLine().getStatusCode();
-    	
-    	if(statusCode != HttpStatus.SC_OK) {
-    		Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
-    	} else {
-    		for(TaskAssignment ta : updateResponse.taskAssignments) {
-    			Utilities.setTaskSynchronized((long) ta.assignment.dbId);		// Mark the task status as synchronised
-    		}
+        ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+        dataToSend.add(new BasicNameValuePair("assignInput", resp));
+        postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
+
+        HttpResponse response = client.execute(postRequest, localContext);
+        int statusCode = response.getStatusLine().getStatusCode();
+        WebUtils.discardEntityBytes(response);
+
+        InputStream is = null;
+        if(statusCode != HttpStatus.SC_OK) {
+            Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
+            results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+            throw new Exception(response.getStatusLine().getReasonPhrase());
+        } else {
+            for(TaskAssignment ta : updateResponse.taskAssignments) {
+                Utilities.setTaskSynchronized((long) ta.assignment.dbId);		// Mark the task status as synchronised
+            }
             TraceUtilities.deleteSource();
-    	}
+        }
 		
 	}
 	
