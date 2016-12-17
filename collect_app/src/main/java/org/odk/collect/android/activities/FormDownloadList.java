@@ -117,7 +117,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private SimpleAdapter mFormListAdapter;
     private ArrayList<HashMap<String, String>> mFormList;
 
-    // private boolean mToggled = false;
     private int mSelectedCount = 0;
 
     private static final boolean EXIT = true;
@@ -146,7 +145,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 //    Collect.getInstance().getActivityLogger().logAction(this,
                 // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
-                // mToggled = false;
                 clearChoices();
             }
         });
@@ -165,7 +163,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
 
-                // mToggled = false;
                 downloadFormList();
                 FormDownloadList.this.getListView().clearChoices();
                 clearChoices();
@@ -178,11 +175,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 mFormNamesAndURLs =
                         (HashMap<String, FormDetails>) savedInstanceState
                                 .getSerializable(BUNDLE_FORM_MAP);
-            }
-
-            // indicating whether or not select-all is on or off.
-            if (savedInstanceState.containsKey(BUNDLE_TOGGLED_KEY)) {
-                // mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
             }
 
             // how many items we've selected
