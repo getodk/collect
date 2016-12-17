@@ -43,6 +43,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.utilities.ListViewUtils;
 
 import java.util.ArrayList;
 
@@ -156,25 +157,18 @@ public class InstanceUploaderList extends ListActivity implements
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // toggle selections of items to all or none
-                ListView ls = getListView();
-                mToggled = !mToggled;
+                ListView lv = getListView();
+                boolean allChecked = ListViewUtils.toggleChecked(lv);
 
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logAction(this, "toggleButton",
-                                Boolean.toString(mToggled));
-                // remove all items from selected list
+                // sync up internal state
                 mSelected.clear();
-                for (int pos = 0; pos < ls.getCount(); pos++) {
-                    ls.setItemChecked(pos, mToggled);
-                    // add all items if mToggled sets to select all
-                    if (mToggled) {
-                        mSelected.add(ls.getItemIdAtPosition(pos));
+                if (allChecked) {
+                    // add all id's back to mSelected
+                    for (int pos = 0; pos < lv.getCount(); pos++) {
+                        mSelected.add(getListAdapter().getItemId(pos));
                     }
                 }
-                mUploadButton.setEnabled(!(mSelected.size() == 0));
-
+                mUploadButton.setEnabled(allChecked);
             }
         });
         mToggleButton.setOnLongClickListener(this);

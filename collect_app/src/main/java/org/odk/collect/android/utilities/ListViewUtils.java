@@ -4,7 +4,9 @@ import android.util.SparseBooleanArray;
 import android.widget.ListView;
 
 /**
- * Created by ubuntu on 12/16/16.
+ *  Utilities for checking/unchecking list views.
+ *
+ *  @author Jeff Wishnie (jeff@wishnie.org)
  */
 
 public final class ListViewUtils {
