@@ -249,7 +249,7 @@ public class DataManagerList extends ListActivity implements
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 Long.toString(k));
 
-        mDeleteButton.setEnabled(!(mSelected.size() == 0));
+        mDeleteButton.setEnabled(mSelected.size() > 0);
     }
 
     @Override
