@@ -181,7 +181,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
-                mDownloadButton.setEnabled(!(mSelectedCount == 0));
+                mDownloadButton.setEnabled(mSelectedCount >  0);
             }
 
             // to restore alert dialog.
@@ -268,7 +268,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        mDownloadButton.setEnabled(!(ListViewUtils.selectedItemCount(getListView()) == 0));
+        mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
 
         Object o = getListAdapter().getItem(position);
         @SuppressWarnings("unchecked")
@@ -679,7 +679,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
-            mDownloadButton.setEnabled(!(ListViewUtils.selectedItemCount(getListView()) == 0));
+            mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
         }
     }
 
