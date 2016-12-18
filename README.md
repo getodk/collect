@@ -41,9 +41,9 @@ If you know a language other than English, consider contributing translations th
 You can also help by improving this documentation.
 
 ## Downloading builds
-Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your Github account, click the build you'd like, then find the APK in the Artifacts tab.
+Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your GitHub account, click the build you'd like, then find the APK in the Artifacts tab.
 
-Released production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk) has current and previous production builds.
+Current and previous production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk).
 
 ## Troubleshooting
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
