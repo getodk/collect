@@ -57,5 +57,4 @@ public final class ListViewUtils {
             lv.setItemChecked(x, check);
         }
     }
-
 }

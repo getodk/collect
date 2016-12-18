@@ -83,7 +83,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private static final int AUTH_DIALOG = 2;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
-    private static final String BUNDLE_TOGGLED_KEY = "toggled";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
     private static final String DIALOG_TITLE = "dialogtitle";
@@ -323,8 +322,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // TODO: Is it safe to remove BUNDLE_TOGGLED_KEY ?
-        outState.putBoolean(BUNDLE_TOGGLED_KEY, false);
         outState.putInt(BUNDLE_SELECTED_COUNT, ListViewUtils.selectedItemCount(getListView()));
         outState.putSerializable(BUNDLE_FORM_MAP, mFormNamesAndURLs);
         outState.putString(DIALOG_TITLE, mAlertTitle);
