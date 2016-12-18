@@ -59,8 +59,6 @@ public class InstanceUploaderList extends ListActivity implements
         OnLongClickListener {
 
     private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
-    private static final String BUNDLE_TOGGLED_KEY = "toggled";
-
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
     private static final int INSTANCE_UPLOADER = 0;
@@ -331,8 +329,6 @@ public class InstanceUploaderList extends ListActivity implements
             selectedArray[i] = mSelected.get(i);
         }
         outState.putLongArray(BUNDLE_SELECTED_ITEMS_KEY, selectedArray);
-        // TODO: Safe to delete TOGGLED_KEY?
-        outState.putBoolean(BUNDLE_TOGGLED_KEY, false);
     }
 
     @Override
