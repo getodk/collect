@@ -53,6 +53,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.utilities.ListViewUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
@@ -82,7 +83,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private static final int AUTH_DIALOG = 2;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
-    private static final String BUNDLE_TOGGLED_KEY = "toggled";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
     private static final String DIALOG_TITLE = "dialogtitle";
@@ -116,7 +116,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private SimpleAdapter mFormListAdapter;
     private ArrayList<HashMap<String, String>> mFormList;
 
-    private boolean mToggled = false;
     private int mSelectedCount = 0;
 
     private static final boolean EXIT = true;
@@ -137,7 +136,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         getListView().setBackgroundColor(Color.WHITE);
 
         mDownloadButton = (Button) findViewById(R.id.add_button);
-        mDownloadButton.setEnabled(selectedItemCount() > 0);
+        mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
         mDownloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,7 +144,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 //    Collect.getInstance().getActivityLogger().logAction(this,
                 // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
-                mToggled = false;
                 clearChoices();
             }
         });
@@ -154,18 +152,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // toggle selections of items to all or none
-                ListView ls = getListView();
-                mToggled = !mToggled;
-
-                Collect.getInstance().getActivityLogger().logAction(this, "toggleFormCheckbox",
-                        Boolean.toString(mToggled));
-
-                for (int pos = 0; pos < ls.getCount(); pos++) {
-                    ls.setItemChecked(pos, mToggled);
-                }
-
-                mDownloadButton.setEnabled(!(selectedItemCount() == 0));
+                mDownloadButton.setEnabled(ListViewUtils.toggleChecked(getListView()));
             }
         });
 
@@ -175,7 +162,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
 
-                mToggled = false;
                 downloadFormList();
                 FormDownloadList.this.getListView().clearChoices();
                 clearChoices();
@@ -190,16 +176,11 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                                 .getSerializable(BUNDLE_FORM_MAP);
             }
 
-            // indicating whether or not select-all is on or off.
-            if (savedInstanceState.containsKey(BUNDLE_TOGGLED_KEY)) {
-                mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
-            }
-
             // how many items we've selected
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
-                mDownloadButton.setEnabled(!(mSelectedCount == 0));
+                mDownloadButton.setEnabled(mSelectedCount >  0);
             }
 
             // to restore alert dialog.
@@ -286,7 +267,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        mDownloadButton.setEnabled(!(selectedItemCount() == 0));
+        mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
 
         Object o = getListAdapter().getItem(position);
         @SuppressWarnings("unchecked")
@@ -341,8 +322,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(BUNDLE_TOGGLED_KEY, mToggled);
-        outState.putInt(BUNDLE_SELECTED_COUNT, selectedItemCount());
+        outState.putInt(BUNDLE_SELECTED_COUNT, ListViewUtils.selectedItemCount(getListView()));
         outState.putSerializable(BUNDLE_FORM_MAP, mFormNamesAndURLs);
         outState.putString(DIALOG_TITLE, mAlertTitle);
         outState.putString(DIALOG_MSG, mAlertMsg);
@@ -350,23 +330,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         outState.putBoolean(SHOULD_EXIT, mShouldExit);
         outState.putSerializable(FORMLIST, mFormList);
     }
-
-
-    /**
-     * returns the number of items currently selected in the list.
-     */
-    private int selectedItemCount() {
-        ListView lv = getListView();
-        int count = 0;
-        SparseBooleanArray sba = lv.getCheckedItemPositions();
-        for (int i = 0; i < lv.getCount(); i++) {
-            if (sba.get(i, false)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -713,7 +676,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
-            mDownloadButton.setEnabled(!(selectedItemCount() == 0));
+            mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
         }
     }
 
