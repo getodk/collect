@@ -43,6 +43,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.utilities.ListViewUtils;
 
 import java.util.ArrayList;
 
@@ -58,8 +59,6 @@ public class InstanceUploaderList extends ListActivity implements
         OnLongClickListener {
 
     private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
-    private static final String BUNDLE_TOGGLED_KEY = "toggled";
-
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
     private static final int INSTANCE_UPLOADER = 0;
@@ -73,7 +72,6 @@ public class InstanceUploaderList extends ListActivity implements
     private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
-    private boolean mToggled = false;
 
     public Cursor getUnsentCursor() {
         // get all complete or failed submission instances
@@ -137,7 +135,6 @@ public class InstanceUploaderList extends ListActivity implements
                     if (mSelected.size() > 0) {
                         // items selected
                         uploadSelectedFiles();
-                        mToggled = false;
                         mSelected.clear();
                         InstanceUploaderList.this.getListView().clearChoices();
                         mUploadButton.setEnabled(false);
@@ -156,25 +153,18 @@ public class InstanceUploaderList extends ListActivity implements
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // toggle selections of items to all or none
-                ListView ls = getListView();
-                mToggled = !mToggled;
+                ListView lv = getListView();
+                boolean allChecked = ListViewUtils.toggleChecked(lv);
 
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logAction(this, "toggleButton",
-                                Boolean.toString(mToggled));
-                // remove all items from selected list
+                // sync up internal state
                 mSelected.clear();
-                for (int pos = 0; pos < ls.getCount(); pos++) {
-                    ls.setItemChecked(pos, mToggled);
-                    // add all items if mToggled sets to select all
-                    if (mToggled) {
-                        mSelected.add(ls.getItemIdAtPosition(pos));
+                if (allChecked) {
+                    // add all id's back to mSelected
+                    for (int pos = 0; pos < lv.getCount(); pos++) {
+                        mSelected.add(getListAdapter().getItemId(pos));
                     }
                 }
-                mUploadButton.setEnabled(!(mSelected.size() == 0));
-
+                mUploadButton.setEnabled(allChecked);
             }
         });
         mToggleButton.setOnLongClickListener(this);
@@ -192,7 +182,7 @@ public class InstanceUploaderList extends ListActivity implements
         setListAdapter(mInstances);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mUploadButton.setEnabled(!(mSelected.size() == 0));
+        mUploadButton.setEnabled(mSelected.size() > 0);
 
         // set title
         setTitle(getString(R.string.app_name) + " > "
@@ -315,7 +305,7 @@ public class InstanceUploaderList extends ListActivity implements
             mSelected.add(k);
         }
 
-        mUploadButton.setEnabled(!(mSelected.size() == 0));
+        mUploadButton.setEnabled(mSelected.size() > 0);
 
     }
 
@@ -327,7 +317,6 @@ public class InstanceUploaderList extends ListActivity implements
         for (int i = 0; i < selectedArray.length; i++) {
             mSelected.add(selectedArray[i]);
         }
-        mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
         mRestored = true;
         mUploadButton.setEnabled(selectedArray.length > 0);
     }
@@ -340,7 +329,6 @@ public class InstanceUploaderList extends ListActivity implements
             selectedArray[i] = mSelected.get(i);
         }
         outState.putLongArray(BUNDLE_SELECTED_ITEMS_KEY, selectedArray);
-        outState.putBoolean(BUNDLE_TOGGLED_KEY, mToggled);
     }
 
     @Override
@@ -401,7 +389,7 @@ public class InstanceUploaderList extends ListActivity implements
         Collect.getInstance()
                 .getActivityLogger()
                 .logAction(this, "toggleButton.longClick",
-                        Boolean.toString(mToggled));
+                        "");
         return showSentAndUnsentChoices();
     }
 
