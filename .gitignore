@@ -9,3 +9,6 @@ local.properties
 # emacs backup files
 *.*~
 
+# gradle env props
+gradle.properties
+
