@@ -3,8 +3,7 @@
     <PreferenceScreen
         android:id="@+id/info"
         android:key="info"
-        android:summary="@string/click_to_web"
-        android:title="@string/app_name" >
+        android:summary="@string/click_to_web" >
         <intent
             android:action="android.intent.action.VIEW"
             android:data="http://opendatakit.org" />

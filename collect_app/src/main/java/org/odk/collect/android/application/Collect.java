@@ -107,7 +107,7 @@ public class Collect extends Application {
         return questionFontsize;
     }
 
-    public String getVersionedAppName() {
+    public String getVersionedAppNameWithBuildNumber() {
         String versionDetail = "";
         try {
             PackageInfo pinfo;
@@ -120,6 +120,16 @@ public class Collect extends Application {
             e.printStackTrace();
         }
         return getString(R.string.app_name) + versionDetail;
+    }
+
+    public String getVersionedAppName() {
+        String versionName = "";
+        try {
+            versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return getString(R.string.app_name) + " " + versionName;
     }
 
     /**
