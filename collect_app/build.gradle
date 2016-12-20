@@ -11,11 +11,36 @@ android {
     compileSdkVersion(22)
     buildToolsVersion("25.0.0")
 
+    def versionPropsFile = file('version.properties')
+    def versionBuild
+
+    // Setting default value for versionBuild which is the last incremented value stored in the file
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        versionBuild = versionProps['VERSION_BUILD'].toInteger()
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    // Wrapping inside a method avoids auto incrementing on every gradle task run. Now it runs only when we build apk
+    ext.autoIncrementBuildNumber = {
+        if (versionPropsFile.canRead()) {
+            def Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionPropsFile))
+            versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
+            versionProps['VERSION_BUILD'] = versionBuild.toString()
+            versionProps.store(versionPropsFile.newWriter(), null)
+        } else {
+            throw new GradleException("Could not read version.properties!")
+        }
+    }
+
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(9)
         targetSdkVersion(9)
-        versionCode(1063)
+        versionCode = versionBuild
         versionName("1.4.12")
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
     }
@@ -29,6 +54,13 @@ android {
             debuggable(true)
             // Allows AndroidTest JaCoCo reports to be generated
             testCoverageEnabled(true)
+        }
+    }
+
+    gradle.taskGraph.whenReady { taskGraph ->
+        // when run release task
+        if (taskGraph.hasTask(assembleRelease)) {
+            autoIncrementBuildNumber()
         }
     }
 
