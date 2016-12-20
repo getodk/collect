@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="smap_accept_task">Acepte la tarea</string>
+  <string name="smap_accepted">: aceptada. </string>
+  <string name="smap_cannot_accept">Incapaz de aceptar la tarea</string>
+  <string name="smap_cannot_complete">Incapaz de completar la tarea</string>
+  <string name="smap_cannot_reject">Incapaz de rechazar la tarea</string>
+  <string name="smap_complete_task">Tarea Completa</string>
+  <string name="smap_data_collection">Coleccion de Datos</string>
+  <string name="smap_destination_not_found">No se ha especificado un destino a la ruta</string>
+  <string name="smap_done">: realizado. </string>
+  <string name="smap_finding_route">Enrutamiento</string>
+  <string name="smap_found_route">Se ha encontrado una Ruta al destino!</string>
+  <string name="smap_get_tasks">Actualizar Lista de Tareas</string>
+  <string name="smap_gps_trail">Rastro del GPS</string>
+  <string name="smap_gps_trail_summary">Registrar la ruta tomada por el usuario</string>
+  <string name="smap_menu_settings">Ajustes</string>
+  <string name="smap_missed">: rechazado. </string>
+  <string name="smap_no_tasks">Ninguna Tarea fue descargada</string>
+  <string name="smap_no_tasks_display"></string>
+  <string name="smap_pending">: pendiente. </string>
+  <string name="smap_reject_task">Tarea Rechazada</string>
+  <string name="smap_route_finding_inprogress">Encontrando ruta para la tarea</string>
+  <string name="smap_routing_network_error">Fallo al buscar una ruta debido a error en la red</string>
+  <string name="smap_route_parse_error">Fallo al buscar una ruta debido a error mientras analizaba la ruta</string>
+  <string name="smap_synchronising">Sincronizando con el Servidor</string>
+  <string name="smap_task_preferences">Tareas</string>
+  <string name="smap_tasks_not_enabled">Tareas no habilitadas - Habilite en la pantalla de ajustes</string>
+  <string name="smap_taskList">Tareas</string>
+  <string name="smap_taskMap">Mapa de Tareas</string>
+  <string name="smap_zoom_data">Zoom a Tareas</string>
+  <string name="smap_project">Proyecto </string>
+  <string name="smap_no_tasks_nfc">Ninguna tarea requiere lectura de tags NFC</string>
+  <string name="smap_no_matching_tasks_nfc">Ninguna tarea corresponde al tag NFC leído : %1$s</string>
+  <string name="smap_starting_task_from_nfc">Activando tarea con tag NFC  : %1$s</string>
+  <string name="smap_must_start_from_nfc">Esta tarea requiere lectura de tag NFC - Favor acerque el celular al tag</string>
+  <string name="smap_nfc_not_authorised">No se ha podido iniciar las Tareas usando NFC</string>
+  <string name="read_only">Esta tarea está completa y sólo se pueden cambiar sus comentarios</string>
+</resources>
