@@ -24,9 +24,9 @@
   <string name="recapture_osm">OSM タグ付けを繰り返す</string>
   <string name="capture_video">ビデオを録画</string>
   <string name="change_language">言語を変更</string>
-  <string name="change_password">ODK パスワード</string>
+  <string name="change_password">パスワード</string>
   <string name="change_protocol_settings_default">プラットフォームの設定</string>
-  <string name="change_username">ODK ユーザー名</string>
+  <string name="change_username">ユーザー名</string>
   <string name="clearanswer_confirm">\"%s\" への回答を削除しますか?</string>
   <string name="clear_answer">回答を削除</string>
   <string name="clear_answer_ask">回答を削除しますか?</string>
@@ -131,7 +131,7 @@
   <string name="username">ユーザー名</string>
   <string name="view_hierarchy">プロンプトへ移動</string>
   <string name="general_preferences">全般設定</string>
-  <string name="click_to_web">タップして表示 http://opendatakit.org</string>
+  <string name="click_to_web">タップして表示 http://www.smap.com.au</string>
   <string name="client">ユーザー インターフェイス</string>
   <string name="show_splash">スプラッシュスクリーンを表示</string>
   <string name="show_splash_summary">アプリケーションの起動時に表示します</string>

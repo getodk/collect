@@ -24,9 +24,9 @@
   <string name="recapture_osm">Ponów OSM Tagging</string>
   <string name="capture_video">Nagraj Wideo</string>
   <string name="change_language">Zmień Język</string>
-  <string name="change_password">Hasło ODK</string>
+  <string name="change_password">Hasło</string>
   <string name="change_protocol_settings_default">Ustawienia Platformy</string>
-  <string name="change_username">Nazwa użytkownika ODK</string>
+  <string name="change_username">Nazwa użytkownika</string>
   <string name="clearanswer_confirm">Czy usunąć odpowiedź na \"%s\"?</string>
   <string name="clear_answer">Usuń odpowiedź</string>
   <string name="clear_answer_ask">Czy Usunąć Tę Odpowiedź?</string>
@@ -131,7 +131,7 @@
   <string name="username">Identyfikator użytkownika</string>
   <string name="view_hierarchy">Idź Do Pytania</string>
   <string name="general_preferences">Ustawienia Ogólne</string>
-  <string name="click_to_web">Naciśnij aby odwiedzić http://opendatakit.org</string>
+  <string name="click_to_web">Naciśnij aby odwiedzić http://www.smap.com.au</string>
   <string name="client">Interfejs Użytkownika</string>
   <string name="show_splash">Pokaż ekran powitalny</string>
   <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>

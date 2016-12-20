@@ -22,7 +22,7 @@
   <string name="change_language">Alterar Idioma</string>
   <string name="change_password">Senha</string>
   <string name="change_protocol_settings_default">Configurações da plataforma</string>
-  <string name="change_username">Usuário ODK</string>
+  <string name="change_username">Usuário</string>
   <string name="clearanswer_confirm">Remover a resposta para \"%s\"?</string>
   <string name="clear_answer">Remover a resposta</string>
   <string name="clear_answer_ask">Remover esta Resposta?</string>
@@ -123,7 +123,7 @@
   <string name="username">Nome do usuário</string>
   <string name="view_hierarchy">Ir para atual</string>
   <string name="general_preferences">Alterar configuração</string>
-  <string name="click_to_web">Toque para visitar http://opendatakit.org</string>
+  <string name="click_to_web">Toque para visitar http://www.smap.com.au</string>
   <string name="client">Cliente</string>
   <string name="show_splash">Mostrar Splash Screen</string>
   <string name="show_splash_summary">Mostrar quando a aplicação iniciar</string>

@@ -21,8 +21,8 @@
   <string name="capture_osm">Anzisha OpenMapkit</string>
   <string name="capture_video">Rekodi Video</string>
   <string name="change_language">Badili Lugha</string>
-  <string name="change_password">Nywila ya ODK</string>
-  <string name="change_username">Jina la mtumiaji wa ODK</string>
+  <string name="change_password">Nywila ya</string>
+  <string name="change_username">Jina la mtumiaji</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
   <string name="clear_answer">Ondoa Jawabu</string>
   <string name="clear_answer_ask">Ondoa jawabu hili?</string>
@@ -123,7 +123,7 @@
   <string name="username">Jina la Mtumiaji </string>
   <string name="view_hierarchy">Nenda kwenye chanzo</string>
   <string name="general_preferences">Badili Mpangilio</string>
-  <string name="click_to_web">Bonyeza kutembelea http://opendatakit.org</string>
+  <string name="click_to_web">Bonyeza kutembelea http://www.smap.com.au</string>
   <string name="client">Client</string>
   <string name="show_splash">Onyesha ukurusa wa mwanzo</string>
   <string name="show_splash_summary">Inaonyesha wakati programu inapoanza</string>

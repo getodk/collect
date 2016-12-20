@@ -26,7 +26,7 @@
   <string name="change_language">Endre språk</string>
   <string name="change_password">Passord</string>
   <string name="change_protocol_settings_default">Plattforminnstillinger</string>
-  <string name="change_username">ODK brukernavn</string>
+  <string name="change_username"> brukernavn</string>
   <string name="clearanswer_confirm">Slette svar til \"%s\"?</string>
   <string name="clear_answer">Slett svar</string>
   <string name="clear_answer_ask">Slette svaret?</string>
@@ -131,7 +131,7 @@
   <string name="username">Brukernavn</string>
   <string name="view_hierarchy">Gå til prompt</string>
   <string name="general_preferences">Endre innstillinger</string>
-  <string name="click_to_web">Trykk her for å gå til http://opendatakit.org</string>
+  <string name="click_to_web">Trykk her for å gå til http://www.smap.com.au</string>
   <string name="client">Klient</string>
   <string name="show_splash">Vis oppstartsbilde</string>
   <string name="show_splash_summary">Vis når programmet starter</string>

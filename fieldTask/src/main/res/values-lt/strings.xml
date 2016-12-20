@@ -21,7 +21,7 @@
   <string name="capture_video">Įrašyti video</string>
   <string name="change_language">Pakeisti kalbą</string>
   <string name="change_password">Slaptažodis</string>
-  <string name="change_username">ODK naudotojo vardas</string>
+  <string name="change_username">naudotojo vardas</string>
   <string name="clearanswer_confirm">Pašalinti atsakymą į \"%s\"?</string>
   <string name="clear_answer">Pašalinti atsakymą</string>
   <string name="clear_answer_ask">Pašalinti šį atsakymą?</string>
@@ -120,7 +120,7 @@
   <string name="username">Naudotojo vardas</string>
   <string name="view_hierarchy">Atsakymų sąrašas</string>
   <string name="general_preferences">Keisti nuostatas</string>
-  <string name="click_to_web">Bakstelėkite, kad aplankytumėte http://opendatakit.org</string>
+  <string name="click_to_web">Bakstelėkite, kad aplankytumėte http://www.smap.com.au</string>
   <string name="client">Klientas</string>
   <string name="show_splash">Rodyti užsklandą</string>
   <string name="show_splash_summary">Rodyti užsklandą paleidžiant programą</string>

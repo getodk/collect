@@ -24,9 +24,9 @@
   <string name="recapture_osm">OSM-Tagging ändern</string>
   <string name="capture_video">Video aufnehmen</string>
   <string name="change_language">Sprache ändern</string>
-  <string name="change_password">ODK Passwort</string>
+  <string name="change_password">Passwort</string>
   <string name="change_protocol_settings_default">Plattform-Einstellungen</string>
-  <string name="change_username">ODK Benutzername</string>
+  <string name="change_username">Benutzername</string>
   <string name="clearanswer_confirm">Antwort zu \"%s\" entfernen?</string>
   <string name="clear_answer">Antwort entfernen</string>
   <string name="clear_answer_ask">Diese Antwort entfernen?</string>
@@ -131,7 +131,7 @@
   <string name="username">Benutzername</string>
   <string name="view_hierarchy">Zur Eingabe</string>
   <string name="general_preferences">Allgemeine Einstellungen</string>
-  <string name="click_to_web">Berühren um zu http://opendatakit.org zu gelangen</string>
+  <string name="click_to_web">Berühren um zu http://www.smap.com.au zu gelangen</string>
   <string name="client">Bedienung</string>
   <string name="show_splash">Startbild anzeigen</string>
   <string name="show_splash_summary">Wird angezeigt, während die App startet</string>

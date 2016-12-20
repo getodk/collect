@@ -20,8 +20,8 @@
   <string name="capture_image">Resim Çek</string>
   <string name="capture_video">Video Kayit</string>
   <string name="change_language">Dil Değiştir</string>
-  <string name="change_password">ODK Şifresi</string>
-  <string name="change_username">ODK Kullanici Adi</string>
+  <string name="change_password">Şifresi</string>
+  <string name="change_username">Kullanici Adi</string>
   <string name="clearanswer_confirm">Bu yanıt kaldırılsın mı \"%s\"?</string>
   <string name="clear_answer">Yanıtları kaldır</string>
   <string name="clear_answer_ask">Bu yanıt kaldırılsın mı ?</string>

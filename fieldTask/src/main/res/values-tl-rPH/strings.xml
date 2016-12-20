@@ -21,7 +21,7 @@
   <string name="capture_video">Mag-tala ng Bidyo</string>
   <string name="change_language">Palitan ang Wika</string>
   <string name="change_password">Hudyat</string>
-  <string name="change_username">ODK Username</string>
+  <string name="change_username">Username</string>
   <string name="clearanswer_confirm">Tanggalin ang tugon sa \"%s\"?</string>
   <string name="clear_answer">Tanggalin ang tugon</string>
   <string name="clear_answer_ask">Tanggalin ang tugon na ito?</string>
@@ -120,7 +120,7 @@
   <string name="username">Username</string>
   <string name="view_hierarchy">Pumunta sa Udyok</string>
   <string name="general_preferences">Palitan ang Settings</string>
-  <string name="click_to_web">i-Tap para pumunta sa http://opendatakit.org</string>
+  <string name="click_to_web">i-Tap para pumunta sa http://www.smap.com.au</string>
   <string name="client">Client</string>
   <string name="show_splash">Ipakita ang Panimulang Tabing</string>
   <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>

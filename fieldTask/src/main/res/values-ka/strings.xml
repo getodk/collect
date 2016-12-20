@@ -24,7 +24,7 @@
   <string name="change_language">ენის შეცვლა</string>
   <string name="change_password">პაროლი</string>
   <string name="change_protocol_settings_default">პლატფორმის პარამეტრები</string>
-  <string name="change_username">ODK-ის მომხმარებლის სახელი</string>
+  <string name="change_username">-ის მომხმარებლის სახელი</string>
   <string name="clearanswer_confirm">შევცვალოთ ეს გამოპასუხება \"%s\"-ით?</string>
   <string name="clear_answer">გამოპასუხების მოცილება</string>
   <string name="clear_answer_ask">მოვაცილოთ ეს გამოპასუხება?</string>
@@ -129,7 +129,7 @@
   <string name="username">მომხმარებლის სახელი</string>
   <string name="view_hierarchy">მოთხოვნაზე გადასვლა</string>
   <string name="general_preferences">შეცვლა</string>
-  <string name="click_to_web">დააჭირეთ ბმულზე გადასასვლელად: http://opendatakit.org</string>
+  <string name="click_to_web">დააჭირეთ ბმულზე გადასასვლელად: http://www.smap.com.au</string>
   <string name="client">მომხმარებლის გრაფიკული ინტერფეისი</string>
   <string name="show_splash">სპლეშ-ეკრანის ჩვენება</string>
   <string name="show_splash_summary">აჩვენებს, როდესაც ირთვება აპლიკაცია</string>

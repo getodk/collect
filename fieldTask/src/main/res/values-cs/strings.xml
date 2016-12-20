@@ -22,9 +22,9 @@
   <string name="capture_image">Udělat fotku</string>
   <string name="capture_video">Nahrát video</string>
   <string name="change_language">Změnit jazyk</string>
-  <string name="change_password">Heslo do ODK</string>
+  <string name="change_password">Heslo</string>
   <string name="change_protocol_settings_default">Nastavení platformy</string>
-  <string name="change_username">Uživatelské jméno do ODK</string>
+  <string name="change_username">Uživatelské jméno</string>
   <string name="clearanswer_confirm">Odstranit odpověď na \"%s\"?</string>
   <string name="clear_answer">Odstranit odpověď</string>
   <string name="clear_answer_ask">Odstranit tuto odpověď?</string>
@@ -130,7 +130,7 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="username">Uživatelské jméno</string>
   <string name="view_hierarchy">Přejít k otázce</string>
   <string name="general_preferences">Obecná nastavení</string>
-  <string name="click_to_web">Klepnutím přejděte na http://opendatakit.org</string>
+  <string name="click_to_web">Klepnutím přejděte na http://www.smap.com.au</string>
   <string name="client">Uživatelské rozhraní</string>
   <string name="show_splash">Zobrazit úvodní obrazovku</string>
   <string name="show_splash_summary">Zobrazit při startu aplikace</string>

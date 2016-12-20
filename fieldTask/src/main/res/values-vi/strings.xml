@@ -26,7 +26,7 @@
   <string name="change_language">Đổi ngôn ngữ</string>
   <string name="change_password">Mật khẩu</string>
   <string name="change_protocol_settings_default">Cài đặt Nền tảng</string>
-  <string name="change_username">Tên truy cập ODK</string>
+  <string name="change_username">Tên truy cập </string>
   <string name="clearanswer_confirm">Xoá câu trả lời \"%s\"?</string>
   <string name="clear_answer">Xoá câu trả lời</string>
   <string name="clear_answer_ask">Muốn xoá câu trả lời này?</string>
@@ -129,7 +129,7 @@
   <string name="username">Tên truy cập</string>
   <string name="view_hierarchy">Di chuyển đến</string>
   <string name="general_preferences">Thay đổi thiết lập</string>
-  <string name="click_to_web">Nhấn đề xem http://opendatakit.org</string>
+  <string name="click_to_web">Nhấn đề xem http://www.smap.com.au</string>
   <string name="client">Giao diện người sử dụng</string>
   <string name="show_splash">Hiển thị màn hình chào</string>
   <string name="show_splash_summary">Hiển thị khi chương trình khởi động</string>

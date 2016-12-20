@@ -23,7 +23,7 @@
   <string name="capture_video">Video vastleggen</string>
   <string name="change_language">Taal wijzigen</string>
   <string name="change_password">Wachtwoord</string>
-  <string name="change_username">ODK Username</string>
+  <string name="change_username"> Username</string>
   <string name="clearanswer_confirm">Verwijder het antwoord voor \"%s\"?</string>
   <string name="clear_answer">Verwijder antwoord</string>
   <string name="clear_answer_ask">Verwijder dit antwoord?</string>
@@ -128,7 +128,7 @@
   <string name="username">Gebruikersnaam</string>
   <string name="view_hierarchy">Ga naar vraag</string>
   <string name="general_preferences">Instellingen</string>
-  <string name="click_to_web">Ga naar http://opendatakit.org</string>
+  <string name="click_to_web">Ga naar http://www.smap.com.au</string>
   <string name="client">Client</string>
   <string name="show_splash">Toon welkomstscherm</string>
   <string name="show_splash_summary">Toon welkomstscherm bij opstarten van de applicatie</string>

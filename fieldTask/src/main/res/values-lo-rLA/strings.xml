@@ -22,9 +22,9 @@
   <string name="capture_image">ຖ່າຍຮູບ</string>
   <string name="capture_video">ບັນທຶກວີດີໂອ</string>
   <string name="change_language">ເລືອກພາສາ</string>
-  <string name="change_password">ລະຫັດຜ່ານ ODK</string>
+  <string name="change_password">ລະຫັດຜ່ານ</string>
   <string name="change_protocol_settings_default">ການຕັ້ງຄ່າ Platform</string>
-  <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
+  <string name="change_username">ບັນຊີຜູ້ໃຊ້</string>
   <string name="clearanswer_confirm">ຕ້ອງການລຶບຄຳຕອບໄປທີ່ \"%s\" ບໍ່?</string>
   <string name="clear_answer">ລຶບຄຳຕອບ</string>
   <string name="clear_answer_ask">ຕ້ອງການຍ້າຍຄຳຕອບນີ້ບໍ່?</string>
@@ -129,7 +129,7 @@
   <string name="username">ບັນຊີຜູ້ໃຊ້ງານ</string>
   <string name="view_hierarchy">ຂ້າມໄປທີ່</string>
   <string name="general_preferences">ການ​ຕັ້ງ​ຄ່າ​ທົ່ວ​ໄປ</string>
-  <string name="click_to_web">ກົດເອັນເຕີ ເພື່ອ​ເຂົ້າ​ສູ້​ເວັບ​ໄຊ http://opendatakit.org</string>
+  <string name="click_to_web">ກົດເອັນເຕີ ເພື່ອ​ເຂົ້າ​ສູ້​ເວັບ​ໄຊ http://www.smap.com.au</string>
   <string name="client">ຂໍ້ມູນສ່ວນຕົວ ຂອງ​ຜູ້​ໃຊ້ງານ</string>
   <string name="show_splash">ສະແດງພາບເລີ່ມຕົ້ນ</string>
   <string name="show_splash_summary">ສະແ​ດງເມື່ອໂປແກຼມ ເລີ່ມຕົ້ນໃຊ້ງານ</string>

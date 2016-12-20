@@ -24,9 +24,9 @@
   <string name="recapture_osm">Uusi OSM-tägi</string>
   <string name="capture_video">Tallenna video</string>
   <string name="change_language">Vaihda kieltä</string>
-  <string name="change_password">ODK salasana</string>
+  <string name="change_password">salasana</string>
   <string name="change_protocol_settings_default">Alustan asetukset</string>
-  <string name="change_username">ODK käyttäjätunnus</string>
+  <string name="change_username">käyttäjätunnus</string>
   <string name="clearanswer_confirm">Poistetaanko vastaus kysymykseen \"%s\"?</string>
   <string name="clear_answer">Poista vastaus</string>
   <string name="clear_answer_ask">Poistetaanko tämä vastaus?</string>
@@ -131,7 +131,7 @@
   <string name="username">Käyttäjätunnus</string>
   <string name="view_hierarchy">Siirry kysymykseen</string>
   <string name="general_preferences">Yleiset asetukset</string>
-  <string name="click_to_web">Napsauta käydäksesi sivustolla http://opendatakit.org</string>
+  <string name="click_to_web">Napsauta käydäksesi sivustolla http://www.smap.com.au</string>
   <string name="client">Käyttöliittymä</string>
   <string name="show_splash">Näytä aloitusruutu</string>
   <string name="show_splash_summary">Näytä sovelluksen käynnistyessä</string>

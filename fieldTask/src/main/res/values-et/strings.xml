@@ -24,9 +24,9 @@
   <string name="recapture_osm">Korda OSM sildistamist</string>
   <string name="capture_video">Video salvestamine</string>
   <string name="change_language">Muuda keelt</string>
-  <string name="change_password">ODK salasõna</string>
+  <string name="change_password">salasõna</string>
   <string name="change_protocol_settings_default">Platvormi seaded</string>
-  <string name="change_username">ODK kasutajanimi</string>
+  <string name="change_username">kasutajanimi</string>
   <string name="clearanswer_confirm">Eemalda vastus \"%s\"?</string>
   <string name="clear_answer">Eemalda vastus</string>
   <string name="clear_answer_ask">Eemalda see vastus?</string>
@@ -132,7 +132,7 @@
   <string name="username">Kasutajanimi</string>
   <string name="view_hierarchy">Liigu küsimusele</string>
   <string name="general_preferences">Üldseaded</string>
-  <string name="click_to_web">Puuduta külastamaks http://opendatakit.org</string>
+  <string name="click_to_web">Puuduta külastamaks http://www.smap.com.au</string>
   <string name="client">Kasutajaliides</string>
   <string name="show_splash">Avamisel näita käivitusekraani</string>
   <string name="show_splash_summary">Ilmub rakenduse avamisel</string>

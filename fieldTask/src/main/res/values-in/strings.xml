@@ -24,7 +24,7 @@
   <string name="change_language">Ubah bahasa</string>
   <string name="change_password">Kata sandi</string>
   <string name="change_protocol_settings_default">Pengaturan Platform</string>
-  <string name="change_username">ODK Username</string>
+  <string name="change_username">Username</string>
   <string name="clearanswer_confirm">Hapus jawaban atas \"%s\"?</string>
   <string name="clear_answer">Hapus jawaban</string>
   <string name="clear_answer_ask">Hapus jawaban ini?</string>
@@ -129,7 +129,7 @@
   <string name="username">Nama pengguna</string>
   <string name="view_hierarchy">Risalah</string>
   <string name="general_preferences">Pengaturan Umum</string>
-  <string name="click_to_web">Tap untuk berkunjung ke http://opendatakit.org</string>
+  <string name="click_to_web">Tap untuk berkunjung ke http://www.smap.com.au</string>
   <string name="client">Klien</string>
   <string name="show_splash">Perlihatkan tampilan pembuka</string>
   <string name="show_splash_summary">Tampilkan pada awal aplikasi berjalan</string>

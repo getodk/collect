@@ -21,7 +21,7 @@
   <string name="capture_osm">Anzisha OpenMapkit</string>
   <string name="capture_video">Rekodi kanda</string>
   <string name="change_language">Badilisha Lugha</string>
-  <string name="change_password">Nywila ya ODK</string>
+  <string name="change_password">Nywila</string>
   <string name="change_username">Jina la mtumiaji</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
   <string name="clear_answer">Ondoa jibu</string>
@@ -122,7 +122,7 @@
   <string name="username">Jina la mtumiaji</string>
   <string name="view_hierarchy">Enda</string>
   <string name="general_preferences">Mazingira ya Jumla</string>
-  <string name="click_to_web">Gusa ili kuelekea http://opendatakit.org</string>
+  <string name="click_to_web">Gusa ili kuelekea http://www.smap.com.au</string>
   <string name="client">Sura ya kutumika</string>
   <string name="show_splash">Onyesha kioo</string>
   <string name="show_splash_summary">Huonyesha ala linapoanza</string>

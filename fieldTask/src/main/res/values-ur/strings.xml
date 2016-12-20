@@ -22,9 +22,9 @@
   <string name="capture_image">تصویر لیں</string>
   <string name="capture_video">وڈیو ریکارڈ کریں</string>
   <string name="change_language">زبان تبدیل کریں</string>
-  <string name="change_password">  ODK  کا شناختی لفظ (Password)</string>
+  <string name="change_password">   کا شناختی لفظ (Password)</string>
   <string name="change_protocol_settings_default">پلیٹ فارم ترتیبات</string>
-  <string name="change_username">ODK استعمال کرنے والے کا نام</string>
+  <string name="change_username"> استعمال کرنے والے کا نام</string>
   <string name="clearanswer_confirm">‎%s‏ کو دیا گیا جواب ہٹائیں</string>
   <string name="clear_answer">جواب مٹا دیں</string>
   <string name="clear_answer_ask"> یہ جواب مٹا دیں؟</string>
@@ -127,7 +127,7 @@
   <string name="username">استعمال کنندہ کا نام</string>
   <string name="view_hierarchy">پرامپٹ (prompt) پر جایئں</string>
   <string name="general_preferences">عمومی ماحول</string>
-  <string name="click_to_web"> http://opendatakit.org پر جانے کیلئے دبایئں</string>
+  <string name="click_to_web"> http://www.smap.com.au پر جانے کیلئے دبایئں</string>
   <string name="client">استعمال کرنے والے کا انٹر فیس</string>
   <string name="show_splash">منتخب شدہ سپلیش سکرین</string>
   <string name="show_splash_summary">ایپلیکیشن جب  شروع ہو، کو دکھاتا ہے</string>

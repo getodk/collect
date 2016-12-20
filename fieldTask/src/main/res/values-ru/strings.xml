@@ -22,9 +22,9 @@
   <string name="capture_image">Сделать снимок</string>
   <string name="capture_video">Записать видео</string>
   <string name="change_language">Выбрать язык</string>
-  <string name="change_password">Пароль ODK</string>
+  <string name="change_password">Пароль</string>
   <string name="change_protocol_settings_default">Настройки сервера</string>
-  <string name="change_username">Имя пользователя ODK</string>
+  <string name="change_username">Имя пользователя</string>
   <string name="clearanswer_confirm">Удалить ответ к \"%s\"?</string>
   <string name="clear_answer">Удалить ответ</string>
   <string name="clear_answer_ask">Удалить этот ответ?</string>

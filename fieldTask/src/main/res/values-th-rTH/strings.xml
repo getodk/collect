@@ -23,9 +23,9 @@
   <string name="capture_osm">เปิด OpenMapKit</string>
   <string name="capture_video">บันทึกภาพเคลื่อนไหว</string>
   <string name="change_language">เปลี่ยนภาษา</string>
-  <string name="change_password">รหัสผ่าน ODK</string>
+  <string name="change_password">รหัสผ่าน</string>
   <string name="change_protocol_settings_default">ตั้งค่า Platform</string>
-  <string name="change_username">ชื่อผู้ใช้งาน ODK</string>
+  <string name="change_username">ชื่อผู้ใช้งาน</string>
   <string name="clearanswer_confirm">ย้ายคำตอบไปที่ \"%s\" หรือไม่?</string>
   <string name="clear_answer">ปิดคำตอบ</string>
   <string name="clear_answer_ask">ปิดคำตอบนี้หรือไม่?</string>
@@ -129,7 +129,7 @@
   <string name="username">ชื่อผู้ใช้</string>
   <string name="view_hierarchy">ข้ามไปที่</string>
   <string name="general_preferences">ตั้งค่าทั่วไป</string>
-  <string name="click_to_web">แตะเพื่อเข้าสู่เว็บ http://opendatakit.org</string>
+  <string name="click_to_web">แตะเพื่อเข้าสู่เว็บ http://www.smap.com.au</string>
   <string name="client">ส่วนติดต่อผู้ใช้งาน</string>
   <string name="show_splash">แสดงภาพเริ่มต้น</string>
   <string name="show_splash_summary">แสดงเมื่อเริ่มการทำงาน</string>

@@ -24,9 +24,9 @@
   <string name="recapture_osm">Refaire le balisage d\'OSM</string>
   <string name="capture_video">Enregistrer une vidéo</string>
   <string name="change_language">Changer la langue</string>
-  <string name="change_password">Mot de passe ODK</string>
+  <string name="change_password">Mot de passe</string>
   <string name="change_protocol_settings_default">Paramètres de la plate-forme</string>
-  <string name="change_username">Nom d\'utilisateur ODK</string>
+  <string name="change_username">Nom d\'utilisateur</string>
   <string name="clearanswer_confirm">Enlever la réponse à \"%s\" ?</string>
   <string name="clear_answer">Enlever la réponse</string>
   <string name="clear_answer_ask">Enlever cette réponse ?</string>
@@ -131,7 +131,7 @@
   <string name="username">Nom d\'utilisateur</string>
   <string name="view_hierarchy">Aller à la ligne de saisie</string>
   <string name="general_preferences">Modifier les Paramètres</string>
-  <string name="click_to_web">Sélectionner pour aller à http://opendatakit.org</string>
+  <string name="click_to_web">Sélectionner pour aller à http://www.smap.com.au</string>
   <string name="client">Client</string>
   <string name="show_splash">Afficher l\'écran de Bienvenue</string>
   <string name="show_splash_summary">Montrer lors du démarrage</string>

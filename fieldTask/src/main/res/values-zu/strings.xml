@@ -23,9 +23,9 @@
   <string name="recapture_osm">phinda i-OSM Tagging</string>
   <string name="capture_video">Thwebula ividiyo</string>
   <string name="change_language">shintsha ulimi</string>
-  <string name="change_password">Inombolomfihlo ye ODK</string>
+  <string name="change_password">Inombolomfihlo </string>
   <string name="change_protocol_settings_default">Ukuhlelwa kwenkundla</string>
-  <string name="change_username">igamamfihlo le ODK</string>
+  <string name="change_username">igamamfihlo </string>
   <string name="clearanswer_confirm">Susa impendulo yoku \'\'%\'\'?</string>
   <string name="clear_answer">Susa Impendulo</string>
   <string name="clear_answer_ask">Susa lempendulo?</string>
@@ -127,7 +127,7 @@
   <string name="username">Igamamfihlo </string>
   <string name="view_hierarchy">Iya kubangela</string>
   <string name="general_preferences">Ukuhlela Okuvamile</string>
-  <string name="click_to_web">Cindezela ukuvakashela http://opendakit.org</string>
+  <string name="click_to_web">Cindezela ukuvakashela http://www.smap.com.au</string>
   <string name="show_splash_summary">Ikhombisa uma uhlu luqala</string>
   <string name="splash_path">Cannot translate</string>
   <string name="default_splash_path">ODK ngokungenhloso</string>

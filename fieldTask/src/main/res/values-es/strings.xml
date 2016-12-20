@@ -26,7 +26,7 @@
   <string name="change_language">Cambiar el Idioma</string>
   <string name="change_password">Contraseña</string>
   <string name="change_protocol_settings_default">Configuración de Plataforma.</string>
-  <string name="change_username">Nombre de Usuario ODK</string>
+  <string name="change_username">Nombre de Usuario</string>
   <string name="clearanswer_confirm">¿Borrar la respuesta a \"%s\"?</string>
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
@@ -131,7 +131,7 @@
   <string name="username">Nombre del Usuario</string>
   <string name="view_hierarchy">Ir a la Pregunta</string>
   <string name="general_preferences">Cambiar la configuración</string>
-  <string name="click_to_web">Toque para visitar http://opendatakit.org</string>
+  <string name="click_to_web">Toque para visitar los sitio web</string>
   <string name="client">Interfaz de usuario</string>
   <string name="show_splash">Mostar la pantalla inicial</string>
   <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>

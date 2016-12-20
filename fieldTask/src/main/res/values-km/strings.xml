@@ -24,9 +24,9 @@
   <string name="recapture_osm">ធ្វើម្តងទៀត OSM tagging</string>
   <string name="capture_video">ថត​វីដេអូ</string>
   <string name="change_language">ប្ដូរ​ភាសា</string>
-  <string name="change_password">ពាក្យ​សម្ងាត់ ODK</string>
+  <string name="change_password">ពាក្យ​សម្ងាត់</string>
   <string name="change_protocol_settings_default">ការ​កំណត់​វេទិកា</string>
-  <string name="change_username">ឈ្មោះ​អ្នកប្រើ ODK</string>
+  <string name="change_username">ឈ្មោះ​អ្នកប្រើ</string>
   <string name="clearanswer_confirm">បោះបង់ចម្លើយ​ដើម្បី \"%s\"?</string>
   <string name="clear_answer">បោះបង់ចម្លើយ</string>
   <string name="clear_answer_ask">បោះ​បង់ការឆ្លើយនេះ</string>
@@ -131,7 +131,7 @@
   <string name="username">អ្នក​ប្រើប្រាស់</string>
   <string name="view_hierarchy">ទៅ Prompt</string>
   <string name="general_preferences">ការកំណត់ទូទៅ</string>
-  <string name="click_to_web">ប៉ះដើម្បីទស្សនា http://opendatakit.org</string>
+  <string name="click_to_web">ប៉ះដើម្បីទស្សនា http://www.smap.com.au</string>
   <string name="client">ចំណុចប្រទាក់អ្នកប្រើប្រាស់</string>
   <string name="show_splash">បង្ហាញអេក្រង់ស្វាគមន៍</string>
   <string name="show_splash_summary">បង្ហាញពេលកម្មវិធីចាប់ផ្តើម</string>

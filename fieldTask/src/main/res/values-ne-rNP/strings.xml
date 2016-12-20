@@ -22,9 +22,9 @@
   <string name="capture_image">फोटो लिनुहोस् </string>
   <string name="capture_video">भिडियो रेकर्ड गर्नुहोस् </string>
   <string name="change_language">भाषा परिवर्तन गर्नुहोस् |</string>
-  <string name="change_password">ODK पासवर्ड </string>
+  <string name="change_password"> पासवर्ड </string>
   <string name="change_protocol_settings_default">प्लेटफर्म सेटिङस् </string>
-  <string name="change_username">ODK प्रयोगकर्ता नाम </string>
+  <string name="change_username"> प्रयोगकर्ता नाम </string>
   <string name="clearanswer_confirm">\"%s\"को जवाफ हटाउनु हुन्छ ?</string>
   <string name="clear_answer">जवाफ हटाउनुहोस् </string>
   <string name="clear_answer_ask">यो जवाफ हटाउनु हुन्छ?</string>
@@ -129,7 +129,7 @@
   <string name="username">प्रयोगकर्ताको नाम </string>
   <string name="view_hierarchy">प्रम्टमा जानुहोस् </string>
   <string name="general_preferences">जनरल सेटिङ्स </string>
-  <string name="click_to_web">http://opendatakit.org खोल्नको लागि थिच्नु होला |</string>
+  <string name="click_to_web">http://www.smap.com.au खोल्नको लागि थिच्नु होला |</string>
   <string name="client">प्रयोगकर्ताको अन्तरक्रिया गर्ने ठाउँ </string>
   <string name="show_splash">पहिलो पर्दाको दृश्य देखाउनुहोस् |</string>
   <string name="show_splash_summary">एप्लिकेशन सुरु हुँदा देखाइन्छ |</string>

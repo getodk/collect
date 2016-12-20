@@ -24,9 +24,9 @@
   <string name="recapture_osm">Doen OSM-tagging oor</string>
   <string name="capture_video">Neem video</string>
   <string name="change_language">Verander Taal</string>
-  <string name="change_password">ODK Wagwoord</string>
+  <string name="change_password">Wagwoord</string>
   <string name="change_protocol_settings_default">Platform Verstellings</string>
-  <string name="change_username">ODK Gebruikersnaam</string>
+  <string name="change_username">Gebruikersnaam</string>
   <string name="clearanswer_confirm">Verwyer die antwoord op \"%s\"?</string>
   <string name="clear_answer">Verwyder antwoord</string>
   <string name="clear_answer_ask">Verwyder hierdie antwoord?</string>
@@ -131,7 +131,7 @@
   <string name="username">Gebruikersnaam</string>
   <string name="view_hierarchy">Gaan Na Vraag</string>
   <string name="general_preferences">Algemene Verstellings</string>
-  <string name="click_to_web">Raak hier om http://opendatakit.org te besoek</string>
+  <string name="click_to_web">Raak hier om http://www.smap.com.au</string>
   <string name="client">Gebruikers koppelvlak</string>
   <string name="show_splash">Vertoon splash skerm</string>
   <string name="show_splash_summary">Vertoon wanneer program begin</string>

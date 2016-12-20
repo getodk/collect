@@ -24,9 +24,9 @@
   <string name="recapture_osm">Зробити наново OSM тегування</string>
   <string name="capture_video">Записати відео</string>
   <string name="change_language">Змінити мову</string>
-  <string name="change_password">Пароль ODK</string>
+  <string name="change_password">Пароль</string>
   <string name="change_protocol_settings_default">Налаштування платформи</string>
-  <string name="change_username">Ім\'я користувача ODK</string>
+  <string name="change_username">Ім\'я користувача</string>
   <string name="clearanswer_confirm">Видалити відповідь на \"%s\"?</string>
   <string name="clear_answer">Видалити відповідь</string>
   <string name="clear_answer_ask">Видалити цю відповідь?</string>
@@ -131,7 +131,7 @@
   <string name="username">Ім\'я користувача</string>
   <string name="view_hierarchy">Перейти</string>
   <string name="general_preferences">Загальні налаштування</string>
-  <string name="click_to_web">Клацніть щоб відвідати http://opendatakit.org</string>
+  <string name="click_to_web">Клацніть щоб відвідати http://www.smap.com.au</string>
   <string name="client">Інтерфейс користувача</string>
   <string name="show_splash">Показувати заставку</string>
   <string name="show_splash_summary">Відображається при старті програми</string>

@@ -24,9 +24,9 @@
   <string name="recapture_osm">Reface etichetare (tagging) OSM</string>
   <string name="capture_video">Înregistrează videoclipul</string>
   <string name="change_language">Schimbă limba</string>
-  <string name="change_password">Parola ODK</string>
+  <string name="change_password">Parola</string>
   <string name="change_protocol_settings_default">Setările platformei</string>
-  <string name="change_username">Nume utilizator ODK</string>
+  <string name="change_username">Nume utilizator</string>
   <string name="clearanswer_confirm">Ștergeți răspunsul de la \"%s\"?</string>
   <string name="clear_answer">Ștergeți răspunsul</string>
   <string name="clear_answer_ask">Ștergeți acest răspuns?</string>
@@ -131,7 +131,7 @@
   <string name="username">Nume de utilizator</string>
   <string name="view_hierarchy">Mergeți către promt</string>
   <string name="general_preferences">Modificați setările</string>
-  <string name="click_to_web">Atingeți pentru a vizita http://opendatakit.org</string>
+  <string name="click_to_web">Atingeți pentru a vizita http://www.smap.com.au</string>
   <string name="client">Interfață utilizator</string>
   <string name="show_splash">Afișați ecranul de început</string>
   <string name="show_splash_summary">Afișat la startul aplicației</string>

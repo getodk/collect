@@ -24,7 +24,7 @@
   <string name="recapture_osm">أعادة تعليم ال OSM</string>
   <string name="capture_video">سجل فيديو</string>
   <string name="change_language">تغيير اللغة</string>
-  <string name="change_password">ODK كلمة المرور</string>
+  <string name="change_password"> كلمة المرور</string>
   <string name="change_protocol_settings_default">اعدادات البرنامج</string>
   <string name="change_username">إسم المستخدم</string>
   <string name="clearanswer_confirm">حذف الإجابة ل \"%s\"؟</string>
@@ -131,7 +131,7 @@
   <string name="username">إسم المستخدم</string>
   <string name="view_hierarchy">الذهاب الى الموجه</string>
   <string name="general_preferences">الإعدادات العامة</string>
-  <string name="click_to_web">انقر لزيارة http://opendatakit.org</string>
+  <string name="click_to_web">انقر لزيارة http://www.smap.com.au</string>
   <string name="client">واجهة المستخدم</string>
   <string name="show_splash">عرض شاشة البداية</string>
   <string name="show_splash_summary">اظهار عند بدء التطبيق</string>
