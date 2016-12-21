@@ -15,7 +15,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(10)
         targetSdkVersion(10)
-        versionCode(3000)
+        versionCode(4000)
     }
 
     productFlavors {
