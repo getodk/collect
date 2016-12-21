@@ -114,6 +114,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         mMap.getUiSettings().setZoomControlsEnabled(false);
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
+        polygonOptions.zIndex(1);
 
         List<String> providers = mLocationManager.getProviders(true);
         for (String provider : providers) {
@@ -419,6 +420,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         polygon = null;
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
+        polygonOptions.zIndex(1);
         markerArray.clear();
         mMap.setOnMapLongClickListener(this);
 
