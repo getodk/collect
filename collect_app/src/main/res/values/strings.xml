@@ -402,4 +402,6 @@
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
+<string name="general_settings_about">About</string>
+<string name="all_open_source_licenses">Open source licenses</string>
 </resources>
