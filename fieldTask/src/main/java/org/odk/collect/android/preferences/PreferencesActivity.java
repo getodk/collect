@@ -104,6 +104,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     public static final String KEY_STORE_USER_TRAIL = "smap_gps_trail";       // smap
     public static final String KEY_STORE_LOCATION_TRIGGER = "smap_location_trigger";       // smap
+    public static final String KEY_STORE_ODK_STYLE_MENUS = "smap_odk_style_menus";       // smap
+    public static final String KEY_STORE_REVIEW_FINAL = "smap_review_final";       // smap
 
     // Maps
 

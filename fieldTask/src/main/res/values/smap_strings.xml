@@ -60,5 +60,6 @@
     <string name="smap_nfc_not_enabled">NFC is not enabled</string>
     <string name="smap_swipe_nfc">Place phone against NFC</string>
     <string name="read_only">This task is complete and only its comments can be changed</string>
+    <string name="no_review">This task is finalised and cannot be reviewed</string>
     <string name="smap_add_comment">Add Comment</string>
 </resources>

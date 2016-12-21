@@ -34,7 +34,6 @@ public MapLocationObserver(Context context, MapsActivity map) {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-      Log.i("Maps Activity: ", "++++++++received location change");
       Location locn = Collect.getInstance().getLocation();
       LatLng point = new LatLng(locn.getLatitude(), locn.getLongitude());
       if(settings.getBoolean(PreferencesActivity.KEY_STORE_USER_TRAIL, false)) {

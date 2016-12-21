@@ -143,7 +143,9 @@ public class MainTabsActivity extends TabActivity implements
             createErrorDialog(e.getMessage(), true);
             return;
         }
-        
+
+        mContext = this;
+
 	    setContentView(R.layout.main_tabs);
 
 	    Resources res = getResources();  // Resource object to get Drawables
@@ -261,10 +263,15 @@ public class MainTabsActivity extends TabActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-		CompatibilityUtils.setShowAsAction(
-				menu.add(0, MENU_ENTERDATA, 0, R.string.enter_data).setIcon(
-						android.R.drawable.ic_menu_edit),
-						MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean odkStyle = settings.getBoolean(PreferencesActivity.KEY_STORE_ODK_STYLE_MENUS, true);
+
+        if(odkStyle) {
+            CompatibilityUtils.setShowAsAction(
+                    menu.add(0, MENU_ENTERDATA, 0, R.string.enter_data).setIcon(
+                            android.R.drawable.ic_menu_edit),
+                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
 		
 		CompatibilityUtils.setShowAsAction(
                 menu.add(0, MENU_GETTASKS, 1, R.string.smap_get_tasks).setIcon(
@@ -275,22 +282,23 @@ public class MainTabsActivity extends TabActivity implements
                 menu.add(0, MENU_PREFERENCES, 2, R.string.server_preferences).setIcon(
                         android.R.drawable.ic_menu_preferences),
                 MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		
-		CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_GETFORMS, 3, R.string.get_forms).setIcon(
-                        android.R.drawable.ic_input_add),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		
-		CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_SENDDATA, 4, R.string.send_data).setIcon(
-                        android.R.drawable.ic_menu_send),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		
-		CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_MANAGEFILES, 5, R.string.manage_files).setIcon(
-                        android.R.drawable.ic_delete),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
-	
+
+        if(odkStyle) {
+            CompatibilityUtils.setShowAsAction(
+                    menu.add(0, MENU_GETFORMS, 3, R.string.get_forms).setIcon(
+                            android.R.drawable.ic_input_add),
+                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            CompatibilityUtils.setShowAsAction(
+                    menu.add(0, MENU_SENDDATA, 4, R.string.send_data).setIcon(
+                            android.R.drawable.ic_menu_send),
+                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            CompatibilityUtils.setShowAsAction(
+                    menu.add(0, MENU_MANAGEFILES, 5, R.string.manage_files).setIcon(
+                            android.R.drawable.ic_delete),
+                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
         return true;
     }
     
@@ -820,46 +828,58 @@ public class MainTabsActivity extends TabActivity implements
             e.printStackTrace();
         }
 
-        // Show a message if this task is read only
-        if(!canUpdate) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean reviewFinal = settings.getBoolean(PreferencesActivity.KEY_STORE_REVIEW_FINAL, true);
+
+        if(!canUpdate && reviewFinal) {
+            // Show a message if this task is read only
             Toast.makeText(
                     MainTabsActivity.this,
                     getString(R.string.read_only),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
+        } else  if(!canUpdate && !reviewFinal) {
+            // Show a message if this task is read only and cannot be reviewed
+            Toast.makeText(
+                    MainTabsActivity.this,
+                    getString(R.string.no_review),
+                    Toast.LENGTH_LONG).show();
         }
 
-        // Get the provider URI of the instance
-        String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] whereArgs = {
-                instancePath
-        };
+        // Open the task if it is editable or reviewable
+        if(canUpdate || reviewFinal) {
+            // Get the provider URI of the instance
+            String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
+            String[] whereArgs = {
+                    instancePath
+            };
 
-        Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
-                null, where, whereArgs, null);
+            Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                    null, where, whereArgs, null);
 
-        if(cInstanceProvider.getCount() != 1) {
-            Log.e("completeTask", "Unique instance not found: count is:" +
-                    cInstanceProvider.getCount());
-        } else {
-            cInstanceProvider.moveToFirst();
-            Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
-                    cInstanceProvider.getLong(
-                            cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
-            surveyNotes = cInstanceProvider.getString(
-                    cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
-            // Start activity to complete form
-            Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+            if (cInstanceProvider.getCount() != 1) {
+                Log.e("completeTask", "Unique instance not found: count is:" +
+                        cInstanceProvider.getCount());
+            } else {
+                cInstanceProvider.moveToFirst();
+                Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                        cInstanceProvider.getLong(
+                                cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
+                surveyNotes = cInstanceProvider.getString(
+                        cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
+                // Start activity to complete form
+                Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
 
-            i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);	// TODO Don't think this is needed
-            i.putExtra(FormEntryActivity.KEY_TASK, taskId);
-            i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
-            i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
-            if(instancePath != null) {	// TODO Don't think this is needed
-                i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+                i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
+                i.putExtra(FormEntryActivity.KEY_TASK, taskId);
+                i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
+                i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
+                if (instancePath != null) {    // TODO Don't think this is needed
+                    i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+                }
+                startActivity(i);
             }
-            startActivity(i);
+            cInstanceProvider.close();
         }
-        cInstanceProvider.close();
 
     }
 
