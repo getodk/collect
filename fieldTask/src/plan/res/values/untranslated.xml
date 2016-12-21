@@ -13,7 +13,7 @@
 
 <resources>
     <!-- strings that should not be translated -->
-	<string translatable="false" name="app_name">FieldTask v4.01</string>
+	<string translatable="false" name="app_name">FieldTask v4.02</string>
 	<string translatable="false" name="default_server_url">https://plan.smap.com.au</string>
 	<string translatable="false" name="default_username"></string>
 	<string translatable="false" name="default_password"></string>

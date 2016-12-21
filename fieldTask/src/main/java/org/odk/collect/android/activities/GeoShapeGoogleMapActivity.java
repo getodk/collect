@@ -58,7 +58,6 @@ import java.util.List;
  * specifying a location via placing a tracker on a map.
  *
  * @author jonnordling@gmail.com
- *
  */
 
 public class GeoShapeGoogleMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
@@ -70,7 +69,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private UiSettings gmapSettings;
     private LocationManager mLocationManager;
     private Boolean mGPSOn = false;
-    private Boolean mNetworkOn =false;
+    private Boolean mNetworkOn = false;
     private Location curLocation;
     private LatLng curlatLng;
     private Boolean initZoom = false;
