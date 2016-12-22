@@ -114,6 +114,7 @@ public class Collect extends Application {
             pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             int versionNumber = pinfo.versionCode;
             String versionName = pinfo.versionName;
+            versionName = versionName.replaceFirst("-", "\n");
             versionDetail = " " + versionName + " (" + versionNumber + ")";
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
