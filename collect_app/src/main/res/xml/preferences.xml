@@ -137,4 +137,12 @@
             android:title="@string/map_basemap_behavior" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/general_settings_about" >
+
+        <PreferenceScreen
+            android:key="open_source_licenses"
+            android:title="@string/all_open_source_licenses" >
+        </PreferenceScreen>
+    </PreferenceCategory>
 </PreferenceScreen>
