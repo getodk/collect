@@ -16,7 +16,6 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -108,19 +107,17 @@ public class Collect extends Application {
     }
 
     public String getVersionedAppName() {
-        String versionDetail = "";
+        String versionName = "";
         try {
-            PackageInfo pinfo;
-            pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            int versionNumber = pinfo.versionCode;
-            String versionName = pinfo.versionName;
-            versionName = versionName.replaceFirst("-", "\n");
-            versionDetail = " " + versionName + " (" + versionNumber + ")";
+            versionName = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0)
+                    .versionName;
+            versionName = " " + versionName.replaceFirst("-", "\n");
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return getString(R.string.app_name) + versionDetail;
+        return getString(R.string.app_name) + versionName;
     }
 
     /**
