@@ -143,7 +143,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 }
             });
 
-            addView(mImageView);
+            answerLayout.addView(mImageView);
         }
         addAnswerView(answerLayout);
 
