@@ -6,6 +6,8 @@
 
 ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part of Open Data Kit (ODK), a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the Open Data Kit project and its history [here](https://opendatakit.org/about/) and read about example ODK deployments [here](https://opendatakit.org/about/deployments/).
 
+ODK Collect renders forms that are compliant with the [ODK XForms standard](http://opendatakit.github.io/odk-xform-spec/), a subset of the [XForms 1.1 standard](https://www.w3.org/TR/xforms/) with some extensions. The form parsing is done by the [JavaRosa library](https://github.com/opendatakit/javarosa) which Collect includes as a jar.
+
 * ODK website: [https://opendatakit.org](https://opendatakit.org)
 * ODK Collect usage instructions: [https://opendatakit.org/use/collect](https://opendatakit.org/use/collect/)
 * ODK community mailing list: [http://groups.google.com/group/opendatakit](http://groups.google.com/group/opendatakit)
