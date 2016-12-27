@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="smap_accept_task">Acepte la tarea</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="smap_task">Tarea</string>
+  <string name="smap_accept_task">Aceptar la tarea</string>
   <string name="smap_accepted">: aceptada. </string>
-  <string name="smap_cannot_accept">Incapaz de aceptar la tarea</string>
-  <string name="smap_cannot_complete">Incapaz de completar la tarea</string>
-  <string name="smap_cannot_reject">Incapaz de rechazar la tarea</string>
-  <string name="smap_complete_task">Tarea Completa</string>
+  <string name="smap_cannot_accept">No es posible aceptar la tarea</string>
+  <string name="smap_cannot_complete">No es posible completar la tarea</string>
+  <string name="smap_cannot_reject">No es posible rechazar la tarea</string>
+  <string name="smap_complete_task">Completar Tarea</string>
   <string name="smap_data_collection">Coleccion de Datos</string>
   <string name="smap_destination_not_found">No se ha especificado un destino a la ruta</string>
   <string name="smap_done">: realizado. </string>
@@ -19,7 +20,7 @@
   <string name="smap_no_tasks">Ninguna Tarea fue descargada</string>
   <string name="smap_no_tasks_display"></string>
   <string name="smap_pending">: pendiente. </string>
-  <string name="smap_reject_task">Tarea Rechazada</string>
+  <string name="smap_reject_task">Rechazar Tarea</string>
   <string name="smap_route_finding_inprogress">Encontrando ruta para la tarea</string>
   <string name="smap_routing_network_error">Fallo al buscar una ruta debido a error en la red</string>
   <string name="smap_route_parse_error">Fallo al buscar una ruta debido a error mientras analizaba la ruta</string>
@@ -27,13 +28,22 @@
   <string name="smap_task_preferences">Tareas</string>
   <string name="smap_tasks_not_enabled">Tareas no habilitadas - Habilite en la pantalla de ajustes</string>
   <string name="smap_taskList">Tareas</string>
-  <string name="smap_taskMap">Mapa de Tareas</string>
+  <string name="smap_taskMap">Mapa</string>
   <string name="smap_zoom_data">Zoom a Tareas</string>
   <string name="smap_project">Proyecto </string>
-  <string name="smap_no_tasks_nfc">Ninguna tarea requiere lectura de tags NFC</string>
-  <string name="smap_no_matching_tasks_nfc">Ninguna tarea corresponde al tag NFC leído : %1$s</string>
-  <string name="smap_starting_task_from_nfc">Activando tarea con tag NFC  : %1$s</string>
-  <string name="smap_must_start_from_nfc">Esta tarea requiere lectura de tag NFC - Favor acerque el celular al tag</string>
+  <string name="smap_no_tasks_nfc">No hay tareas activadas con NFC</string>
+  <string name="smap_no_matching_tasks_nfc">No hay tareas asociadas a este chip NFC : %1$s</string>
+  <string name="smap_starting_task_from_nfc">Activando tarea con chip NFC  : %1$s</string>
+  <string name="smap_must_start_from_nfc">Esta tarea sólo se activa con el chip NFC asociado.</string>
   <string name="smap_nfc_not_authorised">No se ha podido iniciar las Tareas usando NFC</string>
-  <string name="read_only">Esta tarea está completa y sólo se pueden cambiar sus comentarios</string>
+  <string name="smap_read_nfc">Leer chip NFC</string>
+  <string name="smap_reading_nfc">Leyendo chip NFC</string>
+  <string name="smap_replace_nfc">Reemplazar NFC</string>
+  <string name="smap_nfc_not_available">El dispositivo no cuenta con tecnología NFC.</string>
+  <string name="smap_nfc_is_available">Este equipo cuenta con tecnología NFC</string>
+  <string name="smap_nfc_not_enabled">NFC NO activado - Habilite en Ajustes del dispositivo</string>
+  <string name="smap_swipe_nfc">Acerque el teléfono (parte de atrás) al chip NFC</string>
+  <string name="read_only">Tarea completa. Sólo se pueden cambiar sus comentarios</string>
+  <string name="no_review">Esta tarea está finalizada y no puede ser revisada</string>
+  <string name="smap_add_comment">Agregar Comentario</string>
 </resources>
