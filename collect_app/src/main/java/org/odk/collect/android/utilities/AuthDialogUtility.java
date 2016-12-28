@@ -85,8 +85,14 @@ public class AuthDialogUtility {
     public static void setWebCredentialsFromPreferences(Context context) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        WebUtils.addCredentials(getUserName(settings), getPassword(settings),
-                Uri.parse(getServer(settings, context)).getHost());
+        String username = getUserName(settings);
+        String password = getPassword(settings);
+
+        if (username == null || username.isEmpty())
+            return;
+
+        String host = Uri.parse(getServer(settings, context)).getHost();
+        WebUtils.addCredentials(username, password, host);
     }
 
     private static String getServer(SharedPreferences settings, Context context) {

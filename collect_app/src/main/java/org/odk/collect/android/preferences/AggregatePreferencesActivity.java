@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -42,6 +43,17 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
     protected EditTextPreference mServerUrlPreference;
     protected EditTextPreference mUsernamePreference;
     protected EditTextPreference mPasswordPreference;
+    protected boolean mCredentialsHaveChanged = false;
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mCredentialsHaveChanged) {
+            AuthDialogUtility.setWebCredentialsFromPreferences(getBaseContext());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +110,10 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
                 }
 
                 preference.setSummary(username);
-
                 clearCachedCrendentials();
+
+                // To ensure we update current credentials in CredentialsProvider
+                mCredentialsHaveChanged = true;
 
                 return true;
             }
@@ -125,6 +139,9 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 
                         maskPasswordSummary(pw);
                         clearCachedCrendentials();
+
+                        // To ensure we update current credentials in CredentialsProvider
+                        mCredentialsHaveChanged = true;
 
                         return true;
                     }
