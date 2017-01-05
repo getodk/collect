@@ -524,9 +524,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         StringBuffer selectionBuf = new StringBuffer(InstanceColumns._ID + " IN (");
         String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-        if(values != null) {
+        if (values != null) {
             for (int i = 0; i < values.length; i++) {
-                if(i > 0) {
+                if (i > 0) {
                     selectionBuf.append(",");
                 }
                 selectionBuf.append("?");
