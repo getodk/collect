@@ -26,19 +26,16 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -52,10 +49,9 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.ListViewUtils;
-import org.odk.collect.android.utilities.WebUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -76,7 +72,7 @@ import java.util.Set;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadList extends ListActivity implements FormListDownloaderListener,
-        FormDownloaderListener {
+        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final String t = "RemoveFileManageList";
 
     private static final int PROGRESS_DIALOG = 1;
@@ -396,64 +392,10 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             case AUTH_DIALOG:
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
-                AlertDialog.Builder b = new AlertDialog.Builder(this);
 
-                LayoutInflater factory = LayoutInflater.from(this);
-                final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
-
-                // Get the server, username, and password from the settings
-                SharedPreferences settings =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String server =
-                        settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                                getString(R.string.default_server_url));
-
-                String formListUrl = getString(R.string.default_odk_formlist);
-                final String url =
-                        server + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
-                                formListUrl);
-                Log.i(t, "Trying to get formList from: " + url);
-
-                EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-                username.setText(storedUsername);
-
-                EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-                password.setText(storedPassword);
-
-                b.setTitle(getString(R.string.server_requires_auth));
-                b.setMessage(getString(R.string.server_auth_credentials, url));
-                b.setView(dialogView);
-                b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "onCreateDialog.AUTH_DIALOG", "OK");
-
-                        EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-                        EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-
-                        Uri u = Uri.parse(url);
-
-                        WebUtils.addCredentials(username.getText().toString(), password.getText()
-                                .toString(), u.getHost());
-                        downloadFormList();
-                    }
-                });
-                b.setNegativeButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.AUTH_DIALOG", "Cancel");
-                                finish();
-                            }
-                        });
-
-                b.setCancelable(false);
                 mAlertShowing = false;
-                return b.create();
+
+                return new AuthDialogUtility().createDialog(this, this);
         }
         return null;
     }
@@ -752,4 +694,13 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         createAlertDialog(getString(R.string.download_forms_result), b.toString().trim(), EXIT);
     }
 
+    @Override
+    public void updatedCredentials() {
+        downloadFormList();
+    }
+
+    @Override
+    public void cancelledUpdatingCredentials() {
+        finish();
+    }
 }
