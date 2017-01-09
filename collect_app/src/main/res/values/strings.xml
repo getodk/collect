@@ -409,7 +409,7 @@
 <string name="no_form_loaded">&lt;no form loaded&gt;</string>
 <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
-<string name="corrupt_settings_file_notification">Settings successfully loaded from file</string>
+<string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>
 <string name="selected_invalid_image">Selected file is not a valid image</string>
 <string name="edited_osm_file">Edited OSM XML File:</string>
 <string name="invalid_osm_data">Something went wrong. We did not get valid OSM data.</string>
