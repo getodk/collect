@@ -15,9 +15,9 @@
 package org.odk.collect.android.picasa;
 
 
-import java.util.List;
-
 import com.google.api.client.util.Key;
+
+import java.util.List;
 
 
 /**
@@ -25,6 +25,6 @@ import com.google.api.client.util.Key;
  */
 public class AlbumFeed extends Feed {
 
-  @Key("entry")
-  public List<PhotoEntry> photos;
+    @Key("entry")
+    public List<PhotoEntry> photos;
 }

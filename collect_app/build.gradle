@@ -3,19 +3,45 @@
  *************************************************************************************************/
 
 apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
 
 com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
+ant.condition(property: "os", value: "windows") { os(family: "windows") }
+ant.condition(property: "os", value: "unix" ) { os(family: "unix") }
+
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            switch(ant.properties.os){
+                case 'windows':
+                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty'
+                    break
+                case 'unix':
+                    commandLine 'git', 'describe', '--tags', '--dirty'
+                    break
+            }
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null;
+    }
+}
+
 android {
     compileSdkVersion(22)
-    buildToolsVersion("23.0.3")
+    buildToolsVersion("25.0.0")
 
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(9)
         targetSdkVersion(9)
-        versionCode(1062)
-        versionName("1.4.11")
+        versionCode(1063)
+        versionName getVersionName()
+        testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
     }
 
     buildTypes {
@@ -50,6 +76,15 @@ android {
     }
 }
 
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    classpath = files()
+}
+
 configurations.all {
     resolutionStrategy {
         cacheDynamicVersionsFor(0, 'seconds')
@@ -71,4 +106,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile "org.robolectric:robolectric:3.1.2"
+    androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
 }

@@ -18,17 +18,6 @@
 
 package org.odk.collect.android.external;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -43,6 +32,17 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.InvalidSyntaxException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Author: Meletis Margaritis
@@ -74,7 +74,8 @@ public final class ExternalDataUtil {
     public static String toSafeColumnName(String columnName) {
         // SCTO-567 - begin all column names with "c_" to avoid possible conflicts with
         // reserved keywords; also, escape any potentially-illegal characters
-        return "c_" + columnName.trim().replaceAll("[^A-Za-z0-9_]", "_").toLowerCase(Locale.ENGLISH);
+        return "c_" + columnName.trim().replaceAll("[^A-Za-z0-9_]", "_").toLowerCase(
+                Locale.ENGLISH);
     }
 
     public static List<String> findMatchingColumnsAfterSafeningNames(String[] columnNames) {
@@ -106,30 +107,39 @@ public final class ExternalDataUtil {
                 XPathExpression xPathExpression = XPathParseTool.parseXPath(function);
                 if (XPathFuncExpr.class.isAssignableFrom(xPathExpression.getClass())) {
                     XPathFuncExpr xPathFuncExpr = (XPathFuncExpr) xPathExpression;
-                    if (xPathFuncExpr.id.name.equalsIgnoreCase(ExternalDataHandlerSearch.HANDLER_NAME)) {
+                    if (xPathFuncExpr.id.name.equalsIgnoreCase(
+                            ExternalDataHandlerSearch.HANDLER_NAME)) {
                         // also check that the args are either 1, 4 or 6.
-                        if (xPathFuncExpr.args.length == 1 || xPathFuncExpr.args.length == 4 || xPathFuncExpr.args.length == 6) {
+                        if (xPathFuncExpr.args.length == 1 || xPathFuncExpr.args.length == 4
+                                || xPathFuncExpr.args.length == 6) {
                             return xPathFuncExpr;
                         } else {
-                            throw new InvalidSyntaxException(Collect.getInstance().getString(R.string.ext_search_wrong_arguments_error));
+                            throw new InvalidSyntaxException(Collect.getInstance().getString(
+                                    R.string.ext_search_wrong_arguments_error));
                         }
                     } else {
                         // this might mean a problem in the regex above. Unit tests required.
-                        throw new InvalidSyntaxException(Collect.getInstance().getString(R.string.ext_search_wrong_function_error, xPathFuncExpr.id.name));
+                        throw new InvalidSyntaxException(Collect.getInstance().getString(
+                                R.string.ext_search_wrong_function_error, xPathFuncExpr.id.name));
                     }
                 } else {
                     // this might mean a problem in the regex above. Unit tests required.
-                    throw new InvalidSyntaxException(Collect.getInstance().getString(R.string.ext_search_bad_function_error, function));
+                    throw new InvalidSyntaxException(
+                            Collect.getInstance().getString(R.string.ext_search_bad_function_error,
+                                    function));
                 }
             } catch (XPathSyntaxException e) {
-                throw new InvalidSyntaxException(Collect.getInstance().getString(R.string.ext_search_generic_error, appearance), e);
+                throw new InvalidSyntaxException(
+                        Collect.getInstance().getString(R.string.ext_search_generic_error,
+                                appearance), e);
             }
         } else {
             return null;
         }
     }
 
-    public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt, XPathFuncExpr xPathFuncExpr) {
+    public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
+            XPathFuncExpr xPathFuncExpr) {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
@@ -140,30 +150,39 @@ public final class ExternalDataUtil {
                     returnedChoices.add(selectChoice);
                 } else {
                     String displayColumns = formEntryPrompt.getSelectChoiceText(selectChoice);
-                    String imageColumn = formEntryPrompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+                    String imageColumn = formEntryPrompt.getSpecialFormSelectChoiceText(
+                            selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
                     if (imageColumn != null && imageColumn.startsWith(JR_IMAGES_PREFIX)) {
                         imageColumn = imageColumn.substring(JR_IMAGES_PREFIX.length());
                     }
 //                    if (displayColumns == null || displayColumns.trim().length() == 0) {
-//                        throw new InvalidSyntaxException("The label column in the choices sheet appears to be empty (or has been calculated as empty).");
+//                        throw new InvalidSyntaxException("The label column in the choices sheet
+// appears to be empty (or has been calculated as empty).");
 //                    }
 
-                    ExternalDataManager externalDataManager = Collect.getInstance().getExternalDataManager();
-                    FormInstance formInstance = Collect.getInstance().getFormController().getFormDef().getInstance();
+                    ExternalDataManager externalDataManager =
+                            Collect.getInstance().getExternalDataManager();
+                    FormInstance formInstance =
+                            Collect.getInstance().getFormController().getFormDef().getInstance();
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
-                    EvaluationContext evaluationContext = new EvaluationContext(baseEvaluationContext, formEntryPrompt.getIndex().getReference());
+                    EvaluationContext evaluationContext = new EvaluationContext(
+                            baseEvaluationContext, formEntryPrompt.getIndex().getReference());
                     // we can only add only the appropriate by querying the xPathFuncExpr.id.name
-                    evaluationContext.addFunctionHandler(new ExternalDataHandlerSearch(externalDataManager, displayColumns, value, imageColumn));
+                    evaluationContext.addFunctionHandler(
+                            new ExternalDataHandlerSearch(externalDataManager, displayColumns,
+                                    value, imageColumn));
 
                     Object eval = xPathFuncExpr.eval(formInstance, evaluationContext);
                     if (eval.getClass().isAssignableFrom(ArrayList.class)) {
-                       @SuppressWarnings("unchecked")
-                     List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
+                        @SuppressWarnings("unchecked")
+                        List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
                         for (SelectChoice dynamicChoice : dynamicChoices) {
                             returnedChoices.add(dynamicChoice);
                         }
                     } else {
-                        throw new ExternalDataException(Collect.getInstance().getString(R.string.ext_search_return_error, eval.getClass().getName()));
+                        throw new ExternalDataException(
+                                Collect.getInstance().getString(R.string.ext_search_return_error,
+                                        eval.getClass().getName()));
                     }
                 }
             }
@@ -174,14 +193,18 @@ public final class ExternalDataUtil {
     }
 
     /**
-     * We could simple return new String(displayColumns + "," + valueColumn) but we want to handle the cases
-     * where the displayColumns (valueColumn) contain more commas than needed, in the middle, start or end.
+     * We could simple return new String(displayColumns + "," + valueColumn) but we want to handle
+     * the cases
+     * where the displayColumns (valueColumn) contain more commas than needed, in the middle, start
+     * or end.
      *
      * @param valueColumn    single string to appear first.
      * @param displayColumns comma-separated string
-     * @return A {@link java.util.LinkedHashMap} that contains the SQL columns as keys, and the CSV columns as values
+     * @return A {@link java.util.LinkedHashMap} that contains the SQL columns as keys, and the CSV
+     * columns as values
      */
-    public static LinkedHashMap<String, String> createMapWithDisplayingColumns(String valueColumn, String displayColumns) {
+    public static LinkedHashMap<String, String> createMapWithDisplayingColumns(String valueColumn,
+            String displayColumns) {
         valueColumn = valueColumn.trim();
 
         LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>();
@@ -191,7 +214,8 @@ public final class ExternalDataUtil {
         if (displayColumns != null && displayColumns.trim().length() > 0) {
             displayColumns = displayColumns.trim();
 
-            List<String> commaSplitParts = splitTrimmed(displayColumns, COLUMN_SEPARATOR, FALLBACK_COLUMN_SEPARATOR);
+            List<String> commaSplitParts = splitTrimmed(displayColumns, COLUMN_SEPARATOR,
+                    FALLBACK_COLUMN_SEPARATOR);
 
             for (String commaSplitPart : commaSplitParts) {
                 columns.put(toSafeColumnName(commaSplitPart), commaSplitPart);
@@ -204,7 +228,8 @@ public final class ExternalDataUtil {
     public static List<String> createListOfColumns(String columnString) {
         List<String> values = new ArrayList<String>();
 
-        List<String> commaSplitParts = splitTrimmed(columnString, COLUMN_SEPARATOR, FALLBACK_COLUMN_SEPARATOR);
+        List<String> commaSplitParts = splitTrimmed(columnString, COLUMN_SEPARATOR,
+                FALLBACK_COLUMN_SEPARATOR);
 
         for (String commaSplitPart : commaSplitParts) {
             values.add(toSafeColumnName(commaSplitPart));
@@ -213,7 +238,8 @@ public final class ExternalDataUtil {
         return values;
     }
 
-    protected static List<String> splitTrimmed(String displayColumns, String separator, String fallbackSeparator) {
+    protected static List<String> splitTrimmed(String displayColumns, String separator,
+            String fallbackSeparator) {
         List<String> commaSplitParts = splitTrimmed(displayColumns, separator);
 
         // SCTO-584: Fall back to a space-separated list

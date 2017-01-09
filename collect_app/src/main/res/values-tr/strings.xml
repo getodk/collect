@@ -180,4 +180,5 @@
   <string name="view_change_location">Lokasyonu Göster yada Değiştir</string>
   <string name="open_url">URL Aç</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>

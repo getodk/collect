@@ -77,7 +77,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
 		// Determine the activity threshold to use
 		String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-		if ( acc != null && acc.length() != 0 ) {
+		if (acc != null && acc.length() != 0) {
 			mAccuracyThreshold = Double.parseDouble(acc);
 		} else {
 			mAccuracyThreshold = DEFAULT_LOCATION_ACCURACY;
@@ -87,13 +87,13 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mAppearance = prompt.getAppearanceHint();
 		// use mapsV2 if it is available and was requested;
 		mUseMapsV2 = CompatibilityUtils.useMapsV2(context);
-		if ( mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2 ) {
+		if (mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2) {
 			draggable = true;
 			mUseMaps = true;
-		}else if (mAppearance != null && mAppearance.equalsIgnoreCase("maps") && mUseMapsV2) {
+		} else if (mAppearance != null && mAppearance.equalsIgnoreCase("maps") && mUseMapsV2) {
 			draggable = false;
 			mUseMaps = true;
-		}else{
+		} else {
 			mUseMaps = false;
 		}
 
@@ -138,18 +138,18 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 						.logInstanceAction(this, "recordLocation", "click",
 								mPrompt.getIndex());
 				Intent i = null;
-				if ( mUseMapsV2 && mUseMaps ) {
-					if (mapSDK.equals(GOOGLE_MAP_KEY)){
+				if (mUseMapsV2 && mUseMaps) {
+					if (mapSDK.equals(GOOGLE_MAP_KEY)) {
 						i = new Intent(getContext(), GeoPointMapActivity.class);
-					}else{
+					} else {
 						i = new Intent(getContext(), GeoPointOsmMapActivity.class);
 					}
-				}else{
+				} else {
 					i = new Intent(getContext(), GeoPointActivity.class);
 				}
 
 				String s = mStringAnswer.getText().toString();
-				if ( s.length() != 0 ) {
+				if (s.length() != 0) {
 					String[] sa = s.split(" ");
 					double gp[] = new double[4];
 					gp[0] = Double.valueOf(sa[0]).doubleValue();
@@ -199,12 +199,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 			mViewButton.setVisibility(View.GONE);
 			if (mReadOnly) {
 				//READ_ONLY View
-				mGetLocationButton.setText(getContext().getString(R.string.geopoint_view_read_only));
+				mGetLocationButton.setText(
+						getContext().getString(R.string.geopoint_view_read_only));
 			} else {
 				String s = mStringAnswer.getText().toString();
-				if (s.length() != 0){
-					mGetLocationButton.setText(getContext().getString(R.string.view_change_location));
-				}else{
+				if (s.length() != 0) {
+					mGetLocationButton.setText(
+							getContext().getString(R.string.view_change_location));
+				} else {
 					mGetLocationButton.setText(getContext().getString(R.string.get_point));
 				}
 			}
@@ -214,7 +216,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				mGetLocationButton.setVisibility(View.GONE);
 			} else {
 				mGetLocationButton.setVisibility(View.VISIBLE);
-				mGetLocationButton.setText(getContext().getString(dataAvailable ? R.string.get_point : R.string.get_point));
+				mGetLocationButton.setText(getContext().getString(
+						dataAvailable ? R.string.get_point : R.string.get_point));
 			}
 
 			if (mUseMaps) {
@@ -278,13 +281,15 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		if (type.equalsIgnoreCase("lon")) {
 			if (degree.startsWith("-")) {
 				degree = "W " + degree.replace("-", "") + mins + secs;
-			} else
+			} else {
 				degree = "E " + degree.replace("-", "") + mins + secs;
+			}
 		} else {
 			if (degree.startsWith("-")) {
 				degree = "S " + degree.replace("-", "") + mins + secs;
-			} else
+			} else {
 				degree = "N " + degree.replace("-", "") + mins + secs;
+			}
 		}
 		return degree;
 	}
@@ -300,14 +305,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	@Override
 	public void setBinaryData(Object answer) {
 		String s = (String) answer;
-		if (!s.equals("") || s == null){
+		if (!s.equals("") || s == null) {
 			mStringAnswer.setText(s);
 			String[] sa = s.split(" ");
 			mAnswerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
 					formatGps(Double.parseDouble(sa[0]), "lat"),
-					formatGps(Double.parseDouble(sa[1]), "lon"), truncateDouble(sa[2]),
-					truncateDouble(sa[3])));
-		}else{
+                    formatGps(Double.parseDouble(sa[1]), "lon"), truncateDouble(sa[2]),
+                    truncateDouble(sa[3])));
+		} else {
 			mStringAnswer.setText(s);
 			mAnswerDisplay.setText("");
 

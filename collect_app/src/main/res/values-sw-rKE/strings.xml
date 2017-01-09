@@ -18,9 +18,10 @@
   <string name="cannot_edit_completed_form">Fomu hii haiwezi batilishwa pindi inapoekwa alama ya ukamilifu. Inaweza kuwa fiche</string>
   <string name="capture_audio">Rekodi Sauti</string>
   <string name="capture_image">Piga Picha</string>
+  <string name="capture_osm">Anzisha OpenMapkit</string>
   <string name="capture_video">Rekodi kanda</string>
   <string name="change_language">Badilisha Lugha</string>
-  <string name="change_password">thibitisho la ODK</string>
+  <string name="change_password">Nywila ya ODK</string>
   <string name="change_username">Jina la mtumiaji</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
   <string name="clear_answer">Ondoa jibu</string>
@@ -257,4 +258,5 @@
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
   <string name="high_resolution">Ezesha video za mwonekano wa hali ya juu...</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
 </resources>

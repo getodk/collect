@@ -1,14 +1,13 @@
-
 package org.odk.collect.android.activities;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.TextView;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 public class NotificationActivity extends Activity {
 
@@ -24,7 +23,7 @@ public class NotificationActivity extends Activity {
             note = getString(R.string.notification_error);
         }
 
-        TextView notificationText = (TextView)findViewById(R.id.notification);
+        TextView notificationText = (TextView) findViewById(R.id.notification);
         notificationText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         notificationText.setTypeface(null, Typeface.BOLD);
         notificationText.setPadding(0, 0, 0, 7);

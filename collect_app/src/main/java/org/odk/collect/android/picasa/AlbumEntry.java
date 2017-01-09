@@ -21,17 +21,17 @@ import com.google.api.client.util.Key;
  */
 public class AlbumEntry extends Entry {
 
-  @Key("gphoto:access")
-  public String access;
+    @Key("gphoto:access")
+    public String access;
 
-  @Key
-  public Category category = Category.newKind("album");
+    @Key
+    public Category category = Category.newKind("album");
 
-  @Key("gphoto:numphotos")
-  public int numPhotos;
+    @Key("gphoto:numphotos")
+    public int numPhotos;
 
-  @Override
-  public AlbumEntry clone() {
-    return (AlbumEntry) super.clone();
-  }
+    @Override
+    public AlbumEntry clone() {
+        return (AlbumEntry) super.clone();
+    }
 }

@@ -21,9 +21,9 @@ import com.google.api.client.util.Key;
  */
 public class MediaContent {
 
-  @Key("@type")
-  public String type;
+    @Key("@type")
+    public String type;
 
-  @Key("@url")
-  public String url;
+    @Key("@url")
+    public String url;
 }

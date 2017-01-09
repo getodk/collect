@@ -14,18 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import org.javarosa.core.model.SelectChoice;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.SelectOneData;
-import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.external.ExternalDataUtil;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -35,6 +23,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
+
+import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.SelectOneData;
+import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.external.ExternalDataUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * AutoCompleteWidget handles select-one fields using an autocomplete text box. The user types part
@@ -65,7 +65,8 @@ public class AutoCompleteWidget extends QuestionWidget {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
         if (xPathFuncExpr != null) {
             mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
         } else {
@@ -114,8 +115,8 @@ public class AutoCompleteWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-    	clearFocus();
-    	String response = autocomplete.getText().toString();
+        clearFocus();
+        String response = autocomplete.getText().toString();
         for (SelectChoice sc : mItems) {
             if (response.equals(mPrompt.getSelectChoiceText(sc))) {
                 return new SelectOneData(new Selection(sc));
@@ -127,8 +128,8 @@ public class AutoCompleteWidget extends QuestionWidget {
         // solution didn't count.
         if (!response.equals("")) {
             Toast.makeText(getContext(),
-                "Warning: \"" + response + "\" does not match any answers. No answer recorded.",
-                Toast.LENGTH_LONG).show();
+                    "Warning: \"" + response + "\" does not match any answers. No answer recorded.",
+                    Toast.LENGTH_LONG).show();
         }
         return null;
     }
@@ -144,7 +145,7 @@ public class AutoCompleteWidget extends QuestionWidget {
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
 
     }
@@ -242,7 +243,7 @@ public class AutoCompleteWidget extends QuestionWidget {
                         // Match the strings using the filter specified
                         if (filterType.equals(match_substring)
                                 && (item_compare.startsWith(prefixString) || item_compare
-                                        .contains(prefixString))) {
+                                .contains(prefixString))) {
                             newItems.add(item);
                         } else if (filterType.equals(match_prefix)
                                 && item_compare.startsWith(prefixString)) {
@@ -255,8 +256,8 @@ public class AutoCompleteWidget extends QuestionWidget {
                                 int index = item_compare.indexOf(toMatch[j]);
                                 if (index > -1) {
                                     item_compare =
-                                        item_compare.substring(0, index)
-                                                + item_compare.substring(index + 1);
+                                            item_compare.substring(0, index)
+                                                    + item_compare.substring(index + 1);
                                 } else {
                                     matches = false;
                                     break;

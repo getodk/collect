@@ -14,20 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
-import android.view.ViewGroup;
-import android.widget.*;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -42,12 +28,29 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
+
+import java.io.File;
 
 /**
  * Signature widget.
- * 
- * @author BehrAtherton@gmail.com
  *
+ * @author BehrAtherton@gmail.com
  */
 public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
     private final static String t = "SignatureWidget";
@@ -58,22 +61,22 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
     private ImageView mImageView;
     private TextView mErrorTextView;
 
-	public SignatureWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
-		
-		mInstanceFolder = 
-				Collect.getInstance().getFormController().getInstancePath().getParent();
+    public SignatureWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
 
-		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        mInstanceFolder =
+                Collect.getInstance().getFormController().getInstancePath().getParent();
+
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
-		
+
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
         mErrorTextView.setText(R.string.selected_invalid_image);
 
         // setup Blank Image Button
-		mSignButton = new Button(getContext());
-		mSignButton.setId(QuestionWidget.newUniqueId());
+        mSignButton = new Button(getContext());
+        mSignButton.setId(QuestionWidget.newUniqueId());
         mSignButton.setText(getContext().getString(R.string.sign_button));
         mSignButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mSignButton.setPadding(20, 20, 20, 20);
@@ -83,15 +86,15 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         mSignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-				Collect.getInstance()
-						.getActivityLogger()
-						.logInstanceAction(this, "signButton", "click",
-								mPrompt.getIndex());
-            	launchSignatureActivity();
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "signButton", "click",
+                                mPrompt.getIndex());
+                launchSignatureActivity();
             }
         });
-        
-        
+
+
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -99,8 +102,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.addView(mErrorTextView);
 
         // and hide the sign button if read-only
-        if ( prompt.isReadOnly() ) {
-        	mSignButton.setVisibility(View.GONE);
+        if (prompt.isReadOnly()) {
+            mSignButton.setVisibility(View.GONE);
         }
         mErrorTextView.setVisibility(View.GONE);
 
@@ -112,8 +115,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             mImageView = new ImageView(getContext());
             mImageView.setId(QuestionWidget.newUniqueId());
             Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
+                    ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                            .getDefaultDisplay();
             int screenWidth = display.getWidth();
             int screenHeight = display.getHeight();
 
@@ -134,55 +137,56 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage", 
-                			"click", mPrompt.getIndex());
-                   	launchSignatureActivity();
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
+                            "click", mPrompt.getIndex());
+                    launchSignatureActivity();
                 }
             });
 
-            addView(mImageView);
+            answerLayout.addView(mImageView);
         }
         addAnswerView(answerLayout);
 
-	}
-	
-	private void launchSignatureActivity() {
+    }
+
+    private void launchSignatureActivity() {
         mErrorTextView.setVisibility(View.GONE);
-    	Intent i = new Intent(getContext(), DrawActivity.class);
-    	i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE);
+        Intent i = new Intent(getContext(), DrawActivity.class);
+        i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE);
         // copy...
-        if ( mBinaryName != null ) {
-        	File f = new File(mInstanceFolder + File.separator + mBinaryName);
-        	i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
+        if (mBinaryName != null) {
+            File f = new File(mInstanceFolder + File.separator + mBinaryName);
+            i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
-    	i.putExtra(DrawActivity.EXTRA_OUTPUT, 
-    			Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-    	
-    	try {
-	    	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
-	    	((Activity) getContext()).startActivityForResult(i, FormEntryActivity.SIGNATURE_CAPTURE);
-    	}
-    	catch (ActivityNotFoundException e) {
+        i.putExtra(DrawActivity.EXTRA_OUTPUT,
+                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+
+        try {
+            Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+            ((Activity) getContext()).startActivityForResult(i,
+                    FormEntryActivity.SIGNATURE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                getContext().getString(R.string.activity_not_found, "signature capture"),
-                Toast.LENGTH_SHORT).show();
-        	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                    getContext().getString(R.string.activity_not_found, "signature capture"),
+                    Toast.LENGTH_SHORT).show();
+            Collect.getInstance().getFormController().setIndexWaitingForData(null);
         }
-	}
-	
+    }
+
     private void deleteMedia() {
         // get the file path and delete the file
-    	String name = mBinaryName;
+        String name = mBinaryName;
         // clean up variables
-    	mBinaryName = null;
-    	// delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(mInstanceFolder + File.separator + name);
+        mBinaryName = null;
+        // delete from media provider
+        int del = MediaUtils.deleteImageFileFromMediaProvider(
+                mInstanceFolder + File.separator + name);
         Log.i(t, "Deleted " + del + " rows from media content provider");
     }
 
 
-	@Override
-	public void clearAnswer() {
+    @Override
+    public void clearAnswer() {
         // remove the file
         deleteMedia();
         mImageView.setImageBitmap(null);
@@ -190,21 +194,21 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
         // reset buttons
         mSignButton.setText(getContext().getString(R.string.sign_button));
-	}
+    }
 
-	
-	@Override
-	public IAnswerData getAnswer() {
+
+    @Override
+    public IAnswerData getAnswer() {
         if (mBinaryName != null) {
             return new StringData(mBinaryName.toString());
         } else {
             return null;
         }
-	}
+    }
 
-	
-	@Override
-	public void setBinaryData(Object answer) {
+
+    @Override
+    public void setBinaryData(Object answer) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (mBinaryName != null) {
@@ -215,7 +219,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         if (newImage.exists()) {
             // Add the new image to the Media content provider so that the
             // viewing is fast in Android 2.0+
-        	ContentValues values = new ContentValues(6);
+            ContentValues values = new ContentValues(6);
             values.put(Images.Media.TITLE, newImage.getName());
             values.put(Images.Media.DISPLAY_NAME, newImage.getName());
             values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
@@ -223,7 +227,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             values.put(Images.Media.DATA, newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
-            		Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Images.Media.EXTERNAL_CONTENT_URI, values);
             Log.i(t, "Inserting image returned uri = " + imageURI.toString());
 
             mBinaryName = newImage.getName();
@@ -232,35 +236,36 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
         }
 
-    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
-	@Override
-	public void setFocus(Context context) {
-		// Hide the soft keyboard if it's showing.
+    @Override
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-	}
+    }
 
 
-	@Override
-	public boolean isWaitingForBinaryData() {
-		return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
-	}
+    @Override
+    public boolean isWaitingForBinaryData() {
+        return mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController().getIndexWaitingForData());
+    }
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
-	
-	@Override
-	public void setOnLongClickListener(OnLongClickListener l) {
+    @Override
+    public void cancelWaitingForBinaryData() {
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
         mSignButton.setOnLongClickListener(l);
         if (mImageView != null) {
             mImageView.setOnLongClickListener(l);
         }
-	}
+    }
 
 
     @Override

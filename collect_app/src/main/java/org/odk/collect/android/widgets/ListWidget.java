@@ -14,11 +14,25 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import android.view.*;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -34,20 +48,9 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ListWidget handles select-one fields using radio buttons. The radio buttons are aligned
@@ -56,7 +59,7 @@ import android.widget.TextView;
  * easy to navigate quickly. Optionally, you can turn off the labels. This would be done if a label
  * widget was at the top of your field list to provide the labels. If audio or video are specified
  * in the select answers they are ignored.
- * 
+ *
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
@@ -67,7 +70,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     LinearLayout questionLayout;
 
     List<SelectChoice> mItems; // may take a while to compute
-    
+
     ArrayList<RadioButton> buttons;
     View center;
 
@@ -75,7 +78,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
         if (xPathFuncExpr != null) {
             mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
         } else {
@@ -111,7 +115,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 if (mItems.get(i) instanceof ExternalSelectChoice) {
                     imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                            FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
                 // build image view (if an image is provided)
@@ -119,25 +124,25 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 TextView mMissingImage = null;
 
                 final int labelId = QuestionWidget.newUniqueId();
-                
+
                 // Now set up the image view
                 String errorMsg = null;
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                            ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;
                             try {
                                 Display display =
-                                    ((WindowManager) getContext().getSystemService(
-                                        Context.WINDOW_SERVICE)).getDefaultDisplay();
+                                        ((WindowManager) getContext().getSystemService(
+                                                Context.WINDOW_SERVICE)).getDefaultDisplay();
                                 int screenWidth = display.getWidth();
                                 int screenHeight = display.getHeight();
                                 b =
-                                    FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                        screenWidth);
+                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
+                                                screenWidth);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
@@ -193,16 +198,18 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 LinearLayout answer = new LinearLayout(getContext());
                 answer.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams headerParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                                LayoutParams.WRAP_CONTENT);
                 headerParams.gravity = Gravity.CENTER_HORIZONTAL;
 
 
                 LinearLayout.LayoutParams buttonParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                                LayoutParams.WRAP_CONTENT);
                 buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
 
                 if (mImageView != null) {
-                	mImageView.setScaleType(ScaleType.CENTER);
+                    mImageView.setScaleType(ScaleType.CENTER);
                     if (!displayLabel) {
                         mImageView.setVisibility(View.GONE);
                     }
@@ -211,7 +218,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                     answer.addView(mMissingImage, headerParams);
                 } else {
                     if (displayLabel) {
-                    	label.setId(labelId);
+                        label.setId(labelId);
                         answer.addView(label, headerParams);
                     }
 
@@ -221,8 +228,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                 // Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
-                    new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT);
+                        new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
 
                 buttonLayout.addView(answer, answerParams);
@@ -232,7 +239,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.RIGHT_OF, center.getId());
         addView(buttonLayout, params);
     }
@@ -265,18 +273,18 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 
     public int getCheckedId() {
-    	for (int i=0; i < buttons.size(); ++i ) {
-    		RadioButton button = buttons.get(i);
-    		if (button.isChecked()) {
-    			return i;
-    		}
-    	}
+        for (int i = 0; i < buttons.size(); ++i) {
+            RadioButton button = buttons.get(i);
+            if (button.isChecked()) {
+                return i;
+            }
+        }
         return -1;
     }
 
@@ -293,8 +301,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 button.setChecked(false);
             }
         }
-       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
-    			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
+                mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
     }
 
 
@@ -322,7 +330,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         center.setId(QuestionWidget.newUniqueId());
         addView(center, centerParams);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.LEFT_OF, center.getId());
         addView(v, params);
     }

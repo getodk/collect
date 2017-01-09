@@ -14,20 +14,22 @@
 
 package org.odk.collect.android.database;
 
-import java.io.File;
-
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
 import android.util.Log;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+
+import java.io.File;
 
 
 /**
  * We've taken this from Android's SQLiteOpenHelper. However, we can't appropriately lock the
- * database so there may be issues if a thread opens the database read-only and another thread tries
+ * database so there may be issues if a thread opens the database read-only and another thread
+ * tries
  * to open the database read/write. I don't think this will ever happen in ODK, though. (fingers
  * crossed).
  */
@@ -58,7 +60,7 @@ public abstract class ODKSQLiteOpenHelper {
      * Create a helper object to create, open, and/or manage a database. The database is not
      * actually created or opened until one of {@link #getWritableDatabase} or
      * {@link #getReadableDatabase} is called.
-     * 
+     *
      * @param path to the file
      * @param name of the database file, or null for an in-memory database
      * @param factory to use for creating cursor objects, or null for the default
@@ -66,8 +68,9 @@ public abstract class ODKSQLiteOpenHelper {
      *            {@link #onUpgrade} will be used to upgrade the database
      */
     public ODKSQLiteOpenHelper(String path, String name, CursorFactory factory, int version) {
-        if (version < 1)
+        if (version < 1) {
             throw new IllegalArgumentException("Version must be >= 1, was " + version);
+        }
 
         mPath = path;
         mName = name;
@@ -84,7 +87,7 @@ public abstract class ODKSQLiteOpenHelper {
      * Errors such as bad permissions or a full disk may cause this operation to fail, but future
      * attempts may succeed if the problem is fixed.
      * </p>
-     * 
+     *
      * @throws SQLiteException if the database cannot be opened for writing
      * @return a read/write database object valid until {@link #close} is called
      */
@@ -147,8 +150,9 @@ public abstract class ODKSQLiteOpenHelper {
                 mDatabase = db;
             } else {
                 // if (mDatabase != null) mDatabase.unlock();
-                if (db != null)
+                if (db != null) {
                     db.close();
+                }
             }
         }
     }
@@ -161,7 +165,7 @@ public abstract class ODKSQLiteOpenHelper {
      * problem is fixed, a future call to {@link #getWritableDatabase} may succeed, in which case
      * the read-only database object will be closed and the read/write object will be returned in
      * the future.
-     * 
+     *
      * @throws SQLiteException if the database cannot be opened
      * @return a database object valid until {@link #getWritableDatabase} or {@link #close} is
      *         called.
@@ -178,8 +182,9 @@ public abstract class ODKSQLiteOpenHelper {
         try {
             return getWritableDatabase();
         } catch (SQLiteException e) {
-            if (mName == null)
+            if (mName == null) {
                 throw e; // Can't open a temp database read-only!
+            }
             Log.e(t, "Couldn't open " + mName + " for writing (will try read-only):", e);
         }
 
@@ -194,7 +199,8 @@ public abstract class ODKSQLiteOpenHelper {
                 Log.e(t, e.getMessage(), e);
                 String cardstatus = Environment.getExternalStorageState();
                 if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
-                    throw new RuntimeException(Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
+                    throw new RuntimeException(
+                            Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
                 } else {
                     throw e;
                 }
@@ -211,8 +217,9 @@ public abstract class ODKSQLiteOpenHelper {
             return mDatabase;
         } finally {
             mIsInitializing = false;
-            if (db != null && db != mDatabase)
+            if (db != null && db != mDatabase) {
                 db.close();
+            }
         }
     }
 
@@ -221,8 +228,9 @@ public abstract class ODKSQLiteOpenHelper {
      * Close any open database object.
      */
     public synchronized void close() {
-        if (mIsInitializing)
+        if (mIsInitializing) {
             throw new IllegalStateException("Closed during initialization");
+        }
 
         if (mDatabase != null && mDatabase.isOpen()) {
             mDatabase.close();
@@ -234,7 +242,7 @@ public abstract class ODKSQLiteOpenHelper {
     /**
      * Called when the database is created for the first time. This is where the creation of tables
      * and the initial population of the tables should happen.
-     * 
+     *
      * @param db The database.
      */
     public abstract void onCreate(SQLiteDatabase db);
@@ -249,7 +257,7 @@ public abstract class ODKSQLiteOpenHelper {
      * ALTER TABLE to insert them into a live table. If you rename or remove columns you can use
      * ALTER TABLE to rename the old table, then create the new table and then populate the new
      * table with the contents of the old table.
-     * 
+     *
      * @param db The database.
      * @param oldVersion The old database version.
      * @param newVersion The new database version.
@@ -260,7 +268,7 @@ public abstract class ODKSQLiteOpenHelper {
     /**
      * Called when the database has been opened. Override method should check
      * {@link SQLiteDatabase#isReadOnly} before updating the database.
-     * 
+     *
      * @param db The database.
      */
     public void onOpen(SQLiteDatabase db) {

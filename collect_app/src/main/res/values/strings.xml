@@ -132,7 +132,7 @@
 <string name="send_data">Send Finalized Form</string>
 <string name="send_data_button">Send Finalized Form (%s)</string>
 <string name="send_selected_data">Send Selected</string>
-<string name="server_auth_credentials">Please enter username and password for server:\n%s</string>
+<string name="server_auth_credentials">Please enter username and password for the server: %s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
 <string name="server_preferences">Server Settings</string>
@@ -225,11 +225,13 @@
 <string name="save_mid">Save Form</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
+<string name="admin_password">Admin Password</string>
 <string name="admin_password_changed">Admin password successfully changed</string>
 <string name="admin_password_disabled">Admin password disabled</string>
 <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
+<string name="change_admin_password">Change Admin Password</string>
 <string name="found_in_menu">Uncheck to hide from menu in Form Entry</string>
 <string name="autosend">Auto Send</string>
 <string name="autosend_wifi">Auto send with Wi-Fi</string>
@@ -342,11 +344,14 @@
 <string name="map_sdk_selector_title">Mapping SDK</string>
 <string name="map_sdk_behavior">Mapping SDK</string>
 <string name="google_maps_sdk">Google Maps SDK</string>
-<string name="openstreetmap_sdk">OpenStreet Map SDK</string>
+<string name="openstreetmap_sdk">OpenStreetMap SDK</string>
 <string name="show_map_sdk">Show Map SDK Options</string>
-<string name="openstreetmap">OpenStreetMap</string>
-<string name="mapquest_streets">MapQuest Streets</string>
-<string name="mapquest_satellite">MapQuest Satellite</string>
+<string name="openmap_streets">OSM Streets</string>
+<string name="openmap_usgs_topo">USGS National Map Topo</string>
+<string name="openmap_usgs_sat">USGS National Map Sat</string>
+<string name="openmap_stamen_terrain">Stamen Terrain</string>
+<string name="openmap_cartodb_positron">CartoDB Positron</string>
+<string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
 <string name="streets">Streets</string>
 <string name="terrain">Terrain</string>
 <string name="hybrid">Hybrid</string>
@@ -421,4 +426,6 @@
 <string name="selected_answer">Selected: %s</string>
 <string name="selected_answer_with_comma">%1$s, %2$s</string>
 <string name="version_number">Version: %s</string>
+<string name="general_settings_about">About</string>
+<string name="all_open_source_licenses">Open source licenses</string>
 </resources>
