@@ -423,7 +423,7 @@
 <string name="text2">text2</string>
 <string name="record_geopoint">Record GeoPoint</string>
 <string name="gps_result" formatted="false">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
-<string name="parser_exception">XPathParser Exception: " %s"</string>
+<string name="parser_exception">XPathParser Exception: \"%s\"</string>
 <string name="selected_answer">Selected: %s</string>
 <string name="selected_answer_with_comma">%1$s, %2$s</string>
 <string name="version_number">Version: %s</string>
