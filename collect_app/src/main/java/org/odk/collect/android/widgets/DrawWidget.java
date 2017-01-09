@@ -53,226 +53,226 @@ import java.io.File;
  * @author BehrAtherton@gmail.com
  */
 public class DrawWidget extends QuestionWidget implements IBinaryWidget {
-	private final static String t = "DrawWidget";
+    private final static String t = "DrawWidget";
 
-	private Button mDrawButton;
-	private String mBinaryName;
-	private String mInstanceFolder;
-	private ImageView mImageView;
-	private TextView mErrorTextView;
+    private Button mDrawButton;
+    private String mBinaryName;
+    private String mInstanceFolder;
+    private ImageView mImageView;
+    private TextView mErrorTextView;
 
-	public DrawWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+    public DrawWidget(Context context, FormEntryPrompt prompt) {
+        super(context, prompt);
 
-		mErrorTextView = new TextView(context);
-		mErrorTextView.setId(QuestionWidget.newUniqueId());
-		mErrorTextView.setText(R.string.selected_invalid_image);
+        mErrorTextView = new TextView(context);
+        mErrorTextView.setId(QuestionWidget.newUniqueId());
+        mErrorTextView.setText(R.string.selected_invalid_image);
 
-		mInstanceFolder = Collect.getInstance().getFormController()
-				.getInstancePath().getParent();
+        mInstanceFolder = Collect.getInstance().getFormController()
+                .getInstancePath().getParent();
 
-		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-		params.setMargins(7, 5, 7, 5);
-		// setup Blank Image Button
-		mDrawButton = new Button(getContext());
-		mDrawButton.setId(QuestionWidget.newUniqueId());
-		mDrawButton.setText(getContext().getString(R.string.draw_image));
-		mDrawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		mDrawButton.setPadding(20, 20, 20, 20);
-		mDrawButton.setEnabled(!prompt.isReadOnly());
-		mDrawButton.setLayoutParams(params);
-		// launch capture intent on click
-		mDrawButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Collect.getInstance()
-						.getActivityLogger()
-						.logInstanceAction(this, "drawButton", "click",
-								mPrompt.getIndex());
-				launchDrawActivity();
-			}
-		});
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+        // setup Blank Image Button
+        mDrawButton = new Button(getContext());
+        mDrawButton.setId(QuestionWidget.newUniqueId());
+        mDrawButton.setText(getContext().getString(R.string.draw_image));
+        mDrawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mDrawButton.setPadding(20, 20, 20, 20);
+        mDrawButton.setEnabled(!prompt.isReadOnly());
+        mDrawButton.setLayoutParams(params);
+        // launch capture intent on click
+        mDrawButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "drawButton", "click",
+                                mPrompt.getIndex());
+                launchDrawActivity();
+            }
+        });
 
-		// finish complex layout
-		LinearLayout answerLayout = new LinearLayout(getContext());
-		answerLayout.setOrientation(LinearLayout.VERTICAL);
-		answerLayout.addView(mDrawButton);
-		answerLayout.addView(mErrorTextView);
+        // finish complex layout
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(mDrawButton);
+        answerLayout.addView(mErrorTextView);
 
-		if (mPrompt.isReadOnly()) {
-			mDrawButton.setVisibility(View.GONE);
-		}
-		mErrorTextView.setVisibility(View.GONE);
+        if (mPrompt.isReadOnly()) {
+            mDrawButton.setVisibility(View.GONE);
+        }
+        mErrorTextView.setVisibility(View.GONE);
 
-		// retrieve answer from data model and update ui
-		mBinaryName = prompt.getAnswerText();
+        // retrieve answer from data model and update ui
+        mBinaryName = prompt.getAnswerText();
 
-		// Only add the imageView if the user has signed
-		if (mBinaryName != null) {
-			mImageView = new ImageView(getContext());
-			mImageView.setId(QuestionWidget.newUniqueId());
-			Display display = ((WindowManager) getContext().getSystemService(
-					Context.WINDOW_SERVICE)).getDefaultDisplay();
-			int screenWidth = display.getWidth();
-			int screenHeight = display.getHeight();
+        // Only add the imageView if the user has signed
+        if (mBinaryName != null) {
+            mImageView = new ImageView(getContext());
+            mImageView.setId(QuestionWidget.newUniqueId());
+            Display display = ((WindowManager) getContext().getSystemService(
+                    Context.WINDOW_SERVICE)).getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
 
-			File f = new File(mInstanceFolder + File.separator + mBinaryName);
+            File f = new File(mInstanceFolder + File.separator + mBinaryName);
 
-			if (f.exists()) {
-				Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f,
-						screenHeight, screenWidth);
-				if (bmp == null) {
-					mErrorTextView.setVisibility(View.VISIBLE);
-				}
-				mImageView.setImageBitmap(bmp);
-			} else {
-				mImageView.setImageBitmap(null);
-			}
+            if (f.exists()) {
+                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f,
+                        screenHeight, screenWidth);
+                if (bmp == null) {
+                    mErrorTextView.setVisibility(View.VISIBLE);
+                }
+                mImageView.setImageBitmap(bmp);
+            } else {
+                mImageView.setImageBitmap(null);
+            }
 
-			mImageView.setPadding(10, 10, 10, 10);
-			mImageView.setAdjustViewBounds(true);
-			mImageView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Collect.getInstance()
-							.getActivityLogger()
-							.logInstanceAction(this, "viewImage", "click",
-									mPrompt.getIndex());
-					launchDrawActivity();
-				}
-			});
+            mImageView.setPadding(10, 10, 10, 10);
+            mImageView.setAdjustViewBounds(true);
+            mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "viewImage", "click",
+                                    mPrompt.getIndex());
+                    launchDrawActivity();
+                }
+            });
 
-			answerLayout.addView(mImageView);
-		}
-		addAnswerView(answerLayout);
+            answerLayout.addView(mImageView);
+        }
+        addAnswerView(answerLayout);
 
-	}
+    }
 
-	private void launchDrawActivity() {
-		mErrorTextView.setVisibility(View.GONE);
-		Intent i = new Intent(getContext(), DrawActivity.class);
-		i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_DRAW);
-		// copy...
-		if (mBinaryName != null) {
-			File f = new File(mInstanceFolder + File.separator + mBinaryName);
-			i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
-		}
-		i.putExtra(DrawActivity.EXTRA_OUTPUT,
-				Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+    private void launchDrawActivity() {
+        mErrorTextView.setVisibility(View.GONE);
+        Intent i = new Intent(getContext(), DrawActivity.class);
+        i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_DRAW);
+        // copy...
+        if (mBinaryName != null) {
+            File f = new File(mInstanceFolder + File.separator + mBinaryName);
+            i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
+        }
+        i.putExtra(DrawActivity.EXTRA_OUTPUT,
+                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
 
-		try {
-			Collect.getInstance().getFormController()
-					.setIndexWaitingForData(mPrompt.getIndex());
-			((Activity) getContext()).startActivityForResult(i,
-					FormEntryActivity.DRAW_IMAGE);
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(
-					getContext(),
-					getContext().getString(R.string.activity_not_found,
-							"draw image"), Toast.LENGTH_SHORT).show();
-			Collect.getInstance().getFormController()
-					.setIndexWaitingForData(null);
-		}
-	}
+        try {
+            Collect.getInstance().getFormController()
+                    .setIndexWaitingForData(mPrompt.getIndex());
+            ((Activity) getContext()).startActivityForResult(i,
+                    FormEntryActivity.DRAW_IMAGE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "draw image"), Toast.LENGTH_SHORT).show();
+            Collect.getInstance().getFormController()
+                    .setIndexWaitingForData(null);
+        }
+    }
 
-	private void deleteMedia() {
-		// get the file path and delete the file
-		String name = mBinaryName;
-		// clean up variables
-		mBinaryName = null;
-		// delete from media provider
-		int del = MediaUtils.deleteImageFileFromMediaProvider(mInstanceFolder
-				+ File.separator + name);
-		Log.i(t, "Deleted " + del + " rows from media content provider");
-	}
+    private void deleteMedia() {
+        // get the file path and delete the file
+        String name = mBinaryName;
+        // clean up variables
+        mBinaryName = null;
+        // delete from media provider
+        int del = MediaUtils.deleteImageFileFromMediaProvider(mInstanceFolder
+                + File.separator + name);
+        Log.i(t, "Deleted " + del + " rows from media content provider");
+    }
 
-	@Override
-	public void clearAnswer() {
-		// remove the file
-		deleteMedia();
-		mImageView.setImageBitmap(null);
-		mErrorTextView.setVisibility(View.GONE);
+    @Override
+    public void clearAnswer() {
+        // remove the file
+        deleteMedia();
+        mImageView.setImageBitmap(null);
+        mErrorTextView.setVisibility(View.GONE);
 
-		// reset buttons
-		mDrawButton.setText(getContext().getString(R.string.draw_image));
-	}
+        // reset buttons
+        mDrawButton.setText(getContext().getString(R.string.draw_image));
+    }
 
-	@Override
-	public IAnswerData getAnswer() {
-		if (mBinaryName != null) {
-			return new StringData(mBinaryName.toString());
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public IAnswerData getAnswer() {
+        if (mBinaryName != null) {
+            return new StringData(mBinaryName.toString());
+        } else {
+            return null;
+        }
+    }
 
-	@Override
-	public void setBinaryData(Object answer) {
-		// you are replacing an answer. delete the previous image using the
-		// content provider.
-		if (mBinaryName != null) {
-			deleteMedia();
-		}
+    @Override
+    public void setBinaryData(Object answer) {
+        // you are replacing an answer. delete the previous image using the
+        // content provider.
+        if (mBinaryName != null) {
+            deleteMedia();
+        }
 
-		File newImage = (File) answer;
-		if (newImage.exists()) {
-			// Add the new image to the Media content provider so that the
-			// viewing is fast in Android 2.0+
-			ContentValues values = new ContentValues(6);
-			values.put(Images.Media.TITLE, newImage.getName());
-			values.put(Images.Media.DISPLAY_NAME, newImage.getName());
-			values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			values.put(Images.Media.DATA, newImage.getAbsolutePath());
+        File newImage = (File) answer;
+        if (newImage.exists()) {
+            // Add the new image to the Media content provider so that the
+            // viewing is fast in Android 2.0+
+            ContentValues values = new ContentValues(6);
+            values.put(Images.Media.TITLE, newImage.getName());
+            values.put(Images.Media.DISPLAY_NAME, newImage.getName());
+            values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
+            values.put(Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(Images.Media.DATA, newImage.getAbsolutePath());
 
-			Uri imageURI = getContext().getContentResolver().insert(
-					Images.Media.EXTERNAL_CONTENT_URI, values);
-			Log.i(t, "Inserting image returned uri = " + imageURI.toString());
+            Uri imageURI = getContext().getContentResolver().insert(
+                    Images.Media.EXTERNAL_CONTENT_URI, values);
+            Log.i(t, "Inserting image returned uri = " + imageURI.toString());
 
-			mBinaryName = newImage.getName();
-			Log.i(t, "Setting current answer to " + newImage.getName());
-		} else {
-			Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
-		}
+            mBinaryName = newImage.getName();
+            Log.i(t, "Setting current answer to " + newImage.getName());
+        } else {
+            Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
+        }
 
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
-	@Override
-	public void setFocus(Context context) {
-		// Hide the soft keyboard if it's showing.
-		InputMethodManager inputManager = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-	}
+    @Override
+    public void setFocus(Context context) {
+        // Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
 
-	@Override
-	public boolean isWaitingForBinaryData() {
-		return mPrompt.getIndex().equals(
-				Collect.getInstance().getFormController()
-						.getIndexWaitingForData());
-	}
+    @Override
+    public boolean isWaitingForBinaryData() {
+        return mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController()
+                        .getIndexWaitingForData());
+    }
 
-	@Override
-	public void cancelWaitingForBinaryData() {
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    @Override
+    public void cancelWaitingForBinaryData() {
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
-	@Override
-	public void setOnLongClickListener(OnLongClickListener l) {
-		mDrawButton.setOnLongClickListener(l);
-		if (mImageView != null) {
-			mImageView.setOnLongClickListener(l);
-		}
-	}
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        mDrawButton.setOnLongClickListener(l);
+        if (mImageView != null) {
+            mImageView.setOnLongClickListener(l);
+        }
+    }
 
-	@Override
-	public void cancelLongPress() {
-		super.cancelLongPress();
-		mDrawButton.cancelLongPress();
-		if (mImageView != null) {
-			mImageView.cancelLongPress();
-		}
-	}
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        mDrawButton.cancelLongPress();
+        if (mImageView != null) {
+            mImageView.cancelLongPress();
+        }
+    }
 
 }
