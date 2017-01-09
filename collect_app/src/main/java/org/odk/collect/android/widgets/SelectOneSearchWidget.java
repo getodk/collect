@@ -18,7 +18,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -46,7 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on input, the searched
+ * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
+ * input, the searched
  * options only appear which can then be chosen. This is used to narrow down the Select One options
  * For now, audio/video/image etc will be ignored
  *
@@ -68,7 +68,8 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         this.prompt = prompt;
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
         if (xPathFuncExpr != null) {
             mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
         } else {
@@ -165,7 +166,8 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
         buttonLayout.setOrientation(LinearLayout.VERTICAL);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, mSearchStr.getId());
         params.setMargins(10, 0, 10, 0);
@@ -181,20 +183,21 @@ public class SelectOneSearchWidget extends QuestionWidget implements
             public void afterTextChanged(Editable s) {
                 if (!s.toString().equals(oldText)) {
                     Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "searchTextChanged", s.toString(), getPrompt().getIndex());
+                            .logInstanceAction(this, "searchTextChanged", s.toString(),
+                                    getPrompt().getIndex());
                     doSearch(s.toString());
                 }
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+                    int after) {
                 oldText = s.toString();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+                    int count) {
             }
         });
     }

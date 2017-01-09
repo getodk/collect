@@ -63,12 +63,14 @@ enum ExternalDataSearchType {
         return keyword;
     }
 
-    public static ExternalDataSearchType getByKeyword(String keyword, ExternalDataSearchType fallback) {
+    public static ExternalDataSearchType getByKeyword(String keyword,
+            ExternalDataSearchType fallback) {
         if (keyword == null) {
             return fallback;
         }
         for (ExternalDataSearchType externalDataSearchType : ExternalDataSearchType.values()) {
-            if (externalDataSearchType.getKeyword().trim().toLowerCase().equals(keyword.trim().toLowerCase())) {
+            if (externalDataSearchType.getKeyword().trim().toLowerCase().equals(
+                    keyword.trim().toLowerCase())) {
                 return externalDataSearchType;
             }
         }

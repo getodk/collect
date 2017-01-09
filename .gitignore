@@ -4,3 +4,11 @@ build
 local.properties
 *.iml
 .DS_Store
+*.sublime-project
+
+# emacs backup files
+*.*~
+
+# gradle env props
+gradle.properties
+

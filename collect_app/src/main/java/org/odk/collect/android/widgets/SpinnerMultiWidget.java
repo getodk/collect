@@ -14,12 +14,16 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.view.ViewGroup;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -29,14 +33,8 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.util.TypedValue;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
@@ -46,7 +44,7 @@ import android.widget.TextView;
  * http://code.google.com/p/android/issues/detail?id=922 This bug causes text to be white in alert
  * boxes, which makes the select options invisible in this widget. For this reason, this widget
  * should not be used on phones with android versions lower than 2.0.
- * 
+ *
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SpinnerMultiWidget extends QuestionWidget {
@@ -74,7 +72,8 @@ public class SpinnerMultiWidget extends QuestionWidget {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
         if (xPathFuncExpr != null) {
             mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
         } else {
@@ -108,35 +107,36 @@ public class SpinnerMultiWidget extends QuestionWidget {
             public void onClick(View v) {
 
                 alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton(R.string.ok,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            boolean first = true;
-                            selectionText.setText("");
-                            for (int i = 0; i < selections.length; i++) {
-                                if (selections[i]) {
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                boolean first = true;
+                                selectionText.setText("");
+                                for (int i = 0; i < selections.length; i++) {
+                                    if (selections[i]) {
 
-                                    if (first) {
-                                        first = false;
-                                        selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                                answer_items[i].toString()));
-                                        selectionText.setVisibility(View.VISIBLE);
-                                    } else {
-                                        selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
-                                                selectionText.getText().toString(), answer_items[i].toString()));
+                                        if (first) {
+                                            first = false;
+                                            selectionText.setText(String.format(context.getString(R.string.selected_answer),
+                                                    answer_items[i].toString()));
+                                            selectionText.setVisibility(View.VISIBLE);
+                                        } else {
+                                            selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
+                                                    selectionText.getText().toString(), answer_items[i].toString()));
+                                        }
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
 
                 alert_builder.setMultiChoiceItems(answer_items, selections,
-                    new DialogInterface.OnMultiChoiceClickListener() {
+                        new DialogInterface.OnMultiChoiceClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            selections[which] = isChecked;
-                        }
-                    });
+                            @Override
+                            public void onClick(DialogInterface dialog, int which,
+                                                boolean isChecked) {
+                                selections[which] = isChecked;
+                            }
+                        });
                 AlertDialog alert = alert_builder.create();
                 alert.show();
             }
@@ -188,7 +188,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-    	clearFocus();
+        clearFocus();
         List<Selection> vc = new ArrayList<Selection>();
         for (int i = 0; i < mItems.size(); i++) {
             if (selections[i]) {
@@ -219,7 +219,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
 
     }

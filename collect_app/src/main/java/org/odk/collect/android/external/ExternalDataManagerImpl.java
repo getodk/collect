@@ -19,6 +19,7 @@
 package org.odk.collect.android.external;
 
 import android.util.Log;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -34,7 +35,8 @@ import java.util.Map;
  */
 public class ExternalDataManagerImpl implements ExternalDataManager {
 
-    private Map<String, ExternalSQLiteOpenHelper> dbMap = new HashMap<String, ExternalSQLiteOpenHelper>();
+    private Map<String, ExternalSQLiteOpenHelper> dbMap =
+            new HashMap<String, ExternalSQLiteOpenHelper>();
 
     private final File mediaFolder;
 
@@ -57,7 +59,8 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
             } else {
                 File dbFile = new File(mediaFolder, dataSetName + ".db");
                 if (!dbFile.exists()) {
-                    String msg = Collect.getInstance().getString(R.string.ext_import_csv_missing_error, dataSetName, dataSetName);
+                    String msg = Collect.getInstance().getString(
+                            R.string.ext_import_csv_missing_error, dataSetName, dataSetName);
                     Log.e(ExternalDataUtil.LOGGER_NAME, msg);
                     if (required) {
                         throw new ExternalDataException(msg);
@@ -77,7 +80,8 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
     public void close() {
         if (dbMap != null) {
             for (ExternalSQLiteOpenHelper externalSQLiteOpenHelper : dbMap.values()) {
-                Log.w(ExternalDataUtil.LOGGER_NAME, "Closing database handler:" + externalSQLiteOpenHelper.toString());
+                Log.w(ExternalDataUtil.LOGGER_NAME,
+                        "Closing database handler:" + externalSQLiteOpenHelper.toString());
                 externalSQLiteOpenHelper.close();
             }
         }

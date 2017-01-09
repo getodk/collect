@@ -22,26 +22,31 @@ import java.util.Map;
  * Represents the result of an HTTP request.  Adapted from Ruby's "Rack" Web interface.
  */
 public class Response {
-    
+
     /**
      * The HTTP status code
      */
     public int status;
-    
+
     /**
      * The HTTP headers received in the response
      */
-    public  Map<String, List<String>> headers;
-    
+    public Map<String, List<String>> headers;
+
     /**
      * The response body, if any
      */
     public byte[] body;
-    
-    public Response(int status,  Map<String, List<String>> headers, byte[] body) {
-        this.status = status; this.headers = headers; this.body = body;
+
+    public Response(int status, Map<String, List<String>> headers, byte[] body) {
+        this.status = status;
+        this.headers = headers;
+        this.body = body;
     }
-    public Response(int status,  Map<String, List<String>> headers, String body) {
-        this.status = status; this.headers = headers; this.body = body.getBytes();
+
+    public Response(int status, Map<String, List<String>> headers, String body) {
+        this.status = status;
+        this.headers = headers;
+        this.body = body.getBytes();
     }
 }

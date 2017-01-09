@@ -19,7 +19,6 @@
 package org.odk.collect.android.tasks;
 
 /**
- *
  * Author: Meletis Margaritis
  * Date: 15/3/2013
  * Time: 2:53 μμ
