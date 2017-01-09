@@ -1803,7 +1803,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance().getFormController();
             title = (formController == null) ? null : formController.getFormTitle();
             if (title == null) {
-                title = "<".concat(getString(R.string.no_form_loaded)).concat(">");
+                title = getString(R.string.no_form_loaded);
             }
         }
 
