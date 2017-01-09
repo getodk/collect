@@ -49,8 +49,7 @@ def getVersionName = { ->
             standardOutput = stdout
         }
         return stdout.toString().trim()
-    }
-    catch (ignored) {
+    } catch (ignored) {
         return null;
     }
 }
