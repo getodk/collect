@@ -403,8 +403,8 @@
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
 <string name="select_odk_shortcut">Select ODK Shortcut</string>
-<string name="bad_uri">Bad URI: </string>
-<string name="unrecognized_uri">Unrecognized URI: </string>
+<string name="bad_uri">Bad URI: %s</string>
+<string name="unrecognized_uri">Unrecognized URI: %s</string>
 <string name="no_form_loaded">no form loaded</string>
 <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>

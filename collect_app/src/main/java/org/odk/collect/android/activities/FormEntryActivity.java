@@ -354,7 +354,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             instanceCursor = getContentResolver().query(uri,
                                     null, null, null, null);
                             if (instanceCursor.getCount() != 1) {
-                                this.createErrorDialog(getString(R.string.bad_uri) + uri, EXIT);
+                                this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                                 return;
                             } else {
                                 instanceCursor.moveToFirst();
@@ -445,7 +445,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
                         if (c.getCount() != 1) {
-                            this.createErrorDialog(getString(R.string.bad_uri) + uri, EXIT);
+                            this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
                             c.moveToFirst();
@@ -508,7 +508,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 } else {
                     Log.e(t, "unrecognized URI");
-                    this.createErrorDialog(getString(R.string.unrecognized_uri) + uri, EXIT);
+                    this.createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
                     return;
                 }
 
