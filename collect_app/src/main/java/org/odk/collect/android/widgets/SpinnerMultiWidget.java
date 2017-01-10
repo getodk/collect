@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -109,22 +110,17 @@ public class SpinnerMultiWidget extends QuestionWidget {
                 alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                boolean first = true;
-                                selectionText.setText("");
+                                List<String> selectedValues = new ArrayList<>();
+
                                 for (int i = 0; i < selections.length; i++) {
                                     if (selections[i]) {
-
-                                        if (first) {
-                                            first = false;
-                                            selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                                    answer_items[i].toString()));
-                                            selectionText.setVisibility(View.VISIBLE);
-                                        } else {
-                                            selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
-                                                    selectionText.getText().toString(), answer_items[i].toString()));
-                                        }
+                                        selectedValues.add(answer_items[i].toString());
                                     }
                                 }
+
+                                selectionText.setText(String.format(context.getString(R.string.selected_answer),
+                                        TextUtils.join(", ", selectedValues)));
+                                selectionText.setVisibility(View.VISIBLE);
                             }
                         });
 
@@ -149,33 +145,22 @@ public class SpinnerMultiWidget extends QuestionWidget {
         }
 
         if (ve != null) {
-            boolean first = true;
-            for (int i = 0; i < selections.length; ++i) {
+            List<String> selectedValues = new ArrayList<>();
 
+            for (int i = 0; i < selections.length; i++) {
                 String value = mItems.get(i).getValue();
-                boolean found = false;
                 for (Selection s : ve) {
                     if (value.equals(s.getValue())) {
-                        found = true;
+                        selections[i] = true;
+                        selectedValues.add(answer_items[i].toString());
                         break;
                     }
                 }
-
-                selections[i] = found;
-
-                if (found) {
-                    if (first) {
-                        first = false;
-                        selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                answer_items[i].toString()));
-                        selectionText.setVisibility(View.VISIBLE);
-                    } else {
-                        selectionText.setText(String.format(context.getString(R.string.selected_answer_with_comma),
-                                selectionText.getText().toString(), answer_items[i].toString()));
-                    }
-                }
-
             }
+
+            selectionText.setText(String.format(context.getString(R.string.selected_answer),
+                    TextUtils.join(", ", selectedValues)));
+            selectionText.setVisibility(View.VISIBLE);
         }
 
         LinearLayout answerLayout = new LinearLayout(getContext());
