@@ -425,7 +425,6 @@
 <string name="gps_result" formatted="false">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
 <string name="parser_exception">XPathParser Exception: \"%s\"</string>
 <string name="selected_answer">Selected: %s</string>
-<string name="selected_answer_with_comma">%1$s, %2$s</string>
 <string name="version_number">Version: %s</string>
 <string name="general_settings_about">About</string>
 <string name="all_open_source_licenses">Open source licenses</string>
