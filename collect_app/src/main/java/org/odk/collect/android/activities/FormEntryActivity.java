@@ -25,8 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,7 +55,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -92,6 +89,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -201,6 +199,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private String mErrorMessage;
+    private boolean mShownAlertDialogIsGroupRepeat;
 
     // used to limit forward/backward swipes to one per question
     private boolean mBeenSwiped = false;
@@ -763,12 +762,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // field-lists,
         // repeat events, and indexes in field-lists that is not the containing
         // group.
-        if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-            createRepeatDialog();
-        } else {
-            View current = createView(event, false);
-            showView(current, AnimationType.FADE);
-        }
+
+        View current = createView(event, false);
+        showView(current, AnimationType.FADE);
     }
 
     @Override
@@ -888,9 +884,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = Collect.getInstance()
                 .getFormController();
-        // only try to save if the current event is a question or a field-list
-        // group
-        if (formController.currentPromptIsQuestion()) {
+        // only try to save if the current event is a question or a field-list group
+        // and current view is an ODKView (occasionally we show blank views that do not have any
+        // controls to save data from)
+        if (formController.currentPromptIsQuestion() && mCurrentView instanceof ODKView) {
             LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) mCurrentView)
                     .getAnswers();
             try {
@@ -936,26 +933,41 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-		/*
-		 * We don't have the right view here, so we store the View's ID as the
-		 * item ID and loop through the possible views to find the one the user
-		 * clicked on.
-		 */
-        for (QuestionWidget qw : ((ODKView) mCurrentView).getWidgets()) {
-            if (item.getItemId() == qw.getId()) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onContextItemSelected",
-                                "createClearDialog", qw.getPrompt().getIndex());
-                createClearDialog(qw);
-            }
-        }
         if (item.getItemId() == DELETE_REPEAT) {
             Collect.getInstance()
                     .getActivityLogger()
                     .logInstanceAction(this, "onContextItemSelected",
                             "createDeleteRepeatConfirmDialog");
             createDeleteRepeatConfirmDialog();
+        } else {
+            /*
+            * We don't have the right view here, so we store the View's ID as the
+            * item ID and loop through the possible views to find the one the user
+            * clicked on.
+            */
+            boolean shouldClearDialogBeShown;
+            for (QuestionWidget qw : ((ODKView) mCurrentView).getWidgets()) {
+                shouldClearDialogBeShown = false;
+                if (qw instanceof StringWidget) {
+                    for (int i = 0; i < qw.getChildCount(); i++) {
+                        if (item.getItemId() == qw.getChildAt(i).getId()) {
+                            shouldClearDialogBeShown = true;
+                            break;
+                        }
+                    }
+                } else if (item.getItemId() == qw.getId()) {
+                    shouldClearDialogBeShown = true;
+                }
+
+                if (shouldClearDialogBeShown) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "onContextItemSelected",
+                                    "createClearDialog", qw.getPrompt().getIndex());
+                    createClearDialog(qw);
+                    break;
+                }
+            }
         }
 
         return super.onContextItemSelected(item);
@@ -1001,87 +1013,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                View startView = View
-                        .inflate(this, R.layout.form_entry_start, null);
-                setTitle(getString(R.string.app_name) + " > "
-                        + formController.getFormTitle());
+                return createViewForFormBeginning(event, advancingPage, formController);
 
-                Drawable image = null;
-                File mediaFolder = formController.getMediaFolder();
-                String mediaDir = mediaFolder.getAbsolutePath();
-                BitmapDrawable bitImage = null;
-                // attempt to load the form-specific logo...
-                // this is arbitrarily silly
-                bitImage = new BitmapDrawable(getResources(), mediaDir + File.separator
-                        + "form_logo.png");
-
-                if (bitImage != null && bitImage.getBitmap() != null
-                        && bitImage.getIntrinsicHeight() > 0
-                        && bitImage.getIntrinsicWidth() > 0) {
-                    image = bitImage;
-                }
-
-                if (image == null) {
-                    // show the opendatakit zig...
-                    // image =
-                    // getResources().getDrawable(R.drawable.opendatakit_zig);
-                    ((ImageView) startView.findViewById(R.id.form_start_bling))
-                            .setVisibility(View.GONE);
-                } else {
-                    ImageView v = ((ImageView) startView
-                            .findViewById(R.id.form_start_bling));
-                    v.setImageDrawable(image);
-                    v.setContentDescription(formController.getFormTitle());
-                }
-
-                // change start screen based on navigation prefs
-                String navigationChoice = PreferenceManager
-                        .getDefaultSharedPreferences(this).getString(
-                                PreferencesActivity.KEY_NAVIGATION,
-                                PreferencesActivity.KEY_NAVIGATION);
-                Boolean useSwipe = false;
-                Boolean useButtons = false;
-                ImageView ia = ((ImageView) startView
-                        .findViewById(R.id.image_advance));
-                ImageView ib = ((ImageView) startView
-                        .findViewById(R.id.image_backup));
-                TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
-                TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
-                TextView d = ((TextView) startView.findViewById(R.id.description));
-
-                if (navigationChoice != null) {
-                    if (navigationChoice
-                            .contains(PreferencesActivity.NAVIGATION_SWIPE)) {
-                        useSwipe = true;
-                    }
-                    if (navigationChoice
-                            .contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
-                        useButtons = true;
-                    }
-                }
-                if (useSwipe && !useButtons) {
-                    d.setText(getString(R.string.swipe_instructions,
-                            formController.getFormTitle()));
-                } else if (useButtons && !useSwipe) {
-                    ia.setVisibility(View.GONE);
-                    ib.setVisibility(View.GONE);
-                    ta.setVisibility(View.GONE);
-                    tb.setVisibility(View.GONE);
-                    d.setText(getString(R.string.buttons_instructions,
-                            formController.getFormTitle()));
-                } else {
-                    d.setText(getString(R.string.swipe_buttons_instructions,
-                            formController.getFormTitle()));
-                }
-
-                if (mBackButton.isShown()) {
-                    mBackButton.setEnabled(false);
-                }
-                if (mNextButton.isShown()) {
-                    mNextButton.setEnabled(true);
-                }
-
-                return startView;
             case FormEntryController.EVENT_END_OF_FORM:
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 ((TextView) endView.findViewById(R.id.description))
@@ -1240,7 +1173,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
                     if (!qw.getPrompt().isReadOnly()) {
-                        registerForContextMenu(qw);
+                        // If it's a StringWidget register all its elements apart from EditText as
+                        // we want to enable paste option after long click on the EditText
+                        if (qw instanceof StringWidget) {
+                            for (int i = 0; i < qw.getChildCount(); i++) {
+                                if (!(qw.getChildAt(i) instanceof EditText)) {
+                                    registerForContextMenu(qw.getChildAt(i));
+                                }
+                            }
+                        } else {
+                            registerForContextMenu(qw);
+                        }
                     }
                 }
 
@@ -1249,6 +1192,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     mNextButton.setEnabled(true);
                 }
                 return odkv;
+
+            case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                createRepeatDialog();
+                return new EmptyView(this);
+
             default:
                 Log.e(t, "Attempted to create a view that does not exist.");
                 // this is badness to avoid a crash.
@@ -1261,6 +1209,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
                 return createView(event, advancingPage);
         }
+    }
+
+    private View createViewForFormBeginning(int event, boolean advancingPage,
+            FormController formController) {
+        try {
+            event = formController.stepToNextScreenEvent();
+
+        } catch (JavaRosaException e) {
+            Log.e(t, e.getMessage(), e);
+            createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+        }
+
+        return createView(event, advancingPage);
     }
 
     @Override
@@ -1306,8 +1267,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
 
             View next;
+
+            int originalEvent = formController.getEvent();
             int event = formController.stepToNextScreenEvent();
 
+            // Helps prevent transition animation at the end of the form (if user swipes left
+            // she will stay on the same screen)
+            if (originalEvent == event && originalEvent == FormEntryController.EVENT_END_OF_FORM) {
+                mBeenSwiped = false;
+                return;
+            }
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1321,11 +1290,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     break;
                 case FormEntryController.EVENT_END_OF_FORM:
                 case FormEntryController.EVENT_REPEAT:
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
-                    break;
-                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                    createRepeatDialog();
                     break;
                 case FormEntryController.EVENT_REPEAT_JUNCTURE:
                     Log.i(t, "repeat juncture: "
@@ -1360,6 +1327,22 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
             if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 int event = formController.stepToPreviousScreenEvent();
+
+                // If we are the begining of the form, lets revert our actions and ignore
+                // this swipe
+                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    event = formController.stepToNextScreenEvent();
+                    mBeenSwiped = false;
+
+                    // If we are not showing an empty view, then abort
+                    if (event == FormEntryController.EVENT_REPEAT && !(mCurrentView instanceof EmptyView)) {
+                        // Returning here prevents the same view sliding in when
+                        // - Form starts with a repeat group AND
+                        // - User has added several groups AND
+                        // - She is on the first group and swipes back
+                        return;
+                    }
+                }
 
                 if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
                         || event == FormEntryController.EVENT_GROUP
@@ -1573,11 +1556,21 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .getFormController();
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createRepeatDialog", "show");
+
+        // In some cases dialog might be present twice because refreshView() is being called
+        // from onResume(). This ensures that we do not preset this modal dialog if it's already
+        // visible. Checking for mShownAlertDialogIsGroupRepeat because the same field
+        // mAlertDialog is being used for all alert dialogs in this activity.
+        if (mAlertDialog != null && mAlertDialog.isShowing() && mShownAlertDialogIsGroupRepeat) {
+            return;
+        }
+
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
+                mShownAlertDialogIsGroupRepeat = false;
                 FormController formController = Collect.getInstance()
                         .getFormController();
                 switch (i) {
@@ -1665,6 +1658,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
         mAlertDialog.setCancelable(false);
         mBeenSwiped = false;
+        mShownAlertDialogIsGroupRepeat = true;
         mAlertDialog.show();
     }
 
@@ -1719,6 +1713,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         "show");
         FormController formController = Collect.getInstance()
                 .getFormController();
+
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = formController.getLastRepeatedGroupName();
@@ -1741,13 +1736,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
                         formController.deleteRepeat();
-                        showPreviousView();
+                        refreshCurrentView();
                         break;
+
                     case DialogInterface.BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "cancel");
+
+                        refreshCurrentView();
                         break;
                 }
             }
@@ -2558,7 +2556,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
-                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the next question
+                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
+                // next question
                 if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 }
@@ -2821,6 +2820,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             Toast.makeText(this, getString(R.string.save_point_error, errorMessage),
                     Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Used whenever we need to show empty view and be able to recognize it from the code
+     */
+    class EmptyView extends View {
+
+        public EmptyView(Context context) {
+            super(context);
         }
     }
 }

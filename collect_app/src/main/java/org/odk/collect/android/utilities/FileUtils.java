@@ -213,6 +213,43 @@ public class FileUtils {
         return b;
     }
 
+    /**
+     * With this method we do not care about efficient decoding and focus
+     * more on a precise scaling to maximize use of space on the screen
+     */
+    public static Bitmap getBitmapAccuratelyScaledToDisplay(File f, int screenHeight,
+            int screenWidth) {
+        // Determine image size of f
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+
+        // Load full size bitmap image
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inInputShareable = true;
+        options.inPurgeable = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+
+        // Figure out scale
+        double heightScale = ((double) (o.outHeight)) / screenHeight;
+        double widthScale = ((double) o.outWidth) / screenWidth;
+        double scale = Math.max(widthScale, heightScale);
+
+        double newHeight = Math.ceil(o.outHeight / scale);
+        double newWidth = Math.ceil(o.outWidth / scale);
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
+
+        if (bitmap != null) {
+            Log.i(t,
+                    "Screen is " + screenHeight + "x" + screenWidth
+                            + ".  Image has been scaled down by "
+                            + scale + " to " + bitmap.getHeight() + "x" + bitmap.getWidth());
+        }
+
+        return bitmap;
+    }
+
 
     public static String copyFile(File sourceFile, File destFile) {
         if (sourceFile.exists()) {

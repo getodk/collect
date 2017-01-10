@@ -39,6 +39,7 @@ import android.text.Spanned;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.OpenSourceLicensesActivity;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -65,6 +66,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_DELETE_AFTER_SEND = "delete_send";
 
     public static final String KEY_PROTOCOL = "protocol";
+    public static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
     public static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
 
     // leaving these in the main screen because username can be used as a
@@ -113,6 +115,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
 
     private PreferenceScreen mSplashPathPreference;
+    private PreferenceScreen mOpenSourceLicensesPreference;
     private ListPreference mSelectedGoogleAccountPreference;
     private ListPreference mFontSizePreference;
     private ListPreference mNavigationPreference;
@@ -171,6 +174,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
 
         mProtocolSettings = (PreferenceScreen) findPreference(KEY_PROTOCOL_SETTINGS);
+        mOpenSourceLicensesPreference = (PreferenceScreen) findPreference(KEY_OPEN_SOURCE_LICENSES);
 
         mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
@@ -399,6 +403,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         if (!(resolutionAvailable || adminMode)) {
             clientCategory.removePreference(highResolution);
         }
+
+        mOpenSourceLicensesPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getApplicationContext(), OpenSourceLicensesActivity.class));
+                return true;
+            }
+        });
 
         mSplashPathPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 

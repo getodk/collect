@@ -174,7 +174,7 @@ public final class WebUtils {
         }
         List<AuthScope> asList = buildAuthScopes(host);
         for (AuthScope a : asList) {
-            if (a.getScheme() == AuthSchemes.BASIC) {
+            if (a.getScheme().equalsIgnoreCase(AuthSchemes.BASIC)) {
                 ac.put(h, new BasicScheme());
             }
         }

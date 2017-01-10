@@ -14,7 +14,9 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -22,8 +24,12 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.javarosa.core.model.FormDef;
@@ -61,6 +67,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_CHANGE_SERVER = "change_server";
     public static String KEY_CHANGE_USERNAME = "change_username";
     public static String KEY_CHANGE_PASSWORD = "change_password";
+    public static String KEY_CHANGE_ADMIN_PASSWORD = "admin_password";
     public static String KEY_CHANGE_GOOGLE_ACCOUNT = "change_google_account";
     public static String KEY_CHANGE_PROTOCOL_SETTINGS = "change_protocol_settings";
     // client
@@ -118,6 +125,69 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                         return true;
                     }
                 });
+
+        Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+        mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AlertDialog.Builder b = new AlertDialog.Builder(AdminPreferencesActivity.this);
+
+                LayoutInflater factory = LayoutInflater.from(AdminPreferencesActivity.this);
+                final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
+
+                final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
+                final EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
+
+                b.setTitle(R.string.change_admin_password);
+                b.setView(dialogView);
+                b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String pw = passwordEditText.getText().toString();
+                        String ver = verifyEditText.getText().toString();
+
+                        if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
+                            // passwords are the same
+                            SharedPreferences.Editor editor = getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                            editor.putString(AdminPreferencesActivity.KEY_ADMIN_PW, pw);
+                            Toast.makeText(AdminPreferencesActivity.this,
+                                    R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
+                            editor.commit();
+                            dialog.dismiss();
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "AdminPasswordDialog", "CHANGED");
+                        } else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
+                            SharedPreferences.Editor editor = getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                            editor.putString(AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                            editor.commit();
+                            Toast.makeText(AdminPreferencesActivity.this,
+                                    R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "AdminPasswordDialog", "DISABLED");
+                        } else {
+                            Toast.makeText(AdminPreferencesActivity.this,
+                                    R.string.admin_password_mismatch, Toast.LENGTH_SHORT).show();
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "AdminPasswordDialog", "MISMATCH");
+                        }
+                    }
+                });
+                b.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Collect.getInstance().getActivityLogger().logAction(this, "AdminPasswordDialog", "CANCELLED");
+                    }
+                });
+
+                b.setCancelable(false);
+                AlertDialog dialog = b.create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                dialog.show();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -168,7 +238,6 @@ public class AdminPreferencesActivity extends PreferenceActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
