@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -42,6 +43,17 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
     protected EditTextPreference mServerUrlPreference;
     protected EditTextPreference mUsernamePreference;
     protected EditTextPreference mPasswordPreference;
+    protected boolean mCredentialsHaveChanged = false;
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mCredentialsHaveChanged) {
+            AuthDialogUtility.setWebCredentialsFromPreferences(getBaseContext());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +110,10 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
                 }
 
                 preference.setSummary(username);
+                clearCachedCrendentials();
 
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                        getBaseContext());
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                        getString(R.string.default_server_url));
-                Uri u = Uri.parse(server);
-                WebUtils.clearHostCredentials(u.getHost());
-                Collect.getInstance().getCookieStore().clear();
+                // To ensure we update current credentials in CredentialsProvider
+                mCredentialsHaveChanged = true;
 
                 return true;
             }
@@ -129,29 +137,35 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
                             return false;
                         }
 
-                        if (pw.length() > 0) {
-                            mPasswordPreference.setSummary("********");
-                        } else {
-                            mPasswordPreference.setSummary("");
-                        }
+                        maskPasswordSummary(pw);
+                        clearCachedCrendentials();
 
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                                getBaseContext());
-                        String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                                getString(R.string.default_server_url));
-                        Uri u = Uri.parse(server);
-                        WebUtils.clearHostCredentials(u.getHost());
-                        Collect.getInstance().getCookieStore().clear();
+                        // To ensure we update current credentials in CredentialsProvider
+                        mCredentialsHaveChanged = true;
 
                         return true;
                     }
                 });
-        if (mPasswordPreference.getText() != null
-                && mPasswordPreference.getText().length() > 0) {
-            mPasswordPreference.setSummary("********");
-        }
+
+        maskPasswordSummary(mPasswordPreference.getText());
         mPasswordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
+    }
+
+    private void maskPasswordSummary(String password) {
+        mPasswordPreference.setSummary(password != null && password.length() > 0
+                ? "********"
+                : "");
+    }
+
+    private void clearCachedCrendentials() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getBaseContext());
+        String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                getString(R.string.default_server_url));
+        Uri u = Uri.parse(server);
+        WebUtils.clearHostCredentials(u.getHost());
+        Collect.getInstance().getCookieStore().clear();
     }
 
 }

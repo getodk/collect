@@ -106,6 +106,9 @@
             android:name=".activities.DrawActivity"
             android:label="@string/app_name" />
         <activity
+            android:name=".activities.OpenSourceLicensesActivity"
+            android:label="@string/all_open_source_licenses" />
+        <activity
             android:name=".activities.GoogleDriveActivity"
             android:label="@string/app_name" 
             android:windowSoftInputMode="stateHidden"

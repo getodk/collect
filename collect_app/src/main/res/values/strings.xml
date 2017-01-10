@@ -132,7 +132,7 @@
 <string name="send_data">Send Finalized Form</string>
 <string name="send_data_button">Send Finalized Form (%s)</string>
 <string name="send_selected_data">Send Selected</string>
-<string name="server_auth_credentials">Please enter username and password for server:\n%s</string>
+<string name="server_auth_credentials">Please enter username and password for the server: %s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
 <string name="server_preferences">Server Settings</string>
@@ -225,11 +225,13 @@
 <string name="save_mid">Save Form</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
+<string name="admin_password">Admin Password</string>
 <string name="admin_password_changed">Admin password successfully changed</string>
 <string name="admin_password_disabled">Admin password disabled</string>
 <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
 <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
 <string name="enter_admin_password">Enter Admin Password</string>
+<string name="change_admin_password">Change Admin Password</string>
 <string name="found_in_menu">Uncheck to hide from menu in Form Entry</string>
 <string name="autosend">Auto Send</string>
 <string name="autosend_wifi">Auto send with Wi-Fi</string>
@@ -400,4 +402,6 @@
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
+<string name="general_settings_about">About</string>
+<string name="all_open_source_licenses">Open source licenses</string>
 </resources>

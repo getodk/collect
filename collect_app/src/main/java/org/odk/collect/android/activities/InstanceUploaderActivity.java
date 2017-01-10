@@ -36,6 +36,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ import java.util.Set;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener {
+public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
+        AuthDialogUtility.AuthDialogUtilityResultListener {
     private final static String TAG = "InstanceUploaderActiv";
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
@@ -295,77 +297,15 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                         + " instances!");
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
-                AlertDialog.Builder b = new AlertDialog.Builder(this);
 
-                LayoutInflater factory = LayoutInflater.from(this);
-                final View dialogView = factory.inflate(R.layout.server_auth_dialog, null);
 
                 // Get the server, username, and password from the settings
                 SharedPreferences settings =
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-                String server = mUrl;
-                if (server == null) {
-                    Log.e(TAG, "onCreateDialog(AUTH_DIALOG): No failing mUrl specified for upload of "
-                            + mInstancesToSend.length + " instances!");
-                    // if the bundle is null, we're looking for a formlist
-                    String submissionUrl = getString(R.string.default_odk_submission);
-                    server =
-                            settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                                    getString(R.string.default_server_url))
-                                    + settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
-                                    submissionUrl);
-                }
-
-                final String url = server;
-
-                Log.i(TAG, "Trying connecting to: " + url);
-
-                EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-                username.setText(storedUsername);
-
-                EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-                password.setText(storedPassword);
-
-                b.setTitle(getString(R.string.server_requires_auth));
-                b.setMessage(getString(R.string.server_auth_credentials, url));
-                b.setView(dialogView);
-                b.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "onCreateDialog.AUTH_DIALOG", "OK");
-                        EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-                        EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
-
-                        Uri u = Uri.parse(url);
-                        WebUtils.addCredentials(username.getText().toString(), password.getText()
-                                .toString(), u.getHost());
-
-                        showDialog(PROGRESS_DIALOG);
-                        mInstanceUploaderTask = new InstanceUploaderTask();
-
-                        // register this activity with the new uploader task
-                        mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
-
-                        mInstanceUploaderTask.execute(mInstancesToSend);
-                    }
-                });
-                b.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "onCreateDialog.AUTH_DIALOG", "cancel");
-                        finish();
-                    }
-                });
-
-                b.setCancelable(false);
-                return b.create();
+                return new AuthDialogUtility().createDialog(this, this);
         }
+
         return null;
     }
 
@@ -436,4 +376,18 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         mAlertDialog.show();
     }
 
+    @Override
+    public void updatedCredentials() {
+        showDialog(PROGRESS_DIALOG);
+        mInstanceUploaderTask = new InstanceUploaderTask();
+
+        // register this activity with the new uploader task
+        mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
+        mInstanceUploaderTask.execute(mInstancesToSend);
+    }
+
+    @Override
+    public void cancelledUpdatingCredentials() {
+        finish();
+    }
 }

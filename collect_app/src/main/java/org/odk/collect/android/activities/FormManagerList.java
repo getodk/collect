@@ -36,6 +36,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.utilities.ListViewUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import java.util.ArrayList;
@@ -96,29 +97,21 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 
         mToggleButton = (Button) findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean checkAll = false;
-                // if everything is checked, uncheck
-                if (mSelected.size() == mInstances.getCount()) {
-                    checkAll = false;
+                @Override
+                public void onClick(View v) {
+                    ListView lv = getListView();
+                    boolean allChecked = ListViewUtils.toggleChecked(lv);
+
+                    // sync up internal state
                     mSelected.clear();
-                    mDeleteButton.setEnabled(false);
-                } else {
-                    // otherwise check everything
-                    checkAll = true;
-                    for (int pos = 0; pos < FormManagerList.this.getListView().getCount(); pos++) {
-                        Long id = getListAdapter().getItemId(pos);
-                        if (!mSelected.contains(id)) {
-                            mSelected.add(id);
+                    if (allChecked) {
+                        // add all id's back to mSelected
+                        for (int pos = 0; pos < lv.getCount(); pos++) {
+                            mSelected.add(getListAdapter().getItemId(pos));
                         }
                     }
-                    mDeleteButton.setEnabled(true);
+                    mDeleteButton.setEnabled(allChecked);
                 }
-                for (int pos = 0; pos < FormManagerList.this.getListView().getCount(); pos++) {
-                    FormManagerList.this.getListView().setItemChecked(pos, checkAll);
-                }
-            }
         });
 
         String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";

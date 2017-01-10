@@ -7,6 +7,30 @@ apply plugin: 'checkstyle'
 
 com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
+ant.condition(property: "os", value: "windows") { os(family: "windows") }
+ant.condition(property: "os", value: "unix" ) { os(family: "unix") }
+
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            switch(ant.properties.os){
+                case 'windows':
+                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty'
+                    break
+                case 'unix':
+                    commandLine 'git', 'describe', '--tags', '--dirty'
+                    break
+            }
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null;
+    }
+}
+
 android {
     compileSdkVersion(22)
     buildToolsVersion("25.0.0")
@@ -16,7 +40,7 @@ android {
         minSdkVersion(9)
         targetSdkVersion(9)
         versionCode(1063)
-        versionName("1.4.12")
+        versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
     }
 
