@@ -404,4 +404,5 @@
 <string name="direction">Direction: %s</string>
 <string name="general_settings_about">About</string>
 <string name="all_open_source_licenses">Open source licenses</string>
+<string name="gdrive_exception_message">An error occurred. Do you want to try again?</string>
 </resources>
