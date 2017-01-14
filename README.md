@@ -34,10 +34,12 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 
 To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app.
 
-#### Google Drive API
+**Google Drive API**
+
 Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/).
 
-#### Google Maps API
+**Google Maps API**
+
 Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup). Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
  
 ## Contributing code
