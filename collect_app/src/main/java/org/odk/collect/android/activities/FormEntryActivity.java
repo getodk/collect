@@ -47,6 +47,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -180,6 +181,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
+    private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean mAutoSaved;
 
@@ -561,7 +563,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
-            Intent intent) {
+                                    final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -683,23 +685,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			 * Android 1.6) we want to handle images the audio and video
 			 */
 
-                // get gp of chosen file
-                Uri selectedImage = intent.getData();
-                String sourceImagePath = MediaUtils.getPathFromUri(this, selectedImage,
-                        Images.Media.DATA);
+                showDialog(SAVING_IMAGE_DIALOG);
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenImage(intent.getData());
+                    }
+                };
+                new Thread(runnable).start();
 
-                // Copy file to sdcard
-                String mInstanceFolder1 = formController.getInstancePath()
-                        .getParent();
-                String destImagePath = mInstanceFolder1 + File.separator
-                        + System.currentTimeMillis() + ".jpg";
-
-                File source = new File(sourceImagePath);
-                File newImage = new File(destImagePath);
-                FileUtils.copyFile(source, newImage);
-
-                ((ODKView) mCurrentView).setBinaryData(newImage);
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
@@ -740,6 +734,38 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         }
         refreshCurrentView();
+    }
+
+    private void saveChosenImage(Uri selectedImage) {
+        // Copy file to sdcard
+        String mInstanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+                .getParent();
+        String destImagePath = mInstanceFolder1 + File.separator
+                + System.currentTimeMillis() + ".jpg";
+
+        File chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
+        if (chosenImage != null) {
+            final File newImage = new File(destImagePath);
+            FileUtils.copyFile(chosenImage, newImage);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    ((ODKView) mCurrentView).setBinaryData(newImage);
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
+                }
+            });
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    Log.e(t, "Could not receive chosen image");
+                    showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                }
+            });
+        }
     }
 
     /**
@@ -2159,6 +2185,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         cancelSaveToDiskTask();
                     }
                 });
+                return mProgressDialog;
+
+            case SAVING_IMAGE_DIALOG:
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                mProgressDialog.setMessage(getString(R.string.please_wait));
+                mProgressDialog.setCancelable(false);
+
                 return mProgressDialog;
         }
         return null;
