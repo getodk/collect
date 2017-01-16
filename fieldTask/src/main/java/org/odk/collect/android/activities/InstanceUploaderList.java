@@ -94,7 +94,7 @@ public class InstanceUploaderList extends ListActivity implements
 				+ "=?";
 		String selectionArgs[] = { InstanceProviderAPI.STATUS_COMPLETE,
 				InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
-				InstanceProviderAPI.STATUS_SUBMITTED };
+				InstanceProviderAPI.STATUS_INCOMPLETE };			// smap SUBMITTED changed to INCOMPLETE
 		String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
 		Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection,
 				selectionArgs, sortOrder);
@@ -233,27 +233,9 @@ public class InstanceUploaderList extends ListActivity implements
             instanceIDs[i] = mSelected.get(i);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
-        if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-            // if it's Sheets, start the Sheets uploader
-            // first make sure we have a google account selected
-
-            String googleUsername = prefs.getString(
-                    PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-            if (googleUsername == null || googleUsername.equals("")) {
-                showDialog(GOOGLE_USER_DIALOG);
-                return;
-            }
-            Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
-            startActivityForResult(i, INSTANCE_UPLOADER);
-        } else {
-            // otherwise, do the normal agregate/other thing.
-            Intent i = new Intent(this, InstanceUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
-            startActivityForResult(i, INSTANCE_UPLOADER);
-        }
+        Intent i = new Intent(this, InstanceUploaderActivity.class);  // Smap no google sheets
+        i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
+        startActivityForResult(i, INSTANCE_UPLOADER);
     }
 
 	@Override
@@ -450,7 +432,8 @@ public class InstanceUploaderList extends ListActivity implements
 		alertDialog.show();
 		return true;
 	}
-	
+
+    /* smap no google dialog
 	@Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -470,5 +453,6 @@ public class InstanceUploaderList extends ListActivity implements
         }
         return null;
     }
+    */
 
 }

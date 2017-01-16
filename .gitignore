@@ -5,3 +5,7 @@ local.properties
 *.iml
 .DS_Store
 *.apk
+
+fieldTask-release/
+fieldTask/fieldTask-release/
+fieldTask/src/kontrolid

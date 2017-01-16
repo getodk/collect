@@ -8,7 +8,7 @@
 	the specific language governing permissions and limitations under the License. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- strings that should not be translated -->
-    <string translatable="false" name="app_name">FieldTask v4.02</string>
+    <string translatable="false" name="app_name">FieldTask v4.03</string>
     <string translatable="false" name="default_server_url">https://sg.smap.com.au</string>
     <string translatable="false" name="default_username">gplay</string>
     <string translatable="false" name="default_password">gplay</string>
