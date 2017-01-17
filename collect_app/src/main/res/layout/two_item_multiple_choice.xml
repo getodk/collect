@@ -6,6 +6,7 @@
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
 	the specific language governing permissions and limitations under the License. -->
 <org.odk.collect.android.views.TwoItemMultipleChoiceView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -32,7 +33,7 @@
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/checkbox"
             android:gravity="center_vertical"
-            android:text="@string/text1"
+            tools:text="text1"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -43,7 +44,7 @@
             android:layout_below="@+id/text1"
             android:layout_toLeftOf="@+id/checkbox"
             android:gravity="center_vertical"
-            android:text="@string/text2"
+            tools:text="text2"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
