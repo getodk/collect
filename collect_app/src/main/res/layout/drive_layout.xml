@@ -29,7 +29,7 @@ the License.
 
         <Button
                 android:id="@+id/back_button"
-                android:text="Go Back"
+                android:text="@string/go_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -37,7 +37,7 @@ the License.
                 android:layout_weight="1"/>
         <Button
                 android:id="@+id/download_button"
-                android:text="Download Selected"
+                android:text="@string/download_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"

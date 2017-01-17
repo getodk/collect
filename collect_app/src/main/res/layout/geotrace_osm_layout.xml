@@ -29,7 +29,7 @@
         />
 
     <Button
-        android:text="Record GeoPoint"
+        android:text="@string/record_geopoint"
         android:id="@+id/manual_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

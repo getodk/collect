@@ -130,13 +130,12 @@ public class MainMenuActivity extends Activity {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 Toast.makeText(this,
-                        "Settings successfully loaded from file",
+                        getString(R.string.settings_successfully_loaded_file_notification),
                         Toast.LENGTH_LONG).show();
                 f.delete();
             } else {
-                Toast.makeText(
-                        this,
-                        "Sorry, settings file is corrupt and should be deleted or replaced",
+                Toast.makeText(this,
+                        getString(R.string.corrupt_settings_file_notification),
                         Toast.LENGTH_LONG).show();
             }
         }
@@ -428,7 +427,7 @@ public class MainMenuActivity extends Activity {
                         getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                                                int whichButton) {
                                 String value = input.getText().toString();
                                 String pw = mAdminPreferences.getString(
                                         AdminPreferencesActivity.KEY_ADMIN_PW, "");

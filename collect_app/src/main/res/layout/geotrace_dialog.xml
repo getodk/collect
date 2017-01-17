@@ -33,9 +33,9 @@
         android:id="@+id/trace_number"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="detection frequency"
+        android:hint="@string/detection_frequency"
         android:visibility="gone"
-        android:text="200"
+        android:text="@string/two_hundred"
         android:inputType="number"
         android:imeActionLabel="Label" />
 

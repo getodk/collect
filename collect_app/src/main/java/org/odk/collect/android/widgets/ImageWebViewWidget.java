@@ -91,7 +91,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     }
 
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2,
-            float velocityX, float velocityY) {
+                                        float velocityX, float velocityY) {
         if (mImageDisplay == null
                 || mImageDisplay.getVisibility() != View.VISIBLE) {
             return false;
@@ -137,7 +137,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
-        mErrorTextView.setText("Selected file is not a valid image");
+        mErrorTextView.setText(R.string.selected_invalid_image);
 
         // setup capture button
         mCaptureButton = new Button(getContext());

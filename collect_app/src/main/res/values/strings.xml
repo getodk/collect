@@ -402,6 +402,28 @@
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
+<string name="select_odk_shortcut">Select ODK Shortcut</string>
+<string name="bad_uri">Bad URI: %s</string>
+<string name="unrecognized_uri">Unrecognized URI: %s</string>
+<!-- &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
+<string name="no_form_loaded">&lt;no form loaded&gt;</string>
+<string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
+<string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
+<string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>
+<string name="selected_invalid_image">Selected file is not a valid image</string>
+<string name="edited_osm_file">Edited OSM XML File:</string>
+<string name="invalid_osm_data">Something went wrong. We did not get valid OSM data.</string>
+<string name="alert">Alert</string>
+<string name="install_openmapkit">Please install OpenMapKit!</string>
+<string name="go_back">Go back</string>
+<string name="download_selected">Download Selected</string>
+<string name="detection_frequency">detection frequency</string>
+<string name="two_hundred">200</string>
+<string name="record_geopoint">Record GeoPoint</string>
+<string name="gps_result" formatted="false">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
+<string name="parser_exception">XPathParser Exception: \"%s\"</string>
+<string name="selected_answer">Selected: %s</string>
+<string name="version_number">Version: %s</string>
 <string name="general_settings_about">About</string>
 <string name="all_open_source_licenses">Open source licenses</string>
 </resources>
