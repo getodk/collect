@@ -101,14 +101,14 @@
   <string name="replace_location">Pakeisti vietovę</string>
   <string name="required_answer_error">Atsakymas į šį klausimą yra privalomas!</string>
   <string name="review_data">Taisyti užpildytą formą</string>
-  <string name="review_data_button">Taisyti užpildytą formą</string>
+  <string name="review_data_button">Taisyti užpildytą formą (%s)</string>
   <string name="saved_data">Nebaigta (%s)</string>
   <string name="save_all_answers">Išsaugoti formą</string>
   <string name="save_enter_data_description">Jūs esate \"%s\" pabaigoje.</string>
   <string name="saving_form">Forma išsaugoma</string>
   <string name="sending_items">Siunčiama %1$s iš %2$s formų</string>
   <string name="send_data">Išsiųsti užbaigtą formą</string>
-  <string name="send_data_button">Išsiųsti užbaigtą formą</string>
+  <string name="send_data_button">Išsiųsti užbaigtą formą (%s)</string>
   <string name="send_selected_data">Išsiųsti pažymėtas</string>
   <string name="server_requires_auth">Serveris reikalauja autentifikavimo</string>
   <string name="server_url">URL</string>

@@ -321,7 +321,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
   <string name="sheets_google_account_needed">Ați selectat  Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
-  <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %1%s. Nu am putut încărca datele în tabel.</string>
+  <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
   <string name="google_sheets_access_denied">Acces interzis. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
   <string name="google_sheets_update_error">Eroare la actualizarea foii de calcul. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>

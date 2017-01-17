@@ -423,7 +423,7 @@ public class DownloadFormsTask extends
                     }
                     String errMsg =
                             Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-                                    response.getStatusLine().getReasonPhrase(), statusCode);
+                                    response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
                     Log.e(t, errMsg);
                     throw new Exception(errMsg);
                 }
@@ -683,7 +683,7 @@ public class DownloadFormsTask extends
                 publishProgress(
                         Collect.getInstance().getString(R.string.form_download_progress,
                                 fd.formName,
-                                mediaCount, files.size()), Integer.valueOf(count).toString(),
+                                String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
                         Integer
                                 .valueOf(total).toString());
 //                try {

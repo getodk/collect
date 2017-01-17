@@ -207,7 +207,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         mLayers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog();
+                mHelper.showLayersDialog(GeoPointMapActivity.this);
             }
         });
         zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);

@@ -321,7 +321,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_google_account_needed">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
-  <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %1%s あります。スプレッドシートにアップロードできません。</string>
+  <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
   <string name="google_sheets_update_error">スプレッドシートの更新中にエラー。スプレッドシートの所有者が、書き込みアクセス許可を与えていることを確認してください。</string>

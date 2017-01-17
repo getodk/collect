@@ -146,8 +146,8 @@
   <string name="form_scan_starting">Inatafuta fomu.....</string>
   <string name="access_error">Hitilafu wakati wa kupata %s:</string>
   <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
-  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa% s</string>
-  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi:% s</string>
+  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>
+  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi: %s</string>
   <string name="manifest_tag_error">Wasilisho la Manifest %s linakosa vitambulisho moja au zaidi: jina la faili, hash, au downloadUrl</string>
   <string name="form_download_progress">%1$s. Kupata faili za vyombo vya habari: %2$s kati ya %3$s</string>
   <string name="file_fetch_failed">Hitilafu: %2$s (%3$s) katika %1$s</string>

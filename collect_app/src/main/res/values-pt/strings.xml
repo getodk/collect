@@ -110,8 +110,8 @@
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
   <string name="saving_form">Salvando Formulário</string>
   <string name="sending_items">Enviando %1$s de %2$s Formulário(s)</string>
-  <string name="send_data">Enviar Formulário Finalizado</string>
-  <string name="send_data_button">Enviar Formulário finalizado</string>
+  <string name="send_data">Enviar formulário finalizado</string>
+  <string name="send_data_button">Enviar formulário finalizado (%s)</string>
   <string name="send_selected_data">Enviar selecionado</string>
   <string name="server_requires_auth">Servidor Requer Autenticação</string>
   <string name="server_url">Servidor URL</string>
