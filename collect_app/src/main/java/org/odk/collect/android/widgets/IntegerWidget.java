@@ -24,6 +24,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.util.Locale;
+
 /**
  * Widget that restricts values to integers.
  *
@@ -74,7 +76,7 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(i.toString());
+            mAnswer.setText(String.format(Locale.ENGLISH, "%d", i));
         }
 
         setupChangeListener();
