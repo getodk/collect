@@ -52,7 +52,7 @@ import java.util.Set;
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
-    private final static String t = "InstanceUploaderActivity";
+    private final static String TAG = "InstanceUploaderActiv";
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
 
@@ -79,7 +79,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(t, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Log.i(TAG, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         mAlertMsg = getString(R.string.please_wait);
         mAlertShowing = false;
@@ -120,10 +120,10 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // at this point, we don't expect this to be empty...
         if (mInstancesToSend.length == 0) {
-            Log.e(t, "onCreate: No instances to upload!");
+            Log.e(TAG, "onCreate: No instances to upload!");
             // drop through -- everything will process through OK
         } else {
-            Log.i(t, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Log.i(TAG, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
@@ -148,7 +148,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onResume() {
-        Log.i(t, "onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
+        Log.i(TAG, "onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(this);
         }
@@ -181,7 +181,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onPause() {
-        Log.i(t, "onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
+        Log.i(TAG, "onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
         super.onPause();
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
@@ -205,7 +205,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        Log.i(t, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
+        Log.i(TAG, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
                 + mInstancesToSend.length + " instances!");
 
         try {
@@ -260,7 +260,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void progressUpdate(int progress, int total) {
-        mAlertMsg = getString(R.string.sending_items, progress, total);
+        mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         mProgressDialog.setMessage(mAlertMsg);
     }
 
@@ -293,7 +293,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case AUTH_DIALOG:
-                Log.i(t, "onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.length
+                Log.i(TAG, "onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.length
                         + " instances!");
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
@@ -329,7 +329,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 Long removeMe = Long.valueOf(itr.next());
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Log.i(t, removeMe
+                    Log.i(TAG, removeMe
                             + " was already sent, removing from queue before restarting task");
                 }
             }

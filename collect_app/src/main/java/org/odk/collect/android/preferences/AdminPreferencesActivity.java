@@ -307,7 +307,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.w("AdminPreferencesActivity",
+            Log.w("AdminPrefActivity",
                     "Unable to get EvalBehavior -- defaulting to recommended mode");
             mode = FormDef.recommendedMode;
         }

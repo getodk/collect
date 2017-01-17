@@ -321,7 +321,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_google_account_needed">Palvelimesi on Google Sheets, valitse vastaava Google-tili Yleisasetuksissa ennen jatkamista</string>
-  <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %1%s, eikä sitä voida lähettää työkirjaan. </string>
+  <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että työkirjan omistaja on myöntänyt pääsyn.</string>
   <string name="google_sheets_update_error">Virhe päivittäessä työkirjaa. Varmista että työkirjan omistaja on myöntänyt muokkausoikeuden.</string>

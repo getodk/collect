@@ -478,7 +478,7 @@ public class MainMenuActivity extends Activity {
             mFinalizedCursor.requery();
             mCompletedCount = mFinalizedCursor.getCount();
             if (mCompletedCount > 0) {
-                mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
+                mSendDataButton.setText(getString(R.string.send_data_button, String.valueOf(mCompletedCount)));
             } else {
                 mSendDataButton.setText(getString(R.string.send_data));
             }
@@ -493,7 +493,7 @@ public class MainMenuActivity extends Activity {
             mSavedCount = mSavedCursor.getCount();
             if (mSavedCount > 0) {
                 mReviewDataButton.setText(getString(R.string.review_data_button,
-                        mSavedCount));
+                        String.valueOf(mSavedCount)));
             } else {
                 mReviewDataButton.setText(getString(R.string.review_data));
             }
