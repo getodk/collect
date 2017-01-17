@@ -697,15 +697,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
+                Uri mediaUri = intent.getData();
+                saveAudioVideoAnswer(mediaUri);
+                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
+                if (filePath != null) {
+                    new File(filePath).delete();
+                }
+                getContentResolver().delete(mediaUri, null, null);
+                break;
             case AUDIO_CHOOSER:
             case VIDEO_CHOOSER:
-                // For audio/video capture/chooser, we get the URI from the content
-                // provider
-                // then the widget copies the file and makes a new entry in the
-                // content provider.
-                Uri media = intent.getData();
-                ((ODKView) mCurrentView).setBinaryData(media);
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                saveAudioVideoAnswer(intent.getData());
                 break;
             case LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -766,6 +768,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
             });
         }
+    }
+
+    private void saveAudioVideoAnswer(Uri media) {
+        // For audio/video capture/chooser, we get the URI from the content
+        // provider
+        // then the widget copies the file and makes a new entry in the
+        // content provider.
+        ((ODKView) mCurrentView).setBinaryData(media);
+        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
     /**
