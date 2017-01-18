@@ -104,14 +104,14 @@
   <string name="replace_location">Badili mahali</string>
   <string name="required_answer_error">Samahani, jibu hili linahitajika!</string>
   <string name="review_data">Hariri Fomu iliyohifadhiwa</string>
-  <string name="review_data_button">Hariri Fomu iliyohifadhiwa</string>
+  <string name="review_data_button">Hariri Fomu iliyohifadhiwa (%s)</string>
   <string name="saved_data">Si kamili (%s)</string>
   <string name="save_all_answers">Hifadhi Fomu</string>
   <string name="save_enter_data_description">Umefika mwisho wa \"%s\".</string>
   <string name="saving_form">Inahifadhi Fomu</string>
   <string name="sending_items">Inatuma %1$s ya %2$s fomu(s)</string>
   <string name="send_data">Tuma Fomu Zilizokamilika</string>
-  <string name="send_data_button">Tuma Fomu Zilizokamilika</string>
+  <string name="send_data_button">Tuma Fomu Zilizokamilika (%s)</string>
   <string name="send_selected_data">Tuma zilizochaguliwa</string>
   <string name="server_requires_auth">Seva Inahitaji Uthibitishaji</string>
   <string name="server_url">URL</string>

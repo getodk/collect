@@ -72,7 +72,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
-        mErrorTextView.setText("Selected file is not a valid image");
+        mErrorTextView.setText(R.string.selected_invalid_image);
 
         // setup Blank Image Button
         mSignButton = new Button(getContext());

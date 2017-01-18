@@ -180,7 +180,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog();
+                mHelper.showLayersDialog(GeoShapeGoogleMapActivity.this);
 
             }
         });

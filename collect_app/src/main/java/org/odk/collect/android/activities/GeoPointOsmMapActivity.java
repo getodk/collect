@@ -205,7 +205,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mLayersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog();
+                mHelper.showLayersDialog(GeoPointOsmMapActivity.this);
 
             }
         });

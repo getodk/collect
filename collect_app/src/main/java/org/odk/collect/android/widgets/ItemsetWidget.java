@@ -163,7 +163,7 @@ public class ItemsetWidget extends QuestionWidget implements
             } catch (XPathSyntaxException e) {
                 e.printStackTrace();
                 TextView error = new TextView(context);
-                error.setText("XPathParser Exception:  \"" + arguments.get(i) + "\"");
+                error.setText(String.format(getContext().getString(R.string.parser_exception), arguments.get(i)));
                 addAnswerView(error);
                 break;
             }

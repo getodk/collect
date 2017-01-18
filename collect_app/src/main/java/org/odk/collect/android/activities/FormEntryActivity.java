@@ -356,7 +356,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             instanceCursor = getContentResolver().query(uri,
                                     null, null, null, null);
                             if (instanceCursor.getCount() != 1) {
-                                this.createErrorDialog("Bad URI: " + uri, EXIT);
+                                this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                                 return;
                             } else {
                                 instanceCursor.moveToFirst();
@@ -377,7 +377,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                                 jrVersion = instanceCursor.isNull(idxJrVersion) ? null
                                         : instanceCursor
-                                                .getString(idxJrVersion);
+                                        .getString(idxJrVersion);
                             }
                         } finally {
                             if (instanceCursor != null) {
@@ -417,9 +417,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                                 jrFormId)
                                                 + ((jrVersion == null) ? ""
                                                 : "\n"
-                                                        + getString(R.string.version)
-                                                        + " "
-                                                        + jrVersion),
+                                                + getString(R.string.version)
+                                                + " "
+                                                + jrVersion),
                                         EXIT);
                                 return;
                             } else if (formCursor.getCount() > 1) {
@@ -447,7 +447,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
                         if (c.getCount() != 1) {
-                            this.createErrorDialog("Bad URI: " + uri, EXIT);
+                            this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
                             c.moveToFirst();
@@ -510,7 +510,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 } else {
                     Log.e(t, "unrecognized URI");
-                    this.createErrorDialog("Unrecognized URI: " + uri, EXIT);
+                    this.createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
                     return;
                 }
 
@@ -625,12 +625,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             case SIGNATURE_CAPTURE:
             case IMAGE_CAPTURE:
             /*
-			 * We saved the image to the tempfile_path, but we really want it to
-			 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-			 * we move it there before inserting it into the content provider.
-			 * Once the android image capture bug gets fixed, (read, we move on
-			 * from Android 1.6) we want to handle images the audio and video
-			 */
+             * We saved the image to the tempfile_path, but we really want it to
+             * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+             * we move it there before inserting it into the content provider.
+             * Once the android image capture bug gets fixed, (read, we move on
+             * from Android 1.6) we want to handle images the audio and video
+             */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
                 File fi = new File(Collect.TMPFILE_PATH);
@@ -652,11 +652,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case ALIGNED_IMAGE:
-			/*
-			 * We saved the image to the tempfile_path; the app returns the full
-			 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-			 * and move it into the instance folder.
-			 */
+            /*
+             * We saved the image to the tempfile_path; the app returns the full
+             * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+             * and move it into the instance folder.
+             */
                 String path = intent
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
@@ -677,13 +677,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CHOOSER:
-			/*
-			 * We have a saved image somewhere, but we really want it to be in:
-			 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-			 * it there before inserting it into the content provider. Once the
-			 * android image capture bug gets fixed, (read, we move on from
-			 * Android 1.6) we want to handle images the audio and video
-			 */
+            /*
+             * We have a saved image somewhere, but we really want it to be in:
+             * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+             * it there before inserting it into the content provider. Once the
+             * android image capture bug gets fixed, (read, we move on from
+             * Android 1.6) we want to handle images the audio and video
+             */
 
                 showDialog(SAVING_IMAGE_DIALOG);
                 Runnable runnable = new Runnable() {
@@ -943,7 +943,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
+                                    ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "onCreateContextMenu", "show");
@@ -1064,7 +1064,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
                     public CharSequence filter(CharSequence source, int start,
-                            int end, Spanned dest, int dstart, int dend) {
+                                               int end, Spanned dest, int dstart, int dend) {
                         for (int i = start; i < end; i++) {
                             if (Character.getType((source.charAt(i))) == Character.CONTROL) {
                                 return "";
@@ -1238,7 +1238,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private View createViewForFormBeginning(int event, boolean advancingPage,
-            FormController formController) {
+                                            FormController formController) {
         try {
             event = formController.stepToNextScreenEvent();
 
@@ -1495,14 +1495,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     // Hopefully someday we can use managed dialogs when the bugs are fixed
-	/*
-	 * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
-	 * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
-	 * (cupcake). We do use managed dialogs for our static loading
-	 * ProgressDialog. The main issue we noticed and are waiting to see fixed
-	 * is: onPrepareDialog() is not called after a screen orientation change.
-	 * http://code.google.com/p/android/issues/detail?id=1639
-	 */
+    /*
+     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
+     * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
+     * (cupcake). We do use managed dialogs for our static loading
+     * ProgressDialog. The main issue we noticed and are waiting to see fixed
+     * is: onPrepareDialog() is not called after a screen orientation change.
+     * http://code.google.com/p/android/issues/detail?id=1639
+     */
 
     //
 
@@ -1796,7 +1796,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     // but if you want save in the background, can't be current screen
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
-            boolean current) {
+                                   boolean current) {
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
@@ -1829,7 +1829,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance().getFormController();
             title = (formController == null) ? null : formController.getFormTitle();
             if (title == null) {
-                title = "<no form loaded>";
+                title = getString(R.string.no_form_loaded);
             }
         }
 
@@ -2063,7 +2063,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                                                int whichButton) {
                                 FormController formController = Collect
                                         .getInstance().getFormController();
                                 // Update the language in the content provider
@@ -2103,7 +2103,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                                                int whichButton) {
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
@@ -2618,7 +2618,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * @return status as determined in FormEntryController
      */
     public int saveAnswer(IAnswerData answer, FormIndex index,
-            boolean evaluateConstraints) throws JavaRosaException {
+                          boolean evaluateConstraints) throws JavaRosaException {
         FormController formController = Collect.getInstance()
                 .getFormController();
         if (evaluateConstraints) {
@@ -2725,7 +2725,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-            float velocityY) {
+                           float velocityY) {
         // only check the swipe if it's enabled in preferences
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -2807,7 +2807,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-            float distanceY) {
+                            float distanceY) {
         // The onFling() captures the 'up' event so our view thinks it gets long
         // pressed.
         // We don't wnat that, so cancel it.

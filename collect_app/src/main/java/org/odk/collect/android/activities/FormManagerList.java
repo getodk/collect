@@ -224,7 +224,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(getString(R.string.delete_file));
         mAlertDialog.setMessage(getString(R.string.delete_confirm,
-                mSelected.size()));
+                String.valueOf(mSelected.size())));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -306,7 +306,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         if (deletedForms == mSelected.size()) {
             // all deletes were successful
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.file_deleted_ok, deletedForms),
+                    getString(R.string.file_deleted_ok, String.valueOf(deletedForms)),
                     Toast.LENGTH_SHORT).show();
         } else {
             // had some failures
@@ -314,8 +314,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                     + " forms");
             Toast.makeText(
                     getApplicationContext(),
-                    getString(R.string.file_deleted_error, mSelected.size()
-                            - deletedForms, mSelected.size()),
+                    getString(R.string.file_deleted_error, String.valueOf(mSelected.size()
+                            - deletedForms), String.valueOf(mSelected.size())),
                     Toast.LENGTH_LONG).show();
         }
         mBackgroundTasks.mDeleteFormsTask = null;

@@ -111,14 +111,14 @@
   <string name="replace_location">Remplacer le Lieu</string>
   <string name="required_answer_error">Réponse obligatoire !</string>
   <string name="review_data">Éditer un Formulaire Sauvegardé</string>
-  <string name="review_data_button">Éditer un Formulaire Sauvegardé (%s)</string>
+  <string name="review_data_button">Éditer un formulaire sauvegardé (%s)</string>
   <string name="saved_data">Incomplet (%s)</string>
   <string name="save_all_answers">Sauvegarder le formulaire</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <string name="saving_form">Sauvegarde du Formulaire…</string>
   <string name="sending_items">Envoi de %1$s sur %2$s formulaire(s)</string>
-  <string name="send_data">Envoyer un Formulaire Finalisé</string>
-  <string name="send_data_button">Envoyer un Formulaire Finalisé</string>
+  <string name="send_data">Envoyer un formulaire finalisé</string>
+  <string name="send_data_button">Envoyer un formulaire finalisé (%s)</string>
   <string name="send_selected_data">Envoyer Eléments Sélectionnés</string>
   <string name="server_auth_credentials">Saisir le nom d\'utilisateur et mot de passe pour le serveur:\n%s</string>
   <string name="server_requires_auth">Le Serveur requiert une authentification</string>
@@ -322,7 +322,7 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="sheets_google_account_needed">Vous avez sélectionné Google Sheets comme serveur. Avant de continuer, merci de sélectionner le compte Google correspondant dans les paramètres généraux avant de continuer.</string>
-  <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %1%s. </string>
+  <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="google_sheets_access_denied">Accès refusé. Merci d’assurer que le propriétaire de la feuille de calcul vous a accordé l\'autorisation d\'accès.</string>
   <string name="google_sheets_update_error">Erreur de mis à jour de la feuille de calcul. Demandez le propriétaire d\'assurer votre accès en autorisation d\'écriture.</string>

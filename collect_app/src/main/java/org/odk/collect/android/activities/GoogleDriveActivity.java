@@ -64,6 +64,7 @@ import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentList;
 
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
@@ -740,11 +741,11 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
             for (int k = 0; k < fileItems.size(); k++) {
                 DriveListItem fileItem = fileItems.get(k);
 
-                String mediaDir = fileItem.getName().substring(0, fileItem.getName().length() - 4)
+                String mediaDirName = fileItem.getName().substring(0, fileItem.getName().length() - 4)
                         + "-media";
 
                 String requestString = "'" + fileItem.getParentId()
-                        + "' in parents and trashed=false and title='" + mediaDir + "'";
+                        + "' in parents and trashed=false and title='" + mediaDirName + "'";
                 Files.List request = null;
                 List<com.google.api.services.drive.model.File> driveFileList =
                         new ArrayList<com.google.api.services.drive.model.File>();
@@ -769,8 +770,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                 } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
                 if (driveFileList.size() > 1) {
-                    results.put(fileItem.getName(),
-                            "More than one media folder detected, please remove one and try again");
+                    results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
                     return results;
                 } else if (driveFileList.size() == 1) {
                     requestString = "'" + driveFileList.get(0).getId()
@@ -797,6 +797,31 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                         results.put(fileItem.getName(), e.getMessage());
                         return results;
                     }
+
+                    File mediaDir = new File(Collect.FORMS_PATH + File.separator + mediaDirName);
+                    if (!mediaDir.exists()) {
+                        mediaDir.mkdir();
+                    }
+
+                    for (com.google.api.services.drive.model.File file : mediaFileList) {
+                        InputStream is = downloadFile(service, file);
+
+                        File targetFile = new File(Collect.FORMS_PATH +
+                                File.separator + mediaDirName + File.separator + file.getTitle());
+
+                        try {
+                            if (is != null) {
+                                FileUtils.copyInputStreamToFile(is, targetFile);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            results.put(file.getTitle(), e.getMessage());
+                            return results;
+                        }
+
+                        results.put(file.getTitle(), Collect.getInstance().getString(R.string.success));
+                    }
+
                 } else {
                     // zero.. just downloda the .xml file
                 }

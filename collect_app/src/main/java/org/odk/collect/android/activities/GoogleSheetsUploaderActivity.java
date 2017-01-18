@@ -52,7 +52,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener {
-    private final static String tag = "GoogleSheetsUploaderActivity";
+    private final static String TAG = "SheetsUploaderActivity";
 
     private final static int PROGRESS_DIALOG = 1;
     private final static int GOOGLE_USER_DIALOG = 3;
@@ -73,7 +73,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(tag, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Log.i(TAG, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -110,11 +110,11 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
         // at this point, we don't expect this to be empty...
         if (mInstancesToSend.length == 0) {
-            Log.e(tag, "onCreate: No instances to upload!");
+            Log.e(TAG, "onCreate: No instances to upload!");
             // drop through --
             // everything will process through OK
         } else {
-            Log.i(tag, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Log.i(TAG, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
         }
 
         runTask();
@@ -163,7 +163,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // the user backed out
             finish();
         } else {
-            Log.e(tag, "unknown request: " + requestCode + " :: result: " + resultCode);
+            Log.e(TAG, "unknown request: " + requestCode + " :: result: " + resultCode);
         }
     }
 
@@ -230,7 +230,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // probably got an auth request, so ignore
             return;
         }
-        Log.i(tag, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
+        Log.i(TAG, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
                 + mInstancesToSend.length + " instances!");
 
         StringBuilder selection = new StringBuilder();
@@ -279,7 +279,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
     @Override
     public void progressUpdate(int progress, int total) {
-        mAlertMsg = getString(R.string.sending_items, progress, total);
+        mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         mProgressDialog.setMessage(mAlertMsg);
     }
 

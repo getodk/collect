@@ -78,7 +78,7 @@ import java.util.regex.Pattern;
 public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
-    private final static String tag = "GoogleSheetsInstanceUploaderTask";
+    private final static String TAG = "GoogleSheetsUploadTask";
 
     protected HashMap<String, String> mResults;
 
@@ -135,7 +135,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     if (md5 == null) {
                         // fail and exit
-                        Log.e(tag, "no md5");
+                        Log.e(TAG, "no md5");
                         return;
                     }
 
@@ -204,7 +204,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         if (columnNames.size() > 255) {
             mResults.put(id,
                     Collect.getInstance()
-                            .getString(R.string.sheets_max_columns, columnNames.size()));
+                            .getString(R.string.sheets_max_columns, String.valueOf(columnNames.size())));
             return false;
         }
 
@@ -843,7 +843,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     }
                     break;
                 default:
-                    Log.i(tag, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
                     break;
             }
             event = parser.next();
@@ -887,7 +887,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     path.remove(path.size() - 1);
                     break;
                 default:
-                    Log.i(tag, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
                     break;
             }
             event = parser.next();
