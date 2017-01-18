@@ -140,7 +140,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 //    Collect.getInstance().getActivityLogger().logAction(this,
                 // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
-                clearChoices();
             }
         });
 
