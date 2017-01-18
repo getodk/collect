@@ -418,7 +418,6 @@
 <string name="go_back">Go back</string>
 <string name="download_selected">Download Selected</string>
 <string name="detection_frequency">detection frequency</string>
-<string name="two_hundred">200</string>
 <string name="record_geopoint">Record GeoPoint</string>
 <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
 <string name="parser_exception">XPathParser Exception: \"%s\"</string>
