@@ -2589,8 +2589,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         Toast.LENGTH_LONG).show();
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                Toast.makeText(this, saveResult.getSaveErrorMessage() +
-                        " Form has not been saved as finalized", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, String.format(getString(R.string.encryption_error_message),
+                        saveResult.getSaveErrorMessage()), Toast.LENGTH_LONG).show();
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
