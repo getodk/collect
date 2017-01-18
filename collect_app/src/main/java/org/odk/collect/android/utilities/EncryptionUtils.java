@@ -295,7 +295,7 @@ public class EncryptionUtils {
      * @param mUri either an instance URI (if previously saved) or a form URI
      */
     public static EncryptedFormInformation getEncryptedFormInformation(Uri mUri,
-            InstanceMetadata instanceMetadata) {
+            InstanceMetadata instanceMetadata) throws EncryptionException {
 
         ContentResolver cr = Collect.getInstance().getContentResolver();
 
@@ -316,7 +316,7 @@ public class EncryptionUtils {
                     instanceCursor = cr.query(mUri, null, null, null, null);
                     if (instanceCursor.getCount() != 1) {
                         Log.e(t, "Not exactly one record for this instance!");
-                        return null; // save unencrypted.
+                        throw new EncryptionException("Not exactly one record for this instance!", null);
                     }
                     instanceCursor.moveToFirst();
                     String jrFormId = instanceCursor.getString(
@@ -342,15 +342,15 @@ public class EncryptionUtils {
                         null);
 
                 if (formCursor.getCount() != 1) {
-                    Log.e(t, "Not exactly one blank form matches this jr_form_id");
-                    return null; // save unencrypted
+                    Log.e(t, "Not exactly one blank form matches this jr_form_id.");
+                    throw new EncryptionException("Not exactly one blank form matches this jr_form_id", null);
                 }
                 formCursor.moveToFirst();
             } else if (cr.getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
                 formCursor = cr.query(mUri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
                     Log.e(t, "Not exactly one blank form!");
-                    return null; // save unencrypted.
+                    throw new EncryptionException("Not exactly one blank form!", null);
                 }
                 formCursor.moveToFirst();
             }
@@ -358,7 +358,7 @@ public class EncryptionUtils {
             formId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
             if (formId == null || formId.length() == 0) {
                 Log.e(t, "No FormId specified???");
-                return null;
+                throw new EncryptionException("No FormId specified???", null);
             }
             int idxVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
             int idxBase64RsaPublicKey = formCursor.getColumnIndex(
@@ -374,7 +374,7 @@ public class EncryptionUtils {
             int version = android.os.Build.VERSION.SDK_INT;
             if (version < 8) {
                 Log.e(t, "Phone does not support encryption.");
-                return null; // save unencrypted
+                throw new EncryptionException("Phone does not support encryption", null);
             }
 
             // this constructor will throw an exception if we are not
@@ -385,7 +385,8 @@ public class EncryptionUtils {
                 Log.e(t, "Phone does not have Base64 class but API level is "
                         + version);
                 e.printStackTrace();
-                return null; // save unencrypted
+                throw new EncryptionException("Phone does not have Base64 class but API level is "
+                        + version, e);
             }
 
             // OK -- Base64 decode (requires API Version 8 or higher)
@@ -397,14 +398,14 @@ public class EncryptionUtils {
             } catch (NoSuchAlgorithmException e) {
                 Log.e(t, "Phone does not support RSA encryption.");
                 e.printStackTrace();
-                return null;
+                throw new EncryptionException("Phone does not support RSA encryption.", e);
             }
             try {
                 pk = kf.generatePublic(publicKeySpec);
             } catch (InvalidKeySpecException e) {
                 e.printStackTrace();
                 Log.e(t, "Invalid RSA public key.");
-                return null;
+                throw new EncryptionException("Invalid RSA public key.", e);
             }
         } finally {
             if (formCursor != null) {
