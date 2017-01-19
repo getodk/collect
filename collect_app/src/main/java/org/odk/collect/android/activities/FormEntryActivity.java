@@ -69,6 +69,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -743,26 +744,38 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         String destImagePath = mInstanceFolder1 + File.separator
                 + System.currentTimeMillis() + ".jpg";
 
-        File chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-        if (chosenImage != null) {
-            final File newImage = new File(destImagePath);
-            FileUtils.copyFile(chosenImage, newImage);
+        File chosenImage;
+        try {
+            chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
+            if (chosenImage != null) {
+                final File newImage = new File(destImagePath);
+                FileUtils.copyFile(chosenImage, newImage);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        ((ODKView) mCurrentView).setBinaryData(newImage);
+                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                        refreshCurrentView();
+                    }
+                });
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        Log.e(t, "Could not receive chosen image");
+                        showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        } catch (GDriveConnectionException e) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     dismissDialog(SAVING_IMAGE_DIALOG);
-                    ((ODKView) mCurrentView).setBinaryData(newImage);
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                }
-            });
-        } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Log.e(t, "Could not receive chosen image");
-                    showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                    Log.e(t, "Could not receive chosen image due to connection problem");
+                    showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
         }
