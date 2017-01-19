@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.util.Base64;
 import android.view.ViewGroup;
 import android.widget.*;
 import org.javarosa.core.model.data.IAnswerData;
@@ -124,8 +125,9 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 	 */
 	@Override
 	public void setBinaryData(Object answer) {
-		mStringAnswer.setText((String) answer);
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        String x = (String) answer;
+        mStringAnswer.setText(x.replaceAll("\\p{C}", "?"));     // smap remove non printable characters
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
 	@Override
