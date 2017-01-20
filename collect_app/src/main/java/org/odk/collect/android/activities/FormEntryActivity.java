@@ -1360,18 +1360,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     event = formController.stepToNextScreenEvent();
                     mBeenSwiped = false;
 
-                    // If we are not showing an empty view, then abort
-                    if (event == FormEntryController.EVENT_REPEAT && !(mCurrentView instanceof EmptyView)) {
-                        // Returning here prevents the same view sliding in when
-                        // - Form starts with a repeat group AND
-                        // - User has added several groups AND
-                        // - She is on the first group and swipes back
+                    if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                        // Returning here prevents the same view sliding when user is on the first screen
                         return;
                     }
                 }
 
-                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
-                        || event == FormEntryController.EVENT_GROUP
+                if (event == FormEntryController.EVENT_GROUP
                         || event == FormEntryController.EVENT_QUESTION) {
                     // create savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
