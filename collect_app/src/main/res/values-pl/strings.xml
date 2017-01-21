@@ -321,6 +321,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Trwa proces wysyłania, spróbuj ponownie wkrótce</string>
   <string name="sheets_google_account_needed">Wybrałeś Google Sheets jako twój serwer, wybierz równie odpowiednie konto w Ustawieniach Ogólnych zanim będziesz kontynuował.</string>
+  <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
   <string name="google_sheets_access_denied">Brak dostępu. Upewnij się, że właściciel arkusza kalkulacyjnego udzielił Ci praw dostępu.</string>
   <string name="google_sheets_update_error">Błąd podczas aktualizacji arkusza kalkulacyjnego. Upewnij się, że właściciel arkusza kalkulacyjnego udzielił Ci praw zapisu.</string>

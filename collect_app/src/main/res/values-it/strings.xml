@@ -322,6 +322,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="sheets_google_account_needed">Hai selezionato Google Sheets come tuo server, perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
+  <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="google_sheets_access_denied">Accesso negato. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso.</string>
   <string name="google_sheets_update_error">Errore di caricamento del foglio. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso in modalità scrittura.</string>

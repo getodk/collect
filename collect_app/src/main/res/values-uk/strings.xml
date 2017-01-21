@@ -321,6 +321,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
   <string name="sheets_google_account_needed">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
+  <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
   <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
   <string name="google_sheets_update_error">Помилка оновлення Сторінок. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>

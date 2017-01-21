@@ -324,6 +324,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
   <string name="sheets_google_account_needed">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
+  <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_access_denied">Ligipääs keelatud. Palun veenduge, et arvutustabeli omanik on teile õigused võimaldanud.</string>
   <string name="google_sheets_update_error">Viga arvutustabeli uuendamisel. Palun veenduge, et arvutustabeli omanik on võimaldanud teile kirjutamise õigused.</string>

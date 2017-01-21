@@ -312,6 +312,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
   <string name="sheets_google_account_needed">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
+  <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
   <string name="google_sheets_access_denied">เข้าถึงไม่ได้ แน่ใจหรือไม่ว่าเจ้าของ spreadsheet ให้อนุญาตในการเข้าถึง</string>
   <string name="google_sheets_update_error">มีข้อผิดพลาดในการแก้ไข Spreadsheet โปรดตรวจสอบว่าเจ้าของ Spreadsheet อนุญาตให้คุณเข้าถึงได้</string>
