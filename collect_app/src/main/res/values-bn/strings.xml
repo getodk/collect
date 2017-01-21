@@ -119,7 +119,7 @@
   <string name="send_data">চূড়ান্ত ফরম পাঠান</string>
   <string name="send_data_button">চূড়ান্ত ফরম (%s) পাঠান</string>
   <string name="send_selected_data">নির্বাচিত ফরমটি পাঠান </string>
-  <string name="server_auth_credentials">দয়া করে সার্ভার server:\n%s এর জন্য ব্যবহারকারীর নির্দিষ্ট নাম ও পাসওয়ার্ড </string>
+  <string name="server_auth_credentials">দয়া করে সার্ভার server:%s এর জন্য ব্যবহারকারীর নির্দিষ্ট নাম ও পাসওয়ার্ড </string>
   <string name="server_requires_auth">সার্ভারে প্রমাণীকরণ অপরিহার্য আবশ্যক</string>
   <string name="server_url">ইউআরএল </string>
   <string name="server_preferences">সার্ভার নির্দিষ্টকরণ</string>
@@ -239,4 +239,5 @@
   <string name="clear">মুছে ফেলুন।</string>
   <string name="points_captured">পয়েন্ট নির্ধারন করা</string>
   <string name="direction">অভিমুখ: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

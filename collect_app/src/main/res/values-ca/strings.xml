@@ -120,7 +120,7 @@
   <string name="send_data">Enviar formulari finalitzat</string>
   <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
   <string name="send_selected_data">Enviar seleccionats</string>
-  <string name="server_auth_credentials">Si us plau, entrar nom d\'usuari i clau pel servidor:\n%s</string>
+  <string name="server_auth_credentials">Si us plau, entrar nom d\'usuari i clau pel servidor: %s</string>
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servidor</string>
@@ -321,7 +321,6 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
   <string name="sheets_google_account_needed">Heu seleccionat Google Sheets com servidor, seleccioneu el compte Google a Configuració general abans de continuar</string>
-  <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_access_denied">Accés denegat. Si us plau, assegureu-vos que teniu permís d\'accés a la fulla de càlcul.</string>
   <string name="google_sheets_update_error">Error actualitzant fulla. Comproveu que el propietari de la fulla de càlcul us ha atorgat permís d\'accés.</string>
@@ -330,4 +329,5 @@
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

@@ -121,7 +121,7 @@
   <string name="send_data">Invia Modulo Completato</string>
   <string name="send_data_button">Invia Modulo Completato (%s)</string>
   <string name="send_selected_data">Invia selezionato</string>
-  <string name="server_auth_credentials">Per favore inserisci la username e password per il server\n%s</string>
+  <string name="server_auth_credentials">Per favore inserisci la username e password per il server %s</string>
   <string name="server_requires_auth">Server richiede l\'autenticazione</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Impostazioni Server</string>
@@ -322,7 +322,6 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="sheets_google_account_needed">Hai selezionato Google Sheets come tuo server, perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
-  <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="google_sheets_access_denied">Accesso negato. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso.</string>
   <string name="google_sheets_update_error">Errore di caricamento del foglio. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso in modalità scrittura.</string>
@@ -335,7 +334,6 @@
   <string name="map_sdk_selector_title">Mappatura SDK</string>
   <string name="map_sdk_behavior">Mappatura SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreet Map SDK</string>
   <string name="show_map_sdk">Mostra Opzioni per mappa SDK</string>
   <string name="streets">Streets - Stradale</string>
   <string name="terrain">Terrain - Territoriale</string>
@@ -385,4 +383,27 @@
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
   <string name="bearing">Orientamento: %.3f </string>
   <string name="direction">Direzione: %s</string>
+  <string name="bad_uri">URI mal strutturato : %s</string>
+  <string name="unrecognized_uri">URI non riconosciuto : %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;nessun form caricato&gt;</string>
+  <string name="multiple_media_folders_detected_notification">Più di un cartella media rilevata, si prega di rimuovere una e riprovare</string>
+  <string name="settings_successfully_loaded_file_notification">Impostazioni caricate con successo da file</string>
+  <string name="corrupt_settings_file_notification">Spiacente, il file di impostazioni è danneggiato e deve essere cancellato o sostituito</string>
+  <string name="selected_invalid_image">Il file selezionato non è una valida immagine</string>
+  <string name="edited_osm_file">File XML di OSM modificato:</string>
+  <string name="invalid_osm_data">Qualcosa è andato storto. Non abbiamo ricevuto validi dati OSM.</string>
+  <string name="alert">Attenzione</string>
+  <string name="install_openmapkit">Per favore installare OpenMapKit!</string>
+  <string name="go_back">Torna indietro</string>
+  <string name="download_selected">Selezionato il download</string>
+  <string name="detection_frequency">rilevazione frequenza</string>
+  <string name="two_hundred">200</string>
+  <string name="record_geopoint">Registrare Coordinate</string>
+  <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
+  <string name="parser_exception">Eccezione XPathParser: \"%s\"</string>
+  <string name="selected_answer">Selezionato: %s</string>
+  <string name="version_number">Versione: %s</string>
+  <string name="general_settings_about">A proposito</string>
+  <string name="all_open_source_licenses">Licenze open source </string>
 </resources>

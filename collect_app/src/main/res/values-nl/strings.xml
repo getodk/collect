@@ -117,7 +117,7 @@
   <string name="send_data">Verstuur Afgeronde Formulieren</string>
   <string name="send_data_button">Upload afgerond formulier (%s)</string>
   <string name="send_selected_data">Verstuur selectie</string>
-  <string name="server_auth_credentials">Voer gebruikersnaam en wachtwoord in voor server:\n%s</string>
+  <string name="server_auth_credentials">Voer gebruikersnaam en wachtwoord in voor server: %s</string>
   <string name="server_requires_auth">Server vereist authenticatie</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>
@@ -292,4 +292,5 @@
   <string name="no_blank_search">Zoekveld mag niet leeg zijn.</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

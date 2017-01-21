@@ -120,7 +120,7 @@
   <string name="send_data">Enviar Formulario Finalizado</string>
   <string name="send_data_button">Enviar Formulario Finalizado (%s)</string>
   <string name="send_selected_data">Enviar seleccionado</string>
-  <string name="server_auth_credentials">Por favor ingrese el nombre del usuario y contraseña para el servidor:\n%s</string>
+  <string name="server_auth_credentials">Por favor ingrese el nombre del usuario y contraseña para el servidor: %s</string>
   <string name="server_requires_auth">El servidor requiere autenticacion</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Configuración del Servidor</string>
@@ -323,7 +323,6 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_google_account_needed">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
-  <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="google_sheets_access_denied">Acceso denegado. Asegurese de que dispone de permisos de acceso.</string>
   <string name="google_sheets_update_error">Error al actualizar la hoja. Asegurese de que dispone de permisos de acceso.</string>
@@ -336,7 +335,6 @@
   <string name="map_sdk_selector_title">Cartografía SDK</string>
   <string name="map_sdk_behavior">Cartografía SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">Mapa SDK OpenStreet</string>
   <string name="show_map_sdk">Mostrar Opciones del Mapa SDK</string>
   <string name="streets">Calles</string>
   <string name="terrain">Terreno</string>
@@ -374,4 +372,5 @@
   <string name="geoshape_view_change_location">Ver o cambiar FormaGeo</string>
   <string name="geotrace_view_change_location">Ver o cambiar RastroGeo</string>
   <string name="direction">Dirección: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>
