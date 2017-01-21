@@ -118,7 +118,7 @@
   <string name="send_data">Kirim formulir ke Server</string>
   <string name="send_data_button">Kirim formulir ke Server (%s)</string>
   <string name="send_selected_data">Kirim</string>
-  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server:\n%s</string>
+  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server: %s</string>
   <string name="server_requires_auth">Harap login untuk otentikasi</string>
   <string name="server_url">Tautan (URL)</string>
   <string name="server_preferences">Pengaturan Server</string>
@@ -310,4 +310,5 @@
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

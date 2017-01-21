@@ -120,7 +120,7 @@
   <string name="send_data">Trimiteți formular finalizat</string>
   <string name="send_data_button">Trimiteți formular finalizat (%s)</string>
   <string name="send_selected_data">Trimiteți selectatele</string>
-  <string name="server_auth_credentials">Vă rugăm să introduceți numele de utilizator și parola pentru server:\n%s</string>
+  <string name="server_auth_credentials">Vă rugăm să introduceți numele de utilizator și parola pentru server: %s</string>
   <string name="server_requires_auth">Serverul necesită autentificare</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Setări server</string>
@@ -334,7 +334,6 @@
   <string name="map_sdk_selector_title">SDK cartografiere</string>
   <string name="map_sdk_behavior">SDK cartografiere</string>
   <string name="google_maps_sdk">SDK Google Maps</string>
-  <string name="openstreetmap_sdk">SDK OpenStreet Map</string>
   <string name="show_map_sdk">Afișați opțiuni SDK hartă</string>
   <string name="streets">Străzi</string>
   <string name="terrain">Teren</string>
@@ -357,4 +356,5 @@
   <string name="polygon_save">Salvare ca poligon</string>
   <string name="polyline_save">Salvare ca Polyline</string>
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

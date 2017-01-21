@@ -119,7 +119,7 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="send_data">Odeslat dokončený dotazník</string>
   <string name="send_data_button">Odeslat dokončený dotazník (%s)</string>
   <string name="send_selected_data">Odeslat vybrané</string>
-  <string name="server_auth_credentials">Zadejte prosím uživatelské jméno a heslo pro server:\n%s</string>
+  <string name="server_auth_credentials">Zadejte prosím uživatelské jméno a heslo pro server: %s</string>
   <string name="server_requires_auth">Server vyžaduje přihlášení</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Nastavení serveru</string>
@@ -304,4 +304,5 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

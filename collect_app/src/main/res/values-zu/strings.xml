@@ -115,7 +115,7 @@
   <string name="send_data">Thumela kwefomu eliphelesiwe</string>
   <string name="send_data_button">Thumela kwefomu eliphelesiwe (%s)</string>
   <string name="send_selected_data">Thumela okukhethiwe</string>
-  <string name="server_auth_credentials">Sicela ufake igamamfihlo nenombolomfihlo kweseva:\n%s</string>
+  <string name="server_auth_credentials">Sicela ufake igamamfihlo nenombolomfihlo kweseva: %s</string>
   <string name="server_requires_auth">Iseva idinga isikhombosigxivizo</string>
   <string name="server_preferences">ukuhlelwa kweSeva</string>
   <string name="trigger">Kulungile. Ucelwa ukuba uqhubeke.</string>
@@ -263,4 +263,5 @@
   <string name="delete_after_send_summary">Cima amafomu nezekuxhumana emuva kokuthumela ku seva</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

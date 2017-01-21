@@ -60,7 +60,7 @@
   <string name="enter_data_button">Täida vorm</string>
   <string name="error_occured">Esines viga</string>
   <string name="error_attaching_binary_file">Meedia %s lisamisel esines viga </string>
-  <string name="fetching_file">Laen alla %1$s.\n\nvormi %2$s / %3$s vormi.</string>
+  <string name="fetching_file">Laen alla %1$s.\n\nVormi(id) (%2$s/%3$s).</string>
   <string name="file_deleted_error">Kahjuks ei õnnestunud kustutada %1$s / %2$s valitud vormidest.
 </string>
   <string name="file_deleted_ok">%s vorm(id) edukalt kustutatud!</string>
@@ -103,7 +103,7 @@
   <string name="password">Salasõna</string>
   <string name="play_audio">Mängi heli</string>
   <string name="play_video">Mängi videot</string>
-  <string name="please_wait">Palun oodake hetke.</string>
+  <string name="please_wait">Palun oodake.</string>
   <string name="please_wait_long">Palun oodake. See võib võtta mõne minuti.</string>
   <string name="quit_application">Välju %s</string>
   <string name="quit_entry">Salvesta vorm ja välju</string>
@@ -121,14 +121,14 @@
   <string name="send_data">Saada lõpetatud vorm</string>
   <string name="send_data_button">Saada lõpetatud vorm (%s)</string>
   <string name="send_selected_data">Saada valitud</string>
-  <string name="server_auth_credentials">Palun sisestage kasutajanimi ja salasõna serverisse:\n%s</string>
+  <string name="server_auth_credentials">Palun sisestage serveri %s kasutajanimi ja salasõna</string>
   <string name="server_requires_auth">Server nõuab autentimist</string>
-  <string name="server_url">veebiaadress</string>
+  <string name="server_url">Veebiaadress</string>
   <string name="server_preferences">Serveri seaded</string>
   <string name="toggle_selected">Vali kõik</string>
   <string name="trigger">Ok. Palun jätkake.</string>
   <string name="uploading_data">Saadan vormi</string>
-  <string name="url_error">Vabandage vale veebiaadress!</string>
+  <string name="url_error">Vabandage, vale veebiaadress!</string>
   <string name="username">Kasutajanimi</string>
   <string name="view_hierarchy">Liigu küsimusele</string>
   <string name="general_preferences">Üldseaded</string>
@@ -219,11 +219,13 @@
   <string name="save_mid">Salvesta vorm</string>
   <string name="enter_new_password">Sisesta uus salasõna</string>
   <string name="verify_new_password">Siesta uus salasõna uuesti</string>
+  <string name="admin_password">Administraatori salasõna</string>
   <string name="admin_password_changed">Administraatori salasõna muutmine õnnestus</string>
   <string name="admin_password_disabled">Administraatori salasõna on keelatud</string>
   <string name="admin_password_mismatch">Vabandage, salasõnad ei ühti!</string>
   <string name="admin_password_incorrect">Vabandust, salasõna on vale!</string>
   <string name="enter_admin_password">Sisestage administraatori salasõna</string>
+  <string name="change_admin_password">Muuda administraatori salasõna</string>
   <string name="found_in_menu">Vormi siestusmmenüüst eemaldamiseks puhasta väli</string>
   <string name="autosend">Automaatne saatmine</string>
   <string name="autosend_wifi">Automaatne saatmine, kui wifi ühendus</string>
@@ -335,8 +337,14 @@
   <string name="map_sdk_selector_title">Mapping SDK</string>
   <string name="map_sdk_behavior">Mapping SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreet Map SDK</string>
+  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Näita Map SDK valikuid</string>
+  <string name="openmap_streets">OSM Streets</string>
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">USGS National Map Sat</string>
+  <string name="openmap_stamen_terrain">Stamen Terrain</string>
+  <string name="openmap_cartodb_positron">CartoDB Positron</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="streets">Tänavad</string>
   <string name="terrain">Maastik</string>
   <string name="hybrid">Hübriid</string>
@@ -386,4 +394,7 @@
   <string name="geotrace_view_change_location">Vaata või muuda rada</string>
   <string name="bearing">Suund: %.3f</string>
   <string name="direction">Siht: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="general_settings_about">Teave</string>
+  <string name="all_open_source_licenses">Avatud lähtekoodi litsentsid</string>
 </resources>

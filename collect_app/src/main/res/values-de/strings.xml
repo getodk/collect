@@ -120,7 +120,7 @@
   <string name="send_data">Vollständiges Formular hochladen</string>
   <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <string name="send_selected_data">Auswahl hochladen</string>
-  <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben:\n%s</string>
+  <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben: %s</string>
   <string name="server_requires_auth">Server verlangt Authentifizierung</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servereinstellungen</string>
@@ -334,7 +334,6 @@
   <string name="map_sdk_selector_title">Karten-SDK</string>
   <string name="map_sdk_behavior">Karten-SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
   <string name="streets">Straßen</string>
   <string name="terrain">Gelände</string>
@@ -384,4 +383,5 @@
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
   <string name="bearing">Kompass-Peilung: %.3f</string>
   <string name="direction">Himmelsrichtung: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>
