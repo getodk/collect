@@ -110,6 +110,8 @@
   <string name="send_data">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္</string>
   <string name="send_data_button">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္ (%s)</string>
   <string name="send_selected_data">ေရြးခ်ယ္ထားေသာပံုစံမ်ားေပးပို႔ရန္</string>
+  <string name="server_auth_credentials">ဆာဗာ သံုးစြဲသူ အမည္ႏွင့္ လ်ိဳ႔၀ွက္နံပါတ္ ထည့္သြင္းရန္:
+%s</string>
   <string name="server_requires_auth">ဆာဗာမွ မွန္ကန္ေၾကာင္း ေထာက္ခံရန္လိုအပ္ပါသည္</string>
   <string name="server_url">ရင္းျမစ္ေနရာ</string>
   <string name="server_preferences">ဆာဗာ</string>
@@ -227,11 +229,9 @@
   <string name="swipe_navigation">Use horizontal swipes</string>
   <string name="buttons_navigation">Use forward/backward buttons</string>
   <string name="swipe_buttons_navigation">Use swipes and buttons</string>
-  <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
-  <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
-  <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

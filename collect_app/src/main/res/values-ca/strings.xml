@@ -120,7 +120,7 @@
   <string name="send_data">Enviar formulari finalitzat</string>
   <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
   <string name="send_selected_data">Enviar seleccionats</string>
-  <string name="server_auth_credentials">Si us plau, entrar nom d\'usuari i clau pel servidor:\n%s</string>
+  <string name="server_auth_credentials">Si us plau, entrar nom d\'usuari i clau pel servidor: %s</string>
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servidor</string>
@@ -330,4 +330,5 @@
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

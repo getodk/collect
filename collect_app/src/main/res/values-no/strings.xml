@@ -120,7 +120,7 @@
   <string name="send_data">Send ferdig skjema</string>
   <string name="send_data_button">Send ferdig skjema (%s)</string>
   <string name="send_selected_data">Send utvalgte</string>
-  <string name="server_auth_credentials">Skriv inn brukernavn og passord for serveren:\n%s</string>
+  <string name="server_auth_credentials">Skriv inn brukernavn og passord for serveren: %s</string>
   <string name="server_requires_auth">Server krever godkjenning</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>
@@ -330,4 +330,5 @@
   <string name="username_error_whitespace">Mellomrom er ikke tillatt før eller etter brukernavn</string>
   <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

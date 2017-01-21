@@ -118,7 +118,7 @@
   <string name="send_data">ส่งแบบสำรวจที่ทำเสร็จแล้ว</string>
   <string name="send_data_button">ส่งแบบสำรวจที่เสร็จสมบูรณ์แล้ว (%s)</string>
   <string name="send_selected_data">ส่งแบบสำรวจที่เลือกไว้</string>
-  <string name="server_auth_credentials">กรุณาใส่ชื่อผู้ใช้และรหัสผ่านสำหรับเซิร์ฟเวอร์:\n%s</string>
+  <string name="server_auth_credentials">กรุณาใส่ชื่อผู้ใช้และรหัสผ่านสำหรับเซิร์ฟเวอร์: %s</string>
   <string name="server_requires_auth">Server Requires Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">ตั้งค่าเซิร์ฟเวอร์</string>
@@ -322,4 +322,5 @@
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่
 </string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>
