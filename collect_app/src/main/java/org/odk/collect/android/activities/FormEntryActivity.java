@@ -1361,7 +1361,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     mBeenSwiped = false;
 
                     // If we are not showing an empty view, then abort
-                    if (event == FormEntryController.EVENT_REPEAT && !(mCurrentView instanceof EmptyView)) {
+                    if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                         // Returning here prevents the same view sliding in when
                         // - Form starts with a repeat group AND
                         // - User has added several groups AND
@@ -1370,8 +1370,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 }
 
-                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM
-                        || event == FormEntryController.EVENT_GROUP
+                if (event == FormEntryController.EVENT_GROUP
                         || event == FormEntryController.EVENT_QUESTION) {
                     // create savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
