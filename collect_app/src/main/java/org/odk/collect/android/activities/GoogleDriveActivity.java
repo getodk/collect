@@ -18,6 +18,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,6 +33,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -72,6 +74,7 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.utilities.ODKDialogFragment;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -494,6 +497,23 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
         mAlertDialog.show();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void createExceptionAlertDialog() {
+        ODKDialogFragment.ODKDialogBundle.Builder odkDialogBundle = new ODKDialogFragment.ODKDialogBundle.Builder();
+        odkDialogBundle
+                .setDialogTitle(getString(R.string.download_forms_result))
+                .setDialogMessage(getString(R.string.gdrive_exception_message))
+                .setLeftButtonText(getString(R.string.cancel))
+                .setLeftButtonAction(ODKDialogFragment.Action.FINISH)
+                .setRightButtonText(getString(R.string.ok))
+                .setRightButtonAction(ODKDialogFragment.Action.TRY_TO_LIST_FILES_FROM_GDRIVE_AGAIN)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setCancelable(false);
+
+        ODKDialogFragment odkDialogFragment = ODKDialogFragment.newInstance(odkDialogBundle.build());
+        odkDialogFragment.show(getFragmentManager(), "ODKDialogFragment");
+    }
+
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
             final Intent data) {
@@ -530,6 +550,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
             AsyncTask<String, HashMap<String, Object>, HashMap<String, Object>> {
 
         private TaskListener listener;
+        private boolean exceptionOccurred;
 
         public void setTaskListener(TaskListener tl) {
             listener = tl;
@@ -568,6 +589,8 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                     return null;
                 } catch (IOException e) {
                     e.printStackTrace();
+                    exceptionOccurred = true;
+                    return null;
                 }
 
                 rootId = rootfile.getId();
@@ -635,6 +658,9 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
         protected void onPostExecute(HashMap<String, Object> results) {
             super.onPostExecute(results);
             if (results == null) {
+                if (exceptionOccurred) {
+                    listener.taskException();
+                }
                 // was an auth request
                 return;
             }
@@ -919,6 +945,12 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
     }
 
     @Override
+    public void taskException() {
+        MyDrive = false;
+        createExceptionAlertDialog();
+    }
+
+    @Override
     protected void onPause() {
         if (mRetrieveDriveFileContentsAsyncTask != null) {
             mRetrieveDriveFileContentsAsyncTask.setTaskListener(null);
@@ -999,6 +1031,11 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
 
     public void listFiles(String dir) {
         listFiles(dir, null);
+    }
+
+    public void tryListFilesAgain() {
+        MyDrive = true;
+        listFiles(ROOT_KEY, null);
     }
 
 }

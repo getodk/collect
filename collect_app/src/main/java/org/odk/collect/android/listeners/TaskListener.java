@@ -20,4 +20,6 @@ import java.util.HashMap;
  */
 public interface TaskListener {
     void taskComplete(HashMap<String, Object> results);
+
+    void taskException();
 }
