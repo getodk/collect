@@ -280,15 +280,19 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         String secs = location.substring(0, location.indexOf(".")) + '"';
         if (type.equalsIgnoreCase("lon")) {
             if (degree.startsWith("-")) {
-                degree = "W " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.west), degree.replace("-", ""), mins, secs);
             } else {
-                degree = "E " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.east), degree.replace("-", ""), mins, secs);
             }
         } else {
             if (degree.startsWith("-")) {
-                degree = "S " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.south), degree.replace("-", ""), mins, secs);
             } else {
-                degree = "N " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.north), degree.replace("-", ""), mins, secs);
             }
         }
         return degree;
