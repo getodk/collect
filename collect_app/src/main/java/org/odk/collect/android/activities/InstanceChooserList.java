@@ -61,20 +61,18 @@ public class InstanceChooserList extends ListActivity {
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
         Intent i = this.getIntent();
-        String selection = null;
-        String[] selectionArgs = null;
+        String selection = InstanceColumns.STATUS + " = ?";
+        String selectionArgString;
 
         if(i.getStringExtra("Action").equalsIgnoreCase("EditSaved")){
             setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
-            selection = InstanceColumns.STATUS + " = ?";
-            selectionArgs = {InstanceProviderAPI.STATUS_INCOMPLETE};
+            selectionArgString= InstanceProviderAPI.STATUS_INCOMPLETE;
         }
         else{
             setTitle(getString(R.string.app_name) + " > " + getString(R.string.view_data));
-            selection = InstanceColumns.STATUS + " = ?";
-            selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+            selectionArgString = InstanceProviderAPI.STATUS_SUBMITTED;
         }
-
+        String[] selectionArgs = {selectionArgString};
         String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
         Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
 
