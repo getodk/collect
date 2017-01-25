@@ -409,7 +409,6 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="go_back">Retour</string>
   <string name="download_selected">Télécharger éléments sélectionnés </string>
   <string name="detection_frequency">Fréquence de détection</string>
-  <string name="two_hundred">200</string>
   <string name="record_geopoint">Enregistrer un GeoPoint</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
