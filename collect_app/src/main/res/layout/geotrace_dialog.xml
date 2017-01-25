@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -35,7 +36,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/detection_frequency"
         android:visibility="gone"
-        android:text="@string/two_hundred"
+        tools:text="200"
         android:inputType="number"
         android:imeActionLabel="Label" />
 
