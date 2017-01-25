@@ -173,12 +173,14 @@ public class DateTimeWidget extends QuestionWidget {
                 this.mDatePicker.setCalendarViewShown(false);
                 this.mDatePicker.setSpinnersShown(true);
             }
+            mTimePicker.setVisibility(GONE);
         } else if ("year".equals(appearance)) {
             hideMonth = true;
             if (Build.VERSION.SDK_INT >= 11) {
                 this.mDatePicker.setCalendarViewShown(false);
                 this.mDatePicker.setSpinnersShown(true);
             }
+            mTimePicker.setVisibility(GONE);
         } else if ("no-calendar".equals(appearance)) {
             if (Build.VERSION.SDK_INT >= 11) {
                 this.mDatePicker.setCalendarViewShown(false);
@@ -286,9 +288,11 @@ public class DateTimeWidget extends QuestionWidget {
         }
         clearFocus();
         DateTime ldt =
-                new DateTime(mDatePicker.getYear(), mDatePicker.getMonth() + 1,
-                        mDatePicker.getDayOfMonth(), mTimePicker.getCurrentHour(),
-                        mTimePicker.getCurrentMinute(), 0);
+                new DateTime(mDatePicker.getYear(),
+                        (!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1,
+                        (!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth(),
+                        (!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentHour(),
+                        (!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentMinute(), 0);
         //DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
         return new DateTimeData(ldt.toDate());
     }
