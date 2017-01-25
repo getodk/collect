@@ -15,8 +15,11 @@
 package org.odk.collect.android.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
@@ -119,6 +122,13 @@ public class Collect extends Application {
             e.printStackTrace();
         }
         return getString(R.string.app_name) + versionName;
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getInstance()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
     }
 
     /**

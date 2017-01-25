@@ -30,7 +30,9 @@ import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 
+import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.GDriveConnectionException;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -531,7 +533,7 @@ public class MediaUtils {
         return null;
     }
 
-    public static File getFileFromUri(final Context context, final Uri uri, String pathKey) {
+    public static File getFileFromUri(final Context context, final Uri uri, String pathKey) throws GDriveConnectionException {
         File file = null;
         String filePath = getPathFromUri(context, uri, pathKey);
         if (filePath != null) {
@@ -543,7 +545,10 @@ public class MediaUtils {
         return file;
     }
 
-    private static File getGoogleDriveFile(Context context, Uri uri) {
+    private static File getGoogleDriveFile(Context context, Uri uri) throws GDriveConnectionException {
+        if (!Collect.getInstance().isNetworkAvailable()) {
+            throw new GDriveConnectionException();
+        }
         if (uri == null) {
             return null;
         }
@@ -564,14 +569,11 @@ public class MediaUtils {
                 outputStream.write(bytes, 0, read);
             }
             return new File(filePath);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
-            try {
-                inputStream.close();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(outputStream);
         }
         return null;
     }
