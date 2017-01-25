@@ -408,7 +408,6 @@
   <string name="go_back">戻る</string>
   <string name="download_selected">選択済をダウンロード</string>
   <string name="detection_frequency">検出頻度</string>
-  <string name="two_hundred">200</string>
   <string name="record_geopoint">地理位置を記録</string>
   <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
   <string name="parser_exception">XPathParser 例外: \"%s\"</string>
