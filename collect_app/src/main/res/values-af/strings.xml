@@ -120,7 +120,7 @@
   <string name="send_data">Stuur Gefinaliseerde Vorm</string>
   <string name="send_data_button">Stuur Gefinaliseerde Vorm (%s)</string>
   <string name="send_selected_data">Stuur Geselekteerde</string>
-  <string name="server_auth_credentials">Voer asb gebruikersnaam en wagwoord vir server in:\n%s</string>
+  <string name="server_auth_credentials">Voer asb gebruikersnaam en wagwoord vir server in: %s</string>
   <string name="server_requires_auth">Server Benodig Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server Verstellings</string>
@@ -311,4 +311,6 @@
   <string name="change_server_url">Server URL</string>
   <string name="no_blank_search">Soek-veld mag nie leeg wees nie.</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

@@ -14,17 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -47,8 +36,20 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
+
+import java.io.File;
+
 /**
- * Widget that allows user to invoke the aligned-image camera to take pictures and add them to the form.
+ * Widget that allows user to invoke the aligned-image camera to take pictures and add them to the
+ * form.
  * Modified to launch the Aligned-image camera app.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
@@ -57,17 +58,18 @@ import android.widget.Toast;
  * @author Mitchell Tyler Lee
  */
 public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget {
-    private static final String ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT = "org.opendatakit.camera.TakePicture";
+    private static final String ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT =
+            "org.opendatakit.camera.TakePicture";
 
-	private static final String ODK_CAMERA_INTENT_PACKAGE = "org.opendatakit.camera";
+    private static final String ODK_CAMERA_INTENT_PACKAGE = "org.opendatakit.camera";
 
-	private static final String RETAKE_OPTION_EXTRA = "retakeOption";
+    private static final String RETAKE_OPTION_EXTRA = "retakeOption";
 
-	private static final String DIMENSIONS_EXTRA = "dimensions";
+    private static final String DIMENSIONS_EXTRA = "dimensions";
 
-	private static final String FILE_PATH_EXTRA = "filePath";
+    private static final String FILE_PATH_EXTRA = "filePath";
 
-	private final static String t = "AlignedImageWidget";
+    private final static String t = "AlignedImageWidget";
 
     private Button mCaptureButton;
     private Button mChooseButton;
@@ -87,15 +89,15 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         String appearance = prompt.getAppearanceHint();
         String alignments = appearance.substring(appearance.indexOf(":") + 1);
         String[] splits = alignments.split(" ");
-        if ( splits.length != 6 ) {
-        	Log.w(t, "Only have " + splits.length + " alignment values");
+        if (splits.length != 6) {
+            Log.w(t, "Only have " + splits.length + " alignment values");
         }
-        for ( int i = 0 ; i < 6 ; ++i ) {
-        	if ( splits.length < i ) {
-        		iArray[i] = 0;
-        	} else {
-        		iArray[i] = Integer.valueOf(splits[i]);
-        	}
+        for (int i = 0; i < 6; ++i) {
+            if (splits.length < i) {
+                iArray[i] = 0;
+            } else {
+                iArray[i] = Integer.valueOf(splits[i]);
+            }
         }
 
         mInstanceFolder =
@@ -106,7 +108,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
         mErrorTextView = new TextView(context);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
-        mErrorTextView.setText("Selected file is not a valid image");
+        mErrorTextView.setText(R.string.selected_invalid_image);
 
         // setup capture button
         mCaptureButton = new Button(getContext());
@@ -121,13 +123,13 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
-            			"click", mPrompt.getIndex());
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
+                        "click", mPrompt.getIndex());
                 mErrorTextView.setVisibility(View.GONE);
 
                 Intent i = new Intent();
                 i.setComponent(new ComponentName(ODK_CAMERA_INTENT_PACKAGE,
-                					ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT));
+                        ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT));
                 i.putExtra(FILE_PATH_EXTRA, Collect.CACHE_PATH);
                 i.putExtra(DIMENSIONS_EXTRA, iArray);
                 i.putExtra(RETAKE_OPTION_EXTRA, false);
@@ -143,14 +145,16 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
                 try {
-                	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                    Collect.getInstance().getFormController().setIndexWaitingForData(
+                            mPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.ALIGNED_IMAGE);
+                            FormEntryActivity.ALIGNED_IMAGE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found, "aligned image capture"),
-                        Toast.LENGTH_SHORT).show();
-                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                            getContext().getString(R.string.activity_not_found,
+                                    "aligned image capture"),
+                            Toast.LENGTH_SHORT).show();
+                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
                 }
 
             }
@@ -169,22 +173,22 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         mChooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               	Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
-            			"click", mPrompt.getIndex());
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
+                        "click", mPrompt.getIndex());
                 mErrorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
 
                 try {
-					Collect.getInstance().getFormController()
-							.setIndexWaitingForData(mPrompt.getIndex());
+                    Collect.getInstance().getFormController()
+                            .setIndexWaitingForData(mPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.IMAGE_CHOOSER);
+                            FormEntryActivity.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found, "choose image"),
-                        Toast.LENGTH_SHORT).show();
-                	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                            getContext().getString(R.string.activity_not_found, "choose image"),
+                            Toast.LENGTH_SHORT).show();
+                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
                 }
 
             }
@@ -198,9 +202,9 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         answerLayout.addView(mErrorTextView);
 
         // and hide the capture and choose button if read-only
-        if ( prompt.isReadOnly() ) {
-        	mCaptureButton.setVisibility(View.GONE);
-        	mChooseButton.setVisibility(View.GONE);
+        if (prompt.isReadOnly()) {
+            mCaptureButton.setVisibility(View.GONE);
+            mChooseButton.setVisibility(View.GONE);
         }
         mErrorTextView.setVisibility(View.GONE);
 
@@ -212,8 +216,8 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             mImageView = new ImageView(getContext());
             mImageView.setId(QuestionWidget.newUniqueId());
             Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
+                    ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+                            .getDefaultDisplay();
             int screenWidth = display.getWidth();
             int screenHeight = display.getHeight();
 
@@ -234,19 +238,21 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   	Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton",
-                			"click", mPrompt.getIndex());
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton",
+                            "click", mPrompt.getIndex());
                     Intent i = new Intent("android.intent.action.VIEW");
-                    Uri uri = MediaUtils.getImageUriFromMediaProvider(mInstanceFolder + File.separator + mBinaryName);
-                	if ( uri != null ) {
-                        Log.i(t,"setting view path to: " + uri);
+                    Uri uri = MediaUtils.getImageUriFromMediaProvider(
+                            mInstanceFolder + File.separator + mBinaryName);
+                    if (uri != null) {
+                        Log.i(t, "setting view path to: " + uri);
                         i.setDataAndType(uri, "image/*");
                         try {
                             getContext().startActivity(i);
                         } catch (ActivityNotFoundException e) {
                             Toast.makeText(getContext(),
-                                getContext().getString(R.string.activity_not_found, "view image"),
-                                Toast.LENGTH_SHORT).show();
+                                    getContext().getString(R.string.activity_not_found,
+                                            "view image"),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -260,11 +266,12 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
     private void deleteMedia() {
         // get the file path and delete the file
-    	String name = mBinaryName;
+        String name = mBinaryName;
         // clean up variables
-    	mBinaryName = null;
-    	// delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(mInstanceFolder + File.separator + name);
+        mBinaryName = null;
+        // delete from media provider
+        int del = MediaUtils.deleteImageFileFromMediaProvider(
+                mInstanceFolder + File.separator + name);
         Log.i(t, "Deleted " + del + " rows from media content provider");
     }
 
@@ -303,7 +310,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         if (newImage.exists()) {
             // Add the new image to the Media content provider so that the
             // viewing is fast in Android 2.0+
-        	ContentValues values = new ContentValues(6);
+            ContentValues values = new ContentValues(6);
             values.put(Images.Media.TITLE, newImage.getName());
             values.put(Images.Media.DISPLAY_NAME, newImage.getName());
             values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
@@ -311,7 +318,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             values.put(Images.Media.DATA, newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
-            		Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Images.Media.EXTERNAL_CONTENT_URI, values);
             Log.i(t, "Inserting image returned uri = " + imageURI.toString());
 
             mBinaryName = newImage.getName();
@@ -320,28 +327,29 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
         }
 
-    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 
     @Override
     public boolean isWaitingForBinaryData() {
-    	return mPrompt.getIndex().equals(Collect.getInstance().getFormController().getIndexWaitingForData());
+        return mPrompt.getIndex().equals(
+                Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 
 
     @Override
-	public void cancelWaitingForBinaryData() {
-    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    public void cancelWaitingForBinaryData() {
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
 
 
     @Override

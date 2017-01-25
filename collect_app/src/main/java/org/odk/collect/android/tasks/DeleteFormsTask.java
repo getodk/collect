@@ -14,86 +14,88 @@
 
 package org.odk.collect.android.tasks;
 
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.DeleteFormsListener;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.DeleteFormsListener;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+
 /**
  * Task responsible for deleting selected forms.
+ *
  * @author norman86@gmail.com
  * @author mitchellsundt@gmail.com
- *
  */
 public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
-	private static final String t = "DeleteFormsTask";
-	
-	private ContentResolver cr;
-	private DeleteFormsListener dl;
-	
-	private int successCount = 0;
-	
-	@Override
-	protected Integer doInBackground(Long... params) {
-		int deleted = 0;
+    private static final String t = "DeleteFormsTask";
 
-		if (params == null ||cr == null || dl == null) {
-			return deleted;
-		}
-		
-		// delete files from database and then from file system
-		for (int i = 0; i < params.length; i++) {
-			if ( isCancelled() ) {
-				break;
-			}
-			try {
-	            Uri deleteForm =
-	                Uri.withAppendedPath(FormsColumns.CONTENT_URI, params[i].toString());
-	            
-	            int wasDeleted = cr.delete(deleteForm, null, null); 
-	            deleted += wasDeleted;
-	            
-	            if (wasDeleted > 0) {
-	            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
-	            }
-			} catch ( Exception ex ) {
-				Log.e(t,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());
-			}
-	    } 
-		successCount = deleted;
-		return deleted;
-	}
-	
-	@Override
-	protected void onPostExecute(Integer result) {
-      	cr = null;
+    private ContentResolver cr;
+    private DeleteFormsListener dl;
+
+    private int successCount = 0;
+
+    @Override
+    protected Integer doInBackground(Long... params) {
+        int deleted = 0;
+
+        if (params == null || cr == null || dl == null) {
+            return deleted;
+        }
+
+        // delete files from database and then from file system
+        for (int i = 0; i < params.length; i++) {
+            if (isCancelled()) {
+                break;
+            }
+            try {
+                Uri deleteForm =
+                        Uri.withAppendedPath(FormsColumns.CONTENT_URI, params[i].toString());
+
+                int wasDeleted = cr.delete(deleteForm, null, null);
+                deleted += wasDeleted;
+
+                if (wasDeleted > 0) {
+                    Collect.getInstance().getActivityLogger().logAction(this, "delete",
+                            deleteForm.toString());
+                }
+            } catch (Exception ex) {
+                Log.e(t, "Exception during delete of: " + params[i].toString() + " exception: "
+                        + ex.toString());
+            }
+        }
+        successCount = deleted;
+        return deleted;
+    }
+
+    @Override
+    protected void onPostExecute(Integer result) {
+        cr = null;
         if (dl != null) {
             dl.deleteComplete(result);
         }
         super.onPostExecute(result);
-	}
-	
-	@Override
-	protected void onCancelled() {
-		cr = null;
-		if (dl != null) {
-			dl.deleteComplete(successCount);
-		}
-	}
-	
+    }
+
+    @Override
+    protected void onCancelled() {
+        cr = null;
+        if (dl != null) {
+            dl.deleteComplete(successCount);
+        }
+    }
+
     public void setDeleteListener(DeleteFormsListener listener) {
         dl = listener;
     }
-    
-    public void setContentResolver(ContentResolver resolver){
-    	cr = resolver;
+
+    public void setContentResolver(ContentResolver resolver) {
+        cr = resolver;
     }
 
     public int getDeleteCount() {
-    	return successCount;
+        return successCount;
     }
 }

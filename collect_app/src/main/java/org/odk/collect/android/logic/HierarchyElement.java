@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.logic;
 
-import org.javarosa.core.model.FormIndex;
-
 import android.graphics.drawable.Drawable;
+
+import org.javarosa.core.model.FormIndex;
 
 import java.util.ArrayList;
 

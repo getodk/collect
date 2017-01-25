@@ -14,10 +14,19 @@
 
 package org.odk.collect.android.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
-import android.view.ViewGroup;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -32,28 +41,18 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.MediaLayout;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons. Unlike the classic
  * SelectOneWidget, when a user clicks an option they are then immediately advanced to the next
  * question.
- * 
+ *
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener {
-	 List<SelectChoice> mItems; // may take a while to compute
+    List<SelectChoice> mItems; // may take a while to compute
     ArrayList<RadioButton> buttons;
     AdvanceToNextListener listener;
 
@@ -64,7 +63,8 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(prompt.getAppearanceHint());
+        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
         if (xPathFuncExpr != null) {
             mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
         } else {
@@ -81,7 +81,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
         // use this for recycle
         Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),
-               								R.drawable.expander_ic_right);
+                R.drawable.expander_ic_right);
 
         if (mItems != null) {
             LinearLayout answerLayout = new LinearLayout(getContext());
@@ -89,7 +89,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
             for (int i = 0; i < mItems.size(); i++) {
 
                 RelativeLayout thisParentLayout =
-                    (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
+                        (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
 
                 LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
                 ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
@@ -114,14 +114,15 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 String audioURI = null;
                 audioURI =
-                    prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-                        FormEntryCaption.TEXT_FORM_AUDIO);
+                        prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                                FormEntryCaption.TEXT_FORM_AUDIO);
 
                 String imageURI;
                 if (mItems.get(i) instanceof ExternalSelectChoice) {
                     imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), FormEntryCaption.TEXT_FORM_IMAGE);
+                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                            FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
                 String videoURI = null;
@@ -131,12 +132,13 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
-                mediaLayout.setAVT(prompt.getIndex(), "", r, audioURI, imageURI, videoURI, bigImageURI);
+                mediaLayout.setAVT(prompt.getIndex(), "", r, audioURI, imageURI, videoURI,
+                        bigImageURI);
 
                 if (i != mItems.size() - 1) {
-	                // Last, add the dividing line (except for the last element)
-	                ImageView divider = new ImageView(getContext());
-	                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                    // Last, add the dividing line (except for the last element)
+                    ImageView divider = new ImageView(getContext());
+                    divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                     mediaLayout.addDivider(divider);
                 }
                 questionLayout.addView(mediaLayout);
@@ -174,14 +176,14 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
         InputMethodManager inputManager =
-            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
 
     public int getCheckedId() {
-    	for (int i = 0; i < buttons.size(); ++i) {
-    		RadioButton button = buttons.get(i);
+        for (int i = 0; i < buttons.size(); ++i) {
+            RadioButton button = buttons.get(i);
             if (button.isChecked()) {
                 return i;
             }
@@ -205,10 +207,10 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 button.setChecked(false);
             }
         }
-       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
-    			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
+                mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
 
-       	listener.advance();
+        listener.advance();
     }
 
 

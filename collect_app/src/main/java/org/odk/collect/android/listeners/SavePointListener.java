@@ -19,7 +19,6 @@
 package org.odk.collect.android.listeners;
 
 /**
- *
  * Author: Meletis Margaritis
  * Date: 27/6/2013
  * Time: 7:15 μμ

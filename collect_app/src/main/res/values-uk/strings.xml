@@ -120,7 +120,7 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
-  <string name="server_auth_credentials">Будь ласка, введіть ім`я користувача та пароль для сервера:\n%s</string>
+  <string name="server_auth_credentials">Будь ласка, введіть ім`я користувача та пароль для сервера: %s</string>
   <string name="server_requires_auth">Для доступу до сервера необхідно авторизуватись</string>
   <string name="server_url">Адреса URL</string>
   <string name="server_preferences">Налаштування сервера</string>
@@ -321,13 +321,24 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
   <string name="sheets_google_account_needed">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
-  <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %1%s. Неможливо вивантажити в Сторінки.</string>
+  <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
   <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
   <string name="google_sheets_update_error">Помилка оновлення Сторінок. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
   <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
-  <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?
-</string>
+  <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_preferences">Опції мапувння</string>
+  <string name="map_sdk_selector_title">SDK для мапування</string>
+  <string name="map_sdk_behavior">SDK для мапування</string>
+  <string name="streets">Вулиці</string>
+  <string name="terrain">Ландшафт</string>
+  <string name="hybrid">Змішана</string>
+  <string name="satellite">Супутник</string>
+  <string name="map_basemap_selector_title">Базова мапа</string>
+  <string name="map_basemap_behavior">Обрати базову мапу</string>
+  <string name="show_map_basemap">Показати параметри базової мапи</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

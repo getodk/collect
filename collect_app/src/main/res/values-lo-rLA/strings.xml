@@ -118,7 +118,7 @@
   <string name="send_data">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ</string>
   <string name="send_data_button">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ(%s)</string>
   <string name="send_selected_data">ສົ່ງແບບຟອມທີ່ເລືອກ</string>
-  <string name="server_auth_credentials">ກະລຸນາປ້ອນຊື່ ແລະ ລະຫັດຜ່ານ ຂອງເສີບເວີ: \n%s</string>
+  <string name="server_auth_credentials">ກະລຸນາປ້ອນຊື່ ແລະ ລະຫັດຜ່ານ ຂອງເສີບເວີ: %s</string>
   <string name="server_requires_auth">ເຊີເວີຕ້ອງການກວດ​ສອບ​ຊື່ຜູ້ໃຊ້ງານ ແລະ ລະ​ຫັດ​ຜ່ານ</string>
   <string name="server_url">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
   <string name="server_preferences">​ການ​ຕັ້ງ​ຄ່າ​ເຊີ​ເວີ</string>
@@ -303,4 +303,6 @@
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
   <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

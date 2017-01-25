@@ -14,15 +14,11 @@
 
 package org.odk.collect.android.tasks;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.zip.GZIPInputStream;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -43,11 +39,19 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Background task for downloading a given list of forms. We assume right now that the forms are
@@ -68,7 +72,7 @@ public class DownloadFormsTask extends
     private FormDownloaderListener mStateListener;
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
-        "http://openrosa.org/xforms/xformsManifest";
+            "http://openrosa.org/xforms/xformsManifest";
 
     private boolean isXformsManifestNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
@@ -81,7 +85,8 @@ public class DownloadFormsTask extends
 
         int total = toDownload.size();
         int count = 1;
-    	Collect.getInstance().getActivityLogger().logAction(this, "downloadForms", String.valueOf(total));
+        Collect.getInstance().getActivityLogger().logAction(this, "downloadForms",
+                String.valueOf(total));
 
         HashMap<FormDetails, String> result = new HashMap<FormDetails, String>();
 
@@ -105,9 +110,12 @@ public class DownloadFormsTask extends
 
                 if (fd.manifestUrl != null) {
                     // use a temporary media path until everything is ok.
-                    tempMediaPath = new File(Collect.CACHE_PATH, String.valueOf(System.currentTimeMillis())).getAbsolutePath();
-                    finalMediaPath = FileUtils.constructMediaPath(fileResult.getFile().getAbsolutePath());
-                    String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd, count, total);
+                    tempMediaPath = new File(Collect.CACHE_PATH,
+                            String.valueOf(System.currentTimeMillis())).getAbsolutePath();
+                    finalMediaPath = FileUtils.constructMediaPath(
+                            fileResult.getFile().getAbsolutePath());
+                    String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
+                            count, total);
                     if (error != null) {
                         message += error;
                     }
@@ -123,16 +131,16 @@ public class DownloadFormsTask extends
                 break;
             } catch (Exception e) {
                 String msg = e.getMessage();
-                if ( msg == null ) {
-                  msg = e.toString();
+                if (msg == null) {
+                    msg = e.toString();
                 }
                 Log.e(t, msg);
 
                 if (e.getCause() != null) {
-                  msg = e.getCause().getMessage();
-                  if ( msg == null ) {
-                    msg = e.getCause().toString();
-                  }
+                    msg = e.getCause().getMessage();
+                    if (msg == null) {
+                        msg = e.getCause().toString();
+                    }
                 }
                 message += msg;
             }
@@ -153,11 +161,12 @@ public class DownloadFormsTask extends
                 } catch (IOException e) {
                     Log.e(t, e.getMessage());
 
-                    if (uriResult != null && uriResult.isNew() && fileResult.isNew())  {
+                    if (uriResult != null && uriResult.isNew() && fileResult.isNew()) {
                         // this means we should delete the entire form together with the metadata
                         Uri uri = uriResult.getUri();
                         Log.w(t, "The form is new. We should delete the entire form.");
-                        int deletedCount = Collect.getInstance().getContentResolver().delete(uri, null, null);
+                        int deletedCount = Collect.getInstance().getContentResolver().delete(uri,
+                                null, null);
                         Log.w(t, "Deleted " + deletedCount + " rows using uri " + uri);
                     }
 
@@ -187,14 +196,12 @@ public class DownloadFormsTask extends
 
     /**
      * Some clean up
-     *
-     * @param fileResult
-     * @param fileOnCancel
-     * @param tempMediaPath
      */
     private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
         if (fileResult == null) {
-            Log.w(t, "The user cancelled (or an exception happened) the download of a form at the very beginning.");
+            Log.w(t,
+                    "The user cancelled (or an exception happened) the download of a form at the "
+                            + "very beginning.");
         } else {
             if (fileResult.getFile() != null) {
                 FileUtils.deleteAndReport(fileResult.getFile());
@@ -205,8 +212,8 @@ public class DownloadFormsTask extends
             FileUtils.deleteAndReport(fileOnCancel);
         }
 
-        if ( tempMediaPath != null ) {
-        	FileUtils.purgeMediaPath(tempMediaPath);
+        if (tempMediaPath != null) {
+            FileUtils.purgeMediaPath(tempMediaPath);
         }
     }
 
@@ -251,18 +258,21 @@ public class DownloadFormsTask extends
                 HashMap<String, String> formInfo = FileUtils.parseXML(formFile);
 
                 if (isCancelled()) {
-                    throw new TaskCancelledException(formFile, "Form " + formFile.getName() + " was cancelled while it was being parsed.");
+                    throw new TaskCancelledException(formFile, "Form " + formFile.getName()
+                            + " was cancelled while it was being parsed.");
                 }
 
                 v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
                 v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
                 v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
                 v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
-                v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+                v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
+                        formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
                 uri =
                         Collect.getInstance().getContentResolver()
                                 .insert(FormsColumns.CONTENT_URI, v);
-                Collect.getInstance().getActivityLogger().logAction(this, "insert", formFile.getAbsolutePath());
+                Collect.getInstance().getActivityLogger().logAction(this, "insert",
+                        formFile.getAbsolutePath());
 
             } else {
                 cursor.moveToFirst();
@@ -270,7 +280,8 @@ public class DownloadFormsTask extends
                         Uri.withAppendedPath(FormsColumns.CONTENT_URI,
                                 cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
                 mediaPath = cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
-                Collect.getInstance().getActivityLogger().logAction(this, "refresh", formFile.getAbsolutePath());
+                Collect.getInstance().getActivityLogger().logAction(this, "refresh",
+                        formFile.getAbsolutePath());
             }
         } finally {
             if (cursor != null) {
@@ -284,11 +295,6 @@ public class DownloadFormsTask extends
     /**
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
-     *
-     * @param formName
-     * @param url
-     * @return
-     * @throws Exception
      */
     private FileResult downloadXform(String formName, String url) throws Exception {
         // clean up friendly form name...
@@ -322,16 +328,18 @@ public class DownloadFormsTask extends
 
         Cursor c = null;
         try {
-        	c = Collect.getInstance().getContentResolver()
+            c = Collect.getInstance().getContentResolver()
                     .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs, null);
-	        if (c.getCount() > 0) {
-	            // Should be at most, 1
-	            c.moveToFirst();
+            if (c.getCount() > 0) {
+                // Should be at most, 1
+                c.moveToFirst();
 
                 isNew = false;
 
                 // delete the file we just downloaded, because it's a duplicate
-                Log.w(t, "A duplicate file has been found, we need to remove the downloaded file and return the other one.");
+                Log.w(t,
+                        "A duplicate file has been found, we need to remove the downloaded file "
+                                + "and return the other one.");
                 FileUtils.deleteAndReport(f);
 
                 // set the file returned to the file we already had
@@ -353,15 +361,16 @@ public class DownloadFormsTask extends
      * Common routine to download a document from the downloadUrl and save the contents in the file
      * 'file'. Shared by media file download and form file download.
      *
-     * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything is okay,
+     * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
+     * is okay,
      * so that garbage is not left over on cancel.
-     * 
+     *
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
-     * @throws Exception
      */
     private void downloadFile(File file, String downloadUrl) throws Exception {
-        File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION, new File(Collect.CACHE_PATH));
+        File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
+                new File(Collect.CACHE_PATH));
 
         URI uri;
         try {
@@ -382,100 +391,106 @@ public class DownloadFormsTask extends
         boolean success = false;
         int attemptCount = 0;
         final int MAX_ATTEMPT_COUNT = 2;
-        while ( !success && ++attemptCount <= MAX_ATTEMPT_COUNT ) {
+        while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
 
             if (isCancelled()) {
-                throw new TaskCancelledException(tempFile, "Cancelled before requesting " + tempFile.getAbsolutePath());
+                throw new TaskCancelledException(tempFile,
+                        "Cancelled before requesting " + tempFile.getAbsolutePath());
             } else {
-                Log.i(t, "Started downloading to " + tempFile.getAbsolutePath() + " from " + downloadUrl);
+                Log.i(t, "Started downloading to " + tempFile.getAbsolutePath() + " from "
+                        + downloadUrl);
             }
 
             // get shared HttpContext so that authentication and cookies are retained.
-	        HttpContext localContext = Collect.getInstance().getHttpContext();
+            HttpContext localContext = Collect.getInstance().getHttpContext();
 
-	        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+            HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
-	        // set up request...
-	        HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-	        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
+            // set up request...
+            HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
+            req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
 
-	        HttpResponse response;
-	        try {
-	            response = httpclient.execute(req, localContext);
-	            int statusCode = response.getStatusLine().getStatusCode();
+            HttpResponse response;
+            try {
+                response = httpclient.execute(req, localContext);
+                int statusCode = response.getStatusLine().getStatusCode();
 
-	            if (statusCode != HttpStatus.SC_OK) {
-	            	WebUtils.discardEntityBytes(response);
-	            	if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-	            		// clear the cookies -- should not be necessary?
-	            		Collect.getInstance().getCookieStore().clear();
-	            	}
-	                String errMsg =
-	                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-	                        response.getStatusLine().getReasonPhrase(), statusCode);
-	                Log.e(t, errMsg);
-	                throw new Exception(errMsg);
-	            }
+                if (statusCode != HttpStatus.SC_OK) {
+                    WebUtils.discardEntityBytes(response);
+                    if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                        // clear the cookies -- should not be necessary?
+                        Collect.getInstance().getCookieStore().clear();
+                    }
+                    String errMsg =
+                            Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
+                                    response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
+                    Log.e(t, errMsg);
+                    throw new Exception(errMsg);
+                }
 
-	            // write connection to file
-	            InputStream is = null;
-	            OutputStream os = null;
-	            try {
-	            	HttpEntity entity = response.getEntity();
-	                is = entity.getContent();
-	                Header contentEncoding = entity.getContentEncoding();
-	                if ( contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING) ) {
-	                	is = new GZIPInputStream(is);
-	                }
-	                os = new FileOutputStream(tempFile);
-	                byte buf[] = new byte[4096];
-	                int len;
-	                while ((len = is.read(buf)) > 0 && !isCancelled()) {
-	                    os.write(buf, 0, len);
-	                }
-	                os.flush();
-	                success = true;
-	            } finally {
-	                if (os != null) {
-	                    try {
-	                        os.close();
-	                    } catch (Exception e) {
-	                    }
-	                }
-	                if (is != null) {
-	                	try {
-	                		// ensure stream is consumed...
-	                        final long count = 1024L;
-	                        while (is.skip(count) == count)
-	                            ;
-	                	} catch (Exception e) {
-	                		// no-op
-	                	}
-	                    try {
-	                        is.close();
-	                    } catch (Exception e) {
-	                    }
-	                }
-	            }
-	        } catch (Exception e) {
-	        	Log.e(t, e.toString());
-	            // silently retry unless this is the last attempt,
-	            // in which case we rethrow the exception.
+                // write connection to file
+                InputStream is = null;
+                OutputStream os = null;
+                try {
+                    HttpEntity entity = response.getEntity();
+                    is = entity.getContent();
+                    Header contentEncoding = entity.getContentEncoding();
+                    if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
+                            WebUtils.GZIP_CONTENT_ENCODING)) {
+                        is = new GZIPInputStream(is);
+                    }
+                    os = new FileOutputStream(tempFile);
+                    byte buf[] = new byte[4096];
+                    int len;
+                    while ((len = is.read(buf)) > 0 && !isCancelled()) {
+                        os.write(buf, 0, len);
+                    }
+                    os.flush();
+                    success = true;
+                } finally {
+                    if (os != null) {
+                        try {
+                            os.close();
+                        } catch (Exception e) {
+                        }
+                    }
+                    if (is != null) {
+                        try {
+                            // ensure stream is consumed...
+                            final long count = 1024L;
+                            while (is.skip(count) == count) {
+                                ;
+                            }
+                        } catch (Exception e) {
+                            // no-op
+                        }
+                        try {
+                            is.close();
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(t, e.toString());
+                // silently retry unless this is the last attempt,
+                // in which case we rethrow the exception.
 
                 FileUtils.deleteAndReport(tempFile);
 
-	            if ( attemptCount == MAX_ATTEMPT_COUNT ) {
-	            	throw e;
-	            }
-	        }
+                if (attemptCount == MAX_ATTEMPT_COUNT) {
+                    throw e;
+                }
+            }
 
             if (isCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
-                throw new TaskCancelledException(tempFile, "Cancelled downloading of " + tempFile.getAbsolutePath());
+                throw new TaskCancelledException(tempFile,
+                        "Cancelled downloading of " + tempFile.getAbsolutePath());
             }
         }
 
-        Log.d(t, "Completed downloading of " + tempFile.getAbsolutePath() + ". It will be moved to the proper path...");
+        Log.d(t, "Completed downloading of " + tempFile.getAbsolutePath()
+                + ". It will be moved to the proper path...");
 
         FileUtils.deleteAndReport(file);
 
@@ -485,7 +500,8 @@ public class DownloadFormsTask extends
             Log.w(t, "Copied " + tempFile.getAbsolutePath() + " over " + file.getAbsolutePath());
             FileUtils.deleteAndReport(tempFile);
         } else {
-            String msg = Collect.getInstance().getString(R.string.fs_file_copy_error, tempFile.getAbsolutePath(), file.getAbsolutePath(), errorMessage);
+            String msg = Collect.getInstance().getString(R.string.fs_file_copy_error,
+                    tempFile.getAbsolutePath(), file.getAbsolutePath(), errorMessage);
             Log.w(t, msg);
             throw new RuntimeException(msg);
         }
@@ -549,13 +565,15 @@ public class DownloadFormsTask extends
     }
 
 
-    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath, FormDetails fd, int count,
+    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
+            FormDetails fd, int count,
             int total) throws Exception {
-        if (fd.manifestUrl == null)
+        if (fd.manifestUrl == null) {
             return null;
+        }
 
         publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.formName),
-            Integer.valueOf(count).toString(), Integer.valueOf(total).toString());
+                Integer.valueOf(count).toString(), Integer.valueOf(total).toString());
 
         List<MediaFile> files = new ArrayList<MediaFile>();
         // get shared HttpContext so that authentication and cookies are retained.
@@ -564,7 +582,7 @@ public class DownloadFormsTask extends
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-            WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient);
+                WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient);
 
         if (result.errorMessage != null) {
             return result.errorMessage;
@@ -582,8 +600,8 @@ public class DownloadFormsTask extends
         Element manifestElement = result.doc.getRootElement();
         if (!manifestElement.getName().equals("manifest")) {
             errMessage +=
-                Collect.getInstance().getString(R.string.root_element_error,
-                    manifestElement.getName());
+                    Collect.getInstance().getString(R.string.root_element_error,
+                            manifestElement.getName());
             Log.e(t, errMessage);
             return errMessage;
         }
@@ -641,8 +659,8 @@ public class DownloadFormsTask extends
                 }
                 if (filename == null || downloadUrl == null || hash == null) {
                     errMessage +=
-                        Collect.getInstance().getString(R.string.manifest_tag_error,
-                            Integer.toString(i));
+                            Collect.getInstance().getString(R.string.manifest_tag_error,
+                                    Integer.toString(i));
                     Log.e(t, errMessage);
                     return errMessage;
                 }
@@ -663,30 +681,33 @@ public class DownloadFormsTask extends
             for (MediaFile toDownload : files) {
                 ++mediaCount;
                 publishProgress(
-                    Collect.getInstance().getString(R.string.form_download_progress, fd.formName,
-                        mediaCount, files.size()), Integer.valueOf(count).toString(), Integer
-                            .valueOf(total).toString());
+                        Collect.getInstance().getString(R.string.form_download_progress,
+                                fd.formName,
+                                String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
+                        Integer
+                                .valueOf(total).toString());
 //                try {
-                    File finalMediaFile = new File(finalMediaDir, toDownload.filename);
-                    File tempMediaFile = new File(tempMediaDir, toDownload.filename);
+                File finalMediaFile = new File(finalMediaDir, toDownload.filename);
+                File tempMediaFile = new File(tempMediaDir, toDownload.filename);
 
-                    if (!finalMediaFile.exists()) {
+                if (!finalMediaFile.exists()) {
+                    downloadFile(tempMediaFile, toDownload.downloadUrl);
+                } else {
+                    String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
+                    String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
+
+                    if (!currentFileHash.contentEquals(downloadFileHash)) {
+                        // if the hashes match, it's the same file
+                        // otherwise delete our current one and replace it with the new one
+                        FileUtils.deleteAndReport(finalMediaFile);
                         downloadFile(tempMediaFile, toDownload.downloadUrl);
                     } else {
-                        String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
-                        String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
-
-                        if (!currentFileHash.contentEquals(downloadFileHash)) {
-                            // if the hashes match, it's the same file
-                            // otherwise delete our current one and replace it with the new one
-                            FileUtils.deleteAndReport(finalMediaFile);
-                            downloadFile(tempMediaFile, toDownload.downloadUrl);
-                        } else {
-                            // exists, and the hash is the same
-                            // no need to download it again
-                        	Log.i(t, "Skipping media file fetch -- file hashes identical: " + finalMediaFile.getAbsolutePath());
-                        }
+                        // exists, and the hash is the same
+                        // no need to download it again
+                        Log.i(t, "Skipping media file fetch -- file hashes identical: "
+                                + finalMediaFile.getAbsolutePath());
                     }
+                }
 //                } catch (Exception e) {
 //                    return e.getLocalizedMessage();
 //                }
@@ -712,8 +733,8 @@ public class DownloadFormsTask extends
             if (mStateListener != null) {
                 // update progress and total
                 mStateListener.progressUpdate(values[0],
-                	Integer.valueOf(values[1]),
-                    Integer.valueOf(values[2]));
+                        Integer.valueOf(values[1]),
+                        Integer.valueOf(values[2]));
             }
         }
 

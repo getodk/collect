@@ -111,16 +111,16 @@
   <string name="replace_location">Standort ersetzen</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
   <string name="review_data">Gespeichertes Formular ändern</string>
-  <string name="review_data_button">Gespeichertes Formular ändern</string>
+  <string name="review_data_button">Gespeichertes Formular ändern (%s)</string>
   <string name="saved_data">Unvollständig (%s)</string>
   <string name="save_all_answers">Formular speichern</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
   <string name="saving_form">Formular wird gespeichert</string>
   <string name="sending_items">%1$s von %2$s Formular(en) werden hochgeladen</string>
   <string name="send_data">Vollständiges Formular hochladen</string>
-  <string name="send_data_button">Vollständiges Formular hochladen</string>
+  <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <string name="send_selected_data">Auswahl hochladen</string>
-  <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben:\n%s</string>
+  <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben: %s</string>
   <string name="server_requires_auth">Server verlangt Authentifizierung</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servereinstellungen</string>
@@ -256,8 +256,6 @@
   <string name="constraint_behavior_on_finalize">Validierung beim Abschließen</string>
   <string name="view_change_location">Standort anzeigen oder ändern</string>
   <string name="open_url">URL öffnen</string>
-  <string name="bearing">Kompass-Peilung</string>
-  <string name="direction">Himmelsrichtung</string>
   <string name="get_bearing">Kompass-Peilung erfassen</string>
   <string name="replace_bearing">Kompass-Peilung ändern</string>
   <string name="getting_bearing">Kompass-Peilung erfassen</string>
@@ -323,7 +321,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="sheets_google_account_needed">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
-  <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %1%s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
+  <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_update_error">Fehler beim Aktualisieren der Tabelle.Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Schreibzugriffsberechtigung erteilt hat.</string>
@@ -336,11 +334,7 @@
   <string name="map_sdk_selector_title">Karten-SDK</string>
   <string name="map_sdk_behavior">Karten-SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
-  <string name="openstreetmap">OpenStreetMap</string>
-  <string name="mapquest_streets">MapQuest Streets</string>
-  <string name="mapquest_satellite">MapQuest Satellite</string>
   <string name="streets">Straßen</string>
   <string name="terrain">Gelände</string>
   <string name="hybrid">Hybrid</string>
@@ -350,6 +344,7 @@
   <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
   <string name="save_point">Standort speichern</string>
   <string name="get_point">Standort erfassen</string>
+  <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="get_shape">GeoShape starten</string>
   <string name="get_trace">GeoTrace starten</string>
   <string name="geoshape_title">GeoShape</string>
@@ -376,6 +371,7 @@
   <string name="geoshape_instruction">Lange Drücken um eine Markierung zu platzieren.</string>
   <string name="geotrace_instruction">Auf Lock warten, dann Button Markierung hinzufügen antippen um zu starten.</string>
   <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
+  <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
   <string name="zoom_to_where">Heranzoomen...</string>
   <string name="zoom_to_location">Aktuellen Standort heranzoomen</string>
@@ -383,4 +379,9 @@
   <string name="points_captured">%s Punkte erfasst</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' ist ein ungültiger Spaltenname in ihrem Formular. Google Sheets erlaubt nur alphanumerische Zeichen und Bindestriche in Spaltennamen</string>
   <string name="google_sheets_invalid_column_instance">\'n%1$s\' ist ein ungültiger Spaltenname in ihrer gespeicherten Instanz. Google Sheets erlaubt nur alphanumerische Zeichen und Bindestriche in Spaltennamen</string>
+  <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
+  <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
+  <string name="bearing">Kompass-Peilung: %.3f</string>
+  <string name="direction">Himmelsrichtung: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

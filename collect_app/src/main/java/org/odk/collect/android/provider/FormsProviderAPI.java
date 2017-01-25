@@ -26,14 +26,16 @@ public final class FormsProviderAPI {
     public static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
 
     // This class cannot be instantiated
-    private FormsProviderAPI() {}
-    
+    private FormsProviderAPI() {
+    }
+
     /**
      * Notes table
      */
     public static final class FormsColumns implements BaseColumns {
         // This class cannot be instantiated
-        private FormsColumns() {}
+        private FormsColumns() {
+        }
 
 
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
@@ -52,14 +54,14 @@ public final class FormsProviderAPI {
         // these are generated for you (but you can insert something else if you want)
         public static final String DISPLAY_SUBTEXT = "displaySubtext";
         public static final String MD5_HASH = "md5Hash";
-        public static final String DATE = "date";        
+        public static final String DATE = "date";
         public static final String JRCACHE_FILE_PATH = "jrcacheFilePath";
-        public static final String FORM_MEDIA_PATH = "formMediaPath";      
-        
-        
+        public static final String FORM_MEDIA_PATH = "formMediaPath";
+
+
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
-        
-        
+
+
     }
 }

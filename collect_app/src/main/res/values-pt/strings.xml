@@ -111,8 +111,9 @@
   <string name="saving_form">Salvando Formulário</string>
   <string name="sending_items">Enviando %1$s de %2$s Formulário(s)</string>
   <string name="send_data">Enviar Formulário Finalizado</string>
-  <string name="send_data_button">Enviar Formulário finalizado</string>
+  <string name="send_data_button">Enviar formulário finalizado (%s)</string>
   <string name="send_selected_data">Enviar selecionado</string>
+  <string name="server_auth_credentials">Por favor, entre com nome do usuário e senha para do servidor: %s</string>
   <string name="server_requires_auth">Servidor Requer Autenticação</string>
   <string name="server_url">Servidor URL</string>
   <string name="server_preferences">Servidor</string>
@@ -296,4 +297,6 @@ Escolher Imagem</string>
   <string name="change_server_url">Servidor URL</string>
   <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

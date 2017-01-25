@@ -13,7 +13,6 @@
  */
 
 /**
- *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 package org.odk.collect.android.spatial;
@@ -26,15 +25,14 @@ import java.io.File;
 import java.util.Collections;
 
 
- 
 /**
  * This class is a simplification of the the MapTileProviderArray: it only
  * allows a single provider.
  */
 public class OsmMBTileProvider extends MapTileProviderArray {
- 
+
     public OsmMBTileProvider(IRegisterReceiver receiverRegistrar, File file) {
- 
+
         /**
          * Call the super-constructor.
          *
@@ -49,24 +47,24 @@ public class OsmMBTileProvider extends MapTileProviderArray {
          * location, From TileSystem for example.
          */
         super(OsmMBTileSource.createFromFile(file), receiverRegistrar);
- 
+
         // Create the module provider; this class provides a TileLoader that
         // actually loads the tile from the DB.
         OsmMBTileModuleProvider moduleProvider;
         moduleProvider = new OsmMBTileModuleProvider(receiverRegistrar,
-                                                  file,
-                                                  (OsmMBTileSource) getTileSource());
- 
+                file,
+                (OsmMBTileSource) getTileSource());
+
         MapTileModuleProviderBase[] pTileProviderArray;
-        pTileProviderArray = new MapTileModuleProviderBase[] { moduleProvider };
- 
+        pTileProviderArray = new MapTileModuleProviderBase[]{moduleProvider};
+
         // Add the module provider to the array of providers; mTileProviderList
         // is defined by the superclass.
         Collections.addAll(mTileProviderList, pTileProviderArray);
     }
-     
+
     // TODO: implement public Drawable getMapTile(final MapTile pTile) {}
     //       The current implementation is needlessly complex because it uses
     //       MapTileProviderArray as a basis.
- 
+
 }

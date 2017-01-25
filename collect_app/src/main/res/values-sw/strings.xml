@@ -18,9 +18,10 @@
   <string name="cannot_edit_completed_form">Fomu hii haiwezi kuhaririwa baada ya kuwekwa alama ni kamili. Huenda imesibwa.</string>
   <string name="capture_audio">Rekodi Sauti</string>
   <string name="capture_image">Chukua Picha</string>
+  <string name="capture_osm">Anzisha OpenMapkit</string>
   <string name="capture_video">Rekodi Video</string>
   <string name="change_language">Badili Lugha</string>
-  <string name="change_password">Neno siri</string>
+  <string name="change_password">Nywila ya ODK</string>
   <string name="change_username">Jina la mtumiaji wa ODK</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
   <string name="clear_answer">Ondoa Jawabu</string>
@@ -103,14 +104,14 @@
   <string name="replace_location">Badili mahali</string>
   <string name="required_answer_error">Samahani, jibu hili linahitajika!</string>
   <string name="review_data">Hariri Fomu iliyohifadhiwa</string>
-  <string name="review_data_button">Hariri Fomu iliyohifadhiwa</string>
+  <string name="review_data_button">Hariri Fomu iliyohifadhiwa (%s)</string>
   <string name="saved_data">Si kamili (%s)</string>
   <string name="save_all_answers">Hifadhi Fomu</string>
   <string name="save_enter_data_description">Umefika mwisho wa \"%s\".</string>
   <string name="saving_form">Inahifadhi Fomu</string>
   <string name="sending_items">Inatuma %1$s ya %2$s fomu(s)</string>
   <string name="send_data">Tuma Fomu Zilizokamilika</string>
-  <string name="send_data_button">Tuma Fomu Zilizokamilika</string>
+  <string name="send_data_button">Tuma Fomu Zilizokamilika (%s)</string>
   <string name="send_selected_data">Tuma zilizochaguliwa</string>
   <string name="server_requires_auth">Seva Inahitaji Uthibitishaji</string>
   <string name="server_url">URL</string>
@@ -258,4 +259,6 @@
   <string name="change_server_url">URL ya Seva</string>
   <string name="google_search_browse">Tafuta fomu. Au chagua \'My Drive\' hapa chini kuzipekua</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

@@ -109,16 +109,16 @@
   <string name="replace_location">Ubah lokasi</string>
   <string name="required_answer_error">Maaf, data ini dibutuhkan!</string>
   <string name="review_data">Ubah formulir tersimpan</string>
-  <string name="review_data_button">Ubah formulir tersimpan</string>
+  <string name="review_data_button">Ubah formulir tersimpan (%s)</string>
   <string name="saved_data">Belum selesai (%s)</string>
   <string name="save_all_answers">Simpan Formulir</string>
   <string name="save_enter_data_description">Anda telah selesai mengisikan \"%s\".</string>
   <string name="saving_form">Sedang menyimpan formulir</string>
   <string name="sending_items">Sedang mengirim %1$s dari %2$s total formulir</string>
   <string name="send_data">Kirim formulir ke Server</string>
-  <string name="send_data_button">Kirim formulir ke Server</string>
+  <string name="send_data_button">Kirim formulir ke Server (%s)</string>
   <string name="send_selected_data">Kirim</string>
-  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server:\n%s</string>
+  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server: %s</string>
   <string name="server_requires_auth">Harap login untuk otentikasi</string>
   <string name="server_url">Tautan (URL)</string>
   <string name="server_preferences">Pengaturan Server</string>
@@ -309,4 +309,6 @@
   <string name="change_server_url">Tautan server (URL)</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

@@ -19,7 +19,7 @@
         <EditTextPreference
             android:id="@+id/password"
             android:dialogTitle="@string/change_password"
-            android:inputType="textNoSuggestions"
+            android:inputType="textPassword"
             android:key="password"
             android:title="@string/password" />
     </PreferenceCategory>

@@ -14,38 +14,40 @@
 
 package org.odk.collect.android.widgets;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.IntegerData;
-import org.javarosa.form.api.FormEntryPrompt;
-
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.IntegerData;
+import org.javarosa.form.api.FormEntryPrompt;
+
+import java.util.Locale;
+
 /**
  * Widget that restricts values to integers.
- * 
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class IntegerWidget extends StringWidget {
 
-	private Integer getIntegerAnswerValue() {
-		IAnswerData dataHolder = mPrompt.getAnswerValue();
-		Integer d = null;
+    private Integer getIntegerAnswerValue() {
+        IAnswerData dataHolder = mPrompt.getAnswerValue();
+        Integer d = null;
         if (dataHolder != null) {
-        	Object dataValue = dataHolder.getValue();
-        	if ( dataValue != null ) {
-        		if (dataValue instanceof Double){
-	                d =  Integer.valueOf(((Double) dataValue).intValue());
-	            } else {
-	                d =  (Integer)dataValue;
-	            }
-        	}
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                if (dataValue instanceof Double) {
+                    d = Integer.valueOf(((Double) dataValue).intValue());
+                } else {
+                    d = (Integer) dataValue;
+                }
+            }
         }
         return d;
-	}
+    }
 
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride, true);
@@ -74,17 +76,17 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(i.toString());
+            mAnswer.setText(String.format(Locale.ENGLISH, "%d", i));
         }
-        
+
         setupChangeListener();
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-    	clearFocus();
-    	String s = mAnswer.getText().toString();
+        clearFocus();
+        String s = mAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
