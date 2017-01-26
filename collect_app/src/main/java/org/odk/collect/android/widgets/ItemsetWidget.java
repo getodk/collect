@@ -19,8 +19,10 @@ import android.database.Cursor;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
@@ -53,7 +55,7 @@ public class ItemsetWidget extends QuestionWidget implements
     private static String tag = "ItemsetWidget";
 
     boolean mReadOnly;
-    protected RadioGroup mButtons;
+    private ArrayList<RadioButton> mButtons;
     private String mAnswer = null;
     // Hashmap linking label:value
     private HashMap<String, String> mAnswers;
@@ -65,10 +67,14 @@ public class ItemsetWidget extends QuestionWidget implements
     protected ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
             boolean derived) {
         super(context, prompt);
-        mButtons = new RadioGroup(context);
-        mButtons.setId(QuestionWidget.newUniqueId());
+
         mReadOnly = prompt.isReadOnly() || readOnlyOverride;
         mAnswers = new HashMap<String, String>();
+
+        mButtons = new ArrayList<>();
+
+        // Layout holds the vertical list of buttons
+        LinearLayout allOptionsLayout = new LinearLayout(context);
 
         String currentAnswer = prompt.getAnswerText();
 
@@ -206,6 +212,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 Cursor c = ida.query(pathHash, selection.toString(), selectionArgs);
                 if (c != null) {
                     c.move(-1);
+                    int index = 0;
                     while (c.moveToNext()) {
                         String label = "";
                         String val = "";
@@ -234,24 +241,57 @@ public class ItemsetWidget extends QuestionWidget implements
                         mAnswers.put(label, val);
 
                         RadioButton rb = new RadioButton(context);
+
                         rb.setOnCheckedChangeListener(this);
-                        rb.setText(label);
                         rb.setTextSize(mAnswerFontsize);
-                        mButtons.addView(rb);
+                        rb.setText(label);
+                        rb.setTag(index);
+                        rb.setId(QuestionWidget.newUniqueId());
+
+                        mButtons.add(rb);
+
                         // have to add it to the radiogroup before checking it,
                         // else it lets two buttons be checked...
                         if (currentAnswer != null
                                 && val.compareTo(currentAnswer) == 0) {
                             rb.setChecked(true);
                         }
+
+                        RelativeLayout singleOptionLayout = new RelativeLayout(getContext());
+
+                        RelativeLayout.LayoutParams textParams =
+                                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                                        LayoutParams.WRAP_CONTENT);
+                        textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                        textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        singleOptionLayout.addView(rb, textParams);
+
+                        if (!c.isLast()) {
+                            // Last, add the dividing line (except for the last element)
+                            ImageView divider = new ImageView(getContext());
+                            divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+
+                            RelativeLayout.LayoutParams dividerParams =
+                                    new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                                            LayoutParams.WRAP_CONTENT);
+
+                            dividerParams.addRule(RelativeLayout.BELOW, rb.getId());
+                            singleOptionLayout.addView(divider, dividerParams);
+                        }
+
+                        allOptionsLayout.addView(singleOptionLayout);
+                        index++;
                     }
+                    allOptionsLayout.setOrientation(LinearLayout.VERTICAL);
                     c.close();
                 }
             } finally {
                 ida.close();
             }
 
-            addAnswerView(mButtons);
+            addAnswerView(allOptionsLayout);
         } else {
             TextView error = new TextView(context);
             error.setText(
@@ -263,8 +303,13 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public void clearAnswer() {
-        mButtons.clearCheck();
         mAnswer = null;
+        for (RadioButton button : mButtons) {
+            if (button.isChecked()) {
+                button.setChecked(false);
+                return;
+            }
+        }
     }
 
     @Override
@@ -294,25 +339,29 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mButtons.setOnLongClickListener(l);
-        for (int i = 0; i < mButtons.getChildCount(); i++) {
-            mButtons.getChildAt(i).setOnLongClickListener(l);
+        for (RadioButton r : mButtons) {
+            r.setOnLongClickListener(l);
         }
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mButtons.cancelLongPress();
-        for (int i = 0; i < mButtons.getChildCount(); i++) {
-            mButtons.getChildAt(i).cancelLongPress();
+        for (RadioButton button : mButtons) {
+            button.cancelLongPress();
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            mAnswer = mAnswers.get(buttonView.getText().toString());
+            for (RadioButton button : mButtons) {
+                if (button.isChecked() && !(buttonView == button)) {
+                    button.setChecked(false);
+                } else {
+                    mAnswer = mAnswers.get(buttonView.getText().toString());
+                }
+            }
         }
     }
 
