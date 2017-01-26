@@ -39,15 +39,17 @@ android {
         applicationId("org.odk.collect.android")
         minSdkVersion(9)
         targetSdkVersion(9)
-        versionCode(1064)
+        versionCode(1065)
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
     }
 
     buildTypes {
         release {
-            minifyEnabled(true)
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            // Proguard rules will need to be carefully revised before turning on minification --
+            // the current configuration breaks Google Drive API.
+            // minifyEnabled(true)
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
         debug {
             debuggable(true)
