@@ -2588,6 +2588,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 Toast.makeText(this, message,
                         Toast.LENGTH_LONG).show();
                 break;
+            case SaveToDiskTask.ENCRYPTION_ERROR:
+                Toast.makeText(this, String.format(getString(R.string.encryption_error_message),
+                        saveResult.getSaveErrorMessage()), Toast.LENGTH_LONG).show();
+                finishReturnInstance();
+                break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 refreshCurrentView();
