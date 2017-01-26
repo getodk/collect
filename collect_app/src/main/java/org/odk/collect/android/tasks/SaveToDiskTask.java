@@ -60,6 +60,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int VALIDATE_ERROR = 502;
     public static final int VALIDATED = 503;
     public static final int SAVED_AND_EXIT = 504;
+    public static final int ENCRYPTION_ERROR = 505;
 
 
     public SaveToDiskTask(Uri uri, Boolean saveAndExit, Boolean markCompleted, String updatedName) {
@@ -133,6 +134,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             }
 
             saveResult.setSaveResult(mSave ? SAVED_AND_EXIT : SAVED);
+        } catch (EncryptionException e) {
+            saveResult.setSaveErrorMessage(e.getMessage());
+            saveResult.setSaveResult(ENCRYPTION_ERROR);
         } catch (Exception e) {
             Log.e(t, e.getMessage(), e);
 
