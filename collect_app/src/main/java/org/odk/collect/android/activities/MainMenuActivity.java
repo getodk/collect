@@ -40,6 +40,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -96,6 +98,8 @@ public class MainMenuActivity extends Activity {
     private MyContentObserver mContentObserver = new MyContentObserver();
 
     private static boolean EXIT = true;
+
+    private Tracker mTracker;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -312,6 +316,8 @@ public class MainMenuActivity extends Activity {
         } else {
             mManageFilesButton.setVisibility(View.VISIBLE);
         }
+
+        mTracker  = ((Collect) getApplication()).getDefaultTracker();
     }
 
     @Override
