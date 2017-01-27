@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "933926644208",
+    "project_id": "firebase-odk-collect"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933926644208:android:5e1d7c3c296329e8",
+        "android_client_info": {
+          "package_name": "org.odk.collect.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrmcxEXxPRn6XDFUsK-Q14kyf4B9AqyB4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-90983851-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
