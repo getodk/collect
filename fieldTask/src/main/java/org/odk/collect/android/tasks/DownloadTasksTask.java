@@ -280,18 +280,33 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
                     results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
                     throw new Exception(response.getStatusLine().getReasonPhrase());
-                } else {
-                    HttpEntity entity = response.getEntity();
-                    is = entity.getContent();
                 }
 
-
-                // De-serialise
-                GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
-                gson = gb.create();
-                Reader isReader = new InputStreamReader(is);
-                tr = gson.fromJson(isReader, TaskResponse.class);
-                Log.i(getClass().getSimpleName(), "Message:" + tr.message);
+                try {
+                    HttpEntity entity = response.getEntity();
+                    is = entity.getContent();
+                    // De-serialise
+                    GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
+                    gson = gb.create();
+                    Reader isReader = new InputStreamReader(is);
+                    tr = gson.fromJson(isReader, TaskResponse.class);
+                    Log.i(getClass().getSimpleName(), "Message:" + tr.message);
+                } finally {
+                    if (is != null) {
+                        try {
+                            // ensure stream is consumed...
+                            final long count = 1024L;
+                            while (is.skip(count) == count)
+                                ;
+                        } catch (Exception e) {
+                            // no-op
+                        }
+                        try {
+                            is.close();
+                        } catch (Exception e) {
+                        }
+                    }
+                }
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
@@ -508,17 +523,16 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         int statusCode = response.getStatusLine().getStatusCode();
         WebUtils.discardEntityBytes(response);
 
-        InputStream is = null;
         if(statusCode != HttpStatus.SC_OK) {
             Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
             results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
             throw new Exception(response.getStatusLine().getReasonPhrase());
-        } else {
-            for(TaskAssignment ta : updateResponse.taskAssignments) {
-                Utilities.setTaskSynchronized((long) ta.assignment.dbId);		// Mark the task status as synchronised
-            }
-            TraceUtilities.deleteSource();
         }
+
+        for(TaskAssignment ta : updateResponse.taskAssignments) {
+            Utilities.setTaskSynchronized((long) ta.assignment.dbId);		// Mark the task status as synchronised
+        }
+        TraceUtilities.deleteSource();
 		
 	}
 	

@@ -185,7 +185,9 @@ public class ManageForm {
 		        	 Long table_id = c.getLong(c.getColumnIndex(FormsColumns._ID));
 		             String formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
 		             String version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
-		             
+
+                     Log.i("   Delete Check: ", "Found Form Id: " + formId + " : " + version);
+
 		             // Check to see if this form was downloaded
 		             if(formMap.get(formId + "_v_" + version) == null) {
 		            	 Log.i("   Delete: ", "Candidate 1");
