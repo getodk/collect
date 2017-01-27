@@ -63,10 +63,14 @@ import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.NameValuePair;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
+import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
+import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
+import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
 import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
@@ -77,8 +81,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -271,8 +279,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 URI uri = url.toURI();
                 HttpGet req = new HttpGet();
                 req.setURI(uri);
-
-                publishProgress("Update status of tasks on server");
 
                 HttpResponse response = client.execute(req, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -504,12 +510,29 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             TraceUtilities.getPoints(updateResponse.userTrail);
         }
 
+        publishProgress("Update status of tasks on server");
+
+
         // Call the service
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
         Uri u = Uri.parse(taskURL);
         if(username != null && password != null) {
             WebUtils.addCredentials(username, password, u.getHost());
+        }
+
+
+        /*
+         * Use a head request as per instance uploader
+         * This will set the authentication as digest and set the nonce
+         *
+         * There must be a more efficient way to do this!
+         */
+        HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
+        try {
+            client.execute(httpHead, localContext);
+        } catch (Exception e) {
+
         }
 
         HttpPost postRequest = new HttpPost(URI.create(u.toString()));
@@ -521,8 +544,14 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         dataToSend.add(new BasicNameValuePair("assignInput", resp));
         postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
 
-        HttpResponse response = client.execute(postRequest, localContext);
-        int statusCode = response.getStatusLine().getStatusCode();
+        HttpResponse response = null;
+        int statusCode = 0;
+        try {
+            response = client.execute(postRequest, localContext);
+            statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+
+        }
 
         if(statusCode != HttpStatus.SC_OK) {
             Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
