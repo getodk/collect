@@ -30,12 +30,14 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
@@ -103,15 +105,24 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                R.id.gmap)).getMap();
-        mHelper = new MapHelper(this, mMap);
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerDragListener(this);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                if (mMap == null) {
+                    Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                mHelper = new MapHelper(GeoShapeGoogleMapActivity.this, mMap);
+                mMap.setMyLocationEnabled(true);
+                mMap.setOnMapLongClickListener(GeoShapeGoogleMapActivity.this);
+                mMap.setOnMarkerDragListener(GeoShapeGoogleMapActivity.this);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setCompassEnabled(true);
+                mMap.getUiSettings().setZoomControlsEnabled(false);
+            }
+        });
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
         polygonOptions.zIndex(1);

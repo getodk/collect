@@ -35,12 +35,14 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
@@ -138,15 +140,25 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         setContentView(R.layout.geotrace_google_layout);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                R.id.gmap)).getMap();
-        mHelper = new MapHelper(this, mMap);
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerDragListener(this);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                if (mMap == null) {
+                    Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+
+                mHelper = new MapHelper(GeoTraceGoogleMapActivity.this, mMap);
+                mMap.setMyLocationEnabled(true);
+                mMap.setOnMapLongClickListener(GeoTraceGoogleMapActivity.this);
+                mMap.setOnMarkerDragListener(GeoTraceGoogleMapActivity.this);
+                mMap.getUiSettings().setZoomControlsEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setZoomControlsEnabled(false);
+            }
+        });
 
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.RED);
