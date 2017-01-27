@@ -128,7 +128,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         // start smap.  Remove non printable characters
         String resp = (String) answer;
         if(resp != null) {      // It looks like resp is not set to null even if no barcode captured, however it seems prudent to check
-            resp = resp.replaceAll("\\p{C}", "?");
+            resp = resp.replaceAll("\\p{C}", ".");
         }
         // smap end
         mStringAnswer.setText(resp);

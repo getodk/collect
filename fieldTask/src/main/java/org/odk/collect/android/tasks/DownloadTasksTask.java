@@ -272,6 +272,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 HttpGet req = new HttpGet();
                 req.setURI(uri);
 
+                publishProgress("Update status of tasks on server");
+
                 HttpResponse response = client.execute(req, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
 
@@ -521,13 +523,14 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         HttpResponse response = client.execute(postRequest, localContext);
         int statusCode = response.getStatusLine().getStatusCode();
-        WebUtils.discardEntityBytes(response);
 
         if(statusCode != HttpStatus.SC_OK) {
             Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
             results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+            WebUtils.discardEntityBytes(response);
             throw new Exception(response.getStatusLine().getReasonPhrase());
         }
+        WebUtils.discardEntityBytes(response);
 
         for(TaskAssignment ta : updateResponse.taskAssignments) {
             Utilities.setTaskSynchronized((long) ta.assignment.dbId);		// Mark the task status as synchronised
