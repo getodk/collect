@@ -31,6 +31,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.ListViewUtils;
@@ -98,7 +99,14 @@ public class DataManagerList extends ListActivity implements
             }
         });
 
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
+        String selection = InstanceColumns.STATUS + "=? or " +
+                InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
+
+        //We do not need the reord here whose status is both submitted and deleted(STATUS_SUBMITTED_AND_DELETED)
+        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED,InstanceProviderAPI.STATUS_COMPLETE,
+                InstanceProviderAPI.STATUS_INCOMPLETE};
+
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
                 InstanceColumns.DISPLAY_NAME + " ASC");
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
