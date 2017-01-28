@@ -80,20 +80,6 @@ public class InstanceChooserList extends ListActivity {
             c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
         }
 
-
-
-        //Amit
-//        String[] s = new String[c.getCount()];
-//        int count = 0;
-//        if (c.getCount() > 0) {
-//            c.moveToFirst();
-//            do {
-//                s[count] = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-//                count++;
-//            } while (c.moveToNext());
-//        }
-
-
         String[] data = new String[]{
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_SUBTEXT
         };
