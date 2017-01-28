@@ -34,7 +34,7 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
 
         View view = super.getView(position, convertView, parent);
         TextView sent = (TextView) view.findViewById(R.id.text2);
-        TextView delete = (TextView) view.findViewById(R.id.text4);
+        TextView visibilityOffCause = (TextView) view.findViewById(R.id.text4);
         ImageView visibleOff = (ImageView) view.findViewById(R.id.visible_off);
         String status = c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
         /**
@@ -42,7 +42,7 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
          * show visibility off icon
          */
         if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
-            delete.setVisibility(View.VISIBLE);
+            visibilityOffCause.setVisibility(View.VISIBLE);
             visibleOff.setVisibility(View.VISIBLE);
 
         } else {
@@ -60,10 +60,14 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
                 String encryption = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.BASE64_RSA_PUBLIC_KEY));
                 if (encryption != null) {
                     visibleOff.setVisibility(View.VISIBLE);
+                    visibilityOffCause.setVisibility(View.VISIBLE);
+                    visibilityOffCause.setText(context.getString(R.string.encrypted_form));
                 }
 
             }else{
                 visibleOff.setVisibility(View.VISIBLE);
+                visibilityOffCause.setVisibility(View.VISIBLE);
+                visibilityOffCause.setText(context.getString(R.string.blank_form_deleted));
             }
             if(cursor != null) {
                 cursor.close();
