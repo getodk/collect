@@ -37,6 +37,8 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
@@ -64,6 +66,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_SPLASH_PATH = "splashPath";
     public static final String KEY_FONT_SIZE = "font_size";
     public static final String KEY_DELETE_AFTER_SEND = "delete_send";
+    public static final String KEY_ENABLE_ANALYTICS = "enable_analytics";
 
     public static final String KEY_PROTOCOL = "protocol";
     public static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
@@ -403,6 +406,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         if (!(resolutionAvailable || adminMode)) {
             clientCategory.removePreference(highResolution);
         }
+
+        final CheckBoxPreference enableAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ENABLE_ANALYTICS);
+        enableAnalyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
+                googleAnalytics.setAppOptOut(!enableAnalyticsPreference.isChecked());
+                return true;
+            }
+        });
 
         mOpenSourceLicensesPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
