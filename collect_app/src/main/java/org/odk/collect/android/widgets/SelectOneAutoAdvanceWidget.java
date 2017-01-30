@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -51,7 +52,7 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener {
+public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener, View.OnClickListener {
     List<SelectChoice> mItems; // may take a while to compute
     ArrayList<RadioButton> buttons;
     AdvanceToNextListener listener;
@@ -111,6 +112,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 }
 
                 r.setOnCheckedChangeListener(this);
+                r.setOnClickListener(this);
 
                 String audioURI = null;
                 audioURI =
@@ -209,8 +211,6 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
                 mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
-
-        listener.advance();
     }
 
 
@@ -230,4 +230,8 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        listener.advance();
+    }
 }
