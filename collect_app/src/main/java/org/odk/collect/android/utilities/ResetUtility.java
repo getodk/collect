@@ -25,6 +25,7 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
+import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
 
@@ -32,7 +33,7 @@ public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
                       boolean resetForms, boolean resetLayers, boolean resetDatabases,
-                      boolean resetCache) {
+                      boolean resetCache, boolean resetOsmDroid) {
 
         if (resetPreferences) {
             resetPreferences(context);
@@ -51,6 +52,9 @@ public class ResetUtility {
             context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);        }
         if (resetCache) {
             deleteFolderContents(Collect.CACHE_PATH);
+        }
+        if (resetOsmDroid) {
+            deleteFolderContents(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath());
         }
     }
 
