@@ -44,7 +44,7 @@ public class InstanceChooserTabs extends TabActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+        setTitle(getString(R.string.review_data));
 
         // create tab host and tweak color
         final TabHost tabHost = getTabHost();

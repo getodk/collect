@@ -1034,8 +1034,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private View createView(int event, boolean advancingPage) {
         FormController formController = Collect.getInstance()
                 .getFormController();
-        setTitle(getString(R.string.app_name) + " > "
-                + formController.getFormTitle());
+        setTitle(formController.getFormTitle());
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:

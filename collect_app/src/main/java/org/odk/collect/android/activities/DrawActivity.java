@@ -167,8 +167,7 @@ public class DrawActivity extends Activity {
                     getString(R.string.draw_image));
         }
 
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.draw_image));
+        setTitle(getString(R.string.draw_image));
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);

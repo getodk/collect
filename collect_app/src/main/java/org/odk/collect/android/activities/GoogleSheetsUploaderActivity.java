@@ -83,7 +83,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         mAlertMsg = getString(R.string.please_wait);
         mAlertShowing = false;
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
+        setTitle(getString(R.string.send_data));
 
         // get any simple saved state...
         // resets alert message and showing dialog if the screen is rotated
