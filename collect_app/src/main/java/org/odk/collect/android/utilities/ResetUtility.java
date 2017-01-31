@@ -20,16 +20,21 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.DatabaseReader;
+import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 
 public class ResetUtility {
 
-    public void reset(final Context context, boolean resetPreferences, boolean resetInstances) {
+    public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
+                      boolean resetForms) {
         if (resetPreferences) {
             resetPreferences(context);
         }
         if (resetInstances) {
             resetInstances(context);
+        }
+        if (resetForms) {
+            resetForms(context);
         }
     }
 
@@ -49,5 +54,13 @@ public class ResetUtility {
         DeleteInstancesTask task = new DeleteInstancesTask();
         task.setContentResolver(context.getContentResolver());
         task.execute(allInstances);
+    }
+
+    private void resetForms(final Context context) {
+        final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
+
+        DeleteFormsTask task = new DeleteFormsTask();
+        task.setContentResolver(context.getContentResolver());
+        task.execute(allForms);
     }
 }

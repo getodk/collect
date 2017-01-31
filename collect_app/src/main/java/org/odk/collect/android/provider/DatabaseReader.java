@@ -47,4 +47,29 @@ public class DatabaseReader {
 
         return result.toArray(new Long[result.size()]);
     }
+
+    public Long[] getAllFormsIDs(Context context) {
+        ArrayList<Long> result = new ArrayList<Long>();
+
+        Cursor cursor = context.getContentResolver().query(
+                FormsProviderAPI.FormsColumns.CONTENT_URI, null, null, null,
+                FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC");
+
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
+                        Long id = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
+                        result.add(id);
+
+                        cursor.moveToNext();
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return result.toArray(new Long[result.size()]);
+    }
 }
