@@ -19,12 +19,17 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.provider.DatabaseReader;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
 
 public class ResetUtility {
 
-    public void reset(final Context context, boolean resetPreferences) {
+    public void reset(final Context context, boolean resetPreferences, boolean resetInstances) {
         if (resetPreferences) {
             resetPreferences(context);
+        }
+        if (resetInstances) {
+            resetInstances(context);
         }
     }
 
@@ -36,5 +41,13 @@ public class ResetUtility {
                 .apply();
 
         PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
+    }
+
+    private void resetInstances(final Context context) {
+        final Long[] allInstances = new DatabaseReader().getAllInstancesIDs(context);
+
+        DeleteInstancesTask task = new DeleteInstancesTask();
+        task.setContentResolver(context.getContentResolver());
+        task.execute(allInstances);
     }
 }

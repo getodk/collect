@@ -30,6 +30,7 @@ import org.odk.collect.android.utilities.ResetUtility;
 public class ResetDialogPreference extends DialogPreference {
 
     private CheckBox mPreferences;
+    private CheckBox mInstances;
     private Context mContext;
     private ProgressDialog mProgressDialog;
 
@@ -42,6 +43,7 @@ public class ResetDialogPreference extends DialogPreference {
     @Override
     public void onBindDialogView(View view) {
         mPreferences = (CheckBox) view.findViewById(R.id.preferences);
+        mInstances = (CheckBox) view.findViewById(R.id.instances);
         super.onBindDialogView(view);
     }
 
@@ -54,13 +56,14 @@ public class ResetDialogPreference extends DialogPreference {
 
     private void resetSelected() {
         final boolean resetPreferences = mPreferences.isChecked();
+        final boolean resetInstances = mInstances.isChecked();
 
-        if (resetPreferences) {
+        if (resetPreferences || resetInstances) {
             showProgressDialog();
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    new ResetUtility().reset(getContext(), resetPreferences);
+                    new ResetUtility().reset(getContext(), resetPreferences, resetInstances);
                     hideProgressDialog();
                 }
             };
