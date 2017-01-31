@@ -32,6 +32,7 @@ public class ResetDialogPreference extends DialogPreference {
     private CheckBox mPreferences;
     private CheckBox mInstances;
     private CheckBox mForms;
+    private CheckBox mLayers;
     private Context mContext;
     private ProgressDialog mProgressDialog;
 
@@ -46,6 +47,7 @@ public class ResetDialogPreference extends DialogPreference {
         mPreferences = (CheckBox) view.findViewById(R.id.preferences);
         mInstances = (CheckBox) view.findViewById(R.id.instances);
         mForms = (CheckBox) view.findViewById(R.id.forms);
+        mLayers = (CheckBox) view.findViewById(R.id.layers);
         super.onBindDialogView(view);
     }
 
@@ -60,13 +62,15 @@ public class ResetDialogPreference extends DialogPreference {
         final boolean resetPreferences = mPreferences.isChecked();
         final boolean resetInstances = mInstances.isChecked();
         final boolean resetForms = mForms.isChecked();
+        final boolean resetLayers = mLayers.isChecked();
 
-        if (resetPreferences || resetInstances || resetForms) {
+        if (resetPreferences || resetInstances || resetForms || resetLayers) {
             showProgressDialog();
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    new ResetUtility().reset(getContext(), resetPreferences, resetInstances, resetForms);
+                    new ResetUtility().reset(getContext(), resetPreferences, resetInstances, resetForms,
+                            resetLayers);
                     hideProgressDialog();
                 }
             };

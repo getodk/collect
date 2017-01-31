@@ -19,14 +19,17 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.DatabaseReader;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 
+import java.io.File;
+
 public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-                      boolean resetForms) {
+                      boolean resetForms, boolean resetLayers) {
         if (resetPreferences) {
             resetPreferences(context);
         }
@@ -35,6 +38,9 @@ public class ResetUtility {
         }
         if (resetForms) {
             resetForms(context);
+        }
+        if (resetLayers) {
+            deleteFolderContents(Collect.OFFLINE_LAYERS);
         }
     }
 
@@ -62,5 +68,25 @@ public class ResetUtility {
         DeleteFormsTask task = new DeleteFormsTask();
         task.setContentResolver(context.getContentResolver());
         task.execute(allForms);
+    }
+
+    private void deleteFolderContents(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+
+            for (File f : files) {
+                deleteRecursive(f);
+            }
+        }
+    }
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+        fileOrDirectory.delete();
     }
 }
