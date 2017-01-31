@@ -31,7 +31,9 @@ import java.io.File;
 public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-                      boolean resetForms, boolean resetLayers, boolean resetDatabases) {
+                      boolean resetForms, boolean resetLayers, boolean resetDatabases,
+                      boolean resetCache) {
+
         if (resetPreferences) {
             resetPreferences(context);
         }
@@ -47,6 +49,9 @@ public class ResetUtility {
         if (resetDatabases) {
             context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
             context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);        }
+        if (resetCache) {
+            deleteFolderContents(Collect.CACHE_PATH);
+        }
     }
 
     private void resetPreferences(Context context) {
