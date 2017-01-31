@@ -21,6 +21,8 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.DatabaseReader;
+import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 
@@ -29,7 +31,7 @@ import java.io.File;
 public class ResetUtility {
 
     public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-                      boolean resetForms, boolean resetLayers) {
+                      boolean resetForms, boolean resetLayers, boolean resetDatabases) {
         if (resetPreferences) {
             resetPreferences(context);
         }
@@ -42,6 +44,9 @@ public class ResetUtility {
         if (resetLayers) {
             deleteFolderContents(Collect.OFFLINE_LAYERS);
         }
+        if (resetDatabases) {
+            context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
+            context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);        }
     }
 
     private void resetPreferences(Context context) {
