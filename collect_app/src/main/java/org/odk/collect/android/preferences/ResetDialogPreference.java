@@ -15,22 +15,75 @@
  */
 package org.odk.collect.android.preferences;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ResetUtility;
 
 public class ResetDialogPreference extends DialogPreference {
+
+    private CheckBox mPreferences;
+    private Context mContext;
+    private ProgressDialog mProgressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.reset_dialog_layout);
+        mContext = context;
     }
 
     @Override
     public void onBindDialogView(View view) {
+        mPreferences = (CheckBox) view.findViewById(R.id.preferences);
         super.onBindDialogView(view);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if (which == DialogInterface.BUTTON_POSITIVE) {
+            resetSelected();
+        }
+    }
+
+    private void resetSelected() {
+        final boolean resetPreferences = mPreferences.isChecked();
+
+        if (resetPreferences) {
+            showProgressDialog();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    new ResetUtility().reset(getContext(), resetPreferences);
+                    hideProgressDialog();
+                }
+            };
+            new Thread(runnable).start();
+        } else {
+            Toast.makeText(getContext(), R.string.reset_dialog_nothing, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = ProgressDialog.show(getContext(),
+                mContext.getString(R.string.please_wait),
+                mContext.getString(R.string.reset_in_progress),
+                true);
+    }
+
+    private void hideProgressDialog() {
+        mProgressDialog.dismiss();
+        ((AdminPreferencesActivity) mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), R.string.resetting_finished, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

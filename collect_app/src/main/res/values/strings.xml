@@ -456,4 +456,7 @@
 <string name="reset_settings_dialog_title">Select what to reset</string>
 <string name="reset_settings_dialog">Reset App State</string>
 <string name="reset_settings_button_reset">Reset</string>
+<string name="reset_dialog_nothing">You have not selected anything to reset.</string>
+<string name="reset_in_progress">Resetting…</string>
+<string name="resetting_finished">Resetting finished</string>
 </resources>
