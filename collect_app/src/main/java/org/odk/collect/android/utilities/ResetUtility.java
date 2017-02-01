@@ -28,34 +28,46 @@ import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ResetUtility {
 
-    public void reset(final Context context, boolean resetPreferences, boolean resetInstances,
-                      boolean resetForms, boolean resetLayers, boolean resetDatabases,
-                      boolean resetCache, boolean resetOsmDroid) {
+    private List<Integer> mFailedResetActions;
 
-        if (resetPreferences) {
-            resetPreferences(context);
+    public List<Integer> reset(final Context context, List<Integer> resetActions) {
+
+        mFailedResetActions = new ArrayList<>();
+        mFailedResetActions.addAll(resetActions);
+
+        for (int action : resetActions) {
+            switch (action) {
+                case ResetAction.RESET_PREFERENCES:
+                    resetPreferences(context);
+                    break;
+                case ResetAction.RESET_INSTANCES:
+                    resetInstances(context);
+                    break;
+                case ResetAction.RESET_FORMS:
+                    resetForms(context);
+                    break;
+                case ResetAction.RESET_LAYERS:
+                    deleteFolderContents(Collect.OFFLINE_LAYERS, ResetAction.RESET_LAYERS);
+                    break;
+                case ResetAction.RESET_DATABASES:
+                    resetDatabases(context);
+                    break;
+                case ResetAction.RESET_CACHE:
+                    deleteFolderContents(Collect.CACHE_PATH, ResetAction.RESET_CACHE);
+                    break;
+                case ResetAction.RESET_OSM_DROID:
+                    deleteFolderContents(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath(), ResetAction.RESET_OSM_DROID);
+                    break;
+            }
         }
-        if (resetInstances) {
-            resetInstances(context);
-        }
-        if (resetForms) {
-            resetForms(context);
-        }
-        if (resetLayers) {
-            deleteFolderContents(Collect.OFFLINE_LAYERS);
-        }
-        if (resetDatabases) {
-            context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
-            context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);        }
-        if (resetCache) {
-            deleteFolderContents(Collect.CACHE_PATH);
-        }
-        if (resetOsmDroid) {
-            deleteFolderContents(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath());
-        }
+
+        return mFailedResetActions;
     }
 
     private void resetPreferences(Context context) {
@@ -66,6 +78,7 @@ public class ResetUtility {
                 .apply();
 
         PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
+        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
     }
 
     private void resetInstances(final Context context) {
@@ -73,7 +86,14 @@ public class ResetUtility {
 
         DeleteInstancesTask task = new DeleteInstancesTask();
         task.setContentResolver(context.getContentResolver());
-        task.execute(allInstances);
+        try {
+            task.execute(allInstances).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (task.getDeleteCount() == allInstances.length) {
+            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_INSTANCES));
+        }
     }
 
     private void resetForms(final Context context) {
@@ -81,26 +101,53 @@ public class ResetUtility {
 
         DeleteFormsTask task = new DeleteFormsTask();
         task.setContentResolver(context.getContentResolver());
-        task.execute(allForms);
+        try {
+            task.execute(allForms).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (task.getDeleteCount() == allForms.length) {
+            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_FORMS));
+        }
     }
 
-    private void deleteFolderContents(String path) {
+    private void deleteFolderContents(String path, int action) {
+        boolean result = true;
         File file = new File(path);
         if (file.exists()) {
             File[] files = file.listFiles();
 
             for (File f : files) {
-                deleteRecursive(f);
+                result = deleteRecursive(f);
             }
+        }
+        if (result) {
+            mFailedResetActions.remove(mFailedResetActions.indexOf(action));
         }
     }
 
-    private void deleteRecursive(File fileOrDirectory) {
+    private boolean deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory()) {
             for (File child : fileOrDirectory.listFiles()) {
                 deleteRecursive(child);
             }
         }
-        fileOrDirectory.delete();
+        return fileOrDirectory.delete();
+    }
+
+    private void resetDatabases(Context context) {
+        context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
+        context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
+        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_DATABASES));
+    }
+
+    public static class ResetAction {
+        public static final int RESET_PREFERENCES = 0;
+        public static final int RESET_INSTANCES = 1;
+        public static final int RESET_FORMS = 2;
+        public static final int RESET_LAYERS = 3;
+        public static final int RESET_DATABASES = 4;
+        public static final int RESET_CACHE = 5;
+        public static final int RESET_OSM_DROID = 6;
     }
 }
