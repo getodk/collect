@@ -100,8 +100,6 @@ public class MainMenuActivity extends Activity {
 
     private static boolean EXIT = true;
 
-    private Tracker mTracker;
-
     // private static boolean DO_NOT_EXIT = false;
 
     @Override
@@ -319,7 +317,7 @@ public class MainMenuActivity extends Activity {
             mManageFilesButton.setVisibility(View.VISIBLE);
         }
 
-        mTracker  = ((Collect) getApplication()).getDefaultTracker();
+        ((Collect) getApplication()).getDefaultTracker();
     }
 
     @Override
