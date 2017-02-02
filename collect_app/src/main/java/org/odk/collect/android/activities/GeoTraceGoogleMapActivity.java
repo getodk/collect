@@ -143,26 +143,29 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-                if (mMap == null) {
-                    Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
-                    finish();
-                    return;
-                }
-
-                mHelper = new MapHelper(GeoTraceGoogleMapActivity.this, mMap);
-                mMap.setMyLocationEnabled(true);
-                mMap.setOnMapLongClickListener(GeoTraceGoogleMapActivity.this);
-                mMap.setOnMarkerDragListener(GeoTraceGoogleMapActivity.this);
-                mMap.getUiSettings().setZoomControlsEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mMap.getUiSettings().setZoomControlsEnabled(false);
+                setupMap(googleMap);
             }
         });
+    }
+
+    private void setupMap(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (mMap == null) {
+            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        mHelper = new MapHelper(GeoTraceGoogleMapActivity.this, mMap);
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMapLongClickListener(GeoTraceGoogleMapActivity.this);
+        mMap.setOnMarkerDragListener(GeoTraceGoogleMapActivity.this);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
 
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.RED);
-
 
         clear_button = (Button) findViewById(R.id.clear);
         clear_button.setOnClickListener(new View.OnClickListener() {
@@ -198,8 +201,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 } catch (Exception e) {
                     // Do nothing
                 }
-
-
             }
         });
         layers_button = (Button) findViewById(R.id.layers);
@@ -207,7 +208,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         save_button = (Button) findViewById(R.id.geotrace_save);
         save_button.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (markerArray.size() != 0) {
@@ -215,8 +215,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 } else {
                     saveGeoTrace();
                 }
-
-
             }
         });
         play_button = (Button) findViewById(R.id.play);
@@ -259,13 +257,11 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             @Override
             public void onClick(View v) {
                 addLocationMarker();
-
             }
         });
 
         polygon_save = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
         polygon_save.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (markerArray.size() > 2) {
@@ -276,18 +272,14 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                     p_alert.dismiss();
                     showPolyonErrorDialog();
                 }
-
-
             }
         });
         polyline_save = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
         polyline_save.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 p_alert.dismiss();
                 saveGeoTrace();
-
             }
         });
 
@@ -313,7 +305,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 zoomToMyLocation();
@@ -323,10 +314,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 zoomtoBounds();
                 zoomDialog.dismiss();
             }
@@ -343,7 +332,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                         LocationManager.NETWORK_PROVIDER);
             }
         }
-
 
         if (mGPSOn) {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
@@ -375,7 +363,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-
+        mHelper.setBasemap();
     }
 
     private void overlayIntentTrace(String str) {
@@ -446,14 +434,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     protected void onPause() {
         super.onPause();
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mHelper.setBasemap();
 
     }
 
