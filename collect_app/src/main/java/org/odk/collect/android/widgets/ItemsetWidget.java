@@ -18,6 +18,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -52,7 +53,7 @@ import java.util.HashMap;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class ItemsetWidget extends QuestionWidget implements
-        android.widget.CompoundButton.OnCheckedChangeListener {
+        CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static String tag = "ItemsetWidget";
 
@@ -248,6 +249,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         RadioButton rb = new RadioButton(context);
 
                         rb.setOnCheckedChangeListener(this);
+                        rb.setOnClickListener(this);
                         rb.setTextSize(mAnswerFontsize);
                         rb.setText(label);
                         rb.setTag(index);
@@ -381,10 +383,13 @@ public class ItemsetWidget extends QuestionWidget implements
                     mAnswer = mAnswers.get(buttonView.getText().toString());
                 }
             }
-            if (mAutoAdvanceToNext) {
-                mAutoAdvanceToNextListener.advance();
-            }
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        if (mAutoAdvanceToNext) {
+            mAutoAdvanceToNextListener.advance();
+        }
+    }
 }
