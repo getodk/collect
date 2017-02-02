@@ -65,7 +65,8 @@ import java.util.Map.Entry;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends Activity {
-    private static final String t = "MainMenuActivity";
+
+	private static final String t = "MainMenuActivity";
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -79,6 +80,7 @@ public class MainMenuActivity extends Activity {
     private Button mSendDataButton;
     private Button mReviewDataButton;
     private Button mGetFormsButton;
+    private Button mViewSendFormsButton;
 
     private View mReviewSpacer;
     private View mGetFormsSpacer;
@@ -88,9 +90,11 @@ public class MainMenuActivity extends Activity {
 
     private int mCompletedCount;
     private int mSavedCount;
+    private int mViewSentCount;
 
     private Cursor mFinalizedCursor;
     private Cursor mSavedCursor;
+    private Cursor mViewSentCursor;
 
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
@@ -170,6 +174,7 @@ public class MainMenuActivity extends Activity {
                         .logAction(this, "editSavedForm", "click");
                 Intent i = new Intent(getApplicationContext(),
                         InstanceChooserList.class);
+                i.putExtra("Action", "EditSaved");
                 startActivity(i);
             }
         });
@@ -226,6 +231,20 @@ public class MainMenuActivity extends Activity {
                 startActivity(i);
             }
         });
+        
+        
+        //View sent form
+		mViewSendFormsButton = (Button) findViewById(R.id.view_data);
+		mViewSendFormsButton.setText(getString(R.string.view_data_button));
+		mViewSendFormsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Collect.getInstance().getActivityLogger().logAction(this, "viewSentForm", "click");
+				Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+				i.putExtra("Action", "ViewSent");
+				startActivity(i);
+			}
+		});
 
         // count for finalized instances
         String selection = InstanceColumns.STATUS + "=? or "
@@ -267,6 +286,25 @@ public class MainMenuActivity extends Activity {
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
         // don't need to set a content observer because it can't change in the
         // background
+
+        //count for view sent form
+        String selectionViewSent = InstanceColumns.STATUS + "=? or "
+                + InstanceColumns.STATUS + "=?";
+        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED,
+                InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED};
+
+        try {
+            mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
+                    selectionViewSent, selectionArgsViewSent, null);
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (mViewSentCursor != null) {
+            startManagingCursor(mViewSentCursor);
+        }
+        mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
 
         updateButtons();
     }
@@ -311,6 +349,13 @@ public class MainMenuActivity extends Activity {
             mManageFilesButton.setVisibility(View.GONE);
         } else {
             mManageFilesButton.setVisibility(View.VISIBLE);
+        }
+        boolean view_sent = sharedPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+        if (!view_sent) {
+            mViewSendFormsButton.setVisibility(View.GONE);
+        } else {
+            mViewSendFormsButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -500,6 +545,21 @@ public class MainMenuActivity extends Activity {
             mReviewDataButton.setText(getString(R.string.review_data));
             Log.w(t,
                     "Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
+        }
+
+
+        if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
+            mViewSentCursor.requery();
+            mViewSentCount = mViewSentCursor.getCount();
+            if (mViewSentCount > 0) {
+                mViewSendFormsButton.setText(getString(R.string.view_data_button, String.valueOf(mViewSentCount)));
+            } else {
+                mViewSendFormsButton.setText(getString(R.string.view_data));
+            }
+        } else {
+            mViewSendFormsButton.setText(getString(R.string.view_data));
+            Log.w(t,
+                    "Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
         }
     }
 

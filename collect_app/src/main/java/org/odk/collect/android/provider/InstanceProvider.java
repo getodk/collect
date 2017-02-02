@@ -78,7 +78,8 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.JR_VERSION + " text, "
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null );");
+                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
+                    + InstanceColumns.DELETED_SUBTEXT + " text );" );
         }
 
 
@@ -241,6 +242,8 @@ public class InstanceProvider extends ContentProvider {
             return new SimpleDateFormat(
                     getContext().getString(R.string.sending_failed_on_date_at_time),
                     Locale.getDefault()).format(date);
+        } else if (InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED.equalsIgnoreCase(state)) {
+            return new SimpleDateFormat(getContext().getString(R.string.deleted_on_date_at_time), Locale.getDefault()).format(date);
         } else {
             return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
                     Locale.getDefault()).format(date);
@@ -314,10 +317,12 @@ public class InstanceProvider extends ContentProvider {
                 String instanceId = uri.getPathSegments().get(1);
 
                 Cursor c = null;
+                String status = null;
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
                     if (c.getCount() > 0) {
                         c.moveToFirst();
+                        status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                         do {
                             String instanceFile = c.getString(
                                     c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
@@ -332,12 +337,20 @@ public class InstanceProvider extends ContentProvider {
                         c.close();
                     }
                 }
+                //We are going to update the status, if the form is submitted
+                //We will not delete the record in table but we will delete the file
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)){
 
-                count =
-                        db.delete(INSTANCES_TABLE_NAME,
-                                InstanceColumns._ID + "=" + instanceId
-                                        + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                whereArgs);
+                    ContentValues cv = new ContentValues();
+                    cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED);
+                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                } else {
+                    count =
+                            db.delete(INSTANCES_TABLE_NAME,
+                                    InstanceColumns._ID + "=" + instanceId
+                                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                    whereArgs);
+                }
                 break;
 
             default:
@@ -361,7 +374,7 @@ public class InstanceProvider extends ContentProvider {
         }
 
         int count;
-        String status = null;
+        String status;
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:
                 if (values.containsKey(InstanceColumns.STATUS)) {
@@ -386,7 +399,11 @@ public class InstanceProvider extends ContentProvider {
                     if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+                        if(status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)){
+                            values.put(InstanceColumns.DELETED_SUBTEXT, text);
+                        } else {
+                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+                        }
                     }
                 }
 
@@ -425,6 +442,7 @@ public class InstanceProvider extends ContentProvider {
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
                 InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(InstanceColumns.DELETED_SUBTEXT, InstanceColumns.DELETED_SUBTEXT);
     }
 
 }

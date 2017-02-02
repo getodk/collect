@@ -124,6 +124,8 @@
 <string name="required_answer_error">Sorry, this response is required!</string>
 <string name="review_data">Edit Saved Form</string>
 <string name="review_data_button">Edit Saved Form (%s)</string>
+<string name="view_data">View Sent Form</string>
+<string name="view_data_button">View Sent Form (%s)</string>
 <string name="saved_data">Incomplete (%s)</string>
 <string name="save_all_answers">Save Form</string>
 <string name="save_enter_data_description">You are at the end of %s.</string>
@@ -201,6 +203,7 @@
 <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="deleted_on_date_at_time">\'Deleted on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
 <string name="version">Version:</string>
 <string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
 <string name="launch_app">Launch</string>
@@ -425,6 +428,8 @@
 <string name="version_number">Version: %s</string>
 <string name="general_settings_about">About</string>
 <string name="all_open_source_licenses">Open source licenses</string>
+<string name="encrypted_form">Encrypted form</string>
+<string name="blank_form_deleted">Blank form deleted</string>
 <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
 <string name="west">W %1$s%2$s%3$s</string>
 <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8" -->

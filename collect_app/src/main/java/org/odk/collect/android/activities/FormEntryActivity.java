@@ -910,6 +910,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
+                i.putExtra("Action", "EditSaved");
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
             case MENU_PREFERENCES:
@@ -2465,7 +2466,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         CompatibilityUtils.invalidateOptionsMenu(this);
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
-
+        
         // Set the language if one has already been set in the past
         String[] languageTest = formController.getLanguages();
         if (languageTest != null) {
@@ -2545,10 +2546,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy
                 // view
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                startActivity(i);
-                return; // so we don't show the intro screen before jumping to
-                // the hierarchy
+            	Intent i = new Intent(this, FormHierarchyActivity.class);
+				if (reqIntent.getStringExtra("Action").equalsIgnoreCase("EditSaved")) {
+					i.putExtra("Action", "EditSaved");
+					startActivity(i);
+					return; // so we don't show the intro screen before jumping to
+	                // the hierarchy
+				} else {
+					if (reqIntent.getStringExtra("Action").equalsIgnoreCase("ViewSent")) {
+						i.putExtra("Action", "ViewSent");
+						startActivity(i);
+					}
+					finish();
+				}
             }
         }
 
@@ -2574,7 +2584,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public void savingComplete(SaveResult saveResult) {
         dismissDialog(SAVING_DIALOG);
-
+        
         int saveStatus = saveResult.getSaveResult();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:

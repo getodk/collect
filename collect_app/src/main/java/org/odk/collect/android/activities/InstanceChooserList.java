@@ -28,7 +28,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -60,24 +62,34 @@ public class InstanceChooserList extends ListActivity {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
+        Intent i = this.getIntent();
+        String selection;
+        String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
+        Cursor c;
 
-        String selection = InstanceColumns.STATUS + " != ?";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
-        String sortOrder =
-                InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
-                sortOrder);
+        if(i.getStringExtra("Action").equalsIgnoreCase("EditSaved")){
+            setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+            selection = InstanceColumns.STATUS + " = ?";
+            String[] selectionArgs = {InstanceProviderAPI.STATUS_INCOMPLETE};
+            c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
+        }
+        else{
+            setTitle(getString(R.string.app_name) + " > " + getString(R.string.view_data));
+            selection = InstanceColumns.STATUS + " = ? or " + InstanceColumns.STATUS + " = ?";
+            String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED, InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED};
+            c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
+        }
 
         String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_SUBTEXT
         };
         int[] view = new int[]{
-                R.id.text1, R.id.text2
+                R.id.text1, R.id.text2, R.id.text4
         };
 
         // render total instance view
-        SimpleCursorAdapter instances =
-                new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
+        ViewSentListAdapter instances =
+        new ViewSentListAdapter(this, R.layout.two_item, c, data, view);
         setListAdapter(instances);
     }
 
@@ -102,29 +114,60 @@ public class InstanceChooserList extends ListActivity {
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 instanceUri.toString());
 
-        String action = getIntent().getAction();
-        if (Intent.ACTION_PICK.equals(action)) {
-            // caller is waiting on a picked form
-            setResult(RESULT_OK, new Intent().setData(instanceUri));
-        } else {
-            // the form can be edited if it is incomplete or if, when it was
-            // marked as complete, it was determined that it could be edited
-            // later.
-            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-            String strCanEditWhenComplete =
-                    c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+        String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+        String selection = InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " =? ";
+        String[] selectionArgs = {c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID))};
 
-            boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
-                    || Boolean.parseBoolean(strCanEditWhenComplete);
-            if (!canEdit) {
-                createErrorDialog(getString(R.string.cannot_edit_completed_form),
-                        DO_NOT_EXIT);
-                return;
+        //getting blank form record
+        Cursor cursor = getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, null,selection
+                , selectionArgs, null);
+
+        //If size is zero
+        if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            //checking whether the form encryption and status
+            String encryption = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.BASE64_RSA_PUBLIC_KEY));
+            if (encryption != null || status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
+                //making the item non clickable if the form is encrypted or the sent data is deleted
+                listView.setClickable(false);
+            }else{
+                String action = getIntent().getAction();
+                if (Intent.ACTION_PICK.equals(action)) {
+                    // caller is waiting on a picked form
+                    setResult(RESULT_OK, new Intent().setData(instanceUri));
+                } else {
+                    // the form can be edited if it is incomplete or if, when it was
+                    // marked as complete, it was determined that it could be edited
+                    // later.
+                    String strCanEditWhenComplete =
+                            c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+
+                    boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
+                            || Boolean.parseBoolean(strCanEditWhenComplete);
+                    if (!canEdit) {
+                        createErrorDialog(getString(R.string.cannot_edit_completed_form),
+                                DO_NOT_EXIT);
+                        return;
+                    }
+                    // caller wants to view/edit a form, so launch formentryactivity
+                    Intent parentIntent = this.getIntent();
+                    Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+                    if (parentIntent.getStringExtra("Action").equalsIgnoreCase("EditSaved")) {
+                        intent.putExtra("Action", "EditSaved");
+                    } else {
+                        intent.putExtra("Action", "ViewSent");
+                    }
+                    startActivity(intent);
+                }
+                finish();
             }
-            // caller wants to view/edit a form, so launch formentryactivity
-            startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
+        }else {
+            listView.setClickable(false);
         }
-        finish();
+        if(cursor != null){
+            cursor.close();
+        }
+
     }
 
     @Override

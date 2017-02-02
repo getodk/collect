@@ -33,6 +33,12 @@
             android:summary="@string/found_in_main"
             android:title="@string/send_data" />
         <CheckBoxPreference
+            android:id="@+id/sent_form"
+            android:defaultValue="true"
+            android:key="view_sent"
+            android:summary="@string/found_in_main"
+            android:title="@string/view_data" />
+        <CheckBoxPreference
             android:id="@+id/get_blank"
             android:defaultValue="true"
             android:key="get_blank"
