@@ -23,6 +23,9 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -76,6 +79,8 @@ public class Collect extends Application {
     private ExternalDataManager externalDataManager;
 
     private static Collect singleton = null;
+
+    private Tracker mTracker;
 
     public static Collect getInstance() {
         return singleton;
@@ -240,6 +245,18 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
+    }
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 
 }
