@@ -238,8 +238,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         setContentView(R.layout.form_entry);
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.loading_form));
+        setTitle(getString(R.string.loading_form));
 
         mErrorMessage = null;
 

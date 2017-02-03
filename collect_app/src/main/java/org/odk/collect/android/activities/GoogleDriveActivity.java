@@ -159,7 +159,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.google_drive));
+        setTitle(getString(R.string.google_drive));
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setProgressBarVisibility(true);
