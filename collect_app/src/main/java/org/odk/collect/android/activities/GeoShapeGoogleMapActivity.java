@@ -30,12 +30,14 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
@@ -103,15 +105,37 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                R.id.gmap)).getMap();
-        mHelper = new MapHelper(this, mMap);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mLocationManager.removeUpdates(this);
+
+    }
+
+    private void setupMap(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (mMap == null) {
+            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        mHelper = new MapHelper(GeoShapeGoogleMapActivity.this, mMap);
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerDragListener(this);
+        mMap.setOnMapLongClickListener(GeoShapeGoogleMapActivity.this);
+        mMap.setOnMarkerDragListener(GeoShapeGoogleMapActivity.this);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(false);
+
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
         polygonOptions.zIndex(1);
@@ -138,9 +162,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         gps_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(curLocation !=null){
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
-//                }
+        // if(curLocation !=null){
+        //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
+        // }
                 showZoomDialog();
             }
         });
@@ -174,14 +198,11 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-
         layers_button = (Button) findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 mHelper.showLayersDialog(GeoShapeGoogleMapActivity.this);
-
             }
         });
 
@@ -189,7 +210,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (curLocation != null) {
@@ -201,10 +221,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-//                zoomToCentroid();
+                // zoomToCentroid();
                 zoomtoBounds();
                 zoomDialog.dismiss();
             }
@@ -218,28 +237,15 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             showZoomDialog();
         }
 
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mLocationManager.removeUpdates(this);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         mHelper.setBasemap();
-        List<String> providers = mLocationManager.getProviders(true);
+        providers = mLocationManager.getProviders(true);
 
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
                 mGPSOn = true;
                 curLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-//                gps_button.setEnabled(true);
+                // gps_button.setEnabled(true);
             }
             if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
                 mNetworkOn = true;
@@ -247,19 +253,18 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                         LocationManager.NETWORK_PROVIDER);
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
                         this);
-//                gps_button.setEnabled(true);
+                // gps_button.setEnabled(true);
             }
         }
 
         if (mGPSOn) {
-//            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            // mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             gps_button.setEnabled(true);
         }
         if (mNetworkOn) {
-//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            // mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             gps_button.setEnabled(true);
         }
-
     }
 
     @Override

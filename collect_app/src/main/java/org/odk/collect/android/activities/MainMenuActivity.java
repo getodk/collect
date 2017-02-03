@@ -40,6 +40,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -269,6 +272,7 @@ public class MainMenuActivity extends Activity {
         // background
 
         updateButtons();
+        setupGoogleAnalytics();
     }
 
     @Override
@@ -312,6 +316,8 @@ public class MainMenuActivity extends Activity {
         } else {
             mManageFilesButton.setVisibility(View.VISIBLE);
         }
+
+        ((Collect) getApplication()).getDefaultTracker();
     }
 
     @Override
@@ -470,6 +476,15 @@ public class MainMenuActivity extends Activity {
 
         }
         return null;
+    }
+
+    // This flag must be set each time the app starts up
+    private void setupGoogleAnalytics() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+                .getInstance());
+        boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ENABLE_ANALYTICS, true);
+        GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
+        googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }
 
     private void updateButtons() {

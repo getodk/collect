@@ -32,6 +32,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <!-- Get permission for reliable local dispatching on non-Google Play devices. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>
@@ -253,7 +256,18 @@
                 <action android:name="org.odk.collect.android.FormSaved" />
             </intent-filter>
         </receiver>
-
+        <!-- Register AnalyticsReceiver and AnalyticsService to support background
+        dispatching on non-Google Play devices. -->
+        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false"/>
+        <!-- ... -->
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"

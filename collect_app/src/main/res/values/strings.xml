@@ -442,4 +442,7 @@
 <string name="phone_does_not_support_rsa">Phone does not support RSA encryption.</string>
 <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
 <string name="encryption_error_message">%s Form has not been saved as finalized.</string>
+<string name="analytics_preferences">Analytics Options</string>
+<string name="enable_analytics">Enable Analytics</string>
+<string name="enable_analytics_summary">Uncheck to disable Analytics</string>
 </resources>
