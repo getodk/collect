@@ -31,6 +31,7 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 
 import java.lang.reflect.Field;
@@ -287,13 +288,16 @@ public class DateTimeWidget extends QuestionWidget {
             scrollView.clearChildFocus(mDatePicker);
         }
         clearFocus();
-        DateTime ldt =
-                new DateTime(mDatePicker.getYear(),
-                        (!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1,
-                        (!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth(),
-                        (!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentHour(),
-                        (!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentMinute(), 0);
-        //DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+
+        LocalDateTime ldt = new LocalDateTime()
+                .withYear(mDatePicker.getYear())
+                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1)
+                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth())
+                .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentHour())
+                .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentMinute())
+                .withSecondOfMinute(0);
+
+        ldt = skipDaylightSavingGapIfExists(ldt);
         return new DateTimeData(ldt.toDate());
     }
 
