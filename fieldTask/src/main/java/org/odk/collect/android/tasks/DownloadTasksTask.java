@@ -30,6 +30,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
@@ -266,8 +267,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 }
 
                 /*
-	        	 * Get tasks from the server
+	        	 * Get new forms and tasks from the server
 	        	 */
+                publishProgress(Collect.getInstance().getString(R.string.smap_new_forms));
+
                 HttpContext localContext = Collect.getInstance().getHttpContext();
                 HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
                 Uri u = Uri.parse(taskURL);
@@ -434,14 +437,15 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 }
             }
 
-            InstanceUploaderTask instanceUploaderTask = new InstanceUploaderTask();
-            publishProgress("Submitting " + toUpload.size() + " finalised surveys");
-            instanceUploaderTask.setUploaderListener((InstanceUploaderListener) mStateListener);
-
-            Long[] toSendArray = new Long[toUpload.size()];
-            toUpload.toArray(toSendArray);
-            Log.i(getClass().getSimpleName(), "Submitting " + toUpload.size() + " finalised surveys");
             if(toUpload.size() > 0) {
+                InstanceUploaderTask instanceUploaderTask = new InstanceUploaderTask();
+                publishProgress(Collect.getInstance().getString(R.string.smap_submitting, toUpload.size()));
+                instanceUploaderTask.setUploaderListener((InstanceUploaderListener) mStateListener);
+
+                Long[] toSendArray = new Long[toUpload.size()];
+                toUpload.toArray(toSendArray);
+                Log.i(getClass().getSimpleName(), "Submitting " + toUpload.size() + " finalised surveys");
+
             	return instanceUploaderTask.doInBackground(toSendArray);	// Already running a background task so call direct
             } else {
             	return null;
@@ -510,62 +514,65 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             TraceUtilities.getPoints(updateResponse.userTrail);
         }
 
-        publishProgress("Update status of tasks on server");
+        if(updateResponse.taskAssignments.size() > 0 ||
+                (updateResponse.taskCompletionInfo != null &&
+                        (updateResponse.taskCompletionInfo.size() > 0 || updateResponse.userTrail.size() > 0))) {
+
+            publishProgress(Collect.getInstance().getString(R.string.smap_update_task_status));
 
 
-        // Call the service
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-        HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-        Uri u = Uri.parse(taskURL);
-        if(username != null && password != null) {
-            WebUtils.addCredentials(username, password, u.getHost());
-        }
+            // Call the service
+            HttpContext localContext = Collect.getInstance().getHttpContext();
+            HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+            Uri u = Uri.parse(taskURL);
+            if (username != null && password != null) {
+                WebUtils.addCredentials(username, password, u.getHost());
+            }
 
+            /*
+             * Use a head request as per instance uploader
+             * This will set the authentication as digest and set the nonce
+             *
+             * There must be a more efficient way to do this!
+             */
+            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
+            try {
+                client.execute(httpHead, localContext);
+            } catch (Exception e) {
 
-        /*
-         * Use a head request as per instance uploader
-         * This will set the authentication as digest and set the nonce
-         *
-         * There must be a more efficient way to do this!
-         */
-        HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
-        try {
-            client.execute(httpHead, localContext);
-        } catch (Exception e) {
+            }
 
-        }
+            HttpPost postRequest = new HttpPost(URI.create(u.toString()));
 
-        HttpPost postRequest = new HttpPost(URI.create(u.toString()));
+            Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
+            String resp = gson.toJson(updateResponse);
 
-        Gson gson=  new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
-		String resp = gson.toJson(updateResponse);
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("assignInput", resp));
+            postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
 
-        ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-        dataToSend.add(new BasicNameValuePair("assignInput", resp));
-        postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
+            HttpResponse response = null;
+            int statusCode = 0;
+            try {
+                response = client.execute(postRequest, localContext);
+                statusCode = response.getStatusLine().getStatusCode();
+            } catch (Exception e) {
 
-        HttpResponse response = null;
-        int statusCode = 0;
-        try {
-            response = client.execute(postRequest, localContext);
-            statusCode = response.getStatusLine().getStatusCode();
-        } catch (Exception e) {
+            }
 
-        }
-
-        if(statusCode != HttpStatus.SC_OK) {
-            Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
-            results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+            if (statusCode != HttpStatus.SC_OK) {
+                Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
+                results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+                WebUtils.discardEntityBytes(response);
+                throw new Exception(response.getStatusLine().getReasonPhrase());
+            }
             WebUtils.discardEntityBytes(response);
-            throw new Exception(response.getStatusLine().getReasonPhrase());
-        }
-        WebUtils.discardEntityBytes(response);
 
-        for(TaskAssignment ta : updateResponse.taskAssignments) {
-            Utilities.setTaskSynchronized((long) ta.assignment.dbId);		// Mark the task status as synchronised
+            for (TaskAssignment ta : updateResponse.taskAssignments) {
+                Utilities.setTaskSynchronized((long) ta.assignment.dbId);        // Mark the task status as synchronised
+            }
+            TraceUtilities.deleteSource();
         }
-        TraceUtilities.deleteSource();
-		
 	}
 	
 	/*
@@ -661,7 +668,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 		HashMap<FormDetails, String> dfResults = null;
     	
     	if(forms == null) {
-        	publishProgress("No forms to download");
+        	publishProgress(Collect.getInstance().getString(R.string.smap_no_forms));
     	} else {
     		
     		HashMap <String, String> formMap = new HashMap <String, String> ();
@@ -691,14 +698,16 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         		String entryHash = form.ident + "_v_" + form.version;
         		formMap.put(entryHash, entryHash);
         	}
-	        
-        	DownloadFormsTask downloadFormsTask = new DownloadFormsTask();
-            publishProgress("Downloading " + toDownload.size() + " forms");
 
-            Log.i(getClass().getSimpleName(), "Downloading " + toDownload.size() + " forms");
-            downloadFormsTask.setDownloaderListener((FormDownloaderListener) mStateListener);
-            dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
-        		
+            if(toDownload.size() > 0) {
+                DownloadFormsTask downloadFormsTask = new DownloadFormsTask();
+                publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
+
+                Log.i(getClass().getSimpleName(), "Downloading " + toDownload.size() + " forms");
+                downloadFormsTask.setDownloaderListener((FormDownloaderListener) mStateListener);
+                dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
+            }
+            
           	// Delete any forms no longer required
         	mf.deleteForms(formMap, results);
     	}

@@ -46,4 +46,8 @@
   <string name="read_only">Tarea completa. Sólo se pueden cambiar sus comentarios</string>
   <string name="no_review">Esta tarea está finalizada y no puede ser revisada</string>
   <string name="smap_add_comment">Agregar Comentario</string>
+  <string name="smap_no_forms">No hay formularios para descargar</string>
+  <string name="smap_downloading">Descargando %1$d formularios</string>
+  <string name="smap_submitting">Enviando al servidor %1$d formularios finalizados</string>
+  <string name="smap_update_task_status">Actualizando estatus de tareas en el servidor</string>
 </resources>

@@ -62,4 +62,9 @@
     <string name="read_only">This task is complete and only its comments can be changed</string>
     <string name="no_review">This task is finalised and cannot be reviewed</string>
     <string name="smap_add_comment">Add Comment</string>
+    <string name="smap_new_forms">Look for new forms and tasks</string>
+    <string name="smap_no_forms">No forms to download</string>
+    <string name="smap_downloading">Downloading %1$d forms</string>
+    <string name="smap_submitting">"Submitting %1$d finalised surveys"</string>
+    <string name="smap_update_task_status">"Update status of tasks on the server"</string>
 </resources>
