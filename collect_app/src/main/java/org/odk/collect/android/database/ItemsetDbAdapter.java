@@ -101,9 +101,14 @@ public class ItemsetDbAdapter {
         sb.append("create table " + DATABASE_TABLE + pathHash
                 + " (_id integer primary key autoincrement ");
         for (int j = 0; j < columns.length; j++) {
-            // add double quotes in case the column is of label:lang
-            sb.append(" , \"" + columns[j] + "\" text ");
-            // create database with first line
+            if (!columns[j].isEmpty()) {
+                // add double quotes in case the column is of label:lang
+                sb
+                        .append(" , \"")
+                        .append(columns[j])
+                        .append("\" text ");
+                // create database with first line
+            }
         }
         sb.append(");");
 
@@ -125,7 +130,9 @@ public class ItemsetDbAdapter {
         // rows don't necessarily use all the columns
         // but a column is guaranteed to exist for a row (or else blow up)
         for (int i = 0; i < newRow.length; i++) {
-            cv.put("\"" + columns[i] + "\"", newRow[i]);
+            if (!columns[i].isEmpty()) {
+                cv.put("\"" + columns[i] + "\"", newRow[i]);
+            }
         }
         mDb.insert(DATABASE_TABLE + tableName, null, cv);
         return true;
