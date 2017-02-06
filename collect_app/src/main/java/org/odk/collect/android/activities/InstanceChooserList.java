@@ -57,7 +57,7 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+        setTitle(getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
 

@@ -101,8 +101,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.admin_preferences));
+        setTitle(getString(R.string.admin_preferences));
 
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
