@@ -138,7 +138,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.general_preferences));
+        setTitle(getString(R.string.general_preferences));
 
         // not super safe, but we're just putting in this mode to help
         // administrate
