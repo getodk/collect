@@ -30,6 +30,7 @@ import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 
 import java.lang.reflect.Field;
@@ -251,12 +252,15 @@ public class DateWidget extends QuestionWidget {
             scrollView.clearChildFocus(mDatePicker);
         }
         clearFocus();
-        DateTime ldt =
-                new DateTime(mDatePicker.getYear(),
-                        (!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1,
-                        (!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth(),
-                        0, 0);
-        // DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
+
+        LocalDateTime ldt = new LocalDateTime()
+                .withYear(mDatePicker.getYear())
+                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1)
+                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth())
+                .withHourOfDay(0)
+                .withMinuteOfHour(0);
+
+        ldt = skipDaylightSavingGapIfExists(ldt);
         return new DateData(ldt.toDate());
     }
 
