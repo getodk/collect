@@ -22,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -51,10 +52,6 @@ import java.io.File;
  */
 public class Collect extends Application {
 
-    static {
-        PRNGFixes.apply();
-    }
-
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
             + File.separator + "odk";
@@ -66,9 +63,13 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String TMPXML_PATH = CACHE_PATH + File.separator + "tmp.xml";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
-
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
+    private static Collect singleton = null;
+
+    static {
+        PRNGFixes.apply();
+    }
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
@@ -77,33 +78,10 @@ public class Collect extends Application {
     private ActivityLogger mActivityLogger;
     private FormController mFormController = null;
     private ExternalDataManager externalDataManager;
-
-    private static Collect singleton = null;
-
     private Tracker mTracker;
 
     public static Collect getInstance() {
         return singleton;
-    }
-
-    public ActivityLogger getActivityLogger() {
-        return mActivityLogger;
-    }
-
-    public FormController getFormController() {
-        return mFormController;
-    }
-
-    public void setFormController(FormController controller) {
-        mFormController = controller;
-    }
-
-    public ExternalDataManager getExternalDataManager() {
-        return externalDataManager;
-    }
-
-    public void setExternalDataManager(ExternalDataManager externalDataManager) {
-        this.externalDataManager = externalDataManager;
     }
 
     public static int getQuestionFontsize() {
@@ -113,27 +91,6 @@ public class Collect extends Application {
                 Collect.DEFAULT_FONTSIZE);
         int questionFontsize = Integer.valueOf(question_font);
         return questionFontsize;
-    }
-
-    public String getVersionedAppName() {
-        String versionName = "";
-        try {
-            versionName = getPackageManager()
-                    .getPackageInfo(getPackageName(), 0)
-                    .versionName;
-            versionName = " " + versionName.replaceFirst("-", "\n");
-        } catch (NameNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return getString(R.string.app_name) + versionName;
-    }
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) getInstance()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
     }
 
     /**
@@ -193,6 +150,57 @@ public class Collect extends Application {
         return false;
     }
 
+    public ActivityLogger getActivityLogger() {
+        return mActivityLogger;
+    }
+
+    public FormController getFormController() {
+        return mFormController;
+    }
+
+    public void setFormController(FormController controller) {
+        mFormController = controller;
+    }
+
+    public ExternalDataManager getExternalDataManager() {
+        return externalDataManager;
+    }
+
+    public void setExternalDataManager(ExternalDataManager externalDataManager) {
+        this.externalDataManager = externalDataManager;
+    }
+
+    public String getVersionedAppName() {
+        String versionName = "";
+        try {
+            versionName = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0)
+                    .versionName;
+            versionName = " " + versionName.replaceFirst("-", "\n");
+        } catch (NameNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return getString(R.string.app_name) + versionName;
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getInstance()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
+    }
+
+    /*
+        Adds support for multidex support library. For more info check out the link below,
+        https://developer.android.com/studio/build/multidex.html
+    */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     /**
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
@@ -249,6 +257,7 @@ public class Collect extends Application {
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
+     *
      * @return tracker
      */
     synchronized public Tracker getDefaultTracker() {
