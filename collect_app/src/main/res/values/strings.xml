@@ -445,4 +445,6 @@
 <string name="analytics_preferences">Analytics Options</string>
 <string name="enable_analytics">Enable Analytics</string>
 <string name="enable_analytics_summary">Uncheck to disable Analytics</string>
+    <string name="select_all">Select All</string>
+    <string name="clear_all">Clear All</string>
 </resources>
