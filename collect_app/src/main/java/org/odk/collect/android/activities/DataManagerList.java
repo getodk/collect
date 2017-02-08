@@ -72,6 +72,7 @@ public class DataManagerList extends ListActivity implements
                         Integer.toString(mSelected.size()));
                 if (mSelected.size() > 0) {
                     createDeleteInstancesDialog();
+                    ListViewUtils.disableToggleButton(mToggleButton, getListView());
                 } else {
                     Toast.makeText(getApplicationContext(),
                             R.string.noselect_error, Toast.LENGTH_SHORT).show();
@@ -85,6 +86,7 @@ public class DataManagerList extends ListActivity implements
             public void onClick(View v) {
                 ListView lv = getListView();
                 boolean allChecked = ListViewUtils.toggleChecked(lv);
+                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
 
                 // sync up internal state
                 mSelected.clear();
@@ -249,6 +251,7 @@ public class DataManagerList extends ListActivity implements
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 Long.toString(k));
 
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(mSelected.size() > 0);
     }
 

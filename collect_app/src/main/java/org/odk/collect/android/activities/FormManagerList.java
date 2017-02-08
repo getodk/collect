@@ -88,6 +88,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
 
                 if (mSelected.size() > 0) {
                     createDeleteFormsDialog();
+                    ListViewUtils.disableToggleButton(mToggleButton, getListView());
                 } else {
                     Toast.makeText(getApplicationContext(),
                             R.string.noselect_error, Toast.LENGTH_SHORT).show();
@@ -101,7 +102,6 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                 public void onClick(View v) {
                     ListView lv = getListView();
                     boolean allChecked = ListViewUtils.toggleChecked(lv);
-
                     // sync up internal state
                     mSelected.clear();
                     if (allChecked) {
@@ -110,6 +110,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                             mSelected.add(getListAdapter().getItemId(pos));
                         }
                     }
+                    ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
                     mDeleteButton.setEnabled(allChecked);
                 }
         });
@@ -287,6 +288,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 Long.toString(k));
 
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
     }

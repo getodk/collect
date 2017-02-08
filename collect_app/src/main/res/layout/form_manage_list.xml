@@ -34,7 +34,7 @@ the License.
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="12dp"
-            android:text="@string/toggle_selected"
+            android:text="@string/select_all"
             android:textSize="16sp" />
          
         <Button

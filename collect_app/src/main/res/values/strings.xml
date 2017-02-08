@@ -136,7 +136,6 @@
 <string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
 <string name="server_preferences">Server Settings</string>
-<string name="toggle_selected">Toggle All</string>
 <string name="trigger">OK. Please continue.</string>
 <string name="uploading_data">Sending Form</string>
 <string name="url_error">Sorry, invalid URL!</string>
@@ -445,4 +444,6 @@
 <string name="analytics_preferences">Analytics Options</string>
 <string name="enable_analytics">Enable Analytics</string>
 <string name="enable_analytics_summary">Uncheck to disable Analytics</string>
+<string name="select_all">Select All</string>
+<string name="clear_all">Clear All</string>
 </resources>
