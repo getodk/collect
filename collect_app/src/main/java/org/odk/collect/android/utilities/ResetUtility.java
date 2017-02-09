@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.provider.DatabaseReader;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -98,6 +99,12 @@ public class ResetUtility {
     private void resetForms(final Context context) {
         context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
 
+        File itemsetDbFile = new File(Collect.METADATA_PATH + File.separator + ItemsetDbAdapter.DATABASE_NAME);
+        boolean itemsetDbDeleted = true;
+        if (itemsetDbFile.exists()) {
+            itemsetDbDeleted = itemsetDbFile.delete();
+        }
+
         final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
 
         DeleteFormsTask task = new DeleteFormsTask();
@@ -107,7 +114,7 @@ public class ResetUtility {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        if (task.getDeleteCount() == allForms.length) {
+        if (task.getDeleteCount() == allForms.length && itemsetDbDeleted) {
             mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_FORMS));
         }
     }
