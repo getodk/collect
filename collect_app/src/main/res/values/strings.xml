@@ -450,7 +450,6 @@
 <string name="reset_filled_out_forms">Saved forms</string>
 <string name="reset_blank_forms">Blank forms</string>
 <string name="reset_layers">Offline map layers</string>
-<string name="reset_databases">Databases</string>
 <string name="reset_cache">Form load cache</string>
 <string name="reset_osmdroid">All OSM tiles from the device</string>
 <string name="reset_settings_dialog_title">Select what to reset</string>

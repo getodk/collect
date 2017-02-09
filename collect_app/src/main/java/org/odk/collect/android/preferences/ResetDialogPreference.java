@@ -39,7 +39,6 @@ public class ResetDialogPreference extends DialogPreference {
     private CheckBox mInstances;
     private CheckBox mForms;
     private CheckBox mLayers;
-    private CheckBox mDatabases;
     private CheckBox mCache;
     private Context mContext;
     private CheckBox mOsmDroid;
@@ -57,7 +56,6 @@ public class ResetDialogPreference extends DialogPreference {
         mInstances = (CheckBox) view.findViewById(R.id.instances);
         mForms = (CheckBox) view.findViewById(R.id.forms);
         mLayers = (CheckBox) view.findViewById(R.id.layers);
-        mDatabases = (CheckBox) view.findViewById(R.id.databases);
         mCache = (CheckBox) view.findViewById(R.id.cache);
         mOsmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
         super.onBindDialogView(view);
@@ -76,7 +74,6 @@ public class ResetDialogPreference extends DialogPreference {
         final boolean resetInstances = mInstances.isChecked();
         final boolean resetForms = mForms.isChecked();
         final boolean resetLayers = mLayers.isChecked();
-        final boolean resetDatabases = mDatabases.isChecked();
         final boolean resetCache = mCache.isChecked();
         final boolean resetOsmDroid = mOsmDroid.isChecked();
 
@@ -91,9 +88,6 @@ public class ResetDialogPreference extends DialogPreference {
         }
         if (resetLayers) {
             resetActions.add(ResetUtility.ResetAction.RESET_LAYERS);
-        }
-        if (resetDatabases) {
-            resetActions.add(ResetUtility.ResetAction.RESET_DATABASES);
         }
         if (resetCache) {
             resetActions.add(ResetUtility.ResetAction.RESET_CACHE);
@@ -173,17 +167,6 @@ public class ResetDialogPreference extends DialogPreference {
                     } else {
                         resultMessage.append(String.format(ACTION_RESULT,
                                 getContext().getString(R.string.reset_layers),
-                                getContext().getString(R.string.success)));
-                    }
-                    break;
-                case ResetUtility.ResetAction.RESET_DATABASES:
-                    if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_databases),
-                                getContext().getString(R.string.error_occured)));
-                    } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_databases),
                                 getContext().getString(R.string.success)));
                     }
                     break;

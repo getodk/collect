@@ -71,15 +71,6 @@ limitations under the License.
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
         <CheckBox
-            android:id="@+id/databases"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reset_databases"
-            android:padding="5dp"
-            android:button="@null"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
-
-        <CheckBox
             android:id="@+id/cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

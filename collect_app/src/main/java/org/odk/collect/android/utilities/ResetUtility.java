@@ -55,9 +55,6 @@ public class ResetUtility {
                 case ResetAction.RESET_LAYERS:
                     deleteFolderContents(Collect.OFFLINE_LAYERS, ResetAction.RESET_LAYERS);
                     break;
-                case ResetAction.RESET_DATABASES:
-                    resetDatabases(context);
-                    break;
                 case ResetAction.RESET_CACHE:
                     deleteFolderContents(Collect.CACHE_PATH, ResetAction.RESET_CACHE);
                     break;
@@ -82,6 +79,8 @@ public class ResetUtility {
     }
 
     private void resetInstances(final Context context) {
+        context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
+
         final Long[] allInstances = new DatabaseReader().getAllInstancesIDs(context);
 
         DeleteInstancesTask task = new DeleteInstancesTask();
@@ -97,6 +96,8 @@ public class ResetUtility {
     }
 
     private void resetForms(final Context context) {
+        context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
+
         final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
 
         DeleteFormsTask task = new DeleteFormsTask();
@@ -135,19 +136,12 @@ public class ResetUtility {
         return fileOrDirectory.delete();
     }
 
-    private void resetDatabases(Context context) {
-        context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
-        context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
-        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_DATABASES));
-    }
-
     public static class ResetAction {
         public static final int RESET_PREFERENCES = 0;
         public static final int RESET_INSTANCES = 1;
         public static final int RESET_FORMS = 2;
         public static final int RESET_LAYERS = 3;
-        public static final int RESET_DATABASES = 4;
-        public static final int RESET_CACHE = 5;
-        public static final int RESET_OSM_DROID = 6;
+        public static final int RESET_CACHE = 4;
+        public static final int RESET_OSM_DROID = 5;
     }
 }
