@@ -32,16 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResetDialogPreference extends DialogPreference {
-
-    private static final String ACTION_RESULT = "%s :: %s\n";
-
     private CheckBox mPreferences;
     private CheckBox mInstances;
     private CheckBox mForms;
     private CheckBox mLayers;
     private CheckBox mCache;
-    private Context mContext;
     private CheckBox mOsmDroid;
+    private Context mContext;
     private ProgressDialog mProgressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {
@@ -70,29 +67,23 @@ public class ResetDialogPreference extends DialogPreference {
 
     private void resetSelected() {
         final List<Integer> resetActions = new ArrayList<>();
-        final boolean resetPreferences = mPreferences.isChecked();
-        final boolean resetInstances = mInstances.isChecked();
-        final boolean resetForms = mForms.isChecked();
-        final boolean resetLayers = mLayers.isChecked();
-        final boolean resetCache = mCache.isChecked();
-        final boolean resetOsmDroid = mOsmDroid.isChecked();
 
-        if (resetPreferences) {
+        if (mPreferences.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_PREFERENCES);
         }
-        if (resetInstances) {
+        if (mInstances.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_INSTANCES);
         }
-        if (resetForms) {
+        if (mForms.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_FORMS);
         }
-        if (resetLayers) {
+        if (mLayers.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_LAYERS);
         }
-        if (resetCache) {
+        if (mCache.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_CACHE);
         }
-        if (resetOsmDroid) {
+        if (mOsmDroid.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_OSM_DROID);
         }
         if (!resetActions.isEmpty()) {
@@ -128,73 +119,64 @@ public class ResetDialogPreference extends DialogPreference {
             switch (action) {
                 case ResetUtility.ResetAction.RESET_PREFERENCES:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_settings),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_settings_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_settings),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_settings_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
                 case ResetUtility.ResetAction.RESET_INSTANCES:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_filled_out_forms),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_saved_forms_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_filled_out_forms),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_saved_forms_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
                 case ResetUtility.ResetAction.RESET_FORMS:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_blank_forms),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_blank_forms_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_blank_forms),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_blank_forms_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
                 case ResetUtility.ResetAction.RESET_LAYERS:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_layers),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_layers),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
                 case ResetUtility.ResetAction.RESET_CACHE:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_cache),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_cache_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_cache),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_cache_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
                 case ResetUtility.ResetAction.RESET_OSM_DROID:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_osmdroid),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_osm_tiles_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(ACTION_RESULT,
-                                getContext().getString(R.string.reset_osmdroid),
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_osm_tiles_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
             }
+            if (resetActions.indexOf(action) < resetActions.size() - 1) {
+                resultMessage.append("\n");
+            }
         }
-        showResultDialog(String.valueOf(resultMessage.substring(0, resultMessage.length() - 1)));
+        showResultDialog(String.valueOf(resultMessage));
     }
 
     private void showResultDialog(final String resultMessage) {

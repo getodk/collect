@@ -47,7 +47,7 @@ limitations under the License.
             android:id="@+id/instances"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reset_filled_out_forms"
+            android:text="@string/reset_saved_forms"
             android:padding="5dp"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -83,7 +83,7 @@ limitations under the License.
             android:id="@+id/osmdroid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reset_osmdroid"
+            android:text="@string/reset_osm_tiles"
             android:padding="5dp"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
