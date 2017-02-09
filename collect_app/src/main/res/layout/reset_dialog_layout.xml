@@ -26,6 +26,14 @@ limitations under the License.
         android:padding="10dp"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            android:text="@string/reset_app_state_warning"
+            android:background="#F44336"/>
+
         <CheckBox
             android:id="@+id/preferences"
             android:layout_width="match_parent"
