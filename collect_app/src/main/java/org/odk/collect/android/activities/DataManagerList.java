@@ -215,9 +215,9 @@ public class DataManagerList extends ListActivity implements
                     }
                 };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.delete_yes),
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delete_yes),
                 dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.delete_no),
+        mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delete_no),
                 dialogYesNoListener);
         mAlertDialog.show();
     }
