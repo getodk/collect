@@ -63,9 +63,10 @@ public final class ListViewUtils {
 
     // Function to toggle button label
     public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
-        if (ListViewUtils.selectedItemCount(lv) != lv.getCount())
+        if (ListViewUtils.selectedItemCount(lv) != lv.getCount()) {
             mToggleButton.setText(R.string.select_all);
-        else
+        } else {
             mToggleButton.setText(R.string.clear_all);
+        }
     }
 }
