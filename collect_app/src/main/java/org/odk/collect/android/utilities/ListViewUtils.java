@@ -68,10 +68,4 @@ public final class ListViewUtils {
         else
             mToggleButton.setText(R.string.clear_all);
     }
-
-    public static void disableToggleButton(Button mToggleButton, ListView lv) {
-        if (lv.getCount() == 0)
-            mToggleButton.setEnabled(false);
-    }
-
 }

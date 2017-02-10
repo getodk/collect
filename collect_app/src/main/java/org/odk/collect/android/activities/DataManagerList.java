@@ -72,7 +72,6 @@ public class DataManagerList extends ListActivity implements
                         Integer.toString(mSelected.size()));
                 if (mSelected.size() > 0) {
                     createDeleteInstancesDialog();
-                    ListViewUtils.disableToggleButton(mToggleButton, getListView());
                 } else {
                     Toast.makeText(getApplicationContext(),
                             R.string.noselect_error, Toast.LENGTH_SHORT).show();
@@ -115,6 +114,10 @@ public class DataManagerList extends ListActivity implements
         mDeleteButton.setEnabled(false);
 
         mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
+
+        if (getListView().getCount() == 0) {
+            mToggleButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -200,6 +203,9 @@ public class DataManagerList extends ListActivity implements
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "createDeleteInstancesDialog", "delete");
                                 deleteSelectedInstances();
+                                if (getListView().getCount() == mSelected.size()) {
+                                    mToggleButton.setEnabled(false);
+                                }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE: // do nothing
                                 Collect.getInstance().getActivityLogger().logAction(this,
