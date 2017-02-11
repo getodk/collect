@@ -33,12 +33,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.MediaLayout;
 
@@ -386,5 +389,25 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             ldt = ldt.plusMinutes(1);
         }
         return ldt;
+    }
+
+    /**
+     * It's needed only for external choices. Everything works well and
+     * out of the box when we use internal choices instead
+     */
+    protected void clearNextLevelsOfCascadingSelect() {
+        FormController formController = Collect.getInstance().getFormController();
+        try {
+            FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
+            formController.stepToNextScreenEvent();
+            while (formController.currentCaptionPromptIsQuestion() &&
+                    formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
+                formController.stepToNextScreenEvent();
+            }
+            formController.jumpToIndex(startFormIndex);
+        } catch (JavaRosaException e) {
+            e.printStackTrace();
+        }
     }
 }
