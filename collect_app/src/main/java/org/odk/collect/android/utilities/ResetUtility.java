@@ -21,17 +21,13 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.provider.DatabaseReader;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.tasks.DeleteFormsTask;
-import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ResetUtility {
 
@@ -54,13 +50,19 @@ public class ResetUtility {
                     resetForms(context);
                     break;
                 case ResetAction.RESET_LAYERS:
-                    deleteFolderContents(Collect.OFFLINE_LAYERS, ResetAction.RESET_LAYERS);
+                    if (deleteFolderContents(Collect.OFFLINE_LAYERS)) {
+                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_LAYERS));
+                    }
                     break;
                 case ResetAction.RESET_CACHE:
-                    deleteFolderContents(Collect.CACHE_PATH, ResetAction.RESET_CACHE);
+                    if (deleteFolderContents(Collect.CACHE_PATH)) {
+                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_CACHE));
+                    }
                     break;
                 case ResetAction.RESET_OSM_DROID:
-                    deleteFolderContents(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath(), ResetAction.RESET_OSM_DROID);
+                    if (deleteFolderContents(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath())) {
+                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
+                    }
                     break;
             }
         }
@@ -82,16 +84,7 @@ public class ResetUtility {
     private void resetInstances(final Context context) {
         context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
 
-        final Long[] allInstances = new DatabaseReader().getAllInstancesIDs(context);
-
-        DeleteInstancesTask task = new DeleteInstancesTask();
-        task.setContentResolver(context.getContentResolver());
-        try {
-            task.execute(allInstances).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        if (task.getDeleteCount() == allInstances.length) {
+        if (deleteFolderContents(Collect.INSTANCES_PATH)) {
             mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_INSTANCES));
         }
     }
@@ -100,26 +93,13 @@ public class ResetUtility {
         context.getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
 
         File itemsetDbFile = new File(Collect.METADATA_PATH + File.separator + ItemsetDbAdapter.DATABASE_NAME);
-        boolean itemsetDbDeleted = true;
-        if (itemsetDbFile.exists()) {
-            itemsetDbDeleted = itemsetDbFile.delete();
-        }
 
-        final Long[] allForms = new DatabaseReader().getAllFormsIDs(context);
-
-        DeleteFormsTask task = new DeleteFormsTask();
-        task.setContentResolver(context.getContentResolver());
-        try {
-            task.execute(allForms).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        if (task.getDeleteCount() == allForms.length && itemsetDbDeleted) {
+        if (deleteFolderContents(Collect.FORMS_PATH) && (!itemsetDbFile.exists() || itemsetDbFile.delete())) {
             mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_FORMS));
         }
     }
 
-    private void deleteFolderContents(String path, int action) {
+    private boolean deleteFolderContents(String path) {
         boolean result = true;
         File file = new File(path);
         if (file.exists()) {
@@ -129,9 +109,7 @@ public class ResetUtility {
                 result = deleteRecursive(f);
             }
         }
-        if (result) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(action));
-        }
+        return result;
     }
 
     private boolean deleteRecursive(File fileOrDirectory) {
