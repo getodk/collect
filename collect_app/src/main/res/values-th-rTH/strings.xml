@@ -122,7 +122,6 @@
   <string name="server_requires_auth">Server Requires Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">ตั้งค่าเซิร์ฟเวอร์</string>
-  <string name="toggle_selected">เลือกทั้งหมด</string>
   <string name="trigger">ตกลง โปรดดำเนินการต่อ</string>
   <string name="uploading_data">กำลังส่งแบบสำรวจ</string>
   <string name="url_error">ขออภัย URL ไม่ถูกต้อง</string>

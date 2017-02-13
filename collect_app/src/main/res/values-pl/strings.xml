@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Serwer Wymaga Uwierzytelnienia</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Ustawienia Serwera</string>
-  <string name="toggle_selected">Przełącz Wszystkie</string>
   <string name="trigger">OK. Kontynuuj, proszę.</string>
   <string name="uploading_data">Wysyłanie Formularza</string>
   <string name="url_error">Przykro mi, niepoprawny URL!</string>

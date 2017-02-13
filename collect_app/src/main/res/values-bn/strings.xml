@@ -123,7 +123,6 @@
   <string name="server_requires_auth">সার্ভারে প্রমাণীকরণ অপরিহার্য আবশ্যক</string>
   <string name="server_url">ইউআরএল </string>
   <string name="server_preferences">সার্ভার নির্দিষ্টকরণ</string>
-  <string name="toggle_selected">সব সিলেক্ট করুন</string>
   <string name="trigger">ঠিক আছে। দয়া করে সামনের দিকে যান।</string>
   <string name="uploading_data">পাঠানো হচ্ছে ফরম </string>
   <string name="url_error">দুঃখিত।ইউ আর এল সঠিক নয়</string>

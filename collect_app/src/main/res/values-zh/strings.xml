@@ -114,7 +114,6 @@
   <string name="server_requires_auth">服务器要求验证身份</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">服务器设置</string>
-  <string name="toggle_selected">选定所有</string>
   <string name="trigger">好的. 请继续.</string>
   <string name="uploading_data">正在发送表格</string>
   <string name="url_error">不正确的URL!</string>

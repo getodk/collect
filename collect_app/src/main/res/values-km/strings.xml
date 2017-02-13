@@ -124,7 +124,6 @@
   <string name="server_requires_auth">ម៉ាស៊ីនមេទាមទារឲ្យមានការផ្ទៀងផ្ទាត់</string>
   <string name="server_url">អាសយដ្ឋាន</string>
   <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
-  <string name="toggle_selected">បិទបើកទាំងអស់</string>
   <string name="trigger">យល់ព្រម. សូមបន្ត.</string>
   <string name="uploading_data">កំពុងបញ្ជូនសំណុំ​បែប​បទ​</string>
   <string name="url_error">សុំទោស, អាសយដ្ឋានមិនត្រឹមត្រូវ!</string>
