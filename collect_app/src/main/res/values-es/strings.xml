@@ -124,7 +124,6 @@
   <string name="server_requires_auth">El servidor requiere autenticacion</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Configuración del Servidor</string>
-  <string name="toggle_selected">Cambiar todos</string>
   <string name="trigger">OK. Por favor continue.</string>
   <string name="uploading_data">Enviando el formulario</string>
   <string name="url_error">¡URL invalida!</string>

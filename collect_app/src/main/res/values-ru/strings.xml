@@ -122,7 +122,6 @@
   <string name="server_requires_auth">Необходима аутентификация</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Настройки сервера</string>
-  <string name="toggle_selected">Выбрать все</string>
   <string name="trigger">OK. Продолжайте.</string>
   <string name="uploading_data">Отправка формы …</string>
   <string name="url_error">Неверный адрес!</string>

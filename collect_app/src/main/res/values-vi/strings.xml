@@ -121,7 +121,6 @@
   <string name="server_requires_auth">Máy chủ yêu cầu xác thực</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Máy chủ</string>
-  <string name="toggle_selected">Đánh dấu tất</string>
   <string name="trigger">OK. Hãy tiếp tục.</string>
   <string name="uploading_data">Gửi biểu mẫu</string>
   <string name="url_error">Xin lỗi URL không đúng!</string>

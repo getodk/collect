@@ -125,7 +125,6 @@
   <string name="server_requires_auth">Server richiede l\'autenticazione</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Impostazioni Server</string>
-  <string name="toggle_selected">Seleziona tutto</string>
   <string name="trigger">OK. Perpiacere continua.</string>
   <string name="uploading_data">Invio del Modulo</string>
   <string name="url_error">Spiacenti, URL non valida!</string>

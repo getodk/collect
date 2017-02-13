@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Server verlangt Authentifizierung</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servereinstellungen</string>
-  <string name="toggle_selected">Alle auswählen</string>
   <string name="trigger">OK. Bitte fortfahren.</string>
   <string name="uploading_data">Formular wird gesendet</string>
   <string name="url_error">Ungültige URL!</string>

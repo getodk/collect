@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Для доступу до сервера необхідно авторизуватись</string>
   <string name="server_url">Адреса URL</string>
   <string name="server_preferences">Налаштування сервера</string>
-  <string name="toggle_selected">Обрати все</string>
   <string name="trigger">Добре. Будь ласка, продовжуйте.</string>
   <string name="uploading_data">Надсилаю анкету</string>
   <string name="url_error">Вибачте, посилання недійсне!</string>

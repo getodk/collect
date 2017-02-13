@@ -122,7 +122,6 @@
   <string name="server_requires_auth">सर्भरलाई प्रमाणीकरण चाहिन्छ </string>
   <string name="server_url">URL</string>
   <string name="server_preferences">सर्भर सेटिङ्स</string>
-  <string name="toggle_selected">सबैलाई/nचिनो/n(न)लगाउने</string>
   <string name="trigger">हुन्छ | कृपया जारी राख्नुहोस् |</string>
   <string name="uploading_data">फारम पठाईदैछ |</string>
   <string name="url_error">गलत URL</string>

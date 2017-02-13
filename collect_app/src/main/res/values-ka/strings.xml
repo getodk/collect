@@ -122,7 +122,6 @@
   <string name="server_requires_auth">სერვერი მოითხოვს ავთენტიკაციას</string>
   <string name="server_url">ბმული</string>
   <string name="server_preferences">სერვერი</string>
-  <string name="toggle_selected">ყველას არჩევა</string>
   <string name="trigger">OK. გთხოვთ, გააგრძელოთ.</string>
   <string name="uploading_data">ფორმის გაგზავნა</string>
   <string name="url_error">უკავრავად, არასწორი ბმული!</string>
