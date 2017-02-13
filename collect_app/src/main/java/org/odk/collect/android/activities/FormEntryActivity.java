@@ -223,6 +223,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
+    private boolean firstQuestion = true; // keeps track of the first question
 
     /** Called when the activity is first created. */
     @Override
@@ -265,6 +266,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         });
 
         mBackButton = (ImageButton) findViewById(R.id.form_back_button);
+        mBackButton.setEnabled(false);
         mBackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1236,7 +1238,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 if (mBackButton.isShown() && mNextButton.isShown()) {
-                    mBackButton.setEnabled(true);
+                    mBackButton.setEnabled(!firstQuestion);
                     mNextButton.setEnabled(true);
                 }
                 return odkv;
@@ -1289,6 +1291,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      */
     private void showNextView() {
         try {
+            firstQuestion = false;
             FormController formController = Collect.getInstance()
                     .getFormController();
 
@@ -1379,6 +1382,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // If we are the begining of the form, lets revert our actions and ignore
                 // this swipe
                 if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    firstQuestion = true;
                     event = formController.stepToNextScreenEvent();
                     mBeenSwiped = false;
 
@@ -1395,6 +1399,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         nonblockingCreateSavePointData();
                     }
                 }
+
+                //Code to check whether this is first question or not to disable prev button
+                int ev = formController.stepToPreviousScreenEvent();
+                if (ev == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    firstQuestion = true;
+                } else {
+                    firstQuestion = false;
+                }
+                formController.stepToNextScreenEvent();
+
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
