@@ -15,15 +15,15 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. 
 
-1. Once you've made an incremental progress towards you goal and are ready to commit, reformat all Java code using Android Studio and official [codestyle](https://github.com/android/platform_development/blob/master/ide/intellij/codestyles/AndroidStyle.xml).
-
-1. Commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
+1. Once you've made incremental progress towards you goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
         git commit -m "Do a thing. Fix #1."
 
-1. Push changes to your fork to make them publicly available:
+1. Push changes to your fork at any time to make them publicly available:
 
         git push
+        
+1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md#style-guidelines). Additionally, [lint](https://developer.android.com/studio/write/lint.html) is run for each new build so please run `gradle lint` and fix any errors before issuing a pull request.
 
 1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
 
