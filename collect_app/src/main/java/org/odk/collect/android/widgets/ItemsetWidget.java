@@ -328,7 +328,8 @@ public class ItemsetWidget extends QuestionWidget implements
         for (RadioButton button : mButtons) {
             if (button.isChecked()) {
                 button.setChecked(false);
-                return;
+                clearNextLevelsOfCascadingSelect();
+                break;
             }
         }
     }
@@ -379,6 +380,7 @@ public class ItemsetWidget extends QuestionWidget implements
             for (RadioButton button : mButtons) {
                 if (button.isChecked() && !(buttonView == button)) {
                     button.setChecked(false);
+                    clearNextLevelsOfCascadingSelect();
                 } else {
                     mAnswer = mAnswers.get(buttonView.getText().toString());
                 }
