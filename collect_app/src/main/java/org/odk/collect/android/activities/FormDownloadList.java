@@ -148,6 +148,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             @Override
             public void onClick(View v) {
                 mDownloadButton.setEnabled(ListViewUtils.toggleChecked(getListView()));
+                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
             }
         });
 
@@ -262,6 +263,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
 
         Object o = getListAdapter().getItem(position);
@@ -277,7 +279,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     "<missing form detail>");
         }
     }
-
 
     /**
      * Starts the download task and shows the progress dialog.
@@ -310,6 +311,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             mDownloadFormListTask = new DownloadFormListTask();
             mDownloadFormListTask.setDownloaderListener(this);
             mDownloadFormListTask.execute();
+
         }
     }
 
@@ -618,6 +620,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
+            ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         }
     }
 
