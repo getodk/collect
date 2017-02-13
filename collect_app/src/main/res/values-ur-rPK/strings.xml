@@ -119,7 +119,6 @@
   <string name="server_requires_auth">سرور کو تصدیق چاہیے</string>
   <string name="server_url">یو آر ایل (URL)</string>
   <string name="server_preferences">سرور کی ترتیب</string>
-  <string name="toggle_selected">سب کو ٹوگل(Toggle) کریں</string>
   <string name="trigger">ٹھیک ہے، مہربانی کرکے جاری رکھیں</string>
   <string name="uploading_data">فارم بھیجا جا رہا ہے</string>
   <string name="url_error">معافی، url صحیح نہیں ہے</string>

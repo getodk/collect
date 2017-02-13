@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Palvelin vaatii tunnistautumista</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Palvelinasetukset</string>
-  <string name="toggle_selected">Vaihda kaikki</string>
   <string name="trigger">OK. Ole hyvä ja jatka.</string>
   <string name="uploading_data">Lähetetään lomaketta.</string>
   <string name="url_error">Pahoittelut, URL ei kelpaa! </string>

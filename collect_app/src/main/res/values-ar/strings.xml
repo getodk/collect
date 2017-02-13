@@ -124,7 +124,6 @@
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
-  <string name="toggle_selected">تحديد الكل</string>
   <string name="trigger">حسنًا. الرجاء المواصلة.</string>
   <string name="uploading_data">جاري ارسال الاستمارة</string>
   <string name="url_error">غدراً، الرابط خاطئ!</string>

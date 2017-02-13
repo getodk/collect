@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Server Benodig Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server Verstellings</string>
-  <string name="toggle_selected">Wissel Almal (Toggle)</string>
   <string name="trigger">OK. Gaan asseblief voort.</string>
   <string name="uploading_data">Besig om vorm te stuur</string>
   <string name="url_error">Jammer, ongeldige URL!</string>

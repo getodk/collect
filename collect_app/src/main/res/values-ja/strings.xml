@@ -124,7 +124,6 @@
   <string name="server_requires_auth">サーバーは認証が必要です</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">サーバー設定</string>
-  <string name="toggle_selected">すべて反転</string>
   <string name="trigger">OK、続けます。</string>
   <string name="uploading_data">フォームを送信中</string>
   <string name="url_error">申し訳ありません、URL が正しくありません!</string>
