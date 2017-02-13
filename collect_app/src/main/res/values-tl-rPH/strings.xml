@@ -111,7 +111,6 @@
   <string name="server_requires_auth">Nangangailagan ng Authentication ang Server</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>
-  <string name="toggle_selected">i-Toggle Lahat</string>
   <string name="trigger">Sige. Magpatuloy.</string>
   <string name="uploading_data">Pinapadala ang Form</string>
   <string name="url_error">Paumanhin, may mali sa URL!</string>

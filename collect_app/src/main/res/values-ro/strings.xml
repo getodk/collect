@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Serverul necesită autentificare</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Setări server</string>
-  <string name="toggle_selected">Marcați tot</string>
   <string name="trigger">OK. Vă rugăm să continuați.</string>
   <string name="uploading_data">Trimitere formular</string>
   <string name="url_error">Ne pare rău, URL invalid!</string>

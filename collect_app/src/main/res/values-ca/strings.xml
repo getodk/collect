@@ -124,7 +124,6 @@
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servidor</string>
-  <string name="toggle_selected">Marcar tots</string>
   <string name="trigger">D\'acord. Si us plau, continuar.</string>
   <string name="uploading_data">Enviant formulari</string>
   <string name="url_error">La URL és invàlida!</string>

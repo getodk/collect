@@ -123,7 +123,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="server_requires_auth">Server vyžaduje přihlášení</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Nastavení serveru</string>
-  <string name="toggle_selected">O(d)značit všechny</string>
   <string name="trigger">OK. Pokračujte prosím.</string>
   <string name="uploading_data">Odesílám dotazník</string>
   <string name="url_error">Neplatné URL!</string>

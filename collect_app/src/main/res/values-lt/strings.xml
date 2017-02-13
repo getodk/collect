@@ -114,7 +114,6 @@
   <string name="server_requires_auth">Serveris reikalauja autentifikavimo</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Serveris</string>
-  <string name="toggle_selected">Perjungti visas</string>
   <string name="trigger">Gerai. Prašome tęsti.</string>
   <string name="uploading_data">Siunčiama forma</string>
   <string name="url_error">Netinkamas URL!</string>

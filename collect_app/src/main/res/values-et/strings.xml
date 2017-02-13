@@ -125,7 +125,6 @@
   <string name="server_requires_auth">Server nõuab autentimist</string>
   <string name="server_url">Veebiaadress</string>
   <string name="server_preferences">Serveri seaded</string>
-  <string name="toggle_selected">Vali kõik</string>
   <string name="trigger">Ok. Palun jätkake.</string>
   <string name="uploading_data">Saadan vormi</string>
   <string name="url_error">Vabandage, vale veebiaadress!</string>

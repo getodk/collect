@@ -117,7 +117,6 @@
   <string name="server_requires_auth">Servidor Requer Autenticação</string>
   <string name="server_url">Servidor URL</string>
   <string name="server_preferences">Servidor</string>
-  <string name="toggle_selected">Alternar todos</string>
   <string name="trigger">OK. Por favor, continuar.</string>
   <string name="uploading_data">Eviando Formulário</string>
   <string name="url_error">Desculpe, URL inválida!</string>

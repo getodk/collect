@@ -122,7 +122,6 @@
   <string name="server_requires_auth">ເຊີເວີຕ້ອງການກວດ​ສອບ​ຊື່ຜູ້ໃຊ້ງານ ແລະ ລະ​ຫັດ​ຜ່ານ</string>
   <string name="server_url">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
   <string name="server_preferences">​ການ​ຕັ້ງ​ຄ່າ​ເຊີ​ເວີ</string>
-  <string name="toggle_selected">ເລືອກທັງໝົດ</string>
   <string name="trigger">ຕົກລົງ. ກະລຸນາດຳເນີນຕໍ່</string>
   <string name="uploading_data">ກຳລັງສົ່ງແບບຟອມ</string>
   <string name="url_error">ທີ່​ຢູ່​ເວັບ​ໄຊ ຫຼື URL ບໍ່ຖືກຕ້ອງ</string>

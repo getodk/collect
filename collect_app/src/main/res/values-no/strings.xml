@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Server krever godkjenning</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>
-  <string name="toggle_selected">Velg alle</string>
   <string name="trigger">OK. Vennligst fortsett.</string>
   <string name="uploading_data">Sender skjema</string>
   <string name="url_error">Beklager, ugyldig URL!</string>
