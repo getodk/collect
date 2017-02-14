@@ -41,7 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -316,7 +315,9 @@ public class MainMenuActivity extends Activity {
             mManageFilesButton.setVisibility(View.VISIBLE);
         }
 
-        ((Collect) getApplication()).getDefaultTracker();
+        ((Collect) getApplication())
+                .getDefaultTracker()
+                .enableAutoActivityTracking(true);
     }
 
     @Override
