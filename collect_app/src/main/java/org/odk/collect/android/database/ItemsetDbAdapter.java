@@ -20,7 +20,7 @@ public class ItemsetDbAdapter {
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
-    private static final String DATABASE_NAME = "itemsets.db";
+    public static final String DATABASE_NAME = "itemsets.db";
     private static final String DATABASE_TABLE = "itemset_";
     private static final int DATABASE_VERSION = 2;
 
