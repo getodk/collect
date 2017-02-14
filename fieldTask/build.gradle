@@ -15,25 +15,25 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(10)
         targetSdkVersion(10)
-        versionCode(4004)
+        versionCode(4005)
     }
 
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "4.05"
+            versionName "4.06"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "4.05-plan"
+            versionName "4.06-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "4.05-kontrolid"
+            versionName "4.06-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "4.05-pop"
+            versionName "4.06-pop"
         }
     }
 

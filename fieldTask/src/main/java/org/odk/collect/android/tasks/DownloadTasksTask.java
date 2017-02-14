@@ -707,7 +707,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 downloadFormsTask.setDownloaderListener((FormDownloaderListener) mStateListener);
                 dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
             }
-            
+
           	// Delete any forms no longer required
         	mf.deleteForms(formMap, results);
     	}
