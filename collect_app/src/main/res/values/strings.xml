@@ -468,4 +468,7 @@
 <string name="reset_layers_result">Offline map layers :: %s</string>
 <string name="reset_cache_result">Form load cache :: %s</string>
 <string name="reset_osm_tiles_result">OSM tiles :: %s</string>
+<string name="encrypted_form">Encrypted form</string>
+<string name="deleted_form">Deleted form</string>
+<string name="exit">Exit</string>
 </resources>

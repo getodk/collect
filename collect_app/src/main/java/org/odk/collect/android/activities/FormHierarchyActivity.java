@@ -37,6 +37,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,25 @@ public class FormHierarchyActivity extends ListActivity {
                 finish();
             }
         });
+
+        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.VIEW_SENT)) {
+            Collect.getInstance().getFormController().stepToOuterScreenEvent();
+
+            Button exitButton = (Button) findViewById(R.id.exitButton);
+            exitButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "exit",
+                            "click");
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+
+            exitButton.setVisibility(View.VISIBLE);
+            jumpBeginningButton.setVisibility(View.GONE);
+            jumpEndButton.setVisibility(View.GONE);
+        }
 
         refreshView();
 
@@ -423,7 +443,9 @@ public class FormHierarchyActivity extends ListActivity {
                     }
                 }
                 setResult(RESULT_OK);
-                finish();
+                if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                    finish();
+                }
                 return;
             case CHILD:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
