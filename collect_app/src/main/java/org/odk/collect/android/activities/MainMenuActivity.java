@@ -79,6 +79,7 @@ public class MainMenuActivity extends Activity {
     private Button mEnterDataButton;
     private Button mManageFilesButton;
     private Button mSendDataButton;
+    private Button mViewSentFormsButton;
     private Button mReviewDataButton;
     private Button mGetFormsButton;
 
@@ -189,6 +190,18 @@ public class MainMenuActivity extends Activity {
             }
         });
 
+        //View sent forms
+        mViewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        mViewSentFormsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logAction(this, "viewSentForms", "click");
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra("Action", "ViewSentForms");
+                startActivity(i);
+            }
+        });
+
         // manage forms button. no result expected.
         mGetFormsButton = (Button) findViewById(R.id.get_forms);
         mGetFormsButton.setText(getString(R.string.get_forms));
@@ -295,6 +308,14 @@ public class MainMenuActivity extends Activity {
             mSendDataButton.setVisibility(View.GONE);
         } else {
             mSendDataButton.setVisibility(View.VISIBLE);
+        }
+
+        boolean view_sent = sharedPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+        if (!view_sent) {
+            mViewSentFormsButton.setVisibility(View.GONE);
+        } else {
+            mViewSentFormsButton.setVisibility(View.VISIBLE);
         }
 
         boolean get_blank = sharedPreferences.getBoolean(

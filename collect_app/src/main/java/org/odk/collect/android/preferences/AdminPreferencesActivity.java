@@ -61,6 +61,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     // main menu
     public static String KEY_EDIT_SAVED = "edit_saved";
     public static String KEY_SEND_FINALIZED = "send_finalized";
+    public static String KEY_VIEW_SENT = "view_sent";
     public static String KEY_GET_BLANK = "get_blank";
     public static String KEY_DELETE_SAVED = "delete_saved";
     // server
