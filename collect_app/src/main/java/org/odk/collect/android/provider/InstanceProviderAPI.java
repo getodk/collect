@@ -34,6 +34,7 @@ public final class InstanceProviderAPI {
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
     public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
+    public static final String STATUS_SUBMITTED_AND_DELETED = "submittedAndDeleted";
 
     /**
      * Notes table
@@ -60,6 +61,7 @@ public final class InstanceProviderAPI {
         public static final String CAN_EDIT_WHEN_COMPLETE = "canEditWhenComplete";
         public static final String LAST_STATUS_CHANGE_DATE = "date";
         public static final String DISPLAY_SUBTEXT = "displaySubtext";
+        public static final String DELETED_DATE = "deletedDate";
         //public static final String DISPLAY_SUB_SUBTEXT = "displaySubSubtext";
 
 

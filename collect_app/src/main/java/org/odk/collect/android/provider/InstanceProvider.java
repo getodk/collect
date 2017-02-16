@@ -46,7 +46,7 @@ public class InstanceProvider extends ContentProvider {
     private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -78,7 +78,8 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.JR_VERSION + " text, "
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null );");
+                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
+                    + InstanceColumns.DELETED_DATE + " text );" );
         }
 
 
@@ -99,6 +100,10 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion == 2) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                         InstanceColumns.JR_VERSION + " text;");
+            }
+            if (oldVersion == 3) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.DELETED_DATE + " text;");
             }
             Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
                     + newVersion
@@ -241,6 +246,9 @@ public class InstanceProvider extends ContentProvider {
             return new SimpleDateFormat(
                     getContext().getString(R.string.sending_failed_on_date_at_time),
                     Locale.getDefault()).format(date);
+        } else if (InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED.equalsIgnoreCase(state)) {
+            return new SimpleDateFormat(getContext().getString(R.string.deleted_on_date_at_time),
+                    Locale.getDefault()).format(date);
         } else {
             return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
                     Locale.getDefault()).format(date);
@@ -314,10 +322,12 @@ public class InstanceProvider extends ContentProvider {
                 String instanceId = uri.getPathSegments().get(1);
 
                 Cursor c = null;
+                String status = null;
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
                     if (c.getCount() > 0) {
                         c.moveToFirst();
+                        status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                         do {
                             String instanceFile = c.getString(
                                     c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
@@ -333,11 +343,19 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
-                count =
-                        db.delete(INSTANCES_TABLE_NAME,
-                                InstanceColumns._ID + "=" + instanceId
-                                        + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                whereArgs);
+                //We are going to update the status, if the form is submitted
+                //We will not delete the record in table but we will delete the file
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)){
+                    ContentValues cv = new ContentValues();
+                    cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED);
+                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                } else {
+                    count =
+                            db.delete(INSTANCES_TABLE_NAME,
+                                    InstanceColumns._ID + "=" + instanceId
+                                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                    whereArgs);
+                }
                 break;
 
             default:
@@ -386,7 +404,11 @@ public class InstanceProvider extends ContentProvider {
                     if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+                        if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
+                            values.put(InstanceColumns.DELETED_DATE, text);
+                        } else {
+                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+                        }
                     }
                 }
 
@@ -425,6 +447,7 @@ public class InstanceProvider extends ContentProvider {
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
                 InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 
 }
