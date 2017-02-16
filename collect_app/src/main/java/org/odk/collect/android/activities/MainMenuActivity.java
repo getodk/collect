@@ -92,9 +92,11 @@ public class MainMenuActivity extends Activity {
 
     private int mCompletedCount;
     private int mSavedCount;
+    private int mViewSentCount;
 
     private Cursor mFinalizedCursor;
     private Cursor mSavedCursor;
+    private Cursor mViewSentCursor;
 
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
@@ -280,8 +282,23 @@ public class MainMenuActivity extends Activity {
             startManagingCursor(mSavedCursor);
         }
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
-        // don't need to set a content observer because it can't change in the
-        // background
+
+        //count for view sent form
+        String selectionViewSent = InstanceColumns.STATUS + "=? or "
+                + InstanceColumns.STATUS + "=?";
+        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED,
+                InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED};
+        try {
+            mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
+                    selectionViewSent, selectionArgsViewSent, null);
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        if (mViewSentCursor != null) {
+            startManagingCursor(mViewSentCursor);
+        }
+        mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
 
         updateButtons();
         setupGoogleAnalytics();
@@ -537,6 +554,20 @@ public class MainMenuActivity extends Activity {
             mReviewDataButton.setText(getString(R.string.review_data));
             Log.w(t,
                     "Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
+        }
+
+        if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
+            mViewSentCursor.requery();
+            mViewSentCount = mViewSentCursor.getCount();
+            if (mViewSentCount > 0) {
+                mViewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
+            } else {
+                mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            }
+        } else {
+                       mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            Log.w(t,
+                    "Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
         }
     }
 

@@ -133,6 +133,7 @@
 <string name="send_data_button">Send Finalized Form (%s)</string>
 <string name="send_selected_data">Send Selected</string>
 <string name="view_sent_forms">View Sent Form</string>
+<string name="view_sent_forms_button">View Sent Form (%s)</string>
 <string name="server_auth_credentials">Please enter username and password for the server: %s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
