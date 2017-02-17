@@ -317,7 +317,9 @@ public class MainMenuActivity extends Activity {
             mManageFilesButton.setVisibility(View.VISIBLE);
         }
 
-        ((Collect) getApplication()).getDefaultTracker();
+        ((Collect) getApplication())
+                .getDefaultTracker()
+                .enableAutoActivityTracking(true);
     }
 
     @Override
