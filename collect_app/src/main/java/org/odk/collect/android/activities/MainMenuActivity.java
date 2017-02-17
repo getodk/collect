@@ -41,10 +41,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -73,8 +73,9 @@ public class MainMenuActivity extends Activity {
     private static final int PASSWORD_DIALOG = 1;
 
     // menu options
-    private static final int MENU_PREFERENCES = Menu.FIRST;
-    private static final int MENU_ADMIN = Menu.FIRST + 1;
+    private static final int MENU_ABOUT = Menu.FIRST;
+    private static final int MENU_PREFERENCES = Menu.FIRST + 1;
+    private static final int MENU_ADMIN = Menu.FIRST + 2;
 
     // buttons
     private Button mEnterDataButton;
@@ -346,6 +347,9 @@ public class MainMenuActivity extends Activity {
         super.onCreateOptionsMenu(menu);
 
         CompatibilityUtils.setShowAsAction(
+                menu.add(0, MENU_ABOUT, 0, R.string.about_preferences),
+                MenuItem.SHOW_AS_ACTION_NEVER);
+        CompatibilityUtils.setShowAsAction(
                 menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
                         .setIcon(R.drawable.ic_menu_preferences),
                 MenuItem.SHOW_AS_ACTION_NEVER);
@@ -359,6 +363,14 @@ public class MainMenuActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case MENU_ABOUT:
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logAction(this, "onOptionsItemSelected",
+                                "MENU_ABOUT");
+                Intent aboutIntent = new Intent(this, AboutPreferencesActivity.class);
+                startActivity(aboutIntent);
+                return true;
             case MENU_PREFERENCES:
                 Collect.getInstance()
                         .getActivityLogger()

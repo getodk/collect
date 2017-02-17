@@ -337,6 +337,12 @@
 <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
 <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
 <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
+<string name="about_preferences">About</string>
+<string name="tell_your_friends">Tell your friends</string>
+<string name="tell_your_friends_title">Share ODK Collect with your friends</string>
+<string name="tell_your_friends_msg">Download ODK Collect app!</string>
+<string name="leave_a_review">Leave a review</string>
+<string name="leave_a_review_summary">Leave a review in Google Play</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
 <string name="map_preferences">Mapping Options</string>
