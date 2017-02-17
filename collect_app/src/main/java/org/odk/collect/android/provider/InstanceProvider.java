@@ -79,7 +79,7 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                     + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " text );" );
+                    + InstanceColumns.DELETED_DATE + " date );" );
         }
 
 
@@ -103,7 +103,7 @@ public class InstanceProvider extends ContentProvider {
             }
             if (oldVersion == 3) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.DELETED_DATE + " text;");
+                        InstanceColumns.DELETED_DATE + " date;");
             }
             Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
                     + newVersion
@@ -246,9 +246,6 @@ public class InstanceProvider extends ContentProvider {
             return new SimpleDateFormat(
                     getContext().getString(R.string.sending_failed_on_date_at_time),
                     Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.deleted_on_date_at_time),
-                    Locale.getDefault()).format(date);
         } else {
             return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
                     Locale.getDefault()).format(date);
@@ -371,7 +368,7 @@ public class InstanceProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
         if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
@@ -403,10 +400,10 @@ public class InstanceProvider extends ContentProvider {
 
                     if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
                         Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
                         if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
-                            values.put(InstanceColumns.DELETED_DATE, text);
+                            values.put(InstanceColumns.DELETED_DATE, now);
                         } else {
+                            String text = getDisplaySubtext(status, today);
                             values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
                         }
                     }

@@ -27,6 +27,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ViewSentListAdapter extends SimpleCursorAdapter {
     private Context mContext;
 
@@ -68,12 +72,15 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
             visibilityOffCause.setVisibility(View.VISIBLE);
             visibleOff.setVisibility(View.VISIBLE);
 
-            if (!status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
-                if (!formExists) {
-                    visibilityOffCause.setText(mContext.getString(R.string.deleted_form));
-                } else if (isFormEncrypted) {
-                    visibilityOffCause.setText(mContext.getString(R.string.encrypted_form));
-                }
+            if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
+                Date date = new Date(getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE)));
+                visibilityOffCause.setText(
+                        new SimpleDateFormat(mContext.getString(R.string.deleted_on_date_at_time),
+                                Locale.getDefault()).format(date));
+            } else if (!formExists) {
+                visibilityOffCause.setText(mContext.getString(R.string.deleted_form));
+            } else if (isFormEncrypted) {
+                visibilityOffCause.setText(mContext.getString(R.string.encrypted_form));
             }
         } else {
             visibilityOffCause.setVisibility(View.GONE);
