@@ -100,9 +100,8 @@ public class DataManagerList extends ListActivity implements
             }
         });
 
-        String selection = InstanceColumns.STATUS + " != ?";
-        String[] selectionArgs = new String[]{InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED};
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, null,
                 InstanceColumns.DISPLAY_NAME + " ASC");
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,

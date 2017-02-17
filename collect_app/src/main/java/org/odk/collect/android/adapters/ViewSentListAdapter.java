@@ -42,7 +42,7 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        String status = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+        Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + " =? ";
         String[] selectionArgs = {getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID))};
@@ -68,18 +68,17 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
 
         TextView visibilityOffCause = (TextView) view.findViewById(R.id.text4);
         ImageView visibleOff = (ImageView) view.findViewById(R.id.visible_off);
-        if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED) || !formExists || isFormEncrypted) {
+        if (date != 0 || !formExists || isFormEncrypted) {
             visibilityOffCause.setVisibility(View.VISIBLE);
             visibleOff.setVisibility(View.VISIBLE);
 
-            if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
-                Date date = new Date(getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE)));
+            if (date != 0) {
                 visibilityOffCause.setText(
                         new SimpleDateFormat(mContext.getString(R.string.deleted_on_date_at_time),
-                                Locale.getDefault()).format(date));
+                                Locale.getDefault()).format(new Date(date)));
             } else if (!formExists) {
                 visibilityOffCause.setText(mContext.getString(R.string.deleted_form));
-            } else if (isFormEncrypted) {
+            } else {
                 visibilityOffCause.setText(mContext.getString(R.string.encrypted_form));
             }
         } else {

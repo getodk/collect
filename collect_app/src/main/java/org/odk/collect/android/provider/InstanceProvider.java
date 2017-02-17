@@ -344,7 +344,7 @@ public class InstanceProvider extends ContentProvider {
                 //We will not delete the record in table but we will delete the file
                 if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)){
                     ContentValues cv = new ContentValues();
-                    cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED);
+                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                 } else {
                     count =
@@ -400,12 +400,8 @@ public class InstanceProvider extends ContentProvider {
 
                     if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
                         Date today = new Date();
-                        if (status.equals(InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED)) {
-                            values.put(InstanceColumns.DELETED_DATE, now);
-                        } else {
-                            String text = getDisplaySubtext(status, today);
-                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                        }
+                        String text = getDisplaySubtext(status, today);
+                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
                     }
                 }
 

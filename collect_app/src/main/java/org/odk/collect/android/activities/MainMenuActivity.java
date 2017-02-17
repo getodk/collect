@@ -284,10 +284,8 @@ public class MainMenuActivity extends Activity {
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
 
         //count for view sent form
-        String selectionViewSent = InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?";
-        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED,
-                InstanceProviderAPI.STATUS_SUBMITTED_AND_DELETED};
+        String selectionViewSent = InstanceColumns.STATUS + "=?";
+        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED};
         try {
             mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
                     selectionViewSent, selectionArgsViewSent, null);

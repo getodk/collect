@@ -34,7 +34,6 @@ public final class InstanceProviderAPI {
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
     public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
-    public static final String STATUS_SUBMITTED_AND_DELETED = "submittedAndDeleted";
 
     /**
      * Notes table
