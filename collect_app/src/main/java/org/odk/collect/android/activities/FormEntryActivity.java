@@ -265,7 +265,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         });
 
         mBackButton = (ImageButton) findViewById(R.id.form_back_button);
-        mBackButton.setEnabled(false);
         mBackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1179,10 +1178,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             }
                         });
 
-                if (mBackButton.isShown()) {
+                if (mBackButton.getVisibility()==View.VISIBLE) {
                     mBackButton.setEnabled(true);
                 }
-                if (mNextButton.isShown()) {
+                if (mNextButton.getVisibility()==View.VISIBLE) {
                     mNextButton.setEnabled(false);
                 }
 
@@ -1236,7 +1235,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 }
 
-                if (mBackButton.isShown() && mNextButton.isShown()) {
+                if (mBackButton.getVisibility()==View.VISIBLE && mNextButton.getVisibility()==View.VISIBLE) {
                     try {
                         boolean firstQuestion = formController.stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM;
                         mBackButton.setEnabled(!firstQuestion);
