@@ -83,8 +83,13 @@ public class InstanceChooserList extends ListActivity {
         };
 
         // render total instance view
-        ViewSentListAdapter instances =
-                new ViewSentListAdapter(this, R.layout.two_item, c, data, view);
+        SimpleCursorAdapter instances;
+        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+            instances = new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
+        } else {
+            instances = new ViewSentListAdapter(this, R.layout.two_item, c, data, view);
+        }
+
         setListAdapter(instances);
     }
 
