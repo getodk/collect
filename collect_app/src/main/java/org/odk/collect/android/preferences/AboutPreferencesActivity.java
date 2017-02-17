@@ -32,17 +32,16 @@ public class AboutPreferencesActivity extends PreferenceActivity {
     private static final String GOOGLE_PLAY_LINK =
             "https://play.google.com/store/apps/details?id=org.odk.collect.android";
 
-    private PreferenceScreen mOpenSourceLicensesPreference;
-    private PreferenceScreen mTellYourFriendsPreference;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.about_preferences);
         setTitle(getString(R.string.about_preferences));
 
-        mOpenSourceLicensesPreference = (PreferenceScreen) findPreference(KEY_OPEN_SOURCE_LICENSES);
-        mTellYourFriendsPreference = (PreferenceScreen) findPreference(KEY_TELL_YOUR_FRIENDS);
+        PreferenceScreen mOpenSourceLicensesPreference = (PreferenceScreen) findPreference(
+                KEY_OPEN_SOURCE_LICENSES);
+        PreferenceScreen mTellYourFriendsPreference = (PreferenceScreen) findPreference(
+                KEY_TELL_YOUR_FRIENDS);
 
         mOpenSourceLicensesPreference.setOnPreferenceClickListener(
                 new Preference.OnPreferenceClickListener() {
