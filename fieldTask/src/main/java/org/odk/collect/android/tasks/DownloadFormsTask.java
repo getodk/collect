@@ -41,7 +41,6 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
-<<<<<<< HEAD:fieldTask/src/main/java/org/odk/collect/android/tasks/DownloadFormsTask.java
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
