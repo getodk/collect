@@ -433,4 +433,12 @@
 <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8" -->
 <string name="north">N %1$s%2$s%3$s</string>
 <string name="gdrive_connection_exception">This image is stored on Google Drive and cannot be accessed while you are offline.</string>
+<string name="not_exactly_one_record_for_this_instance">Not exactly one record for this instance!</string>
+<string name="not_exactly_one_blank_form_for_this_form_id">Not exactly one blank form matches this jr_form_id.</string>
+<string name="no_form_id_specified">No FormId specified???</string>
+<string name="phone_does_not_support_encryption">Phone does not support encryption.</string>
+<string name="phone_does_not_have_base64_class">Phone does not have Base64 class but API level is %s.</string>
+<string name="phone_does_not_support_rsa">Phone does not support RSA encryption.</string>
+<string name="invalid_rsa_public_key">Invalid RSA public key.</string>
+<string name="encryption_error_message">%s Form has not been saved as finalized.</string>
 </resources>

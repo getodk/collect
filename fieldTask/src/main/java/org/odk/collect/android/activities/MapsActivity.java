@@ -91,8 +91,8 @@ public class MapsActivity extends FragmentActivity
     private MapLocationObserver mo = null;
 
     private static MainTabsActivity tabsActivity;
-    private static MapsActivity thisActivity;
-    private static Context mContext;
+    private MapsActivity thisActivity;
+    private Context mContext;
 
     ArrayList<Marker> markers = null;
     HashMap<Marker, Integer> markerMap = null;
@@ -177,7 +177,7 @@ public class MapsActivity extends FragmentActivity
 
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog();
+                mHelper.showLayersDialog(mContext);
 
             }
         });

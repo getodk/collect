@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.views;
 
+import java.io.Serializable;
+import java.util.*;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;

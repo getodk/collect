@@ -721,15 +721,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
+                Uri mediaUri = intent.getData();
+                saveAudioVideoAnswer(mediaUri);
+                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
+                if (filePath != null) {
+                    new File(filePath).delete();
+                }
+                getContentResolver().delete(mediaUri, null, null);
+                break;
             case AUDIO_CHOOSER:
             case VIDEO_CHOOSER:
-                // For audio/video capture/chooser, we get the URI from the content
-                // provider
-                // then the widget copies the file and makes a new entry in the
-                // content provider.
-                Uri media = intent.getData();
-                ((ODKView) mCurrentView).setBinaryData(media);
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                saveAudioVideoAnswer(intent.getData());
                 break;
             case LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -807,6 +809,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
             });
         }
+    }
+
+    private void saveAudioVideoAnswer(Uri media) {
+        // For audio/video capture/chooser, we get the URI from the content
+        // provider
+        // then the widget copies the file and makes a new entry in the
+        // content provider.
+        ((ODKView) mCurrentView).setBinaryData(media);
+        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
     /**
@@ -1240,7 +1251,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
                     odkv = new ODKView(this, formController.getQuestionPrompts(),
-                            groups, advancingPage);
+                            groups, advancingPage, formController.getCanUpdate());   // smap pass parameter indicating if view is updatable
                     Log.i(t,
                             "created view for group "
                                     + (groups.length > 0 ? groups[groups.length - 1]
@@ -2652,6 +2663,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
                 Toast.makeText(this, message,
                         Toast.LENGTH_LONG).show();
+                break;
+            case SaveToDiskTask.ENCRYPTION_ERROR:
+                Toast.makeText(this, String.format(getString(R.string.encryption_error_message),
+                        saveResult.getSaveErrorMessage()), Toast.LENGTH_LONG).show();
+                finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
