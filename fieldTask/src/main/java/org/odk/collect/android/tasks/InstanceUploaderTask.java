@@ -572,10 +572,12 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     	Outcome outcome = new Outcome();
 
         // Start smap
+
         StringBuffer selectionBuf = new StringBuffer(InstanceColumns._ID + " IN (");
         String[] selectionArgs = new String[(values == null) ? 0 : values.length];
         if(values != null) {
-            for (int i = 0; i < values.length; i++) {
+            int numberToSend = values.length > 999 ? 999 : values.length;
+            for (int i = 0; i < numberToSend; i++) {
                 if(i > 0) {
                     selectionBuf.append(",");
                 }
