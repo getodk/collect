@@ -87,12 +87,16 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
      * Uploads to urlString the submission identified by id with filepath of instance
      *
      * @param urlString    destination URL
+     * @param id
+     * @param instanceFilePath
      * @param toUpdate     - Instance URL for recording status update.
      * @param localContext - context (e.g., credentials, cookies) for client connection
      * @param uriRemap     - mapping of Uris to avoid redirects on subsequent invocations
+     * @param outcome
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
+                            Uri toUpdate,
                             HttpContext localContext,
                             Map<Uri, Uri> uriRemap,
                             Outcome outcome,
