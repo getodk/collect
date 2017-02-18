@@ -84,4 +84,5 @@
   <string name="change_server_url">सर्भर URL</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

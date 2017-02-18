@@ -101,14 +101,12 @@
   <string name="replace_location">Palitan ang Lokasyon</string>
   <string name="required_answer_error">Paumanhin, ang tugon na ito ay kailangan!</string>
   <string name="review_data">Patnugutan ang inimpok na Form</string>
-  <string name="review_data_button">Patnugutan ang naka-impok na Form</string>
   <string name="saved_data">Kulang(%s)</string>
   <string name="save_all_answers">Impukin ang mga sagot sa Form</string>
   <string name="save_enter_data_description">Ikaw ay nasa dulo ng \"%s\".</string>
   <string name="saving_form">Ini-impok ang Form</string>
   <string name="sending_items">Pinapadala ang %1$s sa %2$s na (mga) form</string>
   <string name="send_data">Ipadala ang mga Yaring Form</string>
-  <string name="send_data_button">Ipadala ang Yaring Form</string>
   <string name="send_selected_data">Ipadala ang mga pinili</string>
   <string name="server_requires_auth">Nangangailagan ng Authentication ang Server</string>
   <string name="server_url">URL</string>
@@ -187,4 +185,5 @@
   <string name="save_mid">Impukin ang mga sagot sa Form</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

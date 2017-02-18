@@ -14,9 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,9 +24,12 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+
 /**
  * A host activity for {@link InstanceChooserList}.
- * 
+ *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class InstanceChooserTabs extends TabActivity {
@@ -54,12 +54,12 @@ public class InstanceChooserTabs extends TabActivity {
         // create intent for saved tab
         Intent saved = new Intent(this, InstanceChooserList.class);
         tabHost.addTab(tabHost.newTabSpec(SAVED_TAB)
-                .setIndicator(getString(R.string.saved_data, mSavedCount)).setContent(saved));
+                .setIndicator(getString(R.string.saved_data, String.valueOf(mSavedCount))).setContent(saved));
 
         // create intent for completed tab
         Intent completed = new Intent(this, InstanceChooserList.class);
         tabHost.addTab(tabHost.newTabSpec(COMPLETED_TAB)
-                .setIndicator(getString(R.string.completed_data, mCompletedCount))
+                .setIndicator(getString(R.string.completed_data, String.valueOf(mCompletedCount)))
                 .setContent(completed));
 
         // hack to set font size and padding in tab headers

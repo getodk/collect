@@ -14,15 +14,17 @@
 
 package org.odk.collect.android.listeners;
 
-import java.util.HashMap;
-
 import android.net.Uri;
+
+import java.util.HashMap;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface InstanceUploaderListener {
     void uploadingComplete(HashMap<String, String> result);
+
     void progressUpdate(int progress, int total);
+
     void authRequest(Uri url, HashMap<String, String> doneSoFar);
 }

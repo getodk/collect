@@ -92,6 +92,7 @@
   <string name="send_data">Dolu Formu gönder</string>
   <string name="send_data_button">Dolu Formu gönder (%s)</string>
   <string name="send_selected_data">Seçili olanı gönder</string>
+  <string name="server_auth_credentials">Sunucu için kullanıcı adı ve şifre giriniz : %s</string>
   <string name="server_requires_auth">Server kimlik doğrulaması gerektirir</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Sunucu Ayarlari</string>
@@ -180,4 +181,5 @@
   <string name="open_url">URL Aç</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

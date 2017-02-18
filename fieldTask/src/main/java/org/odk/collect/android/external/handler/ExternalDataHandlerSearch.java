@@ -20,6 +20,7 @@ package org.odk.collect.android.external.handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -31,7 +32,11 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Author: Meletis Margaritis
@@ -46,7 +51,8 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
     private final String valueColumn;
     private final String imageColumn;
 
-    public ExternalDataHandlerSearch(ExternalDataManager externalDataManager, String displayColumns, String valueColumn, String imageColumn) {
+    public ExternalDataHandlerSearch(ExternalDataManager externalDataManager, String displayColumns,
+            String valueColumn, String imageColumn) {
         super(externalDataManager);
         this.displayColumns = displayColumns;
         this.valueColumn = valueColumn;
@@ -88,8 +94,10 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
         if (args == null || (args.length != 1 && args.length != 4 && args.length != 6)) {
-            // we should never get here since it is already handled in ExternalDataUtil.getSearchXPathExpression(String appearance)
-            throw new ExternalDataException(Collect.getInstance().getString(R.string.ext_search_wrong_arguments_error));
+            // we should never get here since it is already handled in ExternalDataUtil
+            // .getSearchXPathExpression(String appearance)
+            throw new ExternalDataException(
+                    Collect.getInstance().getString(R.string.ext_search_wrong_arguments_error));
         }
 
         String dataSetName = XPathFuncExpr.toString(args[0]);
@@ -105,7 +113,8 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             queriedValue = XPathFuncExpr.toString(args[3]);
         }
 
-        ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(searchType, ExternalDataSearchType.CONTAINS);
+        ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(
+                searchType, ExternalDataSearchType.CONTAINS);
 
         boolean searchRows = false;
         boolean useFilter = false;
@@ -128,10 +137,13 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
 
         Cursor c = null;
         try {
-            ExternalSQLiteOpenHelper sqLiteOpenHelper = getExternalDataManager().getDatabase(dataSetName, true);
+            ExternalSQLiteOpenHelper sqLiteOpenHelper = getExternalDataManager().getDatabase(
+                    dataSetName, true);
 
             SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
-            LinkedHashMap<String, String> selectColumnMap = ExternalDataUtil.createMapWithDisplayingColumns(getValueColumn(), getDisplayColumns());
+            LinkedHashMap<String, String> selectColumnMap =
+                    ExternalDataUtil.createMapWithDisplayingColumns(getValueColumn(),
+                            getDisplayColumns());
 
             List<String> columnsToFetch = new ArrayList<String>(selectColumnMap.keySet());
             String safeImageColumn = null;
@@ -146,14 +158,17 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             String[] selectionArgs;
 
             if (searchRows && useFilter) {
-                selection = "( " + createLikeExpression(queriedColumns) + " ) AND " + ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";
-                String[] likeArgs = externalDataSearchType.constructLikeArguments(queriedValue, queriedColumns.size());
+                selection = "( " + createLikeExpression(queriedColumns) + " ) AND "
+                        + ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";
+                String[] likeArgs = externalDataSearchType.constructLikeArguments(queriedValue,
+                        queriedColumns.size());
                 selectionArgs = new String[likeArgs.length + 1];
                 System.arraycopy(likeArgs, 0, selectionArgs, 0, likeArgs.length);
                 selectionArgs[selectionArgs.length - 1] = filterValue;
             } else if (searchRows) {
                 selection = createLikeExpression(queriedColumns);
-                selectionArgs = externalDataSearchType.constructLikeArguments(queriedValue, queriedColumns.size());
+                selectionArgs = externalDataSearchType.constructLikeArguments(queriedValue,
+                        queriedColumns.size());
             } else if (useFilter) {
                 selection = ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";
                 selectionArgs = new String[]{filterValue};
@@ -163,12 +178,14 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             }
 
             try {
-                c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection, selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
+                c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
+                        selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
             } catch (Exception e) {
-                if ( c != null ) { 
-                  c.close();
+                if (c != null) {
+                    c.close();
                 }
-                c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection, selectionArgs, null, null, null);
+                c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
+                        selectionArgs, null, null, null);
             }
 
             return createDynamicSelectChoices(c, selectColumnMap, safeImageColumn);
@@ -179,7 +196,8 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
         }
     }
 
-    protected ArrayList<SelectChoice> createDynamicSelectChoices(Cursor c, LinkedHashMap<String, String> selectColumnMap, String safeImageColumn) {
+    protected ArrayList<SelectChoice> createDynamicSelectChoices(Cursor c,
+            LinkedHashMap<String, String> selectColumnMap, String safeImageColumn) {
         List<String> columnsToExcludeFromLabels = new ArrayList<String>();
         if (safeImageColumn != null) {
             columnsToExcludeFromLabels.add(safeImageColumn);
@@ -240,13 +258,9 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
      * col1value
      * col1value (col2name: col2value)
      * col1value (col2name: col2value) (col3name: col3value)
-     *
-     * @param c
-     * @param selectColumnMap
-     * @param columnsToExcludeFromLabels
-     * @return
      */
-    protected String buildLabel(Cursor c, LinkedHashMap<String, String> selectColumnMap, List<String> columnsToExcludeFromLabels) {
+    protected String buildLabel(Cursor c, LinkedHashMap<String, String> selectColumnMap,
+            List<String> columnsToExcludeFromLabels) {
         StringBuilder sb = new StringBuilder();
         // we start at 1 since 0 is the "value" column
         for (int columnIndex = 1; columnIndex < c.getColumnCount(); columnIndex++) {

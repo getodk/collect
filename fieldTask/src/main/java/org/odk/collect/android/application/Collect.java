@@ -15,9 +15,11 @@
 package org.odk.collect.android.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.location.Location;       // smap
@@ -29,6 +31,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -47,9 +50,9 @@ import java.io.File;
 public class Collect extends Application {
 
     static {
-		PRNGFixes.apply();
-	}
-	
+        PRNGFixes.apply();
+    }
+
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
             + File.separator + "fieldTask";   // smap
@@ -112,18 +115,24 @@ public class Collect extends Application {
     }
 
     public String getVersionedAppName() {
-        String versionDetail = "";
+        String versionName = "";
         try {
-            PackageInfo pinfo;
-            pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            int versionNumber = pinfo.versionCode;
-            String versionName = pinfo.versionName;
-            versionDetail = " " + versionName + " (" + versionNumber + ")";
+            versionName = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0)
+                    .versionName;
+            versionName = " " + versionName.replaceFirst("-", "\n");
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return getString(R.string.app_name) + versionDetail;
+        return getString(R.string.app_name) + versionName;
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getInstance()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
     }
 
     /**
@@ -134,11 +143,12 @@ public class Collect extends Application {
     public static void createODKDirs() throws RuntimeException {
         String cardstatus = Environment.getExternalStorageState();
         if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
-            throw new RuntimeException(Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
+            throw new RuntimeException(
+                    Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
         }
 
         String[] dirs = {
-                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH,OFFLINE_LAYERS
+                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
@@ -164,32 +174,27 @@ public class Collect extends Application {
     /**
      * Predicate that tests whether a directory path might refer to an
      * ODK Tables instance data directory (e.g., for media attachments).
-     *
-     * @param directory
-     * @return
      */
     public static boolean isODKTablesInstanceDataDirectory(File directory) {
-		/**
-		 * Special check to prevent deletion of files that
-		 * could be in use by ODK Tables.
-		 */
-    	String dirPath = directory.getAbsolutePath();
-    	if ( dirPath.startsWith(Collect.ODK_ROOT) ) {
-    		dirPath = dirPath.substring(Collect.ODK_ROOT.length());
-    		String[] parts = dirPath.split(File.separator);
-    		// [appName, instances, tableId, instanceId ]
-    		if ( parts.length == 4 && parts[1].equals("instances") ) {
-    			return true;
-    		}
-    	}
-    	return false;
-	}
+        /**
+         * Special check to prevent deletion of files that
+         * could be in use by ODK Tables.
+         */
+        String dirPath = directory.getAbsolutePath();
+        if (dirPath.startsWith(Collect.ODK_ROOT)) {
+            dirPath = dirPath.substring(Collect.ODK_ROOT.length());
+            String[] parts = dirPath.split(File.separator);
+            // [appName, instances, tableId, instanceId ]
+            if (parts.length == 4 && parts[1].equals("instances")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
-     *
-     * @return
      */
     public synchronized HttpContext getHttpContext() {
 
@@ -210,7 +215,7 @@ public class Collect extends Application {
     public CookieStore getCookieStore() {
         return cookieStore;
     }
-    
+
     @Override
     public void onCreate() {
         singleton = this;
@@ -234,9 +239,11 @@ public class Collect extends Application {
         PropertyManager mgr = new PropertyManager(this);
 
         FormController.initializeJavaRosa(mgr);
-        
+
         mActivityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
+
+        AuthDialogUtility.setWebCredentialsFromPreferences(this);
     }
 
     // Begin Smap

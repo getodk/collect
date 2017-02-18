@@ -29,16 +29,6 @@
 
     </RadioGroup>
 
-    <EditText
-        android:id="@+id/trace_number"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="detection frequency"
-        android:visibility="gone"
-        android:text="200"
-        android:inputType="number"
-        android:imeActionLabel="Label" />
-
     <Spinner
         android:id="@+id/trace_delay"
         android:layout_width="fill_parent"

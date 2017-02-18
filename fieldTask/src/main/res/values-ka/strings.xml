@@ -109,16 +109,16 @@
   <string name="replace_location">მდებარეობის შესვლა</string>
   <string name="required_answer_error">უკაცრავად, ეს გამოპასუხება მოთხოვნილია!</string>
   <string name="review_data">შენახული ფორმის რედაქტირება</string>
-  <string name="review_data_button">შენახული ფორმის რედაქტირება</string>
+  <string name="review_data_button">შენახული ფორმის რედაქტირება (%s)</string>
   <string name="saved_data">არასრული (%s)</string>
   <string name="save_all_answers">ფორმის შენახვა</string>
   <string name="save_enter_data_description">თქვენ ხართ \"%s\"-ს ბოლოში.</string>
   <string name="saving_form">ფორმის შენახვა…</string>
   <string name="sending_items">%2$s-დან %1$s ფორმის გაგზავნა</string>
   <string name="send_data">დასრულებული ფორმების გაგზავნა</string>
-  <string name="send_data_button">დასრულებული ფორმების გაგზავნა</string>
+  <string name="send_data_button">დასრულებული ფორმების გაგზავნა (%s)</string>
   <string name="send_selected_data">არჩეული ფორმების გაგზავნა</string>
-  <string name="server_auth_credentials">გთხოვთ, შეიყვანოთ მომხმარებლის სახელი და პაროლი სერვერისთვის:\n%s</string>
+  <string name="server_auth_credentials">გთხოვთ, შეიყვანოთ მომხმარებლის სახელი და პაროლი სერვერისთვის: %s</string>
   <string name="server_requires_auth">სერვერი მოითხოვს ავთენტიკაციას</string>
   <string name="server_url">ბმული</string>
   <string name="server_preferences">სერვერი</string>
@@ -262,4 +262,5 @@
   <string name="no_blank_search">საძიებო ველი არ უნდა იყოს ცარიელი!</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

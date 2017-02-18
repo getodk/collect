@@ -14,12 +14,6 @@
 
 package org.odk.collect.android.provider;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.MediaUtils;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -31,6 +25,12 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -204,12 +204,12 @@ public class InstanceProvider extends ContentProvider {
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-        	mDbHelper = null;
+            mDbHelper = null;
             return null;
         }
 
         if (mDbHelper != null) {
-        	return mDbHelper;
+            return mDbHelper;
         }
         mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return mDbHelper;
@@ -219,8 +219,8 @@ public class InstanceProvider extends ContentProvider {
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
         DatabaseHelper h = getDbHelper();
-        if ( h == null ) {
-        	return false;
+        if (h == null) {
+            return false;
         }
         return true;
     }
@@ -307,8 +307,8 @@ public class InstanceProvider extends ContentProvider {
         if (rowId > 0) {
             Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(instanceUri, null);
-        	Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
-        			instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
+            Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
+                    instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
             return instanceUri;
         }
 
@@ -317,28 +317,35 @@ public class InstanceProvider extends ContentProvider {
 
     private String getDisplaySubtext(String state, Date date) {
         if (state == null) {
-        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(date);
+            return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                    Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time), Locale.getDefault()).format(date);
+            return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
+                    Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time), Locale.getDefault()).format(date);
+            return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
+                    Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time), Locale.getDefault()).format(date);
+            return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
+                    Locale.getDefault()).format(date);
         } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-        	return new SimpleDateFormat(getContext().getString(R.string.sending_failed_on_date_at_time), Locale.getDefault()).format(date);
+            return new SimpleDateFormat(
+                    getContext().getString(R.string.sending_failed_on_date_at_time),
+                    Locale.getDefault()).format(date);
         } else {
-        	return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time), Locale.getDefault()).format(date);
+            return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                    Locale.getDefault()).format(date);
         }
     }
 
     private void deleteAllFilesInDirectory(File directory) {
         if (directory.exists()) {
-        	// do not delete the directory if it might be an
-        	// ODK Tables instance data directory. Let ODK Tables
-        	// manage the lifetimes of its filled-in form data
-        	// media attachments.
+            // do not delete the directory if it might be an
+            // ODK Tables instance data directory. Let ODK Tables
+            // manage the lifetimes of its filled-in form data
+            // media attachments.
             if (directory.isDirectory() && !Collect.isODKTablesInstanceDataDirectory(directory)) {
-            	// delete any media entries for files in this directory...
+                // delete any media entries for files in this directory...
                 int images = MediaUtils.deleteImagesInFolderFromMediaProvider(directory);
                 int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
                 int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
@@ -361,7 +368,8 @@ public class InstanceProvider extends ContentProvider {
 
 
     /**
-     * This method removes the entry from the content provider, and also removes any associated files.
+     * This method removes the entry from the content provider, and also removes any associated
+     * files.
      * files:  form.xml, [formmd5].formdef, formname-media {directory}
      */
     @Override
@@ -373,20 +381,22 @@ public class InstanceProvider extends ContentProvider {
             case INSTANCES:
                 Cursor del = null;
                 try {
-                	del = this.query(uri, null, where, whereArgs, null);
-                	if (del.getCount() > 0) {
-                		del.moveToFirst();
-                		do {
-		                    String instanceFile = del.getString(del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-		                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
-		                    File instanceDir = (new File(instanceFile)).getParentFile();
-		                    deleteAllFilesInDirectory(instanceDir);
-                		} while (del.moveToNext());
-	                }
+                    del = this.query(uri, null, where, whereArgs, null);
+                    if (del.getCount() > 0) {
+                        del.moveToFirst();
+                        do {
+                            String instanceFile = del.getString(
+                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                            Collect.getInstance().getActivityLogger().logAction(this, "delete",
+                                    instanceFile);
+                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            deleteAllFilesInDirectory(instanceDir);
+                        } while (del.moveToNext());
+                    }
                 } finally {
-                	if ( del != null ) {
-                		del.close();
-                	}
+                    if (del != null) {
+                        del.close();
+                    }
                 }
                 count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
                 break;
@@ -396,27 +406,29 @@ public class InstanceProvider extends ContentProvider {
 
                 Cursor c = null;
                 try {
-                	c = this.query(uri, null, where, whereArgs, null);
-                	if (c.getCount() > 0) {
-                		c.moveToFirst();
-                		do {
-		                    String instanceFile = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-		                    Collect.getInstance().getActivityLogger().logAction(this, "delete", instanceFile);
-		                    File instanceDir = (new File(instanceFile)).getParentFile();
-		                    deleteAllFilesInDirectory(instanceDir);
-                		} while (c.moveToNext());
-	                }
+                    c = this.query(uri, null, where, whereArgs, null);
+                    if (c.getCount() > 0) {
+                        c.moveToFirst();
+                        do {
+                            String instanceFile = c.getString(
+                                    c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                            Collect.getInstance().getActivityLogger().logAction(this, "delete",
+                                    instanceFile);
+                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            deleteAllFilesInDirectory(instanceDir);
+                        } while (c.moveToNext());
+                    }
                 } finally {
-                	if ( c != null ) {
-                		c.close();
-                	}
+                    if (c != null) {
+                        c.close();
+                    }
                 }
 
                 count =
-                    db.delete(INSTANCES_TABLE_NAME,
-                        InstanceColumns._ID + "=" + instanceId
-                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                        whereArgs);
+                        db.delete(INSTANCES_TABLE_NAME,
+                                InstanceColumns._ID + "=" + instanceId
+                                        + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                whereArgs);
                 break;
 
             default:
@@ -470,8 +482,10 @@ public class InstanceProvider extends ContentProvider {
                 }
 
                 count =
-                    db.update(INSTANCES_TABLE_NAME, values, InstanceColumns._ID + "=" + instanceId
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""), whereArgs);
+                        db.update(INSTANCES_TABLE_NAME, values,
+                                InstanceColumns._ID + "=" + instanceId
+                                        + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                whereArgs);
                 break;
 
             default:
@@ -491,8 +505,10 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
         sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
-        sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
-        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.INSTANCE_FILE_PATH);
+        sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE,
+                InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
+        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH,
+                InstanceColumns.INSTANCE_FILE_PATH);
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);

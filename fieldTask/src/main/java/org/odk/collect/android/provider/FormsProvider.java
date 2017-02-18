@@ -14,20 +14,6 @@
 
 package org.odk.collect.android.provider;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -39,6 +25,20 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
  *
@@ -276,275 +276,275 @@ public class FormsProvider extends ContentProvider {
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-        	mDbHelper = null;
+            mDbHelper = null;
             return null;
         }
 
         if (mDbHelper != null) {
-        	return mDbHelper;
+            return mDbHelper;
         }
         mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return mDbHelper;
     }
 
-	@Override
-	public boolean onCreate() {
+    @Override
+    public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-		DatabaseHelper h = getDbHelper();
-        if ( h == null ) {
-        	return false;
+        DatabaseHelper h = getDbHelper();
+        if (h == null) {
+            return false;
         }
         return true;
-	}
+    }
 
-	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(FORMS_TABLE_NAME);
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection,
+            String[] selectionArgs, String sortOrder) {
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        qb.setTables(FORMS_TABLE_NAME);
 
-		switch (sUriMatcher.match(uri)) {
-		case FORMS:
-			qb.setProjectionMap(sFormsProjectionMap);
-			break;
+        switch (sUriMatcher.match(uri)) {
+            case FORMS:
+                qb.setProjectionMap(sFormsProjectionMap);
+                break;
 
-		case FORM_ID:
-			qb.setProjectionMap(sFormsProjectionMap);
-			qb.appendWhere(FormsColumns._ID + "="
-					+ uri.getPathSegments().get(1));
-			break;
+            case FORM_ID:
+                qb.setProjectionMap(sFormsProjectionMap);
+                qb.appendWhere(FormsColumns._ID + "="
+                        + uri.getPathSegments().get(1));
+                break;
 
-		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
-		}
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
 
-		// Get the database and run the query
-		SQLiteDatabase db = getDbHelper().getReadableDatabase();
-		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-				null, sortOrder);
+        // Get the database and run the query
+        SQLiteDatabase db = getDbHelper().getReadableDatabase();
+        Cursor c = qb.query(db, projection, selection, selectionArgs, null,
+                null, sortOrder);
 
-		// Tell the cursor what uri to watch, so it knows when its source data
-		// changes
-		c.setNotificationUri(getContext().getContentResolver(), uri);
-		return c;
-	}
+        // Tell the cursor what uri to watch, so it knows when its source data
+        // changes
+        c.setNotificationUri(getContext().getContentResolver(), uri);
+        return c;
+    }
 
-	@Override
-	public String getType(Uri uri) {
-		switch (sUriMatcher.match(uri)) {
-		case FORMS:
-			return FormsColumns.CONTENT_TYPE;
+    @Override
+    public String getType(Uri uri) {
+        switch (sUriMatcher.match(uri)) {
+            case FORMS:
+                return FormsColumns.CONTENT_TYPE;
 
-		case FORM_ID:
-			return FormsColumns.CONTENT_ITEM_TYPE;
+            case FORM_ID:
+                return FormsColumns.CONTENT_ITEM_TYPE;
 
-		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
-		}
-	}
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+    }
 
-	@Override
-	public synchronized Uri insert(Uri uri, ContentValues initialValues) {
-		// Validate the requested uri
-		if (sUriMatcher.match(uri) != FORMS) {
-			throw new IllegalArgumentException("Unknown URI " + uri);
-		}
+    @Override
+    public synchronized Uri insert(Uri uri, ContentValues initialValues) {
+        // Validate the requested uri
+        if (sUriMatcher.match(uri) != FORMS) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
 
-		ContentValues values;
-		if (initialValues != null) {
-			values = new ContentValues(initialValues);
-		} else {
-			values = new ContentValues();
-		}
+        ContentValues values;
+        if (initialValues != null) {
+            values = new ContentValues(initialValues);
+        } else {
+            values = new ContentValues();
+        }
 
-		if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-			throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH
-					+ " must be specified.");
-		}
+        if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+            throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH
+                    + " must be specified.");
+        }
 
-		// Normalize the file path.
-		// (don't trust the requester).
-		String filePath = values.getAsString(FormsColumns.FORM_FILE_PATH);
-		File form = new File(filePath);
-		filePath = form.getAbsolutePath(); // normalized
-		values.put(FormsColumns.FORM_FILE_PATH, filePath);
+        // Normalize the file path.
+        // (don't trust the requester).
+        String filePath = values.getAsString(FormsColumns.FORM_FILE_PATH);
+        File form = new File(filePath);
+        filePath = form.getAbsolutePath(); // normalized
+        values.put(FormsColumns.FORM_FILE_PATH, filePath);
 
-		Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = Long.valueOf(System.currentTimeMillis());
 
-		// Make sure that the necessary fields are all set
-		if (values.containsKey(FormsColumns.DATE) == false) {
-			values.put(FormsColumns.DATE, now);
-		}
+        // Make sure that the necessary fields are all set
+        if (values.containsKey(FormsColumns.DATE) == false) {
+            values.put(FormsColumns.DATE, now);
+        }
 
-		if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
-			Date today = new Date();
-			String ts = new SimpleDateFormat(getContext().getString(
-					R.string.added_on_date_at_time), Locale.getDefault())
-					.format(today);
-			values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
-		}
+        if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
+            Date today = new Date();
+            String ts = new SimpleDateFormat(getContext().getString(
+                    R.string.added_on_date_at_time), Locale.getDefault())
+                    .format(today);
+            values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
+        }
 
-		if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
-			values.put(FormsColumns.DISPLAY_NAME, form.getName());
-		}
+        if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
+            values.put(FormsColumns.DISPLAY_NAME, form.getName());
+        }
 
-		// don't let users put in a manual md5 hash
-		if (values.containsKey(FormsColumns.MD5_HASH)) {
-			values.remove(FormsColumns.MD5_HASH);
-		}
-		String md5 = FileUtils.getMd5Hash(form);
-		values.put(FormsColumns.MD5_HASH, md5);
+        // don't let users put in a manual md5 hash
+        if (values.containsKey(FormsColumns.MD5_HASH)) {
+            values.remove(FormsColumns.MD5_HASH);
+        }
+        String md5 = FileUtils.getMd5Hash(form);
+        values.put(FormsColumns.MD5_HASH, md5);
 
-		if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
-			String cachePath = Collect.CACHE_PATH + File.separator + md5
-					+ ".formdef";
-			values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
-		}
-		if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
-			String pathNoExtension = filePath.substring(0,
-					filePath.lastIndexOf("."));
-			String mediaPath = pathNoExtension + "-media";
-			values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
-		}
+        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
+            String cachePath = Collect.CACHE_PATH + File.separator + md5
+                    + ".formdef";
+            values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
+        }
+        if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
+            String pathNoExtension = filePath.substring(0,
+                    filePath.lastIndexOf("."));
+            String mediaPath = pathNoExtension + "-media";
+            values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
+        }
 
-		SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
-		// first try to see if a record with this filename already exists...
-		String[] projection = { FormsColumns._ID, FormsColumns.FORM_FILE_PATH };
-		String[] selectionArgs = { filePath };
-		String selection = FormsColumns.FORM_FILE_PATH + "=?";
-		Cursor c = null;
-		try {
-			c = db.query(FORMS_TABLE_NAME, projection, selection,
-					selectionArgs, null, null, null);
-			if (c.getCount() > 0) {
-				// already exists
-				throw new SQLException("FAILED Insert into " + uri
-						+ " -- row already exists for form definition file: "
-						+ filePath);
-			}
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        // first try to see if a record with this filename already exists...
+        String[] projection = {FormsColumns._ID, FormsColumns.FORM_FILE_PATH};
+        String[] selectionArgs = {filePath};
+        String selection = FormsColumns.FORM_FILE_PATH + "=?";
+        Cursor c = null;
+        try {
+            c = db.query(FORMS_TABLE_NAME, projection, selection,
+                    selectionArgs, null, null, null);
+            if (c.getCount() > 0) {
+                // already exists
+                throw new SQLException("FAILED Insert into " + uri
+                        + " -- row already exists for form definition file: "
+                        + filePath);
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
 
-		long rowId = db.insert(FORMS_TABLE_NAME, null, values);
-		if (rowId > 0) {
-			Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
-					rowId);
-			getContext().getContentResolver().notifyChange(formUri, null);
-			Collect.getInstance()
-					.getActivityLogger()
-					.logActionParam(this, "insert", formUri.toString(),
-							values.getAsString(FormsColumns.FORM_FILE_PATH));
-			return formUri;
-		}
+        long rowId = db.insert(FORMS_TABLE_NAME, null, values);
+        if (rowId > 0) {
+            Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
+                    rowId);
+            getContext().getContentResolver().notifyChange(formUri, null);
+            Collect.getInstance()
+                    .getActivityLogger()
+                    .logActionParam(this, "insert", formUri.toString(),
+                            values.getAsString(FormsColumns.FORM_FILE_PATH));
+            return formUri;
+        }
 
-		throw new SQLException("Failed to insert row into " + uri);
-	}
+        throw new SQLException("Failed to insert row into " + uri);
+    }
 
-	private void deleteFileOrDir(String fileName) {
-		File file = new File(fileName);
-		if (file.exists()) {
-			if (file.isDirectory()) {
-				// delete any media entries for files in this directory...
-				int images = MediaUtils
-						.deleteImagesInFolderFromMediaProvider(file);
-				int audio = MediaUtils
-						.deleteAudioInFolderFromMediaProvider(file);
-				int video = MediaUtils
-						.deleteVideoInFolderFromMediaProvider(file);
+    private void deleteFileOrDir(String fileName) {
+        File file = new File(fileName);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                // delete any media entries for files in this directory...
+                int images = MediaUtils
+                        .deleteImagesInFolderFromMediaProvider(file);
+                int audio = MediaUtils
+                        .deleteAudioInFolderFromMediaProvider(file);
+                int video = MediaUtils
+                        .deleteVideoInFolderFromMediaProvider(file);
 
-				Log.i(t, "removed from content providers: " + images
-						+ " image files, " + audio + " audio files," + " and "
-						+ video + " video files.");
+                Log.i(t, "removed from content providers: " + images
+                        + " image files, " + audio + " audio files," + " and "
+                        + video + " video files.");
 
-				// delete all the containing files
-				File[] files = file.listFiles();
-				for (File f : files) {
-					// should make this recursive if we get worried about
-					// the media directory containing directories
-					Log.i(t,
-							"attempting to delete file: " + f.getAbsolutePath());
-					f.delete();
-				}
-			}
-			file.delete();
-			Log.i(t, "attempting to delete file: " + file.getAbsolutePath());
-		}
-	}
+                // delete all the containing files
+                File[] files = file.listFiles();
+                for (File f : files) {
+                    // should make this recursive if we get worried about
+                    // the media directory containing directories
+                    Log.i(t,
+                            "attempting to delete file: " + f.getAbsolutePath());
+                    f.delete();
+                }
+            }
+            file.delete();
+            Log.i(t, "attempting to delete file: " + file.getAbsolutePath());
+        }
+    }
 
-	/**
-	 * This method removes the entry from the content provider, and also removes
-	 * any associated files. files: form.xml, [formmd5].formdef, formname-media
-	 * {directory}
-	 */
-	@Override
-	public int delete(Uri uri, String where, String[] whereArgs) {
-		SQLiteDatabase db = getDbHelper().getWritableDatabase();
-		int count;
+    /**
+     * This method removes the entry from the content provider, and also removes
+     * any associated files. files: form.xml, [formmd5].formdef, formname-media
+     * {directory}
+     */
+    @Override
+    public int delete(Uri uri, String where, String[] whereArgs) {
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        int count;
 
-		switch (sUriMatcher.match(uri)) {
-		case FORMS:
-			Cursor del = null;
-			try {
-				del = this.query(uri, null, where, whereArgs, null);
-				if (del.getCount() > 0) {
-					del.moveToFirst();
-					do {
-						deleteFileOrDir(del
-								.getString(del
-										.getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-						String formFilePath = del.getString(del
-								.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-						Collect.getInstance().getActivityLogger()
-								.logAction(this, "delete", formFilePath);
-						deleteFileOrDir(formFilePath);
-						deleteFileOrDir(del.getString(del
-								.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
-					} while (del.moveToNext());
-				}
-			} finally {
-				if (del != null) {
-					del.close();
-				}
-			}
-			count = db.delete(FORMS_TABLE_NAME, where, whereArgs);
-			break;
+        switch (sUriMatcher.match(uri)) {
+            case FORMS:
+                Cursor del = null;
+                try {
+                    del = this.query(uri, null, where, whereArgs, null);
+                    if (del.getCount() > 0) {
+                        del.moveToFirst();
+                        do {
+                            deleteFileOrDir(del
+                                    .getString(del
+                                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                            String formFilePath = del.getString(del
+                                    .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "delete", formFilePath);
+                            deleteFileOrDir(formFilePath);
+                            deleteFileOrDir(del.getString(del
+                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                        } while (del.moveToNext());
+                    }
+                } finally {
+                    if (del != null) {
+                        del.close();
+                    }
+                }
+                count = db.delete(FORMS_TABLE_NAME, where, whereArgs);
+                break;
 
-		case FORM_ID:
-			String formId = uri.getPathSegments().get(1);
+            case FORM_ID:
+                String formId = uri.getPathSegments().get(1);
 
-			Cursor c = null;
-			try {
-				c = this.query(uri, null, where, whereArgs, null);
-				// This should only ever return 1 record.
-				if (c.getCount() > 0) {
-					c.moveToFirst();
-					do {
-						deleteFileOrDir(c.getString(c
-								.getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-						String formFilePath = c.getString(c
-								.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-						Collect.getInstance().getActivityLogger()
-								.logAction(this, "delete", formFilePath);
-						deleteFileOrDir(formFilePath);
-						deleteFileOrDir(c.getString(c
-							.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                Cursor c = null;
+                try {
+                    c = this.query(uri, null, where, whereArgs, null);
+                    // This should only ever return 1 record.
+                    if (c.getCount() > 0) {
+                        c.moveToFirst();
+                        do {
+                            deleteFileOrDir(c.getString(c
+                                    .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                            String formFilePath = c.getString(c
+                                    .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "delete", formFilePath);
+                            deleteFileOrDir(formFilePath);
+                            deleteFileOrDir(c.getString(c
+                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
 
-						try {
-                            // get rid of the old tables
-                            ItemsetDbAdapter ida = new ItemsetDbAdapter();
-                            ida.open();
-                            ida.delete(c.getString(c
-                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
-                                    + "/itemsets.csv");
-                            ida.close();
-                        } catch (Exception e) {
-                            // if something else is accessing the provider this may not exist
-                            // so catch it and move on.
-                        }
+                            try {
+                                // get rid of the old tables
+                                ItemsetDbAdapter ida = new ItemsetDbAdapter();
+                                ida.open();
+                                ida.delete(c.getString(c
+                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
+                                        + "/itemsets.csv");
+                                ida.close();
+                            } catch (Exception e) {
+                                // if something else is accessing the provider this may not exist
+                                // so catch it and move on.
+                            }
 
 					} while (c.moveToNext());
 				}

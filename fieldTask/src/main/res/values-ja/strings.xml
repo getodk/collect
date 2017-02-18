@@ -120,7 +120,7 @@
   <string name="send_data">確定済のフォームを送信</string>
   <string name="send_data_button">確定済のフォーム (%s) を送信</string>
   <string name="send_selected_data">選択済を送信</string>
-  <string name="server_auth_credentials">サーバーのユーザー名とパスワードを入力してください:\n%s</string>
+  <string name="server_auth_credentials">サーバーのユーザー名とパスワードを入力してください: %s</string>
   <string name="server_requires_auth">サーバーは認証が必要です</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">サーバー設定</string>
@@ -217,11 +217,13 @@
   <string name="save_mid">フォームを保存する</string>
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="verify_new_password">新しいパスワードを再入力してください</string>
+  <string name="admin_password">管理者パスワード</string>
   <string name="admin_password_changed">管理者パスワードが変更されました</string>
   <string name="admin_password_disabled">管理者パスワードが無効にされました</string>
   <string name="admin_password_mismatch">申し訳ありません、パスワードが一致しません!</string>
   <string name="admin_password_incorrect">申し訳ありません、パスワードが正しくありません!</string>
   <string name="enter_admin_password">管理者パスワードを入力してください</string>
+  <string name="change_admin_password">管理者パスワードを変更</string>
   <string name="found_in_menu">チェックを外すとメニューからフォームエントリーを非表示にします</string>
   <string name="autosend">自動送信</string>
   <string name="autosend_wifi">Wi-Fi で自動送信</string>
@@ -320,7 +322,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_google_account_needed">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
-  <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %1%s あります。スプレッドシートにアップロードできません。</string>
+  <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
   <string name="google_sheets_update_error">スプレッドシートの更新中にエラー。スプレッドシートの所有者が、書き込みアクセス許可を与えていることを確認してください。</string>
@@ -333,8 +335,14 @@
   <string name="map_sdk_selector_title">マッピング SDK</string>
   <string name="map_sdk_behavior">マッピング SDK</string>
   <string name="google_maps_sdk">Google マップ SDK</string>
-  <string name="openstreetmap_sdk">OpenStreet Map SDK</string>
+  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">マップ SDK オプションを表示</string>
+  <string name="openmap_streets">OSM 道路</string>
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">USGS National Map Sat</string>
+  <string name="openmap_stamen_terrain">Stamen Terrain</string>
+  <string name="openmap_cartodb_positron">CartoDB ポジトロン</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB ダークマター</string>
   <string name="streets">道路</string>
   <string name="terrain">地形</string>
   <string name="hybrid">ハイブリッド</string>
@@ -383,4 +391,27 @@
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
   <string name="bearing">方位: %.3f</string>
   <string name="direction">方角: %s</string>
+  <string name="select_odk_shortcut">ODK ショートカットを選択</string>
+  <string name="bad_uri">間違った URI: %s</string>
+  <string name="unrecognized_uri">認識できない URI: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;フォームが読み込まれていません&gt;</string>
+  <string name="multiple_media_folders_detected_notification">複数のメディアフォルダが検出されました。メディアフォルダを削除してもう一度やり直してください</string>
+  <string name="settings_successfully_loaded_file_notification">ファイルから設定が読み込まれました</string>
+  <string name="corrupt_settings_file_notification">申し訳ありません。設定ファイルが壊れているため、削除または置き換えしてください</string>
+  <string name="selected_invalid_image">選択したファイルは有効な画像ではありません</string>
+  <string name="edited_osm_file">編集した OSM XML ファイル:</string>
+  <string name="invalid_osm_data">何か問題があります。 有効な OSM データを取得できませんでした。</string>
+  <string name="alert">警告</string>
+  <string name="install_openmapkit">OpenMapKit をインストールしてください!</string>
+  <string name="go_back">戻る</string>
+  <string name="download_selected">選択済をダウンロード</string>
+  <string name="detection_frequency">検出頻度</string>
+  <string name="record_geopoint">地理位置を記録</string>
+  <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
+  <string name="parser_exception">XPathParser 例外: \"%s\"</string>
+  <string name="selected_answer">選択済: %s</string>
+  <string name="version_number">バージョン: %s</string>
+  <string name="general_settings_about">アプリについて</string>
+  <string name="all_open_source_licenses">オープンソースライセンス</string>
 </resources>

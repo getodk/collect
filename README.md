@@ -1,5 +1,4 @@
 [Smap fieldTask](http://www.smap.com.au) 
-======
 [![Build Status](https://travis-ci.org/nap2000/fieldTask2.svg)](https://travis-ci.org/nap2000/fieldTask2)
 
 fieldTask4 is a clone of [odkCollect](http://opendatakit.org/use/collect/) with Task Management functionality. It replaces fieldTask3 which used odkCollect as a library.

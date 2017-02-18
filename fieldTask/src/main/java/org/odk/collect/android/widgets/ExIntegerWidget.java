@@ -14,13 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import org.odk.collect.android.external.ExternalAppsUtils;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.IntegerData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -28,6 +21,13 @@ import android.content.Intent;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.IntegerData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalAppsUtils;
 
 
 /**
@@ -37,25 +37,24 @@ import android.text.method.DigitsKeyListener;
  * See {@link org.odk.collect.android.widgets.ExStringWidget} for usage.
  *
  * @author mitchellsundt@gmail.com
- *
  */
 public class ExIntegerWidget extends ExStringWidget {
 
-	private Integer getIntegerAnswerValue() {
-		IAnswerData dataHolder = mPrompt.getAnswerValue();
-		Integer d = null;
+    private Integer getIntegerAnswerValue() {
+        IAnswerData dataHolder = mPrompt.getAnswerValue();
+        Integer d = null;
         if (dataHolder != null) {
-        	Object dataValue = dataHolder.getValue();
-        	if ( dataValue != null ) {
-        		if (dataValue instanceof Double){
-	                d =  Integer.valueOf(((Double) dataValue).intValue());
-	            } else {
-	                d =  (Integer)dataValue;
-	            }
-        	}
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                if (dataValue instanceof Double) {
+                    d = Integer.valueOf(((Double) dataValue).intValue());
+                } else {
+                    d = (Integer) dataValue;
+                }
+            }
         }
         return d;
-	}
+    }
 
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -73,16 +72,16 @@ public class ExIntegerWidget extends ExStringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(i.toString());
+            mAnswer.setText(String.format("%d", i.toString()));
         }
     }
 
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-    	i.putExtra("value", getIntegerAnswerValue());
-       	Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-    			i.getAction(), mPrompt.getIndex());
+        i.putExtra("value", getIntegerAnswerValue());
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
+                i.getAction(), mPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_INT_CAPTURE);
     }
@@ -109,8 +108,8 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
-    	mAnswer.setText( integerData == null ? null : integerData.getValue().toString());
-    	Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        mAnswer.setText(integerData == null ? null : integerData.getValue().toString());
+        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
 }

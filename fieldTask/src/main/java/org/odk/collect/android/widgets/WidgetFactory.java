@@ -32,15 +32,16 @@ public class WidgetFactory {
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
      *
-     * @param fep prompt element to be rendered
-     * @param context Android context
+     * @param fep              prompt element to be rendered
+     * @param context          Android context
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context, boolean readOnlyOverride) {
+    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
+            boolean readOnlyOverride) {
 
-    	// get appearance hint and clean it up so it is lower case and never null...
+        // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
-        if ( appearance == null ) appearance = "";
+        if (appearance == null) appearance = "";
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
@@ -58,7 +59,7 @@ public class WidgetFactory {
                         questionWidget = new TimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                    	if ( appearance.startsWith("ex:") ) {
+                        if (appearance.startsWith("ex:")) {
                             questionWidget = new ExDecimalWidget(context, fep);
                         } else if (appearance.equals("bearing")) {
                             questionWidget = new BearingWidget(context, fep);
@@ -67,11 +68,11 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
-                    	if ( appearance.startsWith("ex:") ) {
-                    		questionWidget = new ExIntegerWidget(context, fep);
-                    	} else {
-                    		questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
-                    	}
+                        if (appearance.startsWith("ex:")) {
+                            questionWidget = new ExIntegerWidget(context, fep);
+                        } else {
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
+                        }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
                         questionWidget = new GeoPointWidget(context, fep);
@@ -90,7 +91,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_TEXT:
-                    	String query = fep.getQuestion().getAdditionalAttribute(null, "query");
+                        String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = new ItemsetWidget(context, fep, readOnlyOverride);
                         } else if (appearance.startsWith("printer")) {
@@ -126,8 +127,8 @@ public class WidgetFactory {
             	}
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
-            	questionWidget = new OSMWidget(context, fep);
-            	break;
+                questionWidget = new OSMWidget(context, fep);
+                break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 questionWidget = new AudioWidget(context, fep);
                 break;
@@ -135,17 +136,17 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-								// SurveyCTO-revised support for dynamic select content (from .csv files)
-								// consider traditional ODK appearance to be first word in appearance string
+                // SurveyCTO-revised support for dynamic select content (from .csv files)
+                // consider traditional ODK appearance to be first word in appearance string
                 if (appearance.startsWith("compact") || appearance.startsWith("quickcompact")) {
                     int numColumns = -1;
                     try {
-                    	String firstWord = appearance.split("\\s+")[0];
-                    	int idx = firstWord.indexOf("-");
-                    	if ( idx != -1 ) {
-                    		numColumns =
-                    				Integer.parseInt(firstWord.substring(idx + 1));
-                    	}
+                        String firstWord = appearance.split("\\s+")[0];
+                        int idx = firstWord.indexOf("-");
+                        if (idx != -1) {
+                            numColumns =
+                                    Integer.parseInt(firstWord.substring(idx + 1));
+                        }
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
                         Log.e("WidgetFactory", "Exception parsing numColumns");
@@ -185,17 +186,17 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-								// SurveyCTO-revised support for dynamic select content (from .csv files)
-								// consider traditional ODK appearance to be first word in appearance string
+                // SurveyCTO-revised support for dynamic select content (from .csv files)
+                // consider traditional ODK appearance to be first word in appearance string
                 if (appearance.startsWith("compact")) {
                     int numColumns = -1;
                     try {
-                    	String firstWord = appearance.split("\\s+")[0];
-                    	int idx = firstWord.indexOf("-");
-                    	if ( idx != -1 ) {
-                    		numColumns =
-                    				Integer.parseInt(firstWord.substring(idx + 1));
-                    	}
+                        String firstWord = appearance.split("\\s+")[0];
+                        int idx = firstWord.indexOf("-");
+                        if (idx != -1) {
+                            numColumns =
+                                    Integer.parseInt(firstWord.substring(idx + 1));
+                        }
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
                         Log.e("WidgetFactory", "Exception parsing numColumns");

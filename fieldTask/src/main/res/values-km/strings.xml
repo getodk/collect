@@ -120,7 +120,7 @@
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
   <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
   <string name="send_selected_data">បញ្ជូនការជ្រើសរើស</string>
-  <string name="server_auth_credentials">សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ និងពាក្យសម្ងាត់សម្រាប់ម៉ាស៊ីនមេ: \n%s</string>
+  <string name="server_auth_credentials">សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ និងពាក្យសម្ងាត់សម្រាប់ម៉ាស៊ីនមេ: %s</string>
   <string name="server_requires_auth">ម៉ាស៊ីនមេទាមទារឲ្យមានការផ្ទៀងផ្ទាត់</string>
   <string name="server_url">អាសយដ្ឋាន</string>
   <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
@@ -217,11 +217,13 @@
   <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
   <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
   <string name="verify_new_password">សូមបំពេញពាក្យសម្ងាត់ម្តងទៀត</string>
+  <string name="admin_password">ពាក្យសម្ងាត់ Admin</string>
   <string name="admin_password_changed">ពាក្យសម្ងាត់របស់ Admin បានផ្លាស់ប្តូរដោយជោគជ័យ</string>
   <string name="admin_password_disabled">ពាក្យសម្ងាត់របស់ Admin មិនដំណើការ</string>
   <string name="admin_password_mismatch">សុំទោស, ពាក្យសម្ងាត់មិនត្រូវគ្នា!</string>
   <string name="admin_password_incorrect">សោកស្តាយផង, ពាក្យសម្ងាត់នេះមិនត្រឹមត្រូវ!</string>
   <string name="enter_admin_password">បញ្ចូលពាក្យសម្ងាត់របស់ Admin</string>
+  <string name="change_admin_password">ផ្លាស់​ប្តូរ​ពាក្យ​សម្ងាត់​ Admin</string>
   <string name="found_in_menu">ដោះ​ធីក​ដើម្បី​លាក់​ពី​ម៊ឺនុយ​នៅ​ក្នុង​សំណុំ​បែប​បទ​បញ្ចូល​ទិន្នន័យ</string>
   <string name="autosend">បញ្ជូនចេញដោយស្វ័យប្រវត្តិ</string>
   <string name="autosend_wifi">បញ្ជូនចេញដោយស្វ័យប្រវត្តិជាមួយ Wi-Fi</string>
@@ -321,7 +323,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
   <string name="sheets_google_account_needed">អ្នកបានជ្រើសរើសយកសន្លឹក Google ជាម៉ាស៊ីនមេរបស់អ្នក, សូមរើសនូវគណនី Google ដែលត្រូវគ្នានៅក្នុងការកំណត់ទូទៅ មុននឹងបន្ត</string>
-  <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %1%s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
+  <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ការចូលដំណើរការត្រូវបានបដិសេធ។  ​សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីបាន​ផ្តល់​ការអនុញ្ញាតឲ្យអ្នកចូលដំណើរការ។</string>
   <string name="google_sheets_update_error">មាន​កំហុស​ក្នុង​ធ្វើ​បច្ចុប្បន្ន​ភាព​លើ​សៀវភៅ​បញ្ជី ។ សូម​ប្រាកដ​ថា​ម្ចាស់​​សៀវភៅ​បញ្ជី​​បាន​ផ្តល់​ការ​អនុញ្ញាតិ​ឲ្យ​អ្នក មាន​សិទ្ធិសរសេរ ។</string>
@@ -330,4 +332,30 @@
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_preferences">ជម្រើសនៃ​ការ​គូសផែនទី</string>
+  <string name="map_sdk_selector_title">ផែនទី SDK</string>
+  <string name="map_sdk_behavior">ផែនទី SDK</string>
+  <string name="google_maps_sdk">ផែនទី Google SDK</string>
+  <string name="openstreetmap_sdk">ផែនទី​ OpenStreetMap SDK</string>
+  <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
+  <string name="start">ចាប់ផ្តើម</string>
+  <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
+  <string name="enable_gps_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
+  <string name="polygon_save">រក្សាទុកជាពហុកោណ</string>
+  <string name="polyline_save">រក្សាទុកជាពហុបន្ទាត់</string>
+  <string name="gps_enable_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
+  <string name="minutes">នាទី</string>
+  <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
+  <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
+  <string name="dialog_continue">បន្តរ</string>
+  <string name="clear">លុ​បចេញ</string>
+  <string name="discard">បោះបង់</string>
+  <string name="zoom_to_where">ពង្រីក/បង្រួមទៅ...</string>
+  <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
+  <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
+  <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>
+  <string name="direction">ទិសដៅ៖ %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="general_settings_about">អំពី</string>
+  <string name="all_open_source_licenses">អាជ្ញាប័ណ្ណប្រភពបើកចំហ</string>
 </resources>

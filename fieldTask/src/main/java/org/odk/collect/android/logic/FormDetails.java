@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 public class FormDetails implements Serializable {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 

@@ -14,39 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.exception.FormException;
-import org.odk.collect.android.picasa.AlbumEntry;
-import org.odk.collect.android.picasa.AlbumFeed;
-import org.odk.collect.android.picasa.PhotoEntry;
-import org.odk.collect.android.picasa.PicasaClient;
-import org.odk.collect.android.picasa.PicasaUrl;
-import org.odk.collect.android.picasa.UserFeed;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -68,10 +35,42 @@ import com.google.gdata.client.spreadsheet.WorksheetQuery;
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
 import com.google.gdata.data.spreadsheet.ListEntry;
-import com.google.gdata.data.spreadsheet.ListFeed;
 import com.google.gdata.data.spreadsheet.WorksheetEntry;
 import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.ServiceException;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.FormException;
+import org.odk.collect.android.picasa.AlbumEntry;
+import org.odk.collect.android.picasa.AlbumFeed;
+import org.odk.collect.android.picasa.PhotoEntry;
+import org.odk.collect.android.picasa.PicasaClient;
+import org.odk.collect.android.picasa.PicasaUrl;
+import org.odk.collect.android.picasa.UserFeed;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author carlhartung (chartung@nafundi.com)
@@ -79,7 +78,7 @@ import com.google.gdata.util.ServiceException;
 public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
-    private final static String tag = "GoogleSheetsInstanceUploaderTask";
+    private final static String TAG = "GoogleSheetsUploadTask";
 
     protected HashMap<String, String> mResults;
 
@@ -117,7 +116,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     String formSelection = FormsColumns.JR_FORM_ID + "=?";
                     String[] formSelectionArgs = {
-                        jrformid
+                            jrformid
                     };
                     Cursor formcursor = Collect
                             .getInstance()
@@ -136,13 +135,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     if (md5 == null) {
                         // fail and exit
-                        Log.e(tag, "no md5");
+                        Log.e(TAG, "no md5");
                         return;
                     }
 
                     publishProgress(c.getPosition() + 1, c.getCount());
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
-                        cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                        cv.put(InstanceColumns.STATUS,
+                                InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                         return;
                     } else {
@@ -204,14 +204,16 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         if (columnNames.size() > 255) {
             mResults.put(id,
                     Collect.getInstance()
-                            .getString(R.string.sheets_max_columns, columnNames.size()));
+                            .getString(R.string.sheets_max_columns, String.valueOf(columnNames.size())));
             return false;
         }
 
         // make sure column names are legal
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, Collect.getInstance().getString(R.string.google_sheets_invalid_column_form, n));
+                mResults.put(id,
+                        Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
+                                n));
                 return false;
             }
         }
@@ -247,7 +249,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, Collect.getInstance().getString(R.string.google_sheets_invalid_column_instance, n));
+                mResults.put(id, Collect.getInstance().getString(
+                        R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
         }
@@ -284,7 +287,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         String selection = InstanceColumns._ID + "=?";
         String[] selectionArgs = {
-            id
+                id
         };
 
         Cursor cursor = null;
@@ -325,7 +328,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             mResults.put(
                     id,
                     form_fail
-                            + Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
+                            + Collect.getInstance().getString(R.string.invalid_sheet_id,
+                            urlString));
             return false;
         } else {
             int start = urlString.indexOf(googleHeader) + googleHeader.length();
@@ -339,7 +343,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         id,
                         form_fail
                                 + Collect.getInstance().getString(R.string.invalid_sheet_id,
-                                        urlString));
+                                urlString));
                 return false;
             }
             sheetId = urlString.substring(start, end);
@@ -374,7 +378,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         id,
                         form_fail
                                 + Collect.getInstance().getString(
-                                        R.string.google_sheets_access_denied));
+                                R.string.google_sheets_access_denied));
             } else {
                 mResults.put(id, form_fail + Html.fromHtml(e.getResponseBody()));
             }
@@ -445,7 +449,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         id,
                         form_fail
                                 + Collect.getInstance().getString(
-                                        R.string.google_sheets_update_error));
+                                R.string.google_sheets_update_error));
                 return false;
             }
 
@@ -580,7 +584,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     id,
                     form_fail
                             + Collect.getInstance().getString(
-                                    R.string.google_sheets_missing_columns, missingString));
+                            R.string.google_sheets_missing_columns, missingString));
             return false;
         }
 
@@ -606,7 +610,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             // if it's a location
             // [-]#.# [-]#.# #.# #.#
             Pattern p = Pattern
-                    .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s[0-9]+\\.[0-9]+$");
+                    .compile(
+                            "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+                                    + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
             Matcher m = p.matcher(answer);
             if (m.matches()) {
                 // get rid of everything after the second space
@@ -632,7 +638,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 mResults.put(
                         id,
                         form_fail
-                                + Collect.getInstance().getString(R.string.google_sheets_access_denied));
+                                + Collect.getInstance().getString(
+                                R.string.google_sheets_access_denied));
             } else {
                 mResults.put(id, form_fail + Html.fromHtml(e.getResponseBody()));
             }
@@ -657,7 +664,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             // to see if this photo already has a picasa_id
             String selection = Images.Media.DATA + "=?";
             String[] selectionArgs = {
-                filename
+                    filename
             };
             Cursor c = Collect.getInstance().getContentResolver()
                     .query(Images.Media.EXTERNAL_CONTENT_URI, null, selection, selectionArgs, null);
@@ -714,7 +721,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 // update the content provider picasa_id once we upload
                 String where = Images.Media.DATA + "=?";
                 String[] whereArgs = {
-                    toUpload.getAbsolutePath()
+                        toUpload.getAbsolutePath()
                 };
                 Collect.getInstance().getContentResolver()
                         .update(Images.Media.EXTERNAL_CONTENT_URI, cv, where, whereArgs);
@@ -836,7 +843,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     }
                     break;
                 default:
-                    Log.i(tag, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
                     break;
             }
             event = parser.next();
@@ -880,7 +887,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     path.remove(path.size() - 1);
                     break;
                 default:
-                    Log.i(tag, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
                     break;
             }
             event = parser.next();
@@ -977,10 +984,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
-     * @param name
-     * @return
      */
-    private boolean isValidGoogleSheetsString (String name) {
+    private boolean isValidGoogleSheetsString(String name) {
         Pattern p = Pattern
                 .compile("^[a-zA-Z0-9\\-]+$");
         Matcher m = p.matcher(name);

@@ -112,7 +112,6 @@
   <string name="required_answer_error">দুঃখিত, এই উত্তরটি অপরিহার্য ।</string>
   <string name="review_data">সংরক্ষিত ফরম পুনরায় সম্পাদনা করুন</string>
   <string name="review_data_button">সংরক্ষিত ফরম %s সম্পাদনা করুন </string>
-  <string name="saved_data">ফরম সংরক্ষণ </string>
   <string name="save_all_answers">সকল উত্তর সংরক্ষণ করুন </string>
   <string name="save_enter_data_description">আপনি %s ফরম শেষে দিকে রয়েছে </string>
   <string name="saving_form">ফরম সংরক্ষন করা হচ্ছে।</string>
@@ -120,7 +119,7 @@
   <string name="send_data">চূড়ান্ত ফরম পাঠান</string>
   <string name="send_data_button">চূড়ান্ত ফরম (%s) পাঠান</string>
   <string name="send_selected_data">নির্বাচিত ফরমটি পাঠান </string>
-  <string name="server_auth_credentials">দয়া করে সার্ভার server:\n%s এর জন্য ব্যবহারকারীর নির্দিষ্ট নাম ও পাসওয়ার্ড </string>
+  <string name="server_auth_credentials">দয়া করে সার্ভার server:%s এর জন্য ব্যবহারকারীর নির্দিষ্ট নাম ও পাসওয়ার্ড </string>
   <string name="server_requires_auth">সার্ভারে প্রমাণীকরণ অপরিহার্য আবশ্যক</string>
   <string name="server_url">ইউআরএল </string>
   <string name="server_preferences">সার্ভার নির্দিষ্টকরণ</string>
@@ -221,7 +220,6 @@
   <string name="buttons_navigation">buttons নেভিগেশান</string>
   <string name="swipe_buttons_navigation">swipe buttons নেভিগেশান</string>
   <string name="swipe_instructions">আপনি %s টি শুরুতে বিষয় ঠিক করতে পরদার নীচের দিকে উপর নীচ করে নিরধারণ করুন</string>
-  <string name="buttons_instructions">buttons ইন্সট্রাকশান</string>
   <string name="form_processing_logic">ফর্ম প্রসেসিং logic</string>
   <string name="launch_printer">প্রিন্টার চালু</string>
   <string name="no_printer">প্রিন্টার নেই</string>
@@ -239,5 +237,6 @@
   <string name="minutes">মিনিট</string>
   <string name="clear">মুছে ফেলুন।</string>
   <string name="points_captured">পয়েন্ট নির্ধারন করা</string>
-  <string name="direction">অভিমুখ</string>
+  <string name="direction">অভিমুখ: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>

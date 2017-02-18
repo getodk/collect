@@ -18,8 +18,7 @@
 
 package org.odk.collect.android.external;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.util.Log;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
@@ -36,7 +35,8 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormAnswerDataSerializer;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Meletis Margaritis
@@ -47,13 +47,16 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
     @Override
     public IAnswerData resolveAnswer(String textVal, TreeElement treeElement, FormDef formDef) {
-        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(), formDef, treeElement.getRef());
-        if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
+        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(),
+                formDef, treeElement.getRef());
+        if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE
+                || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
             boolean containsSearchExpression = false;
 
             XPathFuncExpr xPathExpression = null;
             try {
-                xPathExpression = ExternalDataUtil.getSearchXPathExpression(questionDef.getAppearanceAttr());
+                xPathExpression = ExternalDataUtil.getSearchXPathExpression(
+                        questionDef.getAppearanceAttr());
             } catch (Exception e) {
                 Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
                 // there is a search expression, but has syntax errors
@@ -77,28 +80,38 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 if (selectChoiceValue.equals(textVal)) {
                                     // This means that the user selected a static selection.
                                     //
-                                    // Although (for select1 fields) the default implementation will catch this and return the right thing
-                                    // (if we call super.resolveAnswer(textVal, treeElement, formDef))
+                                    // Although (for select1 fields) the default implementation
+                                    // will catch this and return the right thing
+                                    // (if we call super.resolveAnswer(textVal, treeElement,
+                                    // formDef))
                                     // we just need to make sure, so we will override that.
-                                    if (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE) {
+                                    if (questionDef.getControlType()
+                                            == Constants.CONTROL_SELECT_ONE) {
                                         // we don't need another, just return the static choice.
                                         return new SelectOneData(selection);
                                     }
                                 }
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
-                                // we should search in a potential comma-separated string of values for a match
-                                // copied from org.javarosa.xform.util.XFormAnswerDataParser.getSelections()
-                                List<String> textValues = DateUtils.split(textVal, XFormAnswerDataSerializer.DELIMITER, true);
+                                // we should search in a potential comma-separated string of
+                                // values for a match
+                                // copied from org.javarosa.xform.util.XFormAnswerDataParser
+                                // .getSelections()
+                                List<String> textValues = DateUtils.split(textVal,
+                                        XFormAnswerDataSerializer.DELIMITER, true);
                                 if (textValues.contains(textVal)) {
-                                    // this means that the user has selected AT LEAST the static choice.
+                                    // this means that the user has selected AT LEAST the static
+                                    // choice.
                                     if (selectChoiceValue.equals(textVal)) {
-                                        // this means that the user selected ONLY the static answer, so just return that
-                                        List<Selection> customSelections = new ArrayList<Selection>();
+                                        // this means that the user selected ONLY the static
+                                        // answer, so just return that
+                                        List<Selection> customSelections =
+                                                new ArrayList<Selection>();
                                         customSelections.add(selection);
                                         return new SelectMultiData(customSelections);
                                     } else {
-                                        // we will ignore it for now since we will return that selection together with the dynamic ones.
+                                        // we will ignore it for now since we will return that
+                                        // selection together with the dynamic ones.
                                     }
                                 }
                                 break;
@@ -112,17 +125,23 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                     } else {
                         switch (questionDef.getControlType()) {
                             case Constants.CONTROL_SELECT_ONE: {
-                                // the default implementation will search for the "textVal" (saved answer) inside the static choices.
-                                // Since we know that there isn't such, we just wrap the textVal in a virtual choice in order to
-                                // create a SelectOneData object to be used as the IAnswer to the TreeElement.
-                                // (the caller of this function is searching for such an answer to populate the in-memory model.)
-                                SelectChoice customSelectChoice = new SelectChoice(textVal, textVal, false);
+                                // the default implementation will search for the "textVal"
+                                // (saved answer) inside the static choices.
+                                // Since we know that there isn't such, we just wrap the textVal
+                                // in a virtual choice in order to
+                                // create a SelectOneData object to be used as the IAnswer to the
+                                // TreeElement.
+                                // (the caller of this function is searching for such an answer
+                                // to populate the in-memory model.)
+                                SelectChoice customSelectChoice = new SelectChoice(textVal, textVal,
+                                        false);
                                 customSelectChoice.setIndex(index);
                                 return new SelectOneData(customSelectChoice.selection());
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
                                 // we should create multiple selections and add them to the pile
-                                List<SelectChoice> customSelectChoices = createCustomSelectChoices(textVal);
+                                List<SelectChoice> customSelectChoices = createCustomSelectChoices(
+                                        textVal);
                                 List<Selection> customSelections = new ArrayList<Selection>();
                                 for (SelectChoice customSelectChoice : customSelectChoices) {
                                     customSelections.add(customSelectChoice.selection());
@@ -147,12 +166,15 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
     }
 
     private RuntimeException createBugRuntimeException(TreeElement treeElement, String textVal) {
-        return new RuntimeException("The appearance column of the field " + treeElement.getName() + " contains a search() call and the field type is " + treeElement.getDataType() + " and the saved answer is " + textVal);
+        return new RuntimeException("The appearance column of the field " + treeElement.getName()
+                + " contains a search() call and the field type is " + treeElement.getDataType()
+                + " and the saved answer is " + textVal);
     }
 
     protected List<SelectChoice> createCustomSelectChoices(String completeTextValue) {
         // copied from org.javarosa.xform.util.XFormAnswerDataParser.getSelections()
-        List<String> textValues = DateUtils.split(completeTextValue, XFormAnswerDataSerializer.DELIMITER, true);
+        List<String> textValues = DateUtils.split(completeTextValue,
+                XFormAnswerDataSerializer.DELIMITER, true);
 
         int index = 0;
         List<SelectChoice> customSelectChoices = new ArrayList<SelectChoice>();

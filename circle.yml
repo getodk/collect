@@ -11,8 +11,7 @@ dependencies:
         
 test:
     pre:
-        - ./gradlew assembleRelease
-        - ./gradlew assembleAndroidTest
+        - ./gradlew lint assembleRelease assembleAndroidTest
 
     override:
         - ./gradlew testReleaseUnitTest
@@ -21,3 +20,7 @@ test:
     post:
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
         - find . -type f -regex ".*/build/test-results/.*.xml"  -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+
+        # Lint
+        - mkdir -p $CIRCLE_TEST_REPORTS/lint/
+        - find . -type f -regex ".*/collect_app/build/outputs/lint-results-*.*" -exec cp --parent {} $CIRCLE_TEST_REPORTS/lint/ \;

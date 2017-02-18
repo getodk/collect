@@ -95,7 +95,6 @@
   <string name="ok">ٹھیک ہے</string>
   <string name="parse_error">معافی، فارم کا تجزیہ نہیں ہو سکا</string>
   <string name="parse_legacy_formlist_failed">سرور نے     ‎Aggregate 0.9.x: %1$s‏ کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے</string>
-  <string name="parse_openrosa_formlist_failed">سرور نے ‎Open rosa standard 1.0‏ کے صورت کے ساتھ موافق فارموں کی دستاویز مہیانہیں کی ہے</string>
   <string name="password">شناختی لفظ (Password)</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="please_wait">براہ مہربانی۔ چند منٹ انتظار کرلیں</string>
@@ -150,7 +149,6 @@
   <string name="form_scan_starting">فارم (ز) کی سکیننگ ہو رہی ہے</string>
   <string name="access_error">‎%s‏ تک رسائی غلطی آ رہی ہے</string>
   <string name="manifest_server_error">دکھایا گیا جواب ‎OpenRosa‏ ورژن کو رپورت نہیں کرتا ۔ خراب سرور</string>
-  <string name="root_namespace_error">بنیادی عنصر کے نام کا خانہ غلط ہے</string>
   <string name="manifest_tag_error">دکھایا گیا ‎%s‏  کے اندراج سے ایک یا ذیادہ  tagsغائب ہیں ۔ فائل کا نام، ہیش، یا ڈاون لوڈ </string>
   <string name="form_download_progress">غلطی: ‎%1$s‏ میڈیا فائل حاصل کیا جا رہا ہے: ‎%3$s‏ کا ‎%2$s‏</string>
   <string name="success">کامیابی</string>
@@ -241,4 +239,6 @@
   <string name="view_change_location">مقام کو ملاحظہ کریں یا تبدیلکریں۔</string>
   <string name="change_server_url">یو آر ایل (URL)</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
 </resources>
