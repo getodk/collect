@@ -245,7 +245,7 @@
   <string name="buttons_instructions">Vous êtes au début de %s. Utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="swipe_buttons_instructions">Vous êtes au début de %s. Faites glisser votre doigt comme montré ou utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="form_processing_logic">Logique de traitement du formulaire</string>
-  <string name="form_processing_logic_recommended">Recommendé (par défaut)</string>
+  <string name="form_processing_logic_recommended">Recommandé (par défaut)</string>
   <string name="form_processing_logic_0">janvier 2015 (le plus vite)</string>
   <string name="form_processing_logic_1">janvier 2015 (le plus sûr)</string>
   <string name="form_processing_logic_2">mi-2014 (lent)</string>
@@ -406,7 +406,7 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="alert">Alerte</string>
   <string name="install_openmapkit">Veuillez installer OpenMapKit.</string>
   <string name="go_back">Retour</string>
-  <string name="download_selected">Télécharger éléments sélectionnés </string>
+  <string name="download_selected">Télécharger la sélection</string>
   <string name="detection_frequency">Fréquence de détection</string>
   <string name="record_geopoint">Enregistrer un GeoPoint</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
@@ -415,4 +415,23 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="version_number">Version: %s</string>
   <string name="general_settings_about">A propos</string>
   <string name="all_open_source_licenses">Licences Open Source</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">O %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">Cette image est stockée sur Google Drive et ne peut être accédée si vous êtes hors ligne.</string>
+  <string name="not_exactly_one_record_for_this_instance">Pas exactement un enregistrement pour cette instance !</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">Aucun formulaire vierge ne correspond à ce jr_form_id.</string>
+  <string name="no_form_id_specified">Pas de FormId spécifié ???</string>
+  <string name="phone_does_not_support_encryption">Le téléphone ne supporte pas le chiffrement.</string>
+  <string name="phone_does_not_have_base64_class">Le téléphone ne dispose pas de la classe Base64 mais le niveau API est %s.</string>
+  <string name="phone_does_not_support_rsa">Le téléphone ne supporte pas le chiffrement RSA.</string>
+  <string name="invalid_rsa_public_key">Clé publique RSA invalide.</string>
+  <string name="encryption_error_message">Le formulaire %s n\'a pas été enregistré comme finalisé.</string>
+  <string name="select_all">Sélectionner tout</string>
+  <string name="clear_all">Tout effacer</string>
 </resources>
