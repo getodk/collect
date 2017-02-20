@@ -391,7 +391,44 @@
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
   <string name="bearing">Suuntima: %.3f</string>
   <string name="direction">Suunta: %s</string>
+  <string name="select_odk_shortcut">Valitse ODK-oikotie</string>
+  <string name="bad_uri">Kelvoton URI: %s</string>
+  <string name="unrecognized_uri">Tunnistamaton URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;ei ladattua lomaketta&gt;</string>
+  <string name="multiple_media_folders_detected_notification">Enemmän kuin yksi media-kansio havaittu: poista yksi ja yritä uudelleen</string>
+  <string name="settings_successfully_loaded_file_notification">Asetusten lataaminen tiedostosta onnistui</string>
+  <string name="corrupt_settings_file_notification">Pahoittelut, asetustiedosto on viallinen ja pitäisi poistaa tai korvata</string>
+  <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
+  <string name="edited_osm_file">Muokattu OSM XML -tiedosto:</string>
+  <string name="invalid_osm_data">Jokin meni pieleen. Kelvollista OSM-dataa ei saatu.</string>
+  <string name="alert">Huomio</string>
+  <string name="install_openmapkit">Ole hyvä ja asenna OpenMapKit!</string>
+  <string name="go_back">Palaa</string>
+  <string name="download_selected">Lataaminen valittu</string>
+  <string name="detection_frequency">havaintofrekvenssi</string>
+  <string name="record_geopoint">Tallenna GeoPoint-koordinaatit</string>
+  <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
+  <string name="parser_exception">XPathParser-virhe: \"%s\"</string>
+  <string name="selected_answer">Valittu: %s</string>
+  <string name="version_number">Versio: %s</string>
   <string name="general_settings_about">Tietoja</string>
   <string name="all_open_source_licenses">Avoimen lähdekoodin lisenssit</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">Tämä kuva on tallennettu Google Drive -palveluun eikä siihen ole pääsyä offline-tilassa.</string>
+  <string name="not_exactly_one_record_for_this_instance">Tällä instanssilla ei ole täsmälleen yhtä tietuetta!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">Tätä jr_form_id:tä ei vastaa täsmälleen yksi tyhjä lomake.</string>
+  <string name="no_form_id_specified">FormId määrittämättä???</string>
+  <string name="phone_does_not_support_encryption">Laite ei tuo salausta.</string>
+  <string name="phone_does_not_have_base64_class">Laitteella ei ole Base64 -luokkaa mutta API -taso on %s.</string>
+  <string name="phone_does_not_support_rsa">Laite ei tue RSA-salausta.</string>
+  <string name="invalid_rsa_public_key">Kelvoton julkinen RSA-avain.</string>
+  <string name="encryption_error_message">%s Lomaketta ei ole tallennettu viimeisteltynä.</string>
 </resources>
