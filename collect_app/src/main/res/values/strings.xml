@@ -443,7 +443,7 @@
 <string name="encryption_error_message">%s Form has not been saved as finalized.</string>
 <string name="analytics_preferences">Usage data</string>
 <string name="enable_analytics">Collect anonymous usage data</string>
-<string name="enable_analytics_summary">Anonymous usage data helps the ODK team prioritize fixes and features.</string>
+<string name="enable_analytics_summary">Anonymous usage data helps the ODK team prioritize fixes and features</string>
 <string name="select_all">Select All</string>
 <string name="clear_all">Clear All</string>
 <string name="reset_settings">Settings</string>
