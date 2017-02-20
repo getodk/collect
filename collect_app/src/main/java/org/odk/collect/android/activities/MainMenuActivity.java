@@ -250,9 +250,9 @@ public class MainMenuActivity extends Activity {
                 mContentObserver);
 //		mFinalizedCursor.registerContentObserver(mContentObserver);
 
-        // count for finalized instances
-        String selectionSaved = InstanceColumns.STATUS + "=?";
-        String selectionArgsSaved[] = {InstanceProviderAPI.STATUS_INCOMPLETE};
+        // count for saved instances
+        String selectionSaved = InstanceColumns.STATUS + "!=?";
+        String selectionArgsSaved[] = {InstanceProviderAPI.STATUS_SUBMITTED};
 
         try {
             mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
