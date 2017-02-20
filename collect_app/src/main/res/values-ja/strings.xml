@@ -414,4 +414,46 @@
   <string name="version_number">バージョン: %s</string>
   <string name="general_settings_about">アプリについて</string>
   <string name="all_open_source_licenses">オープンソースライセンス</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">この画像はGoogleドライブに保存されており、オフラインではアクセスできません。</string>
+  <string name="not_exactly_one_record_for_this_instance">このインスタンスで正確なレコードではありません!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">ブランクフォームはこの jr_form_id に一致しません。</string>
+  <string name="no_form_id_specified">フォームId が指定されていない???</string>
+  <string name="phone_does_not_support_encryption">電話は暗号化をサポートしていません。</string>
+  <string name="phone_does_not_have_base64_class">電話は Base64 クラスがありません。 API レベルは %s です。</string>
+  <string name="phone_does_not_support_rsa">電話は RSA 暗号化をサポートしていません。</string>
+  <string name="invalid_rsa_public_key">RSA 公開鍵が無効です。</string>
+  <string name="encryption_error_message">%s フォームはファイナライズ済みとして保存されていません。</string>
+  <string name="analytics_preferences">アナリティクスオプション</string>
+  <string name="enable_analytics">アナリティクスを有効にする</string>
+  <string name="enable_analytics_summary">チェックを外すとアナリティクスを無効にします</string>
+  <string name="select_all">すべて選択</string>
+  <string name="clear_all">すべてクリア</string>
+  <string name="reset_settings">設定</string>
+  <string name="reset_saved_forms">保存されたフォーム</string>
+  <string name="reset_blank_forms">空のフォーム</string>
+  <string name="reset_layers">オフライン地図レイヤー</string>
+  <string name="reset_cache">フォーム読み込みキャッシュ</string>
+  <string name="reset_osm_tiles">OSM タイル</string>
+  <string name="reset_settings_dialog_title">リセットするものを選択</string>
+  <string name="reset_settings_dialog">アプリ状態をリセット</string>
+  <string name="reset_settings_button_reset">リセット</string>
+  <string name="reset_dialog_nothing">リセットするものが選択されていません。</string>
+  <string name="reset_in_progress">リセットしています…</string>
+  <string name="resetting_finished">リセットが完了しました</string>
+  <string name="reset_app_state_result">アプリ状態のリセット結果</string>
+  <string name="reset_app_state_warning">選択したデータはすべて完全に削除されます。元に戻すことはできません。</string>
+  <string name="reset_settings_result">設定 :: %s</string>
+  <string name="reset_saved_forms_result">保存されたフォーム :: %s</string>
+  <string name="reset_blank_forms_result">空のフォーム :: %s</string>
+  <string name="reset_layers_result">オフライン地図レイヤー :: %s</string>
+  <string name="reset_cache_result">フォーム読み込みキャッシュ :: %s</string>
+  <string name="reset_osm_tiles_result">OSM タイル :: %s</string>
 </resources>
