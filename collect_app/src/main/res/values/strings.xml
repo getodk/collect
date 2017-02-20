@@ -442,8 +442,8 @@
 <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
 <string name="encryption_error_message">%s Form has not been saved as finalized.</string>
 <string name="analytics_preferences">Analytics Options</string>
-<string name="enable_analytics">Enable Analytics</string>
-<string name="enable_analytics_summary">Uncheck to disable Analytics</string>
+<string name="analytics">Enable Analytics</string>
+<string name="analytics_summary">Uncheck to disable Analytics</string>
 <string name="select_all">Select All</string>
 <string name="clear_all">Clear All</string>
 <string name="reset_settings">Settings</string>
