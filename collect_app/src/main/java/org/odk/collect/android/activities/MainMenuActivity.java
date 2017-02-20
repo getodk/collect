@@ -48,6 +48,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import java.io.File;
@@ -79,6 +80,7 @@ public class MainMenuActivity extends Activity {
     private Button mEnterDataButton;
     private Button mManageFilesButton;
     private Button mSendDataButton;
+    private Button mViewSentFormsButton;
     private Button mReviewDataButton;
     private Button mGetFormsButton;
 
@@ -90,9 +92,11 @@ public class MainMenuActivity extends Activity {
 
     private int mCompletedCount;
     private int mSavedCount;
+    private int mViewSentCount;
 
     private Cursor mFinalizedCursor;
     private Cursor mSavedCursor;
+    private Cursor mViewSentCursor;
 
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
@@ -168,9 +172,9 @@ public class MainMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, "editSavedForm", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        InstanceChooserList.class);
+                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(i);
             }
         });
@@ -185,6 +189,18 @@ public class MainMenuActivity extends Activity {
                         .logAction(this, "uploadForms", "click");
                 Intent i = new Intent(getApplicationContext(),
                         InstanceUploaderList.class);
+                startActivity(i);
+            }
+        });
+
+        //View sent forms
+        mViewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        mViewSentFormsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logAction(this, ApplicationConstants.FormModes.VIEW_SENT, "click");
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
                 startActivity(i);
             }
         });
@@ -266,8 +282,21 @@ public class MainMenuActivity extends Activity {
             startManagingCursor(mSavedCursor);
         }
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
-        // don't need to set a content observer because it can't change in the
-        // background
+
+        //count for view sent form
+        String selectionViewSent = InstanceColumns.STATUS + "=?";
+        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED};
+        try {
+            mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
+                    selectionViewSent, selectionArgsViewSent, null);
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        if (mViewSentCursor != null) {
+            startManagingCursor(mViewSentCursor);
+        }
+        mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
 
         updateButtons();
         setupGoogleAnalytics();
@@ -295,6 +324,14 @@ public class MainMenuActivity extends Activity {
             mSendDataButton.setVisibility(View.GONE);
         } else {
             mSendDataButton.setVisibility(View.VISIBLE);
+        }
+
+        boolean view_sent = sharedPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+        if (!view_sent) {
+            mViewSentFormsButton.setVisibility(View.GONE);
+        } else {
+            mViewSentFormsButton.setVisibility(View.VISIBLE);
         }
 
         boolean get_blank = sharedPreferences.getBoolean(
@@ -515,6 +552,20 @@ public class MainMenuActivity extends Activity {
             mReviewDataButton.setText(getString(R.string.review_data));
             Log.w(t,
                     "Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
+        }
+
+        if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
+            mViewSentCursor.requery();
+            mViewSentCount = mViewSentCursor.getCount();
+            if (mViewSentCount > 0) {
+                mViewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
+            } else {
+                mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            }
+        } else {
+                       mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            Log.w(t,
+                    "Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
         }
     }
 
