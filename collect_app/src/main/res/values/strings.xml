@@ -339,7 +339,7 @@
 <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
-<string name="map_preferences">Mapping Options</string>
+<string name="map_preferences">Mapping</string>
 <string name="map_sdk_selector_title">Mapping SDK</string>
 <string name="map_sdk_behavior">Mapping SDK</string>
 <string name="google_maps_sdk">Google Maps SDK</string>
