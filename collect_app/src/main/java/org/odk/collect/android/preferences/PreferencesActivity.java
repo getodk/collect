@@ -184,10 +184,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
 
-        PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(
-                getString(R.string.analytics_preferences));
-        mAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
-
         boolean autosendWifiAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
         if (!(autosendWifiAvailable || adminMode)) {
@@ -413,12 +409,15 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             clientCategory.removePreference(highResolution);
         }
 
+        PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(
+                getString(R.string.analytics_preferences));
+        mAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
+
         boolean analyticsAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_ANALYTICS, true);
         if (!(analyticsAvailable || adminMode)) {
             analyticsCategory.removePreference(mAnalyticsPreference);
             getPreferenceScreen().removePreference(analyticsCategory);
-
         }
 
         mAnalyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
