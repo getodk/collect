@@ -132,6 +132,8 @@
 <string name="send_data">Send Finalized Form</string>
 <string name="send_data_button">Send Finalized Form (%s)</string>
 <string name="send_selected_data">Send Selected</string>
+<string name="view_sent_forms">View Sent Form</string>
+<string name="view_sent_forms_button">View Sent Form (%s)</string>
 <string name="server_auth_credentials">Please enter username and password for the server: %s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
@@ -200,6 +202,7 @@
 <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="deleted_on_date_at_time">\'Deleted on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
 <string name="version">Version:</string>
 <string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
 <string name="launch_app">Launch</string>
@@ -466,4 +469,7 @@
 <string name="reset_layers_result">Map layers :: %s</string>
 <string name="reset_cache_result">Form load cache :: %s</string>
 <string name="reset_osm_tiles_result">OSM tile cache :: %s</string>
+<string name="encrypted_form">Encrypted form</string>
+<string name="deleted_form">Deleted form</string>
+<string name="exit">Exit</string>
 </resources>
