@@ -20,9 +20,9 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
@@ -44,7 +44,7 @@ public class ResetUtility {
                     resetPreferences(context);
                     break;
                 case ResetAction.RESET_INSTANCES:
-                    resetInstances(context);
+                    resetInstances();
                     break;
                 case ResetAction.RESET_FORMS:
                     resetForms(context);
@@ -81,8 +81,8 @@ public class ResetUtility {
         mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
     }
 
-    private void resetInstances(final Context context) {
-        context.getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
+    private void resetInstances() {
+        new InstancesDao().deleteInstancesDatabase();
 
         if (deleteFolderContents(Collect.INSTANCES_PATH)) {
             mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_INSTANCES));

@@ -44,9 +44,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -243,15 +243,11 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        // count for finalized instances
-        String selection = InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?";
-        String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
+        InstancesDao instancesDao = new InstancesDao();
 
+        // count for finalized instances
         try {
-            mFinalizedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-                    selection, selectionArgs, null);
+            mFinalizedCursor = instancesDao.getFinalizedInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
@@ -266,12 +262,8 @@ public class MainMenuActivity extends Activity {
 //		mFinalizedCursor.registerContentObserver(mContentObserver);
 
         // count for saved instances
-        String selectionSaved = InstanceColumns.STATUS + "!=?";
-        String selectionArgsSaved[] = {InstanceProviderAPI.STATUS_SUBMITTED};
-
         try {
-            mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-                    selectionSaved, selectionArgsSaved, null);
+            mSavedCursor = instancesDao.getUnsentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
@@ -283,11 +275,8 @@ public class MainMenuActivity extends Activity {
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
 
         //count for view sent form
-        String selectionViewSent = InstanceColumns.STATUS + "=?";
-        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED};
         try {
-            mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-                    selectionViewSent, selectionArgsViewSent, null);
+            mViewSentCursor = instancesDao.getSentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;

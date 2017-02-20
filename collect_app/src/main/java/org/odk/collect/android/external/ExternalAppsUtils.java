@@ -35,6 +35,7 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -124,12 +125,9 @@ public class ExternalAppsUtils {
                         String path =
                                 Collect.getInstance().getFormController().getInstancePath()
                                         .getAbsolutePath();
-                        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-                        String selectionArgs[] = {path};
 
                         String instanceProviderID = "-1";
-                        Cursor c = Collect.getInstance().getContentResolver().query(
-                                InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                        Cursor c = new InstancesDao().getInstancesCursorForFilePath(path);
                         if (c != null && c.getCount() > 0) {
                             // should only ever be one
                             c.moveToFirst();
