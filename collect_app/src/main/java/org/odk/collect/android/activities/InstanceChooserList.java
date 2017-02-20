@@ -22,15 +22,22 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SearchableAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -61,24 +68,8 @@ public class InstanceChooserList extends ListActivity {
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
 
-        String selection = InstanceColumns.STATUS + " != ?";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
-        String sortOrder =
-                InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
-                sortOrder);
-
-        String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
-        };
-        int[] view = new int[]{
-                R.id.text1, R.id.text2
-        };
-
-        // render total instance view
-        SimpleCursorAdapter instances =
-                new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
-        setListAdapter(instances);
+        setupAdapter(InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC");
+        setupSearchBar();
     }
 
 
@@ -93,11 +84,12 @@ public class InstanceChooserList extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
-        Cursor c = (Cursor) getListAdapter().getItem(position);
-        startManagingCursor(c);
-        Uri instanceUri =
-                ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                        c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+        SearchableAdapter.ListElement listElement = (SearchableAdapter.ListElement)
+                getListAdapter().getItem(position);
+        Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, listElement.getId());
+
+        Cursor c = managedQuery(instanceUri, null, null, null, null);
+        c.moveToFirst();
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 instanceUri.toString());
@@ -137,6 +129,58 @@ public class InstanceChooserList extends ListActivity {
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    private void setupAdapter(String sortOrder) {
+        String selection = InstanceColumns.STATUS + " != ?";
+        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
+                sortOrder);
+
+        List<SearchableAdapter.ListElement> listElements = new ArrayList<>();
+        while (c.moveToNext()) {
+            long id = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+            String name = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+            String subtext = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_SUBTEXT));
+
+            listElements.add(new SearchableAdapter.ListElement(id, name, subtext));
+        }
+        SearchableAdapter searchableAdapter = new SearchableAdapter(this, listElements);
+        setListAdapter(searchableAdapter);
+    }
+
+    private void setupSearchBar() {
+        EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                performFiltering(s);
+            }
+        });
+
+        getListView().post(adjustSearchBar);
+    }
+
+    private final Runnable adjustSearchBar = new Runnable() {
+        @Override
+        public synchronized void run() {
+            LinearLayout searchBarLayout = (LinearLayout) findViewById(R.id.searchBarLayout);
+            if (getListView().getChildCount() < ((SearchableAdapter) getListAdapter()).getOriginalItemsSize()) {
+                searchBarLayout.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
+    private void performFiltering(CharSequence filter) {
+        ((SearchableAdapter) getListAdapter()).getFilter().filter(filter);
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
