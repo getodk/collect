@@ -223,6 +223,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
+    private boolean mShowNavigationButtons=false;
 
     /** Called when the activity is first created. */
     @Override
@@ -1178,10 +1179,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             }
                         });
 
-                if (mBackButton.isShown()) {
+                if (mShowNavigationButtons) {
                     mBackButton.setEnabled(true);
-                }
-                if (mNextButton.isShown()) {
                     mNextButton.setEnabled(false);
                 }
 
@@ -1235,8 +1234,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 }
 
-                if (mBackButton.isShown() && mNextButton.isShown()) {
-                    mBackButton.setEnabled(true);
+                if (mShowNavigationButtons) {
+                    adjustBackNavigationButtonVisibility();
                     mNextButton.setEnabled(true);
                 }
                 return odkv;
@@ -1256,6 +1255,26 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     createErrorDialog(e.getCause().getMessage(), EXIT);
                 }
                 return createView(event, advancingPage);
+        }
+    }
+
+    /**
+     * Disables the back button if it is first question....
+     */
+    private void adjustBackNavigationButtonVisibility(){
+        FormController formController = Collect.getInstance()
+                .getFormController();
+        try {
+            boolean firstQuestion = formController.stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM;
+            mBackButton.setEnabled(!firstQuestion);
+            formController.stepToNextScreenEvent();
+            if (formController.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                mBackButton.setEnabled(true);
+                formController.stepToNextScreenEvent();
+            }
+        } catch (JavaRosaException e) {
+            mBackButton.setEnabled(true);
+            e.printStackTrace();
         }
     }
 
@@ -2309,12 +2328,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         String navigation = sharedPreferences.getString(
                 PreferencesActivity.KEY_NAVIGATION,
                 PreferencesActivity.KEY_NAVIGATION);
-        Boolean showButtons = false;
         if (navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
-            showButtons = true;
+            mShowNavigationButtons = true;
         }
 
-        if (showButtons) {
+        if (mShowNavigationButtons) {
             mBackButton.setVisibility(View.VISIBLE);
             mNextButton.setVisibility(View.VISIBLE);
         } else {
