@@ -144,21 +144,21 @@ public class ResetDialogPreference extends DialogPreference {
                                 getContext().getString(R.string.success)));
                     }
                     break;
-                case ResetUtility.ResetAction.RESET_LAYERS:
-                    if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
-                                getContext().getString(R.string.error_occured)));
-                    } else {
-                        resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
-                                getContext().getString(R.string.success)));
-                    }
-                    break;
                 case ResetUtility.ResetAction.RESET_CACHE:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_cache_result),
                                 getContext().getString(R.string.error_occured)));
                     } else {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_cache_result),
+                                getContext().getString(R.string.success)));
+                    }
+                    break;
+                case ResetUtility.ResetAction.RESET_LAYERS:
+                    if (failedResetActions.contains(action)) {
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
+                                getContext().getString(R.string.error_occured)));
+                    } else {
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;

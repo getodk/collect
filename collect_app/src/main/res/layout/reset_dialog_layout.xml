@@ -29,10 +29,11 @@ limitations under the License.
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
+            android:textColor="#F44336"
+            android:textStyle="bold"
             android:textAlignment="center"
-            android:text="@string/reset_app_state_warning"
-            android:background="#F44336"/>
+            android:padding="5dp"
+            android:text="@string/reset_app_state_warning" />
 
         <CheckBox
             android:id="@+id/preferences"
@@ -62,19 +63,19 @@ limitations under the License.
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
         <CheckBox
-            android:id="@+id/layers"
+            android:id="@+id/cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reset_layers"
+            android:text="@string/reset_cache"
             android:padding="5dp"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
         <CheckBox
-            android:id="@+id/cache"
+            android:id="@+id/layers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reset_cache"
+            android:text="@string/reset_layers"
             android:padding="5dp"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -87,5 +88,6 @@ limitations under the License.
             android:padding="5dp"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
     </LinearLayout>
 </ScrollView>
