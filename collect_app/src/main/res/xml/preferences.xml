@@ -142,11 +142,11 @@
         android:title="@string/analytics_preferences" >
 
         <CheckBoxPreference
-            android:id="@+id/enable_analytics"
+            android:id="@+id/analytics"
             android:defaultValue="true"
-            android:key="enable_analytics"
-            android:summary="@string/enable_analytics_summary"
-            android:title="@string/enable_analytics" />
+            android:key="analytics"
+            android:summary="@string/analytics_summary"
+            android:title="@string/analytics" />
     </PreferenceCategory>
 
     <PreferenceCategory
