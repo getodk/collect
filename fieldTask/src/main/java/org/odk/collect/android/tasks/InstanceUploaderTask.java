@@ -578,11 +578,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     	Outcome outcome = new Outcome();
 
         // Start smap
-
+        int maxFiles = 999;
+        int numberToSend = values == null ? 0 : values.length > maxFiles ? maxFiles : values.length;
         StringBuffer selectionBuf = new StringBuffer(InstanceColumns._ID + " IN (");
-        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
+        String[] selectionArgs = new String[numberToSend];
         if(values != null) {
-            int numberToSend = values.length > 999 ? 999 : values.length;
             for (int i = 0; i < numberToSend; i++) {
                 if(i > 0) {
                     selectionBuf.append(",");
@@ -595,22 +595,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         String selection = selectionBuf.toString();
         Log.i(t, "Getting instances "  + selection);
         // end smap
-
-        /*
-         * Commented out SMAP
-         *
-        String selection = InstanceColumns._ID + "=?";
-        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-        if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                if (i > 0) {
-                    selectionBuf.append(",");
-                }
-                selectionBuf.append("?");
-                selectionArgs[i] = values[i].toString();
-            }
-        }
-        */
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                 .getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
