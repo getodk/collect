@@ -114,6 +114,12 @@
             android:key="splashPath"
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
+        <CheckBoxPreference
+            android:id="@+id/server_custom_messaging"
+            android:defaultValue="false"
+            android:key="show_custom_messaging"
+            android:summary="@string/server_custom_messaging_summary"
+            android:title="@string/server_custom_messaging" />
     </PreferenceCategory>
 
     <PreferenceCategory
