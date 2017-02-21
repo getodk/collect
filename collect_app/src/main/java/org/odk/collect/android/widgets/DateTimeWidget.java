@@ -169,10 +169,8 @@ public class DateTimeWidget extends QuestionWidget {
             mTimePicker.setVisibility(GONE);
         } else if ("year".equals(appearance)) {
             hideMonth = true;
-            if (Build.VERSION.SDK_INT >= 11) {
-                this.mDatePicker.setCalendarViewShown(false);
-                this.mDatePicker.setSpinnersShown(true);
-            }
+            this.mDatePicker.setCalendarViewShown(false);
+            this.mDatePicker.setSpinnersShown(true);
             mTimePicker.setVisibility(GONE);
         } else if ("no-calendar".equals(appearance)) {
             if (Build.VERSION.SDK_INT >= 11) {
