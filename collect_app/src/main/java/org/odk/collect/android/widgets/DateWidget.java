@@ -149,17 +149,15 @@ public class DateWidget extends QuestionWidget {
             this.mDatePicker.setCalendarViewShown(false);
             this.mDatePicker.setSpinnersShown(true);
         } else {
-            if (Build.VERSION.SDK_INT >= 11) {
-                showCalendar = true;
-                this.mDatePicker.setCalendarViewShown(true);
-                if (Build.VERSION.SDK_INT >= 12) {
-                    CalendarView cv = this.mDatePicker.getCalendarView();
-                    cv.setShowWeekNumber(false);
-                }
-                this.mDatePicker.setSpinnersShown(true);
-                hideDay = true;
-                hideMonth = false;
+            showCalendar = true;
+            this.mDatePicker.setCalendarViewShown(true);
+            if (Build.VERSION.SDK_INT >= 12) {
+                CalendarView cv = this.mDatePicker.getCalendarView();
+                cv.setShowWeekNumber(false);
             }
+            this.mDatePicker.setSpinnersShown(true);
+            hideDay = true;
+            hideMonth = false;
         }
 
         if (hideMonth || hideDay) {
