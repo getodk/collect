@@ -87,7 +87,6 @@ import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.views.ODKView;
@@ -342,7 +341,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
-            CompatibilityUtils.invalidateOptionsMenu(this);
+            invalidateOptionsMenu();
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -824,25 +823,25 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
-                        android.R.drawable.ic_menu_save),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu
+                .add(0, MENU_SAVE, 0, R.string.save_all_answers)
+                .setIcon(android.R.drawable.ic_menu_save)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
-                        .setIcon(R.drawable.ic_menu_goto),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu
+                .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
+                .setIcon(R.drawable.ic_menu_goto)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_LANGUAGES, 0, R.string.change_language)
-                        .setIcon(R.drawable.ic_menu_start_conversation),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, MENU_LANGUAGES, 0, R.string.change_language)
+                .setIcon(R.drawable.ic_menu_start_conversation)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                        .setIcon(R.drawable.ic_menu_preferences),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+                .setIcon(R.drawable.ic_menu_preferences)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
@@ -2480,7 +2479,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
-        CompatibilityUtils.invalidateOptionsMenu(this);
+        invalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
