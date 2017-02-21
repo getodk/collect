@@ -34,17 +34,14 @@ public class CompatibilityUtils {
     }
 
     public static void invalidateOptionsMenu(final Activity a) {
-        if (Build.VERSION.SDK_INT >= 11) {
-            a.runOnUiThread(
-                    new Runnable() {
+        a.runOnUiThread(
+                new Runnable() {
 
-                        @Override
-                        public void run() {
-                            a.invalidateOptionsMenu();
-                        }
-                    });
-
-        }
+                    @Override
+                    public void run() {
+                        a.invalidateOptionsMenu();
+                    }
+                });
     }
 
     public static boolean useMapsV2(final Context context) {
