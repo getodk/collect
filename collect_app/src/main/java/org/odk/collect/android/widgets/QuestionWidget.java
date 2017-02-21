@@ -397,17 +397,19 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      */
     protected void clearNextLevelsOfCascadingSelect() {
         FormController formController = Collect.getInstance().getFormController();
-        try {
-            FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
-            formController.stepToNextScreenEvent();
-            while (formController.currentCaptionPromptIsQuestion() &&
-                    formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
-                formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
+        if (formController.currentCaptionPromptIsQuestion()) {
+            try {
+                FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
                 formController.stepToNextScreenEvent();
+                while (formController.currentCaptionPromptIsQuestion() &&
+                        formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                    formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
+                    formController.stepToNextScreenEvent();
+                }
+                formController.jumpToIndex(startFormIndex);
+            } catch (JavaRosaException e) {
+                e.printStackTrace();
             }
-            formController.jumpToIndex(startFormIndex);
-        } catch (JavaRosaException e) {
-            e.printStackTrace();
         }
     }
 }
