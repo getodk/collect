@@ -146,10 +146,8 @@ public class DateWidget extends QuestionWidget {
             this.mDatePicker.setCalendarViewShown(false);
             this.mDatePicker.setSpinnersShown(true);
         } else if ("no-calendar".equals(appearance)) {
-            if (Build.VERSION.SDK_INT >= 11) {
-                this.mDatePicker.setCalendarViewShown(false);
-                this.mDatePicker.setSpinnersShown(true);
-            }
+            this.mDatePicker.setCalendarViewShown(false);
+            this.mDatePicker.setSpinnersShown(true);
         } else {
             if (Build.VERSION.SDK_INT >= 11) {
                 showCalendar = true;
