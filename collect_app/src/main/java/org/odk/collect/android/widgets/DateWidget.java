@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -149,10 +148,8 @@ public class DateWidget extends QuestionWidget {
         } else {
             showCalendar = true;
             this.mDatePicker.setCalendarViewShown(true);
-            if (Build.VERSION.SDK_INT >= 12) {
-                CalendarView cv = this.mDatePicker.getCalendarView();
-                cv.setShowWeekNumber(false);
-            }
+            CalendarView cv = this.mDatePicker.getCalendarView();
+            cv.setShowWeekNumber(false);
             this.mDatePicker.setSpinnersShown(true);
             hideDay = true;
             hideMonth = false;
