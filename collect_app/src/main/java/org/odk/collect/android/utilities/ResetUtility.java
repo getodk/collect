@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
@@ -71,14 +72,26 @@ public class ResetUtility {
     }
 
     private void resetPreferences(Context context) {
-        PreferenceManager
+        boolean clearedDefaultPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .clear()
-                .apply();
+                .commit();
 
         PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
-        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
+
+        boolean clearedAdminPreferences = context
+                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0)
+                .edit()
+                .clear()
+                .commit();
+
+        boolean deletedSettingsDir = !new File(Collect.SETTINGS).exists() ||
+                deleteRecursive(new File(Collect.SETTINGS));
+
+        if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsDir) {
+            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
+        }
     }
 
     private void resetInstances(final Context context) {

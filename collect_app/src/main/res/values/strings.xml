@@ -449,7 +449,7 @@
 <string name="analytics_summary">Anonymous usage data helps the ODK team prioritize fixes and features</string>
 <string name="select_all">Select All</string>
 <string name="clear_all">Clear All</string>
-<string name="reset_settings">General settings</string>
+<string name="reset_settings">Settings</string>
 <string name="reset_saved_forms">Saved forms (instances folder, instances database)</string>
 <string name="reset_blank_forms">Blank forms (forms folder, forms database, itemsets database)</string>
 <string name="reset_layers">Map layers (layers folder)</string>
@@ -463,7 +463,7 @@
 <string name="resetting_finished">Resetting finished</string>
 <string name="reset_app_state_result">Reset results</string>
 <string name="reset_app_state_warning">All selected data will be deleted permanently. There is no undo.</string>
-<string name="reset_settings_result">General settings :: %s</string>
+<string name="reset_settings_result">Settings :: %s</string>
 <string name="reset_saved_forms_result">Saved forms :: %s</string>
 <string name="reset_blank_forms_result">Blank forms :: %s</string>
 <string name="reset_layers_result">Map layers :: %s</string>
