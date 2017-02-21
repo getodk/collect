@@ -30,9 +30,7 @@ import android.view.MenuItem;
 @SuppressLint("NewApi")
 public class CompatibilityUtils {
     public static void setShowAsAction(MenuItem item, int action) {
-        if (Build.VERSION.SDK_INT >= 11) {
-            item.setShowAsAction(action);
-        }
+        item.setShowAsAction(action);
     }
 
     public static void invalidateOptionsMenu(final Activity a) {
