@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.os.Build;
 import android.view.MenuItem;
 
 /**
@@ -45,14 +44,11 @@ public class CompatibilityUtils {
     }
 
     public static boolean useMapsV2(final Context context) {
-        if (Build.VERSION.SDK_INT >= 8) {
-            final ActivityManager activityManager = (ActivityManager) context.getSystemService(
-                    Context.ACTIVITY_SERVICE);
-            final ConfigurationInfo configurationInfo =
-                    activityManager.getDeviceConfigurationInfo();
-            boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
-            return supportsEs2;
-        }
-        return false;
+        final ActivityManager activityManager = (ActivityManager) context.getSystemService(
+                Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo =
+                activityManager.getDeviceConfigurationInfo();
+        boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
+        return supportsEs2;
     }
 }
