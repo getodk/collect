@@ -157,10 +157,8 @@ public class DateTimeWidget extends QuestionWidget {
         if (appearance == null) {
             showCalendar = true;
             this.mDatePicker.setCalendarViewShown(true);
-            if (Build.VERSION.SDK_INT >= 12) {
-                CalendarView cv = this.mDatePicker.getCalendarView();
-                cv.setShowWeekNumber(false);
-            }
+            CalendarView cv = this.mDatePicker.getCalendarView();
+            cv.setShowWeekNumber(false);
             this.mDatePicker.setSpinnersShown(true);
             hideDay = true;
             hideMonth = false;
