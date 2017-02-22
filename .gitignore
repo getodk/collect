@@ -1,4 +1,5 @@
 build
+fieldTask/
 .gradle
 .idea
 local.properties
