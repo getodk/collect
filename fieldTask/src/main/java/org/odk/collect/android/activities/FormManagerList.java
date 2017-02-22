@@ -17,9 +17,11 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -325,5 +327,8 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
             getListView().setItemChecked(i, false);
         }
         mDeleteButton.setEnabled(false);
+
+        Intent intent = new Intent("refresh");  // smap refresh task list
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
     }
 }

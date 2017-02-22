@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -254,6 +255,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             }
         }
 
+        Intent intent = new Intent("refresh");  // smap refresh task list
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
         createAlertDialog(message.toString().trim());
     }
 

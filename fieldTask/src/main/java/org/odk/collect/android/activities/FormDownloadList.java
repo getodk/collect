@@ -29,6 +29,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -618,6 +619,10 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
+
+
+            Intent intent = new Intent("refresh");  // smap refresh task list
+            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
         }
     }
 
