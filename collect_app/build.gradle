@@ -41,7 +41,7 @@ android {
         applicationId("org.odk.collect.android")
         minSdkVersion(9)
         targetSdkVersion(9)
-        versionCode(1066)
+        versionCode(1067)
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
         multiDexEnabled true
