@@ -14,8 +14,10 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -25,13 +27,26 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListPopupWindow;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handles aggregate specific preferences.
@@ -40,11 +55,15 @@ import org.odk.collect.android.utilities.WebUtils;
  */
 public class AggregatePreferencesActivity extends PreferenceActivity {
 
+    private static final String KNOWN_URL_LIST = "knownUrlList";
+
     protected EditTextPreference mServerUrlPreference;
     protected EditTextPreference mUsernamePreference;
     protected EditTextPreference mPasswordPreference;
     protected boolean mCredentialsHaveChanged = false;
 
+    private ListPopupWindow mListPopupWindow;
+    private List<String> mUrlList;
 
     @Override
     protected void onPause() {
@@ -69,6 +88,38 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
         PreferenceCategory aggregatePreferences = (PreferenceCategory) findPreference(
                 getString(R.string.aggregate_preferences));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String urlListString = prefs.getString(KNOWN_URL_LIST, "");
+        if (urlListString.isEmpty()){
+            mUrlList = new ArrayList<>();
+        } else {
+            mUrlList =
+                    new Gson().fromJson(urlListString, new TypeToken<List<String>>() {}.getType());
+        }
+        if (mUrlList.size() == 0) {
+            addUrlToPreferencesList(getString(R.string.default_server_url), prefs);
+        }
+
+        urlDropdownSetup();
+
+        mServerUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+        mServerUrlPreference.getEditText().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    if (event.getX() >= (v.getWidth() - ((EditText) v)
+                            .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        mListPopupWindow.show();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         mServerUrlPreference
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     @Override
@@ -83,6 +134,21 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
 
                         if (UrlUtils.isValidUrl(url)) {
                             preference.setSummary(newValue.toString());
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            String urlListString = prefs.getString(KNOWN_URL_LIST, "");
+
+                            mUrlList =
+                                    new Gson().fromJson(urlListString,
+                                            new TypeToken<List<String>>() {}.getType());
+
+                            if (!mUrlList.contains(url)) {
+                                // We store a list with at most 5 elements
+                                if (mUrlList.size() == 5) {
+                                    mUrlList.remove(4);
+                                }
+                                addUrlToPreferencesList(url, prefs);
+                                setupUrlDropdownAdapter();
+                            }
                             return true;
                         } else {
                             Toast.makeText(getApplicationContext(),
@@ -150,6 +216,33 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
         maskPasswordSummary(mPasswordPreference.getText());
         mPasswordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
+    }
+
+    private void urlDropdownSetup() {
+        mListPopupWindow = new ListPopupWindow(this);
+        setupUrlDropdownAdapter();
+        mListPopupWindow.setAnchorView(mServerUrlPreference.getEditText());
+        mListPopupWindow.setModal(true);
+        mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+                mServerUrlPreference.getEditText().setText(mUrlList.get(position));
+                mListPopupWindow.dismiss();
+            }
+        });
+    }
+
+    private void setupUrlDropdownAdapter() {
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mUrlList);
+        mListPopupWindow.setAdapter(adapter);
+    }
+
+    private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
+        mUrlList.add(0, url);
+        String urlListString = new Gson().toJson(mUrlList);
+        prefs
+                .edit()
+                .putString(KNOWN_URL_LIST, urlListString)
+                .apply();
     }
 
     private void maskPasswordSummary(String password) {
