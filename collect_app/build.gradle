@@ -39,8 +39,8 @@ android {
 
     defaultConfig {
         applicationId("org.odk.collect.android")
-        minSdkVersion(9)
-        targetSdkVersion(9)
+        minSdkVersion(16)
+        targetSdkVersion(22)
         versionCode(1067)
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
