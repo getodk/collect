@@ -177,7 +177,7 @@ public class MapsActivity extends FragmentActivity
 
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog(mContext);
+                mHelper.showLayersDialog(thisActivity);
 
             }
         });

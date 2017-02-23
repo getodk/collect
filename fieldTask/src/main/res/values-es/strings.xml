@@ -373,4 +373,6 @@
   <string name="geotrace_view_change_location">Ver o cambiar RastroGeo</string>
   <string name="direction">Dirección: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!-- Temporary smap additions - need to update language files -->
+  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
 </resources>
