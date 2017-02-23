@@ -37,6 +37,8 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
@@ -64,6 +66,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_SPLASH_PATH = "splashPath";
     public static final String KEY_FONT_SIZE = "font_size";
     public static final String KEY_DELETE_AFTER_SEND = "delete_send";
+    public static final String KEY_ANALYTICS = "analytics";
 
     public static final String KEY_PROTOCOL = "protocol";
     public static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
@@ -130,12 +133,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     protected ListPreference mMapSdk;
     protected ListPreference mMapBasemap;
 
+    private CheckBoxPreference mAnalyticsPreference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.general_preferences));
+        setTitle(getString(R.string.general_preferences));
 
         // not super safe, but we're just putting in this mode to help
         // administrate
@@ -403,6 +408,26 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         if (!(resolutionAvailable || adminMode)) {
             clientCategory.removePreference(highResolution);
         }
+
+        PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(
+                getString(R.string.analytics_preferences));
+        mAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
+
+        boolean analyticsAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_ANALYTICS, true);
+        if (!(analyticsAvailable || adminMode)) {
+            analyticsCategory.removePreference(mAnalyticsPreference);
+            getPreferenceScreen().removePreference(analyticsCategory);
+        }
+
+        mAnalyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
+                googleAnalytics.setAppOptOut(!mAnalyticsPreference.isChecked());
+                return true;
+            }
+        });
 
         mOpenSourceLicensesPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override

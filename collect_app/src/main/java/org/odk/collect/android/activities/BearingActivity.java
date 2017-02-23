@@ -45,7 +45,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_bearing));
+        setTitle(getString(R.string.get_bearing));
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

@@ -40,13 +40,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,6 +79,7 @@ public class MainMenuActivity extends Activity {
     private Button mEnterDataButton;
     private Button mManageFilesButton;
     private Button mSendDataButton;
+    private Button mViewSentFormsButton;
     private Button mReviewDataButton;
     private Button mGetFormsButton;
 
@@ -88,9 +91,11 @@ public class MainMenuActivity extends Activity {
 
     private int mCompletedCount;
     private int mSavedCount;
+    private int mViewSentCount;
 
     private Cursor mFinalizedCursor;
     private Cursor mSavedCursor;
+    private Cursor mViewSentCursor;
 
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
@@ -122,8 +127,7 @@ public class MainMenuActivity extends Activity {
                     .getVersionedAppName());
         }
 
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.main_menu));
+        setTitle(getString(R.string.main_menu));
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
         if (f.exists()) {
@@ -167,9 +171,9 @@ public class MainMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, "editSavedForm", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        InstanceChooserList.class);
+                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(i);
             }
         });
@@ -184,6 +188,18 @@ public class MainMenuActivity extends Activity {
                         .logAction(this, "uploadForms", "click");
                 Intent i = new Intent(getApplicationContext(),
                         InstanceUploaderList.class);
+                startActivity(i);
+            }
+        });
+
+        //View sent forms
+        mViewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        mViewSentFormsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logAction(this, ApplicationConstants.FormModes.VIEW_SENT, "click");
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
                 startActivity(i);
             }
         });
@@ -249,9 +265,9 @@ public class MainMenuActivity extends Activity {
                 mContentObserver);
 //		mFinalizedCursor.registerContentObserver(mContentObserver);
 
-        // count for finalized instances
-        String selectionSaved = InstanceColumns.STATUS + "=?";
-        String selectionArgsSaved[] = {InstanceProviderAPI.STATUS_INCOMPLETE};
+        // count for saved instances
+        String selectionSaved = InstanceColumns.STATUS + "!=?";
+        String selectionArgsSaved[] = {InstanceProviderAPI.STATUS_SUBMITTED};
 
         try {
             mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
@@ -265,10 +281,24 @@ public class MainMenuActivity extends Activity {
             startManagingCursor(mSavedCursor);
         }
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
-        // don't need to set a content observer because it can't change in the
-        // background
+
+        //count for view sent form
+        String selectionViewSent = InstanceColumns.STATUS + "=?";
+        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED};
+        try {
+            mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
+                    selectionViewSent, selectionArgsViewSent, null);
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        if (mViewSentCursor != null) {
+            startManagingCursor(mViewSentCursor);
+        }
+        mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
 
         updateButtons();
+        setupGoogleAnalytics();
     }
 
     @Override
@@ -295,6 +325,14 @@ public class MainMenuActivity extends Activity {
             mSendDataButton.setVisibility(View.VISIBLE);
         }
 
+        boolean view_sent = sharedPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+        if (!view_sent) {
+            mViewSentFormsButton.setVisibility(View.GONE);
+        } else {
+            mViewSentFormsButton.setVisibility(View.VISIBLE);
+        }
+
         boolean get_blank = sharedPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_GET_BLANK, true);
         if (!get_blank) {
@@ -312,6 +350,10 @@ public class MainMenuActivity extends Activity {
         } else {
             mManageFilesButton.setVisibility(View.VISIBLE);
         }
+
+        ((Collect) getApplication())
+                .getDefaultTracker()
+                .enableAutoActivityTracking(true);
     }
 
     @Override
@@ -340,14 +382,15 @@ public class MainMenuActivity extends Activity {
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                        .setIcon(R.drawable.ic_menu_preferences),
-                MenuItem.SHOW_AS_ACTION_NEVER);
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_ADMIN, 0, R.string.admin_preferences)
-                        .setIcon(R.drawable.ic_menu_login),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+                .setIcon(R.drawable.ic_menu_preferences)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+        menu
+                .add(0, MENU_ADMIN, 0, R.string.admin_preferences)
+                .setIcon(R.drawable.ic_menu_login)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
@@ -472,6 +515,15 @@ public class MainMenuActivity extends Activity {
         return null;
     }
 
+    // This flag must be set each time the app starts up
+    private void setupGoogleAnalytics() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+                .getInstance());
+        boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);
+        GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
+        googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
+    }
+
     private void updateButtons() {
         if (mFinalizedCursor != null && !mFinalizedCursor.isClosed()) {
             mFinalizedCursor.requery();
@@ -500,6 +552,20 @@ public class MainMenuActivity extends Activity {
             mReviewDataButton.setText(getString(R.string.review_data));
             Log.w(t,
                     "Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
+        }
+
+        if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
+            mViewSentCursor.requery();
+            mViewSentCount = mViewSentCursor.getCount();
+            if (mViewSentCount > 0) {
+                mViewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
+            } else {
+                mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            }
+        } else {
+                       mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            Log.w(t,
+                    "Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
         }
     }
 

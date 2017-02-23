@@ -35,7 +35,6 @@ import android.widget.Toast;
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,6 +60,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     // main menu
     public static String KEY_EDIT_SAVED = "edit_saved";
     public static String KEY_SEND_FINALIZED = "send_finalized";
+    public static String KEY_VIEW_SENT = "view_sent";
     public static String KEY_GET_BLANK = "get_blank";
     public static String KEY_DELETE_SAVED = "delete_saved";
     // server
@@ -96,13 +96,14 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
     public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
 
+    public static String KEY_ANALYTICS = "analytics";
+
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.admin_preferences));
+        setTitle(getString(R.string.admin_preferences));
 
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
@@ -196,10 +197,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
-                        .setIcon(R.drawable.ic_menu_save),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
+                .setIcon(R.drawable.ic_menu_save)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 

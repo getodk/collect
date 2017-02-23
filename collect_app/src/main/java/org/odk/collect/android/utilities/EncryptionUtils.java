@@ -377,11 +377,6 @@ public class EncryptionUtils {
             }
 
             int version = android.os.Build.VERSION.SDK_INT;
-            if (version < 8) {
-                String msg = Collect.getInstance().getString(R.string.phone_does_not_support_encryption);
-                Log.e(t, msg);
-                throw new EncryptionException(msg, null);
-            }
 
             // this constructor will throw an exception if we are not
             // running on version 8 or above (if Base64 is not found).

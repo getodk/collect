@@ -42,7 +42,6 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
-import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.ListViewUtils;
 
 import java.util.ArrayList;
@@ -155,6 +154,7 @@ public class InstanceUploaderList extends ListActivity implements
             public void onClick(View v) {
                 ListView lv = getListView();
                 boolean allChecked = ListViewUtils.toggleChecked(lv);
+                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
 
                 // sync up internal state
                 mSelected.clear();
@@ -185,8 +185,7 @@ public class InstanceUploaderList extends ListActivity implements
         mUploadButton.setEnabled(mSelected.size() > 0);
 
         // set title
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.send_data));
+        setTitle(getString(R.string.send_data));
 
         // if current activity is being reinitialized due to changing
         // orientation restore all check
@@ -254,14 +253,15 @@ public class InstanceUploaderList extends ListActivity implements
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                        .setIcon(R.drawable.ic_menu_preferences),
-                MenuItem.SHOW_AS_ACTION_NEVER);
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-                        .setIcon(R.drawable.ic_menu_manage),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+                .setIcon(R.drawable.ic_menu_preferences)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+        menu
+                .add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
+                .setIcon(R.drawable.ic_menu_manage)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
@@ -306,7 +306,7 @@ public class InstanceUploaderList extends ListActivity implements
         }
 
         mUploadButton.setEnabled(mSelected.size() > 0);
-
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
     }
 
     @Override

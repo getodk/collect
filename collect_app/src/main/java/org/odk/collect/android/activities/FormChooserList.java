@@ -66,7 +66,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         }
 
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
+        setTitle(getString(R.string.enter_data));
 
         String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
@@ -175,6 +175,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     /**
      * Called by DiskSyncTask when the task is finished
      */
+
     @Override
     public void SyncComplete(String result) {
         Log.i(t, "disk sync task complete");

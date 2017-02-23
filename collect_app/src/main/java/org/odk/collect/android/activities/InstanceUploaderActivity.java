@@ -86,7 +86,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         mUploadedInstances = new HashMap<String, String>();
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
+        setTitle(getString(R.string.send_data));
 
         // get any simple saved state...
         if (savedInstanceState != null) {

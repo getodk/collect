@@ -914,7 +914,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             if (mStateListener != null) {
                 mStateListener.uploadingComplete(results);
 
-                if (results != null) {
+                if (results != null && !results.isEmpty()) {
                     StringBuilder selection = new StringBuilder();
                     Set<String> keys = results.keySet();
                     Iterator<String> it = keys.iterator();

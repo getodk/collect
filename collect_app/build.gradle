@@ -1,3 +1,5 @@
+import com.android.ddmlib.DdmPreferences
+
 /**************************************************************************************************
  GRADLE CONFIG
  *************************************************************************************************/
@@ -5,10 +7,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
 
-com.android.ddmlib.DdmPreferences.setTimeOut(60000)
+DdmPreferences.setTimeOut(60000)
 
 ant.condition(property: "os", value: "windows") { os(family: "windows") }
-ant.condition(property: "os", value: "unix" ) { os(family: "unix") }
+ant.condition(property: "os", value: "unix") { os(family: "unix") }
 
 // Build numbers were manually set until 1063
 def LEGACY_BUILD_NUMBER_OFFSET = 1065
@@ -38,7 +40,7 @@ def getVersionName = { ->
     try {
         def stdout = new ByteArrayOutputStream()
         exec {
-            switch(ant.properties.os){
+            switch (ant.properties.os) {
                 case 'windows':
                     commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty'
                     break
@@ -60,11 +62,12 @@ android {
 
     defaultConfig {
         applicationId("org.odk.collect.android")
-        minSdkVersion(9)
-        targetSdkVersion(9)
+        minSdkVersion(16)
+        targetSdkVersion(22)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -100,6 +103,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
+    dexOptions {
+        javaMaxHeapSize "2048M"
+    }
+
     lintOptions {
         abortOnError true
     }
@@ -113,6 +120,8 @@ task checkstyle(type: Checkstyle) {
 
     classpath = files()
 }
+
+
 
 configurations.all {
     resolutionStrategy {
@@ -130,13 +139,26 @@ allprojects {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.google.android.gms:play-services:4.1.32'
+    compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
+    compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
+    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
+    compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
+    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
+    compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
+    compile group: 'org.osmdroid', name: 'osmdroid-android', version: '4.2'
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
 
     // Testing-only dependencies
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile "org.robolectric:robolectric:3.1.2"
-    androidTestCompile 'com.android.support:support-annotations:24.0.0'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
+    testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
+    testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
+    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '24.0.0'
+    androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
+    androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
 }
+
+apply plugin: 'com.google.gms.google-services'

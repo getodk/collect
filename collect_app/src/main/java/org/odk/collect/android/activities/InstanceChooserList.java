@@ -28,9 +28,11 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -57,27 +59,37 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
+        String selection;
+        String[] selectionArgs = new String[]{InstanceProviderAPI.STATUS_SUBMITTED};
+        String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
 
-        String selection = InstanceColumns.STATUS + " != ?";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
-        String sortOrder =
-                InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs,
-                sortOrder);
+        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+            setTitle(getString(R.string.review_data));
+            selection = InstanceColumns.STATUS + " != ? ";
+        } else {
+            setTitle(getString(R.string.view_sent_forms));
+            selection = InstanceColumns.STATUS + " = ? ";
+        }
+
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
 
         String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
         };
         int[] view = new int[]{
-                R.id.text1, R.id.text2
+                R.id.text1, R.id.text2, R.id.text4
         };
 
         // render total instance view
-        SimpleCursorAdapter instances =
-                new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
+        SimpleCursorAdapter instances;
+        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+            instances = new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
+        } else {
+            instances = new ViewSentListAdapter(this, R.layout.two_item, c, data, view);
+        }
+
         setListAdapter(instances);
     }
 
@@ -102,29 +114,38 @@ public class InstanceChooserList extends ListActivity {
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 instanceUri.toString());
 
-        String action = getIntent().getAction();
-        if (Intent.ACTION_PICK.equals(action)) {
-            // caller is waiting on a picked form
-            setResult(RESULT_OK, new Intent().setData(instanceUri));
-        } else {
-            // the form can be edited if it is incomplete or if, when it was
-            // marked as complete, it was determined that it could be edited
-            // later.
-            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-            String strCanEditWhenComplete =
-                    c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+        if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+            String action = getIntent().getAction();
+            if (Intent.ACTION_PICK.equals(action)) {
+                // caller is waiting on a picked form
+                setResult(RESULT_OK, new Intent().setData(instanceUri));
+            } else {
+                // the form can be edited if it is incomplete or if, when it was
+                // marked as complete, it was determined that it could be edited
+                // later.
+                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                String strCanEditWhenComplete =
+                        c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
 
-            boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
-                    || Boolean.parseBoolean(strCanEditWhenComplete);
-            if (!canEdit) {
-                createErrorDialog(getString(R.string.cannot_edit_completed_form),
-                        DO_NOT_EXIT);
-                return;
+                boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
+                        || Boolean.parseBoolean(strCanEditWhenComplete);
+                if (!canEdit) {
+                    createErrorDialog(getString(R.string.cannot_edit_completed_form),
+                            DO_NOT_EXIT);
+                    return;
+                }
+                // caller wants to view/edit a form, so launch formentryactivity
+                Intent parentIntent = this.getIntent();
+                Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+                if (parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                } else {
+                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                }
+                startActivity(intent);
             }
-            // caller wants to view/edit a form, so launch formentryactivity
-            startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
+            finish();
         }
-        finish();
     }
 
     @Override

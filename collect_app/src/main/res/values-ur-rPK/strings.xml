@@ -119,7 +119,6 @@
   <string name="server_requires_auth">سرور کو تصدیق چاہیے</string>
   <string name="server_url">یو آر ایل (URL)</string>
   <string name="server_preferences">سرور کی ترتیب</string>
-  <string name="toggle_selected">سب کو ٹوگل(Toggle) کریں</string>
   <string name="trigger">ٹھیک ہے، مہربانی کرکے جاری رکھیں</string>
   <string name="uploading_data">فارم بھیجا جا رہا ہے</string>
   <string name="url_error">معافی، url صحیح نہیں ہے</string>
@@ -242,4 +241,8 @@
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>
