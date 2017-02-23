@@ -35,7 +35,6 @@ import android.widget.Toast;
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -198,10 +197,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
-                        .setIcon(R.drawable.ic_menu_save),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, SAVE_PREFS_MENU, 0, R.string.save_preferences)
+                .setIcon(R.drawable.ic_menu_save)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
