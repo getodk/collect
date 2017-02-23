@@ -153,11 +153,14 @@ public class FormController {
     private File mInstancePath;
     private FormEntryController mFormEntryController;
     private FormIndex mIndexWaitingForData = null;
+    private TimerLogger mTimerLogger;
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
         mMediaFolder = mediaFolder;
         mFormEntryController = fec;
         mInstancePath = instancePath;
+
+        mTimerLogger = new TimerLogger();
     }
 
     public FormDef getFormDef() {
@@ -182,6 +185,10 @@ public class FormController {
 
     public FormIndex getIndexWaitingForData() {
         return mIndexWaitingForData;
+    }
+
+    public TimerLogger getTimerLogger() {
+        return mTimerLogger;
     }
 
     /**
