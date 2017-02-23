@@ -683,8 +683,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         		String formVersionString = String.valueOf(form.version);
         		ManageFormDetails mfd = mf.getFormDetails(form.ident, formVersionString, source);    // Get the form details
                 Log.i("DownloadTasksTask", "+++ Form: " + form.ident + ":" + formVersionString);
-        		if(!mfd.exists) {
-                    Log.i("DownloadTasksTask", "+++ Form does not exist: " + form.ident + ":" + formVersionString);
+        		if(!mfd.exists || form.dirty) {
+                    Log.i("DownloadTasksTask", "+++ Form does not exist or is dirty: " + form.ident + ":" + formVersionString +
+                            " dirty: " + form.dirty);
         			form.url = serverUrl + "/formXML?key=" + form.ident;	// Set the form url from the server address and form ident
         			if(form.hasManifest) {
         				form.manifestUrl = serverUrl + "/xformsManifest?key=" + form.ident;
