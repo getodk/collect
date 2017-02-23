@@ -652,6 +652,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         		}// end process for xform task
         	}// end tasks loop
     	}
+
+        // Remove any tasks that have been deleted from the server
+        Utilities.deleteObsoleteTasks(tr.taskAssignments);
     	
     	return;
 	}

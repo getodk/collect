@@ -56,6 +56,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 public class Utilities {
@@ -340,11 +341,6 @@ public class Utilities {
             throw e;
         }
 
-
-
-
-
-
     }
 
     public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised) {
@@ -473,8 +469,40 @@ public class Utilities {
         return Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
     }
 
-    /*
- * Delete the task
+/*
+ * Delete any tasks with that are not in the array of assignment identifiers
+ * This can be used to remove tasks that have been removed from the server
+ */
+    public static int deleteObsoleteTasks(List<TaskAssignment> assignmentsToKeep) {
+
+        Uri dbUri =  InstanceColumns.CONTENT_URI;
+        int nIds = 0;
+        if(assignmentsToKeep != null) {
+            nIds = assignmentsToKeep.size();
+        }
+
+        String [] selectArgs = new String[nIds + 1];
+        selectArgs[0] = Utilities.getSource();
+
+        StringBuffer selectClause = new StringBuffer(InstanceColumns.SOURCE + " = ?");
+
+        if(nIds > 0) {
+            selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");
+            for (int i = 0; i < nIds; i++) {
+                if(i > 0) {
+                    selectClause.append(",");
+                }
+                selectClause.append("?");
+                selectArgs[i + 1] = String.valueOf(assignmentsToKeep.get(i).assignment.assignment_id);
+            }
+            selectClause.append(")");
+        }
+
+        return Collect.getInstance().getContentResolver().delete(dbUri, selectClause.toString(), selectArgs);
+    }
+
+/*
+ * Close the task with the matching status
  */
     public static void closeTasksWithStatus(String status) {
 
