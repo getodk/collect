@@ -1061,7 +1061,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         setTitle(getString(R.string.app_name) + " > "
                 + formController.getFormTitle());
 
-        formController.getTimerLogger().logTimerEvent();        //TIMER
+        formController.getTimerLogger().logTimerEvent("a", "b");        //TIMER
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:

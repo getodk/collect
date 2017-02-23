@@ -20,21 +20,36 @@ import android.util.Log;
 
 import org.odk.collect.android.tasks.TimerSaveTask;
 
+import java.util.ArrayList;
+
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
  */
-public class TimerLogger  {
+public class TimerLogger {
     private final static String t = "TimerLogger";
     private static AsyncTask saveTask = null;
+    private ArrayList<String> mEvents = null;
+    private String filename = "timer file";
 
     public TimerLogger() {
-
+        mEvents = new ArrayList<String>();
+        mEvents.add(filename);
     }
 
-    public void logTimerEvent() {
+    public void logTimerEvent(String node, String event) {
 
-        if(saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
-            saveTask = new TimerSaveTask().execute();
+        // Calculate the time and add the event to the events array
+        long timestamp = System.currentTimeMillis();
+        mEvents.add(String.valueOf(timestamp) + "," + node + "," + event);
+
+        if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
+
+            String[] eventArray = mEvents.toArray(new String[mEvents.size()]);
+            saveTask = new TimerSaveTask().execute(eventArray);
+
+            mEvents = new ArrayList<String>();
+            mEvents.add(filename);
+
             Log.e(t, "######### Saving Timer Event");
         } else {
             Log.e(t, "######### Queueing Timer Event");

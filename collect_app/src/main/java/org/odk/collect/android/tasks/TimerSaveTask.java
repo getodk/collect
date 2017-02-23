@@ -15,18 +15,29 @@
 package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import org.odk.collect.android.logic.TimerLogger;
+
+import java.util.ArrayList;
 
 import static android.os.SystemClock.sleep;
 
 /**
  * Background task for appending a timer event to the timer log
  */
-public class TimerSaveTask extends AsyncTask<Void, Void, Void> {
+public class TimerSaveTask extends AsyncTask<String, Void, Void> {
     private final static String t = "TimerSaveTask";
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(String... params) {
 
+        if (params.length > 1) {
+            String filepath = params[0];
+            for (int i = 1; i < params.length; i++) {
+                Log.i(t, "########### saving: " + params[i]);
+            }
+        }
         sleep(10000);
         return null;
     }
