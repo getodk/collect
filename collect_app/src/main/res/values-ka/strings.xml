@@ -20,6 +20,8 @@
   <string name="cannot_edit_completed_form">ამ ფორმის რედაქტირება  დასრულების შემდეგ შეუძლებელია. იგი შეიძლება კოდირებული იყოს.</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
+  <string name="capture_osm">OpenMapKit-ის ჩართვა</string>
+  <string name="recapture_osm">OSM-მარკირების უკან დაბრუნება</string>
   <string name="capture_video">ვიდეოგადაღება</string>
   <string name="change_language">ენის შეცვლა</string>
   <string name="change_password">პაროლი</string>
@@ -192,6 +194,7 @@
   <string name="sending_failed_on_date_at_time">\'ვერ გაიგზავნა\' EEE, MMM dd, yyyy \'საათსა და წუთზე:\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">ვერსია:</string>
+  <string name="parent_form_not_present">შენახული ფორმის რედაქტირება შეუძლებელია, რადგან შესაბამისი ცარიელი ფორმა არ არსებობს, ან - წაშლილია. \n\nფორმის ID: %1$s</string>
   <string name="launch_app">ჩართვა</string>
   <string name="no_app">მოთხოვნილი აპლიკაცია არ მოიძებნა, გთხოვთ მიუთითოთ ხელით.</string>
   <string name="select_one">აირჩიეთ ერთი პასუხი</string>
@@ -213,11 +216,13 @@
   <string name="save_mid">ნაწილობრივ შენახვა</string>
   <string name="enter_new_password">შეიყვანეთ ახალი პაროლი</string>
   <string name="verify_new_password">ხელახლა შეიყვანეთ ახალი პაროლი</string>
+  <string name="admin_password">ადმინისტრატორის პაროლი</string>
   <string name="admin_password_changed">ადმინისტრატორის პაროლი წარმატებით შეიცვალა</string>
   <string name="admin_password_disabled">ადმინისტრატორის პაროლი დაბლოკილია</string>
   <string name="admin_password_mismatch">უკაცრავად, პაროლები ერთმანეთს არ ემთხვევა!</string>
   <string name="admin_password_incorrect">უკაცრავად, პაროლი არასწორია!</string>
   <string name="enter_admin_password">შეიყვანეთ ადმინისტრატორის პაროლი</string>
+  <string name="change_admin_password">ადმინისტრატორის პაროლის შეცვლა</string>
   <string name="found_in_menu">ნაპოვნია ფორმაში მენიუს ღილაკის გამოყენებით</string>
   <string name="autosend">ავტომატური გაგზავნა</string>
   <string name="autosend_wifi">ავტომატური გაგზავნა Wi-Fi-ს მეშვეობით</string>
@@ -238,12 +243,21 @@
   <string name="swipe_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. გაასრიალეთ ეკრანი, როგორც მითითებულია, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="form_processing_logic">ფორმის დამუშავების სინტაქსი</string>
+  <string name="form_processing_logic_recommended">რეკომენდებულია (ნაგულისხმევი)</string>
+  <string name="form_processing_logic_0">2015 წლის იანვარი (ყველაზე სწრაფი)</string>
+  <string name="form_processing_logic_1">2015 წლის იანვარი (ყველაზე უსაფრთხო)</string>
+  <string name="form_processing_logic_2">2014 წლის შუა პერიოდი (ნელი)</string>
+  <string name="form_processing_logic_3">2014 წლის ადრე პერიოდი (სწრაფი)</string>
+  <string name="launch_printer">ბეჭდვის გაშვება</string>
+  <string name="no_printer">მოთხოვნილი პრინტერი არ არის დაყენებული. გთხოვთ, დააყენოთ პრინტერი</string>
   <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>
   <string name="constraint_behavior_on_swipe">სანდოობის შემოწმება წინ გადასვლისას</string>
   <string name="constraint_behavior_on_finalize">სანდოობის შემოწმების გადადება ფორმის დასრულებამდე</string>
   <string name="view_change_location">მდებარეობის ნახვა ან შეცვლა</string>
+  <string name="open_url">ბმულის გახსნა</string>
+  <string name="sdcard_unmounted">Collect-ი ვერ უკავშირდება SD-ბარათს. იქნებ USB-ითაა მიერთებული?  (ამჟამინდელი მდგომარეობა: %s)</string>
+  <string name="ext_file_no_data_error">ეს ფაილი მონაცემებს არ შეიცავს!</string>
   <string name="survey_loading_reading_form_message">მიმდინარეობს ფორმის წაკითხვა</string>
   <string name="survey_loading_reading_data_message">მიმდინარეობს გამოკითხვის მონაცემების წაკითხვა</string>
   <string name="survey_loading_reading_csv_message">მიმდინარეობს CSV ფაილის წაკითხვა</string>
@@ -263,4 +277,8 @@
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

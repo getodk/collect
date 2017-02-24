@@ -65,7 +65,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_SPLASH_PATH = "splashPath";
     public static final String KEY_FONT_SIZE = "font_size";
     public static final String KEY_DELETE_AFTER_SEND = "delete_send";
-    public static final String KEY_ENABLE_ANALYTICS = "enable_analytics";
+    public static final String KEY_ANALYTICS = "analytics";
 
     public static final String KEY_PROTOCOL = "protocol";
     public static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
@@ -129,6 +129,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
     protected ListPreference mMapSdk;
     protected ListPreference mMapBasemap;
+
+    private CheckBoxPreference mAnalyticsPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -403,12 +405,22 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             clientCategory.removePreference(highResolution);
         }
 
-        final CheckBoxPreference enableAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ENABLE_ANALYTICS);
-        enableAnalyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(
+                getString(R.string.analytics_preferences));
+        mAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
+
+        boolean analyticsAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_ANALYTICS, true);
+        if (!(analyticsAvailable || adminMode)) {
+            analyticsCategory.removePreference(mAnalyticsPreference);
+            getPreferenceScreen().removePreference(analyticsCategory);
+        }
+
+        mAnalyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
-                googleAnalytics.setAppOptOut(!enableAnalyticsPreference.isChecked());
+                googleAnalytics.setAppOptOut(!mAnalyticsPreference.isChecked());
                 return true;
             }
         });

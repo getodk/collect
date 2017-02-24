@@ -31,6 +31,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.ListViewUtils;
@@ -99,7 +100,8 @@ public class DataManagerList extends ListActivity implements
             }
         });
 
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, null,
                 InstanceColumns.DISPLAY_NAME + " ASC");
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
