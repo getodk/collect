@@ -34,9 +34,6 @@ import org.odk.collect.android.application.Collect;
  */
 public class FileManagerTabs extends TabActivity {
 
-    private TextView mTVFF;
-    private TextView mTVDF;
-
     private static final String FORMS_TAB = "forms_tab";
     private static final String DATA_TAB = "data_tab";
 
@@ -51,12 +48,16 @@ public class FileManagerTabs extends TabActivity {
         tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
 
         Intent remote = new Intent(this, DataManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec(DATA_TAB)
-                .setIndicator(getString(R.string.data)).setContent(remote));
+        tabHost.addTab(tabHost
+                .newTabSpec(DATA_TAB)
+                .setIndicator(getString(R.string.data))
+                .setContent(remote));
 
         Intent local = new Intent(this, FormManagerList.class);
-        tabHost.addTab(tabHost.newTabSpec(FORMS_TAB)
-                .setIndicator(getString(R.string.forms)).setContent(local));
+        tabHost.addTab(tabHost
+                .newTabSpec(FORMS_TAB)
+                .setIndicator(getString(R.string.forms))
+                .setContent(local));
 
         // hack to set font size
         LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
@@ -65,19 +66,21 @@ public class FileManagerTabs extends TabActivity {
         int fontsize = Collect.getQuestionFontsize();
 
         ViewGroup rllf = (ViewGroup) tw.getChildAt(0);
-        mTVFF = getTextViewChild(rllf);
+        TextView mTVFF = getTextViewChild(rllf);
         if (mTVFF != null) {
             mTVFF.setTextSize(fontsize);
             mTVFF.setTextColor(Color.WHITE);
             mTVFF.setPadding(0, 0, 0, 6);
+            mTVFF.setSingleLine();
         }
 
         ViewGroup rlrf = (ViewGroup) tw.getChildAt(1);
-        mTVDF = getTextViewChild(rlrf);
+        TextView mTVDF = getTextViewChild(rlrf);
         if (mTVDF != null) {
             mTVDF.setTextSize(fontsize);
             mTVDF.setTextColor(Color.WHITE);
             mTVDF.setPadding(0, 0, 0, 6);
+            mTVDF.setSingleLine();
         }
     }
 
