@@ -59,6 +59,8 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setContentView(R.layout.chooser_list_layout);
+        TextView tvEmpty = (TextView) findViewById(android.R.id.empty);
+        tvEmpty.setText(R.string.no_items_display_sent_forms);
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
         String selection;
