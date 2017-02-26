@@ -66,21 +66,21 @@ public class FileManagerTabs extends TabActivity {
         int fontsize = Collect.getQuestionFontsize();
 
         ViewGroup rllf = (ViewGroup) tw.getChildAt(0);
-        TextView mTVFF = getTextViewChild(rllf);
-        if (mTVFF != null) {
-            mTVFF.setTextSize(fontsize);
-            mTVFF.setTextColor(Color.WHITE);
-            mTVFF.setPadding(0, 0, 0, 6);
-            mTVFF.setSingleLine();
+        TextView savedFormTab = getTextViewChild(rllf);
+        if (savedFormTab != null) {
+            savedFormTab.setTextSize(fontsize);
+            savedFormTab.setTextColor(Color.WHITE);
+            savedFormTab.setPadding(0, 0, 0, 6);
+            savedFormTab.setSingleLine();
         }
 
         ViewGroup rlrf = (ViewGroup) tw.getChildAt(1);
-        TextView mTVDF = getTextViewChild(rlrf);
-        if (mTVDF != null) {
-            mTVDF.setTextSize(fontsize);
-            mTVDF.setTextColor(Color.WHITE);
-            mTVDF.setPadding(0, 0, 0, 6);
-            mTVDF.setSingleLine();
+        TextView blankFormTab = getTextViewChild(rlrf);
+        if (blankFormTab != null) {
+            blankFormTab.setTextSize(fontsize);
+            blankFormTab.setTextColor(Color.WHITE);
+            blankFormTab.setPadding(0, 0, 0, 6);
+            blankFormTab.setSingleLine();
         }
     }
 
