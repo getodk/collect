@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nafundi
+ * Copyright 2017 Marcos Lopez Gonzalez (asturcon1234@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
