@@ -77,6 +77,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -1061,13 +1062,23 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         setTitle(getString(R.string.app_name) + " > "
                 + formController.getFormTitle());
 
-        formController.getTimerLogger().logTimerEvent("a", "b");        //TIMER
+
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
+
+                formController.getTimerLogger().logTimerEvent(
+                        FormEntryController.EVENT_BEGINNING_OF_FORM,
+                        formController.getFormIndex().getReference());
+
                 return createViewForFormBeginning(event, advancingPage, formController);
 
             case FormEntryController.EVENT_END_OF_FORM:
+
+                formController.getTimerLogger().logTimerEvent(
+                        FormEntryController.EVENT_END_OF_FORM,
+                        formController.getFormIndex().getReference());
+
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 ((TextView) endView.findViewById(R.id.description))
                         .setText(getString(R.string.save_enter_data_description,
@@ -1224,6 +1235,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
+
+                    formController.getTimerLogger().logTimerEvent(
+                            FormEntryController.EVENT_QUESTION,
+                            formController.getFormIndex().getReference());
+
                     if (!qw.getPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
@@ -1293,6 +1309,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      */
     private void showNextView() {
         try {
+            Collect.getInstance().getFormController().getTimerLogger().exitView();
             FormController formController = Collect.getInstance()
                     .getFormController();
 
@@ -1826,6 +1843,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 return false;
             }
         }
+
+        FormController formController = Collect.getInstance().getFormController();
+        formController.getTimerLogger().logTimerEvent(
+                -1, null);
 
         synchronized (saveDialogLock) {
             mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,

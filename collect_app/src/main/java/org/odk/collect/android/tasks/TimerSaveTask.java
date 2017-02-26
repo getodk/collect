@@ -17,10 +17,6 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.odk.collect.android.logic.TimerLogger;
-
-import java.util.ArrayList;
-
 import static android.os.SystemClock.sleep;
 
 /**
@@ -38,7 +34,6 @@ public class TimerSaveTask extends AsyncTask<String, Void, Void> {
                 Log.i(t, "########### saving: " + params[i]);
             }
         }
-        sleep(10000);
         return null;
     }
 
