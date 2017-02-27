@@ -46,7 +46,7 @@ public class InstanceProvider extends ContentProvider {
     private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -78,7 +78,8 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.JR_VERSION + " text, "
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null );");
+                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
+                    + InstanceColumns.DELETED_DATE + " date );" );
         }
 
 
@@ -99,6 +100,10 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion == 2) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                         InstanceColumns.JR_VERSION + " text;");
+            }
+            if (oldVersion == 3) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.DELETED_DATE + " date;");
             }
             Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
                     + newVersion
@@ -314,10 +319,12 @@ public class InstanceProvider extends ContentProvider {
                 String instanceId = uri.getPathSegments().get(1);
 
                 Cursor c = null;
+                String status = null;
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
                     if (c.getCount() > 0) {
                         c.moveToFirst();
+                        status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                         do {
                             String instanceFile = c.getString(
                                     c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
@@ -333,11 +340,19 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
-                count =
-                        db.delete(INSTANCES_TABLE_NAME,
-                                InstanceColumns._ID + "=" + instanceId
-                                        + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                whereArgs);
+                //We are going to update the status, if the form is submitted
+                //We will not delete the record in table but we will delete the file
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)){
+                    ContentValues cv = new ContentValues();
+                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                } else {
+                    count =
+                            db.delete(INSTANCES_TABLE_NAME,
+                                    InstanceColumns._ID + "=" + instanceId
+                                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                    whereArgs);
+                }
                 break;
 
             default:
@@ -353,7 +368,7 @@ public class InstanceProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
         if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
@@ -425,6 +440,7 @@ public class InstanceProvider extends ContentProvider {
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
                 InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 
 }

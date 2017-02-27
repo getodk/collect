@@ -12,6 +12,30 @@ DdmPreferences.setTimeOut(60000)
 ant.condition(property: "os", value: "windows") { os(family: "windows") }
 ant.condition(property: "os", value: "unix") { os(family: "unix") }
 
+// Build numbers were manually set until 1067
+def LEGACY_BUILD_NUMBER_OFFSET = 1067
+
+// Based on http://stackoverflow.com/questions/17097263#24121734
+def getMasterCommitCount = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            switch(ant.properties.os){
+                case 'windows':
+                    commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
+                    break
+                case 'unix':
+                    commandLine 'git', 'rev-list', '--first-parent', '--count', 'master'
+                    break
+            }
+            standardOutput = stdout
+        }
+        return Integer.parseInt(stdout.toString().trim())
+    } catch (ignored) {
+        return -1;
+    }
+}
+
 def getVersionName = { ->
     try {
         def stdout = new ByteArrayOutputStream()
@@ -27,8 +51,7 @@ def getVersionName = { ->
             standardOutput = stdout
         }
         return stdout.toString().trim()
-    }
-    catch (ignored) {
+    } catch (ignored) {
         return null;
     }
 }
@@ -39,9 +62,9 @@ android {
 
     defaultConfig {
         applicationId("org.odk.collect.android")
-        minSdkVersion(9)
-        targetSdkVersion(9)
-        versionCode(1065)
+        minSdkVersion(16)
+        targetSdkVersion(22)
+        versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
         multiDexEnabled true

@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -97,11 +97,11 @@ public class MapHelper {
     }
 
     private static String _getGoogleBasemap() {
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
     private static String _getOsmBasemap() {
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {

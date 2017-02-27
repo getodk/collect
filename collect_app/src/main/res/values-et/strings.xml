@@ -393,7 +393,55 @@
   <string name="geotrace_view_change_location">Vaata või muuda rada</string>
   <string name="bearing">Suund: %.3f</string>
   <string name="direction">Siht: %s</string>
+  <string name="select_odk_shortcut">Vali ODK otsetee</string>
+  <string name="bad_uri">Vale veebiaadress: %s</string>
+  <string name="unrecognized_uri">Tundmatu veebiaadress: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;vorm laadimata&gt;</string>
+  <string name="multiple_media_folders_detected_notification">Avastati rohkem kui üks meediakaust. Palun eemaldage üks ja proovige uuesti</string>
+  <string name="settings_successfully_loaded_file_notification">Sätete laadimine failist õnnestus</string>
+  <string name="corrupt_settings_file_notification">Sätete fail on vigane. Palun kustutage või asendage</string>
+  <string name="selected_invalid_image">Valitud fail ei ole pilt</string>
+  <string name="edited_osm_file">Muudetud OSM XML fail:</string>
+  <string name="invalid_osm_data">Midagi läks valesti. Me ei saanud korrektseid OSM andmeid.</string>
+  <string name="alert">Alarm</string>
+  <string name="install_openmapkit">Palun paigaldage OpenMapKit!</string>
+  <string name="go_back">Liikuge tagasi</string>
+  <string name="download_selected">Allalaadimine valitud</string>
+  <string name="detection_frequency">avastuse sagedus</string>
+  <string name="record_geopoint">Salvesta asukohapunkt</string>
+  <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
+  <string name="parser_exception">XPathParser Viga: \"%s\"</string>
+  <string name="selected_answer">Valitud: %s</string>
+  <string name="version_number">Versoon: %s</string>
   <string name="general_settings_about">Teave</string>
   <string name="all_open_source_licenses">Avatud lähtekoodi litsentsid</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">Pilti hoiustatakse Google Drive-is ja võrguühenduse puudumisel ei ole pilt kasutatav.</string>
+  <string name="not_exactly_one_record_for_this_instance">Ei leidu täpselt üks kirje!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">Ei leidu täpselt ühte tühja vormi, mis vastaks jr_form_id.</string>
+  <string name="no_form_id_specified">Vormi ID määramata?</string>
+  <string name="phone_does_not_support_encryption">Telefon ei toeta krüpteerimist</string>
+  <string name="phone_does_not_have_base64_class">Telefonil ei ole Base64 klassi, API aste on: %s</string>
+  <string name="phone_does_not_support_rsa">Telefon ei toeta RSA krüpteerimist.</string>
+  <string name="invalid_rsa_public_key">RSA avalik võti on sobimatu.</string>
+  <string name="encryption_error_message">%s vorm ei ole salvestatud ja lõpetatud.</string>
+  <string name="select_all">Vali kõik</string>
+  <string name="clear_all">Eemalda kõik</string>
+  <string name="reset_settings_dialog_title">Vali mida lähtestada</string>
+  <string name="reset_settings_button_reset">Lähtesta</string>
+  <string name="reset_dialog_nothing">Ühtegi elementi ei ole lähtestamiseks valitud.</string>
+  <string name="reset_in_progress">Lähtestamine...</string>
+  <string name="resetting_finished">Lähtestamine lõpetatud</string>
+  <string name="reset_app_state_warning">Kogu valitud andmestik kustutatakse jäädavalt. </string>
+  <string name="reset_saved_forms_result">Salvestatud vormid :: %s</string>
+  <string name="reset_blank_forms_result">Tühjad vormid :: %s</string>
+  <string name="reset_cache_result">Vormi laadimise vahemälu :: %s</string>
 </resources>

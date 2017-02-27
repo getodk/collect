@@ -28,7 +28,7 @@ import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 /**
  * Used to present auth dialog and update credentials in the system as needed.
@@ -96,23 +96,23 @@ public class AuthDialogUtility {
     }
 
     private static String getServer(SharedPreferences settings, Context context) {
-        return settings.getString(PreferencesActivity.KEY_SERVER_URL,
+        return settings.getString(PreferenceKeys.KEY_SERVER_URL,
                 context.getString(R.string.default_server_url));
     }
 
     private static String getPassword(SharedPreferences settings) {
-        return settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+        return settings.getString(PreferenceKeys.KEY_PASSWORD, null);
     }
 
     private static String getUserName(SharedPreferences settings) {
-        return settings.getString(PreferencesActivity.KEY_USERNAME, null);
+        return settings.getString(PreferenceKeys.KEY_USERNAME, null);
     }
 
     private void saveCredentials(SharedPreferences settings, String userName, String password) {
         settings
                 .edit()
-                .putString(PreferencesActivity.KEY_USERNAME, userName)
-                .putString(PreferencesActivity.KEY_PASSWORD, password)
+                .putString(PreferenceKeys.KEY_USERNAME, userName)
+                .putString(PreferenceKeys.KEY_PASSWORD, password)
                 .commit();
     }
 

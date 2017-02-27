@@ -42,6 +42,12 @@
             android:summary="@string/found_in_main"
             android:title="@string/send_data" />
         <CheckBoxPreference
+            android:id="@+id/view_sent"
+            android:defaultValue="true"
+            android:key="view_sent"
+            android:summary="@string/found_in_main"
+            android:title="@string/view_sent_forms" />
+        <CheckBoxPreference
             android:id="@+id/get_blank"
             android:defaultValue="true"
             android:key="get_blank"
@@ -151,6 +157,12 @@
             android:key="show_map_basemap"
             android:summary="@string/found_in_settings"
             android:title="@string/show_map_basemap" />
+        <CheckBoxPreference
+            android:id="@+id/analytics"
+            android:defaultValue="true"
+            android:key="analytics"
+            android:summary="@string/found_in_settings"
+            android:title="@string/analytics" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_form_entry" >
         <CheckBoxPreference

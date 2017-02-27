@@ -39,10 +39,10 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
-import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.ListViewUtils;
 
 import java.util.ArrayList;
@@ -226,13 +226,13 @@ public class InstanceUploaderList extends ListActivity implements
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
+        String server = prefs.getString(PreferenceKeys.KEY_PROTOCOL, null);
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
             // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
 
             String googleUsername = prefs.getString(
-                    PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
                 return;
@@ -254,14 +254,15 @@ public class InstanceUploaderList extends ListActivity implements
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                        .setIcon(R.drawable.ic_menu_preferences),
-                MenuItem.SHOW_AS_ACTION_NEVER);
-        CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-                        .setIcon(R.drawable.ic_menu_manage),
-                MenuItem.SHOW_AS_ACTION_NEVER);
+        menu
+                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
+                .setIcon(R.drawable.ic_menu_preferences)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+        menu
+                .add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
+                .setIcon(R.drawable.ic_menu_manage)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
