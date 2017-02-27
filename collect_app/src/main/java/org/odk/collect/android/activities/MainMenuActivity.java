@@ -45,6 +45,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -72,9 +73,10 @@ public class MainMenuActivity extends Activity {
     private static final int PASSWORD_DIALOG = 1;
 
     // menu options
-    private static final int MENU_PREFERENCES = Menu.FIRST;
-    private static final int MENU_ADMIN = Menu.FIRST + 1;
-
+    private static final int MENU_ABOUT = Menu.FIRST;
+    private static final int MENU_PREFERENCES = Menu.FIRST + 1;
+    private static final int MENU_ADMIN = Menu.FIRST + 2;
+    private static boolean EXIT = true;
     // buttons
     private Button mEnterDataButton;
     private Button mManageFilesButton;
@@ -82,25 +84,18 @@ public class MainMenuActivity extends Activity {
     private Button mViewSentFormsButton;
     private Button mReviewDataButton;
     private Button mGetFormsButton;
-
     private View mReviewSpacer;
     private View mGetFormsSpacer;
-
     private AlertDialog mAlertDialog;
     private SharedPreferences mAdminPreferences;
-
     private int mCompletedCount;
     private int mSavedCount;
     private int mViewSentCount;
-
     private Cursor mFinalizedCursor;
     private Cursor mSavedCursor;
     private Cursor mViewSentCursor;
-
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
-
-    private static boolean EXIT = true;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -173,7 +168,8 @@ public class MainMenuActivity extends Activity {
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
                 Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(i);
             }
         });
@@ -197,9 +193,11 @@ public class MainMenuActivity extends Activity {
         mViewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this, ApplicationConstants.FormModes.VIEW_SENT, "click");
+                Collect.getInstance().getActivityLogger().logAction(this,
+                        ApplicationConstants.FormModes.VIEW_SENT, "click");
                 Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.VIEW_SENT);
                 startActivity(i);
             }
         });
@@ -371,6 +369,8 @@ public class MainMenuActivity extends Activity {
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
+        menu.add(0, MENU_ABOUT, 0, R.string.about_preferences).setShowAsAction(
+                MenuItem.SHOW_AS_ACTION_NEVER);
         menu
                 .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
                 .setIcon(R.drawable.ic_menu_preferences)
@@ -386,6 +386,14 @@ public class MainMenuActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case MENU_ABOUT:
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logAction(this, "onOptionsItemSelected",
+                                "MENU_ABOUT");
+                Intent aboutIntent = new Intent(this, AboutPreferencesActivity.class);
+                startActivity(aboutIntent);
+                return true;
             case MENU_PREFERENCES:
                 Collect.getInstance()
                         .getActivityLogger()
@@ -459,7 +467,7 @@ public class MainMenuActivity extends Activity {
                         getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
-                                                int whichButton) {
+                                    int whichButton) {
                                 String value = input.getText().toString();
                                 String pw = mAdminPreferences.getString(
                                         AdminPreferencesActivity.KEY_ADMIN_PW, "");
@@ -518,14 +526,16 @@ public class MainMenuActivity extends Activity {
             mFinalizedCursor.requery();
             mCompletedCount = mFinalizedCursor.getCount();
             if (mCompletedCount > 0) {
-                mSendDataButton.setText(getString(R.string.send_data_button, String.valueOf(mCompletedCount)));
+                mSendDataButton.setText(
+                        getString(R.string.send_data_button, String.valueOf(mCompletedCount)));
             } else {
                 mSendDataButton.setText(getString(R.string.send_data));
             }
         } else {
             mSendDataButton.setText(getString(R.string.send_data));
             Log.w(t,
-                    "Cannot update \"Send Finalized\" button label since the database is closed. Perhaps the app is running in the background?");
+                    "Cannot update \"Send Finalized\" button label since the database is closed. "
+                            + "Perhaps the app is running in the background?");
         }
 
         if (mSavedCursor != null && !mSavedCursor.isClosed()) {
@@ -540,56 +550,24 @@ public class MainMenuActivity extends Activity {
         } else {
             mReviewDataButton.setText(getString(R.string.review_data));
             Log.w(t,
-                    "Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
+                    "Cannot update \"Edit Form\" button label since the database is closed. "
+                            + "Perhaps the app is running in the background?");
         }
 
         if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
             mViewSentCursor.requery();
             mViewSentCount = mViewSentCursor.getCount();
             if (mViewSentCount > 0) {
-                mViewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
+                mViewSentFormsButton.setText(
+                        getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
             } else {
                 mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
             }
         } else {
-                       mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
             Log.w(t,
-                    "Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
-        }
-    }
-
-    /**
-     * notifies us that something changed
-     */
-    private class MyContentObserver extends ContentObserver {
-
-        public MyContentObserver() {
-            super(null);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            mHandler.sendEmptyMessage(0);
-        }
-    }
-
-    /*
-     * Used to prevent memory leaks
-     */
-    static class IncomingHandler extends Handler {
-        private final WeakReference<MainMenuActivity> mTarget;
-
-        IncomingHandler(MainMenuActivity target) {
-            mTarget = new WeakReference<MainMenuActivity>(target);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainMenuActivity target = mTarget.get();
-            if (target != null) {
-                target.updateButtons();
-            }
+                    "Cannot update \"View Sent\" button label since the database is closed. "
+                            + "Perhaps the app is running in the background?");
         }
     }
 
@@ -663,6 +641,41 @@ public class MainMenuActivity extends Activity {
             }
         }
         return res;
+    }
+
+    /*
+     * Used to prevent memory leaks
+     */
+    static class IncomingHandler extends Handler {
+        private final WeakReference<MainMenuActivity> mTarget;
+
+        IncomingHandler(MainMenuActivity target) {
+            mTarget = new WeakReference<MainMenuActivity>(target);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainMenuActivity target = mTarget.get();
+            if (target != null) {
+                target.updateButtons();
+            }
+        }
+    }
+
+    /**
+     * notifies us that something changed
+     */
+    private class MyContentObserver extends ContentObserver {
+
+        public MyContentObserver() {
+            super(null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            mHandler.sendEmptyMessage(0);
+        }
     }
 
 }
