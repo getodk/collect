@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -84,9 +85,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         boolean sendwifi = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_AUTOSEND_WIFI, false);
+                PreferenceKeys.KEY_AUTOSEND_WIFI, false);
         boolean sendnetwork = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_AUTOSEND_NETWORK, false);
+                PreferenceKeys.KEY_AUTOSEND_NETWORK, false);
 
         return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
@@ -132,13 +133,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-            String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
+            String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
                     context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
                 mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
                 String googleUsername = settings.getString(
-                        PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
                     // just quit if there's no username
                     running = false;
@@ -151,12 +152,12 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } else {
                 // get the username, password, and server from preferences
 
-                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                String storedUsername = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+                String storedPassword = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
+                String server = settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         context.getString(R.string.default_server_url));
                 String url = server
-                        + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
+                        + settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
                         context.getString(R.string.default_odk_formlist));
 
                 Uri u = Uri.parse(url);

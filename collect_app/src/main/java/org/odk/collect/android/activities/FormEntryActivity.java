@@ -79,6 +79,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -1314,13 +1315,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
             // get constraint behavior preference value with appropriate default
             String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR,
-                            PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
+                    .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
+                            PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
 
             if (formController.currentPromptIsQuestion()) {
 
                 // if constraint behavior says we should validate on swipe, do so
-                if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
                         // A constraint was violated so a dialog should be showing.
                         mBeenSwiped = false;
@@ -2327,9 +2328,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
         String navigation = sharedPreferences.getString(
-                PreferencesActivity.KEY_NAVIGATION,
-                PreferencesActivity.KEY_NAVIGATION);
-        if (navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
+                PreferenceKeys.KEY_NAVIGATION,
+                PreferenceKeys.KEY_NAVIGATION);
+        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
             mShowNavigationButtons = true;
         }
 
@@ -2636,13 +2637,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 // get constraint behavior preference value with appropriate default
                 String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
-                        .getString(PreferencesActivity.KEY_CONSTRAINT_BEHAVIOR,
-                                PreferencesActivity.CONSTRAINT_BEHAVIOR_DEFAULT);
+                        .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
+                                PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
                 // next question
-                if (constraint_behavior.equals(PreferencesActivity.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 }
                 // otherwise, we can get the proper toast(s) by saving with constraint check
@@ -2698,7 +2699,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             SharedPreferences sharedPreferences = PreferenceManager
                     .getDefaultSharedPreferences(this);
             complete = sharedPreferences.getBoolean(
-                    PreferencesActivity.KEY_COMPLETED_DEFAULT, true);
+                    PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
         }
 
         // Then see if we've already marked this form as complete before
@@ -2780,10 +2781,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
         String navigation = sharedPreferences.getString(
-                PreferencesActivity.KEY_NAVIGATION,
-                PreferencesActivity.NAVIGATION_SWIPE);
+                PreferenceKeys.KEY_NAVIGATION,
+                PreferenceKeys.NAVIGATION_SWIPE);
         Boolean doSwipe = false;
-        if (navigation.contains(PreferencesActivity.NAVIGATION_SWIPE)) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
             doSwipe = true;
         }
         if (doSwipe) {

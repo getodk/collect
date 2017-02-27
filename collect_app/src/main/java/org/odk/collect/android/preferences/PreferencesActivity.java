@@ -44,6 +44,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import static org.odk.collect.android.preferences.PreferenceKeys.*;
 
 import java.util.ArrayList;
 
@@ -58,66 +59,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
 
-    // PUT ALL PREFERENCE KEYS HERE
-    public static final String KEY_LAST_VERSION = "lastVersion";
-    public static final String KEY_FIRST_RUN = "firstRun";
-    public static final String KEY_SHOW_SPLASH = "showSplash";
-    public static final String KEY_SPLASH_PATH = "splashPath";
-    public static final String KEY_FONT_SIZE = "font_size";
-    public static final String KEY_DELETE_AFTER_SEND = "delete_send";
-    public static final String KEY_ANALYTICS = "analytics";
-
-    public static final String KEY_PROTOCOL = "protocol";
-    public static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
-
-    // leaving these in the main screen because username can be used as a
-    // pre-fill
-    // value in a form
-    public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
-    public static final String KEY_USERNAME = "username";
-    public static final String KEY_PASSWORD = "password";
-
-    // AGGREGATE SPECIFIC
-    public static final String KEY_SERVER_URL = "server_url";
-
-    // GOOGLE SPECIFIC
-    public static final String KEY_GOOGLE_SHEETS_URL = "google_sheets_url";
-
-    // OTHER SPECIFIC
-    public static final String KEY_FORMLIST_URL = "formlist_url";
-    public static final String KEY_SUBMISSION_URL = "submission_url";
-
-    public static final String NAVIGATION_SWIPE = "swipe";
-    public static final String NAVIGATION_BUTTONS = "buttons";
-
-    public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
-    public static final String CONSTRAINT_BEHAVIOR_DEFAULT = "on_swipe";
-
-    public static final String KEY_COMPLETED_DEFAULT = "default_completed";
-
-    public static final String KEY_HIGH_RESOLUTION = "high_resolution";
-
-    public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
-    public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
-
-    public static final String KEY_NAVIGATION = "navigation";
-    public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
-
-    // MAP SPECIFIC
-
-    public static final String KEY_MAP_SDK = "map_sdk_behavior";
-    public static final String KEY_MAP_BASEMAP = "map_basemap_behavior";
-
-    public static final int ARRAY_INDEX_GOOGLE_MAPS = 0;
-    public static final int ARRAY_INDEX_OSM_MAPS = 1;
-    public static final String OSM_BASEMAP_KEY = "osmdroid";
-    public static final String GOOGLE_MAPS_BASEMAP_DEFAULT = "streets";
-    public static final String OSM_MAPS_BASEMAP_DEFAULT = "mapquest_streets";
-
-
     private PreferenceScreen mSplashPathPreference;
     private ListPreference mSelectedGoogleAccountPreference;
-    private ListPreference mFontSizePreference;
     private ListPreference mNavigationPreference;
     private ListPreference mConstraintBehaviorPreference;
     private CheckBoxPreference mAutosendWifiPreference;
@@ -131,6 +74,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     protected ListPreference mMapBasemap;
 
     private CheckBoxPreference mAnalyticsPreference;
+
+    /** Encapsulate the findPreference deprecation warning */
+    private Preference pref(String key) {
+        return findPreference(key);
+    }
+
+    /** Allow shorter code to get ListPreferences */
+    private ListPreference listPref(String key) {
+        return (ListPreference) pref(key);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,35 +103,33 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         // assign all the preferences in advance because changing one often
         // affects another
         // also avoids npe
-        PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(
+        PreferenceCategory autosendCategory = (PreferenceCategory) pref(
                 getString(R.string.autosend));
-        mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
-        mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
-        PreferenceCategory serverCategory = (PreferenceCategory) findPreference(
+        mAutosendWifiPreference = (CheckBoxPreference) pref(KEY_AUTOSEND_WIFI);
+        mAutosendNetworkPreference = (CheckBoxPreference) pref(KEY_AUTOSEND_NETWORK);
+        PreferenceCategory serverCategory = (PreferenceCategory) pref(
                 getString(R.string.server_preferences));
 
-        mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
+        mProtocolPreference = listPref(KEY_PROTOCOL);
 
-        mSelectedGoogleAccountPreference = (ListPreference) findPreference(
-                KEY_SELECTED_GOOGLE_ACCOUNT);
-        PreferenceCategory clientCategory = (PreferenceCategory) findPreference(
+        mSelectedGoogleAccountPreference = listPref(KEY_SELECTED_GOOGLE_ACCOUNT);
+        PreferenceCategory clientCategory = (PreferenceCategory) pref(
                 getString(R.string.client));
-        PreferenceCategory mapCategory = (PreferenceCategory) findPreference(
+        PreferenceCategory mapCategory = (PreferenceCategory) pref(
                 getString(R.string.map_preferences));
-        mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
-        mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
-        Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
-        Preference deleteAfterSend = findPreference(KEY_DELETE_AFTER_SEND);
-        mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-        mConstraintBehaviorPreference = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
+        mNavigationPreference = listPref(KEY_NAVIGATION);
+        Preference defaultFinalized = pref(KEY_COMPLETED_DEFAULT);
+        Preference deleteAfterSend = pref(KEY_DELETE_AFTER_SEND);
+        mSplashPathPreference = (PreferenceScreen) pref(KEY_SPLASH_PATH);
+        mConstraintBehaviorPreference = listPref(KEY_CONSTRAINT_BEHAVIOR);
 
-        mUsernamePreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_USERNAME);
-        mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
+        mUsernamePreference = (EditTextPreference) pref(KEY_USERNAME);
+        mPasswordPreference = (EditTextPreference) pref(KEY_PASSWORD);
 
-        mProtocolSettings = (PreferenceScreen) findPreference(KEY_PROTOCOL_SETTINGS);
+        mProtocolSettings = (PreferenceScreen) pref(KEY_PROTOCOL_SETTINGS);
 
-        mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
-        mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
+        mMapSdk = listPref(KEY_MAP_SDK);
+        mMapBasemap = listPref(KEY_MAP_BASEMAP);
 
         boolean autosendWifiAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
@@ -196,7 +147,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             getPreferenceScreen().removePreference(autosendCategory);
         }
 
-        mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
+        mProtocolPreference = listPref(KEY_PROTOCOL);
         mProtocolPreference.setSummary(mProtocolPreference.getEntry());
         Intent prefIntent = null;
 
@@ -221,7 +172,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 String value = (String) ((ListPreference) preference).getEntryValues()[index];
-                ((ListPreference) preference).setSummary(entry);
+                preference.setSummary(entry);
 
                 Intent prefIntent = null;
                 if (value.equals(getString(R.string.protocol_odk_default))) {
@@ -340,7 +291,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                ((ListPreference) preference).setSummary(entry);
+                preference.setSummary(entry);
                 return true;
             }
         });
@@ -369,19 +320,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         boolean fontAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
-        mFontSizePreference.setSummary(mFontSizePreference.getEntry());
-        mFontSizePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        final ListPreference fontSizePreference = listPref(KEY_FONT_SIZE);
+        fontSizePreference.setSummary(fontSizePreference.getEntry());
+        fontSizePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                ((ListPreference) preference).setSummary(entry);
+                preference.setSummary(entry);
                 return true;
             }
         });
         if (!(fontAvailable || adminMode)) {
-            clientCategory.removePreference(mFontSizePreference);
+            clientCategory.removePreference(fontSizePreference);
         }
 
         boolean defaultAvailable = adminPreferences.getBoolean(
@@ -400,14 +352,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         boolean resolutionAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_HIGH_RESOLUTION, true);
 
-        Preference highResolution = findPreference(KEY_HIGH_RESOLUTION);
+        Preference highResolution = pref(KEY_HIGH_RESOLUTION);
         if (!(resolutionAvailable || adminMode)) {
             clientCategory.removePreference(highResolution);
         }
 
-        PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(
+        PreferenceCategory analyticsCategory = (PreferenceCategory) pref(
                 getString(R.string.analytics_preferences));
-        mAnalyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
+        mAnalyticsPreference = (CheckBoxPreference) pref(KEY_ANALYTICS);
 
         boolean analyticsAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_ANALYTICS, true);
@@ -478,8 +430,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         boolean showSplashAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_SHOW_SPLASH_SCREEN, true);
 
-        CheckBoxPreference showSplashPreference = (CheckBoxPreference) findPreference(
-                KEY_SHOW_SPLASH);
+        CheckBoxPreference showSplashPreference = (CheckBoxPreference) pref(KEY_SHOW_SPLASH);
 
         if (!(showSplashAvailable || adminMode)) {
             clientCategory.removePreference(showSplashPreference);
@@ -588,7 +539,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         editor.putString(KEY_SPLASH_PATH, path);
         editor.commit();
 
-        mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+        mSplashPathPreference = (PreferenceScreen) pref(KEY_SPLASH_PATH);
         mSplashPathPreference.setSummary(mSplashPathPreference.getSharedPreferences().getString(
                 KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
     }
