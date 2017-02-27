@@ -25,7 +25,7 @@ import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -134,12 +134,12 @@ public class PropertyManager implements IPropertyManager {
 
         // Get the username from the settings
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        value = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+        value = settings.getString(PreferenceKeys.KEY_USERNAME, null);
         if (value != null) {
             mProperties.put(USERNAME, value);
             mProperties.put(OR_USERNAME, "username:" + value);
         }
-        value = settings.getString(PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        value = settings.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
         if (value != null) {
             mProperties.put(EMAIL, value);
             mProperties.put(OR_EMAIL, "mailto:" + value);

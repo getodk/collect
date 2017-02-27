@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -81,9 +80,9 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.aggregate_preferences);
 
         mServerUrlPreference = (EditTextPreference) findPreference(
-                PreferencesActivity.KEY_SERVER_URL);
-        mUsernamePreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_USERNAME);
-        mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
+                PreferenceKeys.KEY_SERVER_URL);
+        mUsernamePreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_USERNAME);
+        mPasswordPreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_PASSWORD);
 
         PreferenceCategory aggregatePreferences = (PreferenceCategory) findPreference(
                 getString(R.string.aggregate_preferences));
@@ -254,7 +253,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
     private void clearCachedCrendentials() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getBaseContext());
-        String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+        String server = settings.getString(PreferenceKeys.KEY_SERVER_URL,
                 getString(R.string.default_server_url));
         Uri u = Uri.parse(server);
         WebUtils.clearHostCredentials(u.getHost());

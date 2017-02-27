@@ -36,7 +36,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.ArrayList;
 
@@ -71,7 +71,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
         mReadOnly = prompt.isReadOnly();
 
         mStringAnswer = new TextView(getContext());
