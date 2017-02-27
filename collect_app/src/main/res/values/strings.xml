@@ -349,7 +349,7 @@
 <string name="leave_a_review_summary">Leave a review on Google Play</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
-<string name="map_preferences">Mapping Options</string>
+<string name="map_preferences">Mapping</string>
 <string name="map_sdk_selector_title">Mapping SDK</string>
 <string name="map_sdk_behavior">Mapping SDK</string>
 <string name="google_maps_sdk">Google Maps SDK</string>
