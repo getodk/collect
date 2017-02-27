@@ -349,7 +349,7 @@
 <string name="leave_a_review_summary">Leave a review on Google Play</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
-<string name="map_preferences">Mapping Options</string>
+<string name="map_preferences">Mapping</string>
 <string name="map_sdk_selector_title">Mapping SDK</string>
 <string name="map_sdk_behavior">Mapping SDK</string>
 <string name="google_maps_sdk">Google Maps SDK</string>
@@ -433,6 +433,7 @@
 <string name="selected_answer">Selected: %s</string>
 <string name="version_number">Version: %s</string>
 <string name="general_settings_about">About</string>
+<string name="odk_website">Open Data Kit website</string>
 <string name="all_open_source_licenses">Open source licenses</string>
 <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
 <string name="west">W %1$s%2$s%3$s</string>
