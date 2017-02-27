@@ -89,7 +89,10 @@ public class ResetUtility {
         boolean deletedSettingsDir = !new File(Collect.SETTINGS).exists() ||
                 deleteRecursive(new File(Collect.SETTINGS));
 
-        if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsDir) {
+        boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists() ||
+                (new File(Collect.ODK_ROOT + "/collect.settings").delete());
+
+        if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsDir && deletedSettingsFile) {
             mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
     }
