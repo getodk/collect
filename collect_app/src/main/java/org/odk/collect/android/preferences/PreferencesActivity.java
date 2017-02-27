@@ -105,6 +105,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_NAVIGATION = "navigation";
     public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
+    public static final String KEY_CUSTOM_SERVER_RESPONSE = "key_custom_messaging";
+
     // MAP SPECIFIC
 
     public static final String KEY_MAP_SDK = "map_sdk_behavior";
@@ -115,7 +117,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String OSM_BASEMAP_KEY = "osmdroid";
     public static final String GOOGLE_MAPS_BASEMAP_DEFAULT = "streets";
     public static final String OSM_MAPS_BASEMAP_DEFAULT = "mapquest_streets";
-
 
     private PreferenceScreen mSplashPathPreference;
     private PreferenceScreen mOpenSourceLicensesPreference;
@@ -132,6 +133,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
     protected ListPreference mMapSdk;
     protected ListPreference mMapBasemap;
+
+    private CheckBoxPreference mCustomMessagingResponsePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +184,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         mMapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         mMapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
+
+        mCustomMessagingResponsePreference = (CheckBoxPreference) findPreference(KEY_CUSTOM_SERVER_RESPONSE);
 
         boolean autosendWifiAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
@@ -546,6 +551,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         });
         if (!(mMapBasemapAvailable || adminMode)) {
             mapCategory.removePreference(mMapBasemap);
+        }
+
+        // Custom Message Server Response Available Toggle
+        boolean customMessageServerResponseAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_SHOW_CUSTOM_SERVER_RESPONSE, false);
+
+        if (!(customMessageServerResponseAvailable  || adminMode)) {
+            clientCategory.removePreference(mCustomMessagingResponsePreference);
         }
     }
 

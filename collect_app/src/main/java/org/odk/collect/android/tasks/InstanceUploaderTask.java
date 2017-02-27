@@ -30,8 +30,10 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
+import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
@@ -75,7 +77,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
-
+    private SharedPreferences sharedPreferences;
     private InstanceUploaderListener mStateListener;
 
     public static class Outcome {
@@ -101,6 +103,15 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         ContentValues cv = new ContentValues();
         Uri u = Uri.parse(urlString);
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+
+        ResponseMessageParser messageParser = null;
+        sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(
+                        Collect.getInstance().getApplicationContext());
+
+        Boolean showCustomServerReponse = sharedPreferences.getBoolean(
+                PreferencesActivity.KEY_CUSTOM_SERVER_RESPONSE, false);
+
 
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
@@ -331,6 +342,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             first = false;
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
+            messageParser = null;
 
             MimeTypeMap m = MimeTypeMap.getSingleton();
 
@@ -468,10 +480,18 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
             // prepare response and return uploaded
             HttpResponse response = null;
+
             try {
                 Log.i(t, "Issuing POST request for " + id + " to: " + u.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
+
+                HttpEntity httpEntity = response.getEntity();
+
+                if (showCustomServerReponse){
+                    messageParser = new ResponseMessageParser(httpEntity);
+                }
+
                 WebUtils.discardEntityBytes(response);
 
                 Log.i(t, "Response code:" + responseCode);
@@ -487,8 +507,21 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
-                        outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
+                        // Custom messaging response if fail.
+                        // If Custom Server Response enabled then confirm response is valid
+                        // and set as display message, otherwise fall back to default string messagining
+                        if (showCustomServerReponse){
+                            if (messageParser != null && messageParser.isValid){
+                                outcome.mResults.put(id, fail + messageParser.getMessageResponse());
+                            }else{
+                                outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
+                                        + " (" + responseCode + ") at " + urlString);
+                            }
+                        }else{
+                            outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
+                                    + " (" + responseCode + ") at " + urlString);
+                        }
+
                     }
                     cv.put(InstanceColumns.STATUS,
                             InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -511,7 +544,21 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // if it got here, it must have worked
-        outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+        if (showCustomServerReponse){
+            // Custom messaging handle for success
+            // If Custom Server Response enabled then confirm response is valid
+            // and set as display message, otherwise fall back to default string messagining.
+            if (messageParser != null && messageParser.isValid){
+                outcome.mResults.put(id, messageParser.getMessageResponse());
+            }else{
+                // Default messaging
+                outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+            }
+        }else{
+            // Default messaging
+            outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+        }
+
         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
         return true;

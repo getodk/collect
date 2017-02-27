@@ -468,4 +468,5 @@
 <string name="reset_osm_tiles_result">OSM tiles :: %s</string>
 <string name="server_custom_messaging">Custom Server Responses</string>
 <string name="server_custom_messaging_summary">Display custom server responses durning submissions</string>
+<string name="show_custom_server_response_title">Show Custom Server Responses</string>
 </resources>

@@ -151,6 +151,12 @@
             android:key="show_map_basemap"
             android:summary="@string/found_in_settings"
             android:title="@string/show_map_basemap" />
+        <CheckBoxPreference
+            android:id="@+id/show_custom_server_response"
+            android:defaultValue="true"
+            android:key="show_custom_server_response"
+            android:summary="@string/found_in_settings"
+            android:title="@string/show_custom_server_response_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_form_entry" >
         <CheckBoxPreference
