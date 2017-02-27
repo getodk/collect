@@ -99,7 +99,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         Cursor c = null;
         try {
-            c = new InstancesDao().getInstancesCursor(null, selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
@@ -930,8 +930,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     Cursor uploadResults = null;
                     try {
-                        uploadResults = new InstancesDao().getInstancesCursor(null, selection.toString(),
-                                selectionArgs, null);
+                        uploadResults = new InstancesDao().getInstancesCursor(selection.toString(),
+                                selectionArgs);
                         if (uploadResults.getCount() > 0) {
                             Long[] toDelete = new Long[uploadResults.getCount()];
                             uploadResults.moveToPosition(-1);

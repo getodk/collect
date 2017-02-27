@@ -72,10 +72,14 @@ public class InstanceUploaderList extends ListActivity implements
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
 
+    private InstancesDao mInstanceDao;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
+
+        mInstanceDao = new InstancesDao();
 
         // set up long click listener
 
@@ -143,7 +147,7 @@ public class InstanceUploaderList extends ListActivity implements
         });
         mToggleButton.setOnLongClickListener(this);
 
-        Cursor c = mShowUnsent ? new InstancesDao().getFinalizedInstancesCursor() : new InstancesDao().getAllCompletedInstancesCursor();
+        Cursor c = mShowUnsent ? mInstanceDao.getFinalizedInstancesCursor() : mInstanceDao.getAllCompletedInstancesCursor();
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
                 InstanceColumns.DISPLAY_SUBTEXT};
@@ -329,8 +333,7 @@ public class InstanceUploaderList extends ListActivity implements
     }
 
     private void showUnsent() {
-        mShowUnsent = true;
-        Cursor c = mShowUnsent ? new InstancesDao().getFinalizedInstancesCursor() : new InstancesDao().getAllCompletedInstancesCursor();
+        Cursor c = mInstanceDao.getFinalizedInstancesCursor();
         Cursor old = mInstances.getCursor();
         try {
             mInstances.changeCursor(c);
@@ -344,8 +347,7 @@ public class InstanceUploaderList extends ListActivity implements
     }
 
     private void showAll() {
-        mShowUnsent = false;
-        Cursor c = mShowUnsent ? new InstancesDao().getFinalizedInstancesCursor() : new InstancesDao().getAllCompletedInstancesCursor();
+        Cursor c = mInstanceDao.getAllCompletedInstancesCursor();
         Cursor old = mInstances.getCursor();
         try {
             mInstances.changeCursor(c);

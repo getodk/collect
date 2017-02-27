@@ -547,7 +547,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         Cursor c = null;
         try {
-            c = new InstancesDao().getInstancesCursor(null, selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
@@ -641,7 +641,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     Cursor results = null;
                     try {
-                        results = new InstancesDao().getInstancesCursor(null, selection.toString(), selectionArgs, null);
+                        results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
 
                         if (results.getCount() > 0) {
                             Long[] toDelete = new Long[results.getCount()];

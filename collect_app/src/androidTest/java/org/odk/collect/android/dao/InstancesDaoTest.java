@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.android;
+package org.odk.collect.android.dao;
 
 import android.database.Cursor;
 import android.support.test.runner.AndroidJUnit4;

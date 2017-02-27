@@ -229,7 +229,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         {
             Cursor results = null;
             try {
-                results = new InstancesDao().getInstancesCursor(null, selection.toString(), selectionArgs, null);
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                 if (results.getCount() > 0) {
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {
