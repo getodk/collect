@@ -34,7 +34,7 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -82,17 +82,17 @@ public class SplashScreenActivity extends Activity {
             e.printStackTrace();
         }
 
-        boolean firstRun = mSharedPreferences.getBoolean(PreferencesActivity.KEY_FIRST_RUN, true);
+        boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
-                mSharedPreferences.getBoolean(PreferencesActivity.KEY_SHOW_SPLASH, false);
+                mSharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
         String splashPath =
-                mSharedPreferences.getString(PreferencesActivity.KEY_SPLASH_PATH,
+                mSharedPreferences.getString(PreferenceKeys.KEY_SPLASH_PATH,
                         getString(R.string.default_splash_path));
 
         // if you've increased version code, then update the version number and set firstRun to true
-        if (mSharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0)
+        if (mSharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
                 < packageInfo.versionCode) {
-            editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);
+            editor.putLong(PreferenceKeys.KEY_LAST_VERSION, packageInfo.versionCode);
             editor.commit();
 
             firstRun = true;
@@ -100,7 +100,7 @@ public class SplashScreenActivity extends Activity {
 
         // do all the first run things
         if (firstRun || showSplash) {
-            editor.putBoolean(PreferencesActivity.KEY_FIRST_RUN, false);
+            editor.putBoolean(PreferenceKeys.KEY_FIRST_RUN, false);
             editor.commit();
             startSplashScreen(splashPath);
         } else {

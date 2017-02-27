@@ -49,6 +49,7 @@ import org.odk.collect.android.picasa.PicasaClient;
 import org.odk.collect.android.picasa.PicasaUrl;
 import org.odk.collect.android.picasa.UserFeed;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -309,7 +310,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         SharedPreferences settings = PreferenceManager
                                 .getDefaultSharedPreferences(Collect.getInstance());
                         urlString = settings
-                                .getString(PreferencesActivity.KEY_GOOGLE_SHEETS_URL, Collect
+                                .getString(PreferenceKeys.KEY_GOOGLE_SHEETS_URL, Collect
                                         .getInstance()
                                         .getString(R.string.default_google_sheets_url));
                     }
@@ -954,7 +955,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                             boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
                                     Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferencesActivity.KEY_DELETE_AFTER_SEND, false);
+                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
                             if (deleteFlag) {
                                 DeleteInstancesTask dit = new DeleteInstancesTask();
                                 dit.setContentResolver(Collect.getInstance().getContentResolver());

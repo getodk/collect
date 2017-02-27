@@ -71,7 +71,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -171,7 +171,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
         // ensure we have a google account selected
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mGoogleUsername = prefs.getString(PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
         if (mGoogleUsername == null || mGoogleUsername.equals("")) {
             showDialog(GOOGLE_USER_DIALOG);
             return;
