@@ -57,13 +57,13 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion(22)
-    buildToolsVersion("25.0.0")
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(16)
-        targetSdkVersion(22)
+        targetSdkVersion(25)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
