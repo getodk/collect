@@ -12,8 +12,8 @@ DdmPreferences.setTimeOut(60000)
 ant.condition(property: "os", value: "windows") { os(family: "windows") }
 ant.condition(property: "os", value: "unix") { os(family: "unix") }
 
-// Build numbers were manually set until 1063
-def LEGACY_BUILD_NUMBER_OFFSET = 1065
+// Build numbers were manually set until 1067
+def LEGACY_BUILD_NUMBER_OFFSET = 1067
 
 // Based on http://stackoverflow.com/questions/17097263#24121734
 def getMasterCommitCount = { ->
