@@ -59,8 +59,6 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setContentView(R.layout.chooser_list_layout);
-        TextView tvEmpty = (TextView) findViewById(android.R.id.empty);
-        tvEmpty.setText(R.string.no_items_display_sent_forms);
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
         String selection;
@@ -89,6 +87,7 @@ public class InstanceChooserList extends ListActivity {
         if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
             instances = new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
         } else {
+            ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
             instances = new ViewSentListAdapter(this, R.layout.two_item, c, data, view);
         }
 
