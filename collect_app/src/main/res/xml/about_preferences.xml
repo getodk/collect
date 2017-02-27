@@ -1,6 +1,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceScreen
+        android:id="@+id/info"
+        android:key="info"
+        android:title="@string/odk_website" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://opendatakit.org" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
         android:key="open_source_licenses"
         android:title="@string/all_open_source_licenses"></PreferenceScreen>
 

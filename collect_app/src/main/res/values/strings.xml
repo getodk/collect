@@ -433,6 +433,7 @@
 <string name="selected_answer">Selected: %s</string>
 <string name="version_number">Version: %s</string>
 <string name="general_settings_about">About</string>
+<string name="odk_website">Open Data Kit website</string>
 <string name="all_open_source_licenses">Open source licenses</string>
 <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
 <string name="west">W %1$s%2$s%3$s</string>
