@@ -10,7 +10,6 @@ public final class PreferenceKeys {
     public static final String KEY_ANALYTICS = "analytics";
 
     public static final String KEY_PROTOCOL = "protocol";
-           static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
            static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
 
     // leaving these in the main screen because username can be used as a

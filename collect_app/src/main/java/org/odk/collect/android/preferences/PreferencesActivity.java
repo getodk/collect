@@ -41,7 +41,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.OpenSourceLicensesActivity;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -61,7 +60,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     protected static final int IMAGE_CHOOSER = 0;
 
     private PreferenceScreen mSplashPathPreference;
-    private PreferenceScreen mOpenSourceLicensesPreference;
     private ListPreference mSelectedGoogleAccountPreference;
     private ListPreference mNavigationPreference;
     private ListPreference mConstraintBehaviorPreference;
@@ -129,7 +127,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         mPasswordPreference = (EditTextPreference) pref(KEY_PASSWORD);
 
         mProtocolSettings = (PreferenceScreen) pref(KEY_PROTOCOL_SETTINGS);
-        mOpenSourceLicensesPreference = (PreferenceScreen) pref(KEY_OPEN_SOURCE_LICENSES);
 
         mMapSdk = listPref(KEY_MAP_SDK);
         mMapBasemap = listPref(KEY_MAP_BASEMAP);
@@ -376,14 +373,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             public boolean onPreferenceClick(Preference preference) {
                 GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
                 googleAnalytics.setAppOptOut(!mAnalyticsPreference.isChecked());
-                return true;
-            }
-        });
-
-        mOpenSourceLicensesPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getApplicationContext(), OpenSourceLicensesActivity.class));
                 return true;
             }
         });
