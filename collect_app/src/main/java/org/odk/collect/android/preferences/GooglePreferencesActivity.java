@@ -54,7 +54,7 @@ public class GooglePreferencesActivity extends PreferenceActivity {
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         mSelectedGoogleAccountPreference = (ListPreference) findPreference(
-                PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT);
+                PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         PreferenceCategory googlePreferences = (PreferenceCategory) findPreference(
                 getString(R.string.google_preferences));
 
@@ -96,7 +96,7 @@ public class GooglePreferencesActivity extends PreferenceActivity {
         }
 
         mGoogleSheetsUrlPreference = (EditTextPreference) findPreference(
-                PreferencesActivity.KEY_GOOGLE_SHEETS_URL);
+                PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
         mGoogleSheetsUrlPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {

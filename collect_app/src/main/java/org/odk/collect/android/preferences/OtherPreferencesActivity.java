@@ -40,9 +40,9 @@ public class OtherPreferencesActivity extends AggregatePreferencesActivity
         addPreferencesFromResource(R.xml.other_preferences);
 
         mFormListUrlPreference = (EditTextPreference) findPreference(
-                PreferencesActivity.KEY_FORMLIST_URL);
+                PreferenceKeys.KEY_FORMLIST_URL);
         mSubmissionUrlPreference = (EditTextPreference) findPreference(
-                PreferencesActivity.KEY_SUBMISSION_URL);
+                PreferenceKeys.KEY_SUBMISSION_URL);
 
         InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
 
