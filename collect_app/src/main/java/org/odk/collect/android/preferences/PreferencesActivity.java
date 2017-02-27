@@ -120,7 +120,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private PreferenceScreen mSplashPathPreference;
     private PreferenceScreen mOpenSourceLicensesPreference;
     private ListPreference mSelectedGoogleAccountPreference;
-    private ListPreference mFontSizePreference;
     private ListPreference mNavigationPreference;
     private ListPreference mConstraintBehaviorPreference;
     private CheckBoxPreference mAutosendWifiPreference;
@@ -169,7 +168,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         PreferenceCategory mapCategory = (PreferenceCategory) findPreference(
                 getString(R.string.map_preferences));
         mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
-        mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
         Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
         Preference deleteAfterSend = findPreference(KEY_DELETE_AFTER_SEND);
         mSplashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
@@ -373,19 +371,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         boolean fontAvailable = adminPreferences.getBoolean(
                 AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
-        mFontSizePreference.setSummary(mFontSizePreference.getEntry());
-        mFontSizePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        final ListPreference fontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
+        fontSizePreference.setSummary(fontSizePreference.getEntry());
+        fontSizePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                ((ListPreference) preference).setSummary(entry);
+                preference.setSummary(entry);
                 return true;
             }
         });
         if (!(fontAvailable || adminMode)) {
-            clientCategory.removePreference(mFontSizePreference);
+            clientCategory.removePreference(fontSizePreference);
         }
 
         boolean defaultAvailable = adminPreferences.getBoolean(
