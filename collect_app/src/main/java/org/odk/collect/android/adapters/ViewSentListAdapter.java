@@ -68,6 +68,8 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
 
         TextView visibilityOffCause = (TextView) view.findViewById(R.id.text4);
         ImageView visibleOff = (ImageView) view.findViewById(R.id.visible_off);
+        visibleOff.setScaleX(0.9f);
+        visibleOff.setScaleY(0.9f);
         if (date != 0 || !formExists || isFormEncrypted) {
             visibilityOffCause.setVisibility(View.VISIBLE);
             visibleOff.setVisibility(View.VISIBLE);
