@@ -192,6 +192,7 @@ public class ResetDialogPreference extends DialogPreference {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        ((AdminPreferencesActivity) mContext).recreate();
                     }
                 });
                 AlertDialog alertDialog = b.create();
