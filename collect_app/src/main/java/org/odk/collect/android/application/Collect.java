@@ -65,6 +65,7 @@ public class Collect extends Application {
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
+    public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
     private static Collect singleton = null;
 
     static {
