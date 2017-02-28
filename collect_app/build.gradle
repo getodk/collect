@@ -52,7 +52,7 @@ def getVersionName = { ->
         }
         return stdout.toString().trim()
     } catch (ignored) {
-        return null;
+        return "1.0"; //Returning 1.0 by default
     }
 }
 
