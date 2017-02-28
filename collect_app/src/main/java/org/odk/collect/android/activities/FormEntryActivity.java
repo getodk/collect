@@ -69,6 +69,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -1976,16 +1977,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             temp.delete();
         }
 
-        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] selectionArgs = {formController.getInstancePath()
-                .getAbsolutePath()};
-
         boolean erase = false;
         {
             Cursor c = null;
             try {
-                c = getContentResolver().query(InstanceColumns.CONTENT_URI,
-                        null, selection, selectionArgs, null);
+                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                        .getAbsolutePath());
                 erase = (c.getCount() < 1);
             } finally {
                 if (c != null) {
@@ -2704,13 +2701,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         // Then see if we've already marked this form as complete before
-        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] selectionArgs = {formController.getInstancePath()
-                .getAbsolutePath()};
         Cursor c = null;
         try {
-            c = getContentResolver().query(InstanceColumns.CONTENT_URI, null,
-                    selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                    .getAbsolutePath());
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
                 String status = c.getString(c
@@ -2745,13 +2739,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (Intent.ACTION_PICK.equals(action)
                 || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
-            String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            String[] selectionArgs = {formController.getInstancePath()
-                    .getAbsolutePath()};
             Cursor c = null;
             try {
-                c = getContentResolver().query(InstanceColumns.CONTENT_URI,
-                        null, selection, selectionArgs, null);
+                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                        .getAbsolutePath());
                 if (c.getCount() > 0) {
                     // should only be one...
                     c.moveToFirst();
