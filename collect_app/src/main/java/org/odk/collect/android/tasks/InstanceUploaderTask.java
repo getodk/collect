@@ -76,6 +76,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
 
+    // based on http://www.sqlite.org/limits.html
+    private static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
+
     private InstanceUploaderListener mStateListener;
 
     public static class Outcome {
@@ -517,22 +520,22 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         return true;
     }
 
-    // TODO: This method is like 350 lines long, down from 400.
-    // still. ridiculous. make it smaller.
-    protected Outcome doInBackground(Long... values) {
-        Outcome outcome = new Outcome();
-
-        StringBuffer selectionBuf = new StringBuffer(InstanceColumns._ID + " IN (");
-        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-        if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                if (i > 0) {
-                    selectionBuf.append(",");
-                }
-                selectionBuf.append("?");
-                selectionArgs[i] = values[i].toString();
-            }
+    private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
+        if (values == null) {
+            // don't try anything if values is null
+            return false;
         }
+
+        StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+        String[] selectionArgs = new String[values.length];
+        for (int i = low; i < high; i++) {
+            if (i > 0) {
+                selectionBuf.append(",");
+            }
+            selectionBuf.append("?");
+            selectionArgs[i] = values[i].toString();
+        }
+
         selectionBuf.append(")");
         String selection = selectionBuf.toString();
 
@@ -549,11 +552,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             c = Collect.getInstance().getContentResolver()
                     .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
 
-            if (c.getCount() > 0) {
+            if (c != null && c.getCount() > 0) {
                 c.moveToPosition(-1);
                 while (c.moveToNext()) {
                     if (isCancelled()) {
-                        return outcome;
+                        return false;
                     }
                     publishProgress(c.getPosition() + 1, c.getCount());
                     String instance = c.getString(
@@ -563,8 +566,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     // Use the app's configured URL unless the form included a submission URL
                     int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx) ? getServerSubmissionURL() : c.getString(
-                            subIdx).trim();
+                    String urlString = c.isNull(subIdx) ?
+                            getServerSubmissionURL() : c.getString(subIdx).trim();
 
                     // add the deviceID to the request...
                     try {
@@ -575,7 +578,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,
                             uriRemap, outcome)) {
-                        return outcome; // get credentials...
+                        return false; // get credentials...
                     }
                 }
             }
@@ -585,6 +588,24 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
+        return true;
+    }
+
+    // TODO: This method is like 350 lines long, down from 400.
+    // still. ridiculous. make it smaller.
+    protected Outcome doInBackground(Long... values) {
+        Outcome outcome = new Outcome();
+        int counter = 0;
+        while (counter * SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+            int low = counter * SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter ++) * SQLITE_MAX_VARIABLE_NUMBER;
+            if (high > values.length) {
+                high = values.length;
+            }
+            if (!processChunk(low, high, outcome, values)) {
+                return outcome;
+            }
+        }
         return outcome;
     }
 
