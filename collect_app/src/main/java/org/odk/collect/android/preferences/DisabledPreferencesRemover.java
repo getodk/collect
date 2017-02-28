@@ -39,8 +39,7 @@ class DisabledPreferencesRemover {
     }
 
     /**
-     * Removes any preferences from the category that are excluded by the admin settings,
-     * and deletes the entire category if it is then empty.
+     * Removes any preferences from the category that are excluded by the admin settings.
      *
      * @param adminAndGeneralKeyses one or more AdminAndGeneralKeys objects.
      */
@@ -63,6 +62,7 @@ class DisabledPreferencesRemover {
         }
     }
 
+    /** Deletes all empty PreferenceCategory items. */
     void removeEmptyCategories() {
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
         for (PreferenceCategory pc : new HashSet<>(preferencePreferenceCategoryMap.values())) {
