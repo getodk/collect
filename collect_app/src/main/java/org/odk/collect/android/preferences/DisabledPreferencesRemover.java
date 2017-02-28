@@ -25,8 +25,7 @@ class DisabledPreferencesRemover {
     private Map<Preference, PreferenceCategory> createPreferenceToPreferenceCategoryMap() {
         final Map<Preference, PreferenceCategory> map = new HashMap<>();
         PreferenceScreen screen = pa.getPreferenceScreen();
-        int numPrefs = screen.getPreferenceCount();
-        for (int i = 0; i < numPrefs; i++) {
+        for (int i = 0; i < screen.getPreferenceCount(); i++) {
             Preference p = screen.getPreference(i);
             if (p instanceof PreferenceCategory) {
                 PreferenceCategory pc = (PreferenceCategory) p;
@@ -41,19 +40,19 @@ class DisabledPreferencesRemover {
     /**
      * Removes any preferences from the category that are excluded by the admin settings.
      *
-     * @param adminAndGeneralKeyses one or more AdminAndGeneralKeys objects.
+     * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
-    void remove(AdminAndGeneralKeys... adminAndGeneralKeyses) {
+    void remove(AdminAndGeneralKeys... keyPairs) {
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
 
         final SharedPreferences adminPreferences = pa.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        for (AdminAndGeneralKeys keys : adminAndGeneralKeyses) {
-            final boolean prefAllowed = adminPreferences.getBoolean(keys.adminKey, true);
+        for (AdminAndGeneralKeys agKeys : keyPairs) {
+            final boolean prefAllowed = adminPreferences.getBoolean(agKeys.adminKey, true);
 
             if (!prefAllowed && !adminMode) {
-                Preference pref = pa.pref(keys.generalKey);
+                Preference pref = pa.pref(agKeys.generalKey);
                 PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
                 if (preferenceCategory != null && pref != null) { // Neither should ever be null
                     preferenceCategory.removePreference(pref);
@@ -65,7 +64,9 @@ class DisabledPreferencesRemover {
     /** Deletes all empty PreferenceCategory items. */
     void removeEmptyCategories() {
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-        for (PreferenceCategory pc : new HashSet<>(preferencePreferenceCategoryMap.values())) {
+        HashSet<PreferenceCategory> uniqueCategories = new
+                HashSet<>(preferencePreferenceCategoryMap.values());
+        for (PreferenceCategory pc : uniqueCategories) {
             if (pc.getPreferenceCount() == 0 && !adminMode) {
                 pa.getPreferenceScreen().removePreference(pc);
             }
