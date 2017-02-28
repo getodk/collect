@@ -41,6 +41,7 @@ import com.google.gdata.util.ServiceException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.FormException;
 import org.odk.collect.android.picasa.AlbumEntry;
 import org.odk.collect.android.picasa.AlbumFeed;
@@ -99,8 +100,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         Cursor c = null;
         try {
-            c = Collect.getInstance().getContentResolver()
-                    .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
@@ -286,17 +286,11 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // All photos have been sent to picasa (if there were any)
         // now upload data to Google Sheet
 
-        String selection = InstanceColumns._ID + "=?";
-        String[] selectionArgs = {
-                id
-        };
-
         Cursor cursor = null;
         String urlString = null;
         try {
             // see if the submission element was defined in the form
-            cursor = Collect.getInstance().getContentResolver()
-                    .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            cursor = new InstancesDao().getInstancesCursorForId(id);
 
             if (cursor.getCount() > 0) {
                 cursor.moveToPosition(-1);
@@ -937,11 +931,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     Cursor uploadResults = null;
                     try {
-                        uploadResults = Collect
-                                .getInstance()
-                                .getContentResolver()
-                                .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                        selectionArgs, null);
+                        uploadResults = new InstancesDao().getInstancesCursor(selection.toString(),
+                                selectionArgs);
                         if (uploadResults.getCount() > 0) {
                             Long[] toDelete = new Long[uploadResults.getCount()];
                             uploadResults.moveToPosition(-1);

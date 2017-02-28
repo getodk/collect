@@ -13,19 +13,6 @@ import org.odk.collect.android.R;
  */
 
 public final class ListViewUtils {
-    public static int selectedItemCount(ListView lv) {
-        // shortcut null case
-        if (lv == null) return 0;
-
-        int count = 0;
-        SparseBooleanArray sba = lv.getCheckedItemPositions();
-        for (int i = 0; i < lv.getCount(); i++) {
-            if (sba.get(i, false)) {
-                count++;
-            }
-        }
-        return count;
-    }
 
     // toggles to all checked or all unchecked
     // returns:
@@ -39,7 +26,7 @@ public final class ListViewUtils {
         // shortcut null case
         if (lv == null) return false;
 
-        boolean newCheckState = lv.getCount() > ListViewUtils.selectedItemCount(lv);
+        boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
         ListViewUtils.setAllToCheckedState(lv, newCheckState);
         return newCheckState;
     }
@@ -63,7 +50,7 @@ public final class ListViewUtils {
 
     // Function to toggle button label
     public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
-        if (ListViewUtils.selectedItemCount(lv) != lv.getCount()) {
+        if (lv.getCheckedItemCount() != lv.getCount()) {
             mToggleButton.setText(R.string.select_all);
         } else {
             mToggleButton.setText(R.string.clear_all);

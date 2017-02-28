@@ -22,6 +22,7 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -99,16 +100,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (!running) {
             running = true;
 
-            String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-            String selectionArgs[] =
-                    {
-                            InstanceProviderAPI.STATUS_COMPLETE,
-                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED
-                    };
-
             ArrayList<Long> toUpload = new ArrayList<Long>();
-            Cursor c = context.getContentResolver().query(InstanceColumns.CONTENT_URI, null,
-                    selection, selectionArgs, null);
+            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
@@ -207,11 +201,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             {
                 Cursor results = null;
                 try {
-                    results = Collect
-                            .getInstance()
-                            .getContentResolver()
-                            .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                    selectionArgs, null);
+                    results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                     if (results.getCount() > 0) {
                         results.moveToPosition(-1);
                         while (results.moveToNext()) {

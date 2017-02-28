@@ -40,6 +40,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -255,8 +256,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
             Cursor results = null;
             try {
-                results = getContentResolver().query(InstanceColumns.CONTENT_URI, null,
-                        selection.toString(), selectionArgs, null);
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                 if (results.getCount() > 0) {
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {
