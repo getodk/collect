@@ -131,7 +131,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         getListView().setBackgroundColor(Color.WHITE);
 
         mDownloadButton = (Button) findViewById(R.id.add_button);
-        mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
+        mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
         mDownloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,7 +263,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
-        mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
+        mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
 
         Object o = getListAdapter().getItem(position);
         @SuppressWarnings("unchecked")
@@ -318,7 +318,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(BUNDLE_SELECTED_COUNT, ListViewUtils.selectedItemCount(getListView()));
+        outState.putInt(BUNDLE_SELECTED_COUNT, getListView().getCheckedItemCount());
         outState.putSerializable(BUNDLE_FORM_MAP, mFormNamesAndURLs);
         outState.putString(DIALOG_TITLE, mAlertTitle);
         outState.putString(DIALOG_MSG, mAlertMsg);
@@ -618,7 +618,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
-            mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
+            mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
             ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         }
     }
