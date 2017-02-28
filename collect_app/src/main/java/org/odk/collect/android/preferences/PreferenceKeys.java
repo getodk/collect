@@ -12,9 +12,9 @@ public final class PreferenceKeys {
     public static final String KEY_PROTOCOL = "protocol";
            static final String KEY_PROTOCOL_SETTINGS = "protocol_settings";
 
-    // leaving these in the main screen because username can be used as a
+    // leaving these in the main screen because username can be used as adminKey
     // pre-fill
-    // value in a form
+    // value in adminKey form
     public static final String KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
