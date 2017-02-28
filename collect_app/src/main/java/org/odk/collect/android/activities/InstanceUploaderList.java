@@ -40,6 +40,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.utilities.ListViewUtils;
@@ -203,13 +205,13 @@ public class InstanceUploaderList extends ListActivity implements
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
+        String server = prefs.getString(PreferenceKeys.KEY_PROTOCOL, null);
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
             // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
 
             String googleUsername = prefs.getString(
-                    PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
                 return;

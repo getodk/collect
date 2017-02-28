@@ -28,7 +28,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.WebUtils;
@@ -594,7 +594,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 Collect.getInstance());
-        String serverBase = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+        String serverBase = settings.getString(PreferenceKeys.KEY_SERVER_URL,
                 app.getString(R.string.default_server_url));
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
@@ -602,7 +602,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
+        String submissionPath = settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
                 app.getString(R.string.default_odk_submission));
 
         if (!submissionPath.startsWith(URL_PATH_SEP)) {
@@ -656,7 +656,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                             boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
                                     Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferencesActivity.KEY_DELETE_AFTER_SEND, false);
+                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
                             if (deleteFlag) {
                                 DeleteInstancesTask dit = new DeleteInstancesTask();
                                 dit.setContentResolver(Collect.getInstance().getContentResolver());

@@ -32,7 +32,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PRNGFixes;
@@ -65,6 +65,7 @@ public class Collect extends Application {
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
+    public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
     private static Collect singleton = null;
 
     static {
@@ -87,10 +88,9 @@ public class Collect extends Application {
     public static int getQuestionFontsize() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        String question_font = settings.getString(PreferencesActivity.KEY_FONT_SIZE,
+        String question_font = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        int questionFontsize = Integer.valueOf(question_font);
-        return questionFontsize;
+        return Integer.valueOf(question_font);
     }
 
     /**

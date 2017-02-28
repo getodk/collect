@@ -48,6 +48,8 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -213,7 +215,7 @@ public class MainMenuActivity extends Activity {
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(MainMenuActivity.this);
                 String protocol = sharedPreferences.getString(
-                        PreferencesActivity.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                        PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                     i = new Intent(getApplicationContext(),
@@ -516,7 +518,7 @@ public class MainMenuActivity extends Activity {
     private void setupGoogleAnalytics() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);
+        boolean isAnalyticsEnabled = settings.getBoolean(PreferenceKeys.KEY_ANALYTICS, true);
         GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
         googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }

@@ -208,7 +208,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case SAVE_PREFS_MENU:
-                File writeDir = new File(Collect.ODK_ROOT + "/settings");
+                File writeDir = new File(Collect.SETTINGS);
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         Toast.makeText(
