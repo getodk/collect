@@ -77,6 +77,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -855,18 +856,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         boolean useability;
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SAVE_MID, true);
+                AdminKeys.KEY_SAVE_MID, true);
 
         menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_JUMP_TO, true);
+                AdminKeys.KEY_JUMP_TO, true);
 
         menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
                 .setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_LANGUAGE, true)
+                AdminKeys.KEY_CHANGE_LANGUAGE, true)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -875,7 +876,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true);
+                AdminKeys.KEY_ACCESS_SETTINGS, true);
 
         menu.findItem(MENU_PREFERENCES).setVisible(useability)
                 .setEnabled(useability);
@@ -1078,7 +1079,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 instanceComplete.setChecked(isInstanceComplete(true));
 
                 if (!mAdminPreferences.getBoolean(
-                        AdminPreferencesActivity.KEY_MARK_AS_FINALIZED, true)) {
+                        AdminKeys.KEY_MARK_AS_FINALIZED, true)) {
                     instanceComplete.setVisibility(View.GONE);
                 }
 
@@ -1149,7 +1150,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 // override the visibility settings based upon admin preferences
                 if (!mAdminPreferences.getBoolean(
-                        AdminPreferencesActivity.KEY_SAVE_AS, true)) {
+                        AdminKeys.KEY_SAVE_AS, true)) {
                     saveAs.setVisibility(View.GONE);
                     TextView sa = (TextView) endView
                             .findViewById(R.id.save_form_as);
@@ -1872,7 +1873,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         String[] items;
-        if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_MID,
+        if (mAdminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
             String[] two = {getString(R.string.keep_changes),
                     getString(R.string.do_not_save)};
@@ -1914,7 +1915,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 // whereas if it's enabled it's 'save and exit'
                                 if (mAdminPreferences
                                         .getBoolean(
-                                                AdminPreferencesActivity.KEY_SAVE_MID,
+                                                AdminKeys.KEY_SAVE_MID,
                                                 true)) {
                                     Collect.getInstance()
                                             .getActivityLogger()

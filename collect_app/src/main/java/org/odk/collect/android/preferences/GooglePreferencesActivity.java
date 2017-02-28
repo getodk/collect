@@ -90,7 +90,7 @@ public class GooglePreferencesActivity extends PreferenceActivity {
         mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference.getValue());
 
         boolean googleAccountAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
+                AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT, true);
         if (!(googleAccountAvailable || adminMode)) {
             googlePreferences.removePreference(mSelectedGoogleAccountPreference);
         }
