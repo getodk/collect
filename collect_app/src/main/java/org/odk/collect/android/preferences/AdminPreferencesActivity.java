@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +49,7 @@ import java.io.ObjectOutputStream;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends PreferenceActivity {
+public class AdminPreferencesActivity extends AppPreferenceActivity {
 
     public static String ADMIN_PREFERENCES = "admin_prefs";
 
@@ -67,8 +66,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        ListPreference mFormProcessingLogicPreference = (ListPreference) findPreference(
-                KEY_FORM_PROCESSING_LOGIC);
+        ListPreference mFormProcessingLogicPreference = listPref(KEY_FORM_PROCESSING_LOGIC);
         mFormProcessingLogicPreference.setSummary(mFormProcessingLogicPreference.getEntry());
         mFormProcessingLogicPreference.setOnPreferenceChangeListener(
                 new Preference.OnPreferenceChangeListener() {
@@ -83,7 +81,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                     }
                 });
 
-        Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+        Preference mChangeAdminPwPreference = pref(KEY_CHANGE_ADMIN_PASSWORD);
         mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

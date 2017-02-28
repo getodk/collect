@@ -26,7 +26,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
@@ -52,20 +51,10 @@ import java.util.List;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com;
  *         constraint behavior option)
  */
-public class PreferencesActivity extends PreferenceActivity implements OnPreferenceChangeListener {
+public class PreferencesActivity extends AppPreferenceActivity implements OnPreferenceChangeListener {
 
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
-
-    /** Encapsulate the findPreference deprecation warning */
-    Preference pref(String key) {
-        return findPreference(key);
-    }
-
-    /** Allow shorter code to get ListPreferences */
-    private ListPreference listPref(String key) {
-        return (ListPreference) pref(key);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
