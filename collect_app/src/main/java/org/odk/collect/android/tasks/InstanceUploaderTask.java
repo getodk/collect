@@ -25,6 +25,7 @@ import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -546,8 +547,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         Cursor c = null;
         try {
-            c = Collect.getInstance().getContentResolver()
-                    .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
@@ -641,11 +641,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     Cursor results = null;
                     try {
-                        results = Collect
-                                .getInstance()
-                                .getContentResolver()
-                                .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                        selectionArgs, null);
+                        results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+
                         if (results.getCount() > 0) {
                             Long[] toDelete = new Long[results.getCount()];
                             results.moveToPosition(-1);

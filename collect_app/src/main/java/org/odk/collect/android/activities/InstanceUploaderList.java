@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -73,36 +74,14 @@ public class InstanceUploaderList extends ListActivity implements
     private ArrayList<Long> mSelected = new ArrayList<Long>();
     private boolean mRestored = false;
 
-    public Cursor getUnsentCursor() {
-        // get all complete or failed submission instances
-        String selection = InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?";
-        String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection,
-                selectionArgs, sortOrder);
-        return c;
-    }
-
-    public Cursor getAllCursor() {
-        // get all complete or failed submission instances
-        String selection = InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS
-                + "=?";
-        String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
-                InstanceProviderAPI.STATUS_SUBMITTED};
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection,
-                selectionArgs, sortOrder);
-        return c;
-    }
+    private InstancesDao mInstanceDao;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
+
+        mInstanceDao = new InstancesDao();
 
         // set up long click listener
 
@@ -170,7 +149,7 @@ public class InstanceUploaderList extends ListActivity implements
         });
         mToggleButton.setOnLongClickListener(this);
 
-        Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
+        Cursor c = mShowUnsent ? mInstanceDao.getFinalizedInstancesCursor() : mInstanceDao.getAllCompletedInstancesCursor();
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
                 InstanceColumns.DISPLAY_SUBTEXT};
@@ -356,8 +335,7 @@ public class InstanceUploaderList extends ListActivity implements
     }
 
     private void showUnsent() {
-        mShowUnsent = true;
-        Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
+        Cursor c = mInstanceDao.getFinalizedInstancesCursor();
         Cursor old = mInstances.getCursor();
         try {
             mInstances.changeCursor(c);
@@ -371,8 +349,7 @@ public class InstanceUploaderList extends ListActivity implements
     }
 
     private void showAll() {
-        mShowUnsent = false;
-        Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
+        Cursor c = mInstanceDao.getAllCompletedInstancesCursor();
         Cursor old = mInstances.getCursor();
         try {
             mInstances.changeCursor(c);

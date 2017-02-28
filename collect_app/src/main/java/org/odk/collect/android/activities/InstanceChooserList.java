@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -61,19 +62,16 @@ public class InstanceChooserList extends ListActivity {
         setContentView(R.layout.chooser_list_layout);
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
-        String selection;
-        String[] selectionArgs = new String[]{InstanceProviderAPI.STATUS_SUBMITTED};
-        String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
 
+        Cursor cursor;
+        InstancesDao instancesDao = new InstancesDao();
         if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
             setTitle(getString(R.string.review_data));
-            selection = InstanceColumns.STATUS + " != ? ";
+            cursor = instancesDao.getUnsentInstancesCursor();
         } else {
             setTitle(getString(R.string.view_sent_forms));
-            selection = InstanceColumns.STATUS + " = ? ";
+            cursor = instancesDao.getSentInstancesCursor();
         }
-
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, sortOrder);
 
         String[] data = new String[]{
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
@@ -85,10 +83,10 @@ public class InstanceChooserList extends ListActivity {
         // render total instance view
         SimpleCursorAdapter instances;
         if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
-            instances = new SimpleCursorAdapter(this, R.layout.two_item, c, data, view);
+            instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
         } else {
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
-            instances = new ViewSentListAdapter(this, R.layout.two_item, c, data, view);
+            instances = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
         }
 
         setListAdapter(instances);
