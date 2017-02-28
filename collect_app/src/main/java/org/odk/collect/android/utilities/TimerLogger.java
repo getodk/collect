@@ -22,6 +22,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +30,7 @@ import java.util.ArrayList;
  */
 public class TimerLogger {
 
-    private class PendingEvent {
+    public class Event {
 
         long start;
         int type;
@@ -39,7 +40,7 @@ public class TimerLogger {
         boolean hasIntervalTime;
         boolean endTimeSet;
 
-        public PendingEvent(long start, int type, String node, boolean hasIntervalTime) {
+        Event(long start, int type, String node, boolean hasIntervalTime) {
             this.start = start;
             this.type = type;
             this.node = node;
@@ -57,8 +58,26 @@ public class TimerLogger {
                 case FormEntryController.EVENT_QUESTION:
                     sType = "question";
                     break;
+                case FormEntryController.EVENT_GROUP:
+                    sType = "group questions";
+                    break;
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                    sType = "prompt repeat";
+                    break;
+                case FormEntryController.EVENT_BEGINNING_OF_FORM:
+                    sType = "start";
+                    break;
+                case FormEntryController.EVENT_END_OF_FORM:
+                    sType = "end";
+                    break;
                 case -1:
-                    sType = "save";     // TODO HACK
+                    sType = "finalize";     // TODO HACK
+                    break;
+                case -2:
+                    sType = "survey start";     // TODO HACK
+                    break;
+                case -3:
+                    sType = "survey resume";     // TODO HACK
                     break;
             }
             return sType + "," + node + "," + String.valueOf(start) + ","
@@ -68,8 +87,9 @@ public class TimerLogger {
 
     private final static String t = "TimerLogger";
     private static AsyncTask saveTask = null;
-    private ArrayList<PendingEvent> mPendingEvents = null;
-    private String filename = "timer file";
+    private ArrayList<Event> mEvents = null;
+    private String filename = "timerlog.csv";
+    private File timerlogFile = null;
 
     // Valid events
     public final static String OPEN = "open";
@@ -80,8 +100,10 @@ public class TimerLogger {
     public final static String QUESTION_START = "qstart";
     public final static String QUESTION_END = "qend";
 
-    public TimerLogger() {
-        mPendingEvents = new ArrayList<PendingEvent>();
+    public TimerLogger(File instancePath) {
+        if(instancePath != null )
+            timerlogFile =  new File(instancePath + File.separator + filename);
+        mEvents = new ArrayList<Event>();
     }
 
     public void logTimerEvent(int type, TreeReference ref) {  // TODO customType
@@ -92,18 +114,22 @@ public class TimerLogger {
 
         boolean hasIntervalTime = (type == FormEntryController.EVENT_QUESTION ? true : false);
 
-        mPendingEvents.add(new PendingEvent(start, type, node, hasIntervalTime));
+        mEvents.add(new Event(start, type, node, hasIntervalTime));
 
         writeEvents();
 
+    }
+
+    public void setPath(String instancePath) {
+        timerlogFile =  new File(instancePath + File.separator + filename);
     }
 
     public void exitView() {
 
         // Calculate the time and add the event to the events array
         long end = System.currentTimeMillis();
-        for (int i = 0; i < mPendingEvents.size(); i++) {
-            mPendingEvents.get(i).setEnd(end);
+        for (int i = 0; i < mEvents.size(); i++) {
+            mEvents.get(i).setEnd(end);
         }
         writeEvents();
     }
@@ -111,25 +137,22 @@ public class TimerLogger {
     private void writeEvents() {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
-            int count = 0;
-            for (int i = 0; count < mPendingEvents.size(); i++) {
-                PendingEvent pe = mPendingEvents.get(i);
-                if (!pe.hasIntervalTime || pe.endTimeSet) {
-                    count++;
-                } else {
-                    break;      // Cannot save any more events until the final time has been set
+            // Verify that all the pending events are ready to send, may require us to wait for an "exit" event
+            boolean canSend = true;
+            for (int i = 0; i < mEvents.size(); i++) {
+                Event pe = mEvents.get(i);
+                if (pe.hasIntervalTime && !pe.endTimeSet) {
+                    canSend = false;
+                    break;
                 }
             }
 
-            String[] eventArray = new String[count + 1];    // Add an entry for the filename
-            eventArray[0] = filename;
-            for (int i = 0; i < count; i++) {
-                PendingEvent pe = mPendingEvents.get(0);
-                eventArray[i + 1] = pe.toString();
-                mPendingEvents.remove(0);
-            }
+            if(canSend) {
 
-            saveTask = new TimerSaveTask().execute(eventArray);
+            }
+            Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
+            saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
+            mEvents = new ArrayList<Event> ();
 
             Log.e(t, "######### Saving Timer Event");
         } else {

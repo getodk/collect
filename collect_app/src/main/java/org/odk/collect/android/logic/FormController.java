@@ -161,7 +161,7 @@ public class FormController {
         mFormEntryController = fec;
         mInstancePath = instancePath;
 
-        mTimerLogger = new TimerLogger();
+        mTimerLogger = new TimerLogger(instancePath);
     }
 
     public FormDef getFormDef() {

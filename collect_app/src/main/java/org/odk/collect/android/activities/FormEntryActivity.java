@@ -1063,22 +1063,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 + formController.getFormTitle());
 
 
+        formController.getTimerLogger().logTimerEvent(
+                event,
+                formController.getFormIndex().getReference());
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-
-                formController.getTimerLogger().logTimerEvent(
-                        FormEntryController.EVENT_BEGINNING_OF_FORM,
-                        formController.getFormIndex().getReference());
-
                 return createViewForFormBeginning(event, advancingPage, formController);
 
             case FormEntryController.EVENT_END_OF_FORM:
-
-                formController.getTimerLogger().logTimerEvent(
-                        FormEntryController.EVENT_END_OF_FORM,
-                        formController.getFormIndex().getReference());
-
                 View endView = View.inflate(this, R.layout.form_entry_end, null);
                 ((TextView) endView.findViewById(R.id.description))
                         .setText(getString(R.string.save_enter_data_description,
@@ -1236,10 +1229,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
 
-                    formController.getTimerLogger().logTimerEvent(
-                            FormEntryController.EVENT_QUESTION,
-                            formController.getFormIndex().getReference());
-
                     if (!qw.getPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
@@ -1309,7 +1298,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      */
     private void showNextView() {
         try {
+
             Collect.getInstance().getFormController().getTimerLogger().exitView();
+
             FormController formController = Collect.getInstance()
                     .getFormController();
 
@@ -1702,6 +1693,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
             }
         };
+
+        formController.getTimerLogger().logTimerEvent(
+                FormEntryController.EVENT_PROMPT_NEW_REPEAT, null);
+
         if (formController.getLastRepeatCount() > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             mAlertDialog.setMessage(getString(R.string.add_another_repeat,
@@ -1844,9 +1839,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         }
 
-        FormController formController = Collect.getInstance().getFormController();
-        formController.getTimerLogger().logTimerEvent(
-                -1, null);
+        if(complete) {
+            FormController formController = Collect.getInstance().getFormController();
+            formController.getTimerLogger().logTimerEvent(
+                    -1, null);
+        }
 
         synchronized (saveDialogLock) {
             mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
@@ -2560,6 +2557,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             if (FileUtils.createFolder(path)) {
                 formController.setInstancePath(new File(path + File.separator
                         + file + "_" + time + ".xml"));
+
+                formController.getTimerLogger().setPath(path);
+                formController.getTimerLogger().logTimerEvent(
+                        -2, null);      // survey start
+
             }
         } else {
             Intent reqIntent = getIntent();
@@ -2573,6 +2575,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 return; // so we don't show the intro screen before jumping to
                 // the hierarchy
             }
+
+            formController.getTimerLogger().logTimerEvent(
+                    -3, null);      // survey resume
         }
 
         refreshCurrentView();
