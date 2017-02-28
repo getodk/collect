@@ -527,13 +527,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
-        String[] selectionArgs = new String[values.length];
-        for (int i = low; i < high; i++) {
+        String[] selectionArgs = new String[high - low];
+        for (int i = 0; i < (high - low); i++) {
             if (i > 0) {
                 selectionBuf.append(",");
             }
             selectionBuf.append("?");
-            selectionArgs[i] = values[i].toString();
+            selectionArgs[i] = values[i + low].toString();
         }
 
         selectionBuf.append(")");
@@ -598,13 +598,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         int counter = 0;
         while (counter * SQLITE_MAX_VARIABLE_NUMBER < values.length) {
             int low = counter * SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter ++) * SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter + 1) * SQLITE_MAX_VARIABLE_NUMBER;
             if (high > values.length) {
                 high = values.length;
             }
             if (!processChunk(low, high, outcome, values)) {
                 return outcome;
             }
+            counter ++;
         }
         return outcome;
     }
