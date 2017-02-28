@@ -27,7 +27,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
@@ -42,7 +41,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import static org.odk.collect.android.preferences.PreferenceKeys.*;
-import static org.odk.collect.android.preferences.AgKeys.ag;
+import static org.odk.collect.android.preferences.AdminAndGeneralKeys.ag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,42 +58,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     protected static final int IMAGE_CHOOSER = 0;
 
     /** Encapsulate the findPreference deprecation warning */
-    private Preference pref(String key) {
+    Preference pref(String key) {
         return findPreference(key);
     }
 
     /** Allow shorter code to get ListPreferences */
     private ListPreference listPref(String key) {
         return (ListPreference) pref(key);
-    }
-
-    /** Removes any preferences from the category that are excluded by the admin settings,
-     * and deletes the entire category if it is then empty.
-     * @param resId the resource ID of the PreferenceCategory
-     * @param prefKeys one or more preference key strings belonging to the PreferenceCategory.
-     */
-    private void removeDisallowedPrefs(int resId, AgKeys... prefKeys) {
-        final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
-        final PreferenceCategory category = (PreferenceCategory) pref(getString(resId));
-
-        if (category == null)
-            return;
-
-        final SharedPreferences adminPreferences = getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-        for (AgKeys prefKey : prefKeys) {
-            final boolean prefAllowed = adminPreferences.getBoolean(prefKey.adminKey, true);
-
-            if (!prefAllowed && !adminMode) {
-                category.removePreference(pref(prefKey.generalKey));
-            }
-        }
-
-        if (category.getPreferenceCount() == 0 && !adminMode) {
-            getPreferenceScreen().removePreference(category);
-        }
     }
 
     @Override
@@ -106,7 +76,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
 
-        removeAllDisallowedPrefs();
+        removeAllDisabledPrefs();
 
         // ToDo: order these logically
         initProtocolPrefs(adminMode);
@@ -120,43 +90,28 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         initMapPrefs();
     }
 
-    private void removeAllDisallowedPrefs() {
-        // ToDo: Encode these somehow, or extract from metadata?
-        removeDisallowedPrefs(R.string.autosend,
+    private void removeAllDisabledPrefs() {
+        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this);
+        preferencesRemover.remove(
                 ag(AdminKeys.KEY_AUTOSEND_WIFI),
-                ag(AdminKeys.KEY_AUTOSEND_NETWORK));
-
-        removeDisallowedPrefs(R.string.server_preferences,
+                ag(AdminKeys.KEY_AUTOSEND_NETWORK),
                 ag(AdminKeys.KEY_CHANGE_SERVER),
-                ag(AdminKeys.KEY_CHANGE_PROTOCOL_SETTINGS));
-
-        removeDisallowedPrefs(R.string.client,
+                ag(AdminKeys.KEY_CHANGE_PROTOCOL_SETTINGS),
                 ag(AdminKeys.KEY_DEFAULT_TO_FINALIZED),
                 ag(AdminKeys.KEY_DELETE_AFTER_SEND),
-                ag(AdminKeys.KEY_HIGH_RESOLUTION)
-        );
-
-        removeDisallowedPrefs(R.string.client,
+                ag(AdminKeys.KEY_HIGH_RESOLUTION),
                 ag(AdminKeys.KEY_SHOW_SPLASH_SCREEN, KEY_SHOW_SPLASH),
-                ag(AdminKeys.KEY_SHOW_SPLASH_SCREEN, KEY_SPLASH_PATH));
-
-        removeDisallowedPrefs(R.string.analytics_preferences, ag(AdminKeys.KEY_ANALYTICS));
-
-        removeDisallowedPrefs(R.string.client, ag(AdminKeys.KEY_CHANGE_FONT_SIZE));
-
-        removeDisallowedPrefs(R.string.client, ag(AdminKeys.KEY_CONSTRAINT_BEHAVIOR));
-
-        removeDisallowedPrefs(R.string.map_preferences,
+                ag(AdminKeys.KEY_SHOW_SPLASH_SCREEN, KEY_SPLASH_PATH),
+                ag(AdminKeys.KEY_ANALYTICS),
+                ag(AdminKeys.KEY_CHANGE_FONT_SIZE),
+                ag(AdminKeys.KEY_CONSTRAINT_BEHAVIOR),
                 ag(AdminKeys.KEY_SHOW_MAP_SDK),
-                ag(AdminKeys.KEY_SHOW_MAP_BASEMAP));
-
-        removeDisallowedPrefs(R.string.client, ag(AdminKeys.KEY_NAVIGATION));
-
-        removeDisallowedPrefs(R.string.server_preferences,
+                ag(AdminKeys.KEY_SHOW_MAP_BASEMAP),
+                ag(AdminKeys.KEY_NAVIGATION),
                 ag(AdminKeys.KEY_CHANGE_PASSWORD),
-                ag(AdminKeys.KEY_CHANGE_USERNAME));
-
-        removeDisallowedPrefs(R.string.server_preferences, ag(AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT));
+                ag(AdminKeys.KEY_CHANGE_USERNAME),
+                ag(AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT));
+        preferencesRemover.removeEmptyCategories();
     }
 
     private void initAnalyticsPref() {
