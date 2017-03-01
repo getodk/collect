@@ -47,6 +47,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
@@ -129,12 +130,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             return;
         }
 
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMap(googleMap);
-            }
-        });
+        if (PlayServicesUtil.checkPlayServices(GeoPointMapActivity.this)) {
+            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    setupMap(googleMap);
+                }
+            });
+        }
     }
 
     @Override

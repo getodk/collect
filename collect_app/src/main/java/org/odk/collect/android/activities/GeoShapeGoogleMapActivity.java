@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
@@ -104,13 +105,16 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         setContentView(R.layout.geoshape_google_layout);
 
 
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMap(googleMap);
-            }
-        });
+        if (PlayServicesUtil.checkPlayServices(GeoShapeGoogleMapActivity.this)) {
+
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    setupMap(googleMap);
+                }
+            });
+        }
     }
 
 
