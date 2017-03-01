@@ -117,7 +117,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     protected void onPause() {
         super.onPause();
-        mLocationManager.removeUpdates(this);
+        if(mLocationManager!=null)
+            mLocationManager.removeUpdates(this);
 
     }
 

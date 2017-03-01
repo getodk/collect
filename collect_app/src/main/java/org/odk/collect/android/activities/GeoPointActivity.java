@@ -130,7 +130,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
         super.onPause();
 
         // stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
-        mLocationManager.removeUpdates(this);
+        if(mLocationManager!=null)
+            mLocationManager.removeUpdates(this);
 
         // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
         // leaking memory.
@@ -143,13 +144,16 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGPSOn) {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        if(mLocationManager!=null) {
+            if (mGPSOn) {
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            }
+            if (mNetworkOn) {
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            }
         }
-        if (mNetworkOn) {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        }
-        mLocationDialog.show();
+        if(mLocationDialog!=null)
+            mLocationDialog.show();
     }
 
     @Override
