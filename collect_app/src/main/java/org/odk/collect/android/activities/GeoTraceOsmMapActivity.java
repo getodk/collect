@@ -352,14 +352,18 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-        mHelper.setBasemap();
+        if (mapView != null) {
+            mHelper.setBasemap();
+        }
         upMyLocationOverlayLayers();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mMyLocationOverlay.enableMyLocation();
+        if (mMyLocationOverlay != null) {
+            mMyLocationOverlay.enableMyLocation();
+        }
 //		if(mMyLocationOverlay.getMyLocation()!= null){
 //			mMyLocationOverlay.runOnFirstFix(centerAroundFix);
 //		}
