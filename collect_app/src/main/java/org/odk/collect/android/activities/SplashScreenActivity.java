@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SplashScreenActivity extends Activity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;
@@ -219,19 +219,19 @@ public class SplashScreenActivity extends Activity {
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

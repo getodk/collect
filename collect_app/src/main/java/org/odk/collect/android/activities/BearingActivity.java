@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,7 +29,7 @@ import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
-public class BearingActivity extends Activity implements SensorEventListener {
+public class BearingActivity extends AppCompatActivity implements SensorEventListener {
     private ProgressDialog mBearingDialog;
 
     private SensorManager mSensorManager;
@@ -77,12 +77,12 @@ public class BearingActivity extends Activity implements SensorEventListener {
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

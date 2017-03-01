@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.views;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +23,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -144,7 +144,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             Intent i = new Intent("android.intent.action.VIEW");
             i.setDataAndType(Uri.fromFile(videoFile), "video/*");
             try {
-                ((Activity) getContext()).startActivity(i);
+                ((AppCompatActivity) getContext()).startActivity(i);
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found, "view video"),

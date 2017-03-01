@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -50,7 +50,7 @@ import java.util.Set;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
+public class InstanceUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
     private final static String TAG = "InstanceUploaderActiv";
     private final static int PROGRESS_DIALOG = 1;
@@ -143,7 +143,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
@@ -174,10 +174,10 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
 
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mInstanceUploaderTask;
-    }
+//    @Override
+//    public Object onRetainNonConfigurationInstance() {
+//        return mInstanceUploaderTask;
+//    }
 
     @Override
     protected void onPause() {
@@ -191,7 +191,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
@@ -369,7 +369,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertShowing = true;
         mAlertMsg = message;

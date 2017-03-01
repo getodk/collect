@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -92,7 +92,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
                 Collect.getInstance().getFormController()
                         .setIndexWaitingForData(mPrompt.getIndex());
-                ((Activity) getContext()).startActivityForResult(i,
+                ((AppCompatActivity) getContext()).startActivityForResult(i,
                         FormEntryActivity.BEARING_CAPTURE);
             }
         });

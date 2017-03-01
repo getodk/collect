@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -104,7 +104,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
                 if (s.length() != 0) {
                     i.putExtra(TRACE_LOCATION, s);
                 }
-                ((Activity) getContext()).startActivityForResult(i,
+                ((AppCompatActivity) getContext()).startActivityForResult(i,
                         FormEntryActivity.GEOTRACE_CAPTURE);
 
             }

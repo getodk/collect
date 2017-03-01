@@ -14,8 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -67,7 +67,7 @@ import java.util.Map.Entry;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends Activity {
+public class MainMenuActivity extends AppCompatActivity {
     private static final String t = "MainMenuActivity";
 
     private static final int PASSWORD_DIALOG = 1;
@@ -365,12 +365,12 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
@@ -455,7 +455,7 @@ public class MainMenuActivity extends Activity {
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
 

@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.Log;
@@ -199,7 +199,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         i.putExtra("value", mPrompt.getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), mPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
+        ((AppCompatActivity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_STRING_CAPTURE);
     }
 

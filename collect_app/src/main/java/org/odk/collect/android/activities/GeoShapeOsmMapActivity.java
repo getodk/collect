@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -60,7 +60,7 @@ import java.util.ArrayList;
  */
 
 
-public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
+public class GeoShapeOsmMapActivity extends AppCompatActivity implements IRegisterReceiver {
     private MapView mMap;
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private PathOverlay pathOverlay;

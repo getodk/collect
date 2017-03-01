@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -171,7 +171,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
                 intentName, mPrompt.getIndex());
         Intent i = new Intent(intentName);
-        ((Activity) getContext()).startActivity(i);
+        ((AppCompatActivity) getContext()).startActivity(i);
 
         String[] splits;
         if (s != null) {
@@ -209,7 +209,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         //send the printDataBundle to the activity via broadcast intent
         Intent bcastIntent = new Intent(intentName + ".data");
         bcastIntent.putExtra("DATA", printDataBundle);
-        ((Activity) getContext()).sendBroadcast(bcastIntent);
+        ((AppCompatActivity) getContext()).sendBroadcast(bcastIntent);
     }
 
     @Override

@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -23,6 +22,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -147,7 +147,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 try {
                     Collect.getInstance().getFormController().setIndexWaitingForData(
                             mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
+                    ((AppCompatActivity) getContext()).startActivityForResult(i,
                             FormEntryActivity.ALIGNED_IMAGE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
@@ -182,7 +182,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
+                    ((AppCompatActivity) getContext()).startActivityForResult(i,
                             FormEntryActivity.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),

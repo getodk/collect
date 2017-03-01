@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -163,7 +164,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
         try {
             Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
+            ((AppCompatActivity) getContext()).startActivityForResult(i,
                     FormEntryActivity.SIGNATURE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
