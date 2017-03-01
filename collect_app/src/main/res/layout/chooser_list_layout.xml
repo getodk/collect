@@ -17,7 +17,9 @@ the License.
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent"
+	android:descendantFocusability="beforeDescendants"
+	android:focusableInTouchMode="true">
 		<TextView
 			android:id="@+id/status_text"
 			android:layout_width="fill_parent"
@@ -31,6 +33,40 @@ the License.
 			android:paddingBottom="4dip"
 			android:paddingTop="4dip"
 			android:background="#DDDDDD"/>
+		<LinearLayout
+			android:id="@+id/searchBoxLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:visibility="gone">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<EditText android:id="@+id/inputSearch"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="45dp"
+					android:layout_marginLeft="10dp"
+					android:layout_marginTop="5dp"
+					android:inputType="textFilter"/>
+
+				<ImageView
+					android:layout_width="32dp"
+					android:layout_height="32dp"
+					android:layout_marginTop="11dp"
+					android:layout_marginBottom="7dp"
+					android:layout_marginRight="10dp"
+					android:background="@android:drawable/ic_menu_search"/>
+			</LinearLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="@android:color/darker_gray"/>
+		</LinearLayout>
 		<ListView
 			android:id="@id/android:list"
 			android:layout_width="fill_parent"

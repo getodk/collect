@@ -22,18 +22,28 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SearchableAdapter;
 import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -43,9 +53,15 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  */
 public class InstanceChooserList extends ListActivity {
 
+    private static final String SEARCH_BOX_VISIBILITY = "searchBoxVisibility";
+    private static final int MENU_FILTER = Menu.FIRST;
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
+
+    private boolean mEditSavedMode;
+
+    private LinearLayout mSearchBoxLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +78,8 @@ public class InstanceChooserList extends ListActivity {
         setContentView(R.layout.chooser_list_layout);
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
+
+        mSearchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
 
         Cursor cursor;
         InstancesDao instancesDao = new InstancesDao();
@@ -83,13 +101,30 @@ public class InstanceChooserList extends ListActivity {
         // render total instance view
         SimpleCursorAdapter instances;
         if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
-            instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
+            setupAdapter();
+            setupSearchBox();
+            mEditSavedMode = true;
         } else {
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
             instances = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
+            setListAdapter(instances);
+            mEditSavedMode = false;
         }
+    }
 
-        setListAdapter(instances);
+    private void setupAdapter() {
+        Cursor c = new InstancesDao().getUnsentInstancesCursor();
+
+        List<SearchableAdapter.ListElement> listElements = new ArrayList<>();
+        while (c.moveToNext()) {
+            long id = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+            String name = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+            String subtext = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_SUBTEXT));
+
+            listElements.add(new SearchableAdapter.ListElement(id, name, subtext));
+        }
+        SearchableAdapter searchableAdapter = new SearchableAdapter(this, listElements);
+        setListAdapter(searchableAdapter);
     }
 
 
@@ -104,11 +139,20 @@ public class InstanceChooserList extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
-        Cursor c = (Cursor) getListAdapter().getItem(position);
-        startManagingCursor(c);
-        Uri instanceUri =
-                ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                        c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+        Cursor c;
+        Uri instanceUri;
+        if (mEditSavedMode) {
+            SearchableAdapter.ListElement listElement = (SearchableAdapter.ListElement)
+                    getListAdapter().getItem(position);
+            instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, listElement.getId());
+
+            c = managedQuery(instanceUri, null, null, null, null);
+            c.moveToFirst();
+        } else {
+            c = (Cursor) getListAdapter().getItem(position);
+            startManagingCursor(c);
+            instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+        }
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 instanceUri.toString());
@@ -157,6 +201,77 @@ public class InstanceChooserList extends ListActivity {
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
+        super.onCreateOptionsMenu(menu);
+
+        menu
+                .add(0, MENU_FILTER, 0, R.string.general_preferences)
+                .setIcon(R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(MENU_FILTER).setVisible(mEditSavedMode);
+        return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SEARCH_BOX_VISIBILITY, mSearchBoxLayout.getVisibility() == View.VISIBLE);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mSearchBoxLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_FILTER:
+                if (mSearchBoxLayout.getVisibility() == View.GONE) {
+                    mSearchBoxLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mSearchBoxLayout.setVisibility(View.GONE);
+                }
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupSearchBox() {
+        EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                performFiltering(s);
+            }
+        });
+    }
+
+    private void performFiltering(CharSequence filter) {
+        ((SearchableAdapter) getListAdapter()).getFilter().filter(filter);
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
