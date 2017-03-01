@@ -355,6 +355,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         if (mapView != null) {
             mHelper.setBasemap();
         }
+
         upMyLocationOverlayLayers();
     }
 
@@ -364,6 +365,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         if (mMyLocationOverlay != null) {
             mMyLocationOverlay.enableMyLocation();
         }
+
 //		if(mMyLocationOverlay.getMyLocation()!= null){
 //			mMyLocationOverlay.runOnFirstFix(centerAroundFix);
 //		}

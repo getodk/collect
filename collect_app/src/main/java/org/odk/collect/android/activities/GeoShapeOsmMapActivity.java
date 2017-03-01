@@ -203,6 +203,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         if (mMap != null) {
             mHelper.setBasemap();
         }
+
         upMyLocationOverlayLayers();
     }
 
