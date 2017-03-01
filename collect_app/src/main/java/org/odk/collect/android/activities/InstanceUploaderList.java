@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,9 +37,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -54,9 +52,8 @@ import org.odk.collect.android.utilities.ListViewUtils;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends ListActivity implements OnLongClickListener {
-
-    private final ActivityLogger logger = Collect.getInstance().getActivityLogger();
+public class InstanceUploaderList extends AppListActivity implements OnLongClickListener {
+    private final String t = getClass().getSimpleName();
     private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
@@ -81,7 +78,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
         mUploadButton.setOnClickListener(new OnClickListener() {
 
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View v) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                         Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
@@ -97,8 +94,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
                     Toast.makeText(InstanceUploaderList.this,
                             R.string.no_connection, Toast.LENGTH_SHORT).show();
                 } else {
-                    ListView lv = getListView();
-                    int checkedItemCount = lv.getCheckedItemCount();
+                    int checkedItemCount = getCheckedCount();
                     logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
                     if (checkedItemCount > 0) {
@@ -160,10 +156,6 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
     protected void onStop() {
         logger.logOnStop(this);
         super.onStop();
-    }
-
-    private boolean areCheckedItems() {
-        return getListView().getCheckedItemCount() > 0;
     }
 
     private void uploadSelectedFiles() {
@@ -241,33 +233,23 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
+        Log.d(t, "onRestoreInstanceState");
         super.onRestoreInstanceState(bundle);
-        int[] checkedPositions = bundle.getIntArray(BUNDLE_SELECTED_ITEMS_KEY);
-        if (checkedPositions != null) {
-            ListView lv = getListView();
-            for (int pos : checkedPositions) {
-                lv.setItemChecked(pos, true);
-            }
-        }
+        checkItemsAtPositions(getListView(), bundle.getIntArray(BUNDLE_SELECTED_ITEMS_KEY));
         mUploadButton.setEnabled(areCheckedItems());
     }
 
+    /**
+     * Saves the state of checkboxes. This was determined to be necessary and first
+     * implemented with change
+     * https://github.com/opendatakit/collect/commit/01696cf5b8ba528e949529cf7a5ab7b295196886.
+     * As of 2017-Mar-01 we don’t know if it is still needed.
+     */
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
+        Log.d(t, "onSaveInstanceState");
         super.onSaveInstanceState(bundle);
-        bundle.putIntArray(BUNDLE_SELECTED_ITEMS_KEY, getCheckedItemPositions(getListView()));
-    }
-
-    private int[] getCheckedItemPositions(ListView lv) { // ToDo: eventually move to ListViewUtils, perhaps
-        int itemCount = lv.getCount();
-        int checkedItemCount = lv.getCheckedItemCount();
-        int[] checkedPositions = new int[checkedItemCount];
-        int checkedPosIdx = 0;
-        for (int posIdx = 0; posIdx < itemCount; ++posIdx) {
-            if (lv.isItemChecked(posIdx))
-                checkedPositions[checkedPosIdx++] = posIdx;
-        }
-        return checkedPositions;
+        bundle.putIntArray(BUNDLE_SELECTED_ITEMS_KEY, getCheckedItemInfo(getListView()).positions);
     }
 
     @Override
