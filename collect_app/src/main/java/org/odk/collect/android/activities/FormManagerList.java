@@ -33,6 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManagerList extends ListActivity implements DiskSyncListener,
+public class FormManagerList extends AppListActivity implements DiskSyncListener,
         DeleteFormsListener {
     private static String t = "FormManagerList";
     private static final String SELECTED = "selected";
@@ -58,7 +59,6 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
     private Button mDeleteButton;
     private Button mToggleButton;
 
-    private SimpleCursorAdapter mInstances;
     private ArrayList<Long> mSelected = new ArrayList<Long>();
 
     static class BackgroundTasks {
@@ -122,9 +122,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
 
         // render total instance view
-        mInstances = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this,
+        SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this,
                 R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(mInstances);
+        setListAdapter(cursorAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(!(mSelected.size() == 0));

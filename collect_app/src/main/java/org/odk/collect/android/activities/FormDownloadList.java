@@ -85,8 +85,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
 
-    public static final String LIST_URL = "listurl";
-
     private static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
     private static final String FORMID_DISPLAY = "formiddisplay";
@@ -105,7 +103,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private DownloadFormListTask mDownloadFormListTask;
     private DownloadFormsTask mDownloadFormsTask;
     private Button mToggleButton;
-    private Button mRefreshButton;
 
     private HashMap<String, FormDetails> mFormNamesAndURLs = new HashMap<String, FormDetails>();
     private SimpleAdapter mFormListAdapter;
@@ -149,7 +146,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             }
         });
 
-        mRefreshButton = (Button) findViewById(R.id.refresh_button);
+        Button mRefreshButton = (Button) findViewById(R.id.refresh_button);
         mRefreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
