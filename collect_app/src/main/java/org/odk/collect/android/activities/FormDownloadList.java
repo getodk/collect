@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -500,20 +501,15 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             return true;
         }
 
-        String[] selectionArgs = {formId};
-        String selection = FormsColumns.JR_FORM_ID + "=?";
-        String[] fields = {FormsColumns.JR_VERSION};
-
         Cursor formCursor = null;
         try {
-            formCursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI,
-                    fields, selection, selectionArgs, null);
+            formCursor = new FormsDao().getFormsCursorForFormId(formId);
             if (formCursor.getCount() == 0) {
                 // form does not already exist locally
                 return true;
             }
             formCursor.moveToFirst();
-            int idxJrVersion = formCursor.getColumnIndex(fields[0]);
+            int idxJrVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
             if (formCursor.isNull(idxJrVersion)) {
                 // any non-null version on server is newer
                 return (latestVersion != null);

@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -115,7 +116,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         });
 
         String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
-        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
+        Cursor c = new FormsDao().getFormsCursor(sortOrder);
 
         String[] data = new String[]{FormsColumns.DISPLAY_NAME,
                 FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
