@@ -41,7 +41,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.utilities.ListViewUtils;
@@ -149,7 +148,7 @@ public class InstanceUploaderList extends ListActivity implements
         });
         mToggleButton.setOnLongClickListener(this);
 
-        Cursor c = mShowUnsent ? mInstanceDao.getFinalizedInstancesCursor() : mInstanceDao.getAllCompletedInstancesCursor();
+        Cursor c = mShowUnsent ? mInstanceDao.getFinalizedInstancesCursor() : mInstanceDao.getAllCompletedUndeletedInstancesCursor();
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
                 InstanceColumns.DISPLAY_SUBTEXT};
@@ -349,7 +348,7 @@ public class InstanceUploaderList extends ListActivity implements
     }
 
     private void showAll() {
-        Cursor c = mInstanceDao.getAllCompletedInstancesCursor();
+        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor();
         Cursor old = mInstances.getCursor();
         try {
             mInstances.changeCursor(c);
