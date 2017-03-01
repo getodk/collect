@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -16,94 +15,96 @@ the License.
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentTop="true" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentTop="true">
 
     <LinearLayout
-            android:id="@+id/buttonholder"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal" >
+        android:id="@+id/buttonholder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <Button
-                android:id="@+id/back_button"
-                android:text="@string/go_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:layout_weight="1"/>
+            android:id="@+id/back_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:text="@string/go_back"
+            android:textSize="16sp" />
+
         <Button
-                android:id="@+id/download_button"
-                android:text="@string/download_selected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                android:enabled="false"/>
+            android:id="@+id/download_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:padding="12dp"
+            android:text="@string/download_selected"
+            android:textSize="16sp" />
+
         <Button
-                android:id="@+id/root_button"
-                android:text="@string/go_shared"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:layout_weight="1"/>
+            android:id="@+id/root_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:text="@string/go_shared"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
 
     <LinearLayout
-            android:background="#ECECEC"
-            android:id="@+id/searchholder"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+        android:id="@+id/searchholder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="#ECECEC"
+        android:orientation="horizontal">
 
         <EditText
-                android:imeOptions="actionSearch"
-				android:paddingStart="8dip"
-                android:paddingLeft="8dip"
-				android:paddingEnd="8dip"
-                android:paddingRight="8dip"
-                android:paddingBottom="0dip"
-                android:minHeight="50dp"
-                android:id="@+id/search_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:inputType="textShortMessage" />
+            android:id="@+id/search_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:ellipsize="end"
+            android:imeOptions="actionSearch"
+            android:inputType="textShortMessage"
+            android:minHeight="50dp"
+            android:paddingBottom="0dip"
+            android:paddingEnd="8dip"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip"
+            android:paddingStart="8dip"
+            android:singleLine="true" />
 
         <ImageButton
-                android:id="@+id/search_button"
-                android:layout_width="60dp"
-                android:layout_height="fill_parent"
-                android:src="@drawable/ic_action_action_search"
-                android:enabled="false"/>
+            android:id="@+id/search_button"
+            android:layout_width="60dp"
+            android:layout_height="fill_parent"
+            android:enabled="false"
+            android:src="@drawable/ic_action_action_search" />
 
     </LinearLayout>
 
     <ListView
-            android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/searchholder"
-            android:layout_above="@+id/buttonholder"
-            />
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/buttonholder"
+        android:layout_below="@+id/searchholder" />
 
     <TextView
-            android:id="@android:id/empty"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text="@string/no_items_display"
-            android:textSize="21sp" />
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:text="@string/no_items_display"
+        android:textSize="21sp" />
 
 
 </RelativeLayout>
