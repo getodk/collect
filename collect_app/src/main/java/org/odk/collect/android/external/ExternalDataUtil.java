@@ -32,6 +32,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.InvalidSyntaxException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
+import org.odk.collect.android.helpers.RegexTemplates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public final class ExternalDataUtil {
     public static final String EXTERNAL_DATA_TABLE_NAME = "externalData";
     public static final String SORT_COLUMN_NAME = "c_sortby";
 
-    private static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
+    private static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile(RegexTemplates.SEARCH_FUNCTION);
     private static final String COLUMN_SEPARATOR = ",";
     private static final String FALLBACK_COLUMN_SEPARATOR = " ";
     public static final String JR_IMAGES_PREFIX = "jr://images/";
@@ -74,7 +75,7 @@ public final class ExternalDataUtil {
     public static String toSafeColumnName(String columnName) {
         // SCTO-567 - begin all column names with "c_" to avoid possible conflicts with
         // reserved keywords; also, escape any potentially-illegal characters
-        return "c_" + columnName.trim().replaceAll("[^A-Za-z0-9_]", "_").toLowerCase(
+        return "c_" + columnName.trim().replaceAll(RegexTemplates.SAFE_COLUMN_NAME, "_").toLowerCase(
                 Locale.ENGLISH);
     }
 

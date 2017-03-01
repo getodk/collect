@@ -34,6 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.helpers.RegexTemplates;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
@@ -129,7 +130,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     public void setBinaryData(Object answer) {
         String sResponse = (String) answer;
         if (sResponse != null) {      // It looks like the answer is not set to null even if no barcode captured, however it seems prudent to check
-            sResponse = sResponse.replaceAll("\\p{C}", "");
+            sResponse = sResponse.replaceAll(RegexTemplates.BARCODE_RESPONSE, "");
         }
         mStringAnswer.setText(sResponse);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);

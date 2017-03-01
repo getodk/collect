@@ -25,6 +25,7 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.TaskCancelledException;
+import org.odk.collect.android.helpers.RegexTemplates;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -298,8 +299,8 @@ public class DownloadFormsTask extends
      */
     private FileResult downloadXform(String formName, String url) throws Exception {
         // clean up friendly form name...
-        String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
-        rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
+        String rootName = formName.replaceAll(RegexTemplates.FORM_NAME, " ");
+        rootName = rootName.replaceAll(RegexTemplates.ROOT_NAME, " ");
         rootName = rootName.trim();
 
         // proposed name of xml file...

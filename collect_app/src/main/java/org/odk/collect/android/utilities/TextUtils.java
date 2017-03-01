@@ -16,6 +16,8 @@ package org.odk.collect.android.utilities;
 
 import android.text.Html;
 
+import org.odk.collect.android.helpers.RegexTemplates;
+
 import java.util.regex.MatchResult;
 
 public class TextUtils {
@@ -48,7 +50,7 @@ public class TextUtils {
         // throw away all styles except for color and font-family
         private String sanitizeAttributes(String attributes) {
 
-            String stylesText = attributes.replaceAll("style=[\"'](.*?)[\"']", "$1");
+            String stylesText = attributes.replaceAll(RegexTemplates.STYLES, "$1");
             String[] styles = stylesText.trim().split(";");
             StringBuffer stylesOutput = new StringBuffer();
 
@@ -71,21 +73,21 @@ public class TextUtils {
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
 
         // span - replaced &lt; and &gt; with <>
-        text = ReplaceCallback.replace("(?s)<\\s?span([^\\/\n]*)>((?:(?!<\\/).)+)<\\/\\s?span\\s?>",
+        text = ReplaceCallback.replace(RegexTemplates.HTML_SPAN,
                 text, createSpan);
         // strong
-        text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
-        text = text.replaceAll("(?s)\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+        text = text.replaceAll(RegexTemplates.HTML_STRONG_1, "<strong>$1</strong>");
+        text = text.replaceAll(RegexTemplates.HTML_STRONG_2, "<strong>$1</strong>");
         // emphasis
-        text = text.replaceAll("(?s)_([^\\s][^_\n]*)_", "<em>$1</em>");
-        text = text.replaceAll("(?s)\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
+        text = text.replaceAll(RegexTemplates.HTML_EMPHASIS_1, "<em>$1</em>");
+        text = text.replaceAll(RegexTemplates.HTML_EMPHASIS_2, "<em>$1</em>");
         // links
-        text = text.replaceAll("(?s)\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
+        text = text.replaceAll(RegexTemplates.HTML_LINKS,
                 "<a href=\"$2\" target=\"_blank\">$1</a>");
         // headers - requires ^ or breaks <font color="#f58a1f">color</font>
-        text = ReplaceCallback.replace("(?s)^(#+)([^\n]*)$", text, createHeader);
+        text = ReplaceCallback.replace(RegexTemplates.HTML_HEADERS, text, createHeader);
         // paragraphs
-        text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
+        text = ReplaceCallback.replace(RegexTemplates.HTML_PARAGRAPHS, text, createParagraph);
 
         return text;
     }
