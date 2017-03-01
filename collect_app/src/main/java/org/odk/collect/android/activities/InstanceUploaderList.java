@@ -307,7 +307,7 @@ public class InstanceUploaderList extends ListActivity implements OnLongClickLis
 
     private void showAll() {
         Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor();
-        Cursor old = mInstances.getCursor();
+        Cursor old = mCursorAdapter.getCursor();
         try {
             mCursorAdapter.changeCursor(c);
         } finally {
