@@ -183,8 +183,9 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     @Override
     protected void onPause() {
         super.onPause();
-        if(mLocationManager!=null)
+        if (mLocationManager != null) {
             mLocationManager.removeUpdates(this);
+        }
     }
 
     private void setupMap(GoogleMap googleMap) {

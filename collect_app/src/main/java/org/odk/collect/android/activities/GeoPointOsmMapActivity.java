@@ -317,19 +317,21 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     @Override
     protected void onPause() {
         super.onPause();
-        if(mLocationManager!=null)
+        if (mLocationManager != null) {
             mLocationManager.removeUpdates(this);
+        }
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mMap!=null)
+        if (mMap != null) {
             mHelper.setBasemap();
-        if(mLocationManager!=null)
+        }
+        if (mLocationManager != null) {
             upMyLocationOverlayLayers();
-
+        }
     }
 
     private void upMyLocationOverlayLayers() {

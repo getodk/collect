@@ -415,8 +415,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     private void disableMyLocation() {
-        if(mLocationManager!=null)
+        if (mLocationManager != null) {
             mLocationManager.removeUpdates(this);
+        }
     }
 
     private String generateReturnString() {

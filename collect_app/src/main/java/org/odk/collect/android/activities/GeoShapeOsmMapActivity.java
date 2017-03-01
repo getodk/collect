@@ -200,9 +200,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-        if(mMap!=null)
+        if (mMap != null) {
             mHelper.setBasemap();
-
+        }
         upMyLocationOverlayLayers();
     }
 
