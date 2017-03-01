@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2017 Nyoman Ribeka
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -21,6 +21,7 @@ import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -127,6 +128,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
                                 values.put(InstanceColumns.JR_VERSION, jrVersion);
+                                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+                                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
                                 // save the new instance object
                                 Collect.getInstance().getContentResolver()
                                         .insert(InstanceColumns.CONTENT_URI, values);
