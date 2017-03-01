@@ -31,6 +31,7 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -52,12 +53,13 @@ import java.util.List;
  *         constraint behavior option)
  */
 public class PreferencesActivity extends AppPreferenceActivity implements OnPreferenceChangeListener {
-
+    private final String TAG = getClass().getSimpleName();
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -79,27 +81,101 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
         initMapPrefs();
     }
 
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+
+        // has to go in onResume because it may get updated by
+        // adminKey sub-preference screen
+        // this just keeps the widgets in sync
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        ListPreference googleAccountPreference = listPref(KEY_SELECTED_GOOGLE_ACCOUNT);
+        if (googleAccountPreference != null) {
+            String account = sp.getString(KEY_SELECTED_GOOGLE_ACCOUNT, "");
+            googleAccountPreference.setSummary(account);
+            googleAccountPreference.setValue(account);
+        }
+
+        final EditTextPreference usernamePreference = (EditTextPreference) pref(KEY_USERNAME);
+        if (usernamePreference != null) {
+            String user = sp.getString(KEY_USERNAME, "");
+            usernamePreference.setSummary(user);
+            usernamePreference.setText(user);
+        }
+
+        final EditTextPreference passwordPreference = (EditTextPreference) pref(KEY_PASSWORD);
+        if (passwordPreference != null) {
+            String pw = sp.getString(KEY_PASSWORD, "");
+            if (pw.length() > 0) {
+                passwordPreference.setSummary("********");
+                passwordPreference.setText(pw);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+
+        // the property manager should be re-assigned, as properties
+        // may have changed.
+        IPropertyManager mgr = new PropertyManager(this);
+        FormController.initializeJavaRosa(mgr);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.d(TAG, "onActivityResult " + requestCode + " " + resultCode);
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_CANCELED) {
+            // request was canceled, so do nothing
+            return;
+        }
+
+        switch (requestCode) {
+            case IMAGE_CHOOSER:
+
+                // get gp of chosen file
+                Uri selectedMedia = intent.getData();
+                String sourceMediaPath = MediaUtils.getPathFromUri(this, selectedMedia,
+                        Images.Media.DATA);
+
+                // setting image path
+                setSplashPath(sourceMediaPath);
+                break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
+    }
+
     private void removeAllDisabledPrefs() {
         DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this);
-        preferencesRemover.remove(
-                ag(AdminKeys.KEY_AUTOSEND_WIFI),
-                ag(AdminKeys.KEY_AUTOSEND_NETWORK),
-                ag(AdminKeys.KEY_CHANGE_SERVER),
-                ag(AdminKeys.KEY_CHANGE_PROTOCOL_SETTINGS),
-                ag(AdminKeys.KEY_DEFAULT_TO_FINALIZED),
-                ag(AdminKeys.KEY_DELETE_AFTER_SEND),
-                ag(AdminKeys.KEY_HIGH_RESOLUTION),
-                ag(AdminKeys.KEY_SHOW_SPLASH_SCREEN, KEY_SHOW_SPLASH),
-                ag(AdminKeys.KEY_SHOW_SPLASH_SCREEN, KEY_SPLASH_PATH),
-                ag(AdminKeys.KEY_ANALYTICS),
-                ag(AdminKeys.KEY_CHANGE_FONT_SIZE),
-                ag(AdminKeys.KEY_CONSTRAINT_BEHAVIOR),
-                ag(AdminKeys.KEY_SHOW_MAP_SDK),
-                ag(AdminKeys.KEY_SHOW_MAP_BASEMAP),
-                ag(AdminKeys.KEY_NAVIGATION),
-                ag(AdminKeys.KEY_CHANGE_PASSWORD),
-                ag(AdminKeys.KEY_CHANGE_USERNAME),
-                ag(AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT));
+        preferencesRemover.remove(AdminKeys.adminToGeneral);
         preferencesRemover.removeEmptyCategories();
     }
 
@@ -355,49 +431,6 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
         return prefIntent;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // the property manager should be re-assigned, as properties
-        // may have changed.
-        IPropertyManager mgr = new PropertyManager(this);
-        FormController.initializeJavaRosa(mgr);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // has to go in onResume because it may get updated by
-        // adminKey sub-preference screen
-        // this just keeps the widgets in sync
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-
-        ListPreference googleAccountPreference = listPref(KEY_SELECTED_GOOGLE_ACCOUNT);
-        if (googleAccountPreference != null) {
-            String account = sp.getString(KEY_SELECTED_GOOGLE_ACCOUNT, "");
-            googleAccountPreference.setSummary(account);
-            googleAccountPreference.setValue(account);
-        }
-
-        final EditTextPreference usernamePreference = (EditTextPreference) pref(KEY_USERNAME);
-        if (usernamePreference != null) {
-            String user = sp.getString(KEY_USERNAME, "");
-            usernamePreference.setSummary(user);
-            usernamePreference.setText(user);
-        }
-
-        final EditTextPreference passwordPreference = (EditTextPreference) pref(KEY_PASSWORD);
-        if (passwordPreference != null) {
-            String pw = sp.getString(KEY_PASSWORD, "");
-            if (pw.length() > 0) {
-                passwordPreference.setSummary("********");
-                passwordPreference.setText(pw);
-            }
-        }
-    }
-
     void setSplashPath(String path) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sharedPreferences.edit();
@@ -408,28 +441,6 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
         String summary = splashPathPreference.getSharedPreferences().getString(
                 KEY_SPLASH_PATH, getString(R.string.default_splash_path));
         splashPathPreference.setSummary(summary);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled, so do nothing
-            return;
-        }
-
-        switch (requestCode) {
-            case IMAGE_CHOOSER:
-
-                // get gp of chosen file
-                Uri selectedMedia = intent.getData();
-                String sourceMediaPath = MediaUtils.getPathFromUri(this, selectedMedia,
-                        Images.Media.DATA);
-
-                // setting image path
-                setSplashPath(sourceMediaPath);
-                break;
-        }
     }
 
     private void setDefaultAggregatePaths() {
