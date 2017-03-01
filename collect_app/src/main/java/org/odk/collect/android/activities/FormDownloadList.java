@@ -111,8 +111,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     private SimpleAdapter mFormListAdapter;
     private ArrayList<HashMap<String, String>> mFormList;
 
-    private int mSelectedCount = 0;
-
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private boolean mShouldExit;
@@ -174,8 +172,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // how many items we've selected
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
-                mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
-                mDownloadButton.setEnabled(mSelectedCount >  0);
+                mDownloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) >  0);
             }
 
             // to restore alert dialog.
