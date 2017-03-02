@@ -18,7 +18,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +31,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
-import org.odk.collect.android.utilities.ListViewUtils;
 
 /**
  * Responsible for displaying and deleting all the saved form instances
@@ -75,8 +73,8 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
             @Override
             public void onClick(View v) {
                 ListView lv = getListView();
-                boolean allChecked = ListViewUtils.toggleChecked(lv);
-                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+                boolean allChecked = toggleChecked(lv);
+                toggleButtonLabel(mToggleButton, getListView());
 
                 mDeleteButton.setEnabled(allChecked);
             }
@@ -209,7 +207,7 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
     protected void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
-        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+        toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(areCheckedItems());
     }
 

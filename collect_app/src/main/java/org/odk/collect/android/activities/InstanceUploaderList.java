@@ -42,7 +42,6 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
-import org.odk.collect.android.utilities.ListViewUtils;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -118,8 +117,8 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
             @Override
             public void onClick(View v) {
                 ListView lv = getListView();
-                boolean allChecked = ListViewUtils.toggleChecked(lv);
-                ListViewUtils.toggleButtonLabel(toggleSelsButton, lv);
+                boolean allChecked = toggleChecked(lv);
+                toggleButtonLabel(toggleSelsButton, lv);
                 mUploadButton.setEnabled(allChecked);
             }
         });
@@ -228,7 +227,7 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
 
         mUploadButton.setEnabled(areCheckedItems());
         Button toggleSelectionsButton = (Button) findViewById(R.id.toggle_button);
-        ListViewUtils.toggleButtonLabel(toggleSelectionsButton, getListView());
+        toggleButtonLabel(toggleSelectionsButton, getListView());
     }
 
     @Override
