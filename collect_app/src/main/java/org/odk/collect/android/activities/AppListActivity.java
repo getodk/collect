@@ -17,7 +17,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.ListActivity;
-import android.support.annotation.NonNull;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -55,11 +54,10 @@ abstract class AppListActivity extends ListActivity {
     }
 
     /** Returns the IDs of the checked items, as an array of Long */
-    @NonNull
     protected Long[] getCheckedIdObjects() {
         long[] checkedIds = getCheckedIds();
         Long[] checkedIdObjects = new Long[checkedIds.length];
-        for (int i = 0; i < checkedIds.length; ++i) {
+        for (int i = 0; i < checkedIds.length; i++) {
             checkedIdObjects[i] = checkedIds[i];
         }
         return checkedIdObjects;
