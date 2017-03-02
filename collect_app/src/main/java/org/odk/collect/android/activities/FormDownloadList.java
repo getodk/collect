@@ -139,6 +139,7 @@ public class FormDownloadList extends AppListActivity implements FormListDownloa
             @Override
             public void onClick(View v) {
                 mDownloadButton.setEnabled(toggleChecked(getListView()));
+                toggleButtonLabel(mToggleButton, getListView());
             }
         });
 
