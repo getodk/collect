@@ -49,8 +49,6 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
 
     DeleteInstancesTask mDeleteInstancesTask = null;
 
-    private static final String SELECTED = "selected";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,15 +120,9 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
+        Log.d(t, "onRestoreInstanceState");
         super.onRestoreInstanceState(bundle);
-        checkItemsAtPositions(getListView(), bundle.getIntArray(SELECTED));
         mDeleteButton.setEnabled(areCheckedItems());
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-        bundle.putIntArray(SELECTED, getCheckedItemInfo().positions);
     }
 
     @Override

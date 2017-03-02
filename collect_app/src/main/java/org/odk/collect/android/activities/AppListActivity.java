@@ -2,13 +2,10 @@ package org.odk.collect.android.activities;
 
 import android.app.ListActivity;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.ListView;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
-
-import java.util.Arrays;
 
 abstract class AppListActivity extends ListActivity {
     private final String t = getClass().getSimpleName();
@@ -60,21 +57,6 @@ abstract class AppListActivity extends ListActivity {
             checkedIdObjects[i] = checkedIds[i];
         }
         return checkedIdObjects;
-    }
-
-    /** Checks the items at the positions contained in checkedPositions */
-    protected void checkItemsAtPositions(ListView lv, int[] checkedPositions) {
-        if (checkedPositions != null) {
-            CheckedItemInfo cii = getCheckedItemInfo(lv);
-            if (! Arrays.equals(cii.positions, checkedPositions)) {
-                Log.d(t, "Setting checkboxes");
-                for (int pos : checkedPositions) {
-                    lv.setItemChecked(pos, true);
-                }
-            } else {
-                Log.d(t, "No checkbox changes needed");
-            }
-        }
     }
 
     protected int getCheckedCount() {

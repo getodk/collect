@@ -52,7 +52,6 @@ import java.util.ArrayList;
 public class FormManagerList extends AppListActivity implements DiskSyncListener,
         DeleteFormsListener {
     private static String t = "FormManagerList";
-    private static final String SELECTED = "selected";
     private static final String syncMsgKey = "syncmsgkey";
 
     private AlertDialog mAlertDialog;
@@ -73,6 +72,7 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(t, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_manage_list);
 
@@ -116,7 +116,7 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
         setListAdapter(cursorAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mDeleteButton.setEnabled(!(getCheckedCount() == 0));
+        mDeleteButton.setEnabled(false);
 
         if (getListView().getCount() == 0) {
             mToggleButton.setEnabled(false);
@@ -158,14 +158,12 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         super.onRestoreInstanceState(bundle);
-        checkItemsAtPositions(getListView(), bundle.getIntArray(SELECTED));
         mDeleteButton.setEnabled(areCheckedItems());
     }
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        bundle.putIntArray(SELECTED, getCheckedItemInfo().positions);
         TextView tv = (TextView) findViewById(R.id.status_text);
         bundle.putString(syncMsgKey, tv.getText().toString());
     }
