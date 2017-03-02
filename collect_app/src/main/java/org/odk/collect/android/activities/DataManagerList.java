@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,7 +130,7 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        bundle.putIntArray(SELECTED, getCheckedItemInfo(getListView()).positions);
+        bundle.putIntArray(SELECTED, getCheckedItemInfo().positions);
     }
 
     @Override
@@ -205,12 +206,7 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
             mDeleteInstancesTask = new DeleteInstancesTask();
             mDeleteInstancesTask.setContentResolver(getContentResolver());
             mDeleteInstancesTask.setDeleteListener(this);
-            long[] checkedIds = getCheckedItemInfo(getListView()).ids;
-            Long[] checkedIdObjects = new Long[checkedIds.length];
-            for (int i = 0; i < checkedIds.length; ++i) {
-                checkedIdObjects[i] = checkedIds[i];
-            }
-            mDeleteInstancesTask.execute(checkedIdObjects);
+            mDeleteInstancesTask.execute(getCheckedIdObjects());
         } else {
             Toast.makeText(this, getString(R.string.file_delete_in_progress),
                     Toast.LENGTH_LONG).show();
@@ -220,9 +216,7 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
     @Override
     protected void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
-
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
-
         ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(areCheckedItems());
     }
