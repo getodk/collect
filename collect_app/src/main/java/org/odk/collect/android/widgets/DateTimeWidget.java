@@ -17,8 +17,11 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
@@ -34,6 +37,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -62,6 +66,9 @@ public class DateTimeWidget extends QuestionWidget {
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
 
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) { // this bug exists only in Android 4.1
+            fixCalendarViewIfJellyBean(mDatePicker.getCalendarView());
+        }
         mTimePicker = new TimePicker(getContext());
         mTimePicker.setId(QuestionWidget.newUniqueId());
         mTimePicker.setFocusable(!prompt.isReadOnly());
@@ -125,7 +132,7 @@ public class DateTimeWidget extends QuestionWidget {
             }
         });
 
-        setGravity(Gravity.LEFT);
+        setGravity(Gravity.START);
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         if (showCalendar) {
@@ -143,6 +150,61 @@ public class DateTimeWidget extends QuestionWidget {
 
         // If there's an answer, use it.
         setAnswer();
+    }
+
+    private void fixCalendarViewIfJellyBean(CalendarView calendarView) {
+        try {
+            Object object = calendarView;
+            Field[] fields = object.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if (field.getName().equals("mDelegate")) { // the CalendarViewLegacyDelegate instance is stored in this variable
+                    field.setAccessible(true);
+                    object = field.get(object);
+                    break;
+                }
+            }
+
+            Field field = object.getClass().getDeclaredField("mDateTextSize"); // text size integer value
+            field.setAccessible(true);
+            final int mDateTextSize = (Integer) field.get(object);
+
+            field = object.getClass().getDeclaredField("mListView"); // main ListView
+            field.setAccessible(true);
+            Object innerObject = field.get(object);
+
+            Method method = innerObject.getClass().getMethod(
+                    "setOnHierarchyChangeListener", ViewGroup.OnHierarchyChangeListener.class); // we need to set the OnHierarchyChangeListener
+            method.setAccessible(true);
+            method.invoke(innerObject, (Object) new ViewGroup.OnHierarchyChangeListener() {
+                @Override
+                public void onChildViewAdded(View parent, View child) { // apply text size every time when a new child view is added
+                    try {
+                        Object object = child;
+                        Field[] fields = object.getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            if (field.getName().equals("mMonthNumDrawPaint")) { // the paint is stored inside the view
+                                field.setAccessible(true);
+                                object = field.get(object);
+                                Method method = object.getClass().
+                                        getDeclaredMethod("setTextSize", float.class); // finally set text size
+                                method.setAccessible(true);
+                                method.invoke(object, (Object) mDateTextSize);
+
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("DateTimeWidget", e.getMessage(), e);
+                    }
+                }
+
+                @Override
+                public void onChildViewRemoved(View parent, View child) {
+                }
+            });
+        } catch (Exception e) {
+            Log.e("DateTimeWidget", e.getMessage(), e);
+        }
     }
 
     /**
@@ -203,7 +265,7 @@ public class DateTimeWidget extends QuestionWidget {
 
             DateTime ldt =
                     new DateTime(
-                            ((Date) ((DateTimeData) mPrompt.getAnswerValue()).getValue()).getTime
+                            ((Date) mPrompt.getAnswerValue().getValue()).getTime
                                     ());
             mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
                     mDateListener);
