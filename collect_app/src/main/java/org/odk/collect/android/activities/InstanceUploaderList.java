@@ -249,7 +249,7 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
     protected void onSaveInstanceState(Bundle bundle) {
         Log.d(t, "onSaveInstanceState");
         super.onSaveInstanceState(bundle);
-        bundle.putIntArray(BUNDLE_SELECTED_ITEMS_KEY, getCheckedItemInfo(getListView()).positions);
+        bundle.putIntArray(BUNDLE_SELECTED_ITEMS_KEY, getCheckedItemInfo().positions);
     }
 
     @Override
