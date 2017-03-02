@@ -140,7 +140,6 @@ public class FormDownloadList extends AppListActivity implements FormListDownloa
             @Override
             public void onClick(View v) {
                 mDownloadButton.setEnabled(toggleChecked(getListView()));
-                toggleButtonLabel(mToggleButton, getListView());
             }
         });
 
@@ -306,6 +305,12 @@ public class FormDownloadList extends AppListActivity implements FormListDownloa
         }
     }
 
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        toggleButtonLabel(mToggleButton, getListView());
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
