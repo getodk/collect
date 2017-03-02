@@ -52,9 +52,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         Log.i(TAG, "[" + instance + "] doInBackground begins!");
 
         try {
-            // Process everything then report what didn't work.
-            StringBuilder errors = new StringBuilder();
-
             File instancesPath = new File(Collect.INSTANCES_PATH);
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
@@ -82,8 +79,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                             .query(InstanceColumns.CONTENT_URI, null, null, null, sortOrder);
                     if (instanceCursor == null) {
                         Log.e(TAG, "[" + instance + "] Instance content provider returned null");
-                        errors.append("Internal Error: Unable to access instances content provider");
-                        return errors.toString();
+                        return "Internal Error: Unable to access instances content provider";
                     }
 
                     instanceCursor.moveToPosition(-1);

@@ -42,6 +42,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ListViewUtils;
 
 import java.util.ArrayList;
@@ -203,6 +204,9 @@ public class InstanceUploaderList extends ListActivity implements
             }
             mRestored = false;
         }
+
+        InstanceSyncTask instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.execute();
     }
 
     @Override
