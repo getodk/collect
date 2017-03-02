@@ -44,7 +44,7 @@ abstract class AppListActivity extends ListActivity {
         int checkedItemCount = lv.getCheckedItemCount();
         long[] checkedIds = new long[checkedItemCount];
         int resultIndex = 0;
-        for (int posIdx = 0; posIdx < itemCount; ++posIdx) {
+        for (int posIdx = 0; posIdx < itemCount; posIdx++) {
             if (lv.isItemChecked(posIdx)) {
                 checkedIds      [resultIndex] = lv.getItemIdAtPosition(posIdx);
                 resultIndex++;
