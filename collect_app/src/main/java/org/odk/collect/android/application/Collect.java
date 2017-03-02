@@ -17,6 +17,7 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -44,6 +45,8 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Extends the Application class to implement
@@ -173,8 +176,8 @@ public class Collect extends Application {
     public String getVersionedAppName() {
         String versionName = "";
         try {
-            versionName = getPackageManager()
-                    .getPackageInfo(getPackageName(), 0)
+            versionName = getApplicationContext().getPackageManager()
+                    .getPackageInfo(getApplicationContext().getPackageName(), 0)
                     .versionName;
             versionName = " " + versionName.replaceFirst("-", "\n");
         } catch (NameNotFoundException e) {
