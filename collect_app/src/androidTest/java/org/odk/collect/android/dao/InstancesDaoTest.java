@@ -119,19 +119,16 @@ public class InstancesDaoTest {
     }
 
     @Test
-    public void getAllCompletedInstancesCursorTest() {
-        Cursor cursor = mInstancesDao.getAllCompletedInstancesCursor();
+    public void getAllCompletedUndeletedInstancesCursorTest() {
+        Cursor cursor = mInstancesDao.getAllCompletedUndeletedInstancesCursor();
         List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
-        assertEquals(3, instances.size());
+        assertEquals(2, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
         assertEquals(InstanceProviderAPI.STATUS_SUBMITTED, instances.get(0).getStatus());
 
         assertEquals("Biggest N of Set", instances.get(1).getDisplayName());
         assertEquals(InstanceProviderAPI.STATUS_COMPLETE, instances.get(1).getStatus());
-
-        assertEquals("Widgets", instances.get(2).getDisplayName());
-        assertEquals(InstanceProviderAPI.STATUS_SUBMITTED, instances.get(2).getStatus());
     }
 
     @Test
