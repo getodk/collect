@@ -32,43 +32,32 @@ abstract class AppListActivity extends ListActivity {
         return getCheckedCount() > 0;
     }
 
-    /** The positions and IDs of the checked items */
-    class CheckedItemInfo {
-        final int[] positions;
-        final long[] ids;
-
-        CheckedItemInfo(int[] positions, long[] ids) {
-            this.positions = positions;
-            this.ids = ids;
-        }
+    /** Returns the IDs of the checked items, using the ListView of this activity. */
+    protected long[] getCheckedIds() {
+        return getCheckedIds(getListView());
     }
 
-    /** Returns the positions and IDs of the checked items */
-    protected CheckedItemInfo getCheckedItemInfo() {
-        return getCheckedItemInfo(getListView());
-    }
-
-    /** Returns the positions and IDs of the checked items */
-    protected CheckedItemInfo getCheckedItemInfo(ListView lv) {
+    /** Returns the IDs of the checked items, using the ListView provided */
+    protected long[] getCheckedIds(ListView lv) {
+        // This method could be simplified by using getCheckedItemIds, if one ensured that
+        // IDs were “stable” (see the getCheckedItemIds doc).
         int itemCount = lv.getCount();
         int checkedItemCount = lv.getCheckedItemCount();
-        int[] checkedPositions = new int[checkedItemCount];
         long[] checkedIds = new long[checkedItemCount];
         int resultIndex = 0;
         for (int posIdx = 0; posIdx < itemCount; ++posIdx) {
             if (lv.isItemChecked(posIdx)) {
-                checkedPositions[resultIndex] = posIdx;
                 checkedIds      [resultIndex] = lv.getItemIdAtPosition(posIdx);
                 resultIndex++;
             }
         }
-        return new CheckedItemInfo(checkedPositions, checkedIds);
+        return checkedIds;
     }
 
     /** Returns the IDs of the checked items, as an array of Long */
     @NonNull
     protected Long[] getCheckedIdObjects() {
-        long[] checkedIds = getCheckedItemInfo().ids;
+        long[] checkedIds = getCheckedIds();
         Long[] checkedIdObjects = new Long[checkedIds.length];
         for (int i = 0; i < checkedIds.length; ++i) {
             checkedIdObjects[i] = checkedIds[i];
