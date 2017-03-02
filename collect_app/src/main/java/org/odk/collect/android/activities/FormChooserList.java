@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
@@ -162,12 +162,12 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
@@ -211,7 +211,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
 

@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -95,7 +95,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
+                    ((AppCompatActivity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
@@ -132,7 +132,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
+                    ((AppCompatActivity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
@@ -167,7 +167,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
                 try {
-                    ((Activity) getContext()).startActivity(i);
+                    ((AppCompatActivity) getContext()).startActivity(i);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

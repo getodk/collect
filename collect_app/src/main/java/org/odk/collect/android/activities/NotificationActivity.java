@@ -1,6 +1,6 @@
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
-public class NotificationActivity extends Activity {
+public class NotificationActivity extends AppCompatActivity {
 
     public final static String NOTIFICATION_KEY = "message";
 

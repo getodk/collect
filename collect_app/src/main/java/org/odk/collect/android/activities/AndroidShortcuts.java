@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * @author ctsims
  * @author carlhartung (modified for ODK)
  */
-public class AndroidShortcuts extends Activity {
+public class AndroidShortcuts extends AppCompatActivity {
 
     private Uri[] mCommands;
     private String[] mNames;

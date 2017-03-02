@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -164,7 +164,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
                 Collect.getInstance().getFormController()
                         .setIndexWaitingForData(mPrompt.getIndex());
-                ((Activity) getContext()).startActivityForResult(i,
+                ((AppCompatActivity) getContext()).startActivityForResult(i,
                         FormEntryActivity.LOCATION_CAPTURE);
             }
         });

@@ -14,12 +14,12 @@
 
 package org.odk.collect.android.views;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -159,7 +159,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 }
                             }
 
-                            ((Activity) getContext()).startActivityForResult(i,
+                            ((AppCompatActivity) getContext()).startActivityForResult(i,
                                     FormEntryActivity.EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
                             Log.e("ExternalParamsException", e.getMessage(), e);

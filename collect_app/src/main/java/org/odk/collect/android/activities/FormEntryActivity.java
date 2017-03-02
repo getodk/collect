@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -111,7 +111,7 @@ import java.util.Locale;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class FormEntryActivity extends Activity implements AnimationListener,
+public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener {
     private static final String t = "FormEntryActivity";
@@ -1026,31 +1026,31 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         return super.onContextItemSelected(item);
     }
 
-    /**
-     * If we're loading, then we pass the loading thread to our next instance.
-     */
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
-        // if a form is loading, pass the loader task
-        if (mFormLoaderTask != null
-                && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
-            return mFormLoaderTask;
-        }
-
-        // if a form is writing to disk, pass the save to disk task
-        if (mSaveToDiskTask != null
-                && mSaveToDiskTask.getStatus() != AsyncTask.Status.FINISHED) {
-            return mSaveToDiskTask;
-        }
-
-        // mFormEntryController is static so we don't need to pass it.
-        if (formController != null && formController.currentPromptIsQuestion()) {
-            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-        }
-        return null;
-    }
+//    /**
+//     * If we're loading, then we pass the loading thread to our next instance.
+//     */
+//    @Override
+//    public Object onRetainNonConfigurationInstance() {
+//        FormController formController = Collect.getInstance()
+//                .getFormController();
+//        // if a form is loading, pass the loader task
+//        if (mFormLoaderTask != null
+//                && mFormLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
+//            return mFormLoaderTask;
+//        }
+//
+//        // if a form is writing to disk, pass the save to disk task
+//        if (mSaveToDiskTask != null
+//                && mSaveToDiskTask.getStatus() != AsyncTask.Status.FINISHED) {
+//            return mSaveToDiskTask;
+//        }
+//
+//        // mFormEntryController is static so we don't need to pass it.
+//        if (formController != null && formController.currentPromptIsQuestion()) {
+//            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+//        }
+//        return null;
+//    }
 
     /**
      * Creates a view given the View type and an event
@@ -1707,18 +1707,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             mAlertDialog.setMessage(getString(R.string.add_another_repeat,
                     formController.getLastGroupText()));
-            mAlertDialog.setButton(getString(R.string.add_another),
+            mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.add_another),
                     repeatListener);
-            mAlertDialog.setButton2(getString(R.string.leave_repeat_yes),
+            mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.leave_repeat_yes),
                     repeatListener);
 
         } else {
             mAlertDialog.setTitle(getString(R.string.entering_repeat_ask));
             mAlertDialog.setMessage(getString(R.string.add_repeat,
                     formController.getLastGroupText()));
-            mAlertDialog.setButton(getString(R.string.entering_repeat),
+            mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE,getString(R.string.entering_repeat),
                     repeatListener);
-            mAlertDialog.setButton2(getString(R.string.add_repeat_no),
+            mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,getString(R.string.add_repeat_no),
                     repeatListener);
         }
         mAlertDialog.setCancelable(false);
@@ -1763,7 +1763,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         mBeenSwiped = false;
         mAlertDialog.show();
     }
@@ -1816,8 +1816,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.discard_group), quitListener);
-        mAlertDialog.setButton2(getString(R.string.delete_repeat_no),
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.discard_group), quitListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delete_repeat_no),
                 quitListener);
         mAlertDialog.show();
     }
@@ -2068,8 +2068,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         };
         mAlertDialog.setCancelable(false);
         mAlertDialog
-                .setButton(getString(R.string.discard_answer), quitListener);
-        mAlertDialog.setButton2(getString(R.string.clear_answer_no),
+                .setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.discard_answer), quitListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.clear_answer_no),
                 quitListener);
         mAlertDialog.show();
     }
@@ -2876,12 +2876,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

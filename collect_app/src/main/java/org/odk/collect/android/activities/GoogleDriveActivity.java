@@ -18,9 +18,8 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -34,6 +33,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -487,7 +487,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             }
         };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
         mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertShowing = true;
         mAlertMsg = message;
@@ -965,12 +965,12 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+//        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+//        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

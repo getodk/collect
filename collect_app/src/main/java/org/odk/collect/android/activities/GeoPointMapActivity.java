@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,7 +23,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,7 +59,7 @@ import java.util.List;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointMapActivity extends AppCompatActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
 
     private static final String LOCATION_COUNT = "locationCount";
@@ -140,12 +140,12 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+//        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+//        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

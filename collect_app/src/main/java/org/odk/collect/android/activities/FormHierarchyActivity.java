@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -156,12 +156,12 @@ public class FormHierarchyActivity extends ListActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        //Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        //Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
@@ -391,7 +391,7 @@ public class FormHierarchyActivity extends ListActivity {
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
     }
 

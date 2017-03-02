@@ -16,7 +16,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -29,6 +28,8 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -56,7 +57,7 @@ import java.io.FileOutputStream;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawActivity extends Activity {
+public class DrawActivity extends AppCompatActivity {
     public static final String t = "DrawActivity";
 
     public static final String OPTION = "option";

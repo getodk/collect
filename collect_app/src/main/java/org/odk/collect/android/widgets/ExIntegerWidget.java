@@ -14,10 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
@@ -82,7 +82,7 @@ public class ExIntegerWidget extends ExStringWidget {
         i.putExtra("value", getIntegerAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), mPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
+        ((AppCompatActivity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_INT_CAPTURE);
     }
 

@@ -15,7 +15,7 @@
  */
 package org.odk.collect.android.preferences;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;

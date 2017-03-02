@@ -15,14 +15,14 @@
  */
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import org.odk.collect.android.R;
 
-public class OpenSourceLicensesActivity extends Activity {
+public class OpenSourceLicensesActivity extends AppCompatActivity {
     private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";
 
     @Override
