@@ -41,7 +41,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import static org.odk.collect.android.preferences.PreferenceKeys.*;
-import static org.odk.collect.android.preferences.AdminAndGeneralKeys.ag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +52,13 @@ import java.util.List;
  *         constraint behavior option)
  */
 public class PreferencesActivity extends AppPreferenceActivity implements OnPreferenceChangeListener {
-    private final String TAG = getClass().getSimpleName();
+    private static final String t = "PreferencesActivity";
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        Log.d(t, "onCreate");
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -83,17 +82,17 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
 
     @Override
     protected void onStart() {
-        Log.d(TAG, "onStart");
+        Log.d(t, "onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume");
+        Log.d(t, "onResume");
         super.onResume();
 
         // has to go in onResume because it may get updated by
-        // adminKey sub-preference screen
+        // a sub-preference screen
         // this just keeps the widgets in sync
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -123,7 +122,7 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause");
+        Log.d(t, "onPause");
         super.onPause();
 
         // the property manager should be re-assigned, as properties
@@ -134,7 +133,7 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.d(TAG, "onActivityResult " + requestCode + " " + resultCode);
+        Log.d(t, "onActivityResult " + requestCode + " " + resultCode);
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_CANCELED) {
             // request was canceled, so do nothing
@@ -157,19 +156,19 @@ public class PreferencesActivity extends AppPreferenceActivity implements OnPref
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop");
+        Log.d(t, "onStop");
         super.onStop();
     }
 
     @Override
     protected void onRestart() {
-        Log.d(TAG, "onRestart");
+        Log.d(t, "onRestart");
         super.onRestart();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy");
+        Log.d(t, "onDestroy");
         super.onDestroy();
     }
 

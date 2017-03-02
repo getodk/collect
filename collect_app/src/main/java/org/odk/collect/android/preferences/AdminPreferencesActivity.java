@@ -195,7 +195,7 @@ public class AdminPreferencesActivity extends AppPreferenceActivity {
     }
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
-        // this should be in adminKey thread if it gets big, but for now it's tiny
+        // this should be in a thread if it gets big, but for now it's tiny
         boolean res = false;
         ObjectOutputStream output = null;
         try {

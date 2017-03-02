@@ -141,7 +141,7 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
                                             new TypeToken<List<String>>() {}.getType());
 
                             if (!mUrlList.contains(url)) {
-                                // We store adminKey list with at most 5 elements
+                                // We store a list with at most 5 elements
                                 if (mUrlList.size() == 5) {
                                     mUrlList.remove(4);
                                 }

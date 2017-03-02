@@ -53,7 +53,7 @@ import org.odk.collect.android.utilities.ListViewUtils;
  */
 
 public class InstanceUploaderList extends AppListActivity implements OnLongClickListener {
-    private final String t = getClass().getSimpleName();
+    private static final String t = "InstanceUploaderList";
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
 

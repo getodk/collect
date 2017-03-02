@@ -13,7 +13,7 @@ import java.util.Map;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 class DisabledPreferencesRemover {
-    private final String TAG = getClass().getSimpleName();
+    private static final String t = "DisabledPrefRemover"; // Full name was too long
 
     /** A map used to find the parent category of any preference */ // ToDo: find a better way?
     private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
@@ -59,7 +59,7 @@ class DisabledPreferencesRemover {
                 PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
                 if (preferenceCategory != null && pref != null) { // Neither should ever be null
                     preferenceCategory.removePreference(pref);
-                    Log.d(TAG, "Removed " + pref.toString());
+                    Log.d(t, "Removed " + pref.toString());
                 }
             }
         }

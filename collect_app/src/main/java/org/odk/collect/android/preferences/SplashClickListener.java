@@ -25,7 +25,7 @@ class SplashClickListener implements Preference.OnPreferenceClickListener {
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        // if you have adminKey value, you can clear it or select new.
+        // if you have a value, you can clear it or select new.
         CharSequence cs = splashPathPreference.getSummary();
         if (cs != null && cs.toString().contains("/")) {
 
