@@ -47,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -297,7 +298,7 @@ public class MainMenuActivity extends Activity {
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         boolean edit = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_EDIT_SAVED, true);
+                AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
             mReviewDataButton.setVisibility(View.GONE);
             mReviewSpacer.setVisibility(View.GONE);
@@ -307,7 +308,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean send = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SEND_FINALIZED, true);
+                AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
             mSendDataButton.setVisibility(View.GONE);
         } else {
@@ -315,7 +316,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean view_sent = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+                AdminKeys.KEY_VIEW_SENT, true);
         if (!view_sent) {
             mViewSentFormsButton.setVisibility(View.GONE);
         } else {
@@ -323,7 +324,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean get_blank = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_GET_BLANK, true);
+                AdminKeys.KEY_GET_BLANK, true);
         if (!get_blank) {
             mGetFormsButton.setVisibility(View.GONE);
             mGetFormsSpacer.setVisibility(View.GONE);
@@ -333,7 +334,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean delete_saved = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_DELETE_SAVED, true);
+                AdminKeys.KEY_DELETE_SAVED, true);
         if (!delete_saved) {
             mManageFilesButton.setVisibility(View.GONE);
         } else {
@@ -408,7 +409,7 @@ public class MainMenuActivity extends Activity {
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
                 String pw = mAdminPreferences.getString(
-                        AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                        AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
                     Intent i = new Intent(getApplicationContext(),
                             AdminPreferencesActivity.class);
@@ -472,7 +473,7 @@ public class MainMenuActivity extends Activity {
                                     int whichButton) {
                                 String value = input.getText().toString();
                                 String pw = mAdminPreferences.getString(
-                                        AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                                        AdminKeys.KEY_ADMIN_PW, "");
                                 if (pw.compareTo(value) == 0) {
                                     Intent i = new Intent(getApplicationContext(),
                                             AdminPreferencesActivity.class);
