@@ -32,6 +32,7 @@ import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 /**
@@ -92,6 +93,9 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setListAdapter(instances);
+
+        InstanceSyncTask instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.execute();
     }
 
 
