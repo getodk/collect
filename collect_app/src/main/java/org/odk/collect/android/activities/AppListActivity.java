@@ -8,7 +8,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 
 abstract class AppListActivity extends ListActivity {
-    private final String t = getClass().getSimpleName();
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
     protected boolean areCheckedItems() {
