@@ -21,14 +21,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -50,7 +48,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.ListViewUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -70,7 +68,7 @@ import java.util.Set;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadList extends ListActivity implements FormListDownloaderListener,
+public class FormDownloadList extends AppListActivity implements FormListDownloaderListener,
         FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final String t = "RemoveFileManageList";
 
@@ -141,8 +139,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDownloadButton.setEnabled(ListViewUtils.toggleChecked(getListView()));
-                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+                mDownloadButton.setEnabled(toggleChecked(getListView()));
+                toggleButtonLabel(mToggleButton, getListView());
             }
         });
 
@@ -256,7 +254,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+        toggleButtonLabel(mToggleButton, getListView());
         mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
 
         Object o = getListAdapter().getItem(position);
@@ -613,7 +611,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
-            ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+            toggleButtonLabel(mToggleButton, getListView());
         }
     }
 

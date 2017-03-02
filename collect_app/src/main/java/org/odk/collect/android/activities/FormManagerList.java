@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -30,17 +29,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
-import org.odk.collect.android.utilities.ListViewUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -97,8 +91,8 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
                 @Override
                 public void onClick(View v) {
                     ListView lv = getListView();
-                    boolean allChecked = ListViewUtils.toggleChecked(lv);
-                    ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+                    boolean allChecked = toggleChecked(lv);
+                    toggleButtonLabel(mToggleButton, getListView());
                     mDeleteButton.setEnabled(allChecked);
                 }
         });
@@ -256,7 +250,7 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
     protected void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
-        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+        toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(areCheckedItems());
     }
 
