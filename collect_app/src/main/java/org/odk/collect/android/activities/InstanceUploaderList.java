@@ -54,7 +54,6 @@ import org.odk.collect.android.utilities.ListViewUtils;
 
 public class InstanceUploaderList extends AppListActivity implements OnLongClickListener {
     private final String t = getClass().getSimpleName();
-    private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
 
@@ -69,6 +68,7 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(t, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
 
@@ -140,7 +140,7 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
         setListAdapter(mCursorAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mUploadButton.setEnabled(areCheckedItems());
+        mUploadButton.setEnabled(false);
 
         // set title
         setTitle(getString(R.string.send_data));
@@ -235,21 +235,7 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
     protected void onRestoreInstanceState(Bundle bundle) {
         Log.d(t, "onRestoreInstanceState");
         super.onRestoreInstanceState(bundle);
-        checkItemsAtPositions(getListView(), bundle.getIntArray(BUNDLE_SELECTED_ITEMS_KEY));
         mUploadButton.setEnabled(areCheckedItems());
-    }
-
-    /**
-     * Saves the state of checkboxes. This was determined to be necessary and first
-     * implemented with change
-     * https://github.com/opendatakit/collect/commit/01696cf5b8ba528e949529cf7a5ab7b295196886.
-     * As of 2017-Mar-01 we don’t know if it is still needed.
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle bundle) {
-        Log.d(t, "onSaveInstanceState");
-        super.onSaveInstanceState(bundle);
-        bundle.putIntArray(BUNDLE_SELECTED_ITEMS_KEY, getCheckedItemInfo().positions);
     }
 
     @Override
