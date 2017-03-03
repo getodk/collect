@@ -58,7 +58,7 @@ def getVersionName = { ->
 
 android {
     compileSdkVersion(22)
-    buildToolsVersion("25.0.0")
+    buildToolsVersion("25.0.2")
 
     defaultConfig {
         applicationId("org.odk.collect.android")
