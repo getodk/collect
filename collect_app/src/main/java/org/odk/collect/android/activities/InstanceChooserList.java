@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -31,8 +32,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 /**
@@ -41,11 +44,13 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends ListActivity {
+public class InstanceChooserList extends ListActivity implements DiskSyncListener {
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
+
+    private InstanceSyncTask instanceSyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,14 +95,16 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setListAdapter(instances);
-    }
 
+        instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.setDiskSyncListener(this);
+        instanceSyncTask.execute();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
     }
-
 
     /**
      * Stores the path of selected instance in the parent class and finishes.
@@ -145,6 +152,32 @@ public class InstanceChooserList extends ListActivity {
             }
             finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(this);
+        }
+        super.onResume();
+
+        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            syncComplete(instanceSyncTask.getStatusMessage());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(null);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void syncComplete(String result) {
+        TextView textView = (TextView) findViewById(R.id.status_text);
+        textView.setText(result);
     }
 
     @Override
