@@ -18,15 +18,9 @@ public class PlayServicesUtil {
     private static int resultCode;
 
     public static boolean checkPlayServices(Context context) {
-
         googleApiAvailability = GoogleApiAvailability.getInstance();
-
         resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
-
-        if (resultCode != ConnectionResult.SUCCESS) {
-            return false;
-        }
-        return true;
+        return resultCode == ConnectionResult.SUCCESS;
     }
 
     public static void requestPlayServicesErrorDialog(Context context) {
