@@ -147,7 +147,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         super.onResume();
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            SyncComplete(mDiskSyncTask.getStatusMessage());
+            syncComplete(mDiskSyncTask.getStatusMessage());
         }
     }
 
@@ -177,7 +177,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
      */
 
     @Override
-    public void SyncComplete(String result) {
+    public void syncComplete(String result) {
         Log.i(t, "disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result);
