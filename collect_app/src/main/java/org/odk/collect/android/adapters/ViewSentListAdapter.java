@@ -24,6 +24,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
@@ -44,12 +45,8 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
         View view = super.getView(position, convertView, parent);
         Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
-        String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + " =? ";
-        String[] selectionArgs = {getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID))};
-
-        //getting blank form record
-        Cursor cursor = mContext.getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, null,
-                selection, selectionArgs, null);
+        String formId = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
 
         boolean formExists = false;
         boolean isFormEncrypted = false;
@@ -68,6 +65,8 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
 
         TextView visibilityOffCause = (TextView) view.findViewById(R.id.text4);
         ImageView visibleOff = (ImageView) view.findViewById(R.id.visible_off);
+        visibleOff.setScaleX(0.9f);
+        visibleOff.setScaleY(0.9f);
         if (date != 0 || !formExists || isFormEncrypted) {
             visibilityOffCause.setVisibility(View.VISIBLE);
             visibleOff.setVisibility(View.VISIBLE);

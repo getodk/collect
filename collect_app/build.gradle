@@ -42,10 +42,10 @@ def getVersionName = { ->
         exec {
             switch (ant.properties.os) {
                 case 'windows':
-                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty'
+                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
                     break
                 case 'unix':
-                    commandLine 'git', 'describe', '--tags', '--dirty'
+                    commandLine 'git', 'describe', '--tags', '--dirty', '--always'
                     break
             }
             standardOutput = stdout
@@ -58,7 +58,7 @@ def getVersionName = { ->
 
 android {
     compileSdkVersion(22)
-    buildToolsVersion("25.0.0")
+    buildToolsVersion("25.0.2")
 
     defaultConfig {
         applicationId("org.odk.collect.android")

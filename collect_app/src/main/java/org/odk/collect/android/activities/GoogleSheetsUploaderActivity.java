@@ -40,8 +40,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.GoogleSheetsTask;
@@ -128,7 +129,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String googleUsername = prefs.getString(
-                    PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
                 return;
@@ -255,8 +256,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
             Cursor results = null;
             try {
-                results = getContentResolver().query(InstanceColumns.CONTENT_URI, null,
-                        selection.toString(), selectionArgs, null);
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                 if (results.getCount() > 0) {
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {

@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -32,8 +33,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.DateWidgetUtils;
 
-import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -61,6 +62,10 @@ public class DateTimeWidget extends QuestionWidget {
         mDatePicker.setId(QuestionWidget.newUniqueId());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
+            DateWidgetUtils.fixCalendarViewIfJellyBean(mDatePicker.getCalendarView());
+        }
 
         mTimePicker = new TimePicker(getContext());
         mTimePicker.setId(QuestionWidget.newUniqueId());
@@ -125,7 +130,7 @@ public class DateTimeWidget extends QuestionWidget {
             }
         });
 
-        setGravity(Gravity.LEFT);
+        setGravity(Gravity.START);
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         if (showCalendar) {
@@ -144,6 +149,7 @@ public class DateTimeWidget extends QuestionWidget {
         // If there's an answer, use it.
         setAnswer();
     }
+
 
     /**
      * Shared between DateWidget and DateTimeWidget.
@@ -203,7 +209,7 @@ public class DateTimeWidget extends QuestionWidget {
 
             DateTime ldt =
                     new DateTime(
-                            ((Date) ((DateTimeData) mPrompt.getAnswerValue()).getValue()).getTime
+                            ((Date) mPrompt.getAnswerValue().getValue()).getTime
                                     ());
             mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
                     mDateListener);

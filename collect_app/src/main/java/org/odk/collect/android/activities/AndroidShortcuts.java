@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class AndroidShortcuts extends Activity {
 
         Cursor c = null;
         try {
-            c = getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
+            c = new FormsDao().getFormsCursor();
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);

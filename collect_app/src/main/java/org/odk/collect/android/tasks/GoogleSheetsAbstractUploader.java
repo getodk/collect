@@ -41,6 +41,8 @@ import com.google.gdata.util.ServiceException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.FormException;
 import org.odk.collect.android.picasa.AlbumEntry;
 import org.odk.collect.android.picasa.AlbumFeed;
@@ -49,6 +51,7 @@ import org.odk.collect.android.picasa.PicasaClient;
 import org.odk.collect.android.picasa.PicasaUrl;
 import org.odk.collect.android.picasa.UserFeed;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -98,8 +101,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         Cursor c = null;
         try {
-            c = Collect.getInstance().getContentResolver()
-                    .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
@@ -114,15 +116,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
                     ContentValues cv = new ContentValues();
 
-                    String formSelection = FormsColumns.JR_FORM_ID + "=?";
-                    String[] formSelectionArgs = {
-                            jrformid
-                    };
-                    Cursor formcursor = Collect
-                            .getInstance()
-                            .getContentResolver()
-                            .query(FormsColumns.CONTENT_URI, null, formSelection,
-                                    formSelectionArgs, null);
+                    Cursor formcursor = new FormsDao().getFormsCursorForFormId(jrformid);
                     String md5 = null;
                     String formFilePath = null;
                     if (formcursor.getCount() > 0) {
@@ -285,17 +279,11 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // All photos have been sent to picasa (if there were any)
         // now upload data to Google Sheet
 
-        String selection = InstanceColumns._ID + "=?";
-        String[] selectionArgs = {
-                id
-        };
-
         Cursor cursor = null;
         String urlString = null;
         try {
             // see if the submission element was defined in the form
-            cursor = Collect.getInstance().getContentResolver()
-                    .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            cursor = new InstancesDao().getInstancesCursorForId(id);
 
             if (cursor.getCount() > 0) {
                 cursor.moveToPosition(-1);
@@ -309,7 +297,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         SharedPreferences settings = PreferenceManager
                                 .getDefaultSharedPreferences(Collect.getInstance());
                         urlString = settings
-                                .getString(PreferencesActivity.KEY_GOOGLE_SHEETS_URL, Collect
+                                .getString(PreferenceKeys.KEY_GOOGLE_SHEETS_URL, Collect
                                         .getInstance()
                                         .getString(R.string.default_google_sheets_url));
                     }
@@ -936,11 +924,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     Cursor uploadResults = null;
                     try {
-                        uploadResults = Collect
-                                .getInstance()
-                                .getContentResolver()
-                                .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                        selectionArgs, null);
+                        uploadResults = new InstancesDao().getInstancesCursor(selection.toString(),
+                                selectionArgs);
                         if (uploadResults.getCount() > 0) {
                             Long[] toDelete = new Long[uploadResults.getCount()];
                             uploadResults.moveToPosition(-1);
@@ -954,7 +939,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                             boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
                                     Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferencesActivity.KEY_DELETE_AFTER_SEND, false);
+                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
                             if (deleteFlag) {
                                 DeleteInstancesTask dit = new DeleteInstancesTask();
                                 dit.setContentResolver(Collect.getInstance().getContentResolver());

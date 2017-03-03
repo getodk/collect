@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +34,7 @@ import android.widget.Toast;
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import static org.odk.collect.android.preferences.AdminKeys.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,54 +49,9 @@ import java.io.ObjectOutputStream;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends PreferenceActivity {
+public class AdminPreferencesActivity extends AppPreferenceActivity {
 
     public static String ADMIN_PREFERENCES = "admin_prefs";
-
-    // key for this preference screen
-    public static String KEY_ADMIN_PW = "admin_pw";
-
-    // keys for each preference
-    // main menu
-    public static String KEY_EDIT_SAVED = "edit_saved";
-    public static String KEY_SEND_FINALIZED = "send_finalized";
-    public static String KEY_VIEW_SENT = "view_sent";
-    public static String KEY_GET_BLANK = "get_blank";
-    public static String KEY_DELETE_SAVED = "delete_saved";
-    // server
-    public static String KEY_CHANGE_SERVER = "change_server";
-    public static String KEY_CHANGE_USERNAME = "change_username";
-    public static String KEY_CHANGE_PASSWORD = "change_password";
-    public static String KEY_CHANGE_ADMIN_PASSWORD = "admin_password";
-    public static String KEY_CHANGE_GOOGLE_ACCOUNT = "change_google_account";
-    public static String KEY_CHANGE_PROTOCOL_SETTINGS = "change_protocol_settings";
-    // client
-    public static String KEY_CHANGE_FONT_SIZE = "change_font_size";
-    public static String KEY_DEFAULT_TO_FINALIZED = "default_to_finalized";
-    public static String KEY_HIGH_RESOLUTION = "high_resolution";
-    public static String KEY_SHOW_SPLASH_SCREEN = "show_splash_screen";
-    public static String KEY_SELECT_SPLASH_SCREEN = "select_splash_screen";
-    public static String KEY_DELETE_AFTER_SEND = "delete_after_send";
-    // form entry
-    public static String KEY_SAVE_MID = "save_mid";
-    public static String KEY_JUMP_TO = "jump_to";
-    public static String KEY_CHANGE_LANGUAGE = "change_language";
-    public static String KEY_ACCESS_SETTINGS = "access_settings";
-    public static String KEY_SAVE_AS = "save_as";
-    public static String KEY_MARK_AS_FINALIZED = "mark_as_finalized";
-
-    public static String KEY_AUTOSEND_WIFI = "autosend_wifi";
-    public static String KEY_AUTOSEND_NETWORK = "autosend_network";
-
-    public static String KEY_NAVIGATION = "navigation";
-    public static String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
-
-    public static String KEY_FORM_PROCESSING_LOGIC = "form_processing_logic";
-
-    public static String KEY_SHOW_MAP_SDK = "show_map_sdk";
-    public static String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
-
-    public static String KEY_ANALYTICS = "analytics";
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
@@ -111,8 +66,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        ListPreference mFormProcessingLogicPreference = (ListPreference) findPreference(
-                KEY_FORM_PROCESSING_LOGIC);
+        ListPreference mFormProcessingLogicPreference = listPref(KEY_FORM_PROCESSING_LOGIC);
         mFormProcessingLogicPreference.setSummary(mFormProcessingLogicPreference.getEntry());
         mFormProcessingLogicPreference.setOnPreferenceChangeListener(
                 new Preference.OnPreferenceChangeListener() {
@@ -127,7 +81,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                     }
                 });
 
-        Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+        Preference mChangeAdminPwPreference = pref(KEY_CHANGE_ADMIN_PASSWORD);
         mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -150,7 +104,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                         if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
                             // passwords are the same
                             SharedPreferences.Editor editor = getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                            editor.putString(AdminPreferencesActivity.KEY_ADMIN_PW, pw);
+                            editor.putString(KEY_ADMIN_PW, pw);
                             Toast.makeText(AdminPreferencesActivity.this,
                                     R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
                             editor.commit();
@@ -159,7 +113,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                                     .logAction(this, "AdminPasswordDialog", "CHANGED");
                         } else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
                             SharedPreferences.Editor editor = getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                            editor.putString(AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                            editor.putString(KEY_ADMIN_PW, "");
                             editor.commit();
                             Toast.makeText(AdminPreferencesActivity.this,
                                     R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
@@ -208,7 +162,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case SAVE_PREFS_MENU:
-                File writeDir = new File(Collect.ODK_ROOT + "/settings");
+                File writeDir = new File(Collect.SETTINGS);
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         Toast.makeText(

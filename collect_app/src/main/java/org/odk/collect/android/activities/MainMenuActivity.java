@@ -44,9 +44,12 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -213,7 +216,7 @@ public class MainMenuActivity extends Activity {
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(MainMenuActivity.this);
                 String protocol = sharedPreferences.getString(
-                        PreferencesActivity.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                        PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                     i = new Intent(getApplicationContext(),
@@ -241,15 +244,11 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        // count for finalized instances
-        String selection = InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?";
-        String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
+        InstancesDao instancesDao = new InstancesDao();
 
+        // count for finalized instances
         try {
-            mFinalizedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-                    selection, selectionArgs, null);
+            mFinalizedCursor = instancesDao.getFinalizedInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
@@ -264,12 +263,8 @@ public class MainMenuActivity extends Activity {
 //		mFinalizedCursor.registerContentObserver(mContentObserver);
 
         // count for saved instances
-        String selectionSaved = InstanceColumns.STATUS + "!=?";
-        String selectionArgsSaved[] = {InstanceProviderAPI.STATUS_SUBMITTED};
-
         try {
-            mSavedCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-                    selectionSaved, selectionArgsSaved, null);
+            mSavedCursor = instancesDao.getUnsentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
@@ -281,11 +276,8 @@ public class MainMenuActivity extends Activity {
         mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
 
         //count for view sent form
-        String selectionViewSent = InstanceColumns.STATUS + "=?";
-        String selectionArgsViewSent[] = {InstanceProviderAPI.STATUS_SUBMITTED};
         try {
-            mViewSentCursor = managedQuery(InstanceColumns.CONTENT_URI, null,
-                    selectionViewSent, selectionArgsViewSent, null);
+            mViewSentCursor = instancesDao.getSentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
@@ -306,7 +298,7 @@ public class MainMenuActivity extends Activity {
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         boolean edit = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_EDIT_SAVED, true);
+                AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
             mReviewDataButton.setVisibility(View.GONE);
             mReviewSpacer.setVisibility(View.GONE);
@@ -316,7 +308,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean send = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SEND_FINALIZED, true);
+                AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
             mSendDataButton.setVisibility(View.GONE);
         } else {
@@ -324,7 +316,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean view_sent = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+                AdminKeys.KEY_VIEW_SENT, true);
         if (!view_sent) {
             mViewSentFormsButton.setVisibility(View.GONE);
         } else {
@@ -332,7 +324,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean get_blank = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_GET_BLANK, true);
+                AdminKeys.KEY_GET_BLANK, true);
         if (!get_blank) {
             mGetFormsButton.setVisibility(View.GONE);
             mGetFormsSpacer.setVisibility(View.GONE);
@@ -342,7 +334,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean delete_saved = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_DELETE_SAVED, true);
+                AdminKeys.KEY_DELETE_SAVED, true);
         if (!delete_saved) {
             mManageFilesButton.setVisibility(View.GONE);
         } else {
@@ -417,7 +409,7 @@ public class MainMenuActivity extends Activity {
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
                 String pw = mAdminPreferences.getString(
-                        AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                        AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
                     Intent i = new Intent(getApplicationContext(),
                             AdminPreferencesActivity.class);
@@ -481,7 +473,7 @@ public class MainMenuActivity extends Activity {
                                     int whichButton) {
                                 String value = input.getText().toString();
                                 String pw = mAdminPreferences.getString(
-                                        AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                                        AdminKeys.KEY_ADMIN_PW, "");
                                 if (pw.compareTo(value) == 0) {
                                     Intent i = new Intent(getApplicationContext(),
                                             AdminPreferencesActivity.class);
@@ -527,7 +519,7 @@ public class MainMenuActivity extends Activity {
     private void setupGoogleAnalytics() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);
+        boolean isAnalyticsEnabled = settings.getBoolean(PreferenceKeys.KEY_ANALYTICS, true);
         GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
         googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }
