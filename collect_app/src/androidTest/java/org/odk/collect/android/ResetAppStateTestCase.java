@@ -21,11 +21,12 @@ import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -54,6 +55,15 @@ public class ResetAppStateTestCase {
         ));
     }
 
+    @After
+    public void tearDown() throws IOException {
+        resetAppState(Arrays.asList(
+                ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
+                ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
+                ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
+        ));
+    }
+
     @Test
     public void resetSettingsTest() throws IOException {
         setupTestSettings();
@@ -62,7 +72,7 @@ public class ResetAppStateTestCase {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         assertEquals(null, settings.getString(PreferenceKeys.KEY_USERNAME, null));
         assertEquals(null, settings.getString(PreferenceKeys.KEY_PASSWORD, null));
-        assertEquals(true, settings.getBoolean(AdminPreferencesActivity.KEY_VIEW_SENT, true));
+        assertEquals(true, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
@@ -127,10 +137,10 @@ public class ResetAppStateTestCase {
 
         settings
                 .edit()
-                .putBoolean(AdminPreferencesActivity.KEY_VIEW_SENT, false)
+                .putBoolean(AdminKeys.KEY_VIEW_SENT, false)
                 .apply();
 
-        assertEquals(false, settings.getBoolean(AdminPreferencesActivity.KEY_VIEW_SENT, false));
+        assertEquals(false, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
 
         assertTrue(new File(Collect.SETTINGS).exists() || new File(Collect.SETTINGS).mkdir());
         assertTrue(new File(Collect.SETTINGS + "/collect.settings").createNewFile());
@@ -139,12 +149,12 @@ public class ResetAppStateTestCase {
 
     private void setupTestFormsDatabase() {
         ContentValues values = new ContentValues();
-        values.put(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH, "/storage/emulated/0/odk/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
+        values.put(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH, Collect.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
         values.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, "jrFormId");
-        values.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, "/storage/emulated/0/odk/forms/testFile1-media");
+        values.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, Collect.FORMS_PATH + "/testFile1-media");
         values.put(FormsProviderAPI.FormsColumns.DATE, "1487077903756");
         values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, "/storage/emulated/0/odk/forms/testFile1.xml");
+        values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, Collect.FORMS_PATH + "/testFile1.xml");
         values.put(FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT, "Added on Tue, Feb 14, 2017 at 14:21");
         Collect.getInstance().getContentResolver()
                 .insert(FormsProviderAPI.FormsColumns.CONTENT_URI, values);
@@ -154,7 +164,7 @@ public class ResetAppStateTestCase {
 
     private void setupTestInstancesDatabase() {
         ContentValues values = new ContentValues();
-        values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, "/storage/emulated/0/odk/instances/testDir1/testFile1");
+        values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, Collect.INSTANCES_PATH + "/testDir1/testFile1");
         values.put(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI, "submissionUri");
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, "displayName");
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, "formName");
