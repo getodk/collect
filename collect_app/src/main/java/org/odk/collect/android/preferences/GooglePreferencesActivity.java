@@ -58,23 +58,6 @@ public class GooglePreferencesActivity extends PreferenceActivity {
         PreferenceCategory googlePreferences = (PreferenceCategory) findPreference(
                 getString(R.string.google_preferences));
 
-        // get list of google accounts
-        final Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(
-                "com.google");
-        ArrayList<String> accountEntries = new ArrayList<String>();
-        ArrayList<String> accountValues = new ArrayList<String>();
-
-        for (int i = 0; i < accounts.length; i++) {
-            accountEntries.add(accounts[i].name);
-            accountValues.add(accounts[i].name);
-        }
-        accountEntries.add(getString(R.string.no_account));
-        accountValues.add("");
-
-        mSelectedGoogleAccountPreference.setEntries(accountEntries
-                .toArray(new String[accountEntries.size()]));
-        mSelectedGoogleAccountPreference.setEntryValues(accountValues
-                .toArray(new String[accountValues.size()]));
         mSelectedGoogleAccountPreference
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     @Override
@@ -90,7 +73,7 @@ public class GooglePreferencesActivity extends PreferenceActivity {
         mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference.getValue());
 
         boolean googleAccountAvailable = adminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
+                AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT, true);
         if (!(googleAccountAvailable || adminMode)) {
             googlePreferences.removePreference(mSelectedGoogleAccountPreference);
         }
@@ -124,4 +107,25 @@ public class GooglePreferencesActivity extends PreferenceActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // get list of google accounts
+        final Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(
+                "com.google");
+        ArrayList<String> accountEntries = new ArrayList<String>();
+        ArrayList<String> accountValues = new ArrayList<String>();
+
+        for (int i = 0; i < accounts.length; i++) {
+            accountEntries.add(accounts[i].name);
+            accountValues.add(accounts[i].name);
+        }
+        accountEntries.add(getString(R.string.no_account));
+        accountValues.add("");
+
+        mSelectedGoogleAccountPreference.setEntries(accountEntries
+                .toArray(new String[accountEntries.size()]));
+        mSelectedGoogleAccountPreference.setEntryValues(accountValues
+                .toArray(new String[accountValues.size()]));
+    }
 }
