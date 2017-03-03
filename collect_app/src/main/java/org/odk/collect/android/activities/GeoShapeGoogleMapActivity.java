@@ -114,6 +114,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                     setupMap(googleMap);
                 }
             });
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoShapeGoogleMapActivity.this);
         }
     }
 
@@ -515,5 +517,13 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

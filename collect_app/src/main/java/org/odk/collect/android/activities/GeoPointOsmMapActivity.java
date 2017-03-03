@@ -307,6 +307,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mZoomed = true;
                 zoomToPoint();
             }
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointOsmMapActivity.this);
         }
 
     }
@@ -625,6 +627,14 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

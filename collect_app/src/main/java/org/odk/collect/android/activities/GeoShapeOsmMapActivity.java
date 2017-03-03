@@ -29,6 +29,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
@@ -198,6 +199,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                     zoomDialog.dismiss();
                 }
             });
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoShapeOsmMapActivity.this);
         }
     }
 
@@ -573,6 +576,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
         }
         zoomDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

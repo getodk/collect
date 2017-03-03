@@ -24,6 +24,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -117,9 +118,12 @@ public class GeoPointActivity extends Activity implements LocationListener {
             }
 
             setupLocationDialog();
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointActivity.this);
         }
 
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -255,6 +259,13 @@ public class GeoPointActivity extends Activity implements LocationListener {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private String truncateDouble(float number) {
         DecimalFormat df = new DecimalFormat("#.##");

@@ -137,6 +137,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                     setupMap(googleMap);
                 }
             });
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointMapActivity.this);
         }
     }
 
@@ -575,6 +577,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

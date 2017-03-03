@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
@@ -338,6 +339,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             if (mNetworkOn) {
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoTraceOsmMapActivity.this);
         }
 
     }
@@ -900,5 +903,13 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
