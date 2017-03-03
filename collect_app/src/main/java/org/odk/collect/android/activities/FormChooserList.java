@@ -122,7 +122,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get uri to form
-        long idFormsTable = ((SimpleCursorAdapter) getListAdapter()).getItemId(position);
+        long idFormsTable = ( getListAdapter()).getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">Rekodi Mahali</string>
   <string name="accuracy">Usahihi</string>
   <string name="activity_not_found">Hakuna shughuli ya kushughulikiwa: %s</string>

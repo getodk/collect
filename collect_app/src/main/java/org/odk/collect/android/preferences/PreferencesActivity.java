@@ -44,9 +44,33 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import static org.odk.collect.android.preferences.PreferenceKeys.*;
 
 import java.util.ArrayList;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
+import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_NETWORK;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WIFI;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_DEFAULT;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_DELETE_AFTER_SEND;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_HIGH_RESOLUTION;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL_SETTINGS;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
+import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
 /**
  * Handles general preferences.
@@ -190,7 +214,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 prefIntent.putExtra(INTENT_KEY_ADMIN_MODE, adminMode);
                 mProtocolSettings.setIntent(prefIntent);
 
-                if (!((String) newValue).equals(oldValue)) {
+                if (!( newValue).equals(oldValue)) {
                     startActivity(prefIntent);
                 }
 
@@ -236,7 +260,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                                 newValue.toString());
                         String value =
                                 (String) ((ListPreference) preference).getEntryValues()[index];
-                        ((ListPreference) preference).setSummary(value);
+                        ( preference).setSummary(value);
                         return true;
                     }
                 });
@@ -310,7 +334,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                         int index = ((ListPreference) preference).findIndexOfValue(
                                 newValue.toString());
                         String entry = (String) ((ListPreference) preference).getEntries()[index];
-                        ((ListPreference) preference).setSummary(entry);
+                        (preference).setSummary(entry);
                         return true;
                     }
                 });
@@ -466,7 +490,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 }
 
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                ((ListPreference) preference).setSummary(entry);
+                ( preference).setSummary(entry);
                 return true;
             }
         });
@@ -491,7 +515,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                ((ListPreference) preference).setSummary(entry);
+                ( preference).setSummary(entry);
                 return true;
             }
         });

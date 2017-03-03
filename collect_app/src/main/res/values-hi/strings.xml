@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources >
   <string name="accept_location">जगह  रिकार्ड करे </string>
   <string name="accuracy"> परिशुद्धता</string>
   <string name="add_another"> समूह जोड़ें</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources >
   <string name="accept_location">Записать местоположение</string>
   <string name="accuracy">Точность</string>
   <string name="activity_not_found">Случилось что-то страшное: %s</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">Înregistrează locația</string>
   <string name="accuracy">Precizie</string>
   <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>

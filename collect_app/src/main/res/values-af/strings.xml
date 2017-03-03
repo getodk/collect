@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources >
   <string name="accept_location">Stoor Posisie</string>
   <string name="accuracy">Akkuraatheid</string>
   <string name="activity_not_found">Geen aktiwiteit om te hanteer nie: %s</string>

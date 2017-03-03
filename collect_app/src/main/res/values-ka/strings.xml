@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources >
   <string name="accept_location">ჩანაწერის მდებარეობა</string>
   <string name="accuracy">აკურატულობა</string>
   <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
