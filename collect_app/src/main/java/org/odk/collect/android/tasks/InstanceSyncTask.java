@@ -19,7 +19,9 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.w3c.dom.Document;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,22 +48,35 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private static int counter = 0;
 
+    private String currentStatus;
+    private DiskSyncListener diskSyncListener;
+
+    public String getStatusMessage() {
+        return currentStatus;
+    }
+
+    public void setDiskSyncListener(DiskSyncListener diskSyncListener) {
+        this.diskSyncListener = diskSyncListener;
+    }
+
     @Override
     protected String doInBackground(Void... params) {
 
         int instance = ++counter;
         Log.i(TAG, "[" + instance + "] doInBackground begins!");
 
+        long start = System.nanoTime();
         try {
+            List<String> candidateInstances = new LinkedList<String>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders.length == 0) {
-                    return "Empty instance folder. Terminating sync process ...";
+                    currentStatus = Collect.getInstance().getString(R.string.instance_scan_empty);
+                    return currentStatus;
                 }
 
                 // Build the list of potential path that we need to add to the content provider
-                List<String> candidateInstances = new LinkedList<String>();
                 for (File instanceDir : instanceFolders) {
                     File instanceFile = new File(instanceDir, instanceDir.getName() + ".xml");
                     if (instanceFile.exists() && instanceFile.canRead()) {
@@ -79,7 +95,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                             .query(InstanceColumns.CONTENT_URI, null, null, null, sortOrder);
                     if (instanceCursor == null) {
                         Log.e(TAG, "[" + instance + "] Instance content provider returned null");
-                        return "Internal Error: Unable to access instances content provider";
+                        currentStatus = Collect.getInstance().getString(R.string.instance_scan_error);
+                        return currentStatus;
                     }
 
                     instanceCursor.moveToPosition(-1);
@@ -138,10 +155,17 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
             }
-            return "Finished scanning the instances path.";
+            long elapsed = System.nanoTime() - start;
+            currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
+            if (candidateInstances.size() > 0) {
+                currentStatus += candidateInstances.size() +
+                        Collect.getInstance().getString(R.string.instance_scan_timer) +
+                        String.format(Locale.US, "%ds", (elapsed / 1000000000));
+            }
         } finally {
             Log.i(TAG, "[" + instance + "] doInBackground ends!");
         }
+        return currentStatus;
     }
 
     private String getFormIdFromInstance(final String instancePath) {
@@ -161,5 +185,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+        if (diskSyncListener != null) {
+            diskSyncListener.syncComplete(result);
+        }
     }
 }

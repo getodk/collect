@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -41,11 +43,13 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends ListActivity {
+public class InstanceChooserList extends ListActivity implements DiskSyncListener {
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
+
+    private InstanceSyncTask instanceSyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +64,6 @@ public class InstanceChooserList extends ListActivity {
         }
 
         setContentView(R.layout.chooser_list_layout);
-        TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setVisibility(View.GONE);
         String selection;
         String[] selectionArgs = new String[]{InstanceProviderAPI.STATUS_SUBMITTED};
         String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
@@ -94,7 +96,8 @@ public class InstanceChooserList extends ListActivity {
 
         setListAdapter(instances);
 
-        InstanceSyncTask instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
     }
 
@@ -151,6 +154,33 @@ public class InstanceChooserList extends ListActivity {
             }
             finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(this);
+        }
+        super.onResume();
+
+        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            syncComplete(instanceSyncTask.getStatusMessage());
+        }
+    }
+
+
+    @Override
+    protected void onPause() {
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(null);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void syncComplete(String result) {
+        TextView textView = (TextView) findViewById(R.id.status_text);
+        textView.setText(result);
     }
 
     @Override

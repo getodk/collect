@@ -18,6 +18,21 @@ the License.
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:layout_alignParentTop="true">
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+        android:paddingBottom="4dip"
+        android:paddingEnd="8dip"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
+        android:paddingStart="8dip"
+        android:paddingTop="4dip"
+        android:text="@string/form_scan_starting"
+        android:textSize="14sp" />
+
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -46,7 +61,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_above="@+id/buttonholder"
-		android:layout_alignParentTop="true" />
+		android:layout_below="@+id/status_text" />
 	<TextView
 		android:id="@android:id/empty"
 		android:layout_width="fill_parent"
@@ -58,6 +73,7 @@ the License.
 		android:paddingEnd="20dp"
 		android:paddingRight="20dp"
 		android:gravity="center"
+		android:layout_below="@+id/status_text"
 		android:background="@drawable/white"
 		android:textColor="@drawable/black" />
 </RelativeLayout>

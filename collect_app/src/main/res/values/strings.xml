@@ -479,4 +479,8 @@
 <string name="encrypted_form">Encrypted form</string>
 <string name="deleted_form">Deleted form</string>
 <string name="exit">Exit</string>
+<string name="instance_scan_completed">Finished scanning the instances path. </string>
+<string name="instance_scan_timer"> instances added in </string>
+<string name="instance_scan_empty">Empty instance folder. Terminating sync process.</string>
+<string name="instance_scan_error">Internal Error: Unable to access instances content provider</string>
 </resources>
