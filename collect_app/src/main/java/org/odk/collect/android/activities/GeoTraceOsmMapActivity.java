@@ -39,7 +39,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;

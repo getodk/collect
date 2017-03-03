@@ -29,7 +29,6 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
