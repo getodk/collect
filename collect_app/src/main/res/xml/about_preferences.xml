@@ -3,28 +3,20 @@
     <PreferenceScreen
         android:id="@+id/info"
         android:key="info"
-        android:title="@string/odk_website" >
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="https://opendatakit.org" />
-    </PreferenceScreen>
+        android:title="@string/odk_website"/>
 
     <PreferenceScreen
         android:key="open_source_licenses"
-        android:title="@string/all_open_source_licenses"></PreferenceScreen>
+        android:title="@string/all_open_source_licenses" />
 
     <PreferenceScreen
         android:key="tell_your_friends"
         android:summary="@string/tell_your_friends_title"
-        android:title="@string/tell_your_friends"></PreferenceScreen>
+        android:title="@string/tell_your_friends" />
 
     <PreferenceScreen
         android:key="leave_a_review"
         android:summary="@string/leave_a_review_summary"
-        android:title="@string/leave_a_review">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="https://play.google.com/store/apps/details?id=org.odk.collect.android" />
-    </PreferenceScreen>
+        android:title="@string/leave_a_review" />
 
 </PreferenceScreen>
