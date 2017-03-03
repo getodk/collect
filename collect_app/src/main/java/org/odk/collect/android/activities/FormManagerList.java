@@ -142,7 +142,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         mBackgroundTasks = (BackgroundTasks) getLastNonConfigurationInstance();
         if (mBackgroundTasks == null) {
             mBackgroundTasks = new BackgroundTasks();
-            mBackgroundTasks.mDiskSyncTask = new DiskSyncTask();
+            mBackgroundTasks.mDiskSyncTask = new DiskSyncTask(this);
             mBackgroundTasks.mDiskSyncTask.setDiskSyncListener(this);
             mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
         }

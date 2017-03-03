@@ -15,6 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
@@ -28,6 +29,8 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,9 +43,13 @@ import java.util.List;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class DiskSyncTask extends AsyncTask<Void, String, String> {
+public class DiskSyncTask  extends AsyncTask<Void, String, String> {
     private final static String t = "DiskSyncTask";
+    private Context mContext;
 
+    public DiskSyncTask (Context context) {
+        this.mContext = context;
+    }
     private static int counter = 0;
 
     int instance;
@@ -275,8 +282,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         String base64RsaPublicKey = fields.get(FileUtils.BASE64_RSA_PUBLIC_KEY);
 
         // update date
-        Long now = Long.valueOf(System.currentTimeMillis());
-        updateValues.put(FormsColumns.DATE, now);
+        Format dateFormat = android.text.format.DateFormat.getDateFormat(mContext.getApplicationContext());
+        String now = ((SimpleDateFormat) dateFormat).toLocalizedPattern();
+        updateValues.put(FormsColumns.DATE, now );
 
         if (title != null) {
             updateValues.put(FormsColumns.DISPLAY_NAME, title);

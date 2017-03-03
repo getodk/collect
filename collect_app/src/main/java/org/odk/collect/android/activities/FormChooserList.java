@@ -94,7 +94,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
             Log.i(t, "Starting new disk sync task");
-            mDiskSyncTask = new DiskSyncTask();
+            mDiskSyncTask = new DiskSyncTask(this);
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
         }
