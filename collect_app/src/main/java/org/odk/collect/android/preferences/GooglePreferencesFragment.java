@@ -10,9 +10,9 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.text.InputFilter;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import java.util.ArrayList;
@@ -77,8 +77,7 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                     preference.setSummary(newValue.toString());
                     return true;
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.url_error, Toast.LENGTH_SHORT)
-                            .show();
+                    ToastUtils.shortDuration(String.valueOf(R.string.url_error));
                     return false;
                 }
             }

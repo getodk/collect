@@ -16,10 +16,6 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 
-import org.odk.collect.android.R;
-
-import java.util.List;
-
 /**
  * Handles 'other' specific preferences.
  *

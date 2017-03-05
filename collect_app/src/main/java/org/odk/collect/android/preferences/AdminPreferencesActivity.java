@@ -22,11 +22,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -147,11 +147,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 File writeDir = new File(Collect.SETTINGS);
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
-                        Toast.makeText(
-                                this,
-                                "Error creating directory "
-                                        + writeDir.getAbsolutePath(),
-                                Toast.LENGTH_SHORT).show();
+                        ToastUtils.shortDuration("Error creating directory "
+                                        + writeDir.getAbsolutePath());
                         return false;
                     }
                 }
@@ -160,15 +157,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                         + "/collect.settings");
                 boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, this);
                 if (success) {
-                    Toast.makeText(
-                            this,
-                            "Settings successfully written to "
-                                    + dst.getAbsolutePath(), Toast.LENGTH_LONG)
-                            .show();
+                    ToastUtils.longDuration("Settings successfully written to "
+                            + dst.getAbsolutePath());
                 } else {
-                    Toast.makeText(this,
-                            "Error writing settings to " + dst.getAbsolutePath(),
-                            Toast.LENGTH_LONG).show();
+                    ToastUtils.longDuration("Error writing settings to " + dst.getAbsolutePath());
                 }
                 return true;
 

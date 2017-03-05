@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
@@ -73,8 +74,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
-                        Toast.makeText(getActivity(),
-                                R.string.admin_password_changed, Toast.LENGTH_SHORT).show();
+                         ToastUtils.shortDuration(String.valueOf(R.string.admin_password_changed));
                         editor.commit();
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
@@ -84,14 +84,12 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
                         editor.commit();
-                        Toast.makeText(getActivity(),
-                                R.string.admin_password_disabled, Toast.LENGTH_SHORT).show();
+                         ToastUtils.shortDuration(String.valueOf(R.string.admin_password_disabled));
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "DISABLED");
                     } else {
-                        Toast.makeText(getActivity(),
-                                R.string.admin_password_mismatch, Toast.LENGTH_SHORT).show();
+                         ToastUtils.shortDuration(String.valueOf(R.string.admin_password_mismatch));
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "MISMATCH");
                     }

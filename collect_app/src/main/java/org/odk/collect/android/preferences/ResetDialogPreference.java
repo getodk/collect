@@ -23,10 +23,10 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class ResetDialogPreference extends DialogPreference {
             };
             new Thread(runnable).start();
         } else {
-            Toast.makeText(getContext(), R.string.reset_dialog_nothing, Toast.LENGTH_LONG).show();
+            ToastUtils.longDuration(String.valueOf(R.string.reset_dialog_nothing));
         }
     }
 

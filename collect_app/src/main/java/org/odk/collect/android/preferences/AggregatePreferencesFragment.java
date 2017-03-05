@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -176,9 +176,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                         setupUrlDropdownAdapter();
                     }
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            R.string.url_error, Toast.LENGTH_SHORT)
-                            .show();
+                    ToastUtils.shortDuration(String.valueOf(R.string.url_error));
                     return false;
                 }
                 break;
@@ -188,9 +186,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 // do not allow leading and trailing whitespace
                 if (!username.equals(username.trim())) {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            R.string.username_error_whitespace, Toast.LENGTH_SHORT)
-                            .show();
+                    ToastUtils.shortDuration(String.valueOf(R.string.username_error_whitespace));
                     return false;
                 }
 
@@ -207,9 +203,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 // do not allow leading and trailing whitespace
                 if (!pw.equals(pw.trim())) {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            R.string.password_error_whitespace, Toast.LENGTH_SHORT)
-                            .show();
+                    ToastUtils.shortDuration(String.valueOf(R.string.password_error_whitespace));
                     return false;
                 }
 
