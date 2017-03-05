@@ -17,6 +17,7 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -41,7 +42,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_FORM_PROCESSING_
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppPreferenceActivity {
+public class AdminPreferencesActivity extends PreferenceActivity {
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
     public static String ADMIN_PREFERENCES = "admin_prefs";
 

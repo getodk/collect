@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
@@ -38,18 +39,19 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com;
  *         constraint behavior option)
  */
-public class PreferencesActivity extends AppPreferenceActivity {
+public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
     private static final String t = "PreferencesActivity";
-
+    private PreferencesFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(t, "onCreate");
         super.onCreate(savedInstanceState);
+        fragment = new PreferencesFragment();
         getFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, new PreferencesFragment())
+                .replace(android.R.id.content, fragment)
                 .commit();
 
         setTitle(getString(R.string.general_preferences));
@@ -121,7 +123,7 @@ public class PreferencesActivity extends AppPreferenceActivity {
         editor.putString(KEY_SPLASH_PATH, path);
         editor.commit();
 
-        PreferenceScreen splashPathPreference = (PreferenceScreen) pref(KEY_SPLASH_PATH);
+        PreferenceScreen splashPathPreference = (PreferenceScreen) fragment.findPreference(KEY_SPLASH_PATH);
         String summary = splashPathPreference.getSharedPreferences().getString(
                 KEY_SPLASH_PATH, getString(R.string.default_splash_path));
         splashPathPreference.setSummary(summary);
