@@ -73,7 +73,7 @@ class DisabledPreferencesRemover {
             final boolean prefAllowed = adminPreferences.getBoolean(agKeys.adminKey, true);
 
             if (!prefAllowed && !adminMode) {
-                Preference pref = pa.pref(agKeys.generalKey);
+                Preference pref = pf.findPreference(agKeys.generalKey);
                 PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
                 if (preferenceCategory != null && pref != null) { // Neither should ever be null
                     preferenceCategory.removePreference(pref);
@@ -90,7 +90,7 @@ class DisabledPreferencesRemover {
                 HashSet<>(preferencePreferenceCategoryMap.values());
         for (PreferenceCategory pc : uniqueCategories) {
             if (pc.getPreferenceCount() == 0 && !adminMode) {
-                pa.getPreferenceScreen().removePreference(pc);
+                pf.getPreferenceScreen().removePreference(pc);
             }
         }
     }
