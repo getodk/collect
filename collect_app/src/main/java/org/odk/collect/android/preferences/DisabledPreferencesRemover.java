@@ -35,15 +35,17 @@ class DisabledPreferencesRemover {
     private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
 
     private PreferencesActivity pa;
+    private PreferencesFragment pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa) {
+    DisabledPreferencesRemover(PreferencesActivity pa, PreferencesFragment pf) {
         this.pa = pa;
+        this.pf = pf;
         preferencePreferenceCategoryMap = createPreferenceToPreferenceCategoryMap();
     }
 
     private Map<Preference, PreferenceCategory> createPreferenceToPreferenceCategoryMap() {
         final Map<Preference, PreferenceCategory> map = new HashMap<>();
-        PreferenceScreen screen = pa.getPreferenceScreen();
+        PreferenceScreen screen = pf.getPreferenceScreen();
         for (int i = 0; i < screen.getPreferenceCount(); i++) {
             Preference p = screen.getPreference(i);
             if (p instanceof PreferenceCategory) {
