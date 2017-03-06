@@ -2529,7 +2529,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastUtils.showLongToast(getString(R.string.savepoint_used));
+                    ToastUtils.showLongToast(R.string.savepoint_used);
                 }
             });
         }

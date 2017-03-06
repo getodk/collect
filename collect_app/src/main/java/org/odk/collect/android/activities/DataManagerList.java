@@ -197,7 +197,7 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
             mDeleteInstancesTask.setDeleteListener(this);
             mDeleteInstancesTask.execute(getCheckedIdObjects());
         } else {
-            ToastUtils.showLongToast(getString(R.string.file_delete_in_progress));
+            ToastUtils.showLongToast(R.string.file_delete_in_progress);
         }
     }
 
