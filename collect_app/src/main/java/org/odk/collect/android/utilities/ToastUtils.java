@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import android.content.res.Resources;
 import android.widget.Toast;
 
 import org.odk.collect.android.application.Collect;
@@ -15,23 +16,27 @@ public class ToastUtils {
         toaster(message, LENGTH_SHORT);
     }
 
-    public static void showLongToast(String message) {
-        toaster(message, LENGTH_LONG);
-    }
-
     public static void showShortToast(int messageResource) {
         toaster(messageResource, LENGTH_SHORT);
+    }
+
+    public static void showLongToast(String message) {
+        toaster(message, LENGTH_LONG);
     }
 
     public static void showLongToast(int messageResource) {
         toaster(messageResource, LENGTH_LONG);
     }
 
-    private static void toaster(int messageResource, int duration) {
-        Toast.makeText(Collect.getInstance(), Collect.getInstance().getString(messageResource), duration).show();
-    }
-
     private static void toaster(String message, int duration) {
         Toast.makeText(Collect.getInstance(), message, duration).show();
+    }
+
+    private static void toaster(int messageResource, int duration) {
+        try {
+            Toast.makeText(Collect.getInstance(), Collect.getInstance().getString(messageResource), duration).show();
+        } catch (Resources.NotFoundException nfe) {
+            nfe.printStackTrace();
+        }
     }
 }
