@@ -223,8 +223,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     Display display =
                             ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
                                     .getDefaultDisplay();
-                    int screenWidth = display.getWidth();
-                    int screenHeight = display.getHeight();
+                    Point p = new Point();
+                    display.getSize(p);
+                    int screenWidth = p.x;
+                    int screenHeight =p.y;
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
                             screenWidth);
                     if (b != null) {
