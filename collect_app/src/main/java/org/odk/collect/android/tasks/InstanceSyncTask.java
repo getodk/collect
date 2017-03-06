@@ -158,9 +158,11 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             long elapsed = System.nanoTime() - start;
             currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
             if (candidateInstances.size() > 0) {
-                currentStatus += candidateInstances.size() +
-                        Collect.getInstance().getString(R.string.instance_scan_timer) +
-                        String.format(Locale.US, "%ds", (elapsed / 1000000000));
+                currentStatus +=
+                        String.format(
+                                Collect.getInstance().getString(R.string.instance_scan_timer),
+                                candidateInstances.size(),
+                                String.format(Locale.US, "%ds", (elapsed / 1000000000)));
             }
         } finally {
             Log.i(TAG, "[" + instance + "] doInBackground ends!");

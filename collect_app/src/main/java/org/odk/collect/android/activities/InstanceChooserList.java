@@ -65,8 +65,6 @@ public class InstanceChooserList extends ListActivity implements DiskSyncListene
         }
 
         setContentView(R.layout.chooser_list_layout);
-        TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setVisibility(View.GONE);
 
         Cursor cursor;
         InstancesDao instancesDao = new InstancesDao();

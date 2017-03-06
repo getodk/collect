@@ -32,7 +32,8 @@ the License.
         android:paddingStart="8dip"
         android:paddingTop="4dip"
         android:text="@string/form_scan_starting"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:background="#DDDDDD" />
 
     <LinearLayout
         android:id="@+id/buttonholder"

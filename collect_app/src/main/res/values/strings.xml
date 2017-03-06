@@ -481,7 +481,7 @@
 <string name="deleted_form">Deleted form</string>
 <string name="exit">Exit</string>
 <string name="instance_scan_completed">Finished scanning the instances path. </string>
-<string name="instance_scan_timer"> instances added in </string>
-<string name="instance_scan_empty">Empty instance folder. Terminating sync process.</string>
+<string name="instance_scan_timer">%1$d instances added in %2$s.</string>
+<string name="instance_scan_empty">Empty instance folder. Stopping scan process.</string>
 <string name="instance_scan_error">Internal Error: Unable to access instances content provider</string>
 </resources>
