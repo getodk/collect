@@ -42,7 +42,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH
 public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
-    private static final String TAG = PreferencesActivity.class.getSimpleName();
+    private static final String TAG = "PreferenceActivity";
     private PreferencesFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
