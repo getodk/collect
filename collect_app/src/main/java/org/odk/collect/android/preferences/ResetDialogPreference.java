@@ -98,7 +98,7 @@ public class ResetDialogPreference extends DialogPreference {
             };
             new Thread(runnable).start();
         } else {
-            ToastUtils.makeLongText(String.valueOf(R.string.reset_dialog_nothing));
+            ToastUtils.showLongToast(R.string.reset_dialog_nothing);
         }
     }
 

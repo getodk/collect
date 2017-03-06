@@ -173,7 +173,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                         setupUrlDropdownAdapter();
                     }
                 } else {
-                    ToastUtils.makeShortText(String.valueOf(R.string.url_error));
+                    ToastUtils.showShortToast(R.string.url_error);
                     return false;
                 }
                 break;
@@ -183,7 +183,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 // do not allow leading and trailing whitespace
                 if (!username.equals(username.trim())) {
-                    ToastUtils.makeShortText(String.valueOf(R.string.username_error_whitespace));
+                    ToastUtils.showShortToast(R.string.username_error_whitespace);
                     return false;
                 }
 
@@ -200,7 +200,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 // do not allow leading and trailing whitespace
                 if (!pw.equals(pw.trim())) {
-                    ToastUtils.makeShortText(String.valueOf(R.string.password_error_whitespace));
+                    ToastUtils.showShortToast(R.string.password_error_whitespace);
                     return false;
                 }
 

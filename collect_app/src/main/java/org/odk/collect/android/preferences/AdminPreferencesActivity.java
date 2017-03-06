@@ -147,7 +147,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 File writeDir = new File(Collect.SETTINGS);
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
-                        ToastUtils.makeShortText("Error creating directory "
+                        ToastUtils.showShortToast("Error creating directory "
                                         + writeDir.getAbsolutePath());
                         return false;
                     }
@@ -157,10 +157,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                         + "/collect.settings");
                 boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, this);
                 if (success) {
-                    ToastUtils.makeLongText("Settings successfully written to "
+                    ToastUtils.showLongToast("Settings successfully written to "
                             + dst.getAbsolutePath());
                 } else {
-                    ToastUtils.makeLongText("Error writing settings to " + dst.getAbsolutePath());
+                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
                 }
                 return true;
 

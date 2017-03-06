@@ -74,7 +74,7 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                     preference.setSummary(newValue.toString());
                     return true;
                 } else {
-                    ToastUtils.makeShortText(String.valueOf(R.string.url_error));
+                    ToastUtils.showShortToast(R.string.url_error);
                     return false;
                 }
             }

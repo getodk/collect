@@ -70,7 +70,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
-                        ToastUtils.makeShortText(String.valueOf(R.string.admin_password_changed));
+                        ToastUtils.showShortToast(R.string.admin_password_changed);
                         editor.commit();
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
@@ -80,12 +80,12 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
                         editor.commit();
-                        ToastUtils.makeShortText(String.valueOf(R.string.admin_password_disabled));
+                        ToastUtils.showShortToast(R.string.admin_password_disabled);
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "DISABLED");
                     } else {
-                        ToastUtils.makeShortText(String.valueOf(R.string.admin_password_mismatch));
+                        ToastUtils.showShortToast(R.string.admin_password_mismatch);
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "MISMATCH");
                     }
