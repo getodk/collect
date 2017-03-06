@@ -27,6 +27,23 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
 
+## Making sure your pull request is accepted
+1. Confirm that your code compiles.
+
+1. Make sure that there is an issue that corresponds to the pull request and that it has been discussed by the community as necessary.
+
+1. Make as few changes per pull request as you can. This makes it easier to verify that the pull request has the intended effect. In particular, if you would like to make stylistic changes to the code, create a separate pull request.
+
+1. Run `gradle lint` and fix any lint errors.
+
+1. Write clear code. Use descriptive names and create meaningful abstractions (methods, classes).
+
+1. Document your reasoning. Your commit messages should make it clear why each change has been made.
+
+1. Verify your code. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm your code works as expected.
+
+1. Follow the guidelines below.
+
 ## Style guidelines
 For now, match the style of the code in the file you are editing. When creating new files, follow the [Android style rules](http://source.android.com/source/code-style.html).
 
