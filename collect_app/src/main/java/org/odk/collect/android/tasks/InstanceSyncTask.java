@@ -31,7 +31,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -156,7 +155,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
                 if (counter > 0) {
                     currentStatus += String.format(
-                            Collect.getInstance().getString(R.string.instance_scan_timer),
+                            Collect.getInstance().getString(R.string.instance_scan_count),
                             counter);
                 }
             }
