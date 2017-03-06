@@ -30,17 +30,17 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 ## Making sure your pull request is accepted
 1. Confirm that your code compiles.
 
+1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected.
+
 1. Make sure that there is an issue that corresponds to the pull request and that it has been discussed by the community as necessary.
 
-1. Make as few changes per pull request as you can. This makes it easier to verify that the pull request has the intended effect. In particular, if you would like to make stylistic changes to the code, create a separate pull request.
+1. Keep your pull request focused on one narrow goal. This could mean addressing an issue with multiple, smaller pull requests. Small pull requests are easier to review and less likely to introduce bugs. If you would like to make stylistic changes to the code, create a separate pull request.
 
 1. Run `gradle lint` and fix any lint errors.
 
 1. Write clear code. Use descriptive names and create meaningful abstractions (methods, classes).
 
 1. Document your reasoning. Your commit messages should make it clear why each change has been made.
-
-1. Verify your code. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm your code works as expected.
 
 1. Follow the guidelines below.
 
