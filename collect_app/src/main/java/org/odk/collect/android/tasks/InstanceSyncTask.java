@@ -65,7 +65,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         int instance = ++counter;
         Log.i(TAG, "[" + instance + "] doInBackground begins!");
 
-        long start = System.nanoTime();
         try {
             List<String> candidateInstances = new LinkedList<String>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
@@ -155,14 +154,12 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
             }
-            long elapsed = System.nanoTime() - start;
             currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
             if (candidateInstances.size() > 0) {
                 currentStatus +=
                         String.format(
                                 Collect.getInstance().getString(R.string.instance_scan_timer),
-                                candidateInstances.size(),
-                                String.format(Locale.US, "%ds", (elapsed / 1000000000)));
+                                candidateInstances.size());
             }
         } finally {
             Log.i(TAG, "[" + instance + "] doInBackground ends!");
