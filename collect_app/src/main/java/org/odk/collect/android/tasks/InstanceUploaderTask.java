@@ -591,8 +591,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         return true;
     }
 
-    // TODO: This method is like 350 lines long, down from 400.
-    // still. ridiculous. make it smaller.
     protected Outcome doInBackground(Long... values) {
         Outcome outcome = new Outcome();
         int counter = 0;
