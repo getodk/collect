@@ -167,7 +167,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
                 try {
-                    ((Activity) getContext()).startActivity(i);
+                    (getContext()).startActivity(i);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

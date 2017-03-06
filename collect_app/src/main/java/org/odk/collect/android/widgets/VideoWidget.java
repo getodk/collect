@@ -206,7 +206,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                         + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "video/*");
                 try {
-                    ((Activity) getContext()).startActivity(i);
+                    ( getContext()).startActivity(i);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources >
   <string name="accept_location">ثبت مکان</string>
   <string name="add_another">اضافه کردن گروه</string>
   <string name="add_more">بیشتر</string>

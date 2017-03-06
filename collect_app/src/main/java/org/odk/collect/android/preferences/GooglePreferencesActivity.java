@@ -66,7 +66,7 @@ public class GooglePreferencesActivity extends PreferenceActivity {
                                 .toString());
                         String value =
                                 (String) ((ListPreference) preference).getEntryValues()[index];
-                        ((ListPreference) preference).setSummary(value);
+                        ( preference).setSummary(value);
                         return true;
                     }
                 });

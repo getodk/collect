@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">জিপিএস স্থান র্নির্ধারণ করুন </string>
   <string name="accuracy">যথাযথতা</string>
   <string name="activity_not_found">পরিচালনা করার মত কোন কর্মকাণ্ড পাওয়া যায় নিঃ %s</string>

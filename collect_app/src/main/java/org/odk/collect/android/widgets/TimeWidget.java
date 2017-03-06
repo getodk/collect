@@ -58,7 +58,7 @@ public class TimeWidget extends QuestionWidget {
             // create a new date time from date object using default time zone
             DateTime ldt =
                     new DateTime(
-                            ((Date) ((TimeData) prompt.getAnswerValue()).getValue()).getTime());
+                            ((Date) ( prompt.getAnswerValue()).getValue()).getTime());
             System.out.println("retrieving:" + ldt);
 
             mTimePicker.setCurrentHour(ldt.getHourOfDay());

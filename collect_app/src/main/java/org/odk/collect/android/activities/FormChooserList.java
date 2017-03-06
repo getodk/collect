@@ -96,7 +96,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
             Log.i(t, "Starting new disk sync task");
-            mDiskSyncTask = new DiskSyncTask();
+            mDiskSyncTask = new DiskSyncTask(this);
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
         }
@@ -124,7 +124,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get uri to form
-        long idFormsTable = ((SimpleCursorAdapter) getListAdapter()).getItemId(position);
+        long idFormsTable = ( getListAdapter()).getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
