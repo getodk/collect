@@ -36,7 +36,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -45,6 +44,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
@@ -137,7 +137,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String errorMsg =
                         getContext().getString(R.string.file_missing, videoFilename);
                 Log.e(t, errorMsg);
-                Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(errorMsg);
                 return;
             }
 
@@ -146,9 +146,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             try {
                 ((Activity) getContext()).startActivity(i);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found, "view video"),
-                        Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, "view video"));
             }
         }
     }
@@ -253,10 +251,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                     try {
                                         getContext().startActivity(i);
                                     } catch (ActivityNotFoundException e) {
-                                        Toast.makeText(
-                                                getContext(),
-                                                getContext().getString(R.string.activity_not_found,
-                                                        "view image"), Toast.LENGTH_SHORT).show();
+                                        ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
+                                                        "view image"));
                                     }
                                 }
                             });
