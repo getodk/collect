@@ -1,6 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import android.content.res.Resources;
 import android.widget.Toast;
 
 import org.odk.collect.android.application.Collect;
@@ -33,10 +32,6 @@ public class ToastUtils {
     }
 
     private static void showToast(int messageResource, int duration) {
-        try {
-            Toast.makeText(Collect.getInstance(), Collect.getInstance().getString(messageResource), duration).show();
-        } catch (Resources.NotFoundException nfe) {
-            nfe.printStackTrace();
-        }
+        Toast.makeText(Collect.getInstance(), Collect.getInstance().getString(messageResource), duration).show();
     }
 }
