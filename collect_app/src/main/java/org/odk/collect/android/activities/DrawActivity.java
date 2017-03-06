@@ -455,8 +455,10 @@ public class DrawActivity extends Activity {
         public void reset() {
             Display display = ((WindowManager) getContext().getSystemService(
                     Context.WINDOW_SERVICE)).getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
+            Point p = new Point();
+            display.getSize(p);
+            int screenWidth = p.x;
+            int screenHeight = p.y;
             resetImage(screenWidth, screenHeight);
         }
 
