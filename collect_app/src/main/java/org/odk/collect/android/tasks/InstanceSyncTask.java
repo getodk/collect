@@ -44,7 +44,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  */
 public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
-    private final static String TAG = InstanceSyncTask.class.getSimpleName();
+    private final static String TAG = "InstanceSyncTask";
 
     private static int counter = 0;
 
@@ -61,17 +61,17 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-
         int instance = ++counter;
         Log.i(TAG, "[" + instance + "] doInBackground begins!");
 
+        currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
         try {
             List<String> candidateInstances = new LinkedList<String>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders.length == 0) {
-                    currentStatus = Collect.getInstance().getString(R.string.instance_scan_empty);
+                    Log.i(TAG, "[" + instance + "] Empty instance folder. Stopping scan process.");
                     return currentStatus;
                 }
 
@@ -94,7 +94,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                             .query(InstanceColumns.CONTENT_URI, null, null, null, sortOrder);
                     if (instanceCursor == null) {
                         Log.e(TAG, "[" + instance + "] Instance content provider returned null");
-                        currentStatus = Collect.getInstance().getString(R.string.instance_scan_error);
                         return currentStatus;
                     }
 
@@ -111,6 +110,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
+                int counter = 0;
                 // Begin parsing and add them to the content provider
                 for (String candidateInstance : candidateInstances) {
                     String instanceFormId = getFormIdFromInstance(candidateInstance);
@@ -145,6 +145,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 // save the new instance object
                                 Collect.getInstance().getContentResolver()
                                         .insert(InstanceColumns.CONTENT_URI, values);
+                                counter ++;
                             }
                         } finally {
                             if (formCursor != null) {
@@ -153,13 +154,11 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         }
                     }
                 }
-            }
-            currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
-            if (candidateInstances.size() > 0) {
-                currentStatus +=
-                        String.format(
-                                Collect.getInstance().getString(R.string.instance_scan_timer),
-                                candidateInstances.size());
+                if (counter > 0) {
+                    currentStatus += String.format(
+                            Collect.getInstance().getString(R.string.instance_scan_timer),
+                            counter);
+                }
             }
         } finally {
             Log.i(TAG, "[" + instance + "] doInBackground ends!");

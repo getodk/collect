@@ -480,8 +480,6 @@
 <string name="encrypted_form">Encrypted form</string>
 <string name="deleted_form">Deleted form</string>
 <string name="exit">Exit</string>
-<string name="instance_scan_completed">Finished scanning. </string>
+<string name="instance_scan_completed">Finished scanning instances.</string>
 <string name="instance_scan_timer">%1$d instances added.</string>
-<string name="instance_scan_empty">Empty instance folder. Stopping scan process.</string>
-<string name="instance_scan_error">Internal Error: Unable to access instances content provider</string>
 </resources>
