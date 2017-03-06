@@ -71,12 +71,15 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private AudioPlayListener mAudioPlayListener;
     private int mPlayTextColor;
     private int mPlayBackgroundTextColor;
+    
+    private Context mContext;
 
     private CharSequence mOriginalText;
 
 
     public MediaLayout(Context c, MediaPlayer player) {
         super(c);
+        mContext = c;
         mView_Text = null;
         mAudioButton = null;
         mImageView = null;
@@ -220,7 +223,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
-                    DisplayMetrics metrics = getBaseContext().getResources().getDisplayMetrics();
+                    DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
