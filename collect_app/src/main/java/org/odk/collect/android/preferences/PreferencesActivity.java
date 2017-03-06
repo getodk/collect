@@ -42,11 +42,11 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH
 public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
-    private static final String t = "PreferencesActivity";
+    private static final String TAG = PreferencesActivity.class.getSimpleName();
     private PreferencesFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(t, "onCreate");
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         fragment = new PreferencesFragment();
         getFragmentManager()
@@ -60,14 +60,14 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     public void onStart() {
-        Log.d(t, "onStart");
+        Log.d(TAG, "onStart");
         super.onStart();
     }
 
 
     @Override
     protected void onPause() {
-        Log.d(t, "onPause");
+        Log.d(TAG, "onPause");
         super.onPause();
 
         // the property manager should be re-assigned, as properties
@@ -78,7 +78,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.d(t, "onActivityResult " + requestCode + " " + resultCode);
+        Log.d(TAG, "onActivityResult " + requestCode + " " + resultCode);
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_CANCELED) {
             // request was canceled, so do nothing
@@ -101,19 +101,19 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onStop() {
-        Log.d(t, "onStop");
+        Log.d(TAG, "onStop");
         super.onStop();
     }
 
     @Override
     protected void onRestart() {
-        Log.d(t, "onRestart");
+        Log.d(TAG, "onRestart");
         super.onRestart();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(t, "onDestroy");
+        Log.d(TAG, "onDestroy");
         super.onDestroy();
     }
 

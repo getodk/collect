@@ -49,7 +49,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
     public boolean onPreferenceClick(Preference preference) {
 
         if (preference.getKey().equals(KEY_CHANGE_ADMIN_PASSWORD)) {
-            AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             LayoutInflater factory = LayoutInflater.from(getActivity());
             final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
@@ -57,9 +57,9 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
             final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
             final EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
 
-            b.setTitle(R.string.change_admin_password);
-            b.setView(dialogView);
-            b.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.change_admin_password);
+            builder.setView(dialogView);
+            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String pw = passwordEditText.getText().toString();
@@ -91,7 +91,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                     }
                 }
             });
-            b.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -99,8 +99,8 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                 }
             });
 
-            b.setCancelable(false);
-            AlertDialog dialog = b.create();
+            builder.setCancelable(false);
+            AlertDialog dialog = builder.create();
             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             dialog.show();
         }

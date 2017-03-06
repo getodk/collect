@@ -13,26 +13,26 @@ public class ToastUtils {
 
 
     public static void showShortToast(String message) {
-        toaster(message, LENGTH_SHORT);
+        Toast(message, LENGTH_SHORT);
     }
 
     public static void showShortToast(int messageResource) {
-        toaster(messageResource, LENGTH_SHORT);
+        Toast(messageResource, LENGTH_SHORT);
     }
 
     public static void showLongToast(String message) {
-        toaster(message, LENGTH_LONG);
+        Toast(message, LENGTH_LONG);
     }
 
     public static void showLongToast(int messageResource) {
-        toaster(messageResource, LENGTH_LONG);
+        Toast(messageResource, LENGTH_LONG);
     }
 
-    private static void toaster(String message, int duration) {
+    private static void Toast(String message, int duration) {
         Toast.makeText(Collect.getInstance(), message, duration).show();
     }
 
-    private static void toaster(int messageResource, int duration) {
+    private static void Toast(int messageResource, int duration) {
         try {
             Toast.makeText(Collect.getInstance(), Collect.getInstance().getString(messageResource), duration).show();
         } catch (Resources.NotFoundException nfe) {

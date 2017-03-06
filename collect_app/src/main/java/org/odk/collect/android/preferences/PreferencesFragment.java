@@ -45,7 +45,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMA
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
-    private static final String t = "PreferencesActivity";
+    private static final String TAG = "PreferencesFragment";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     @Override
     public void onResume() {
-        Log.d(t, "onResume");
+        Log.d(TAG, "onResume");
         super.onResume();
 
         // has to go in onResume because it may get updated by
