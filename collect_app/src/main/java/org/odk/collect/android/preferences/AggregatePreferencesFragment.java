@@ -31,9 +31,6 @@ import org.odk.collect.android.utilities.WebUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by shobhit on 5/3/17.
- */
 
 public class AggregatePreferencesFragment extends PreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
@@ -176,7 +173,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                         setupUrlDropdownAdapter();
                     }
                 } else {
-                    ToastUtils.shortDuration(String.valueOf(R.string.url_error));
+                    ToastUtils.makeShortText(String.valueOf(R.string.url_error));
                     return false;
                 }
                 break;
@@ -186,7 +183,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 // do not allow leading and trailing whitespace
                 if (!username.equals(username.trim())) {
-                    ToastUtils.shortDuration(String.valueOf(R.string.username_error_whitespace));
+                    ToastUtils.makeShortText(String.valueOf(R.string.username_error_whitespace));
                     return false;
                 }
 
@@ -203,7 +200,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 // do not allow leading and trailing whitespace
                 if (!pw.equals(pw.trim())) {
-                    ToastUtils.shortDuration(String.valueOf(R.string.password_error_whitespace));
+                    ToastUtils.makeShortText(String.valueOf(R.string.password_error_whitespace));
                     return false;
                 }
 

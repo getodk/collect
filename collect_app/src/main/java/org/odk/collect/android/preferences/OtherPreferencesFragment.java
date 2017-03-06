@@ -7,9 +7,6 @@ import android.text.InputFilter;
 
 import org.odk.collect.android.R;
 
-/**
- * Created by shobhit on 6/3/17.
- */
 
 public class OtherPreferencesFragment extends AggregatePreferencesFragment implements Preference.OnPreferenceChangeListener {
 

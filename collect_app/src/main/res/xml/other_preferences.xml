@@ -19,4 +19,5 @@
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/submission_url" />
     </PreferenceCategory>
+
 </PreferenceScreen>

@@ -16,10 +16,6 @@ import org.odk.collect.android.activities.OpenSourceLicensesActivity;
 
 import java.util.List;
 
-/**
- * Created by shobhit on 4/3/17.
- */
-
 
 public class AboutPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 

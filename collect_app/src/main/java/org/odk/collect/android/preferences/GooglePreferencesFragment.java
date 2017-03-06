@@ -17,9 +17,6 @@ import org.odk.collect.android.utilities.UrlUtils;
 
 import java.util.ArrayList;
 
-/**
- * Created by shobhit on 5/3/17.
- */
 
 public class GooglePreferencesFragment extends PreferenceFragment {
     protected EditTextPreference mGoogleSheetsUrlPreference;
@@ -77,7 +74,7 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                     preference.setSummary(newValue.toString());
                     return true;
                 } else {
-                    ToastUtils.shortDuration(String.valueOf(R.string.url_error));
+                    ToastUtils.makeShortText(String.valueOf(R.string.url_error));
                     return false;
                 }
             }

@@ -42,9 +42,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
-/**
- * Created by shobhit on 6/3/17.
- */
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
@@ -109,7 +106,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
 
     private void removeAllDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity)getActivity(),this);
+        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
         preferencesRemover.remove(AdminKeys.adminToGeneral);
         preferencesRemover.removeEmptyCategories();
     }

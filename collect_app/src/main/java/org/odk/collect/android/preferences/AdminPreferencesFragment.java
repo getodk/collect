@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -24,9 +23,6 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_FORM_PROCESSING_LOGIC;
 
-/**
- * Created by shobhit on 5/3/17.
- */
 
 public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
@@ -74,7 +70,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
-                         ToastUtils.shortDuration(String.valueOf(R.string.admin_password_changed));
+                        ToastUtils.makeShortText(String.valueOf(R.string.admin_password_changed));
                         editor.commit();
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
@@ -84,12 +80,12 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
                         editor.commit();
-                         ToastUtils.shortDuration(String.valueOf(R.string.admin_password_disabled));
+                        ToastUtils.makeShortText(String.valueOf(R.string.admin_password_disabled));
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "DISABLED");
                     } else {
-                         ToastUtils.shortDuration(String.valueOf(R.string.admin_password_mismatch));
+                        ToastUtils.makeShortText(String.valueOf(R.string.admin_password_mismatch));
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "MISMATCH");
                     }
