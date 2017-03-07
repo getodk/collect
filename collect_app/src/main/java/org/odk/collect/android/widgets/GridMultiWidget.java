@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -131,8 +132,9 @@ public class GridMultiWidget extends QuestionWidget {
         Display display =
                 ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
                         .getDefaultDisplay();
-        int screenWidth = display.getWidth();
-        int screenHeight = display.getHeight();
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
+        int screenHeight = metrics.heightPixels;
 
         if (display.getOrientation() % 2 == 1) {
             // rotated 90 degrees...
