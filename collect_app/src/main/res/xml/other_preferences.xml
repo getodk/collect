@@ -1,8 +1,7 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="@string/other_preferences"
-        android:title="@string/other_preferences" >
+        android:title="@string/other_preferences">
         <EditTextPreference
             android:id="@+id/formlist_url"
             android:defaultValue="@string/default_odk_formlist"
@@ -20,5 +19,5 @@
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/submission_url" />
     </PreferenceCategory>
-   
+
 </PreferenceScreen>
