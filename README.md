@@ -16,6 +16,22 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 * ODK developer Slack archive: [http://opendatakit.slackarchive.io](http://opendatakit.slackarchive.io) 
 * ODK developer wiki: [https://github.com/opendatakit/opendatakit/wiki](https://github.com/opendatakit/opendatakit/wiki)
 
+## Release cycle
+New versions of ODK Collect are released on the last Sunday of each month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes).
+
+## Testing a form locally
+
+1. [Make](https://xlsform.org) or get ([example forms](https://github.com/XLSForm/example-forms), [test forms](https://github.com/XLSForm/test-forms)) an XLSForm.
+
+1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://opendatakit.org/xiframe/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
+
+1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
+	```
+	adb push my_form.xml /sdcard/odk/forms/
+	```
+
+1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
+
 ## Setting up your development environment
 
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 

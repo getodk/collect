@@ -35,7 +35,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -48,6 +47,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -280,7 +280,7 @@ public class FormDownloadList extends AppListActivity implements FormListDownloa
         NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
         if (ni == null || !ni.isConnected()) {
-            Toast.makeText(this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.no_connection);
         } else {
 
             mFormNamesAndURLs = new HashMap<String, FormDetails>();
@@ -428,8 +428,7 @@ public class FormDownloadList extends AppListActivity implements FormListDownloa
             mDownloadFormsTask.setDownloaderListener(this);
             mDownloadFormsTask.execute(filesToDownload);
         } else {
-            Toast.makeText(getApplicationContext(), R.string.noselect_error, Toast.LENGTH_SHORT)
-                    .show();
+            ToastUtils.showShortToast(R.string.noselect_error);
         }
     }
 

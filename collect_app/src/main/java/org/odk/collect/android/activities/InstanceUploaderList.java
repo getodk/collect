@@ -36,7 +36,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
@@ -46,6 +45,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.ToastUtils;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -90,15 +90,11 @@ public class InstanceUploaderList extends AppListActivity
                 NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
                 if (NetworkReceiver.running) {
-                    Toast.makeText(
-                            InstanceUploaderList.this,
-                            R.string.send_in_progress,
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShortToast(R.string.send_in_progress);
                 } else if (ni == null || !ni.isConnected()) {
                     logger.logAction(this, "uploadButton", "noConnection");
 
-                    Toast.makeText(InstanceUploaderList.this,
-                            R.string.no_connection, Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShortToast(R.string.no_connection);
                 } else {
                     int checkedItemCount = getCheckedCount();
                     logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
@@ -110,9 +106,7 @@ public class InstanceUploaderList extends AppListActivity
                         mUploadButton.setEnabled(false);
                     } else {
                         // no items selected
-                        Toast.makeText(getApplicationContext(),
-                                getString(R.string.noselect_error),
-                                Toast.LENGTH_SHORT).show();
+                        ToastUtils.showLongToast(R.string.noselect_error);
                     }
                 }
             }

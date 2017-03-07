@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
@@ -33,6 +32,7 @@ import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 
 /**
@@ -67,8 +67,7 @@ public class DataManagerList extends AppListActivity
                 if (checkedItemCount > 0) {
                     createDeleteInstancesDialog();
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            R.string.noselect_error, Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShortToast(R.string.noselect_error);
                 }
             }
         });
@@ -219,8 +218,7 @@ public class DataManagerList extends AppListActivity
             mDeleteInstancesTask.setDeleteListener(this);
             mDeleteInstancesTask.execute(getCheckedIdObjects());
         } else {
-            Toast.makeText(this, getString(R.string.file_delete_in_progress),
-                    Toast.LENGTH_LONG).show();
+            ToastUtils.showLongToast(R.string.file_delete_in_progress);
         }
     }
 
@@ -240,19 +238,14 @@ public class DataManagerList extends AppListActivity
         final int checkedCount = getCheckedCount();
         if (deletedInstances == checkedCount) {
             // all deletes were successful
-            Toast.makeText(this,
-                    getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
             Log.e(t, "Failed to delete "
                     + (checkedCount - deletedInstances) + " instances");
-            Toast.makeText(
-                    this,
-                    getString(R.string.file_deleted_error,
+            ToastUtils.showLongToast(getString(R.string.file_deleted_error,
                             String.valueOf(checkedCount - deletedInstances),
-                            String.valueOf(checkedCount)),
-                    Toast.LENGTH_LONG).show();
+                            String.valueOf(checkedCount)));
         }
         mDeleteInstancesTask = null;
         getListView().clearChoices(); // doesn't unset the checkboxes
