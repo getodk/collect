@@ -23,24 +23,7 @@ import org.odk.collect.android.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
-import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL_SETTINGS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
-import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.PreferenceKeys.*;
 
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
