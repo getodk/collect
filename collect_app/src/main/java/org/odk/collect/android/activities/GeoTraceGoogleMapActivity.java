@@ -35,7 +35,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,6 +55,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 
@@ -157,7 +157,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private void setupMap(GoogleMap googleMap) {
         mMap = googleMap;
         if (mMap == null) {
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
