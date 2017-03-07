@@ -14,12 +14,14 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
@@ -94,7 +96,7 @@ public class PreferencesActivity extends PreferenceActivity {
                         Images.Media.DATA);
 
                 // setting image path
-                setSplashPath(sourceMediaPath);
+                setSplashPath(sourceMediaPath, fragment, this);
                 break;
         }
     }
@@ -117,15 +119,15 @@ public class PreferencesActivity extends PreferenceActivity {
         super.onDestroy();
     }
 
-    void setSplashPath(String path) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    public static void setSplashPath(String path, PreferenceFragment fragment, Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Editor editor = sharedPreferences.edit();
         editor.putString(KEY_SPLASH_PATH, path);
         editor.commit();
 
         PreferenceScreen splashPathPreference = (PreferenceScreen) fragment.findPreference(KEY_SPLASH_PATH);
         String summary = splashPathPreference.getSharedPreferences().getString(
-                KEY_SPLASH_PATH, getString(R.string.default_splash_path));
+                KEY_SPLASH_PATH, context.getString(R.string.default_splash_path));
         splashPathPreference.setSummary(summary);
     }
 }
