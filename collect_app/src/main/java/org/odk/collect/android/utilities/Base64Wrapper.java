@@ -36,7 +36,7 @@ public class Base64Wrapper {
     }
 
     public String encodeToString(byte[] ba) {
-        Class<?>[] argClassList = new Class[]{byte[].class, int.class};
+        Class<?>[] argClassList = new Class<?>[]{byte[].class, int.class};
         try {
             Method m = base64.getDeclaredMethod("encode", argClassList);
             Object[] argList = new Object[]{ba, FLAGS};
@@ -63,7 +63,7 @@ public class Base64Wrapper {
     }
 
     public byte[] decode(String base64String) {
-        Class<?>[] argClassList = new Class[]{String.class, int.class};
+        Class<?>[] argClassList = new Class<?>[]{String.class, int.class};
         Object o;
         try {
             Method m = base64.getDeclaredMethod("decode", argClassList);
