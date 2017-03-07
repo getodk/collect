@@ -57,7 +57,5 @@ the License.
 		android:paddingLeft="20dp"
 		android:paddingEnd="20dp"
 		android:paddingRight="20dp"
-		android:gravity="center"
-		android:background="@drawable/white"
-		android:textColor="@drawable/black" />
+		android:gravity="center"			/>
 </RelativeLayout>
