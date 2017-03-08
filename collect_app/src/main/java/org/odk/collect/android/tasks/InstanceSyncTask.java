@@ -17,11 +17,13 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.w3c.dom.Document;
@@ -109,6 +111,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
+                boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
+                        Collect.getInstance().getApplicationContext()).getBoolean(
+                        PreferenceKeys.KEY_INSTANCE_SYNC, true);
+
                 int counter = 0;
                 // Begin parsing and add them to the content provider
                 for (String candidateInstance : candidateInstances) {
@@ -139,7 +145,13 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
                                 values.put(InstanceColumns.JR_VERSION, jrVersion);
-                                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+
+                                if (instanceSyncFlag){
+                                    values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+                                }else {
+                                    values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+                                }
+
                                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
                                 // save the new instance object
                                 Collect.getInstance().getContentResolver()
