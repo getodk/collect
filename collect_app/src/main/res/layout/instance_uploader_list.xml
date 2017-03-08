@@ -43,7 +43,7 @@ the License.
 		<Button
 			android:id="@+id/toggle_button"
 			android:text="@string/select_all"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
 			android:textSize="16sp"
@@ -51,7 +51,7 @@ the License.
 		<Button
 			android:id="@+id/upload_button"
 			android:text="@string/send_selected_data"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
 			android:textSize="16sp"
