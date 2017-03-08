@@ -235,18 +235,18 @@ public class DataManagerList extends AppListActivity
         Log.i(t, "Delete instances complete");
         logger.logAction(this, "deleteComplete",
                 Integer.toString(deletedInstances));
-        final int checkedCount = mDeleteInstancesTask.getToDeleteCount();
+        final int toDeleteCount = mDeleteInstancesTask.getToDeleteCount();
 
-        if (deletedInstances == checkedCount) {
+        if (deletedInstances == toDeleteCount) {
             // all deletes were successful
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
             Log.e(t, "Failed to delete "
-                    + (checkedCount - deletedInstances) + " instances");
+                    + (toDeleteCount - deletedInstances) + " instances");
             ToastUtils.showLongToast(getString(R.string.file_deleted_error,
-                            String.valueOf(checkedCount - deletedInstances),
-                            String.valueOf(checkedCount)));
+                            String.valueOf(toDeleteCount - deletedInstances),
+                            String.valueOf(toDeleteCount)));
         }
         mDeleteInstancesTask = null;
         getListView().clearChoices(); // doesn't unset the checkboxes
