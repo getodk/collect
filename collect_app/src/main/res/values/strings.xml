@@ -29,7 +29,7 @@
 <string name="cancel">Cancel</string>
 <string name="cancel_loading_form">Cancel</string>
 <string name="cancel_location">Cancel</string>
-<string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as complete. It may be encrypted.</string>
+<string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as finalized. It may be encrypted.</string>
 <string name="capture_audio">Record Sound</string>
 <string name="capture_image">Take Picture</string>
 <string name="capture_osm">Launch OpenMapKit</string>
