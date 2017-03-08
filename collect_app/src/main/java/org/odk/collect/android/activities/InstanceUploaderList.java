@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -34,14 +35,17 @@ import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.ToastUtils;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -51,7 +55,8 @@ import org.odk.collect.android.receivers.NetworkReceiver;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends AppListActivity implements OnLongClickListener {
+public class InstanceUploaderList extends AppListActivity
+        implements OnLongClickListener, DiskSyncListener {
     private static final String t = "InstanceUploaderList";
     private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
@@ -64,6 +69,8 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
     private SimpleCursorAdapter mCursorAdapter;
 
     private InstancesDao mInstanceDao;
+
+    private InstanceSyncTask instanceSyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,15 +90,11 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
                 NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
                 if (NetworkReceiver.running) {
-                    Toast.makeText(
-                            InstanceUploaderList.this,
-                            R.string.send_in_progress,
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShortToast(R.string.send_in_progress);
                 } else if (ni == null || !ni.isConnected()) {
                     logger.logAction(this, "uploadButton", "noConnection");
 
-                    Toast.makeText(InstanceUploaderList.this,
-                            R.string.no_connection, Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShortToast(R.string.no_connection);
                 } else {
                     int checkedItemCount = getCheckedCount();
                     logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
@@ -103,9 +106,7 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
                         mUploadButton.setEnabled(false);
                     } else {
                         // no items selected
-                        Toast.makeText(getApplicationContext(),
-                                getString(R.string.noselect_error),
-                                Toast.LENGTH_SHORT).show();
+                        ToastUtils.showLongToast(R.string.noselect_error);
                     }
                 }
             }
@@ -143,6 +144,36 @@ public class InstanceUploaderList extends AppListActivity implements OnLongClick
 
         // set title
         setTitle(getString(R.string.send_data));
+
+        instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.setDiskSyncListener(this);
+        instanceSyncTask.execute();
+    }
+
+    @Override
+    protected void onResume() {
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(this);
+        }
+        super.onResume();
+
+        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            syncComplete(instanceSyncTask.getStatusMessage());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(null);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void syncComplete(String result) {
+        TextView textView = (TextView) findViewById(R.id.status_text);
+        textView.setText(result);
     }
 
     @Override

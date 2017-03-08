@@ -147,7 +147,7 @@ public class FormsDaoTest {
 
     @Test
     public void getFormsCursorForFormFilePathTest() {
-        Cursor cursor = mFormsDao.getFormsCursorForFormFilePath("/storage/emulated/0/odk/forms/Miramare.xml");
+        Cursor cursor = mFormsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Miramare.xml");
         List<Form> forms = mFormsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
@@ -157,7 +157,7 @@ public class FormsDaoTest {
 
     @Test
     public void updateInstanceTest() {
-        Cursor cursor = mFormsDao.getFormsCursorForFormFilePath("/storage/emulated/0/odk/forms/Widgets.xml");
+        Cursor cursor = mFormsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Widgets.xml");
         List<Form> forms = mFormsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
@@ -169,16 +169,16 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
                 .jrFormId("Widgets2")
                 .date(1487782554846L)
-                .formMediaPath("/storage/emulated/0/odk/forms/Widgets-media")
-                .formFilePath("/storage/emulated/0/odk/forms/Widgets.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/Widgets-media")
+                .formFilePath(Collect.FORMS_PATH + "/Widgets.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
         String where = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
         String[] whereArgs = {"Widgets"};
         assertEquals(mFormsDao.updateForm(mFormsDao.getValuesFromFormObject(form), where, whereArgs), 1);
 
-        cursor = mFormsDao.getFormsCursorForFormFilePath("/storage/emulated/0/odk/forms/Widgets.xml");
+        cursor = mFormsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Widgets.xml");
         forms = mFormsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
@@ -193,9 +193,9 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 15:21")
                 .jrFormId("N_Biggest")
                 .date(1487773315435L)
-                .formMediaPath("/storage/emulated/0/odk/forms/Biggest N of Set-media")
-                .formFilePath("/storage/emulated/0/odk/forms/Biggest N of Set.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/Biggest N of Set-media")
+                .formFilePath(Collect.FORMS_PATH + "/Biggest N of Set.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef")
                 .build();
 
         mFormsDao.saveForm(mFormsDao.getValuesFromFormObject(form1));
@@ -206,9 +206,9 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
                 .jrFormId("Birds")
                 .date(1487782404899L)
-                .formMediaPath("/storage/emulated/0/odk/forms/Birds-media")
-                .formFilePath("/storage/emulated/0/odk/forms/Birds.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/4cd980d50f884362afba842cbff3a798.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/Birds-media")
+                .formFilePath(Collect.FORMS_PATH + "/Birds.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4cd980d50f884362afba842cbff3a798.formdef")
                 .build();
 
         mFormsDao.saveForm(mFormsDao.getValuesFromFormObject(form2));
@@ -219,9 +219,9 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
                 .jrFormId("Miramare")
                 .date(1487782545945L)
-                .formMediaPath("/storage/emulated/0/odk/forms/Miramare-media")
-                .formFilePath("/storage/emulated/0/odk/forms/Miramare.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/e733627cdbf220929bf9c4899cb983ea.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/Miramare-media")
+                .formFilePath(Collect.FORMS_PATH + "/Miramare.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/e733627cdbf220929bf9c4899cb983ea.formdef")
                 .build();
 
         mFormsDao.saveForm(mFormsDao.getValuesFromFormObject(form3));
@@ -232,9 +232,9 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
                 .jrFormId("geo_tagger_v2")
                 .date(1487782428992L)
-                .formMediaPath("/storage/emulated/0/odk/forms/Geo Tagger v2-media")
-                .formFilePath("/storage/emulated/0/odk/forms/Geo Tagger v2.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/Geo Tagger v2-media")
+                .formFilePath(Collect.FORMS_PATH + "/Geo Tagger v2.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef")
                 .build();
 
         mFormsDao.saveForm(mFormsDao.getValuesFromFormObject(form4));
@@ -245,9 +245,9 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
                 .jrFormId("Widgets")
                 .date(1487782554846L)
-                .formMediaPath("/storage/emulated/0/odk/forms/Widgets-media")
-                .formFilePath("/storage/emulated/0/odk/forms/Widgets.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/Widgets-media")
+                .formFilePath(Collect.FORMS_PATH + "/Widgets.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
         mFormsDao.saveForm(mFormsDao.getValuesFromFormObject(form5));
@@ -258,9 +258,9 @@ public class FormsDaoTest {
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
                 .jrFormId("sample")
                 .date(1487782555840L)
-                .formMediaPath("/storage/emulated/0/odk/forms/sample-media")
-                .formFilePath("/storage/emulated/0/odk/forms/sample.xml")
-                .jrCacheFilePath("/storage/emulated/0/odk/.cache/4f495fddd1f2544f65444ea83d25f425.formdef")
+                .formMediaPath(Collect.FORMS_PATH + "/sample-media")
+                .formFilePath(Collect.FORMS_PATH + "/sample.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4f495fddd1f2544f65444ea83d25f425.formdef")
                 .build();
 
         mFormsDao.saveForm(mFormsDao.getValuesFromFormObject(form6));

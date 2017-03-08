@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -452,10 +453,9 @@ public class DrawActivity extends Activity {
         }
 
         public void reset() {
-            Display display = ((WindowManager) getContext().getSystemService(
-                    Context.WINDOW_SERVICE)).getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
+            DisplayMetrics metrics = getBaseContext().getResources().getDisplayMetrics();
+            int screenWidth = metrics.widthPixels;
+            int screenHeight = metrics.heightPixels;
             resetImage(screenWidth, screenHeight);
         }
 

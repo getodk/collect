@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2009 University of Washington
-
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
 the License at
-
 http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -18,6 +15,22 @@ the License.
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:layout_alignParentTop="true">
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+        android:paddingBottom="4dip"
+        android:paddingEnd="8dip"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
+        android:paddingStart="8dip"
+        android:paddingTop="4dip"
+        android:text="@string/form_scan_starting"
+        android:textSize="14sp"
+		android:background="#DDDDDD" />
+
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -27,7 +40,7 @@ the License.
 		<Button
 			android:id="@+id/toggle_button"
 			android:text="@string/select_all"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
 			android:textSize="16sp"
@@ -35,7 +48,7 @@ the License.
 		<Button
 			android:id="@+id/upload_button"
 			android:text="@string/send_selected_data"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
 			android:textSize="16sp"
@@ -46,7 +59,7 @@ the License.
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_above="@+id/buttonholder"
-		android:layout_alignParentTop="true" />
+		android:layout_below="@+id/status_text" />
 	<TextView
 		android:id="@android:id/empty"
 		android:layout_width="fill_parent"
@@ -58,5 +71,5 @@ the License.
 		android:paddingEnd="20dp"
 		android:paddingRight="20dp"
 		android:gravity="center"
-		android:textColor="@drawable/black" />
+		android:layout_below="@+id/status_text" />
 </RelativeLayout>

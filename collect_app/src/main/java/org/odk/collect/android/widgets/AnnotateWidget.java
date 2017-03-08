@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -218,10 +219,9 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             }
             mImageView = new ImageView(getContext());
             mImageView.setId(QuestionWidget.newUniqueId());
-            Display display = ((WindowManager) getContext().getSystemService(
-                    Context.WINDOW_SERVICE)).getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
+            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+            int screenWidth = metrics.widthPixels;
+            int screenHeight = metrics.heightPixels;
 
             File f = new File(mInstanceFolder + File.separator + mBinaryName);
 

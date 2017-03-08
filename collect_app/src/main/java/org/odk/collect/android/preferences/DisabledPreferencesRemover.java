@@ -35,15 +35,17 @@ class DisabledPreferencesRemover {
     private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
 
     private PreferencesActivity pa;
+    private PreferencesFragment pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa) {
+    DisabledPreferencesRemover(PreferencesActivity pa, PreferencesFragment pf) {
         this.pa = pa;
+        this.pf = pf;
         preferencePreferenceCategoryMap = createPreferenceToPreferenceCategoryMap();
     }
 
     private Map<Preference, PreferenceCategory> createPreferenceToPreferenceCategoryMap() {
         final Map<Preference, PreferenceCategory> map = new HashMap<>();
-        PreferenceScreen screen = pa.getPreferenceScreen();
+        PreferenceScreen screen = pf.getPreferenceScreen();
         for (int i = 0; i < screen.getPreferenceCount(); i++) {
             Preference p = screen.getPreference(i);
             if (p instanceof PreferenceCategory) {
@@ -71,7 +73,7 @@ class DisabledPreferencesRemover {
             final boolean prefAllowed = adminPreferences.getBoolean(agKeys.adminKey, true);
 
             if (!prefAllowed && !adminMode) {
-                Preference pref = pa.pref(agKeys.generalKey);
+                Preference pref = pf.findPreference(agKeys.generalKey);
                 PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
                 if (preferenceCategory != null && pref != null) { // Neither should ever be null
                     preferenceCategory.removePreference(pref);
@@ -88,7 +90,7 @@ class DisabledPreferencesRemover {
                 HashSet<>(preferencePreferenceCategoryMap.values());
         for (PreferenceCategory pc : uniqueCategories) {
             if (pc.getPreferenceCount() == 0 && !adminMode) {
-                pa.getPreferenceScreen().removePreference(pc);
+                pf.getPreferenceScreen().removePreference(pc);
             }
         }
     }

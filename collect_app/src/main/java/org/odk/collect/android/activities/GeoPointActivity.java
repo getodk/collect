@@ -25,12 +25,12 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
@@ -83,8 +83,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 }
             }
             if (!mGPSOn && !mNetworkOn) {
-                Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
-                        Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast(R.string.provider_disabled_error);
                 finish();
             }
 

@@ -38,7 +38,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -53,6 +52,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -131,14 +131,10 @@ public class MainMenuActivity extends Activity {
         if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
-                Toast.makeText(this,
-                        getString(R.string.settings_successfully_loaded_file_notification),
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 f.delete();
             } else {
-                Toast.makeText(this,
-                        getString(R.string.corrupt_settings_file_notification),
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
 
@@ -481,10 +477,7 @@ public class MainMenuActivity extends Activity {
                                     input.setText("");
                                     passwordDialog.dismiss();
                                 } else {
-                                    Toast.makeText(
-                                            MainMenuActivity.this,
-                                            getString(R.string.admin_password_incorrect),
-                                            Toast.LENGTH_SHORT).show();
+                                    ToastUtils.showShortToast(R.string.admin_password_incorrect);
                                     Collect.getInstance()
                                             .getActivityLogger()
                                             .logAction(this, "adminPasswordDialog",
