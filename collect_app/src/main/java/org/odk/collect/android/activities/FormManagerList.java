@@ -265,12 +265,14 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
     public void deleteComplete(int deletedForms) {
         Log.i(t, "Delete forms complete");
         logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
-        if (deletedForms == getCheckedCount()) {
+        final int checkedCount = mBackgroundTasks.mDeleteFormsTask.getCheckedCount();
+
+        if (deletedForms == checkedCount) {
             // all deletes were successful
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Log.e(t, "Failed to delete " + (getCheckedCount() - deletedForms) + " forms");
+            Log.e(t, "Failed to delete " + (checkedCount - deletedForms) + " forms");
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                             - deletedForms), String.valueOf(getCheckedCount())));
         }
