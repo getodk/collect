@@ -74,7 +74,5 @@ the License.
 		android:paddingEnd="20dp"
 		android:paddingRight="20dp"
 		android:gravity="center"
-		android:layout_below="@+id/status_text"
-		android:background="@drawable/white"
-		android:textColor="@drawable/black" />
+		android:layout_below="@+id/status_text" />
 </RelativeLayout>
