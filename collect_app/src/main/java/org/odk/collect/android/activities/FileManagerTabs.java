@@ -43,6 +43,8 @@ public class FileManagerTabs extends TabActivity {
 
         setTitle(getString(R.string.manage_files));
 
+        setContentView(R.layout.file_manager_layout);
+
         final TabHost tabHost = getTabHost();
         tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
 
