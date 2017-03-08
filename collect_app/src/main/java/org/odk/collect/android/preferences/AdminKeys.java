@@ -38,7 +38,7 @@ public final class AdminKeys {
     private static String KEY_DEFAULT_TO_FINALIZED      = "default_to_finalized";
     private static String KEY_HIGH_RESOLUTION           = "high_resolution";
     private static String KEY_SHOW_SPLASH_SCREEN        = "show_splash_screen";
-    private static String KEY_DELETE_AFTER_SEND         = "delete_after_send";
+            static String KEY_DELETE_AFTER_SEND         = "delete_after_send";
 
     private static String KEY_AUTOSEND_WIFI             = "autosend_wifi";
     private static String KEY_AUTOSEND_NETWORK          = "autosend_network";
