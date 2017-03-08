@@ -37,7 +37,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
     private DeleteInstancesListener deleteInstancesListener;
 
     private int successCount = 0;
-    private int checkedCount = 0;
+    private int toDeleteCount = 0;
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -47,7 +47,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
             return deleted;
         }
 
-        checkedCount = params.length;
+        toDeleteCount = params.length;
 
 
         // delete files from database and then from file system
@@ -103,7 +103,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
         return successCount;
     }
 
-    public int getCheckedCount() {
-        return checkedCount;
+    public int getToDeleteCount() {
+        return toDeleteCount;
     }
 }

@@ -235,7 +235,7 @@ public class DataManagerList extends AppListActivity
         Log.i(t, "Delete instances complete");
         logger.logAction(this, "deleteComplete",
                 Integer.toString(deletedInstances));
-        final int checkedCount = mDeleteInstancesTask.getCheckedCount();
+        final int checkedCount = mDeleteInstancesTask.getToDeleteCount();
 
         if (deletedInstances == checkedCount) {
             // all deletes were successful

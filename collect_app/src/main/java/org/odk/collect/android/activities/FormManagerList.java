@@ -28,7 +28,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -265,7 +264,7 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
     public void deleteComplete(int deletedForms) {
         Log.i(t, "Delete forms complete");
         logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
-        final int checkedCount = mBackgroundTasks.mDeleteFormsTask.getCheckedCount();
+        final int checkedCount = mBackgroundTasks.mDeleteFormsTask.getToDeleteCount();
 
         if (deletedForms == checkedCount) {
             // all deletes were successful
