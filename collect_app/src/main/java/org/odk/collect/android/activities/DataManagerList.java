@@ -24,13 +24,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.tasks.InstanceSyncTask;
 
 /**
  * Responsible for displaying and deleting all the saved form instances
@@ -39,13 +42,15 @@ import org.odk.collect.android.utilities.ToastUtils;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends AppListActivity implements DeleteInstancesListener {
+public class DataManagerList extends AppListActivity
+        implements DeleteInstancesListener, DiskSyncListener {
     private static final String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
     private Button mToggleButton;
 
     DeleteInstancesTask mDeleteInstancesTask = null;
+    private InstanceSyncTask instanceSyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,10 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
         if (getListView().getCount() == 0) {
             mToggleButton.setEnabled(false);
         }
+
+        instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.setDiskSyncListener(this);
+        instanceSyncTask.execute();
     }
 
     @Override
@@ -128,6 +137,9 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
         if (mDeleteInstancesTask != null) {
             mDeleteInstancesTask.setDeleteListener(this);
         }
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(this);
+        }
         super.onResume();
         // async task may have completed while we were reorienting...
         if (mDeleteInstancesTask != null
@@ -141,10 +153,19 @@ public class DataManagerList extends AppListActivity implements DeleteInstancesL
         if (mDeleteInstancesTask != null) {
             mDeleteInstancesTask.setDeleteListener(null);
         }
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(null);
+        }
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
         }
         super.onPause();
+    }
+
+    @Override
+    public void syncComplete(String result) {
+        TextView textView = (TextView) findViewById(R.id.status_text);
+        textView.setText(result);
     }
 
     /**
