@@ -2,6 +2,8 @@ package org.odk.collect.android.preferences;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -89,7 +92,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
 
     private void removeAllDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
+        boolean adminMode = getActivity().getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+        DisabledPreferencesRemover preferencesRemover =
+                new DisabledPreferencesRemover(adminMode, sharedPreferences, this);
         preferencesRemover.remove(AdminKeys.adminToGeneral);
         preferencesRemover.removeEmptyCategories();
     }
@@ -98,7 +104,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
         if (analyticsPreference != null) {
-            analyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            analyticsPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
@@ -113,7 +119,53 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         final PreferenceScreen pref = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
 
         if (pref != null) {
-            pref.setOnPreferenceClickListener(new SplashClickListener((PreferencesActivity) getActivity(), pref));
+            pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+                private void launchImageChooser() {
+                    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                    i.setType("image/*");
+                    startActivityForResult(i, PreferencesActivity.IMAGE_CHOOSER);
+                }
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // if you have a value, you can clear it or select new.
+                    CharSequence cs = pref.getSummary();
+                    if (cs != null && cs.toString().contains("/")) {
+
+                        final CharSequence[] items = {getString(R.string.select_another_image),
+                                getString(R.string.use_odk_default)};
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(getString(R.string.change_splash_path));
+                        builder.setNeutralButton(getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int item) {
+                                if (items[item].equals(getString(R.string.select_another_image))) {
+                                    launchImageChooser();
+                                } else {
+                                    PreferencesActivity.setSplashPath(getString(
+                                            R.string.default_splash_path), PreferencesFragment.this, getActivity());
+                                }
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+                    } else {
+                        launchImageChooser();
+                    }
+
+                    return true;
+                }
+            });
             pref.setSummary(pref.getSharedPreferences().getString(
                     KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
         }

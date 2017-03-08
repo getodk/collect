@@ -34,11 +34,13 @@ class DisabledPreferencesRemover {
     /** A map used to find the parent category of any preference */ // ToDo: find a better way?
     private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
 
-    private PreferencesActivity pa;
+    private Boolean adminMode;
+    private SharedPreferences adminPreferences;
     private PreferencesFragment pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa, PreferencesFragment pf) {
-        this.pa = pa;
+    DisabledPreferencesRemover(Boolean adminMode, SharedPreferences adminPreferences, PreferencesFragment pf) {
+        this.adminMode = adminMode;
+        this.adminPreferences = adminPreferences;
         this.pf = pf;
         preferencePreferenceCategoryMap = createPreferenceToPreferenceCategoryMap();
     }
@@ -64,11 +66,6 @@ class DisabledPreferencesRemover {
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
     void remove(AdminAndGeneralKeys... keyPairs) {
-        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
-        final SharedPreferences adminPreferences = pa.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
         for (AdminAndGeneralKeys agKeys : keyPairs) {
             final boolean prefAllowed = adminPreferences.getBoolean(agKeys.adminKey, true);
 
@@ -85,7 +82,6 @@ class DisabledPreferencesRemover {
 
     /** Deletes all empty PreferenceCategory items. */
     void removeEmptyCategories() {
-        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
         HashSet<PreferenceCategory> uniqueCategories = new
                 HashSet<>(preferencePreferenceCategoryMap.values());
         for (PreferenceCategory pc : uniqueCategories) {
