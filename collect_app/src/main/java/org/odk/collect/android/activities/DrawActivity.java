@@ -443,7 +443,6 @@ public class DrawActivity extends Activity {
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
             mCurrentPath = new Path();
             mOffscreenPath = new Path();
-            setBackgroundColor(0xFFFFFFFF);
             mBackgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
         }
 

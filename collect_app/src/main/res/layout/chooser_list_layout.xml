@@ -46,6 +46,5 @@ the License.
 			android:paddingEnd="20dip"
 			android:paddingRight="20dp"
 			android:gravity="center"
-			android:background="@drawable/white"
 			android:textColor="@drawable/black" />
 </LinearLayout>

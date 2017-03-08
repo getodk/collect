@@ -44,7 +44,6 @@ public class FileManagerTabs extends TabActivity {
         setTitle(getString(R.string.manage_files));
 
         final TabHost tabHost = getTabHost();
-        tabHost.setBackgroundColor(Color.WHITE);
         tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
 
         Intent remote = new Intent(this, DataManagerList.class);
