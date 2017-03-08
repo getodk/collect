@@ -185,7 +185,6 @@ public class SpinnerWidget extends QuestionWidget {
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
-            tv.setBackgroundColor(Color.WHITE);
             tv.setPadding(10, 10, 10, 10); // Are these values OK?
             if (position == items.length - 1) {
                 tv.setText(parent.getContext().getString(R.string.clear_answer));
