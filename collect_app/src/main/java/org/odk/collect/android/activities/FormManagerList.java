@@ -173,7 +173,7 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
         super.onResume();
         // async task may have completed while we were reorienting...
         if (mBackgroundTasks.mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            SyncComplete(mBackgroundTasks.mDiskSyncTask.getStatusMessage());
+            syncComplete(mBackgroundTasks.mDiskSyncTask.getStatusMessage());
         }
         if (mBackgroundTasks.mDeleteFormsTask != null
                 && mBackgroundTasks.mDeleteFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -255,7 +255,7 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
     }
 
     @Override
-    public void SyncComplete(String result) {
+    public void syncComplete(String result) {
         Log.i(t, "Disk scan complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result);
