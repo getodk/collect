@@ -28,7 +28,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -265,12 +264,14 @@ public class FormManagerList extends AppListActivity implements DiskSyncListener
     public void deleteComplete(int deletedForms) {
         Log.i(t, "Delete forms complete");
         logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
-        if (deletedForms == getCheckedCount()) {
+        final int toDeleteCount = mBackgroundTasks.mDeleteFormsTask.getToDeleteCount();
+
+        if (deletedForms == toDeleteCount) {
             // all deletes were successful
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Log.e(t, "Failed to delete " + (getCheckedCount() - deletedForms) + " forms");
+            Log.e(t, "Failed to delete " + (toDeleteCount - deletedForms) + " forms");
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                             - deletedForms), String.valueOf(getCheckedCount())));
         }
