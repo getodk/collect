@@ -86,7 +86,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         mPlayer = player;
         mAudioPlayListener = null;
         mPlayTextColor = Color.BLUE;
-        mPlayBackgroundTextColor = Color.WHITE;
     }
 
     public void playAudio() {
@@ -95,7 +94,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             mView_Text.setText(mView_Text.getText().toString());
             mView_Text.setTextColor(mPlayTextColor);
-            mView_Text.setBackgroundColor(mPlayBackgroundTextColor);
             mAudioButton.playAudio();
         }
     }
@@ -115,7 +113,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     public void resetTextFormatting() {
         // first set it to defaults
         mView_Text.setTextColor(Color.BLACK);
-        mView_Text.setBackgroundColor(Color.WHITE);
         // then set the text to our original (brings back any html formatting)
         mView_Text.setText(mOriginalText);
     }
@@ -230,7 +227,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     if (b != null) {
                         mImageView = new ImageView(getContext());
                         mImageView.setPadding(2, 2, 2, 2);
-                        mImageView.setBackgroundColor(Color.WHITE);
                         mImageView.setImageBitmap(b);
                         mImageView.setId(imageId);
 

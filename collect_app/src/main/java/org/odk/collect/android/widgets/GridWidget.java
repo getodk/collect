@@ -196,7 +196,6 @@ public class GridWidget extends QuestionWidget {
 
                             ImageView imageView = (ImageView) imageViews[i];
 
-                            imageView.setBackgroundColor(Color.WHITE);
 
                             if (numColumns > 0) {
                                 int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
@@ -308,7 +307,6 @@ public class GridWidget extends QuestionWidget {
                     }
                     selected[i] = false;
                     if (imageViews[i] != null) {
-                        imageViews[i].setBackgroundColor(Color.WHITE);
                     }
                 }
                 selected[position] = true;
@@ -338,8 +336,6 @@ public class GridWidget extends QuestionWidget {
             if (selected[i]) {
                 imageViews[i].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
-            } else {
-                imageViews[i].setBackgroundColor(Color.WHITE);
             }
         }
 
@@ -366,7 +362,6 @@ public class GridWidget extends QuestionWidget {
     public void clearAnswer() {
         for (int i = 0; i < mItems.size(); ++i) {
             selected[i] = false;
-            imageViews[i].setBackgroundColor(Color.WHITE);
         }
 
     }

@@ -192,7 +192,6 @@ public class GridMultiWidget extends QuestionWidget {
 
                             ImageView imageView = (ImageView) imageViews[i];
 
-                            imageView.setBackgroundColor(Color.WHITE);
 
                             if (numColumns > 0) {
                                 int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
@@ -298,7 +297,6 @@ public class GridMultiWidget extends QuestionWidget {
                     if (audioHandlers[position] != null) {
                         stopAudio();
                     }
-                    imageViews[position].setBackgroundColor(Color.WHITE);
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onItemClick.deselect",
                             mItems.get(position).getValue(), mPrompt.getIndex());
@@ -346,9 +344,8 @@ public class GridMultiWidget extends QuestionWidget {
             if (selected[i]) {
                 imageViews[i].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
-            } else {
-                imageViews[i].setBackgroundColor(Color.WHITE);
             }
+
         }
 
         // Use the custom image adapter and initialize the grid view
@@ -380,7 +377,6 @@ public class GridMultiWidget extends QuestionWidget {
     public void clearAnswer() {
         for (int i = 0; i < mItems.size(); ++i) {
             selected[i] = false;
-            imageViews[i].setBackgroundColor(Color.WHITE);
         }
 
     }
