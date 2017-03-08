@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -120,8 +119,6 @@ public class FormDownloadList extends AppListActivity implements FormListDownloa
         setTitle(getString(R.string.get_forms));
         mAlertMsg = getString(R.string.please_wait);
 
-        // need white background before load
-        getListView().setBackgroundColor(Color.WHITE);
 
         mDownloadButton = (Button) findViewById(R.id.add_button);
         mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
