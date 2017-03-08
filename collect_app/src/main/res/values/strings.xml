@@ -482,6 +482,6 @@
 <string name="exit">Exit</string>
 <string name="instance_scan_completed">Finished scanning.</string>
 <string name="instance_scan_count">%1$d forms added.</string>
-<string name="instance_sync">Sync form instance</string>
-<string name="instance_sync_summary">Sync form instances as complete by default</string>
+<string name="instance_sync">Import saved forms as complete</string>
+<string name="instance_sync_summary">Imports saved forms from instances folder</string>
 </resources>

@@ -111,7 +111,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
-                boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
+                final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
                         PreferenceKeys.KEY_INSTANCE_SYNC, true);
 
@@ -124,7 +124,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         Cursor formCursor = null;
                         try {
                             String selection = FormsColumns.JR_FORM_ID + " = ? ";
-                            String[] selectionArgs = new String[]{ instanceFormId };
+                            String[] selectionArgs = new String[]{instanceFormId};
                             // retrieve the form definition
                             formCursor = Collect.getInstance().getContentResolver()
                                     .query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
@@ -145,18 +145,13 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
                                 values.put(InstanceColumns.JR_VERSION, jrVersion);
-
-                                if (instanceSyncFlag){
-                                    values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
-                                }else {
-                                    values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-                                }
-
+                                values.put(InstanceColumns.STATUS, instanceSyncFlag ?
+                                        InstanceProviderAPI.STATUS_COMPLETE : InstanceProviderAPI.STATUS_INCOMPLETE);
                                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
                                 // save the new instance object
                                 Collect.getInstance().getContentResolver()
                                         .insert(InstanceColumns.CONTENT_URI, values);
-                                counter ++;
+                                counter++;
                             }
                         } finally {
                             if (formCursor != null) {
