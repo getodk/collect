@@ -13,6 +13,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en"
            tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
+<string name="show_password">Show password</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
 <string name="add_another">Add Group</string>
