@@ -14,25 +14,23 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.TabActivity;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.views.SlidingTabLayout;
 
 /**
  * An example of tab content that launches an activity via
  * {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
  */
-public class FileManagerTabs extends TabActivity {
+public class FileManagerTabs extends FragmentActivity {
 
     private static final String FORMS_TAB = "forms_tab";
     private static final String DATA_TAB = "data_tab";
@@ -45,6 +43,17 @@ public class FileManagerTabs extends TabActivity {
 
         setContentView(R.layout.file_manager_layout);
 
+        String tabNames[] = {getString(R.string.data), getString(R.string.forms)};
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), tabNames, 2));
+
+        // Give the PagerSlidingTabStrip the ViewPager
+        SlidingTabLayout tabsStrip = (SlidingTabLayout) findViewById(R.id.tabs);
+        // Attach the view pager to the tab strip
+        tabsStrip.setViewPager(viewPager);
+
+/*
         final TabHost tabHost = getTabHost();
         tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
 
@@ -83,6 +92,7 @@ public class FileManagerTabs extends TabActivity {
             blankFormTab.setPadding(0, 0, 0, 6);
             blankFormTab.setSingleLine();
         }
+*/
     }
 
     private TextView getTextViewChild(ViewGroup viewGroup) {
