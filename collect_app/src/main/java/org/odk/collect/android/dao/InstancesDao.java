@@ -104,6 +104,19 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
+    public Cursor getAllCompletedUndeletedInstancesCursor(String sortOrder) {
+        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("
+                + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
+                + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
+                + InstanceProviderAPI.InstanceColumns.STATUS + "=?)";
+
+        String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE,
+                InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
+                InstanceProviderAPI.STATUS_SUBMITTED};
+
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
     public Cursor getInstancesCursorForId(String id) {
         String selection = InstanceProviderAPI.InstanceColumns._ID + "=?";
         String[] selectionArgs = {id};
