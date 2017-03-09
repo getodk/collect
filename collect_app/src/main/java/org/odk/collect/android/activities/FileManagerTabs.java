@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
@@ -48,6 +49,7 @@ public class FileManagerTabs extends FragmentActivity {
         // Give the SlidingTabLayout the ViewPager
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
+        slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setViewPager(viewPager);
     }
 
