@@ -34,6 +34,8 @@ New versions of ODK Collect are released on the last Sunday of each month. We fr
 
 ## Setting up your development environment
 
+1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
+
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
 
 1. Fork the collect project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
