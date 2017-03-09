@@ -119,19 +119,6 @@ public class DataManagerList extends AppListFragment
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        logger.logOnStart(getActivity());
-    }
-
-
-    @Override
-    public void onStop() {
-        logger.logOnStop(getActivity());
-        super.onStop();
-    }
-
     //// TODO: 9/3/17 check on rotate screen
 /*
     @Override

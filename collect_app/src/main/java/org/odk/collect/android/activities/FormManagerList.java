@@ -127,20 +127,6 @@ public class FormManagerList extends AppListFragment implements DiskSyncListener
             mBackgroundTasks.mDiskSyncTask.setDiskSyncListener(this);
             mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
         }
-
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        logger.logOnStart(getActivity());
-    }
-
-    @Override
-    public void onStop() {
-        logger.logOnStop(getActivity());
-        super.onStop();
     }
 
     @Override

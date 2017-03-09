@@ -17,9 +17,6 @@ package org.odk.collect.android.activities;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
@@ -48,61 +45,10 @@ public class FileManagerTabs extends FragmentActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), tabNames, 2));
 
-        // Give the PagerSlidingTabStrip the ViewPager
-        SlidingTabLayout tabsStrip = (SlidingTabLayout) findViewById(R.id.tabs);
+        // Give the SlidingTabLayout the ViewPager
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
-        tabsStrip.setViewPager(viewPager);
-
-/*
-        final TabHost tabHost = getTabHost();
-        tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
-
-        Intent remote = new Intent(this, DataManagerList.class);
-        tabHost.addTab(tabHost
-                .newTabSpec(DATA_TAB)
-                .setIndicator(getString(R.string.data))
-                .setContent(remote));
-
-        Intent local = new Intent(this, FormManagerList.class);
-        tabHost.addTab(tabHost
-                .newTabSpec(FORMS_TAB)
-                .setIndicator(getString(R.string.forms))
-                .setContent(local));
-
-        // hack to set font size
-        LinearLayout ll = (LinearLayout) tabHost.getChildAt(0);
-        TabWidget tw = (TabWidget) ll.getChildAt(0);
-
-        int fontsize = Collect.getQuestionFontsize();
-
-        ViewGroup rllf = (ViewGroup) tw.getChildAt(0);
-        TextView savedFormTab = getTextViewChild(rllf);
-        if (savedFormTab != null) {
-            savedFormTab.setTextSize(fontsize);
-            savedFormTab.setTextColor(Color.WHITE);
-            savedFormTab.setPadding(0, 0, 0, 6);
-            savedFormTab.setSingleLine();
-        }
-
-        ViewGroup rlrf = (ViewGroup) tw.getChildAt(1);
-        TextView blankFormTab = getTextViewChild(rlrf);
-        if (blankFormTab != null) {
-            blankFormTab.setTextSize(fontsize);
-            blankFormTab.setTextColor(Color.WHITE);
-            blankFormTab.setPadding(0, 0, 0, 6);
-            blankFormTab.setSingleLine();
-        }
-*/
-    }
-
-    private TextView getTextViewChild(ViewGroup viewGroup) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View view = viewGroup.getChildAt(i);
-            if (view instanceof TextView) {
-                return (TextView) view;
-            }
-        }
-        return null;
+        slidingTabLayout.setViewPager(viewPager);
     }
 
     @Override
