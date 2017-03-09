@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,10 +63,17 @@ public class FormManagerList extends AppListFragment implements DiskSyncListener
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
         return rootView;
     }
+
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
@@ -120,7 +128,6 @@ public class FormManagerList extends AppListFragment implements DiskSyncListener
             tv.setText(savedInstanceState.getString(syncMsgKey));
         }
 
-        mBackgroundTasks = (BackgroundTasks) getActivity().getLastNonConfigurationInstance();
         if (mBackgroundTasks == null) {
             mBackgroundTasks = new BackgroundTasks();
             mBackgroundTasks.mDiskSyncTask = new DiskSyncTask();
@@ -136,20 +143,11 @@ public class FormManagerList extends AppListFragment implements DiskSyncListener
         bundle.putString(syncMsgKey, tv.getText().toString());
     }
 
-    //// TODO: 9/3/17 on screen change
-/*
     @Override
-    public Object onRetainNonConfigurationInstance() {
-        // pass the tasks on restart
-        return mBackgroundTasks;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle bundle) {
-        super.onRestoreInstanceState(bundle);
+    public void onViewStateRestored(@Nullable Bundle bundle) {
+        super.onViewStateRestored(bundle);
         mDeleteButton.setEnabled(areCheckedItems());
     }
-*/
 
     @Override
     public void onResume() {

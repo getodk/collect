@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.ToastUtils;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+
 public class DataManagerList extends AppListFragment
         implements DeleteInstancesListener, DiskSyncListener {
     private static final String TAG = "DataManagerList";
@@ -60,10 +61,17 @@ public class DataManagerList extends AppListFragment
         return new DataManagerList();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
+        setRetainInstance(true);
         return rootView;
     }
 
@@ -107,8 +115,6 @@ public class DataManagerList extends AppListFragment
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(false);
 
-        mDeleteInstancesTask = (DeleteInstancesTask) getActivity().getLastNonConfigurationInstance();
-
         if (getListView().getCount() == 0) {
             mToggleButton.setEnabled(false);
         }
@@ -119,21 +125,12 @@ public class DataManagerList extends AppListFragment
 
     }
 
-    //// TODO: 9/3/17 check on rotate screen
-/*
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        // pass the tasks on orientation-change restart
-        return mDeleteInstancesTask;
-    }
 
     @Override
-    protected void onRestoreInstanceState(Bundle bundle) {
-        Log.d(TAG, "onRestoreInstanceState");
-        super.onRestoreInstanceState(bundle);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         mDeleteButton.setEnabled(areCheckedItems());
     }
-*/
 
     @Override
     public void onResume() {
