@@ -55,7 +55,7 @@ import org.odk.collect.android.utilities.ToastUtils;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends AppListActivity
+public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener {
     private static final String t = "InstanceUploaderList";
     private static final int MENU_PREFERENCES = Menu.FIRST;

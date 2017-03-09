@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManagerList extends AppListActivity implements DiskSyncListener,
+public class FormManagerList extends FormListActivity implements DiskSyncListener,
         DeleteFormsListener {
     private static String t = "FormManagerList";
     private static final String syncMsgKey = "syncmsgkey";

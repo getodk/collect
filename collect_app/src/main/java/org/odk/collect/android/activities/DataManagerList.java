@@ -42,7 +42,7 @@ import org.odk.collect.android.tasks.InstanceSyncTask;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends AppListActivity
+public class DataManagerList extends InstanceListActivity
         implements DeleteInstancesListener, DiskSyncListener {
     private static final String t = "DataManagerList";
     private AlertDialog mAlertDialog;
