@@ -18,9 +18,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -28,12 +31,13 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.ToastUtils;
 
 /**
  * Responsible for displaying and deleting all the saved form instances
@@ -42,22 +46,30 @@ import org.odk.collect.android.tasks.InstanceSyncTask;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends AppListActivity
+public class DataManagerList extends AppListFragment
         implements DeleteInstancesListener, DiskSyncListener {
-    private static final String t = "DataManagerList";
+    private static final String TAG = "DataManagerList";
+    DeleteInstancesTask mDeleteInstancesTask = null;
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
     private Button mToggleButton;
-
-    DeleteInstancesTask mDeleteInstancesTask = null;
     private InstanceSyncTask instanceSyncTask;
+    private View rootView;
+
+    public static DataManagerList newInstance() {
+        return new DataManagerList();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.tab_layout, container, false);
+        return rootView;
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.data_manage_list);
-
-        mDeleteButton = (Button) findViewById(R.id.delete_button);
+    public void onViewCreated(View rootView, Bundle savedInstanceState) {
+        mDeleteButton = (Button) rootView.findViewById(R.id.delete_button);
         mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -72,7 +84,7 @@ public class DataManagerList extends AppListActivity
             }
         });
 
-        mToggleButton = (Button) findViewById(R.id.toggle_button);
+        mToggleButton = (Button) rootView.findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,14 +100,14 @@ public class DataManagerList extends AppListActivity
                 InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getContext(),
                 R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(), data, view);
         setListAdapter(cursorAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(false);
 
-        mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
+        mDeleteInstancesTask = (DeleteInstancesTask) getActivity().getLastNonConfigurationInstance();
 
         if (getListView().getCount() == 0) {
             mToggleButton.setEnabled(false);
@@ -104,20 +116,24 @@ public class DataManagerList extends AppListActivity
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
+
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-        logger.logOnStart(this);
+        logger.logOnStart(getActivity());
     }
 
+
     @Override
-    protected void onStop() {
-        logger.logOnStop(this);
+    public void onStop() {
+        logger.logOnStop(getActivity());
         super.onStop();
     }
 
+    //// TODO: 9/3/17 check on rotate screen
+/*
     @Override
     public Object onRetainNonConfigurationInstance() {
         // pass the tasks on orientation-change restart
@@ -126,13 +142,14 @@ public class DataManagerList extends AppListActivity
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
-        Log.d(t, "onRestoreInstanceState");
+        Log.d(TAG, "onRestoreInstanceState");
         super.onRestoreInstanceState(bundle);
         mDeleteButton.setEnabled(areCheckedItems());
     }
+*/
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         // hook up to receive completion events
         if (mDeleteInstancesTask != null) {
             mDeleteInstancesTask.setDeleteListener(this);
@@ -149,7 +166,7 @@ public class DataManagerList extends AppListActivity
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         if (mDeleteInstancesTask != null) {
             mDeleteInstancesTask.setDeleteListener(null);
         }
@@ -164,7 +181,7 @@ public class DataManagerList extends AppListActivity
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = (TextView) findViewById(R.id.status_text);
+        TextView textView = (TextView) rootView.findViewById(R.id.status_text);
         textView.setText(result);
     }
 
@@ -175,7 +192,7 @@ public class DataManagerList extends AppListActivity
         logger.logAction(this, "createDeleteInstancesDialog",
                 "show");
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
+        mAlertDialog = new AlertDialog.Builder(getContext()).create();
         mAlertDialog.setTitle(getString(R.string.delete_file));
         mAlertDialog.setMessage(getString(R.string.delete_confirm,
                 String.valueOf(getCheckedCount())));
@@ -214,7 +231,7 @@ public class DataManagerList extends AppListActivity
     private void deleteSelectedInstances() {
         if (mDeleteInstancesTask == null) {
             mDeleteInstancesTask = new DeleteInstancesTask();
-            mDeleteInstancesTask.setContentResolver(getContentResolver());
+            mDeleteInstancesTask.setContentResolver(getActivity().getContentResolver());
             mDeleteInstancesTask.setDeleteListener(this);
             mDeleteInstancesTask.execute(getCheckedIdObjects());
         } else {
@@ -223,7 +240,7 @@ public class DataManagerList extends AppListActivity
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long rowId) {
+    public void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
         toggleButtonLabel(mToggleButton, getListView());
@@ -232,7 +249,7 @@ public class DataManagerList extends AppListActivity
 
     @Override
     public void deleteComplete(int deletedInstances) {
-        Log.i(t, "Delete instances complete");
+        Log.i(TAG, "Delete instances complete");
         logger.logAction(this, "deleteComplete",
                 Integer.toString(deletedInstances));
         final int toDeleteCount = mDeleteInstancesTask.getToDeleteCount();
@@ -242,14 +259,14 @@ public class DataManagerList extends AppListActivity
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
-            Log.e(t, "Failed to delete "
+            Log.e(TAG, "Failed to delete "
                     + (toDeleteCount - deletedInstances) + " instances");
             ToastUtils.showLongToast(getString(R.string.file_deleted_error,
-                            String.valueOf(toDeleteCount - deletedInstances),
-                            String.valueOf(toDeleteCount)));
+                    String.valueOf(toDeleteCount - deletedInstances),
+                    String.valueOf(toDeleteCount)));
         }
         mDeleteInstancesTask = null;
-        getListView().clearChoices(); // doesn't unset the checkboxes
+        getListView().clearChoices(); // doesn'TAG unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
         }

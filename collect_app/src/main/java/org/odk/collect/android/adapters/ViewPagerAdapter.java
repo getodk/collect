@@ -4,7 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.odk.collect.android.fragments.Tab;
+import org.odk.collect.android.activities.DataManagerList;
+import org.odk.collect.android.activities.FormManagerList;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -22,7 +23,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return Tab.newInstance();
+        return position == 0 ? DataManagerList.newInstance() : FormManagerList.newInstance();
     }
 
     @Override
