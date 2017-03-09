@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.odk.collect.android.activities.DataManagerList;
-import org.odk.collect.android.activities.FormManagerList;
+import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.FormManagerList;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
