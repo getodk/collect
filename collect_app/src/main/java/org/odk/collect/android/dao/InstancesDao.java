@@ -77,6 +77,13 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
+    public Cursor getFinalizedInstancesCursor(String sortOrder) {
+        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "=? or " + InstanceProviderAPI.InstanceColumns.STATUS + "=?";
+        String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
+
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
     public Cursor getInstancesCursorForFilePath(String path) {
         String selection = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String selectionArgs[] = {path};

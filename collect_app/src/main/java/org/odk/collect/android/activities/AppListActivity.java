@@ -18,6 +18,7 @@ package org.odk.collect.android.activities;
 
 import android.app.ListActivity;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,6 +36,9 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+
+import java.util.List;
 
 abstract class AppListActivity extends ListActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
@@ -157,6 +161,20 @@ abstract class AppListActivity extends ListActivity {
 
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    protected void retrieveCheckedItems(List<Integer> checkedInstances, Cursor cursor) {
+        getListView().clearChoices();
+        int id = 0;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int instanceId = Integer.parseInt(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
+                if (checkedInstances.contains(instanceId)) {
+                    getListView().setItemChecked(id, true);
+                }
+                id++;
+            }
+        }
     }
 
     protected abstract void sortByNameAsc();
