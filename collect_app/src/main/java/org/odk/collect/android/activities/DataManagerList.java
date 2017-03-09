@@ -253,7 +253,7 @@ public class DataManagerList extends AppListFragment
                     String.valueOf(toDeleteCount)));
         }
         mDeleteInstancesTask = null;
-        getListView().clearChoices(); // doesn'TAG unset the checkboxes
+        getListView().clearChoices(); // doesn't unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
         }

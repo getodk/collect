@@ -48,7 +48,8 @@ public class FileManagerTabs extends FragmentActivity {
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setBackgroundColor(Color.LTGRAY);
+        slidingTabLayout.setFontColor(android.R.color.white);
+        slidingTabLayout.setBackgroundColor(Color.DKGRAY);
         slidingTabLayout.setViewPager(viewPager);
     }
 
