@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.support.v7.widget.AppCompatImageButton;
 import android.util.Log;
 import android.widget.ImageButton;
 
@@ -35,7 +36,7 @@ import java.io.IOException;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends ImageButton {
+public class AudioButton extends AppCompatImageButton {
     private final static String t = "AudioButton";
 
     /**
