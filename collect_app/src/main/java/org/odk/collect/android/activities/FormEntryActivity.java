@@ -2557,13 +2557,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // we've just loaded a saved form, so start in the hierarchy
                 // view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                if (reqIntent.getStringExtra(FORM_MODE).equalsIgnoreCase(EDIT_SAVED)) {
+                String formMode = reqIntent.getStringExtra(FORM_MODE);
+                if (formMode == null || EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     i.putExtra(FORM_MODE, EDIT_SAVED);
                     startActivity(i);
-                    return; // so we don't show the intro screen before jumping to
-                    // the hierarchy
+                    return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
-                    if (reqIntent.getStringExtra(FORM_MODE).equalsIgnoreCase(VIEW_SENT)) {
+                    if (VIEW_SENT.equalsIgnoreCase(formMode)) {
                         i.putExtra(FORM_MODE, VIEW_SENT);
                         startActivity(i);
                     }
