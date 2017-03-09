@@ -62,9 +62,8 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getSavedInstancesCursor() {
+    public Cursor getSavedInstancesCursor(String sortOrder) {
         String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL ";
-        String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
 
         return getInstancesCursor(null, selection, null, sortOrder);
     }
