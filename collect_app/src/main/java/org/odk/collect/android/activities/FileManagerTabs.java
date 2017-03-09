@@ -14,10 +14,10 @@
 
 package org.odk.collect.android.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
@@ -30,8 +30,6 @@ import org.odk.collect.android.views.SlidingTabLayout;
  */
 public class FileManagerTabs extends FragmentActivity {
 
-    private static final String FORMS_TAB = "forms_tab";
-    private static final String DATA_TAB = "data_tab";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,7 @@ public class FileManagerTabs extends FragmentActivity {
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         slidingTabLayout.setDistributeEvenly(true);
+        slidingTabLayout.setBackgroundColor(Color.LTGRAY);
         slidingTabLayout.setViewPager(viewPager);
     }
 
