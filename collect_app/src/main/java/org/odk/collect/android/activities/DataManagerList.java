@@ -61,17 +61,11 @@ public class DataManagerList extends AppListFragment
         return new DataManagerList();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
-        setRetainInstance(true);
         return rootView;
     }
 
