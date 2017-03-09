@@ -40,10 +40,24 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
+    public Cursor getSentInstancesCursor(String sortOrder) {
+        String selection = InstanceProviderAPI.InstanceColumns.STATUS + " =? ";
+        String selectionArgs[] = {InstanceProviderAPI.STATUS_SUBMITTED};
+
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
     public Cursor getUnsentInstancesCursor() {
         String selection = InstanceProviderAPI.InstanceColumns.STATUS + " !=? ";
         String selectionArgs[] = {InstanceProviderAPI.STATUS_SUBMITTED};
         String sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
+    public Cursor getUnsentInstancesCursor(String sortOrder) {
+        String selection = InstanceProviderAPI.InstanceColumns.STATUS + " !=? ";
+        String selectionArgs[] = {InstanceProviderAPI.STATUS_SUBMITTED};
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
