@@ -24,10 +24,6 @@ import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.views.SlidingTabLayout;
 
-/**
- * An example of tab content that launches an activity via
- * {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
- */
 public class FileManagerTabs extends FragmentActivity {
 
 

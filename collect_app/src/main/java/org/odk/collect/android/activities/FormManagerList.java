@@ -265,7 +265,7 @@ public class FormManagerList extends AppListFragment implements DiskSyncListener
                     - deletedForms), String.valueOf(getCheckedCount())));
         }
         mBackgroundTasks.mDeleteFormsTask = null;
-        getListView().clearChoices(); // doesn'TAG unset the checkboxes
+        getListView().clearChoices(); // doesn't unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
         }
