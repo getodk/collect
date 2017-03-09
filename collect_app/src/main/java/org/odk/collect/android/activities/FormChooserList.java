@@ -35,8 +35,10 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.EDIT_SAVED;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -137,7 +139,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         } else {
             // caller wants to view/edit a form, so launch formentryactivity
             Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
-            intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            intent.putExtra(FORM_MODE, EDIT_SAVED);
             startActivity(intent);
         }
 

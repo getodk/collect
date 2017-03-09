@@ -36,7 +36,10 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.EDIT_SAVED;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -68,7 +71,7 @@ public class InstanceChooserList extends ListActivity implements DiskSyncListene
 
         Cursor cursor;
         InstancesDao instancesDao = new InstancesDao();
-        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+        if (getIntent().getStringExtra(FORM_MODE).equalsIgnoreCase(EDIT_SAVED)) {
             setTitle(getString(R.string.review_data));
             cursor = instancesDao.getUnsentInstancesCursor();
         } else {
@@ -85,7 +88,7 @@ public class InstanceChooserList extends ListActivity implements DiskSyncListene
 
         // render total instance view
         SimpleCursorAdapter instances;
-        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+        if (getIntent().getStringExtra(FORM_MODE).equalsIgnoreCase(EDIT_SAVED)) {
             instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
         } else {
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
@@ -141,10 +144,10 @@ public class InstanceChooserList extends ListActivity implements DiskSyncListene
                 // caller wants to view/edit a form, so launch formentryactivity
                 Intent parentIntent = this.getIntent();
                 Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                if (parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                if (parentIntent.getStringExtra(FORM_MODE).equalsIgnoreCase(EDIT_SAVED)) {
+                    intent.putExtra(FORM_MODE, EDIT_SAVED);
                 } else {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                    intent.putExtra(FORM_MODE, VIEW_SENT);
                 }
                 startActivity(intent);
             }

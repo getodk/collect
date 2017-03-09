@@ -45,13 +45,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -62,6 +60,10 @@ import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.EDIT_SAVED;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -165,10 +167,9 @@ public class MainMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                        .logAction(this, EDIT_SAVED, "click");
                 Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.EDIT_SAVED);
+                i.putExtra(FORM_MODE, EDIT_SAVED);
                 startActivity(i);
             }
         });
@@ -192,11 +193,9 @@ public class MainMenuActivity extends Activity {
         mViewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        ApplicationConstants.FormModes.VIEW_SENT, "click");
+                Collect.getInstance().getActivityLogger().logAction(this, VIEW_SENT, "click");
                 Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.VIEW_SENT);
+                i.putExtra(FORM_MODE, VIEW_SENT);
                 startActivity(i);
             }
         });
