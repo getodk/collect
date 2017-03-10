@@ -37,10 +37,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.EDIT_SAVED;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT;
 
 public class FormHierarchyActivity extends ListActivity {
 
@@ -112,7 +115,7 @@ public class FormHierarchyActivity extends ListActivity {
             }
         });
 
-        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.VIEW_SENT)) {
+        if (VIEW_SENT.equalsIgnoreCase(getIntent().getStringExtra(FORM_MODE))) {
             Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
             Button exitButton = (Button) findViewById(R.id.exitButton);
@@ -441,7 +444,8 @@ public class FormHierarchyActivity extends ListActivity {
                     }
                 }
                 setResult(RESULT_OK);
-                if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                String formMode = getIntent().getStringExtra(FORM_MODE);
+                if (formMode == null || EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     finish();
                 }
                 return;

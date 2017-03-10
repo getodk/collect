@@ -89,7 +89,6 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -104,6 +103,10 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.EDIT_SAVED;
+import static org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -916,7 +919,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                i.putExtra(FORM_MODE, EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
             case MENU_PREFERENCES:
@@ -2554,14 +2557,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // we've just loaded a saved form, so start in the hierarchy
                 // view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                String formMode = reqIntent.getStringExtra(FORM_MODE);
+                if (formMode == null || EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                    i.putExtra(FORM_MODE, EDIT_SAVED);
                     startActivity(i);
-                    return; // so we don't show the intro screen before jumping to
-                    // the hierarchy
+                    return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
-                    if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.VIEW_SENT)) {
-                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                    if (VIEW_SENT.equalsIgnoreCase(formMode)) {
+                        i.putExtra(FORM_MODE, VIEW_SENT);
                         startActivity(i);
                     }
                     finish();
