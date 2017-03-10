@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,13 +43,15 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends ListActivity implements DiskSyncListener {
+public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener {
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private AlertDialog mAlertDialog;
 
     private InstanceSyncTask instanceSyncTask;
+
+    private boolean mEditMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,33 +67,25 @@ public class InstanceChooserList extends ListActivity implements DiskSyncListene
 
         setContentView(R.layout.chooser_list_layout);
 
-        Cursor cursor;
-        InstancesDao instancesDao = new InstancesDao();
+        String order;
         if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
             setTitle(getString(R.string.review_data));
-            cursor = instancesDao.getUnsentInstancesCursor();
+            mEditMode = true;
+            mSortingOptions = new String[]{
+                    getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
+                    getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
+                    getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
+            };
+            order = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
         } else {
             setTitle(getString(R.string.view_sent_forms));
-            cursor = instancesDao.getSentInstancesCursor();
+            mSortingOptions = new String[]{
+                    getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
+                    getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+            };
+            order = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
         }
-
-        String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
-        };
-        int[] view = new int[]{
-                R.id.text1, R.id.text2, R.id.text4
-        };
-
-        // render total instance view
-        SimpleCursorAdapter instances;
-        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
-            instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
-        } else {
-            ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
-            instances = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
-        }
-
-        setListAdapter(instances);
+        setupAdapter(order);
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -188,6 +181,32 @@ public class InstanceChooserList extends ListActivity implements DiskSyncListene
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    @Override
+    protected void setupAdapter(String sortOrder) {
+        Cursor cursor;
+        InstancesDao instancesDao = new InstancesDao();
+
+        if (mEditMode) {
+            cursor = instancesDao.getUnsentInstancesCursor(sortOrder);
+        } else {
+            cursor = instancesDao.getSentInstancesCursor(sortOrder);
+        }
+
+        String[] data = new String[]{
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
+        };
+        int[] view = new int[]{
+                R.id.text1, R.id.text2, R.id.text4
+        };
+        SimpleCursorAdapter instances;
+        if (mEditMode) {
+            instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
+        } else {
+            instances = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
+        }
+        setListAdapter(instances);
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {

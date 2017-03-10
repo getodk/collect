@@ -42,10 +42,14 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -55,11 +59,13 @@ import org.odk.collect.android.utilities.ToastUtils;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends AppListActivity
+public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener {
     private static final String t = "InstanceUploaderList";
-    private static final int MENU_PREFERENCES = Menu.FIRST;
-    private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
+    private static final String SHOW_ALL_MODE = "showAllMode";
+
+    private static final int MENU_PREFERENCES = AppListActivity.MENU_SORT + 1;
+    private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
 
     private static final int INSTANCE_UPLOADER = 0;
     private static final int GOOGLE_USER_DIALOG = 1;
@@ -72,11 +78,17 @@ public class InstanceUploaderList extends AppListActivity
 
     private InstanceSyncTask instanceSyncTask;
 
+    private boolean mShowAllMode;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(t, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
+
+        if (savedInstanceState != null) {
+            mShowAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
+        }
 
         mInstanceDao = new InstancesDao();
 
@@ -125,19 +137,8 @@ public class InstanceUploaderList extends AppListActivity
         });
         toggleSelsButton.setOnLongClickListener(this);
 
-        {
-            Cursor cursor = mInstanceDao.getFinalizedInstancesCursor();
-            // ToDo: Look at VCS history and examine the always true ? : for the above line
-            String[] data = new String[]
-                    {InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
-            int[] view = new int[]{R.id.text1, R.id.text2};
+        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
 
-            // render total instance view
-            mCursorAdapter = new SimpleCursorAdapter(this,
-                    R.layout.two_item_multiple_choice, cursor, data, view);
-        }
-
-        setListAdapter(mCursorAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mUploadButton.setEnabled(false);
@@ -148,6 +149,11 @@ public class InstanceUploaderList extends AppListActivity
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
+
+        mSortingOptions = new String[]{
+                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
+                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+        };
     }
 
     @Override
@@ -269,6 +275,12 @@ public class InstanceUploaderList extends AppListActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SHOW_ALL_MODE, mShowAllMode);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_CANCELED) {
             return;
@@ -289,7 +301,28 @@ public class InstanceUploaderList extends AppListActivity
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
+    @Override
+    protected void setupAdapter(String sortOrder) {
+        List<Long> checkedInstances = new ArrayList();
+        for (long a : getListView().getCheckedItemIds()) {
+            checkedInstances.add(a);
+        }
+        Cursor cursor;
+        if (mShowAllMode) {
+            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(sortOrder);
+        } else {
+            cursor = mInstanceDao.getFinalizedInstancesCursor(sortOrder);
+        }
+        String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
+        int[] view = new int[]{R.id.text1, R.id.text2};
+
+        mCursorAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, cursor, data, view);
+        setListAdapter(mCursorAdapter);
+        checkPreviouslyCheckedItems(checkedInstances, cursor);
+    }
+
     private void showUnsent() {
+        mShowAllMode = false;
         Cursor c = mInstanceDao.getFinalizedInstancesCursor();
         Cursor old = mCursorAdapter.getCursor();
         try {
@@ -304,6 +337,7 @@ public class InstanceUploaderList extends AppListActivity
     }
 
     private void showAll() {
+        mShowAllMode = true;
         Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor();
         Cursor old = mCursorAdapter.getCursor();
         try {
