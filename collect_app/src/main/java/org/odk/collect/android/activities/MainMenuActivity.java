@@ -30,13 +30,17 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -60,6 +64,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -454,19 +459,27 @@ public class MainMenuActivity extends Activity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 final AlertDialog passwordDialog = builder.create();
-
                 passwordDialog.setTitle(getString(R.string.enter_admin_password));
-                final EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                input.setTransformationMethod(PasswordTransformationMethod
-                        .getInstance());
-                passwordDialog.setView(input, 20, 10, 20, 10);
-
+                LayoutInflater inflater = this.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
+                passwordDialog.setView(dialogView, 20, 10, 20, 10);
+                final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBox);
+                final EditText input = (EditText) dialogView.findViewById(R.id.editText);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (!checkBox.isChecked()) {
+                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        } else {
+                            input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                    }
+                });
                 passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                         getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                                                int whichButton) {
                                 String value = input.getText().toString();
                                 String pw = mAdminPreferences.getString(
                                         AdminKeys.KEY_ADMIN_PW, "");
