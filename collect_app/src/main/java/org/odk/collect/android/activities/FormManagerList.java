@@ -194,11 +194,10 @@ public class FormManagerList extends FormListActivity implements DiskSyncListene
 
     @Override
     protected void setupAdapter(String sortOrder) {
-        List<Integer> checkedInstances = new ArrayList();
+        List<Long> checkedForms = new ArrayList();
         for (long a : getListView().getCheckedItemIds()) {
-            checkedInstances.add((int) a);
+            checkedForms.add(a);
         }
-
         Cursor c = new FormsDao().getFormsCursor(sortOrder);
         String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
@@ -207,7 +206,7 @@ public class FormManagerList extends FormListActivity implements DiskSyncListene
         SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this,
                 R.layout.two_item_multiple_choice, c, data, view);
         setListAdapter(cursorAdapter);
-        retrieveCheckedItems(checkedInstances, c);
+        checkPreviouslyCheckedItems(checkedForms, c);
     }
 
     /**

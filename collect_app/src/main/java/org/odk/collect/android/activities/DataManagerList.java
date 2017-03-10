@@ -175,11 +175,10 @@ public class DataManagerList extends InstanceListActivity
 
     @Override
     protected void setupAdapter(String sortOrder) {
-        List<Integer> checkedInstances = new ArrayList();
+        List<Long> checkedInstances = new ArrayList();
         for (long a : getListView().getCheckedItemIds()) {
-            checkedInstances.add((int) a);
+            checkedInstances.add(a);
         }
-
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
@@ -187,7 +186,7 @@ public class DataManagerList extends InstanceListActivity
         SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
                 R.layout.two_item_multiple_choice, cursor, data, view);
         setListAdapter(cursorAdapter);
-        retrieveCheckedItems(checkedInstances, cursor);
+        checkPreviouslyCheckedItems(checkedInstances, cursor);
     }
 
     /**

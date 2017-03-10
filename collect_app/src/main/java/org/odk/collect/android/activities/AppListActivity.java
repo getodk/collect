@@ -75,10 +75,10 @@ abstract class AppListActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_SORT:
-                if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                    mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+                    mDrawerLayout.closeDrawer(Gravity.END);
                 } else {
-                    mDrawerLayout.openDrawer(Gravity.RIGHT);
+                    mDrawerLayout.openDrawer(Gravity.END);
                 }
                 return true;
         }
@@ -116,29 +116,33 @@ abstract class AppListActivity extends ListActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
-                    case 0:
-                        sortByNameAsc();
-                        break;
-                    case 1:
-                        sortByNameDesc();
-                        break;
-                    case 2:
-                        sortByDateDesc();
-                        break;
-                    case 3:
-                        sortByDateAsc();
-                        break;
-                    case 4:
-                        sortByStatusAsc();
-                        break;
-                    case 5:
-                        sortByStatusDesc();
-                        break;
-                }
+                performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
             }
         });
+    }
+
+    private void performSelectedSearch(int position) {
+        switch(position) {
+            case 0:
+                sortByNameAsc();
+                break;
+            case 1:
+                sortByNameDesc();
+                break;
+            case 2:
+                sortByDateDesc();
+                break;
+            case 3:
+                sortByDateAsc();
+                break;
+            case 4:
+                sortByStatusAsc();
+                break;
+            case 5:
+                sortByStatusDesc();
+                break;
+        }
     }
 
     private void setupDrawer() {
@@ -160,19 +164,19 @@ abstract class AppListActivity extends ListActivity {
         };
 
         mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
-    protected void retrieveCheckedItems(List<Integer> checkedInstances, Cursor cursor) {
+    protected void checkPreviouslyCheckedItems(List<Long> checkedInstances, Cursor cursor) {
         getListView().clearChoices();
-        int id = 0;
+        int listViewPosition = 0;
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                int instanceId = Integer.parseInt(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
+                long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
                 if (checkedInstances.contains(instanceId)) {
-                    getListView().setItemChecked(id, true);
+                    getListView().setItemChecked(listViewPosition, true);
                 }
-                id++;
+                listViewPosition++;
             }
         }
     }
