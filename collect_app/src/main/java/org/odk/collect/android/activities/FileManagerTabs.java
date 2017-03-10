@@ -38,7 +38,7 @@ public class FileManagerTabs extends FragmentActivity {
         String tabNames[] = {getString(R.string.data), getString(R.string.forms)};
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), tabNames, 2));
+        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), tabNames));
 
         // Give the SlidingTabLayout the ViewPager
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);

@@ -10,15 +10,11 @@ import org.odk.collect.android.fragments.FormManagerList;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private CharSequence tabTitles[];
-    private int PAGE_COUNT = 2;
 
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[]) {
         super(fm);
-
         this.tabTitles = mTitles;
-        this.PAGE_COUNT = mNumbOfTabsumb;
-
     }
 
     @Override
@@ -33,6 +29,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return tabTitles.length;
     }
 }
