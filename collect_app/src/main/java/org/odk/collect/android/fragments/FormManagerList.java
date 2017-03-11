@@ -50,7 +50,7 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManagerList extends FormListActivity implements DiskSyncListener,
+public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener {
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
@@ -67,6 +67,7 @@ public class FormManagerList extends FormListActivity implements DiskSyncListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -99,23 +100,8 @@ public class FormManagerList extends FormListActivity implements DiskSyncListene
             }
         });
 
-//
-        String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
-        Cursor c = new FormsDao().getFormsCursor(sortOrder);
-//
-        //// TODO: 12/3/17   setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
+        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
 
-//
-        String[] data = new String[]{FormsColumns.DISPLAY_NAME,
-                FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
-        int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
-
-        // render total instance view
-        SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, getContext(),
-                R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(cursorAdapter);
-//
-        //// TODO: 12/3/17 remove
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(false);
@@ -141,6 +127,7 @@ public class FormManagerList extends FormListActivity implements DiskSyncListene
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+        super.onViewCreated(rootView, savedInstanceState);
     }
 
     @Override
@@ -198,7 +185,8 @@ public class FormManagerList extends FormListActivity implements DiskSyncListene
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
 
         // render total instance view
-        SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this,
+        SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(
+                FormsColumns.JR_VERSION, getActivity(),
                 R.layout.two_item_multiple_choice, c, data, view);
         setListAdapter(cursorAdapter);
         checkPreviouslyCheckedItems(checkedForms, c);

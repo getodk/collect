@@ -31,6 +31,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.InstanceListActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -50,7 +51,7 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends InstanceListActivity
+public class DataManagerList extends InstanceListFragment
         implements DeleteInstancesListener, DiskSyncListener {
     private static final String TAG = "DataManagerList";
     DeleteInstancesTask mDeleteInstancesTask = null;
@@ -58,7 +59,6 @@ public class DataManagerList extends InstanceListActivity
     private Button mDeleteButton;
     private Button mToggleButton;
     private InstanceSyncTask instanceSyncTask;
-    private View rootView;
 
     public static DataManagerList newInstance() {
         return new DataManagerList();
@@ -67,8 +67,10 @@ public class DataManagerList extends InstanceListActivity
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -100,18 +102,8 @@ public class DataManagerList extends InstanceListActivity
                 mDeleteButton.setEnabled(allChecked);
             }
         });
-//
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
-                InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
 
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getContext(),
-                R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(), data, view);
-        setListAdapter(cursorAdapter);
-//
-        //// TODO: 12/3/17
         setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
-
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
@@ -125,12 +117,11 @@ public class DataManagerList extends InstanceListActivity
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
-        //// TODO: 12/3/17
         mSortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
-
+        super.onViewCreated(rootView, savedInstanceState);
     }
 
 
@@ -179,7 +170,7 @@ public class DataManagerList extends InstanceListActivity
 
     @Override
     protected void setupAdapter(String sortOrder) {
-        List<Long> checkedInstances = new ArrayList();
+        List<Long> checkedInstances = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
         }
@@ -187,7 +178,7 @@ public class DataManagerList extends InstanceListActivity
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         Cursor cursor = new InstancesDao().getSavedInstancesCursor(sortOrder);
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.two_item_multiple_choice, cursor, data, view);
         setListAdapter(cursorAdapter);
         checkPreviouslyCheckedItems(checkedInstances, cursor);

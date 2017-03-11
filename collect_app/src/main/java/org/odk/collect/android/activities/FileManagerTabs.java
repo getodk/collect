@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;

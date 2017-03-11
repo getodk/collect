@@ -15,15 +15,21 @@ License for the specific language governing permissions and limitations under
 the License.
 
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentTop="true">
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/status_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#DDDDDD"
             android:paddingBottom="4dip"
             android:paddingEnd="8dip"
             android:paddingLeft="8dip"
@@ -31,50 +37,54 @@ the License.
             android:paddingStart="8dip"
             android:paddingTop="4dip"
             android:text="@string/form_scan_starting"
-            android:textSize="14sp"
-            android:background="#DDDDDD" />
+            android:textSize="14sp" />
 
-    <LinearLayout
-        android:id="@+id/buttonholder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/toggle_button"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_items_display"
+            android:textSize="21sp" />
+
+        <LinearLayout
+            android:id="@+id/buttonholder"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:text="@string/select_all"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:text="@string/delete_file"
-            android:textSize="16sp" />
+            <Button
+                android:id="@+id/toggle_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="12dp"
+                android:text="@string/select_all"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/delete_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="12dp"
+                android:text="@string/delete_file"
+                android:textSize="16sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-
+    <!-- Side navigation drawer UI -->
     <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
+        android:id="@+id/sortingMenu"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttonholder"
-        android:layout_below="@+id/status_text" />
-
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/status_text"
-        android:gravity="center"
-        android:text="@string/no_items_display"
-        android:textSize="21sp" />
-
-</RelativeLayout>
+        android:layout_gravity="right|end"
+        android:background="#DDDDDD" />
+</android.support.v4.widget.DrawerLayout>
