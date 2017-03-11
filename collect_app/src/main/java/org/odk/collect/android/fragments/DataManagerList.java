@@ -25,13 +25,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.InstanceListActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -56,8 +54,6 @@ public class DataManagerList extends InstanceListFragment
     private static final String TAG = "DataManagerList";
     DeleteInstancesTask mDeleteInstancesTask = null;
     private AlertDialog mAlertDialog;
-    private Button mDeleteButton;
-    private Button mToggleButton;
     private InstanceSyncTask instanceSyncTask;
 
     public static DataManagerList newInstance() {
@@ -69,15 +65,11 @@ public class DataManagerList extends InstanceListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.tab_layout, container, false);
-        setHasOptionsMenu(true);
-        return rootView;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
-        mDeleteButton = (Button) rootView.findViewById(R.id.delete_button);
-        mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +82,6 @@ public class DataManagerList extends InstanceListFragment
                 }
             }
         });
-
-        mToggleButton = (Button) rootView.findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,33 +92,18 @@ public class DataManagerList extends InstanceListFragment
                 mDeleteButton.setEnabled(allChecked);
             }
         });
-
         setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
-
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getListView().setItemsCanFocus(false);
-        mDeleteButton.setEnabled(false);
-
-        if (getListView().getCount() == 0) {
-            mToggleButton.setEnabled(false);
-        }
-
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
-        mSortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
-        };
         super.onViewCreated(rootView, savedInstanceState);
     }
 
 
     @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        mDeleteButton.setEnabled(areCheckedItems());
+    public void onViewStateRestored(@Nullable Bundle bundle) {
+        super.onViewStateRestored(bundle);
     }
 
     @Override
@@ -241,9 +216,6 @@ public class DataManagerList extends InstanceListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
-        logger.logAction(this, "onListItemClick", Long.toString(rowId));
-        toggleButtonLabel(mToggleButton, getListView());
-        mDeleteButton.setEnabled(areCheckedItems());
     }
 
     @Override

@@ -56,26 +56,20 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handed across orientation changes
     private AlertDialog mAlertDialog;
-    private Button mDeleteButton;
-    private Button mToggleButton;
-    private View rootView;
 
     public static FormManagerList newInstance() {
         return new FormManagerList();
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.tab_layout, container, false);
-        setHasOptionsMenu(true);
-        return rootView;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
-
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
-        mDeleteButton = (Button) rootView.findViewById(R.id.delete_button);
-        mDeleteButton.setText(getString(R.string.delete_file));
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +83,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             }
         });
 
-        mToggleButton = (Button) rootView.findViewById(R.id.toggle_button);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,14 +94,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         });
 
         setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
-
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getListView().setItemsCanFocus(false);
-        mDeleteButton.setEnabled(false);
-
-        if (getListView().getCount() == 0) {
-            mToggleButton.setEnabled(false);
-        }
 
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(syncMsgKey)) {
@@ -123,10 +108,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
         }
 
-        mSortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
-        };
         super.onViewCreated(rootView, savedInstanceState);
     }
 
@@ -138,9 +119,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    public void onViewStateRestored(@Nullable Bundle bundle) {
-        super.onViewStateRestored(bundle);
-        mDeleteButton.setEnabled(areCheckedItems());
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
@@ -176,7 +156,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     protected void setupAdapter(String sortOrder) {
-        List<Long> checkedForms = new ArrayList();
+        List<Long> checkedForms = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedForms.add(a);
         }
@@ -247,9 +227,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     @Override
     public void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
-        logger.logAction(this, "onListItemClick", Long.toString(rowId));
-        toggleButtonLabel(mToggleButton, getListView());
-        mDeleteButton.setEnabled(areCheckedItems());
     }
 
     @Override
@@ -282,7 +259,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         mDeleteButton.setEnabled(false);
     }
 
-    static class BackgroundTasks {
+    private static class BackgroundTasks {
         DiskSyncTask mDiskSyncTask = null;
         DeleteFormsTask mDeleteFormsTask = null;
 

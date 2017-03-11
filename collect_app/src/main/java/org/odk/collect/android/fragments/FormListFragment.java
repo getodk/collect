@@ -6,7 +6,7 @@ import org.odk.collect.android.provider.FormsProviderAPI;
  * Created by shobhit on 12/3/17.
  */
 
-public class FormListFragment extends AppListFragment {
+public class FormListFragment extends FileManagerFragment {
     @Override
     protected void sortByNameAsc() {
         setupAdapter(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC");

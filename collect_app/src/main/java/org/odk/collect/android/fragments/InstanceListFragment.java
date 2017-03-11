@@ -6,7 +6,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
  * Created by shobhit on 12/3/17.
  */
 
-public class InstanceListFragment extends AppListFragment{
+public class InstanceListFragment extends FileManagerFragment{
     @Override
     protected void sortByNameAsc() {
         setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " +
