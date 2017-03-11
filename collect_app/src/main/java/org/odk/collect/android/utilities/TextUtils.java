@@ -50,7 +50,7 @@ public class TextUtils {
 
             String stylesText = attributes.replaceAll("style=[\"'](.*?)[\"']", "$1");
             String[] styles = stylesText.trim().split(";");
-            StringBuffer stylesOutput = new StringBuffer();
+            StringBuilder stylesOutput = new StringBuilder();
 
             for (String style : styles) {
                 String[] stylesAttributes = style.trim().split(":");

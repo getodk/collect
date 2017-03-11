@@ -34,16 +34,14 @@ public class CustomTileSource extends BitmapTileSourceBase {
 
     @Override
     public String getTileRelativeFilenameString(MapTile tile) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(pathBase());
-        sb.append('/');
-        sb.append(tile.getZoomLevel());
-        sb.append('/');
-        sb.append(tile.getX());
-        sb.append('_');
-        sb.append(tile.getY());
-        sb.append(imageFilenameEnding());
-        return sb.toString();
+        return pathBase() +
+                '/' +
+                tile.getZoomLevel() +
+                '/' +
+                tile.getX() +
+                '_' +
+                tile.getY() +
+                imageFilenameEnding();
 
     }
 
