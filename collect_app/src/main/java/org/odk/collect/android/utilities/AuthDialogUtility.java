@@ -51,7 +51,7 @@ public class AuthDialogUtility {
         password.setText(getPassword(settings));
 
         builder.setTitle(context.getString(R.string.server_requires_auth));
-        builder.setMessage(context.getString(R.string.server_auth_credentials, getServer(settings, context)));
+        builder.setMessage(context.getString(R.string.server_auth_credentials));
         builder.setView(dialogView);
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
