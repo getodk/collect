@@ -1,6 +1,5 @@
 package org.odk.collect.android.fragments;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -31,10 +30,10 @@ abstract class AppListFragment extends ListFragment {
     public static final int MENU_SORT = Menu.FIRST;
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] mSortingOptions;
+    View rootView;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    View rootView;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -71,6 +70,15 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (!isVisibleToUser) {
+            // close the drawer if open
+            if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END))
+                mDrawerLayout.closeDrawer(Gravity.END);
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
