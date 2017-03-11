@@ -978,10 +978,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         ConnectivityManager manager = (ConnectivityManager) this
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        if (currentNetworkInfo == null) {
-            return false;
-        }
-        return (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
+        return currentNetworkInfo != null &&
+                (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
     }
 
     public void listFiles(String dir, String query) {

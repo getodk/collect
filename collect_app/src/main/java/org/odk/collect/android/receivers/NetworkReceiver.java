@@ -108,7 +108,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     c.move(-1);
                     while (c.moveToNext()) {
                         Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(Long.valueOf(l));
+                        toUpload.add(l);
                     }
                 }
             } finally {

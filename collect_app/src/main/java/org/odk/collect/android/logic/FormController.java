@@ -966,9 +966,7 @@ public class FormController {
 
         FormEntryCaption[] v = getCaptionHierarchy();
         FormEntryCaption[] groups = new FormEntryCaption[v.length - lastquestion];
-        for (int i = 0; i < v.length - lastquestion; i++) {
-            groups[i] = v[i];
-        }
+        System.arraycopy(v, 0, groups, 0, v.length - lastquestion);
         return groups;
     }
 
