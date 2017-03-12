@@ -4,22 +4,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.odk.collect.android.fragments.DataManagerList;
-import org.odk.collect.android.fragments.FormManagerList;
+import java.util.ArrayList;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private CharSequence tabTitles[];
+    private final ArrayList<Fragment> fragments;
+    private final CharSequence tabTitles[];
 
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[]) {
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[],
+                            ArrayList<Fragment> fragments) {
         super(fm);
         this.tabTitles = mTitles;
+        this.fragments = fragments;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return position == 0 ? DataManagerList.newInstance() : FormManagerList.newInstance();
+        return fragments.get(position);
     }
 
     @Override

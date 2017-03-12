@@ -16,14 +16,18 @@ package org.odk.collect.android.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.views.SlidingTabLayout;
+
+import java.util.ArrayList;
 
 public class FileManagerTabs extends FragmentActivity {
 
@@ -39,7 +43,13 @@ public class FileManagerTabs extends FragmentActivity {
         String tabNames[] = {getString(R.string.data), getString(R.string.forms)};
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), tabNames));
+
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(DataManagerList.newInstance());
+        fragments.add(FormManagerList.newInstance());
+
+        viewPager.setAdapter(new ViewPagerAdapter
+                (getSupportFragmentManager(), tabNames, fragments));
 
         // Give the SlidingTabLayout the ViewPager
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
