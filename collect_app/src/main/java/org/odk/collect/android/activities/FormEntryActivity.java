@@ -1063,9 +1063,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 + formController.getFormTitle());
 
 
-        formController.getTimerLogger().logTimerEvent(
-                event,
-                formController.getFormIndex().getReference());
+        formController.getTimerLogger().logTimerEvent(TimerLogger.Event.FEC,
+                event, formController.getFormIndex().getReference());
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1299,7 +1298,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private void showNextView() {
         try {
 
-            Collect.getInstance().getFormController().getTimerLogger().exitView();
+            Collect.getInstance().getFormController().getTimerLogger().exitView();    // Close timer events waiting for an end time
 
             FormController formController = Collect.getInstance()
                     .getFormController();
@@ -1694,7 +1693,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         };
 
-        formController.getTimerLogger().logTimerEvent(
+        formController.getTimerLogger().logTimerEvent(TimerLogger.Event.FEC,
                 FormEntryController.EVENT_PROMPT_NEW_REPEAT, null);
 
         if (formController.getLastRepeatCount() > 0) {
@@ -1839,10 +1838,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         }
 
+        // Log the timer event
+        FormController formController = Collect.getInstance().getFormController();
         if(complete) {
-            FormController formController = Collect.getInstance().getFormController();
-            formController.getTimerLogger().logTimerEvent(
-                    -1, null);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.Event.FINALIZE, 0, null);
+        } else {
+            formController.getTimerLogger().logTimerEvent(TimerLogger.Event.STOP, 0, null);
         }
 
         synchronized (saveDialogLock) {
@@ -2559,13 +2560,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         + file + "_" + time + ".xml"));
 
                 formController.getTimerLogger().setPath(path);
-                formController.getTimerLogger().logTimerEvent(
-                        -2, null);      // survey start
+                formController.getTimerLogger().logTimerEvent(TimerLogger.Event.START, 0, null);
+                Log.i("debug", "$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Create Path");
 
             }
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
+
+            formController.getTimerLogger().logTimerEvent(TimerLogger.Event.RESUME, 0, null);
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy
@@ -2576,8 +2579,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // the hierarchy
             }
 
-            formController.getTimerLogger().logTimerEvent(
-                    -3, null);      // survey resume
         }
 
         refreshCurrentView();

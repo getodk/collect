@@ -16,6 +16,7 @@
 package org.odk.collect.android.utilities;
 
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.javarosa.core.model.instance.TreeReference;
@@ -23,7 +24,9 @@ import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
@@ -33,16 +36,25 @@ public class TimerLogger {
     public class Event {
 
         long start;
-        int type;
+        int eventType;
+        int fecType;
         String node;
         long end;
 
         boolean hasIntervalTime;
         boolean endTimeSet;
 
-        Event(long start, int type, String node, boolean hasIntervalTime) {
+        // Valid event types
+        public static final int FEC = 1000;            // Start from 1000 to not clash with FEC events
+        public static final int START = 1001;
+        public static final int STOP = 1002;
+        public static final int RESUME = 1003;
+        public static final int FINALIZE = 1004;
+
+        Event(long start, int eventType, int fecType, String node, boolean hasIntervalTime) {
             this.start = start;
-            this.type = type;
+            this.eventType = eventType;
+            this.fecType = fecType;
             this.node = node;
             this.hasIntervalTime = hasIntervalTime;
         }
@@ -54,30 +66,42 @@ public class TimerLogger {
 
         public String toString() {
             String sType = "unknown";
-            switch (type) {
-                case FormEntryController.EVENT_QUESTION:
-                    sType = "question";
+            switch (eventType) {
+                case FEC:
+                    switch(fecType) {
+                        case FormEntryController.EVENT_QUESTION:
+                            sType = "question";
+                            break;
+                        case FormEntryController.EVENT_GROUP:
+                            sType = "group questions";
+                            break;
+                        case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                            sType = "prompt repeat";
+                            break;
+                        case FormEntryController.EVENT_BEGINNING_OF_FORM:
+                            sType = "begin";
+                            break;
+                        case FormEntryController.EVENT_END_OF_FORM:
+                            sType = "end";
+                            break;
+                        default:
+                            sType = "Unknown FEC: " + fecType;
+                    }
                     break;
-                case FormEntryController.EVENT_GROUP:
-                    sType = "group questions";
-                    break;
-                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                    sType = "prompt repeat";
-                    break;
-                case FormEntryController.EVENT_BEGINNING_OF_FORM:
+                case START:
                     sType = "start";
                     break;
-                case FormEntryController.EVENT_END_OF_FORM:
-                    sType = "end";
+                case STOP:
+                    sType = "stop";
                     break;
-                case -1:
-                    sType = "finalize";     // TODO HACK
+                case RESUME:
+                    sType = "resume";
                     break;
-                case -2:
-                    sType = "survey start";     // TODO HACK
+                case FINALIZE:
+                    sType = "finalize";
                     break;
-                case -3:
-                    sType = "survey resume";     // TODO HACK
+                default:
+                    sType = "Unknown Event Type: " + eventType;
                     break;
             }
             return sType + "," + node + "," + String.valueOf(start) + ","
@@ -90,44 +114,51 @@ public class TimerLogger {
     private ArrayList<Event> mEvents = null;
     private String filename = "timerlog.csv";
     private File timerlogFile = null;
+    private long surveyOpenTime = 0;
+    private long surveyOpenElapsedTime = 0;
 
-    // Valid events
-    public final static String OPEN = "open";
-    public final static String BEGIN = "begin";
-    public final static String END = "end";
-    public final static String SAVE = "save";
-    public final static String FINALIZE = "finalize";
-    public final static String QUESTION_START = "qstart";
-    public final static String QUESTION_END = "qend";
 
     public TimerLogger(File instancePath) {
-        if(instancePath != null )
-            timerlogFile =  new File(instancePath + File.separator + filename);
+        if(instancePath != null ) {
+            File instanceFolder = instancePath.getParentFile();
+            timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
+        }
         mEvents = new ArrayList<Event>();
     }
 
-    public void logTimerEvent(int type, TreeReference ref) {  // TODO customType
-
-        // Calculate the time and add the event to the events array
-        long start = System.currentTimeMillis();
-        String node = ref == null ? "" : ref.toString();
-
-        boolean hasIntervalTime = (type == FormEntryController.EVENT_QUESTION ? true : false);
-
-        mEvents.add(new Event(start, type, node, hasIntervalTime));
-
-        writeEvents();
-
-    }
 
     public void setPath(String instancePath) {
         timerlogFile =  new File(instancePath + File.separator + filename);
     }
 
-    public void exitView() {
+    public void logTimerEvent(int eventType, int fecType, TreeReference ref) {
 
         // Calculate the time and add the event to the events array
-        long end = System.currentTimeMillis();
+        long start = getEventTime();
+        String node = ref == null ? "" : ref.toString();
+
+        Log.e(t, "######### Timer Event: " + eventType + " : " + fecType);
+
+        boolean hasIntervalTime = (eventType == TimerLogger.Event.FEC &&
+                (fecType == FormEntryController.EVENT_QUESTION ||
+                fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT));
+
+        mEvents.add(new Event(start, eventType, fecType, node, hasIntervalTime));
+
+        // If the user is exiting then mark any open questions as closed
+        if(eventType == Event.STOP || eventType == Event.FINALIZE) {
+            exitView();
+        }
+        writeEvents();
+
+    }
+
+    public void exitView() {
+
+        Log.e(t, "######### Exit view");
+
+        // Calculate the time and add the event to the events array
+        long end = getEventTime();
         for (int i = 0; i < mEvents.size(); i++) {
             mEvents.get(i).setEnd(end);
         }
@@ -148,16 +179,35 @@ public class TimerLogger {
             }
 
             if(canSend) {
-
+                Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
+                saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
+                mEvents = new ArrayList<Event> ();
+            } else {
+                Log.e(t, "######### Queueing Timer Event");
             }
-            Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
-            saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
-            mEvents = new ArrayList<Event> ();
+
 
             Log.e(t, "######### Saving Timer Event");
         } else {
             Log.e(t, "######### Queueing Timer Event");
         }
+    }
+
+    /*
+     * Use the time the survey was opened as a consistent value for wall clock time
+     */
+    private long getEventTime() {
+        if(surveyOpenTime == 0) {
+            surveyOpenTime = System.currentTimeMillis();
+            surveyOpenElapsedTime = SystemClock.elapsedRealtime();
+        }
+
+        // debug
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateTime = sdf.format(surveyOpenTime + (SystemClock.elapsedRealtime() -  surveyOpenElapsedTime));
+        Log.i(t, "%%%%%%%% " + currentDateTime);
+
+        return surveyOpenTime + (SystemClock.elapsedRealtime() -  surveyOpenElapsedTime);
     }
 
 }

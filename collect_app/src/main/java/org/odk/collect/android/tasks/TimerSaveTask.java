@@ -44,7 +44,6 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
             fw = new FileWriter(file, true);
             if (params.length > 0) {
                 for (int i = 0; i < params.length; i++) {
-                    Log.i(t, "########### saving: " + params[i] + " to " + file.getAbsolutePath());
                     fw.write(params[i].toString() + "\n");
                 }
             }
