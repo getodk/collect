@@ -15,14 +15,17 @@
 package org.odk.collect.android.logic;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +45,18 @@ public class PropertyManager implements IPropertyManager {
 
     private HashMap<String, String> mProperties;
 
-    public final static String DEVICE_ID_PROPERTY       = "deviceid";       // imei
-    public final static String OR_DEVICE_ID_PROPERTY    = "uri:deviceid";   // imei
+    public final static String DEVICE_ID_PROPERTY           = "deviceid";       // imei
+    public final static String SUBSCRIBER_ID_PROPERTY       = "subscriberid";   // imsi
+    public final static String SIM_SERIAL_PROPERTY          = "simserial";
+    public final static String PHONE_NUMBER_PROPERTY        = "phonenumber";
+    public final static String USERNAME                     = "username";
+    public final static String EMAIL                        = "email";
+    public final static String OR_DEVICE_ID_PROPERTY        = withUri(DEVICE_ID_PROPERTY);
+    public final static String OR_SUBSCRIBER_ID_PROPERTY    = withUri(SUBSCRIBER_ID_PROPERTY);
+    public final static String OR_SIM_SERIAL_PROPERTY       = withUri(SIM_SERIAL_PROPERTY);
+    public final static String OR_PHONE_NUMBER_PROPERTY     = withUri(PHONE_NUMBER_PROPERTY);
+    public final static String OR_USERNAME                  = withUri(USERNAME);
+    public final static String OR_EMAIL                     = withUri(EMAIL);
 
 
     public String getName() {
@@ -94,6 +107,37 @@ public class PropertyManager implements IPropertyManager {
 
         mProperties.put(DEVICE_ID_PROPERTY, deviceId);
         mProperties.put(OR_DEVICE_ID_PROPERTY, orDeviceId);
+
+        String value;
+
+        value = telephonyManager.getSubscriberId();
+        if (value != null) {
+            mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
+            mProperties.put(OR_SUBSCRIBER_ID_PROPERTY, "imsi:" + value);
+        }
+        value = telephonyManager.getSimSerialNumber();
+        if (value != null) {
+            mProperties.put(SIM_SERIAL_PROPERTY, value);
+            mProperties.put(OR_SIM_SERIAL_PROPERTY, "simserial:" + value);
+        }
+        value = telephonyManager.getLine1Number();
+        if (value != null) {
+            mProperties.put(PHONE_NUMBER_PROPERTY, value);
+            mProperties.put(OR_PHONE_NUMBER_PROPERTY, "tel:" + value);
+        }
+
+        // Get the username from the settings
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        value = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+        if (value != null) {
+            mProperties.put(USERNAME, value);
+            mProperties.put(OR_USERNAME, "username:" + value);
+        }
+        value = settings.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        if (value != null) {
+            mProperties.put(EMAIL, value);
+            mProperties.put(OR_EMAIL, "mailto:" + value);
+        }
     }
 
     @Override
@@ -127,5 +171,10 @@ public class PropertyManager implements IPropertyManager {
     @Override
     public List<IPropertyRules> getRules() {
         return null;
+    }
+
+
+    private static String withUri(String name) {
+        return "uri:" + name;
     }
 }
