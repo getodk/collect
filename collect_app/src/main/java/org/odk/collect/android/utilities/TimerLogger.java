@@ -21,6 +21,8 @@ import android.util.Log;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
@@ -68,7 +70,7 @@ public class TimerLogger {
             String sType = "unknown";
             switch (eventType) {
                 case FEC:
-                    switch(fecType) {
+                    switch (fecType) {
                         case FormEntryController.EVENT_QUESTION:
                             sType = "question";
                             break;
@@ -112,57 +114,79 @@ public class TimerLogger {
     private final static String t = "TimerLogger";
     private static AsyncTask saveTask = null;
     private ArrayList<Event> mEvents = null;
-    private String filename = "timerlog.csv";
+    private String filename = null;
     private File timerlogFile = null;
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
+    private boolean timerEnabled = false;               // Set true of the timer logger is enabled
+    private boolean locationRecordingEnabled = false;   // Set true to also record gps coordinates
 
 
-    public TimerLogger(File instancePath) {
-        if(instancePath != null ) {
-            File instanceFolder = instancePath.getParentFile();
-            timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
+    public TimerLogger(File instancePath, FormController formController) {
+
+        /*
+         * The timer logger is enabled if:
+         *   - A file name ending in .csv or .zip  has been specified in the meta section of the form
+         *           <orx:timing>timing.csv</orx:timing>
+         *   - The timer log has been enabled in the administration properties of collect
+         */
+        filename = formController.getSubmissionMetadata().timing;
+
+        // TODO Check preferences
+        timerEnabled = (filename != null && (filename.endsWith(".csv") || filename.endsWith(".zip")));
+
+        if (timerEnabled) {
+            if (instancePath != null) {
+                File instanceFolder = instancePath.getParentFile();
+                timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
+            }
+            mEvents = new ArrayList<Event>();
         }
-        mEvents = new ArrayList<Event>();
     }
 
 
     public void setPath(String instancePath) {
-        timerlogFile =  new File(instancePath + File.separator + filename);
+        if (timerEnabled) {
+            timerlogFile = new File(instancePath + File.separator + filename);
+        }
     }
 
     public void logTimerEvent(int eventType, int fecType, TreeReference ref) {
 
-        // Calculate the time and add the event to the events array
-        long start = getEventTime();
-        String node = ref == null ? "" : ref.toString();
+        if (timerEnabled) {
+            // Calculate the time and add the event to the events array
+            long start = getEventTime();
+            String node = ref == null ? "" : ref.toString();
 
-        Log.e(t, "######### Timer Event: " + eventType + " : " + fecType);
+            Log.e(t, "######### Timer Event: " + eventType + " : " + fecType);
 
-        boolean hasIntervalTime = (eventType == TimerLogger.Event.FEC &&
-                (fecType == FormEntryController.EVENT_QUESTION ||
-                fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT));
+            boolean hasIntervalTime = (eventType == TimerLogger.Event.FEC &&
+                    (fecType == FormEntryController.EVENT_QUESTION ||
+                            fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT));
 
-        mEvents.add(new Event(start, eventType, fecType, node, hasIntervalTime));
+            mEvents.add(new Event(start, eventType, fecType, node, hasIntervalTime));
 
-        // If the user is exiting then mark any open questions as closed
-        if(eventType == Event.STOP || eventType == Event.FINALIZE) {
-            exitView();
+            // If the user is exiting then mark any open questions as closed
+            if (eventType == Event.STOP || eventType == Event.FINALIZE) {
+                exitView();
+            }
+            writeEvents();
         }
-        writeEvents();
 
     }
 
     public void exitView() {
 
-        Log.e(t, "######### Exit view");
+        if (timerEnabled) {
+            Log.e(t, "######### Exit view");
 
-        // Calculate the time and add the event to the events array
-        long end = getEventTime();
-        for (int i = 0; i < mEvents.size(); i++) {
-            mEvents.get(i).setEnd(end);
+            // Calculate the time and add the event to the events array
+            long end = getEventTime();
+            for (int i = 0; i < mEvents.size(); i++) {
+                mEvents.get(i).setEnd(end);
+            }
+            writeEvents();
         }
-        writeEvents();
     }
 
     private void writeEvents() {
@@ -178,10 +202,10 @@ public class TimerLogger {
                 }
             }
 
-            if(canSend) {
+            if (canSend) {
                 Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
                 saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
-                mEvents = new ArrayList<Event> ();
+                mEvents = new ArrayList<Event>();
             } else {
                 Log.e(t, "######### Queueing Timer Event");
             }
@@ -197,17 +221,17 @@ public class TimerLogger {
      * Use the time the survey was opened as a consistent value for wall clock time
      */
     private long getEventTime() {
-        if(surveyOpenTime == 0) {
+        if (surveyOpenTime == 0) {
             surveyOpenTime = System.currentTimeMillis();
             surveyOpenElapsedTime = SystemClock.elapsedRealtime();
         }
 
         // debug
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateTime = sdf.format(surveyOpenTime + (SystemClock.elapsedRealtime() -  surveyOpenElapsedTime));
+        String currentDateTime = sdf.format(surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime));
         Log.i(t, "%%%%%%%% " + currentDateTime);
 
-        return surveyOpenTime + (SystemClock.elapsedRealtime() -  surveyOpenElapsedTime);
+        return surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime);
     }
 
 }
