@@ -30,7 +30,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,6 +49,8 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
@@ -104,27 +105,33 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         setContentView(R.layout.geoshape_google_layout);
 
 
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMap(googleMap);
-            }
-        });
+        if (PlayServicesUtil.checkPlayServices(GeoShapeGoogleMapActivity.this)) {
+
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    setupMap(googleMap);
+                }
+            });
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoShapeGoogleMapActivity.this);
+        }
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        mLocationManager.removeUpdates(this);
-
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(this);
+        }
     }
 
     private void setupMap(GoogleMap googleMap) {
         mMap = googleMap;
         if (mMap == null) {
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured), Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
@@ -510,5 +517,13 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -48,7 +48,6 @@ public class InstanceChooserTabs extends TabActivity {
 
         // create tab host and tweak color
         final TabHost tabHost = getTabHost();
-        tabHost.setBackgroundColor(Color.WHITE);
         tabHost.getTabWidget().setBackgroundColor(Color.BLACK);
 
         // create intent for saved tab

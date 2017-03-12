@@ -31,7 +31,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +46,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
+import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
@@ -123,18 +124,21 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
             e.printStackTrace();
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
 
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMap(googleMap);
-            }
-        });
+        if (PlayServicesUtil.checkPlayServices(GeoPointMapActivity.this)) {
+            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    setupMap(googleMap);
+                }
+            });
+        } else {
+            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointMapActivity.this);
+        }
     }
 
     @Override
@@ -183,14 +187,15 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     @Override
     protected void onPause() {
         super.onPause();
-        mLocationManager.removeUpdates(this);
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(this);
+        }
     }
 
     private void setupMap(GoogleMap googleMap) {
         mMap = googleMap;
         if (mMap == null) {
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
@@ -570,6 +575,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

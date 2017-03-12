@@ -76,6 +76,5 @@ the License.
 		android:text="@string/no_items_display"
 		android:textSize="21sp"
 		android:padding="20dp"
-		android:gravity="center"
-		android:background="@drawable/white" />
+		android:gravity="center" />
 </RelativeLayout>
