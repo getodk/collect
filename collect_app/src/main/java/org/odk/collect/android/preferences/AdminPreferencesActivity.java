@@ -92,8 +92,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static final String KEY_ANALYTICS = "analytics";
 
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
-    public static final String ADMIN_PREFERENCES = "admin_prefs";
-
+    
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
         boolean res = false;
