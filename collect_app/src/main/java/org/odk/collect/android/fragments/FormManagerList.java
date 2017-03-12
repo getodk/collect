@@ -23,9 +23,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -51,7 +49,7 @@ import java.util.List;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
-        DeleteFormsListener {
+        DeleteFormsListener, View.OnClickListener {
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handed across orientation changes
@@ -70,36 +68,11 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
-        mDeleteButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logger.logAction(this, "deleteButton", Integer.toString(getCheckedCount()));
 
-                if (areCheckedItems()) {
-                    createDeleteFormsDialog();
-                } else {
-                    ToastUtils.showShortToast(R.string.noselect_error);
-                }
-            }
-        });
-
-        mToggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ListView lv = getListView();
-                boolean allChecked = toggleChecked(lv);
-                toggleButtonLabel(mToggleButton, getListView());
-                mDeleteButton.setEnabled(allChecked);
-            }
-        });
+        mDeleteButton.setOnClickListener(this);
+        mToggleButton.setOnClickListener(this);
 
         setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
-
-        if (savedInstanceState != null
-                && savedInstanceState.containsKey(syncMsgKey)) {
-            TextView tv = (TextView) rootView.findViewById(R.id.status_text);
-            tv.setText(savedInstanceState.getString(syncMsgKey));
-        }
 
         if (mBackgroundTasks == null) {
             mBackgroundTasks = new BackgroundTasks();
@@ -107,16 +80,9 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             mBackgroundTasks.mDiskSyncTask.setDiskSyncListener(this);
             mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
         }
-
         super.onViewCreated(rootView, savedInstanceState);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-        TextView tv = (TextView) rootView.findViewById(R.id.status_text);
-        bundle.putString(syncMsgKey, tv.getText().toString());
-    }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
@@ -257,6 +223,28 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             getListView().setItemChecked(i, false);
         }
         mDeleteButton.setEnabled(false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.delete_button:
+                logger.logAction(this, "deleteButton", Integer.toString(getCheckedCount()));
+
+                if (areCheckedItems()) {
+                    createDeleteFormsDialog();
+                } else {
+                    ToastUtils.showShortToast(R.string.noselect_error);
+                }
+                break;
+
+            case R.id.toggle_button:
+                ListView lv = getListView();
+                boolean allChecked = toggleChecked(lv);
+                toggleButtonLabel(mToggleButton, getListView());
+                mDeleteButton.setEnabled(allChecked);
+                break;
+        }
     }
 
     private static class BackgroundTasks {

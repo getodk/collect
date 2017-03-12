@@ -23,7 +23,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -50,7 +49,7 @@ import java.util.List;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DataManagerList extends InstanceListFragment
-        implements DeleteInstancesListener, DiskSyncListener {
+        implements DeleteInstancesListener, DiskSyncListener, View.OnClickListener {
     private static final String TAG = "DataManagerList";
     DeleteInstancesTask mDeleteInstancesTask = null;
     private AlertDialog mAlertDialog;
@@ -70,28 +69,10 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
-        mDeleteButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int checkedItemCount = getCheckedCount();
-                logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
-                if (checkedItemCount > 0) {
-                    createDeleteInstancesDialog();
-                } else {
-                    ToastUtils.showShortToast(R.string.noselect_error);
-                }
-            }
-        });
-        mToggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ListView lv = getListView();
-                boolean allChecked = toggleChecked(lv);
-                toggleButtonLabel(mToggleButton, getListView());
 
-                mDeleteButton.setEnabled(allChecked);
-            }
-        });
+        mDeleteButton.setOnClickListener(this);
+        mToggleButton.setOnClickListener(this);
+
         setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -243,4 +224,27 @@ public class DataManagerList extends InstanceListFragment
         }
         mDeleteButton.setEnabled(false);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.delete_button:
+                int checkedItemCount = getCheckedCount();
+                logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
+                if (checkedItemCount > 0) {
+                    createDeleteInstancesDialog();
+                } else {
+                    ToastUtils.showShortToast(R.string.noselect_error);
+                }
+                break;
+
+            case R.id.toggle_button:
+                ListView lv = getListView();
+                boolean allChecked = toggleChecked(lv);
+                toggleButtonLabel(mToggleButton, getListView());
+                mDeleteButton.setEnabled(allChecked);
+                break;
+        }
+    }
+
 }
