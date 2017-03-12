@@ -23,6 +23,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -161,7 +162,10 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // finish complex layout
-        addView(mLaunchIntentButton);
+        LinearLayout mPrintLayout = new LinearLayout(getContext());
+        mPrintLayout.setOrientation(LinearLayout.VERTICAL);
+        mPrintLayout.addView(mLaunchIntentButton);
+        addAnswerView( mPrintLayout);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
