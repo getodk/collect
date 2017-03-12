@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -141,7 +142,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             mMap.setMultiTouchControls(true);
             mMap.setBuiltInZoomControls(true);
             mMarker = new Marker(mMap);
-            mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+            Context c = getApplicationContext();
+            mMarker.setIcon(ContextCompat.getDrawable(c,R.drawable.ic_place_black_36dp));
             mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
 
             handler.postDelayed(new Runnable() {
@@ -540,7 +542,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mShowLocationButton.setEnabled(true);
         mMap.invalidate();
         mMarker.setPosition(geoPoint);
-        mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+        Context c = getApplicationContext();
+        mMarker.setIcon(ContextCompat.getDrawable(c,R.drawable.ic_place_black_36dp));
         mMarker.setDraggable(true);
         mLatLng = geoPoint;
         mIsDragged = true;

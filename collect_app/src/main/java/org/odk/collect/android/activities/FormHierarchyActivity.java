@@ -16,9 +16,11 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -334,9 +336,9 @@ public class FormHierarchyActivity extends ListActivity {
 
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
+                            Context c = getApplicationContext();
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, getResources()
-                                            .getDrawable(R.drawable.expander_ic_minimized),
+                                    new HierarchyElement(fc.getLongText(), null, ContextCompat.getDrawable(c,R.drawable.expander_ic_minimized),
                                             Color.WHITE,
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
@@ -403,7 +405,7 @@ public class FormHierarchyActivity extends ListActivity {
             goUpLevel();
             return;
         }
-
+        Context c = getApplicationContext();
         switch (h.getType()) {
             case EXPANDED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -413,7 +415,7 @@ public class FormHierarchyActivity extends ListActivity {
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
+                h.setIcon(ContextCompat.getDrawable(c,R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -425,7 +427,7 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
+                h.setIcon(ContextCompat.getDrawable(c,R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
