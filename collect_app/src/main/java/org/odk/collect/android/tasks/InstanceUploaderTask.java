@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -29,6 +30,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.WebUtils;
@@ -641,52 +643,74 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 } else {
                     mStateListener.uploadingComplete(outcome.mResults);
 
-                    StringBuilder selection = new StringBuilder();
+                    StringBuilder selection = null;
                     Set<String> keys = outcome.mResults.keySet();
                     Iterator<String> it = keys.iterator();
 
-                    String[] selectionArgs = new String[keys.size() + 1];
-                    int i = 0;
-                    selection.append("(");
-                    while (it.hasNext()) {
-                        String id = it.next();
-                        selection.append(InstanceColumns._ID + "=?");
-                        selectionArgs[i++] = id;
-                        if (i != keys.size()) {
-                            selection.append(" or ");
-                        }
-                    }
-                    selection.append(") and status=?");
-                    selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
+                    String[] selectionArgs = null;
+                    int count = keys.size();
 
-                    Cursor results = null;
-                    try {
-                        results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                    while(count != 0){
+                        int parLen = count;
 
-                        if (results.getCount() > 0) {
-                            Long[] toDelete = new Long[results.getCount()];
-                            results.moveToPosition(-1);
+                        if(count > SQLITE_MAX_VARIABLE_NUMBER - 1)
+                            parLen = SQLITE_MAX_VARIABLE_NUMBER - 1;
 
-                            int cnt = 0;
-                            while (results.moveToNext()) {
-                                toDelete[cnt] = results.getLong(results
-                                        .getColumnIndex(InstanceColumns._ID));
-                                cnt++;
+                        selection = new StringBuilder();
+                        selectionArgs = new String[parLen + 1];
+
+                        selection.append(InstanceColumns._ID + " IN (");
+                        int i = 0;
+
+                        while (it.hasNext() && i < parLen){
+                            String id = it.next();
+                            selectionArgs[i] = id;
+
+                            if(i != parLen - 1){
+                                selection.append("?,");
+                            }else{
+                                selection.append("?");
                             }
-
-                            boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
-                                    Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
-                            if (deleteFlag) {
-                                DeleteInstancesTask dit = new DeleteInstancesTask();
-                                dit.setContentResolver(Collect.getInstance().getContentResolver());
-                                dit.execute(toDelete);
-                            }
-
+                            i++;
+                            count--;
                         }
-                    } finally {
-                        if (results != null) {
-                            results.close();
+                        selection.append(")");
+                        selection.append(" and status=?");
+                        selectionArgs[i] = InstanceProviderAPI.STATUS_COMPLETE;
+
+                        Cursor results = null;
+                        try {
+                            results =
+                                    new InstancesDao().getInstancesCursor(selection.toString()
+                                            , selectionArgs);
+                            if (results.getCount() > 0) {
+                                Long[] toDelete = new Long[results.getCount()];
+                                results.moveToPosition(-1);
+
+                                int cnt = 0;
+                                while (results.moveToNext()) {
+                                    toDelete[cnt] = results.getLong(results
+                                            .getColumnIndex(InstanceColumns._ID));
+                                    cnt++;
+                                }
+
+                                boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
+                                        Collect.getInstance().getApplicationContext()).getBoolean(
+                                        PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
+                                if (deleteFlag) {
+                                    DeleteInstancesTask dit = new DeleteInstancesTask();
+                                    dit.setContentResolver(
+                                            Collect.getInstance().getContentResolver());
+                                    dit.execute(toDelete);
+                                }
+
+                            }
+                        } catch (SQLException e){
+                            Log.e(t,e.getMessage());
+                        } finally{
+                            if (results != null) {
+                                results.close();
+                            }
                         }
                     }
                 }

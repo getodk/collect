@@ -52,7 +52,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private final static String TAG = "InstanceUploaderActiv";
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
-    private static final int QUERY_LIMIT = 999;
+    private static final int SQLITE_MAXIMUM_QUERY_LIMIT = 999;
 
     private final static String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
@@ -219,55 +219,52 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         String[] selectionArgs = null;
         StringBuilder message = new StringBuilder();
         int count = keys.size();
-        int inc = 0 ;
 
-        while(count != 0){
-            int parLen = count ;
+        while (count != 0) {
+            int parLen = count;
 
-            if(count > QUERY_LIMIT)
-                parLen = QUERY_LIMIT ;
+            if (count > SQLITE_MAXIMUM_QUERY_LIMIT) {
+                parLen = SQLITE_MAXIMUM_QUERY_LIMIT;
+            }
 
             selection = new StringBuilder();
             selectionArgs = new String[parLen];
-
             selection.append(InstanceColumns._ID + " IN (");
-            int i = 0 ;
-            while(it.hasNext() && i < parLen ){
+
+            int i = 0;
+            while (it.hasNext() && i < parLen) {
                 String id = it.next();
                 selectionArgs[i] = id;
-                if(i != parLen - 1){
+                if (i != parLen - 1) {
                     selection.append("?,");
-                }else{
+                } else {
                     selection.append("? )");
                 }
                 i++;
-                count-- ;
+                count--;
             }
+
             StringBuilder queryMessage = new StringBuilder();
             Cursor results = null;
-            try{
-                Log.e(TAG,selection.toString());
-                results = new InstancesDao().getInstancesCursor(selection.toString(),selectionArgs);
-                if(results.getCount() > 0){
+            try {
+                Log.e(TAG, selection.toString());
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                if (results.getCount() > 0) {
                     results.moveToPosition(-1);
-                    while (results.moveToNext()){
+                    while (results.moveToNext()) {
                         String name = results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + "-" + id + "\n\n");
+                        queryMessage.append(name + "\n\n");
                     }
                 }
-            }catch(SQLException e) {
-                Log.e(TAG,e.getMessage());
-            }catch(Exception e) {
-                Log.e(TAG,e.getMessage());
-            }finally {
-                if(results != null)
+            } catch (SQLException e) {
+                Log.e(TAG, e.getMessage());
+            } finally {
+                if (results != null)
                     results.close();
             }
-            Log.d("MESSAGE",queryMessage.toString());
             message.append(queryMessage.toString());
         }
-        if(message.length() == 0){
+        if (message.length() == 0) {
             message.append(getString(R.string.no_forms_uploaded));
         }
         Log.d(TAG,message.toString());
