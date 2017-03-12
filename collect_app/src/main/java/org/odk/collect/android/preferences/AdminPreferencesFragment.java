@@ -8,9 +8,12 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.odk.collect.android.R;
@@ -53,20 +56,25 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
 
             LayoutInflater factory = LayoutInflater.from(getActivity());
             final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
-
             final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
-            final EditText verifyEditText = (EditText) dialogView.findViewById(R.id.verify_field);
-
+            final CheckBox passwordCheckBox = (CheckBox) dialogView.findViewById(R.id.checkBox2);
+            passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (!passwordCheckBox.isChecked()) {
+                        passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    } else {
+                        passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    }
+                }
+            });
             builder.setTitle(R.string.change_admin_password);
             builder.setView(dialogView);
             builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String pw = passwordEditText.getText().toString();
-                    String ver = verifyEditText.getText().toString();
-
-                    if (!pw.equalsIgnoreCase("") && !ver.equalsIgnoreCase("") && pw.equals(ver)) {
-                        // passwords are the same
+                    if (!pw.equals("")) {
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
@@ -75,7 +83,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "CHANGED");
-                    } else if (pw.equalsIgnoreCase("") && ver.equalsIgnoreCase("")) {
+                    } else{
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
@@ -84,10 +92,6 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "DISABLED");
-                    } else {
-                        ToastUtils.showShortToast(R.string.admin_password_mismatch);
-                        Collect.getInstance().getActivityLogger()
-                                .logAction(this, "AdminPasswordDialog", "MISMATCH");
                     }
                 }
             });
