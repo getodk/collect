@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -69,6 +68,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -78,9 +78,10 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -91,6 +92,7 @@ import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -227,6 +229,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private SharedPreferences mAdminPreferences;
     private boolean mShowNavigationButtons=false;
 
+    private FormsDao mFormsDao;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -243,6 +247,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         setContentView(R.layout.form_entry);
         setTitle(getString(R.string.loading_form));
+
+        mFormsDao = new FormsDao();
 
         mErrorMessage = null;
 
@@ -405,9 +411,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     {
                         Cursor formCursor = null;
                         try {
-                            formCursor = getContentResolver().query(
-                                    FormsColumns.CONTENT_URI, null, selection,
-                                    selectionArgs, null);
+                            formCursor = mFormsDao.getFormsCursor(selection, selectionArgs);
                             if (formCursor.getCount() == 1) {
                                 formCursor.moveToFirst();
                                 mFormPath = formCursor
@@ -856,18 +860,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         boolean useability;
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SAVE_MID, true);
+                AdminKeys.KEY_SAVE_MID, true);
 
         menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_JUMP_TO, true);
+                AdminKeys.KEY_JUMP_TO, true);
 
         menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
                 .setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_CHANGE_LANGUAGE, true)
+                AdminKeys.KEY_CHANGE_LANGUAGE, true)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -876,7 +880,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true);
+                AdminKeys.KEY_ACCESS_SETTINGS, true);
 
         menu.findItem(MENU_PREFERENCES).setVisible(useability)
                 .setEnabled(useability);
@@ -1079,7 +1083,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 instanceComplete.setChecked(isInstanceComplete(true));
 
                 if (!mAdminPreferences.getBoolean(
-                        AdminPreferencesActivity.KEY_MARK_AS_FINALIZED, true)) {
+                        AdminKeys.KEY_MARK_AS_FINALIZED, true)) {
                     instanceComplete.setVisibility(View.GONE);
                 }
 
@@ -1144,13 +1148,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
-                    saveAs.setBackgroundColor(Color.WHITE);
                     saveAs.setVisibility(View.VISIBLE);
                 }
 
                 // override the visibility settings based upon admin preferences
                 if (!mAdminPreferences.getBoolean(
-                        AdminPreferencesActivity.KEY_SAVE_AS, true)) {
+                        AdminKeys.KEY_SAVE_AS, true)) {
                     saveAs.setVisibility(View.GONE);
                     TextView sa = (TextView) endView
                             .findViewById(R.id.save_form_as);
@@ -1171,9 +1174,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                                         : "saveIncomplete");
                                 // Form is marked as 'saved' here.
                                 if (saveAs.getText().length() < 1) {
-                                    Toast.makeText(FormEntryActivity.this,
-                                            R.string.save_as_error,
-                                            Toast.LENGTH_SHORT).show();
+                                    ToastUtils.showShortToast(R.string.save_as_error);
                                 } else {
                                     saveDataToDisk(EXIT, instanceComplete
                                             .isChecked(), saveAs.getText()
@@ -1839,8 +1840,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
-                Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT)
-                        .show();
+                ToastUtils.showShortToast(R.string.data_saved_error);
                 return false;
             }
         }
@@ -1873,7 +1873,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         String[] items;
-        if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_MID,
+        if (mAdminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
             String[] two = {getString(R.string.keep_changes),
                     getString(R.string.do_not_save)};
@@ -1915,7 +1915,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 // whereas if it's enabled it's 'save and exit'
                                 if (mAdminPreferences
                                         .getBoolean(
-                                                AdminPreferencesActivity.KEY_SAVE_MID,
+                                                AdminKeys.KEY_SAVE_MID,
                                                 true)) {
                                     Collect.getInstance()
                                             .getActivityLogger()
@@ -2110,9 +2110,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 String selection = FormsColumns.FORM_FILE_PATH
                                         + "=?";
                                 String selectArgs[] = {mFormPath};
-                                int updated = getContentResolver().update(
-                                        FormsColumns.CONTENT_URI, values,
-                                        selection, selectArgs);
+                                int updated = mFormsDao.updateForm(values, selection, selectArgs);
                                 Log.i(t, "Updated language to: "
                                         + languages[whichButton] + " in "
                                         + updated + " rows");
@@ -2486,12 +2484,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (languageTest != null) {
             String defaultLanguage = formController.getLanguage();
             String newLanguage = "";
-            String selection = FormsColumns.FORM_FILE_PATH + "=?";
-            String selectArgs[] = {mFormPath};
             Cursor c = null;
             try {
-                c = getContentResolver().query(FormsColumns.CONTENT_URI, null,
-                        selection, selectArgs, null);
+                c = mFormsDao.getFormsCursorForFormFilePath(mFormPath);
                 if (c.getCount() == 1) {
                     c.moveToFirst();
                     newLanguage = c.getString(c
@@ -2532,9 +2527,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(FormEntryActivity.this,
-                            getString(R.string.savepoint_used),
-                            Toast.LENGTH_LONG).show();
+                    ToastUtils.showLongToast(R.string.savepoint_used);
                 }
             });
         }
@@ -2602,13 +2595,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         int saveStatus = saveResult.getSaveResult();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
-                Toast.makeText(this, getString(R.string.data_saved_ok),
-                        Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast(R.string.data_saved_ok);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
-                Toast.makeText(this, getString(R.string.data_saved_ok),
-                        Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast(R.string.data_saved_ok);
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
@@ -2620,12 +2611,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 } else {
                     message = getString(R.string.data_saved_error);
                 }
-                Toast.makeText(this, message,
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                Toast.makeText(this, String.format(getString(R.string.encryption_error_message),
-                        saveResult.getSaveErrorMessage()), Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
+                        saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
@@ -2894,8 +2884,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public void onSavePointError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
-            Toast.makeText(this, getString(R.string.save_point_error, errorMessage),
-                    Toast.LENGTH_LONG).show();
+            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
         }
     }
 

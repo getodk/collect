@@ -414,7 +414,6 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.remove(position + 1);
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
-                h.setColor(Color.WHITE);
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -427,7 +426,6 @@ public class FormHierarchyActivity extends ListActivity {
 
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
-                h.setColor(Color.WHITE);
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",

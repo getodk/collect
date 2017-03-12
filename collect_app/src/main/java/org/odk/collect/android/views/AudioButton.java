@@ -18,15 +18,16 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.support.v7.widget.AppCompatImageButton;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +36,7 @@ import java.io.IOException;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends ImageButton {
+public class AudioButton extends AppCompatImageButton {
     private final static String t = "AudioButton";
 
     /**
@@ -66,8 +67,7 @@ public class AudioButton extends ImageButton {
             if (URI == null) {
                 // No audio file specified
                 Log.e(t, "No audio file was specified");
-                Toast.makeText(c, c.getString(R.string.audio_file_error),
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(R.string.audio_file_error);
                 return;
             }
 
@@ -84,7 +84,7 @@ public class AudioButton extends ImageButton {
                 // We should have an audio clip, but the file doesn't exist.
                 String errorMsg = c.getString(R.string.file_missing, audioFile);
                 Log.e(t, errorMsg);
-                Toast.makeText(c, errorMsg, Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(errorMsg);
                 return;
             }
 
@@ -96,7 +96,7 @@ public class AudioButton extends ImageButton {
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid);
                 Log.e(t, errorMsg);
-                Toast.makeText(c, errorMsg, Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(errorMsg);
                 e.printStackTrace();
             }
 

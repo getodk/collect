@@ -30,15 +30,18 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -47,11 +50,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,6 +64,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -130,14 +136,10 @@ public class MainMenuActivity extends Activity {
         if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
-                Toast.makeText(this,
-                        getString(R.string.settings_successfully_loaded_file_notification),
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 f.delete();
             } else {
-                Toast.makeText(this,
-                        getString(R.string.corrupt_settings_file_notification),
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
 
@@ -297,7 +299,7 @@ public class MainMenuActivity extends Activity {
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         boolean edit = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_EDIT_SAVED, true);
+                AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
             mReviewDataButton.setVisibility(View.GONE);
             mReviewSpacer.setVisibility(View.GONE);
@@ -307,7 +309,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean send = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_SEND_FINALIZED, true);
+                AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
             mSendDataButton.setVisibility(View.GONE);
         } else {
@@ -315,7 +317,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean view_sent = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_VIEW_SENT, true);
+                AdminKeys.KEY_VIEW_SENT, true);
         if (!view_sent) {
             mViewSentFormsButton.setVisibility(View.GONE);
         } else {
@@ -323,7 +325,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean get_blank = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_GET_BLANK, true);
+                AdminKeys.KEY_GET_BLANK, true);
         if (!get_blank) {
             mGetFormsButton.setVisibility(View.GONE);
             mGetFormsSpacer.setVisibility(View.GONE);
@@ -333,7 +335,7 @@ public class MainMenuActivity extends Activity {
         }
 
         boolean delete_saved = sharedPreferences.getBoolean(
-                AdminPreferencesActivity.KEY_DELETE_SAVED, true);
+                AdminKeys.KEY_DELETE_SAVED, true);
         if (!delete_saved) {
             mManageFilesButton.setVisibility(View.GONE);
         } else {
@@ -408,7 +410,7 @@ public class MainMenuActivity extends Activity {
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
                 String pw = mAdminPreferences.getString(
-                        AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                        AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
                     Intent i = new Intent(getApplicationContext(),
                             AdminPreferencesActivity.class);
@@ -457,22 +459,30 @@ public class MainMenuActivity extends Activity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 final AlertDialog passwordDialog = builder.create();
-
                 passwordDialog.setTitle(getString(R.string.enter_admin_password));
-                final EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                input.setTransformationMethod(PasswordTransformationMethod
-                        .getInstance());
-                passwordDialog.setView(input, 20, 10, 20, 10);
-
+                LayoutInflater inflater = this.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
+                passwordDialog.setView(dialogView, 20, 10, 20, 10);
+                final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBox);
+                final EditText input = (EditText) dialogView.findViewById(R.id.editText);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (!checkBox.isChecked()) {
+                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        } else {
+                            input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                    }
+                });
                 passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                         getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                                                int whichButton) {
                                 String value = input.getText().toString();
                                 String pw = mAdminPreferences.getString(
-                                        AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                                        AdminKeys.KEY_ADMIN_PW, "");
                                 if (pw.compareTo(value) == 0) {
                                     Intent i = new Intent(getApplicationContext(),
                                             AdminPreferencesActivity.class);
@@ -480,10 +490,7 @@ public class MainMenuActivity extends Activity {
                                     input.setText("");
                                     passwordDialog.dismiss();
                                 } else {
-                                    Toast.makeText(
-                                            MainMenuActivity.this,
-                                            getString(R.string.admin_password_incorrect),
-                                            Toast.LENGTH_SHORT).show();
+                                    ToastUtils.showShortToast(R.string.admin_password_incorrect);
                                     Collect.getInstance()
                                             .getActivityLogger()
                                             .logAction(this, "adminPasswordDialog",

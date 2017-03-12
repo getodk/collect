@@ -41,6 +41,7 @@ import com.google.gdata.util.ServiceException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.FormException;
 import org.odk.collect.android.picasa.AlbumEntry;
@@ -115,15 +116,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
                     ContentValues cv = new ContentValues();
 
-                    String formSelection = FormsColumns.JR_FORM_ID + "=?";
-                    String[] formSelectionArgs = {
-                            jrformid
-                    };
-                    Cursor formcursor = Collect
-                            .getInstance()
-                            .getContentResolver()
-                            .query(FormsColumns.CONTENT_URI, null, formSelection,
-                                    formSelectionArgs, null);
+                    Cursor formcursor = new FormsDao().getFormsCursorForFormId(jrformid);
                     String md5 = null;
                     String formFilePath = null;
                     if (formcursor.getCount() > 0) {
