@@ -51,10 +51,10 @@ import java.io.ObjectOutputStream;
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
 
-    public static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     // key for this preference screen
-    public static String KEY_ADMIN_PW = "admin_pw";
+    public static final String KEY_ADMIN_PW = "admin_pw";
 
     // keys for each preference
     // main menu
