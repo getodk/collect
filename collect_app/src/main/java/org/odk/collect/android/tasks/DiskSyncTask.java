@@ -146,8 +146,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         }
                     }
                     // remove the list from the database
-                    mFormsDao.deleteFormsForFormId(idsToDelete.toArray(new String[idsToDelete.size()]));
-					Log.i(t, "the files which does not exist are removed from the database");
+                    mFormsDao.deleteFormsForFormId(idsToDelete);
+                    Log.i(t, "the files which does not exist are removed from the database");
                 } finally {
                     if (mCursor != null) {
                         mCursor.close();

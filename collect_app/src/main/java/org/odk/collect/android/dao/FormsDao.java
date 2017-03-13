@@ -44,12 +44,29 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public int deleteFormsForFormId(String[] selectionArgs) {
+    public void deleteFormsForFormId(List<String> selectionArgs) {
         String selection = FormsProviderAPI.FormsColumns._ID + " in (";
-        for(int i = 0; i < selectionArgs.length-1; i++)
+        List<String> tempSelectionArgs=new ArrayList<String>();
+        int i=0;
+        for(String args:selectionArgs)
+        {
+            i++;
             selection += "?, ";
-        selection += "? )";
-        return deleteFormsForFormId(selection, selectionArgs);
+            tempSelectionArgs.add(args);
+            if(i%999==0)
+            {
+                selection = selection.substring(0,selection.length()-2)+" )";
+                deleteFormsForFormId(selection, tempSelectionArgs.toArray(new String[tempSelectionArgs.size()]));
+                tempSelectionArgs=new ArrayList<String>();
+                i=0;
+                selection = FormsProviderAPI.FormsColumns._ID + " in (";
+            }
+        }
+        if(i%999!=0)
+        {
+            selection = selection.substring(0,selection.length()-2)+" )";
+            deleteFormsForFormId(selection, tempSelectionArgs.toArray(new String[tempSelectionArgs.size()]));
+        }
     }
 
     public Cursor getFormsCursorForFormId(String formId) {
