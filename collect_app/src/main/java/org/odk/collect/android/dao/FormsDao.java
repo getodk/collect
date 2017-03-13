@@ -44,6 +44,13 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public int deleteFormsForFormId(String formId) {
+        String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=?";
+        String selectionArgs[] = {formId};
+
+        return deleteFormsForFormId(selection, selectionArgs);
+    }
+
     public Cursor getFormsCursorForFormId(String formId) {
         String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=?";
         String selectionArgs[] = {formId};
@@ -67,6 +74,10 @@ public class FormsDao {
 
     public Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
+    public int deleteFormsForFormId(String selection, String[] selectionArgs) {
+        return Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, selection, selectionArgs);
     }
 
     public void deleteFormsDatabase() {

@@ -136,8 +136,11 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
+                            // remove it from the database also
+                            mFormsDao.deleteFormsForFormId(mCursor.getString(
+                                                        mCursor.getColumnIndex(FormsColumns.ID)));
                             Log.w(t, "[" + instance
-                                    + "] file referenced by content provider does not exist "
+                                    + "] file referenced by content provider does not exist, hence removed "
                                     + sqlFile);
                         }
                     }
