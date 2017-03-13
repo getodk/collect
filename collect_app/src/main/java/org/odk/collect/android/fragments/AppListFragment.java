@@ -1,3 +1,17 @@
+/*
+
+Copyright 2017 Nafundi
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package org.odk.collect.android.fragments;
 
 import android.content.res.Configuration;
@@ -54,8 +68,9 @@ abstract class AppListFragment extends ListFragment {
 
     public static void setAllToCheckedState(ListView lv, boolean check) {
         // no-op if ListView null
-        if (lv == null) return;
-
+        if (lv == null) {
+            return;
+        }
         for (int x = 0; x < lv.getCount(); x++) {
             lv.setItemChecked(x, check);
         }
@@ -70,13 +85,13 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (!isVisibleToUser) {
             // close the drawer if open
-            if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END))
+            if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END)) {
                 mDrawerLayout.closeDrawer(Gravity.END);
+            }
         }
     }
 
@@ -89,9 +104,7 @@ abstract class AppListFragment extends ListFragment {
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
                 .setIcon(R.drawable.ic_sort)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,10 +117,8 @@ abstract class AppListFragment extends ListFragment {
                 }
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -160,13 +171,11 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupDrawer(view);
         setupDrawerItems();
-
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
         }
