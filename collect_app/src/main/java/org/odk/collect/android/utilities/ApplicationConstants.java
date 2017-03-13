@@ -17,6 +17,8 @@ package org.odk.collect.android.utilities;
 
 public class ApplicationConstants {
 
+    public static final int SQLITE_MAXIMUM_QUERY_LIMIT = 999;
+
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
     }

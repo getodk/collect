@@ -34,6 +34,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 
 import java.util.ArrayList;
@@ -52,7 +53,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private final static String TAG = "InstanceUploaderActiv";
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
-    private static final int SQLITE_MAXIMUM_QUERY_LIMIT = 999;
 
     private final static String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
@@ -221,33 +221,33 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         int count = keys.size();
 
         while (count != 0) {
-            int parLen = count;
 
-            if (count > SQLITE_MAXIMUM_QUERY_LIMIT) {
-                parLen = SQLITE_MAXIMUM_QUERY_LIMIT;
+            if (count > ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT) {
+                selectionArgs = new String[ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT];
+            } else{
+                selectionArgs = new String[count];
             }
 
             selection = new StringBuilder();
-            selectionArgs = new String[parLen];
             selection.append(InstanceColumns._ID + " IN (");
 
             int i = 0;
-            while (it.hasNext() && i < parLen) {
-                String id = it.next();
-                selectionArgs[i] = id;
-                if (i != parLen - 1) {
-                    selection.append("?,");
-                } else {
-                    selection.append("? )");
+            while (it.hasNext() && i < selectionArgs.length) {
+                selectionArgs[i] = it.next();
+                selection.append("?");
+
+                if (i != selectionArgs.length - 1) {
+                    selection.append(",");
                 }
                 i++;
-                count--;
             }
+
+            selection.append(")");
+            count -= selectionArgs.length;
 
             StringBuilder queryMessage = new StringBuilder();
             Cursor results = null;
             try {
-                Log.e(TAG, selection.toString());
                 results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                 if (results.getCount() > 0) {
                     results.moveToPosition(-1);
@@ -260,7 +260,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                     }
                 }
             } catch (SQLException e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             } finally {
                 if (results != null)
                     results.close();
@@ -270,7 +270,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         if (message.length() == 0) {
             message.append(getString(R.string.no_forms_uploaded));
         }
-        Log.d(TAG,message.toString());
         createAlertDialog(message.toString().trim());
     }
 

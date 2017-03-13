@@ -30,9 +30,9 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
@@ -78,9 +78,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
-
-    // based on http://www.sqlite.org/limits.html
-    private static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
 
     private InstanceUploaderListener mStateListener;
 
@@ -596,9 +593,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     protected Outcome doInBackground(Long... values) {
         Outcome outcome = new Outcome();
         int counter = 0;
-        while (counter * SQLITE_MAX_VARIABLE_NUMBER < values.length) {
-            int low = counter * SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter + 1) * SQLITE_MAX_VARIABLE_NUMBER;
+        while (counter * ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT < values.length) {
+            int low = counter * ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT;
+            int high = (counter + 1) * ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT;
             if (high > values.length) {
                 high = values.length;
             }
@@ -651,29 +648,29 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     int count = keys.size();
 
                     while(count != 0){
-                        int parLen = count;
-
-                        if(count > SQLITE_MAX_VARIABLE_NUMBER - 1)
-                            parLen = SQLITE_MAX_VARIABLE_NUMBER - 1;
+                        if(count > ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT - 1) {
+                            selectionArgs = new String[
+                                    ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT];
+                        }else {
+                            selectionArgs = new String[count + 1];
+                        }
 
                         selection = new StringBuilder();
-                        selectionArgs = new String[parLen + 1];
 
                         selection.append(InstanceColumns._ID + " IN (");
                         int i = 0;
 
-                        while (it.hasNext() && i < parLen){
-                            String id = it.next();
-                            selectionArgs[i] = id;
+                        while (it.hasNext() && i < selectionArgs.length - 1){
+                            selectionArgs[i] = it.next();
+                            selection.append("?");
 
-                            if(i != parLen - 1){
-                                selection.append("?,");
-                            }else{
-                                selection.append("?");
+                            if(i != selectionArgs.length - 2) {
+                                selection.append(",");
                             }
                             i++;
-                            count--;
                         }
+
+                        count -= selectionArgs.length - 1;
                         selection.append(")");
                         selection.append(" and status=?");
                         selectionArgs[i] = InstanceProviderAPI.STATUS_COMPLETE;
@@ -706,7 +703,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                             }
                         } catch (SQLException e){
-                            Log.e(t,e.getMessage());
+                            Log.e(t, e.getMessage(), e);
                         } finally{
                             if (results != null) {
                                 results.close();
