@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -251,7 +251,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             Marker marker = new Marker(mMap);
             marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
-            marker.setIcon(ResourcesCompat.getDrawable(getApplicationContext().getResources(),R.drawable.ic_place_black_36dp,null));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
@@ -435,7 +435,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             Marker marker = new Marker(mMap);
             marker.setPosition(point);
             marker.setDraggable(true);
-            marker.setIcon(ResourcesCompat.getDrawable(getApplicationContext().getResources(),R.drawable.ic_place_black_36dp,null));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);

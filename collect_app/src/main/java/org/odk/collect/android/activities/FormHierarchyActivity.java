@@ -19,7 +19,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -336,8 +336,8 @@ public class FormHierarchyActivity extends ListActivity {
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, ResourcesCompat
-                                            .getDrawable(getApplicationContext().getResources(),R.drawable.expander_ic_minimized,null),
+                                    new HierarchyElement(fc.getLongText(), null, ContextCompat
+                                            .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                             Color.WHITE,
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
@@ -414,7 +414,7 @@ public class FormHierarchyActivity extends ListActivity {
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(ResourcesCompat.getDrawable(getApplicationContext().getResources(),R.drawable.expander_ic_minimized,null));
+                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -426,7 +426,7 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(ResourcesCompat.getDrawable(getApplicationContext().getResources(),R.drawable.expander_ic_maximized,null));
+                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
