@@ -36,7 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-
 import java.util.List;
 
 
