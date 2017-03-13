@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities;
 
 public class ApplicationConstants {
 
+    // based on http://www.sqlite.org/limits.html
     public static final int SQLITE_MAXIMUM_QUERY_LIMIT = 999;
 
     public abstract static class BundleKeys {
