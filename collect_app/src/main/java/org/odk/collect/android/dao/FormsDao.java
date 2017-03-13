@@ -45,7 +45,7 @@ public class FormsDao {
     }
 
     public int deleteFormsForFormId(String formId) {
-        String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=?";
+        String selection = FormsProviderAPI.FormsColumns._ID + "=?";
         String selectionArgs[] = {formId};
 
         return deleteFormsForFormId(selection, selectionArgs);
