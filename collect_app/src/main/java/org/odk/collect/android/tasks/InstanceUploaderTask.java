@@ -640,22 +640,19 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 } else {
                     mStateListener.uploadingComplete(outcome.mResults);
 
-                    StringBuilder selection = null;
                     Set<String> keys = outcome.mResults.keySet();
                     Iterator<String> it = keys.iterator();
-
-                    String[] selectionArgs = null;
                     int count = keys.size();
-
-                    while(count != 0){
+                    while(count > 0){
+                        String[] selectionArgs = null;
                         if(count > ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT - 1) {
                             selectionArgs = new String[
                                     ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT];
-                        }else {
+                        } else {
                             selectionArgs = new String[count + 1];
                         }
 
-                        selection = new StringBuilder();
+                        StringBuilder selection = new StringBuilder();
 
                         selection.append(InstanceColumns._ID + " IN (");
                         int i = 0;
@@ -664,7 +661,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                             selectionArgs[i] = it.next();
                             selection.append("?");
 
-                            if(i != selectionArgs.length - 2) {
+                            if (i != selectionArgs.length - 2) {
                                 selection.append(",");
                             }
                             i++;

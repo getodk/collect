@@ -212,23 +212,22 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // tried to close a dialog not open. don't care.
         }
 
-        StringBuilder selection = null;
+
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
 
-        String[] selectionArgs = null;
         StringBuilder message = new StringBuilder();
         int count = keys.size();
-
-        while (count != 0) {
+        while (count > 0) {
+            String[] selectionArgs = null;
 
             if (count > ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT) {
                 selectionArgs = new String[ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT];
-            } else{
+            } else {
                 selectionArgs = new String[count];
             }
 
-            selection = new StringBuilder();
+            StringBuilder selection = new StringBuilder();
             selection.append(InstanceColumns._ID + " IN (");
 
             int i = 0;
