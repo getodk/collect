@@ -44,10 +44,11 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public int deleteFormsForFormId(String formId) {
-        String selection = FormsProviderAPI.FormsColumns._ID + "=?";
-        String selectionArgs[] = {formId};
-
+    public int deleteFormsForFormId(String[] selectionArgs) {
+        String selection = FormsProviderAPI.FormsColumns._ID + " in (";
+        for(int i = 0; i < selectionArgs.length-1; i++)
+            selection += "?, ";
+        selection += "? )";
         return deleteFormsForFormId(selection, selectionArgs);
     }
 

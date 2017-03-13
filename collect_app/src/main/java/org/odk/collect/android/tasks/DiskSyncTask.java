@@ -100,6 +100,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 // parse and update; this is quick, as we only calculate the md5
                 // and see if it has changed.
                 List<UriFile> uriToUpdate = new ArrayList<UriFile>();
+                List<String> idsToDelete = new ArrayList<String>();
                 Cursor mCursor = null;
                 // open the cursor within a try-catch block so it can always be closed.
                 try {
@@ -137,13 +138,16 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                             }
                         } else {
                             // remove it from the database also
-                            mFormsDao.deleteFormsForFormId(mCursor.getString(
-                                                        mCursor.getColumnIndex(FormsColumns._ID)));
+                            idsToDelete.add(mCursor.getString(
+                                    mCursor.getColumnIndex(FormsColumns._ID)));
                             Log.w(t, "[" + instance
                                     + "] file referenced by content provider does not exist, hence removed "
                                     + sqlFile);
                         }
                     }
+                    // remove the list from the database
+                    mFormsDao.deleteFormsForFormId(idsToDelete.toArray(new String[idsToDelete.size()]));
+					Log.i(t, "the files which does not exist are removed from the database");
                 } finally {
                     if (mCursor != null) {
                         mCursor.close();
