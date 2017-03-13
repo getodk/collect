@@ -136,9 +136,15 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
-                            Log.w(t, "[" + instance
-                                    + "] file referenced by content provider does not exist "
-                                    + sqlFile);
+                           //File not found in sdcard but file path found in database
+                            //probably because the file has been deleted or filename was changed in sdcard
+                            //remove the content from the database
+                            
+                            String id = mCursor.getString(
+                                    mCursor.getColumnIndex(FormsColumns._ID));
+
+                                    Collect.getInstance().getContentResolver()
+                            .delete(FormsColumns.CONTENT_URI, FormsColumns._ID + "=" + id , null);
                         }
                     }
                 } finally {
