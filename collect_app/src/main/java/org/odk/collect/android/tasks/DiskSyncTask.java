@@ -138,7 +138,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         } else {
                             // remove it from the database also
                             mFormsDao.deleteFormsForFormId(mCursor.getString(
-                                                        mCursor.getColumnIndex(FormsColumns.ID)));
+                                                        mCursor.getColumnIndex(FormsColumns._ID)));
                             Log.w(t, "[" + instance
                                     + "] file referenced by content provider does not exist, hence removed "
                                     + sqlFile);

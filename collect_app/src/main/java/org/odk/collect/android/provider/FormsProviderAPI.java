@@ -43,7 +43,6 @@ public final class FormsProviderAPI {
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 
         // These are the only things needed for an insert
-        public static final String ID = "_id";
         public static final String DISPLAY_NAME = "displayName";
         public static final String DESCRIPTION = "description";  // can be null
         public static final String JR_FORM_ID = "jrFormId";
