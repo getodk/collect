@@ -910,6 +910,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
+
+                formController.getTimerLogger().exitView();
+                formController.getTimerLogger().logTimerEvent(TimerLogger.Event.HIERARCHY, 0, null);
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
@@ -918,6 +922,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
+
+                formController.getTimerLogger().logTimerEvent(TimerLogger.Event.PREFERENCES, 0, null);
+
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
                 return true;
@@ -1298,10 +1305,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private void showNextView() {
         try {
 
-            Collect.getInstance().getFormController().getTimerLogger().exitView();    // Close timer events waiting for an end time
-
             FormController formController = Collect.getInstance()
                     .getFormController();
+
+            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
 
             // get constraint behavior preference value with appropriate default
             String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
@@ -1378,6 +1385,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         try {
             FormController formController = Collect.getInstance()
                     .getFormController();
+
+            formController.getTimerLogger().exitView();    // Close timer events
+
             // The answer is saved on a back swipe, but question constraints are
             // ignored.
             if (formController.currentPromptIsQuestion()) {

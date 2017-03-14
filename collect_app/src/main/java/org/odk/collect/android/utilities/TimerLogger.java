@@ -52,6 +52,8 @@ public class TimerLogger {
         public static final int STOP = 1002;
         public static final int RESUME = 1003;
         public static final int FINALIZE = 1004;
+        public static final int HIERARCHY = 1005;
+        public static final int PREFERENCES = 1006;
 
         Event(long start, int eventType, int fecType, String node, boolean hasIntervalTime) {
             this.start = start;
@@ -101,6 +103,12 @@ public class TimerLogger {
                     break;
                 case FINALIZE:
                     sType = "finalize";
+                    break;
+                case HIERARCHY:
+                    sType = "jump";
+                    break;
+                case PREFERENCES:
+                    sType = "preferences menu";
                     break;
                 default:
                     sType = "Unknown Event Type: " + eventType;
