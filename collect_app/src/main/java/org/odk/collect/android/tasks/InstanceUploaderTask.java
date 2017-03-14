@@ -593,9 +593,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     protected Outcome doInBackground(Long... values) {
         Outcome outcome = new Outcome();
         int counter = 0;
-        while (counter * ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT < values.length) {
-            int low = counter * ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT;
-            int high = (counter + 1) * ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT;
+        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
             if (high > values.length) {
                 high = values.length;
             }
@@ -645,9 +645,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     int count = keys.size();
                     while(count > 0){
                         String[] selectionArgs = null;
-                        if(count > ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT - 1) {
+                        if(count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
                             selectionArgs = new String[
-                                    ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT];
+                                    ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
                         } else {
                             selectionArgs = new String[count + 1];
                         }
