@@ -16,8 +16,9 @@ dependencies:
          - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2,extra-android-m2repository,extra-google-m2repository"
     
     cache_directories:
+        - /usr/local/android-sdk-linux
         - ~/.android
-        
+
 test:
     override:
         # http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance
