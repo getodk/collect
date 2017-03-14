@@ -221,8 +221,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         while (count > 0) {
             String[] selectionArgs = null;
 
-            if (count > ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT) {
-                selectionArgs = new String[ApplicationConstants.SQLITE_MAXIMUM_QUERY_LIMIT];
+            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
+                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
             } else {
                 selectionArgs = new String[count];
             }
