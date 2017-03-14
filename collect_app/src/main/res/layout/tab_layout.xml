@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2009 University of Washington
+Copyright (C) 2017 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -15,8 +15,7 @@ License for the specific language governing permissions and limitations under
 the License.
 
 -->
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -30,6 +29,7 @@ the License.
             android:id="@+id/status_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#DDDDDD"
             android:paddingBottom="4dip"
             android:paddingEnd="8dip"
             android:paddingLeft="8dip"
@@ -37,8 +37,7 @@ the License.
             android:paddingStart="8dip"
             android:paddingTop="4dip"
             android:text="@string/form_scan_starting"
-            android:textSize="14sp"
-            android:background="#DDDDDD" />
+            android:textSize="14sp" />
 
         <ListView
             android:id="@android:id/list"
@@ -58,7 +57,7 @@ the License.
             android:id="@+id/buttonholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/toggle_button"
@@ -87,5 +86,5 @@ the License.
         android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="right|end"
-        android:background="#DDDDDD"/>
+        android:background="#DDDDDD" />
 </android.support.v4.widget.DrawerLayout>
