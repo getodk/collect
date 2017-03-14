@@ -28,8 +28,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public ViewPagerAdapter(FragmentManager fm, CharSequence titles[],
                             ArrayList<Fragment> fragments) {
         super(fm);
-        this.mTabTitles = titles;
-        this.mFragments = fragments;
+        mTabTitles = titles;
+        mFragments = fragments;
     }
 
     @Override
