@@ -20,7 +20,7 @@ dependencies:
     
     cache_directories:
         - /usr/local/android-sdk-linux/tools
-        - /usr/local/android-sdk-linux/build-tools/25.0.3
+        - /usr/local/android-sdk-linux/build-tools/25.0.2
         - /usr/local/android-sdk-linux/platforms/android-25
         - /usr/local/android-sdk-linux/extras/android/m2repository
         - /usr/local/android-sdk-linux/extras/google/m2repository
