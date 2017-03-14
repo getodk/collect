@@ -113,10 +113,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext());
 
-
         Boolean showCustomServerReponse = sharedPreferences.getBoolean(
                 PreferenceKeys.KEY_CUSTOM_SERVER_RESPONSE, false);
-
 
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
@@ -490,15 +488,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 Log.i(t, "Issuing POST request for " + id + " to: " + u.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
-
                 HttpEntity httpEntity = response.getEntity();
-
                 if (showCustomServerReponse){
                     messageParser = new ResponseMessageParser(httpEntity);
                 }
-
                 WebUtils.discardEntityBytes(response);
-
                 Log.i(t, "Response code:" + responseCode);
                 // verify that the response was a 201 or 202.
                 // If it wasn't, the submission has failed.
