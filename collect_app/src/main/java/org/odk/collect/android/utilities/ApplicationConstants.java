@@ -18,7 +18,7 @@ package org.odk.collect.android.utilities;
 public class ApplicationConstants {
 
     // based on http://www.sqlite.org/limits.html
-    public static final int SQLITE_MAXIMUM_QUERY_LIMIT = 999;
+    public static final int SQLITE_MAXIMUM_QUERY_LIMIT = Integer.MAX_VALUE ;
 
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
