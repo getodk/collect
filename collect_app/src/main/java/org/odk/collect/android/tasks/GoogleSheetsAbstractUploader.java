@@ -50,7 +50,6 @@ import org.odk.collect.android.picasa.PhotoEntry;
 import org.odk.collect.android.picasa.PicasaClient;
 import org.odk.collect.android.picasa.PicasaUrl;
 import org.odk.collect.android.picasa.UserFeed;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
