@@ -30,11 +30,10 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -515,7 +514,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     } else {
                         // Custom messaging response if fail.
                         // If Custom Server Response enabled then confirm response is valid
-                        // and set as display message, otherwise fall back to default string messagining
+                        // and set as display message, otherwise fall back to default string messaging
                         if (showCustomServerReponse){
                             if (messageParser != null && messageParser.isValid){
                                 outcome.mResults.put(id, fail + messageParser.getMessageResponse());
