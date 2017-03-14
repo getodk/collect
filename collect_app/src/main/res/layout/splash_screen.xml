@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
 	android:gravity="center_vertical|center_horizontal"
 	android:background="@android:color/transparent"
 	android:id="@+id/layout"
@@ -39,8 +39,8 @@
 			<TextView
 				android:id="@+id/text"
 				android:text="@string/app_name"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
 				android:background="@android:color/transparent"
 				android:textSize="22sp"
 				android:textStyle="bold"
@@ -51,8 +51,8 @@
 			<TextView
 				android:id="@+id/url"
 				android:text="@string/app_url"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
 				android:background="@android:color/transparent"
 				android:textSize="14sp"
 				android:paddingStart="7dip"
