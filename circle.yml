@@ -6,7 +6,8 @@ machine:
 
         # Out of memory errors in Android builds
         # https://circleci.com/docs/oom/#out-of-memory-errors-in-android-builds
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+        # https://docs.gradle.org/current/userguide/build_environment.html
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
         
 dependencies:
     pre:
