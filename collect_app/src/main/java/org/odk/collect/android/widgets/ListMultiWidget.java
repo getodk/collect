@@ -335,7 +335,7 @@ public class ListMultiWidget extends QuestionWidget {
 
         // Put the question text on the left half of the screen
         LinearLayout.LayoutParams labelParams =
-                new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+                new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         labelParams.weight = 1;
     }
 

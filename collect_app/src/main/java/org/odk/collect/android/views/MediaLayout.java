@@ -391,7 +391,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void addDivider(ImageView v) {
         RelativeLayout.LayoutParams dividerParams =
-                new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT);
         if (mImageView != null) {
             dividerParams.addRule(RelativeLayout.BELOW, mImageView.getId());
