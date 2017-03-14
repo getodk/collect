@@ -28,7 +28,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,7 +39,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -53,7 +51,6 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -64,7 +61,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -110,44 +106,7 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // must be at the beginning of any activity that can be called from an
-        // external intent
-        Log.i(t, "Starting up, creating directories");
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
         setContentView(R.layout.main_menu);
-
-        {
-            // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
-        }
-
-        setTitle(getString(R.string.main_menu));
-
-        File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
-            boolean success = loadSharedPreferencesFromFile(f);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                f.delete();
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        }
-
-        mReviewSpacer = findViewById(R.id.review_spacer);
-        mGetFormsSpacer = findViewById(R.id.get_forms_spacer);
-
-        mAdminPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
@@ -245,6 +204,42 @@ public class MainMenuActivity extends Activity {
             }
         });
 
+        setTitle(getString(R.string.main_menu));
+
+        // must be at the beginning of any activity that can be called from an
+        // external intent
+        Log.i(t, "Starting up, creating directories");
+        try {
+            Collect.createODKDirs();
+        } catch (RuntimeException e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        {
+            // dynamically construct the "ODK Collect vA.B" string
+            TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
+            mainMenuMessageLabel.setText(Collect.getInstance()
+                    .getVersionedAppName());
+        }
+
+        File f = new File(Collect.ODK_ROOT + "/collect.settings");
+        if (f.exists()) {
+            boolean success = loadSharedPreferencesFromFile(f);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                f.delete();
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        }
+
+        mReviewSpacer = findViewById(R.id.review_spacer);
+        mGetFormsSpacer = findViewById(R.id.get_forms_spacer);
+
+        mAdminPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
         InstancesDao instancesDao = new InstancesDao();
 
         // count for finalized instances
@@ -301,45 +296,73 @@ public class MainMenuActivity extends Activity {
         boolean edit = sharedPreferences.getBoolean(
                 AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
-            mReviewDataButton.setVisibility(View.GONE);
-            mReviewSpacer.setVisibility(View.GONE);
+            if (mReviewDataButton != null) {
+                mReviewDataButton.setVisibility(View.GONE);
+            }
+            if (mReviewSpacer != null) {
+                mReviewSpacer.setVisibility(View.GONE);
+            }
         } else {
-            mReviewDataButton.setVisibility(View.VISIBLE);
-            mReviewSpacer.setVisibility(View.VISIBLE);
+            if (mReviewDataButton != null) {
+                mReviewDataButton.setVisibility(View.VISIBLE);
+            }
+            if (mReviewSpacer != null) {
+                mReviewSpacer.setVisibility(View.VISIBLE);
+            }
         }
 
         boolean send = sharedPreferences.getBoolean(
                 AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
-            mSendDataButton.setVisibility(View.GONE);
+            if (mSendDataButton != null) {
+                mSendDataButton.setVisibility(View.GONE);
+            }
         } else {
-            mSendDataButton.setVisibility(View.VISIBLE);
+            if (mSendDataButton != null) {
+                mSendDataButton.setVisibility(View.VISIBLE);
+            }
         }
 
         boolean view_sent = sharedPreferences.getBoolean(
                 AdminKeys.KEY_VIEW_SENT, true);
         if (!view_sent) {
-            mViewSentFormsButton.setVisibility(View.GONE);
+            if (mViewSentFormsButton != null) {
+                mViewSentFormsButton.setVisibility(View.GONE);
+            }
         } else {
-            mViewSentFormsButton.setVisibility(View.VISIBLE);
+            if (mViewSentFormsButton != null) {
+                mViewSentFormsButton.setVisibility(View.VISIBLE);
+            }
         }
 
         boolean get_blank = sharedPreferences.getBoolean(
                 AdminKeys.KEY_GET_BLANK, true);
         if (!get_blank) {
-            mGetFormsButton.setVisibility(View.GONE);
-            mGetFormsSpacer.setVisibility(View.GONE);
+            if (mGetFormsButton != null) {
+                mGetFormsButton.setVisibility(View.GONE);
+            }
+            if (mGetFormsSpacer != null) {
+                mGetFormsSpacer.setVisibility(View.GONE);
+            }
         } else {
-            mGetFormsButton.setVisibility(View.VISIBLE);
-            mGetFormsSpacer.setVisibility(View.VISIBLE);
+            if (mGetFormsButton != null) {
+                mGetFormsButton.setVisibility(View.VISIBLE);
+            }
+            if (mGetFormsSpacer != null) {
+                mGetFormsSpacer.setVisibility(View.VISIBLE);
+            }
         }
 
         boolean delete_saved = sharedPreferences.getBoolean(
                 AdminKeys.KEY_DELETE_SAVED, true);
         if (!delete_saved) {
-            mManageFilesButton.setVisibility(View.GONE);
+            if (mManageFilesButton != null) {
+                mManageFilesButton.setVisibility(View.GONE);
+            }
         } else {
-            mManageFilesButton.setVisibility(View.VISIBLE);
+            if (mManageFilesButton != null) {
+                mManageFilesButton.setVisibility(View.VISIBLE);
+            }
         }
 
         ((Collect) getApplication())

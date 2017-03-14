@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -434,7 +435,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             marker.setOnMarkerClickListener(nullmarkerlistner);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
-            marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             map_markers.add(marker);
             pathOverlay.addPoint(marker.getPosition());
@@ -679,7 +680,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         Float last_know_acuracy =
                 mMyLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         mMyLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-        marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setDraggable(true);
         marker.setOnMarkerDragListener(draglistner);

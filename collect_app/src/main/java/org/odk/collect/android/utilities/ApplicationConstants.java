@@ -17,6 +17,9 @@ package org.odk.collect.android.utilities;
 
 public class ApplicationConstants {
 
+    // based on http://www.sqlite.org/limits.html
+    public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
+
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
     }

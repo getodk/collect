@@ -20,7 +20,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.Log;
-import android.widget.ImageButton;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
