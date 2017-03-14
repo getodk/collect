@@ -478,7 +478,7 @@
 <string name="reset_layers_result">Map layers :: %s</string>
 <string name="reset_cache_result">Form load cache :: %s</string>
 <string name="server_custom_messaging">Custom server responses</string>
-<string name="server_custom_messaging_summary">Display custom server responses durning submissions</string>
+<string name="server_custom_messaging_summary">Display custom server responses during submissions</string>
 <string name="show_custom_server_response_title">Show custom server responses</string>
 <string name="reset_osm_tiles_result">OSM tile cache :: %s</string>
 <string name="encrypted_form">Encrypted form</string>
