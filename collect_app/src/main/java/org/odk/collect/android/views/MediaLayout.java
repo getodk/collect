@@ -35,6 +35,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -195,7 +196,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     BitmapFactory.decodeResource(getContext().getResources(),
                             android.R.drawable.ic_media_play);
             mVideoButton.setImageBitmap(b);
-            mVideoButton.setPadding(22,12,22,12);
+            mVideoButton.setPadding(22, 12, 22, 12);
             mVideoButton.setBackgroundColor(Color.LTGRAY);
             mVideoButton.setOnClickListener(new OnClickListener() {
 
@@ -314,21 +315,21 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                audioParams.setMargins(0,0,11,0);
+                audioParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
             } else if (mAudioButton == null && mVideoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                videoParams.setMargins(0,0,11,0);
+                videoParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                audioParams.setMargins(0,0,11,0);
+                audioParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-                videoParams.setMargins(0,20,11,0);
+                videoParams.setMargins(0, 20, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else {
                 // the image will implicitly scale down to fit within parent...
@@ -351,18 +352,18 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                audioParams.setMargins(0,0,11,0);
+                audioParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
             } else if (mAudioButton == null && mVideoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                videoParams.setMargins(0,0,11,0);
+                videoParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                audioParams.setMargins(0,0,11,0);
+                audioParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                videoParams.setMargins(0,20,11,0);
+                videoParams.setMargins(0, 20, 11, 0);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
