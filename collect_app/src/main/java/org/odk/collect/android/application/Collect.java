@@ -176,7 +176,9 @@ public class Collect extends Application {
             versionName = getPackageManager()
                     .getPackageInfo(getPackageName(), 0)
                     .versionName;
+            if(versionName!=null){
             versionName = " " + versionName.replaceFirst("-", "\n");
+            }
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
