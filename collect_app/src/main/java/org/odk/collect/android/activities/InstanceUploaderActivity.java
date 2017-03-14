@@ -26,18 +26,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -233,8 +229,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         {
             Cursor results = null;
             try {
-                results = getContentResolver().query(InstanceColumns.CONTENT_URI,
-                        null, selection.toString(), selectionArgs, null);
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                 if (results.getCount() > 0) {
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {

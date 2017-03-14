@@ -53,6 +53,15 @@ the License.
 			android:padding="12dp"
 			android:textSize="16sp"
 			android:layout_weight="1" />
+		<Button
+			android:id="@+id/exitButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/exit"
+			android:visibility="gone"
+			android:padding="12dp"
+			android:textSize="16sp"
+			android:layout_weight="1" />
 	</LinearLayout>
 	<ListView
 		android:id="@android:id/list"
@@ -67,6 +76,5 @@ the License.
 		android:text="@string/no_items_display"
 		android:textSize="21sp"
 		android:padding="20dp"
-		android:gravity="center"
-		android:background="@drawable/white" />
+		android:gravity="center" />
 </RelativeLayout>

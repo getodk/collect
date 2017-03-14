@@ -22,7 +22,9 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -84,9 +86,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         boolean sendwifi = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_AUTOSEND_WIFI, false);
+                PreferenceKeys.KEY_AUTOSEND_WIFI, false);
         boolean sendnetwork = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_AUTOSEND_NETWORK, false);
+                PreferenceKeys.KEY_AUTOSEND_NETWORK, false);
 
         return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
@@ -98,16 +100,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (!running) {
             running = true;
 
-            String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-            String selectionArgs[] =
-                    {
-                            InstanceProviderAPI.STATUS_COMPLETE,
-                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED
-                    };
-
             ArrayList<Long> toUpload = new ArrayList<Long>();
-            Cursor c = context.getContentResolver().query(InstanceColumns.CONTENT_URI, null,
-                    selection, selectionArgs, null);
+            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
@@ -132,13 +127,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-            String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
+            String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
                     context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
                 mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
                 String googleUsername = settings.getString(
-                        PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
                     // just quit if there's no username
                     running = false;
@@ -151,12 +146,12 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } else {
                 // get the username, password, and server from preferences
 
-                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                String storedUsername = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+                String storedPassword = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
+                String server = settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         context.getString(R.string.default_server_url));
                 String url = server
-                        + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
+                        + settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
                         context.getString(R.string.default_odk_formlist));
 
                 Uri u = Uri.parse(url);
@@ -206,11 +201,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             {
                 Cursor results = null;
                 try {
-                    results = Collect
-                            .getInstance()
-                            .getContentResolver()
-                            .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                    selectionArgs, null);
+                    results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                     if (results.getCount() > 0) {
                         results.moveToPosition(-1);
                         while (results.moveToNext()) {

@@ -1,15 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceScreen
-        android:id="@+id/info"
-        android:key="info"
-        android:summary="@string/click_to_web"
-        android:title="@string/app_name" >
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="http://opendatakit.org" />
-    </PreferenceScreen>
-
     <PreferenceCategory
         android:key="@string/server_preferences"
         android:title="@string/server_preferences" >
@@ -85,6 +75,12 @@
             android:key="font_size"
             android:title="@string/font_size" />
         <CheckBoxPreference
+            android:id="@+id/instance_sync"
+            android:defaultValue="true"
+            android:key="instance_sync"
+            android:summary="@string/instance_sync_summary"
+            android:title="@string/instance_sync" />
+        <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
             android:key="default_completed"
@@ -117,7 +113,7 @@
         <CheckBoxPreference
             android:id="@+id/server_custom_messaging"
             android:defaultValue="false"
-            android:key="key_custom_messaging"
+            android:key="custom_server_response"
             android:summary="@string/server_custom_messaging_summary"
             android:title="@string/server_custom_messaging" />
     </PreferenceCategory>
@@ -148,19 +144,10 @@
         android:title="@string/analytics_preferences" >
 
         <CheckBoxPreference
-            android:id="@+id/enable_analytics"
+            android:id="@+id/analytics"
             android:defaultValue="true"
-            android:key="enable_analytics"
-            android:summary="@string/enable_analytics_summary"
-            android:title="@string/enable_analytics" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/general_settings_about" >
-
-        <PreferenceScreen
-            android:key="open_source_licenses"
-            android:title="@string/all_open_source_licenses" >
-        </PreferenceScreen>
+            android:key="analytics"
+            android:summary="@string/analytics_summary"
+            android:title="@string/analytics" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -25,8 +25,10 @@ import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -78,6 +80,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
     private SharedPreferences sharedPreferences;
+
+    // based on http://www.sqlite.org/limits.html
+    private static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
+
     private InstanceUploaderListener mStateListener;
 
     public static class Outcome {
@@ -109,8 +115,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext());
 
+
         Boolean showCustomServerReponse = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_CUSTOM_SERVER_RESPONSE, false);
+                PreferenceKeys.KEY_CUSTOM_SERVER_RESPONSE, false);
 
 
         boolean openRosaServer = false;
@@ -564,22 +571,22 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         return true;
     }
 
-    // TODO: This method is like 350 lines long, down from 400.
-    // still. ridiculous. make it smaller.
-    protected Outcome doInBackground(Long... values) {
-        Outcome outcome = new Outcome();
-
-        StringBuffer selectionBuf = new StringBuffer(InstanceColumns._ID + " IN (");
-        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-        if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                if (i > 0) {
-                    selectionBuf.append(",");
-                }
-                selectionBuf.append("?");
-                selectionArgs[i] = values[i].toString();
-            }
+    private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
+        if (values == null) {
+            // don't try anything if values is null
+            return false;
         }
+
+        StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+        String[] selectionArgs = new String[high - low];
+        for (int i = 0; i < (high - low); i++) {
+            if (i > 0) {
+                selectionBuf.append(",");
+            }
+            selectionBuf.append("?");
+            selectionArgs[i] = values[i + low].toString();
+        }
+
         selectionBuf.append(")");
         String selection = selectionBuf.toString();
 
@@ -593,14 +600,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         Cursor c = null;
         try {
-            c = Collect.getInstance().getContentResolver()
-                    .query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
 
-            if (c.getCount() > 0) {
+            if (c != null && c.getCount() > 0) {
                 c.moveToPosition(-1);
                 while (c.moveToNext()) {
                     if (isCancelled()) {
-                        return outcome;
+                        return false;
                     }
                     publishProgress(c.getPosition() + 1, c.getCount());
                     String instance = c.getString(
@@ -610,8 +616,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     // Use the app's configured URL unless the form included a submission URL
                     int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx) ? getServerSubmissionURL() : c.getString(
-                            subIdx).trim();
+                    String urlString = c.isNull(subIdx) ?
+                            getServerSubmissionURL() : c.getString(subIdx).trim();
 
                     // add the deviceID to the request...
                     try {
@@ -622,7 +628,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,
                             uriRemap, outcome)) {
-                        return outcome; // get credentials...
+                        return false; // get credentials...
                     }
                 }
             }
@@ -632,6 +638,23 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
+        return true;
+    }
+
+    protected Outcome doInBackground(Long... values) {
+        Outcome outcome = new Outcome();
+        int counter = 0;
+        while (counter * SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+            int low = counter * SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter + 1) * SQLITE_MAX_VARIABLE_NUMBER;
+            if (high > values.length) {
+                high = values.length;
+            }
+            if (!processChunk(low, high, outcome, values)) {
+                return outcome;
+            }
+            counter ++;
+        }
         return outcome;
     }
 
@@ -641,7 +664,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 Collect.getInstance());
-        String serverBase = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+        String serverBase = settings.getString(PreferenceKeys.KEY_SERVER_URL,
                 app.getString(R.string.default_server_url));
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
@@ -649,7 +672,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = settings.getString(PreferencesActivity.KEY_SUBMISSION_URL,
+        String submissionPath = settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
                 app.getString(R.string.default_odk_submission));
 
         if (!submissionPath.startsWith(URL_PATH_SEP)) {
@@ -688,11 +711,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     Cursor results = null;
                     try {
-                        results = Collect
-                                .getInstance()
-                                .getContentResolver()
-                                .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                        selectionArgs, null);
+                        results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+
                         if (results.getCount() > 0) {
                             Long[] toDelete = new Long[results.getCount()];
                             results.moveToPosition(-1);
@@ -706,7 +726,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                             boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
                                     Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferencesActivity.KEY_DELETE_AFTER_SEND, false);
+                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
                             if (deleteFlag) {
                                 DeleteInstancesTask dit = new DeleteInstancesTask();
                                 dit.setContentResolver(Collect.getInstance().getContentResolver());

@@ -42,6 +42,12 @@
             android:summary="@string/found_in_main"
             android:title="@string/send_data" />
         <CheckBoxPreference
+            android:id="@+id/view_sent"
+            android:defaultValue="true"
+            android:key="view_sent"
+            android:summary="@string/found_in_main"
+            android:title="@string/view_sent_forms" />
+        <CheckBoxPreference
             android:id="@+id/get_blank"
             android:defaultValue="true"
             android:key="get_blank"
@@ -116,6 +122,12 @@
             android:summary="@string/found_in_settings"
             android:title="@string/font_size" />
         <CheckBoxPreference
+            android:id="@+id/instance_sync"
+            android:defaultValue="true"
+            android:key="instance_form_sync"
+            android:summary="@string/found_in_settings"
+            android:title="@string/instance_sync" />
+        <CheckBoxPreference
             android:id="@+id/default_to_finalized"
             android:defaultValue="true"
             android:key="default_to_finalized"
@@ -154,9 +166,15 @@
         <CheckBoxPreference
             android:id="@+id/show_custom_server_response"
             android:defaultValue="true"
-            android:key="show_custom_server_response"
+            android:key="custom_server_response"
             android:summary="@string/found_in_settings"
             android:title="@string/show_custom_server_response_title" />
+        <CheckBoxPreference
+            android:id="@+id/analytics"
+            android:defaultValue="true"
+            android:key="analytics"
+            android:summary="@string/found_in_settings"
+            android:title="@string/analytics" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_access_form_entry" >
         <CheckBoxPreference

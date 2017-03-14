@@ -38,7 +38,6 @@ import java.security.Security;
  */
 public final class PRNGFixes {
 
-    private static final int VERSION_CODE_JELLY_BEAN = 16;
     private static final int VERSION_CODE_JELLY_BEAN_MR2 = 18;
     private static final byte[] BUILD_FINGERPRINT_AND_DEVICE_SERIAL =
             getBuildFingerprintAndDeviceSerial();
@@ -64,8 +63,7 @@ public final class PRNGFixes {
      * @throws SecurityException if the fix is needed but could not be applied.
      */
     private static void applyOpenSSLFix() throws SecurityException {
-        if ((Build.VERSION.SDK_INT < VERSION_CODE_JELLY_BEAN)
-                || (Build.VERSION.SDK_INT > VERSION_CODE_JELLY_BEAN_MR2)) {
+        if (Build.VERSION.SDK_INT > VERSION_CODE_JELLY_BEAN_MR2) {
             // No need to apply the fix
             return;
         }

@@ -88,6 +88,18 @@
                 android:textSize="21sp" />
 
             <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <Button
+                android:id="@+id/view_sent_forms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_sent_forms"
+                android:padding="20dp"
+                android:textSize="21sp" />
+
+            <View
                 android:layout_width="fill_parent"
                 android:layout_height="20dp" />
 

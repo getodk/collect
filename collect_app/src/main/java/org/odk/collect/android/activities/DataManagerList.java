@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -26,16 +25,20 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
-import org.odk.collect.android.utilities.ListViewUtils;
+import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.tasks.InstanceSyncTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Responsible for displaying and deleting all the saved form instances
@@ -44,19 +47,15 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends ListActivity implements
-        DeleteInstancesListener {
+public class DataManagerList extends InstanceListActivity
+        implements DeleteInstancesListener, DiskSyncListener {
     private static final String t = "DataManagerList";
     private AlertDialog mAlertDialog;
     private Button mDeleteButton;
     private Button mToggleButton;
 
-    private SimpleCursorAdapter mInstances;
-    private ArrayList<Long> mSelected = new ArrayList<Long>();
-
     DeleteInstancesTask mDeleteInstancesTask = null;
-
-    private static final String SELECTED = "selected";
+    private InstanceSyncTask instanceSyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,13 +67,12 @@ public class DataManagerList extends ListActivity implements
         mDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this, "deleteButton",
-                        Integer.toString(mSelected.size()));
-                if (mSelected.size() > 0) {
+                int checkedItemCount = getCheckedCount();
+                logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
+                if (checkedItemCount > 0) {
                     createDeleteInstancesDialog();
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            R.string.noselect_error, Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShortToast(R.string.noselect_error);
                 }
             }
         });
@@ -84,31 +82,15 @@ public class DataManagerList extends ListActivity implements
             @Override
             public void onClick(View v) {
                 ListView lv = getListView();
-                boolean allChecked = ListViewUtils.toggleChecked(lv);
-                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
+                boolean allChecked = toggleChecked(lv);
+                toggleButtonLabel(mToggleButton, getListView());
 
-                // sync up internal state
-                mSelected.clear();
-                if (allChecked) {
-                    // add all id's back to mSelected
-                    for (int pos = 0; pos < lv.getCount(); pos++) {
-                        mSelected.add(getListAdapter().getItemId(pos));
-                    }
-                }
                 mDeleteButton.setEnabled(allChecked);
             }
         });
 
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
-                InstanceColumns.DISPLAY_NAME + " ASC");
-
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
-                InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
-
-        mInstances = new SimpleCursorAdapter(this,
-                R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(mInstances);
+        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(false);
@@ -118,17 +100,26 @@ public class DataManagerList extends ListActivity implements
         if (getListView().getCount() == 0) {
             mToggleButton.setEnabled(false);
         }
+
+        instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask.setDiskSyncListener(this);
+        instanceSyncTask.execute();
+
+        mSortingOptions = new String[]{
+                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
+                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+        };
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
+        logger.logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
+        logger.logOnStop(this);
         super.onStop();
     }
 
@@ -139,23 +130,10 @@ public class DataManagerList extends ListActivity implements
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        long[] selectedArray = savedInstanceState.getLongArray(SELECTED);
-        for (int i = 0; i < selectedArray.length; i++) {
-            mSelected.add(selectedArray[i]);
-        }
-        mDeleteButton.setEnabled(selectedArray.length > 0);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        long[] selectedArray = new long[mSelected.size()];
-        for (int i = 0; i < mSelected.size(); i++) {
-            selectedArray[i] = mSelected.get(i);
-        }
-        outState.putLongArray(SELECTED, selectedArray);
+    protected void onRestoreInstanceState(Bundle bundle) {
+        Log.d(t, "onRestoreInstanceState");
+        super.onRestoreInstanceState(bundle);
+        mDeleteButton.setEnabled(areCheckedItems());
     }
 
     @Override
@@ -163,6 +141,9 @@ public class DataManagerList extends ListActivity implements
         // hook up to receive completion events
         if (mDeleteInstancesTask != null) {
             mDeleteInstancesTask.setDeleteListener(this);
+        }
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(this);
         }
         super.onResume();
         // async task may have completed while we were reorienting...
@@ -177,38 +158,63 @@ public class DataManagerList extends ListActivity implements
         if (mDeleteInstancesTask != null) {
             mDeleteInstancesTask.setDeleteListener(null);
         }
+        if (instanceSyncTask != null) {
+            instanceSyncTask.setDiskSyncListener(null);
+        }
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
         }
         super.onPause();
     }
 
+    @Override
+    public void syncComplete(String result) {
+        TextView textView = (TextView) findViewById(R.id.status_text);
+        textView.setText(result);
+    }
+
+    @Override
+    protected void setupAdapter(String sortOrder) {
+        List<Long> checkedInstances = new ArrayList();
+        for (long a : getListView().getCheckedItemIds()) {
+            checkedInstances.add(a);
+        }
+        String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
+        int[] view = new int[]{R.id.text1, R.id.text2};
+
+        Cursor cursor = new InstancesDao().getSavedInstancesCursor(sortOrder);
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
+                R.layout.two_item_multiple_choice, cursor, data, view);
+        setListAdapter(cursorAdapter);
+        checkPreviouslyCheckedItems(checkedInstances, cursor);
+    }
+
     /**
      * Create the instance delete dialog
      */
     private void createDeleteInstancesDialog() {
-        Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog",
+        logger.logAction(this, "createDeleteInstancesDialog",
                 "show");
 
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(getString(R.string.delete_file));
         mAlertDialog.setMessage(getString(R.string.delete_confirm,
-                String.valueOf(mSelected.size())));
+                String.valueOf(getCheckedCount())));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
                             case DialogInterface.BUTTON_POSITIVE: // delete
-                                Collect.getInstance().getActivityLogger().logAction(this,
+                                logger.logAction(this,
                                         "createDeleteInstancesDialog", "delete");
                                 deleteSelectedInstances();
-                                if (getListView().getCount() == mSelected.size()) {
+                                if (getListView().getCount() == getCheckedCount()) {
                                     mToggleButton.setEnabled(false);
                                 }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE: // do nothing
-                                Collect.getInstance().getActivityLogger().logAction(this,
+                                logger.logAction(this,
                                         "createDeleteInstancesDialog", "cancel");
                                 break;
                         }
@@ -231,58 +237,39 @@ public class DataManagerList extends ListActivity implements
             mDeleteInstancesTask = new DeleteInstancesTask();
             mDeleteInstancesTask.setContentResolver(getContentResolver());
             mDeleteInstancesTask.setDeleteListener(this);
-            mDeleteInstancesTask.execute(mSelected.toArray(new Long[mSelected
-                    .size()]));
+            mDeleteInstancesTask.execute(getCheckedIdObjects());
         } else {
-            Toast.makeText(this, getString(R.string.file_delete_in_progress),
-                    Toast.LENGTH_LONG).show();
+            ToastUtils.showLongToast(R.string.file_delete_in_progress);
         }
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        // get row id from db
-        Cursor c = (Cursor) getListAdapter().getItem(position);
-        long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-
-        // add/remove from selected list
-        if (mSelected.contains(k)) {
-            mSelected.remove(k);
-        } else {
-            mSelected.add(k);
-        }
-
-        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                Long.toString(k));
-
-        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
-        mDeleteButton.setEnabled(mSelected.size() > 0);
+    protected void onListItemClick(ListView l, View v, int position, long rowId) {
+        super.onListItemClick(l, v, position, rowId);
+        logger.logAction(this, "onListItemClick", Long.toString(rowId));
+        toggleButtonLabel(mToggleButton, getListView());
+        mDeleteButton.setEnabled(areCheckedItems());
     }
 
     @Override
     public void deleteComplete(int deletedInstances) {
         Log.i(t, "Delete instances complete");
-        Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete",
+        logger.logAction(this, "deleteComplete",
                 Integer.toString(deletedInstances));
-        if (deletedInstances == mSelected.size()) {
+        final int toDeleteCount = mDeleteInstancesTask.getToDeleteCount();
+
+        if (deletedInstances == toDeleteCount) {
             // all deletes were successful
-            Toast.makeText(this,
-                    getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
             Log.e(t, "Failed to delete "
-                    + (mSelected.size() - deletedInstances) + " instances");
-            Toast.makeText(
-                    this,
-                    getString(R.string.file_deleted_error, String.valueOf(mSelected.size()
-                            - deletedInstances), String.valueOf(mSelected.size())),
-                    Toast.LENGTH_LONG).show();
+                    + (toDeleteCount - deletedInstances) + " instances");
+            ToastUtils.showLongToast(getString(R.string.file_deleted_error,
+                            String.valueOf(toDeleteCount - deletedInstances),
+                            String.valueOf(toDeleteCount)));
         }
         mDeleteInstancesTask = null;
-        mSelected.clear();
         getListView().clearChoices(); // doesn't unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
