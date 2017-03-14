@@ -44,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.FormException;
+import org.odk.collect.android.helpers.RegexTemplates;
 import org.odk.collect.android.picasa.AlbumEntry;
 import org.odk.collect.android.picasa.AlbumFeed;
 import org.odk.collect.android.picasa.PhotoEntry;
@@ -597,9 +598,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             // if it's a location
             // [-]#.# [-]#.# #.# #.#
             Pattern p = Pattern
-                    .compile(
-                            "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                                    + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
+                    .compile(RegexTemplates.LOCATION);
             Matcher m = p.matcher(answer);
             if (m.matches()) {
                 // get rid of everything after the second space
@@ -971,7 +970,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
      */
     private boolean isValidGoogleSheetsString(String name) {
         Pattern p = Pattern
-                .compile("^[a-zA-Z0-9\\-]+$");
+                .compile(RegexTemplates.VALID_GOOGLE_SHEETS);
         Matcher m = p.matcher(name);
         return m.matches();
     }

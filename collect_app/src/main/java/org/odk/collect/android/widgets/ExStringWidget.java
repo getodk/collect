@@ -40,6 +40,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.helpers.RegexTemplates;
 
 import java.util.Map;
 
@@ -130,7 +131,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             mAnswer.setClickable(false);
         }
 
-        String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
+        String exSpec = prompt.getAppearanceHint().replaceFirst(RegexTemplates.EX_SPEC, "");
         final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
         final String buttonText;
