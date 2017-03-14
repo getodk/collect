@@ -28,28 +28,29 @@ public class ResponseMessageParser {
     public ResponseMessageParser(HttpEntity httpEntity) {
         this.httpEntity = httpEntity;
         this.messageResponse = parseXMLMessage();
-        if(messageResponse !=null){
+        if (messageResponse != null) {
             this.isValid = true;
         }
     }
-    private HttpEntity getHttpEntity(){
+
+    private HttpEntity getHttpEntity() {
         return httpEntity;
     }
 
-    public Boolean isValid(){
+    public Boolean isValid() {
         return this.isValid;
     }
 
-    public String getMessageResponse(){
+    public String getMessageResponse() {
         return this.messageResponse;
     }
 
 
-    public String parseXMLMessage(){
+    public String parseXMLMessage() {
         String message = null;
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
-        try{
+        try {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = null;
             try {
@@ -57,9 +58,9 @@ public class ResponseMessageParser {
                 doc = dBuilder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
                 doc.getDocumentElement().normalize();
 
-                if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null){
+                if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null) {
                     message = doc.getElementsByTagName(MESSAGE_XML_TAG).item(0).getTextContent();
-                }else{
+                } else {
                     isValid = false;
                 }
                 return message;
@@ -76,7 +77,7 @@ public class ResponseMessageParser {
 
             return message;
 
-        }catch(ParserConfigurationException e){
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
             isValid = false;
         }
