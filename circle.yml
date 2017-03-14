@@ -1,23 +1,32 @@
 machine:
     environment:
-        ANDROID_HOME: /usr/local/android-sdk-linux
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+        # Set memory limits for the JVM
+        # https://circleci.com/docs/oom/#setting-memory-limits-for-the-jvm
         _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+
+        # Out of memory errors in Android builds
+        # https://circleci.com/docs/oom/#out-of-memory-errors-in-android-builds
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
         
 dependencies:
-    override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-25.0.2,android-22,extra-google-m2repository,extra-google-google_play_services,extra-android-support
-        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+    pre:
+        # Almost packages are pre installed
+        # https://circleci.com/docs/build-image-precise/#android
+         - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2,extra-android-m2repository,extra-google-m2repository"
+    
+    cache_directories:
+        - ~/.android
         
 test:
-    pre:
-        - ./gradlew lint assembleRelease assembleAndroidTest
-
     override:
-        - ./gradlew testReleaseUnitTest
-        - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
+        # http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance
+        - ./gradlew lint assembleAndroidTest assembleRelease -PdisablePreDex
 
     post:
+        # APKs
+        - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
+
+        # Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
         - find . -type f -regex ".*/build/test-results/.*.xml"  -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
