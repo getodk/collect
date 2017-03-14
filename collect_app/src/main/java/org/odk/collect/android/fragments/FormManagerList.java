@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -52,7 +52,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         DeleteFormsListener, View.OnClickListener {
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
-    BackgroundTasks mBackgroundTasks; // handed across orientation changes
+    BackgroundTasks mBackgroundTasks; // handled across orientation changes
     private AlertDialog mAlertDialog;
 
     public static FormManagerList newInstance() {

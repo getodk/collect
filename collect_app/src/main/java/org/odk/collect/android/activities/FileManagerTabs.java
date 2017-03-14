@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -41,7 +41,7 @@ public class FileManagerTabs extends FragmentActivity {
         setContentView(R.layout.file_manager_layout);
 
         String tabNames[] = {getString(R.string.data), getString(R.string.forms)};
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        // Get the ViewPager and set its PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
