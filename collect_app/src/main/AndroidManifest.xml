@@ -149,6 +149,9 @@
             android:name=".activities.FormDownloadList"
             android:label="@string/app_name" />
         <activity
+            android:name=".activities.FormListActivity"
+            android:label="@string/app_name" />
+        <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
@@ -167,6 +170,9 @@
         </activity>
         <activity
             android:name=".activities.InstanceUploaderActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.InstanceListActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.AboutPreferencesActivity"
@@ -269,8 +275,8 @@
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI"/>
-
+                android:value="AIzaSyBJVA3fmYKYfWyUNLmrZ7IoOMYgTEISUR4"/>
+                <!--AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI-->
         <meta-data
             tools:replace="android:value"
             android:name="com.google.android.gms.version"
