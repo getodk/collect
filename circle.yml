@@ -27,13 +27,18 @@ dependencies:
         - /usr/local/android-sdk-linux/extras/google/m2repository
 
 test:
+
+    pre: 
+        - ./gradlew lintRelease
+
     override:
         # Disable incremental dexing to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
-        - ./gradlew lint testReleaseUnitTest assembleRelease -Pandroid.useDexArchive=false:
-            timeout: 1200
+        - ./gradlew testReleaseUnitTest -Pandroid.useDexArchive=false
 
     post:
+        - ./gradlew assembleRelease -Pandroid.useDexArchive=false
+
         # APKs
         - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
 
