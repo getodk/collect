@@ -179,6 +179,12 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             return false;
         }
 
+        if (columnNames.size() == 0) {
+            mResults.put(id,
+                    form_fail + "No columns found in the form to upload");
+            return false;
+        }
+
         if (columnNames.size() > 255) {
             mResults.put(id,
                     Collect.getInstance()
