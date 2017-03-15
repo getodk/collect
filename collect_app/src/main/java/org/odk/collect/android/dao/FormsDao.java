@@ -44,6 +44,31 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public void deleteFormsForFormId(List<String> selectionArgs) {
+        String selection = FormsProviderAPI.FormsColumns._ID + " in (";
+        List<String> tempSelectionArgs=new ArrayList<String>();
+        int i=0;
+        for(String args:selectionArgs)
+        {
+            i++;
+            selection += "?, ";
+            tempSelectionArgs.add(args);
+            if(i%999==0)
+            {
+                selection = selection.substring(0,selection.length()-2)+" )";
+                deleteFormsForFormId(selection, tempSelectionArgs.toArray(new String[tempSelectionArgs.size()]));
+                tempSelectionArgs=new ArrayList<String>();
+                i=0;
+                selection = FormsProviderAPI.FormsColumns._ID + " in (";
+            }
+        }
+        if(i%999!=0)
+        {
+            selection = selection.substring(0,selection.length()-2)+" )";
+            deleteFormsForFormId(selection, tempSelectionArgs.toArray(new String[tempSelectionArgs.size()]));
+        }
+    }
+
     public Cursor getFormsCursorForFormId(String formId) {
         String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=?";
         String selectionArgs[] = {formId};
@@ -67,6 +92,10 @@ public class FormsDao {
 
     public Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
+    public int deleteFormsForFormId(String selection, String[] selectionArgs) {
+        return Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, selection, selectionArgs);
     }
 
     public void deleteFormsDatabase() {
