@@ -24,12 +24,12 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.support.v7.widget.AppCompatImageButton;
 import android.util.Log;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RadioButton;
@@ -61,7 +61,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private FormIndex mIndex;
     private TextView mView_Text;
     private AudioButton mAudioButton;
-    private ImageButton mVideoButton;
+    private AppCompatImageButton mVideoButton;
     private ImageView mImageView;
     private TextView mMissingImage;
 
@@ -179,6 +179,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // An audio file is specified
             mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI,
                     mPlayer);
+            mAudioButton.setPadding(22, 12, 22, 12);
+            mAudioButton.setBackgroundColor(Color.LTGRAY);
             mAudioButton.setOnClickListener(this);
             mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
             // relative layout.
@@ -189,11 +191,13 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // Then set up the video button
         if (videoURI != null) {
             // An video file is specified
-            mVideoButton = new ImageButton(getContext());
+            mVideoButton = new AppCompatImageButton(getContext());
             Bitmap b =
                     BitmapFactory.decodeResource(getContext().getResources(),
                             android.R.drawable.ic_media_play);
             mVideoButton.setImageBitmap(b);
+            mVideoButton.setPadding(22, 12, 22, 12);
+            mVideoButton.setBackgroundColor(Color.LTGRAY);
             mVideoButton.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -311,17 +315,21 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
             } else if (mAudioButton == null && mVideoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+                videoParams.setMargins(0, 20, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else {
                 // the image will implicitly scale down to fit within parent...
@@ -344,14 +352,18 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
             } else if (mAudioButton == null && mVideoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.setMargins(0, 20, 11, 0);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
