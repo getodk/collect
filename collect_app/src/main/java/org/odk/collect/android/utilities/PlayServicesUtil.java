@@ -38,6 +38,4 @@ public class PlayServicesUtil {
             ((Activity) context).finish();
         }
     }
-
-
 }

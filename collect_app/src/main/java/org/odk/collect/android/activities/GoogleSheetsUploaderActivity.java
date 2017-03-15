@@ -588,5 +588,4 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             return mResults;
         }
     }
-
 }

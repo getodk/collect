@@ -838,5 +838,4 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 .execute();
         return response.getValues();
     }
-
 }

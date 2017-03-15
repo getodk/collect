@@ -72,7 +72,5 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
 
         token = GoogleAuthUtil.getToken(context, mGoogleUserName, scope);
         return token;
-
     }
-
 }
