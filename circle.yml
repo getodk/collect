@@ -14,7 +14,7 @@ dependencies:
         # Cache Android SDK to avoid unnecessary downloads
         # https://discuss.circleci.com/t/android-sdk-support-library-24/5247/5
         - if ! $(grep -q "Revision=25.2.5" /usr/local/android-sdk-linux/tools/source.properties); then echo y | android update sdk --no-ui --all --filter "tools"; fi
-        - if ! $(grep -q "Revision=25.0.2" /usr/local/android-sdk-linux/platform-tools/source.properties); then echo y | android update sdk --no-ui --all --filter "platform-tools"; fi
+        - if ! $(grep -q "Revision=25.0.3" /usr/local/android-sdk-linux/platform-tools/source.properties); then echo y | android update sdk --no-ui --all --filter "platform-tools"; fi
         - if [ ! -e /usr/local/android-sdk-linux/build-tools/25.0.2 ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
         - if [ ! -e /usr/local/android-sdk-linux/platforms/android-25 ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
         - if ! $(grep -q "Revision=45.0.0" /usr/local/android-sdk-linux/extras/android/m2repository/source.properties); then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"; fi
