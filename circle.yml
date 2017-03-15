@@ -31,9 +31,9 @@ test:
     override:
         # Disable incremental dexing to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
-        - ./gradlew lintRelease -Pandroid.useDexArchive=false
-        - ./gradlew testReleaseUnitTest -Pandroid.useDexArchive=false
-        - ./gradlew assembleRelease -Pandroid.useDexArchive=false:
+        - ./gradlew lintDebug -Pandroid.useDexArchive=false
+        - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
+        - ./gradlew assembleDebug -Pandroid.useDexArchive=false:
             timeout: 900
 
     post:
