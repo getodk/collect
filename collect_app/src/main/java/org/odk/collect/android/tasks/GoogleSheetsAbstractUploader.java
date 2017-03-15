@@ -329,7 +329,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         Spreadsheet response = null;
         try {
-            response = mService.spreadsheets().get(spreadsheetId).setIncludeGridData(false)
+            response = mService.spreadsheets()
+                    .get(spreadsheetId)
+                    .setIncludeGridData(false)
                     .execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -337,13 +339,13 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             return false;
         }
 
-        String sheetName = response.getSheets().get(0).getProperties().getTitle();
+        String spreadsheetName = response.getSheets().get(0).getProperties().getTitle();
 
         List<List<Object>> values;
         List headerFeed = null;
 
         try {
-            values = getHeaderFeed(spreadsheetId, sheetName);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, form_fail + "No data found");
             } else {
@@ -383,11 +385,25 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             row.setValues(content);
 
 
+            /**
+             *  Appends the data at the last row
+             *
+             *  append(spreadsheetId, range, ValueRange)
+             *
+             *  spreadsheetId   :   Unique sheet id
+             *  range           :   A1 notation range. It specifies the range within which the
+             *                      spreadsheet should be searched.
+             *              hint   "Giving only sheetName in range searches in the complete sheet"
+             *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
+             *
+             *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
+             */
+
             // Send the new row to the API for insertion.
             // write the headers
             try {
                 mService.spreadsheets().values()
-                        .append(spreadsheetId, sheetName, row)
+                        .append(spreadsheetId, spreadsheetName, row)
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
@@ -401,7 +417,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // update the feed
 
         try {
-            values = getHeaderFeed(spreadsheetId, sheetName);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, form_fail + "No data found");
                 return false;
@@ -443,7 +459,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
             try {
                 mService.spreadsheets().values()
-                        .update(spreadsheetId, sheetName + "!A1:1", row)
+                        .update(spreadsheetId, spreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -456,7 +472,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // update the feed
 
         try {
-            values = getHeaderFeed(spreadsheetId, sheetName);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, form_fail + "No data found");
                 return false;
@@ -557,7 +573,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // Send the new row to the API for insertion.
         try {
             mService.spreadsheets().values()
-                    .append(spreadsheetId, sheetName, row)
+                    .append(spreadsheetId, spreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -909,10 +925,28 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         return m.matches();
     }
 
-    private List<List<Object>> getHeaderFeed(String sheetId, String sheetName) throws IOException {
+    /**
+     * Fetches the spreadsheet with the provided spreadsheetId
+     *
+     * get(sheetId, range) method requires two parameters
+     *
+     * since we want to search the whole sheet so we provide only the sheet name as range
+     *
+     * range is in A1 notation
+     * eg. Sheet1!A1:G7
+     * 
+     *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
+     *
+     * @param spreadsheetId
+     * @param spreadsheetName
+     * @return
+     * @throws IOException
+     */
+    private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
+            throws IOException {
         ValueRange response = mService.spreadsheets()
                 .values()
-                .get(sheetId, sheetName)
+                .get(spreadsheetId, spreadsheetName)
                 .execute();
         return response.getValues();
     }
