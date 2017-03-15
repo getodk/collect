@@ -56,7 +56,7 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
 
     protected com.google.api.services.sheets.v4.Sheets mService = null;
     protected Exception mLastError = null;
-    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS, "https://picasaweb.google.com/data/"};
+    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
 
     protected String authenticate(Context context, String mGoogleUserName) throws IOException,
             GoogleAuthException {
