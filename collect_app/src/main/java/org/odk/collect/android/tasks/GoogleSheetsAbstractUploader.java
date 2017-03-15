@@ -28,6 +28,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
+import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.odk.collect.android.R;
@@ -387,6 +388,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             values = getHeaderFeeed(sheetId, id);
             if (values == null || values.size() == 0) {
                 mResults.put(id, form_fail + "No data found");
+                return false;
             } else {
                 headerFeed = values.get(0);
             }
@@ -398,8 +400,13 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         // first, get all the columns in the spreadsheet
         ArrayList<String> sheetCols = new ArrayList<>();
-        for (Object column : headerFeed) {
-            sheetCols.add(column.toString());
+        if (headerFeed != null) {
+            for (Object column : headerFeed) {
+                sheetCols.add(column.toString());
+            }
+        }else{
+            mResults.put(id,form_fail + "couldn't get header feed");
+            return false;
         }
 
         ArrayList<String> missingColumns = new ArrayList<>();
