@@ -1482,7 +1482,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         // adjust which view is in the layout container...
         mStaleView = mCurrentView;

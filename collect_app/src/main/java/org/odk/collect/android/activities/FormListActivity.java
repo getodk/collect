@@ -2,7 +2,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.provider.FormsProviderAPI;
 
-public class FormListActivity extends AppListActivity {
+public abstract class FormListActivity extends AppListActivity {
     @Override
     protected void sortByNameAsc() {
         setupAdapter(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC");

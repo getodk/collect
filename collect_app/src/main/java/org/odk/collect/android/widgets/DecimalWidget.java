@@ -85,7 +85,7 @@ public class DecimalWidget extends StringWidget {
 
         // disable if read only
         if (prompt.isReadOnly()) {
-            setBackgroundDrawable(null);
+            setBackground(null);
             setFocusable(false);
             setClickable(false);
         }
