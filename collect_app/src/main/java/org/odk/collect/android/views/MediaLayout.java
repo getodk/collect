@@ -179,6 +179,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // An audio file is specified
             mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI,
                     mPlayer);
+            mAudioButton.setPadding(22, 12, 22, 12);
+            mAudioButton.setBackgroundColor(Color.LTGRAY);
             mAudioButton.setOnClickListener(this);
             mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
             // relative layout.
@@ -319,6 +321,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0,0,11,0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
@@ -350,6 +353,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0,0,11,0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
