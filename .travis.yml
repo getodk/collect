@@ -1,0 +1,29 @@
+language: android
+jdk: oraclejdk8
+
+sudo: true
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - extra-android-support
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - build-tools-24.0.3
+    - android-24
+    - sys-img-armeabi-v7a-android-24
+
+install:
+  - echo y | android update sdk -u -a -t build-tools-25.0.2
+  - echo y | android update sdk -u -a -t android-25
+
+before_script:
+  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
+  - emulator -avd test -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script:
+  - ./gradlew testReleaseUnitTest
+  - ./gradlew connectedCheck
