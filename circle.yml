@@ -2,7 +2,7 @@ machine:
     environment:
         # Set memory limits for the JVM
         # https://circleci.com/docs/oom/#setting-memory-limits-for-the-jvm
-        _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+        _JAVA_OPTIONS: "-Xms512m -Xmx2048m"
 
         # Out of memory errors in Android builds
         # https://circleci.com/docs/oom/#out-of-memory-errors-in-android-builds
@@ -36,6 +36,15 @@ test:
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false 
         #- ./gradlew assembleDebug -Pandroid.useDexArchive=false:
         #    timeout: 900
+        # start the emulator
+        - mksdcard -l e 128M sdcard.img
+        - emulator -avd circleci-android22 -sdcard sdcard.img -no-window:
+            background: true
+            parallel: true
+        # wait for it to have booted
+        - circle-android wait-for-boot
+        # run tests  against the emulator.
+        - ./gradlew connectedCheck -Pandroid.useDexArchive=false
 
     post:
         # APKs
