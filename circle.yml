@@ -37,12 +37,12 @@ test:
 
     post:
         # APKs
-        - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
+        - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
 
         # Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-        - find . -type f -regex ".*/build/test-results/.*.xml"  -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+        - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
         # Lint
         - mkdir -p $CIRCLE_TEST_REPORTS/lint/
-        - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp --parent {} $CIRCLE_TEST_REPORTS/lint/ \;
+        - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
