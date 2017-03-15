@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nafundi
+ * Copyright (C) 2017 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -934,7 +934,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
      *
      * range is in A1 notation
      * eg. Sheet1!A1:G7
-     * 
+     *
      *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
      *
      * @param spreadsheetId

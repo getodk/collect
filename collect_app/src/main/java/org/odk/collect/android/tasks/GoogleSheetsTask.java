@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nafundi
+ * Copyright (C) 2017 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,7 +20,6 @@ import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.sheets.v4.SheetsScopes;
 
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -33,15 +32,15 @@ import java.io.IOException;
 public abstract class GoogleSheetsTask<Params, Progress, Result> extends
         AsyncTask<Params, Progress, Result> {
 
-    private final static String tag = "GoogleSheetsTask";
-
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-
-
+    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
+    private final static String tag = "GoogleSheetsTask";
     protected String mGoogleUserName = null;
+    protected com.google.api.services.sheets.v4.Sheets mService = null;
+    protected Exception mLastError = null;
     InstanceUploaderListener mStateListener;
 
     public void setUserName(String username) {
@@ -53,10 +52,6 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
             mStateListener = sl;
         }
     }
-
-    protected com.google.api.services.sheets.v4.Sheets mService = null;
-    protected Exception mLastError = null;
-    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
 
     protected String authenticate(Context context, String mGoogleUserName) throws IOException,
             GoogleAuthException {
