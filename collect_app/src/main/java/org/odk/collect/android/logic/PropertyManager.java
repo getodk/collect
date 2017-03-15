@@ -39,28 +39,24 @@ import java.util.Locale;
 
 public class PropertyManager implements IPropertyManager {
 
-    public static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
+    private static final String TAG = "PropertyManager";
 
-    private String t = "PropertyManager";
+    private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
 
-    private Context mContext;
-
-    private TelephonyManager mTelephonyManager;
     private HashMap<String, String> mProperties;
 
-    public final static String DEVICE_ID_PROPERTY = "deviceid"; // imei
-    private final static String SUBSCRIBER_ID_PROPERTY = "subscriberid"; // imsi
-    private final static String SIM_SERIAL_PROPERTY = "simserial";
-    private final static String PHONE_NUMBER_PROPERTY = "phonenumber";
-    private final static String USERNAME = "username";
-    private final static String EMAIL = "email";
-
-    public final static String OR_DEVICE_ID_PROPERTY = "uri:deviceid"; // imei
-    public final static String OR_SUBSCRIBER_ID_PROPERTY = "uri:subscriberid"; // imsi
-    public final static String OR_SIM_SERIAL_PROPERTY = "uri:simserial";
-    public final static String OR_PHONE_NUMBER_PROPERTY = "uri:phonenumber";
-    public final static String OR_USERNAME = "uri:username";
-    public final static String OR_EMAIL = "uri:email";
+    public final static String DEVICE_ID_PROPERTY           = "deviceid";       // imei
+    public final static String SUBSCRIBER_ID_PROPERTY       = "subscriberid";   // imsi
+    public final static String SIM_SERIAL_PROPERTY          = "simserial";
+    public final static String PHONE_NUMBER_PROPERTY        = "phonenumber";
+    public final static String USERNAME                     = "username";
+    public final static String EMAIL                        = "email";
+    public final static String OR_DEVICE_ID_PROPERTY        = withUri(DEVICE_ID_PROPERTY);
+    public final static String OR_SUBSCRIBER_ID_PROPERTY    = withUri(SUBSCRIBER_ID_PROPERTY);
+    public final static String OR_SIM_SERIAL_PROPERTY       = withUri(SIM_SERIAL_PROPERTY);
+    public final static String OR_PHONE_NUMBER_PROPERTY     = withUri(PHONE_NUMBER_PROPERTY);
+    public final static String OR_USERNAME                  = withUri(USERNAME);
+    public final static String OR_EMAIL                     = withUri(EMAIL);
 
 
     public String getName() {
@@ -69,20 +65,18 @@ public class PropertyManager implements IPropertyManager {
 
 
     public PropertyManager(Context context) {
-        Log.i(t, "calling constructor");
+        Log.i(TAG, "calling constructor");
 
-        mContext = context;
+        mProperties = new HashMap<>();
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-        mProperties = new HashMap<String, String>();
-        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-
-        String deviceId = mTelephonyManager.getDeviceId();
+        String deviceId = telephonyManager.getDeviceId();
         String orDeviceId = null;
         if (deviceId != null) {
             if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
                 deviceId =
                         Settings.Secure
-                                .getString(mContext.getContentResolver(),
+                                .getString(context.getContentResolver(),
                                         Settings.Secure.ANDROID_ID);
                 orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
             } else {
@@ -93,7 +87,7 @@ public class PropertyManager implements IPropertyManager {
         if (deviceId == null) {
             // no SIM -- WiFi only
             // Retrieve WiFiManager
-            WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
             // Get WiFi status
             WifiInfo info = wifi.getConnectionInfo();
@@ -107,7 +101,7 @@ public class PropertyManager implements IPropertyManager {
         if (deviceId == null) {
             deviceId =
                     Settings.Secure
-                            .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+                            .getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
             orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
         }
 
@@ -116,24 +110,24 @@ public class PropertyManager implements IPropertyManager {
 
         String value;
 
-        value = mTelephonyManager.getSubscriberId();
+        value = telephonyManager.getSubscriberId();
         if (value != null) {
             mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
             mProperties.put(OR_SUBSCRIBER_ID_PROPERTY, "imsi:" + value);
         }
-        value = mTelephonyManager.getSimSerialNumber();
+        value = telephonyManager.getSimSerialNumber();
         if (value != null) {
             mProperties.put(SIM_SERIAL_PROPERTY, value);
             mProperties.put(OR_SIM_SERIAL_PROPERTY, "simserial:" + value);
         }
-        value = mTelephonyManager.getLine1Number();
+        value = telephonyManager.getLine1Number();
         if (value != null) {
             mProperties.put(PHONE_NUMBER_PROPERTY, value);
             mProperties.put(OR_PHONE_NUMBER_PROPERTY, "tel:" + value);
         }
 
         // Get the username from the settings
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         value = settings.getString(PreferenceKeys.KEY_USERNAME, null);
         if (value != null) {
             mProperties.put(USERNAME, value);
@@ -166,13 +160,11 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public void setProperty(String propertyName, List<String> propertyValue) {
-
     }
 
 
     @Override
     public void addRules(IPropertyRules rules) {
-
     }
 
 
@@ -181,4 +173,8 @@ public class PropertyManager implements IPropertyManager {
         return null;
     }
 
+
+    private static String withUri(String name) {
+        return "uri:" + name;
+    }
 }

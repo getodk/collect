@@ -49,7 +49,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -72,6 +71,7 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -340,7 +340,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             mCurrentPath.clear();
             listFiles(ROOT_KEY, mSearchText.getText().toString());
         } else {
-            Toast.makeText(this, R.string.no_blank_search, Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.no_blank_search);
         }
     }
 

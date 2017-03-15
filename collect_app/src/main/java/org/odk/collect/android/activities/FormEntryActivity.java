@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -81,8 +80,8 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -93,6 +92,7 @@ import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -1148,7 +1148,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
-                    saveAs.setBackgroundColor(Color.WHITE);
                     saveAs.setVisibility(View.VISIBLE);
                 }
 
@@ -1175,9 +1174,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                                         : "saveIncomplete");
                                 // Form is marked as 'saved' here.
                                 if (saveAs.getText().length() < 1) {
-                                    Toast.makeText(FormEntryActivity.this,
-                                            R.string.save_as_error,
-                                            Toast.LENGTH_SHORT).show();
+                                    ToastUtils.showShortToast(R.string.save_as_error);
                                 } else {
                                     saveDataToDisk(EXIT, instanceComplete
                                             .isChecked(), saveAs.getText()
@@ -1843,8 +1840,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
-                Toast.makeText(this, getString(R.string.data_saved_error), Toast.LENGTH_SHORT)
-                        .show();
+                ToastUtils.showShortToast(R.string.data_saved_error);
                 return false;
             }
         }
@@ -2531,9 +2527,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(FormEntryActivity.this,
-                            getString(R.string.savepoint_used),
-                            Toast.LENGTH_LONG).show();
+                    ToastUtils.showLongToast(R.string.savepoint_used);
                 }
             });
         }
@@ -2601,13 +2595,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         int saveStatus = saveResult.getSaveResult();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
-                Toast.makeText(this, getString(R.string.data_saved_ok),
-                        Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast(R.string.data_saved_ok);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
-                Toast.makeText(this, getString(R.string.data_saved_ok),
-                        Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast(R.string.data_saved_ok);
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
@@ -2619,12 +2611,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 } else {
                     message = getString(R.string.data_saved_error);
                 }
-                Toast.makeText(this, message,
-                        Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                Toast.makeText(this, String.format(getString(R.string.encryption_error_message),
-                        saveResult.getSaveErrorMessage()), Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
+                        saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
@@ -2893,8 +2884,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public void onSavePointError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
-            Toast.makeText(this, getString(R.string.save_point_error, errorMessage),
-                    Toast.LENGTH_LONG).show();
+            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
         }
     }
 

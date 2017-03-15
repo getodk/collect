@@ -16,55 +16,17 @@
 
 package org.odk.collect.android.preferences;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.OpenSourceLicensesActivity;
 
 public class AboutPreferencesActivity extends PreferenceActivity {
-
-    public static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
-    public static final String KEY_TELL_YOUR_FRIENDS = "tell_your_friends";
-    private static final String GOOGLE_PLAY_LINK =
-            "https://play.google.com/store/apps/details?id=org.odk.collect.android";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.about_preferences);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new AboutPreferencesFragment()).commit();
         setTitle(getString(R.string.about_preferences));
-
-        PreferenceScreen mOpenSourceLicensesPreference = (PreferenceScreen) findPreference(
-                KEY_OPEN_SOURCE_LICENSES);
-        PreferenceScreen mTellYourFriendsPreference = (PreferenceScreen) findPreference(
-                KEY_TELL_YOUR_FRIENDS);
-
-        mOpenSourceLicensesPreference.setOnPreferenceClickListener(
-                new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        startActivity(new Intent(getApplicationContext(),
-                                OpenSourceLicensesActivity.class));
-                        return true;
-                    }
-                });
-
-        mTellYourFriendsPreference.setOnPreferenceClickListener(
-                new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-                        shareIntent.setType("text/plain");
-                        shareIntent.putExtra(Intent.EXTRA_TEXT,
-                                getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_LINK);
-                        startActivity(Intent.createChooser(shareIntent,
-                                getString(R.string.tell_your_friends_title)));
-                        return true;
-                    }
-                });
     }
 }
