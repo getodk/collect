@@ -51,7 +51,7 @@ public class StringNumberWidget extends StringWidget {
         });
 
         if (prompt.isReadOnly()) {
-            setBackgroundDrawable(null);
+            setBackground(null);
             setFocusable(false);
             setClickable(false);
         }
