@@ -28,7 +28,7 @@ dependencies:
 test:
     override:
         # http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance
-        - ./gradlew lint assembleAndroidTest assembleRelease -PdisablePreDex
+        - ./gradlew lint testReleaseUnitTest assembleRelease -PdisablePreDex
 
     post:
         # APKs
@@ -40,4 +40,4 @@ test:
 
         # Lint
         - mkdir -p $CIRCLE_TEST_REPORTS/lint/
-        - find . -type f -regex ".*/collect_app/build/outputs/lint-results-*.*" -exec cp --parent {} $CIRCLE_TEST_REPORTS/lint/ \;
+        - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp --parent {} $CIRCLE_TEST_REPORTS/lint/ \;
