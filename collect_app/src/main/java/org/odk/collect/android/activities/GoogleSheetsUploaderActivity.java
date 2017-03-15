@@ -40,6 +40,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -549,7 +551,15 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 }
             }
             try {
-                uploadInstances(selection, selectionArgs, mCredential.getToken());
+                String token = mCredential.getToken();
+
+                //Immediately invalidate so we get a differnet one if we have to try again
+                GoogleAuthUtil.invalidateToken(GoogleSheetsUploaderActivity.this, token);
+
+                uploadInstances(selection, selectionArgs, token);
+            } catch (UserRecoverableAuthException e) {
+                e.printStackTrace();
+                startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
                 e.printStackTrace();
             }
