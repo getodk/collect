@@ -73,7 +73,7 @@ public class FormsDao {
         Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
     }
     
-    private void deleteFormsFromIDs(String[] idsToDelete) {
+    public void deleteFormsFromIDs(String[] idsToDelete) {
 
         String selection = FormsProviderAPI.FormsColumns._ID + " in (";
         for (int i = 0; i < idsToDelete.length - 1; i++)
