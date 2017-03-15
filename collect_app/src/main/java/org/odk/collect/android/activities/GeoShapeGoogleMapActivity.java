@@ -105,7 +105,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         setContentView(R.layout.geoshape_google_layout);
 
 
-        if (PlayServicesUtil.checkPlayServices(GeoShapeGoogleMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoShapeGoogleMapActivity.this)) {
 
             mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {

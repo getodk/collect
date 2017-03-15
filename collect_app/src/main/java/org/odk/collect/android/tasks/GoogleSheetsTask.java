@@ -20,6 +20,8 @@ import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.services.sheets.v4.SheetsScopes;
 
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 
@@ -33,11 +35,14 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
 
     private final static String tag = "GoogleSheetsTask";
 
-    public final static int PLAYSTORE_REQUEST_CODE = 55551;
-    public final static int USER_RECOVERABLE_REQUEST_CODE = 55552;
+    public static final int REQUEST_ACCOUNT_PICKER = 1000;
+    public static final int REQUEST_AUTHORIZATION = 1001;
+    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+
 
     protected String mGoogleUserName = null;
-    protected InstanceUploaderListener mStateListener;
+    InstanceUploaderListener mStateListener;
 
     public void setUserName(String username) {
         mGoogleUserName = username;
@@ -49,11 +54,14 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
         }
     }
 
+    protected com.google.api.services.sheets.v4.Sheets mService = null;
+    protected Exception mLastError = null;
+
     protected String authenticate(Context context, String mGoogleUserName) throws IOException,
             GoogleAuthException {
         // use google auth utils to get oauth2 token
         String scope =
-                "oauth2:https://spreadsheets.google.com/feeds https://picasaweb.google.com/data/";
+                "https://picasaweb.google.com/data/";
         String token = null;
 
         if (mGoogleUserName == null) {
