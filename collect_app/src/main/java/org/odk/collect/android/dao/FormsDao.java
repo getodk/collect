@@ -74,14 +74,14 @@ public class FormsDao {
     }
     
     public void deleteFormsFromIDs(String[] idsToDelete) {
-
         String selection = FormsProviderAPI.FormsColumns._ID + " in (";
-        for (int i = 0; i < idsToDelete.length - 1; i++)
+        for (int i = 0; i < idsToDelete.length - 1; i++) {
             selection += "?, ";
+        }
         selection += "? )";
-        
+       
+        //This will break if the number of forms to delete > SQLITE_MAX_VARIABLE_NUMBER (999)
         Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, selection, idsToDelete);
-
     }
 
     public Uri saveForm(ContentValues values) {
