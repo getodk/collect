@@ -27,8 +27,7 @@ dependencies:
 
 test:
     override:
-        # http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance
-        - ./gradlew lint testReleaseUnitTest assembleRelease -PdisablePreDex
+        - ./gradlew lint testReleaseUnitTest assembleRelease
 
     post:
         # APKs
