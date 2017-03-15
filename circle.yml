@@ -11,7 +11,7 @@ machine:
         
 dependencies:
     pre:
-        # Cache Android SDK to speed up build
+        # Cache Android SDK to avoid unnecessary downloads
         # https://discuss.circleci.com/t/android-sdk-support-library-24/5247/5
         - if ! $(grep -q "Revision=25.2.5" /usr/local/android-sdk-linux/tools/source.properties); then echo y | android update sdk --no-ui --all --filter "tools"; fi
         - if [ ! -e /usr/local/android-sdk-linux/build-tools/25.0.2 ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
@@ -34,7 +34,7 @@ test:
         - ./gradlew lintRelease -Pandroid.useDexArchive=false
         - ./gradlew testReleaseUnitTest -Pandroid.useDexArchive=false
         - ./gradlew assembleRelease -Pandroid.useDexArchive=false
-        
+
     post:
         # APKs
         - cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
