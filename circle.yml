@@ -32,13 +32,13 @@ test:
         # Disable incremental dexing to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
         - ./gradlew lintDebug -Pandroid.useDexArchive=false
-        - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
-        - ./gradlew assembleDebug -Pandroid.useDexArchive=false:
-            timeout: 900
+        - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false 
+        #- ./gradlew assembleDebug -Pandroid.useDexArchive=false:
+        #    timeout: 900
 
     post:
         # APKs
-        - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
+        # - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
 
         # Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
