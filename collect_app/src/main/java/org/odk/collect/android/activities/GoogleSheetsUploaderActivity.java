@@ -40,7 +40,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -175,7 +174,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      */
     private void getResultsFromApi() {
         if (!PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            acquireGooglePlayServices();
+            PlayServicesUtil.acquireGooglePlayServices(this);
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (!isDeviceOnline()) {
@@ -202,8 +201,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String googleUsername = prefs.getString(
-                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-            if (googleUsername != null) {
+                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
+            if (!googleUsername.equals("")) {
                 mCredential.setSelectedAccountName(googleUsername);
                 getResultsFromApi();
             } else {
@@ -327,37 +326,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    /**
-     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
-     * Play Services installation via a user dialog, if possible.
-     */
-    private void acquireGooglePlayServices() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
-        final int connectionStatusCode =
-                apiAvailability.isGooglePlayServicesAvailable(this);
-        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
-        }
-    }
-
-    /**
-     * Display an error dialog showing that Google Play Services is missing
-     * or out of date.
-     *
-     * @param connectionStatusCode code describing the presence (or lack of)
-     *                             Google Play Services on this device.
-     */
-    void showGooglePlayServicesAvailabilityErrorDialog(
-            final int connectionStatusCode) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        Dialog dialog = apiAvailability.getErrorDialog(
-                this,
-                connectionStatusCode,
-                GoogleSheetsTask.REQUEST_GOOGLE_PLAY_SERVICES);
-        dialog.show();
     }
 
 
