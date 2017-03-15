@@ -343,7 +343,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         List headerFeed = null;
 
         try {
-            values = getHeaderFeeed(spreadsheetId, sheetName);
+            values = getHeaderFeed(spreadsheetId, sheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, form_fail + "No data found");
             } else {
@@ -380,8 +380,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             ArrayList<List<Object>> content = new ArrayList<>();
             content.add(list);
             ValueRange row = new ValueRange();
-            row.setRange(sheetName);
-            row.setMajorDimension("ROWS");
             row.setValues(content);
 
 
@@ -403,7 +401,62 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // update the feed
 
         try {
-            values = getHeaderFeeed(spreadsheetId, sheetName);
+            values = getHeaderFeed(spreadsheetId, sheetName);
+            if (values == null || values.size() == 0) {
+                mResults.put(id, form_fail + "No data found");
+                return false;
+            } else {
+                headerFeed = values.get(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mResults.put(id, form_fail + e.getMessage());
+            return false;
+        }
+
+        //check if any column name is blank
+
+        boolean hasEmptyColumn = false;
+        for (Object column : headerFeed) {
+            if (column.equals("")) {
+                hasEmptyColumn = true;
+                break;
+            }
+        }
+
+        // replace blank column name with a single space
+
+        if (hasEmptyColumn) {
+            ArrayList<Object> list = new ArrayList<>();
+            for (Object column : headerFeed) {
+                if (column.equals("")) {
+                    list.add(" ");
+                } else {
+                    list.add(column);
+                }
+            }
+
+            ArrayList<List<Object>> content = new ArrayList<>();
+            content.add(list);
+            ValueRange row = new ValueRange();
+            row.setValues(content);
+
+            try {
+                mService.spreadsheets().values()
+                        .update(spreadsheetId, sheetName + "!A1:1", row)
+                        .setValueInputOption("USER_ENTERED").execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+                mResults.put(id, form_fail + e.getMessage());
+                return false;
+            }
+        }
+
+        // we may have updated the feed, so get a new one
+        // update the feed
+
+        try {
+            values = getHeaderFeed(spreadsheetId, sheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, form_fail + "No data found");
                 return false;
@@ -463,6 +516,11 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         ArrayList<Object> list = new ArrayList<>();
 
         for (String path : sheetCols) {
+
+            if (path.equals("") || !columnNames.contains(path)) {
+                list.add("");
+            }
+
             // if column present in sheet
             if (columnNames.contains(path)) {
                 String answer;
@@ -485,17 +543,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         answer = answer.substring(0, secondSpace);
                         answer = answer.replace(' ', ',');
                     }
-                } else {
-                    answer = "";
+                    list.add(answer);
                 }
-                list.add(answer);
             }
         }
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
+
         ValueRange row = new ValueRange();
-        row.setRange(sheetName);
-        row.setMajorDimension("ROWS");
         row.setValues(content);
 
 
@@ -503,7 +558,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             mService.spreadsheets().values()
                     .append(spreadsheetId, sheetName, row)
-                    .setIncludeValuesInResponse(true)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -855,11 +909,10 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         return m.matches();
     }
 
-    private List<List<Object>> getHeaderFeeed(String sheetId, String sheetName) throws IOException {
-        String range = sheetName + "!A1:1";
+    private List<List<Object>> getHeaderFeed(String sheetId, String sheetName) throws IOException {
         ValueRange response = mService.spreadsheets()
                 .values()
-                .get(sheetId, range)
+                .get(sheetId, sheetName)
                 .execute();
         return response.getValues();
     }
