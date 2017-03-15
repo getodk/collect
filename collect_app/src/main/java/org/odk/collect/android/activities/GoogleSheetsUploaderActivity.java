@@ -47,7 +47,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.sheets.v4.SheetsScopes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -57,6 +56,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.GoogleSheetsTask;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -69,10 +69,9 @@ import java.util.Set;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static org.odk.collect.android.utilities.PlayServicesUtil.isGooglePlayServicesAvailable;
 
-public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener, EasyPermissions.PermissionCallbacks {
-    protected static final String[] SCOPES = {SheetsScopes.SPREADSHEETS, "https://picasaweb.google.com/data/"};
+public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener,
+        EasyPermissions.PermissionCallbacks {
     private final static String TAG = "SheetsUploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
     private final static int GOOGLE_USER_DIALOG = 3;
@@ -135,7 +134,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
+                getApplicationContext(), Arrays.asList(GoogleSheetsTask.SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
         getResultsFromApi();
@@ -175,7 +174,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (!isGooglePlayServicesAvailable(this)) {
+        if (!PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
@@ -183,7 +182,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
-//            new MakeRequestTask(mCredential).execute();
         }
     }
 
