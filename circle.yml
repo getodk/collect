@@ -7,11 +7,12 @@ machine:
         # Out of memory errors in Android builds
         # https://circleci.com/docs/oom/#out-of-memory-errors-in-android-builds
         # https://docs.gradle.org/current/userguide/build_environment.html
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3072M -XX:+HeapDumpOnOutOfMemoryError"'
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
         
 dependencies:
     pre:
         # Cache Android SDK to speed up build
+        # https://discuss.circleci.com/t/android-sdk-support-library-24/5247/5
         - if ! $(grep -q "Revision=25.2.5" /usr/local/android-sdk-linux/tools/source.properties); then echo y | android update sdk --no-ui --all --filter "tools"; fi
         - if [ ! -e /usr/local/android-sdk-linux/build-tools/25.0.2 ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
         - if [ ! -e /usr/local/android-sdk-linux/platforms/android-25 ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
@@ -27,7 +28,9 @@ dependencies:
 
 test:
     override:
-        - ./gradlew lint testReleaseUnitTest assembleRelease
+        # Disable incremental dexing to speed up clean builds
+        # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
+        - ./gradlew lint testReleaseUnitTest assembleRelease -Pandroid.useDexArchive=false
 
     post:
         # APKs
