@@ -53,9 +53,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     String statusMessage;
 
     private FormsDao mFormsDao;
-    
-    private List<String> idsToDelete;
-
+   
     private static class UriFile {
         public final Uri uri;
         public final File file;
@@ -72,7 +70,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         instance = ++counter; // roughly track the scan # we're on... logging use only
         Log.i(t, "[" + instance + "] doInBackground begins!");
         
-        idsToDelete = new ArrayList<>(Collections.EMPTY_LIST);
+        List<String> idsToDelete = new ArrayList<>();
 
         try {
             // Process everything then report what didn't work.
