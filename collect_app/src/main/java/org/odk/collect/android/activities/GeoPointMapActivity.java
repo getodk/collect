@@ -79,17 +79,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private Button mAcceptLocation;
     private Button mReloadLocation;
 
-    private boolean mRefreshLocation = true;
     private boolean mIsDragged = false;
     private Button mShowLocation;
     private Button mLayers;
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
 
-    private double mLocationAccuracy;
     private int mLocationCount = 0;
 
-    private boolean mZoomed = false;
     private MapHelper mHelper;
 //	private KmlLayer kk;
 
@@ -207,8 +204,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         mMarkerOption = new MarkerOptions();
         mHelper = new MapHelper(this, mMap);
-
-        mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationStatus = (TextView) findViewById(R.id.location_status);
@@ -343,11 +338,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 location_from_intent = true;
 
             }
-
-            if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
-                        GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
-            }
         }
 
 		/*Zoom only if there's a previous location*/
@@ -359,7 +349,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             mMarker = mMap.addMarker(mMarkerOption);
             mCaptureLocation = true;
             foundFirstLocation = true;
-            mZoomed = true;
             zoomToPoint();
         }
 
