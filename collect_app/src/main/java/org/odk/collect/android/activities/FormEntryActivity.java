@@ -2651,23 +2651,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     /**
-     * Attempts to save an answer to the specified index.
-     *
-     * @return status as determined in FormEntryController
-     */
-    public int saveAnswer(IAnswerData answer, FormIndex index,
-                          boolean evaluateConstraints) throws JavaRosaException {
-        FormController formController = Collect.getInstance()
-                .getFormController();
-        if (evaluateConstraints) {
-            return formController.answerQuestion(index, answer);
-        } else {
-            formController.saveAnswer(index, answer);
-            return FormEntryController.ANSWER_OK;
-        }
-    }
-
-    /**
      * Checks the database to determine if the current instance being edited has
      * already been 'marked completed'. A form can be 'unmarked' complete and
      * then resaved.
