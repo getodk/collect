@@ -532,14 +532,11 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         ArrayList<Object> list = new ArrayList<>();
 
         for (String path : sheetCols) {
-
-            if (path.equals("") || !columnNames.contains(path)) {
-                list.add("");
+            String answer = "";
+            if (path.equals(" ") || !columnNames.contains(path)) {
+                //ignores the blank fields and extra fields
             }
-
-            // if column present in sheet
-            if (columnNames.contains(path)) {
-                String answer;
+            else if (columnNames.contains(path)) { // if column present in sheet
                 if (answersToUpload.containsKey(path)) {
                     answer = answersToUpload.get(path);
                     // Check to see if answer is a location, if so, get rid of accuracy
@@ -559,9 +556,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         answer = answer.substring(0, secondSpace);
                         answer = answer.replace(' ', ',');
                     }
-                    list.add(answer);
                 }
             }
+            list.add(answer);
         }
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
@@ -927,15 +924,15 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
     /**
      * Fetches the spreadsheet with the provided spreadsheetId
-     *
+     * <p>
      * get(sheetId, range) method requires two parameters
-     *
+     * <p>
      * since we want to search the whole sheet so we provide only the sheet name as range
-     *
+     * <p>
      * range is in A1 notation
      * eg. Sheet1!A1:G7
-     *
-     *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
+     * <p>
+     * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      *
      * @param spreadsheetId
      * @param spreadsheetName
