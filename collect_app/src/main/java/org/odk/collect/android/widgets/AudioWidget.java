@@ -19,6 +19,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.Log;
@@ -40,6 +41,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -55,7 +57,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private Button mCaptureButton;
     private Button mPlayButton;
     private Button mChooseButton;
-
+    private MediaPlayer mMediaPlayer;
     private String mBinaryName;
     private String mInstanceFolder;
 
@@ -153,8 +155,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mPlayButton.setPadding(20, 20, 20, 20);
         mPlayButton.setLayoutParams(params);
-
-        // on play, launch the appropriate viewer
+        //setting up mediaplayer
+        mMediaPlayer = new MediaPlayer();
+        // on play, play the file
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,6 +165,27 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "playButton", "click",
                                 mPrompt.getIndex());
+                File f = new File(mInstanceFolder + File.separator
+                        + mBinaryName);
+                try {
+                    mMediaPlayer.setDataSource(getContext(),Uri.fromFile(f));
+                    mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mMediaPlayer.start();
+                        }
+                    });
+                    mMediaPlayer.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        // if mediaplayer is unable to play
+        mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + File.separator
                         + mBinaryName);
@@ -174,10 +198,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                             getContext().getString(R.string.activity_not_found,
                                     "play audio"), Toast.LENGTH_SHORT).show();
                 }
-
+                return false;
             }
         });
-
         // retrieve answer from data model and update ui
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
