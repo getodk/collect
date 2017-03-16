@@ -16,8 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.text.InputFilter;
-import android.text.Spanned;
+
 
 /**
  * Handles aggregate specific preferences.
