@@ -80,7 +80,7 @@ the License.
             android:paddingLeft="8dip"
             android:paddingRight="8dip"
             android:paddingStart="8dip"
-            android:singleLine="true" />
+            android:maxLines="1" />
 
         <ImageButton
             android:id="@+id/search_button"
