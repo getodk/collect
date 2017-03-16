@@ -557,7 +557,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     if (isCancelled()) {
                         return false;
                     }
-                    publishProgress(c.getPosition() + 1, c.getCount());
+                    if(high > c.getCount())
+                         publishProgress(c.getPosition() + 1 + low, values.length);
+                    else
+                        publishProgress(c.getPosition() + 1, values.length);
                     String instance = c.getString(
                             c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
