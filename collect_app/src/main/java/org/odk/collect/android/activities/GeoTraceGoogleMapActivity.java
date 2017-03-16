@@ -140,7 +140,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         setContentView(R.layout.geotrace_google_layout);
 
-        if (PlayServicesUtil.checkPlayServices(GeoTraceGoogleMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoTraceGoogleMapActivity.this)) {
 
             mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {

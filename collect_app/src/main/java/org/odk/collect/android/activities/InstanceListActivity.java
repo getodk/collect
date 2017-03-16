@@ -2,7 +2,7 @@ package org.odk.collect.android.activities;
 
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
-public abstract class InstanceListActivity extends AppListActivity {
+abstract class InstanceListActivity extends AppListActivity {
     @Override
     protected void sortByNameAsc() {
         setupAdapter(InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + " DESC");

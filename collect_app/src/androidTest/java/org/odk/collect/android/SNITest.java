@@ -1,5 +1,6 @@
 package org.odk.collect.android;
 
+import android.support.test.filters.Suppress;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -28,6 +29,7 @@ import static org.odk.collect.android.utilities.WebUtils.createOpenRosaHttpGet;
  *
  * @see <a href="https://github.com/opendatakit/collect/issues/199">COLLECT-199</a>
  */
+@Suppress
 @RunWith(AndroidJUnit4.class)
 public class SNITest {
 
