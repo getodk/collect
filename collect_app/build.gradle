@@ -1,8 +1,8 @@
-import com.android.ddmlib.DdmPreferences
-
 /**************************************************************************************************
  GRADLE CONFIG
  *************************************************************************************************/
+
+import com.android.ddmlib.DdmPreferences
 
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
@@ -63,7 +63,7 @@ android {
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(16)
-        targetSdkVersion(22)
+        targetSdkVersion(25)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
