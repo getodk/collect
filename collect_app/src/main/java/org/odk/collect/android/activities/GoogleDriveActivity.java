@@ -380,6 +380,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 createAlertDialog(getString(R.string.no_connection));
             }
         } else {
+            adapter.enableAdapterClick(true);
             // file clicked, download the file, mark checkbox.
             CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
@@ -390,6 +391,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 toDownload.add(o);
             }
             mDownloadButton.setEnabled(toDownload.size() > 0);
+
         }
 
     }
