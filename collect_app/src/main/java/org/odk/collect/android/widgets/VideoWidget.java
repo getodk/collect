@@ -20,19 +20,25 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TableLayout;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -62,7 +68,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private Button mCaptureButton;
     private Button mPlayButton;
     private Button mChooseButton;
-
+    private VideoView mVideoView;
+    private MediaController mMediaController;
     private String mBinaryName;
 
     private String mInstanceFolder;
@@ -193,6 +200,18 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mPlayButton.setPadding(20, 20, 20, 20);
         mPlayButton.setLayoutParams(params);
 
+        //setup video view and media controller
+        mVideoView = new VideoView(getContext());
+        mVideoView.setId(QuestionWidget.newUniqueId());
+        mVideoView.setPadding(20,20,20,20);
+        mVideoView.setVisibility(View.VISIBLE);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        mVideoView.setLayoutParams(new FrameLayout.LayoutParams
+                (ViewGroup.LayoutParams.MATCH_PARENT, (metrics.heightPixels*4)/10));
+        mMediaController = new MediaController(getContext());
+        mMediaController.setAnchorView(mVideoView);
+        mVideoView.setMediaController(mMediaController);
+
         // on play, launch the appropriate viewer
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +220,17 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "playButton",
                                 "click", mPrompt.getIndex());
+                File f = new File(mInstanceFolder + File.separator
+                        + mBinaryName);
+                mVideoView.setVideoURI(Uri.fromFile(f));
+                mVideoView.requestFocus();
+                mVideoView.start();
+            }
+        });
+        //if videoview is unable to play
+        mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(mInstanceFolder + File.separator
                         + mBinaryName);
@@ -213,9 +243,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                             getContext().getString(R.string.activity_not_found,
                                     "video video"), Toast.LENGTH_SHORT).show();
                 }
+                return false;
             }
         });
-
         // retrieve answer from data model and update ui
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
@@ -230,6 +260,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.addView(mCaptureButton);
         answerLayout.addView(mChooseButton);
         answerLayout.addView(mPlayButton);
+        answerLayout.addView(mVideoView);
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
