@@ -72,7 +72,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     public Boolean gpsStatus = true;
     private Boolean play_check = false;
     private MapView mapView;
-    private SharedPreferences sharedPreferences;
     public DefaultResourceProxyImpl resource_proxy;
     public MyLocationNewOverlay mMyLocationOverlay;
     private Button mLocationButton;
@@ -93,7 +92,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private String final_return_string;
     private Integer TRACE_MODE; // 0 manual, 1 is automatic
-    private Boolean inital_location_found = false;
     private Spinner time_units;
     private Spinner time_delay;
     private Button mPolygonSaveButton;
@@ -117,7 +115,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (PlayServicesUtil.checkPlayServices(GeoTraceOsmMapActivity.this)) {
 
             resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
@@ -503,7 +500,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void zoomToMyLocation() {
         if (mMyLocationOverlay.getMyLocation() != null) {
-            inital_location_found = true;
             if (zoom_level == 3) {
                 mapView.getController().setZoom(15);
             } else {
