@@ -71,14 +71,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public static final int stroke_width = 5;
     public String final_return_string;
     private MapEventsOverlay OverlayEventos;
-    private boolean polygon_connection = false;
     private boolean clear_button_test = false;
     private Button mClearButton;
     private Button mSaveButton;
     private Button mLayersButton;
-    private SharedPreferences sharedPreferences;
-    public Boolean layerStatus = false;
-    private int selected_layer = -1;
     public Boolean gpsStatus = true;
     private Button mLocationButton;
     public MyLocationNewOverlay mMyLocationOverlay;
@@ -344,7 +340,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void clearFeatures() {
-        polygon_connection = false;
         clear_button_test = false;
         map_markers.clear();
         pathOverlay.clearPath();
