@@ -167,7 +167,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                                 mPrompt.getIndex());
                 File f = new File(mInstanceFolder + File.separator
                         + mBinaryName);
+
                 try {
+                    mMediaPlayer.reset();
                     mMediaPlayer.setDataSource(getContext(),Uri.fromFile(f));
                     mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
@@ -177,7 +179,10 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                     });
                     mMediaPlayer.prepareAsync();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.d(t,"Cannot read file at " + mInstanceFolder +
+                            File.separator + mBinaryName);
+                } catch (IllegalStateException e){
+                    Log.d(t,"File is already being played.");
                 }
 
             }
