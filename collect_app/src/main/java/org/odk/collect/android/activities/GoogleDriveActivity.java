@@ -194,6 +194,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
             adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image, dl);
             setListAdapter(adapter);
+            adapter.enableAdapterClick(true);
         } else {
             // new
             TextView emptyView = new TextView(this);
@@ -367,7 +368,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         TextView empty = (TextView) findViewById(android.R.id.empty);
         empty.setVisibility(View.VISIBLE);
         getListView().setEmptyView(empty);
-
+        adapter.enableAdapterClick(false);
         DriveListItem o = adapter.getItem(position);
         if (o != null && o.getType() == DriveListItem.DIR) {
             if (testNetwork()) {
@@ -390,6 +391,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             }
             mDownloadButton.setEnabled(toDownload.size() > 0);
         }
+
     }
 
     private void getFiles() {
