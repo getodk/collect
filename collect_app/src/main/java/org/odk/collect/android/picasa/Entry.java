@@ -55,7 +55,7 @@ public class Entry implements Cloneable {
     }
 
     @Override
-    protected Entry clone() {
+    protected Entry clone() throws CloneNotSupportedException {
         try {
             @SuppressWarnings("unchecked")
             Entry result = (Entry) super.clone();
