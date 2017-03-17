@@ -18,6 +18,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.accounts.AccountManager;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -59,6 +60,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentList;
@@ -71,6 +73,7 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.tasks.GoogleSheetsTask;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.BufferedReader;
@@ -80,6 +83,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -155,6 +159,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
     private static final String CURRENT_ID_KEY = "currentDir";
 
+    protected GoogleAccountCredential mCredential;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,8 +179,15 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
         if (mGoogleUsername == null || mGoogleUsername.equals("")) {
-            showDialog(GOOGLE_USER_DIALOG);
-            return;
+            mCredential = GoogleAccountCredential.usingOAuth2(
+                    getApplicationContext(), Arrays.asList(GoogleSheetsTask.SCOPES))
+                    .setBackOff(new ExponentialBackOff());
+            startActivityForResult(
+                    mCredential.newChooseAccountIntent(),
+                    GoogleSheetsTask.REQUEST_ACCOUNT_PICKER);
+            if (mGoogleUsername == null || mGoogleUsername.equals("")) {
+                showDialog(GOOGLE_USER_DIALOG);
+            return;}
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(MY_DRIVE_KEY)) {
@@ -509,6 +522,21 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     // User denied access, show him the account chooser again
                 }
                 break;
+            case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null &&
+                        data.getExtras() != null) {
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+                        editor.apply();
+                        mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                        mCredential.setSelectedAccountName(mGoogleUsername);
+                    }
+                }
+                break;
+
         }
         if (resultCode == RESULT_CANCELED) {
             finish();
