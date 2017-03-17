@@ -377,8 +377,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 listFiles(o.getDriveId());
                 mCurrentPath.push(o.getName());
             } else {
-                createAlertDialog(getString(R.string.no_connection));
                 adapter.setEnabled(true);
+                createAlertDialog(getString(R.string.no_connection));
             }
         } else {
             adapter.setEnabled(true);
