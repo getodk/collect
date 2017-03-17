@@ -203,11 +203,12 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         //setup video view and media controller
         mVideoView = new VideoView(getContext());
         mVideoView.setId(QuestionWidget.newUniqueId());
-        mVideoView.setPadding(20,20,20,20);
-        mVideoView.setVisibility(View.VISIBLE);
+        mVideoView.setPadding(20, 20, 20, 20);
+        mVideoView.setVisibility(View.INVISIBLE);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int videoViewHeight = (metrics.heightPixels * 4) / 10;
         mVideoView.setLayoutParams(new FrameLayout.LayoutParams
-                (ViewGroup.LayoutParams.MATCH_PARENT, (metrics.heightPixels*4)/10));
+                (ViewGroup.LayoutParams.MATCH_PARENT, videoViewHeight));
         mMediaController = new MediaController(getContext());
         mMediaController.setAnchorView(mVideoView);
         mVideoView.setMediaController(mMediaController);
@@ -222,11 +223,19 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                                 "click", mPrompt.getIndex());
                 File f = new File(mInstanceFolder + File.separator
                         + mBinaryName);
+                mVideoView.setVisibility(View.VISIBLE);
                 mVideoView.setVideoURI(Uri.fromFile(f));
                 mVideoView.requestFocus();
                 mVideoView.start();
             }
         });
+        mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mVideoView.seekTo(0);
+            }
+        });
+
         //if videoview is unable to play
         mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
@@ -286,7 +295,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-
+        //reset video view
+        mVideoView.stopPlayback();
+        mVideoView.setVideoURI(null);
+        mVideoView.setVisibility(View.INVISIBLE);
         // reset buttons
         mPlayButton.setEnabled(false);
     }
