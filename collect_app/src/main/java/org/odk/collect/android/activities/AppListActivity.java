@@ -22,6 +22,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +32,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -38,24 +43,47 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 abstract class AppListActivity extends ListActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
-    public static final int MENU_SORT = Menu.FIRST;
+    private static final int MENU_SORT = Menu.FIRST;
+    public static final int MENU_FILTER = MENU_SORT + 1;
+
+    private static final String SELECTED_INSTANCES = "selectedInstances";
 
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private LinearLayout mSearchBoxLayout;
+    private EditText mInputSearch;
 
+    protected SimpleCursorAdapter mListAdapter;
+    protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected String[] mSortingOptions;
 
     @Override
     protected void onResume() {
         super.onResume();
+        mSearchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
+        setupSearchBox();
         setupDrawer();
         setupDrawerItems();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(SELECTED_INSTANCES, mSelectedInstances);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        mSelectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
     }
 
     @Override
@@ -66,6 +94,11 @@ abstract class AppListActivity extends ListActivity {
         menu
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
                 .setIcon(R.drawable.ic_sort)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        menu
+                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
+                .setIcon(R.drawable.ic_search)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return true;
@@ -100,6 +133,30 @@ abstract class AppListActivity extends ListActivity {
         if (mDrawerToggle != null) {
             mDrawerToggle.onConfigurationChanged(newConfig);
         }
+    }
+
+    private void setupSearchBox() {
+        mInputSearch = (EditText) findViewById(R.id.inputSearch);
+        mInputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s);
+            }
+        });
+    }
+
+    private void closeSearchBox() {
+        mInputSearch.setText("");
+        mSearchBoxLayout.setVisibility(View.GONE);
+        Collect.getInstance().hideKeyboard(mInputSearch);
     }
 
     private void setupDrawerItems() {
@@ -167,19 +224,27 @@ abstract class AppListActivity extends ListActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
-    protected void checkPreviouslyCheckedItems(List<Long> checkedInstances, Cursor cursor) {
+    protected void checkPreviouslyCheckedItems() {
         getListView().clearChoices();
+        List<Integer> selectedPositions = new ArrayList<>();
         int listViewPosition = 0;
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
+        Cursor cursor = mListAdapter.getCursor();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
                 long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                if (checkedInstances.contains(instanceId)) {
-                    getListView().setItemChecked(listViewPosition, true);
+                if (mSelectedInstances.contains(instanceId)) {
+                    selectedPositions.add(listViewPosition);
                 }
                 listViewPosition++;
-            }
+            } while (cursor.moveToNext());
+        }
+
+        for (int position : selectedPositions) {
+            getListView().setItemChecked(position, true);
         }
     }
+
+    protected abstract void filter(CharSequence charSequence);
 
     protected abstract void sortByNameAsc();
 
