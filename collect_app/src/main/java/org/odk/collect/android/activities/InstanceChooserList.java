@@ -200,13 +200,22 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         int[] view = new int[]{
                 R.id.text1, R.id.text2, R.id.text4
         };
-        SimpleCursorAdapter instances;
+
         if (mEditMode) {
-            instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
         } else {
-            instances = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
         }
-        setListAdapter(instances);
+        setListAdapter(mListAdapter);
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        if (mEditMode) {
+            mListAdapter.changeCursor(new InstancesDao().getFilteredUnsentInstancesCursor(charSequence));
+        } else {
+            mListAdapter.changeCursor(new InstancesDao().getFilteredSentInstancesCursor(charSequence));
+        }
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {

@@ -55,6 +55,44 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
+    public Cursor getFilteredUnsentInstancesCursor(CharSequence charSequence) {
+        Cursor cursor;
+        if (charSequence == null || charSequence.length() == 0) {
+            cursor = getUnsentInstancesCursor();
+        } else {
+            String selection =
+                    InstanceProviderAPI.InstanceColumns.STATUS + " !=? and "
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = {
+                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    "%" + charSequence + "%"};
+            String sortOrder =
+                    InstanceProviderAPI.InstanceColumns.STATUS + " DESC, "
+                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursor;
+    }
+
+    public Cursor getFilteredSentInstancesCursor(CharSequence charSequence) {
+        Cursor cursor;
+        if (charSequence == null || charSequence.length() == 0) {
+            cursor = getSentInstancesCursor();
+        } else {
+            String selection =
+                    InstanceProviderAPI.InstanceColumns.STATUS + " =? and "
+                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = {
+                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    "%" + charSequence + "%"};
+            String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursor;
+    }
+
     public Cursor getUnsentInstancesCursor(String sortOrder) {
         String selection = InstanceProviderAPI.InstanceColumns.STATUS + " !=? ";
         String selectionArgs[] = {InstanceProviderAPI.STATUS_SUBMITTED};
