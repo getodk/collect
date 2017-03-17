@@ -949,10 +949,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         }
 
         StringBuilder sb = new StringBuilder();
-        Iterator<String> it = results.keySet().iterator();
 
-        while (it.hasNext()) {
-            String id = it.next();
+        for (String id : results.keySet()) {
             sb.append(id + " :: " + results.get(id) + "\n");
         }
         if (sb.length() > 1) {
@@ -978,10 +976,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         ConnectivityManager manager = (ConnectivityManager) this
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        if (currentNetworkInfo == null) {
-            return false;
-        }
-        return (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
+        return currentNetworkInfo != null &&
+                (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
     }
 
     public void listFiles(String dir, String query) {
