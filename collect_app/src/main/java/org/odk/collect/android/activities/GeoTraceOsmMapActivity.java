@@ -118,7 +118,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (PlayServicesUtil.checkPlayServices(GeoTraceOsmMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoTraceOsmMapActivity.this)) {
 
             resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
             mapView = (MapView) findViewById(R.id.geotrace_mapview);

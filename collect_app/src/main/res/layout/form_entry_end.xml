@@ -10,19 +10,19 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp" >
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0" />
 
@@ -49,7 +49,7 @@
 
         <EditText
             android:id="@+id/save_name"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:textSize="21sp" />
@@ -65,7 +65,7 @@
 
         <Button
             android:id="@+id/save_exit_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="20dp"
@@ -73,7 +73,7 @@
             android:textSize="21sp" />
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0" />
     </LinearLayout>

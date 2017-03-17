@@ -352,7 +352,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KEY_FORMLIST_URL, getString(R.string.default_odk_formlist));
         editor.putString(KEY_SUBMISSION_URL, getString(R.string.default_odk_submission));
-        editor.commit();
+        editor.apply();
     }
 
 

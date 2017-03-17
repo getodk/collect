@@ -17,8 +17,9 @@ package org.odk.collect.android.views;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -51,7 +52,7 @@ import android.widget.TextView;
 public class SlidingTabLayout extends HorizontalScrollView {
     private static final int TITLE_OFFSET_DIPS = 24;
     private static final int TAB_VIEW_PADDING_DIPS = 10;
-    private static final int TAB_VIEW_TEXT_SIZE_SP = 12;
+    private static final int TAB_VIEW_TEXT_SIZE_SP = 21;
     private final SlidingTabStrip mTabStrip;
     private int mTitleOffset;
 
@@ -141,7 +142,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         mViewPager = viewPager;
         if (viewPager != null) {
-            viewPager.setOnPageChangeListener(new InternalViewPagerListener());
+            viewPager.addOnPageChangeListener(new InternalViewPagerListener());
             populateTabStrip();
         }
     }
@@ -204,7 +205,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
 
             if (mTitleFontColor != -1) {
-                tabTitleView.setTextColor(getResources().getColor(mTitleFontColor));
+                tabTitleView.setTextColor(ContextCompat.getColor(getContext(), mTitleFontColor));
             }
 
             tabTitleView.setText(adapter.getPageTitle(i));
