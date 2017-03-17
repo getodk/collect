@@ -106,6 +106,15 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, null, sortOrder);
     }
 
+    public Cursor getFilteredSavedInstancesCursor(CharSequence charSequence) {
+        String selection =
+                InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "
+                + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+        String selectionArgs[] = {"%" + charSequence + "%"};
+
+        return getInstancesCursor(null, selection, selectionArgs, null);
+    }
+
     public Cursor getFinalizedInstancesCursor() {
         String selection = InstanceProviderAPI.InstanceColumns.STATUS + "=? or " + InstanceProviderAPI.InstanceColumns.STATUS + "=?";
         String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
