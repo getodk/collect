@@ -109,9 +109,6 @@ android {
 
     lintOptions {
         abortOnError true
-        textReport true
-        textOutput 'stdout'
-        ignore 'InvalidPackage'
     }
 }
 
