@@ -45,7 +45,6 @@ public final class PreferenceKeys {
 
     public static final String KEY_NAVIGATION               = "navigation";
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
-    public static final String KEY_CUSTOM_SERVER_RESPONSE = "custom_server_response";
 
     // MAP SPECIFIC
 

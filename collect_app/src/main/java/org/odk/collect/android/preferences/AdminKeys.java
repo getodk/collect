@@ -51,7 +51,6 @@ public final class AdminKeys {
     private static String KEY_SHOW_MAP_BASEMAP          = "show_map_basemap";
 
     private static String KEY_ANALYTICS                 = "analytics";
-    private static String KEY_CUSTOM_SERVER_RESPONSE    = "custom_server_response";
 
     /**
      * The admin preferences allow removing general preferences. This array contains
@@ -77,7 +76,6 @@ public final class AdminKeys {
         ag(KEY_CHANGE_PASSWORD,            PreferenceKeys.KEY_PASSWORD),
         ag(KEY_CHANGE_USERNAME,            PreferenceKeys.KEY_USERNAME),
         ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT),
-        ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC),
-        ag(KEY_CUSTOM_SERVER_RESPONSE,     PreferenceKeys.KEY_CUSTOM_SERVER_RESPONSE)
+        ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC)
     };
 }

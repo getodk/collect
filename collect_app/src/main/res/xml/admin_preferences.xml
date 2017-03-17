@@ -164,12 +164,6 @@
             android:summary="@string/found_in_settings"
             android:title="@string/show_map_basemap" />
         <CheckBoxPreference
-            android:id="@+id/show_custom_server_response"
-            android:defaultValue="true"
-            android:key="custom_server_response"
-            android:summary="@string/found_in_settings"
-            android:title="@string/show_custom_server_response_title" />
-        <CheckBoxPreference
             android:id="@+id/analytics"
             android:defaultValue="true"
             android:key="analytics"

@@ -80,7 +80,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
-    private SharedPreferences sharedPreferences;
 
     private InstanceUploaderListener mStateListener;
 
@@ -109,12 +108,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         ResponseMessageParser messageParser = null;
-        sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(
-                        Collect.getInstance().getApplicationContext());
-
-        Boolean showCustomServerReponse = sharedPreferences.getBoolean(
-                PreferenceKeys.KEY_CUSTOM_SERVER_RESPONSE, false);
 
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
@@ -489,9 +482,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 HttpEntity httpEntity = response.getEntity();
-                if (showCustomServerReponse){
-                    messageParser = new ResponseMessageParser(httpEntity);
-                }
+                messageParser = new ResponseMessageParser(httpEntity);
                 WebUtils.discardEntityBytes(response);
                 Log.i(t, "Response code:" + responseCode);
                 // verify that the response was a 201 or 202.
@@ -509,13 +500,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         // Custom messaging response if fail.
                         // If Custom Server Response enabled then confirm response is valid
                         // and set as display message, otherwise fall back to default string messaging
-                        if (showCustomServerReponse){
-                            if (messageParser != null && messageParser.isValid){
-                                outcome.mResults.put(id, fail + messageParser.getMessageResponse());
-                            }else{
-                                outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
-                                        + " (" + responseCode + ") at " + urlString);
-                            }
+                        if (messageParser != null && messageParser.isValid){
+                            outcome.mResults.put(id, fail + messageParser.getMessageResponse());
                         }else{
                             outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                     + " (" + responseCode + ") at " + urlString);
@@ -542,17 +528,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
-        // if it got here, it must have worked
-        if (showCustomServerReponse){
-            // Custom messaging handle for success
-            // If Custom Server Response enabled then confirm response is valid
-            // and set as display message, otherwise fall back to default string messagining.
-            if (messageParser != null && messageParser.isValid){
-                outcome.mResults.put(id, messageParser.getMessageResponse());
-            }else{
-                // Default messaging
-                outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
-            }
+        // Custom messaging handle for success
+        // If Custom Server Response enabled then confirm response is valid
+        // and set as display message, otherwise fall back to default string messagining.
+        if (messageParser != null && messageParser.isValid){
+            outcome.mResults.put(id, messageParser.getMessageResponse());
         }else{
             // Default messaging
             outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
