@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 
 public class FileManagerFragment extends AppListFragment {

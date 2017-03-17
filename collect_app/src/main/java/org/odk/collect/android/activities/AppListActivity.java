@@ -111,7 +111,16 @@ abstract class AppListActivity extends ListActivity {
                 if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
                     mDrawerLayout.closeDrawer(Gravity.END);
                 } else {
+                    Collect.getInstance().hideKeyboard(mInputSearch);
                     mDrawerLayout.openDrawer(Gravity.END);
+                }
+                return true;
+
+            case MENU_FILTER:
+                if (mSearchBoxLayout.getVisibility() == View.GONE) {
+                    mSearchBoxLayout.setVisibility(View.VISIBLE);
+                } else {
+                    closeSearchBox();
                 }
                 return true;
         }
@@ -180,6 +189,7 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void performSelectedSearch(int position) {
+        closeSearchBox();
         switch(position) {
             case 0:
                 sortByNameAsc();

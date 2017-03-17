@@ -23,6 +23,8 @@ the License.
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/search_box_layout"/>
+
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
@@ -36,8 +38,6 @@ the License.
             android:gravity="center"
             android:text="@string/no_items_display"
             android:textSize="21sp" />
-
-        <include layout="@layout/search_box_layout"/>
 
         <LinearLayout
             android:id="@+id/buttonholder"

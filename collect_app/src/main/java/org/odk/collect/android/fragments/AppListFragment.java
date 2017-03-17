@@ -175,6 +175,7 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void performSelectedSearch(int position) {
+        closeSearchBox();
         switch (position) {
             case 0:
                 sortByNameAsc();
