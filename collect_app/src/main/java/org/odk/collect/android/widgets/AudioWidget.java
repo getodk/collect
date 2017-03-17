@@ -170,7 +170,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
                 try {
                     mMediaPlayer.reset();
-                    mMediaPlayer.setDataSource(getContext(),Uri.fromFile(f));
+                    mMediaPlayer.setDataSource(getContext(), Uri.fromFile(f));
                     mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {
@@ -179,10 +179,10 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                     });
                     mMediaPlayer.prepareAsync();
                 } catch (IOException e) {
-                    Log.e(t,"Cannot read file at " + mInstanceFolder +
-                            File.separator + mBinaryName,e);
+                    Log.e(t, "Cannot read file at " + mInstanceFolder +
+                            File.separator + mBinaryName, e);
                 } catch (IllegalStateException e){
-                    Log.e(t,"File is already being played.",e);
+                    Log.e(t, "File is already being played.", e);
                 }
             }
         });
