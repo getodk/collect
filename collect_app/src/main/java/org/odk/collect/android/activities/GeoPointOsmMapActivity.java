@@ -130,7 +130,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             return;
         }
 
-        if (PlayServicesUtil.checkPlayServices(GeoPointOsmMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointOsmMapActivity.this)) {
 
             mMap = (MapView) findViewById(R.id.omap);
             mHelper = new MapHelper(this, mMap, GeoPointOsmMapActivity.this);

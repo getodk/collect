@@ -736,6 +736,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 ((ODKView) mCurrentView).setBinaryData(bearing);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                break;
             case HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so
                 // refresh

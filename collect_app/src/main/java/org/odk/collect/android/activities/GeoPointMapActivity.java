@@ -126,7 +126,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             return;
         }
 
-        if (PlayServicesUtil.checkPlayServices(GeoPointMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointMapActivity.this)) {
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {

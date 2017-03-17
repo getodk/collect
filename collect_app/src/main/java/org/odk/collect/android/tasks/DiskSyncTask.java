@@ -53,7 +53,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     String statusMessage;
 
     private FormsDao mFormsDao;
-
+   
     private static class UriFile {
         public final Uri uri;
         public final File file;
@@ -69,6 +69,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         mFormsDao = new FormsDao();
         instance = ++counter; // roughly track the scan # we're on... logging use only
         Log.i(t, "[" + instance + "] doInBackground begins!");
+        
+        List<String> idsToDelete = new ArrayList<>();
 
         try {
             // Process everything then report what didn't work.
@@ -136,9 +138,14 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
-                            Log.w(t, "[" + instance
-                                    + "] file referenced by content provider does not exist "
-                                    + sqlFile);
+                           //File not found in sdcard but file path found in database
+                            //probably because the file has been deleted or filename was changed in sdcard
+                            //Add the ID to list so that they could be deleted all together
+
+                            String id = mCursor.getString(
+                                    mCursor.getColumnIndex(FormsColumns._ID));
+
+                            idsToDelete.add(id);
                         }
                     }
                 } finally {
@@ -146,6 +153,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         mCursor.close();
                     }
                 }
+                
+                //Delete the forms not found in sdcard from the database
+                mFormsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
 
                 // Step3: go through uriToUpdate to parse and update each in turn.
                 // This is slow because buildContentValues(...) is slow.

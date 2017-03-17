@@ -16,8 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.text.InputFilter;
-import android.text.Spanned;
+
 
 /**
  * Handles aggregate specific preferences.
@@ -34,32 +33,3 @@ public class AggregatePreferencesActivity extends PreferenceActivity {
     }
 }
 
-/**
- * Rejects edits that contain whitespace.
- */
-class WhitespaceFilter implements InputFilter {
-    public CharSequence filter(CharSequence source, int start, int end,
-                               Spanned dest, int dstart, int dend) {
-        for (int i = start; i < end; i++) {
-            if (Character.isWhitespace(source.charAt(i))) {
-                return "";
-            }
-        }
-        return null;
-    }
-}
-
-/**
- * Rejects edits that contain control characters, including linefeed and carriage return.
- */
-class ControlCharacterFilter implements InputFilter {
-    public CharSequence filter(CharSequence source, int start, int end,
-                               Spanned dest, int dstart, int dend) {
-        for (int i = start; i < end; i++) {
-            if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-                return "";
-            }
-        }
-        return null;
-    }
-}

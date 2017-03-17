@@ -93,7 +93,7 @@ public class SplashScreenActivity extends Activity {
         if (mSharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
                 < packageInfo.versionCode) {
             editor.putLong(PreferenceKeys.KEY_LAST_VERSION, packageInfo.versionCode);
-            editor.commit();
+            editor.apply();
 
             firstRun = true;
         }

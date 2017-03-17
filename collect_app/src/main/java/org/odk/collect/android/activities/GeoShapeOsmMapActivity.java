@@ -96,7 +96,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
         mSaveButton = (Button) findViewById(R.id.save);
         mClearButton = (Button) findViewById(R.id.clear);
-        if (PlayServicesUtil.checkPlayServices(GeoShapeOsmMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoShapeOsmMapActivity.this)) {
 
             resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
             mMap = (MapView) findViewById(R.id.geoshape_mapview);

@@ -69,7 +69,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
 
         setTitle(getString(R.string.get_location));
 
-        if (PlayServicesUtil.checkPlayServices(GeoPointActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointActivity.this)) {
             mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
             // make sure we have a good location provider before continuing

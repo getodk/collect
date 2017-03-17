@@ -6,6 +6,8 @@ import android.preference.Preference;
 import android.text.InputFilter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
+import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 
 
 public class OtherPreferencesFragment extends AggregatePreferencesFragment implements Preference.OnPreferenceChangeListener {
