@@ -107,20 +107,10 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     }
     @Override
     public boolean isEnabled(int position) {
-        if (areAllItemsEnabled()) {
-            return true;
-        }
-        if(!enabled){
-            return false;
-        }
-        return true;
-    }
-    @Override
-    public boolean areAllItemsEnabled() {
         return enabled;
     }
 
-    public void enableAdapterClick(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 }
