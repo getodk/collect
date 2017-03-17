@@ -160,6 +160,12 @@ dependencies {
     androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.1.0'
     androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
+
+    // firebase core library
+    compile 'com.google.firebase:firebase-core:9.0.0'
+
+    // firebase crash library
+    compile 'com.google.firebase:firebase-crash:9.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
