@@ -20,7 +20,7 @@ def getMasterCommitCount = { ->
     try {
         def stdout = new ByteArrayOutputStream()
         exec {
-            switch(ant.properties.os){
+            switch (ant.properties.os) {
                 case 'windows':
                     commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
                     break
@@ -162,6 +162,7 @@ dependencies {
     compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
     compile group: 'com.google.http-client', name: 'google-http-client-android', version: '1.22.0'
     compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
+    compile group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
