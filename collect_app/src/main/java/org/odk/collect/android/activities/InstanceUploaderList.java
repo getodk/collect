@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,8 +39,8 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
@@ -68,7 +67,6 @@ public class InstanceUploaderList extends InstanceListActivity
     private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
 
     private static final int INSTANCE_UPLOADER = 0;
-    private static final int GOOGLE_USER_DIALOG = 1;
 
     private Button mUploadButton;
 
@@ -202,12 +200,6 @@ public class InstanceUploaderList extends InstanceListActivity
             // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
 
-            String googleUsername = prefs.getString(
-                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-            if (googleUsername == null || googleUsername.equals("")) {
-                showDialog(GOOGLE_USER_DIALOG);
-                return;
-            }
             Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
             i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
             startActivityForResult(i, INSTANCE_UPLOADER);
@@ -400,25 +392,5 @@ public class InstanceUploaderList extends InstanceListActivity
                 }).create();
         alertDialog.show();
         return true;
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case GOOGLE_USER_DIALOG:
-                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
-
-                gudBuilder.setTitle(R.string.no_google_account);
-                gudBuilder
-                        .setMessage(R.string.sheets_google_account_needed);
-                gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                gudBuilder.setCancelable(false);
-                return gudBuilder.create();
-        }
-        return null;
     }
 }

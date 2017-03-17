@@ -630,7 +630,7 @@ public class MainMenuActivity extends Activity {
                     prefEdit.putString(key, ((String) v));
                 }
             }
-            prefEdit.commit();
+            prefEdit.apply();
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
@@ -654,7 +654,7 @@ public class MainMenuActivity extends Activity {
                     adminEdit.putString(key, ((String) v));
                 }
             }
-            adminEdit.commit();
+            adminEdit.apply();
 
             res = true;
         } catch (FileNotFoundException e) {
