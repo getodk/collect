@@ -28,7 +28,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,6 +62,8 @@ import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -208,7 +209,7 @@ public class MainMenuActivity extends Activity {
 
         // must be at the beginning of any activity that can be called from an
         // external intent
-        Log.i(t, "Starting up, creating directories");
+        Timber.i("Starting up, creating directories");
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
@@ -565,8 +566,7 @@ public class MainMenuActivity extends Activity {
             }
         } else {
             mSendDataButton.setText(getString(R.string.send_data));
-            Log.w(t,
-                    "Cannot update \"Send Finalized\" button label since the database is closed. "
+            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
 
@@ -581,8 +581,7 @@ public class MainMenuActivity extends Activity {
             }
         } else {
             mReviewDataButton.setText(getString(R.string.review_data));
-            Log.w(t,
-                    "Cannot update \"Edit Form\" button label since the database is closed. "
+            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
 
@@ -597,8 +596,7 @@ public class MainMenuActivity extends Activity {
             }
         } else {
             mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Log.w(t,
-                    "Cannot update \"View Sent\" button label since the database is closed. "
+            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
     }

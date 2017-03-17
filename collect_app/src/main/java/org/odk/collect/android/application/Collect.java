@@ -28,6 +28,7 @@ import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -46,7 +47,6 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 
-import timber.log.BuildConfig;
 import timber.log.Timber;
 
 /**
