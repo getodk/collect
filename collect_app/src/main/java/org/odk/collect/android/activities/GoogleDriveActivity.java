@@ -393,7 +393,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             }
             mDownloadButton.setEnabled(toDownload.size() > 0);
         }
-
     }
 
     private void getFiles() {
