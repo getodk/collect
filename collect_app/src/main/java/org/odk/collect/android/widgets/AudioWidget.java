@@ -179,12 +179,11 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                     });
                     mMediaPlayer.prepareAsync();
                 } catch (IOException e) {
-                    Log.d(t,"Cannot read file at " + mInstanceFolder +
-                            File.separator + mBinaryName);
+                    Log.e(t,"Cannot read file at " + mInstanceFolder +
+                            File.separator + mBinaryName,e);
                 } catch (IllegalStateException e){
-                    Log.d(t,"File is already being played.");
+                    Log.e(t,"File is already being played.",e);
                 }
-
             }
         });
         // if mediaplayer is unable to play
