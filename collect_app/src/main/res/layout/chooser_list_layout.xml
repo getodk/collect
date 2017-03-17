@@ -39,6 +39,8 @@ the License.
 			android:paddingTop="4dip"
 			android:background="#DDDDDD"/>
 
+		<include layout="@layout/search_box_layout"/>
+
 		<ListView
 			android:id="@id/android:list"
 			android:layout_width="match_parent"

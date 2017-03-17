@@ -37,6 +37,8 @@ the License.
             android:text="@string/no_items_display"
             android:textSize="21sp" />
 
+        <include layout="@layout/search_box_layout"/>
+
         <LinearLayout
             android:id="@+id/buttonholder"
             android:layout_width="match_parent"
