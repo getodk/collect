@@ -109,6 +109,9 @@ android {
 
     lintOptions {
         abortOnError true
+        textReport true
+        textOutput 'stdout'
+        ignore 'InvalidPackage'
     }
 }
 
@@ -136,6 +139,7 @@ allprojects {
         options.compilerArgs << "-Xlint:all"
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
