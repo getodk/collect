@@ -22,6 +22,7 @@ import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -30,6 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -87,6 +89,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
                 Collections.sort(candidateInstances);
 
+                List<String> filesToRemove = new ArrayList<>();
+
                 // Remove all the path that's already in the content provider
                 Cursor instanceCursor = null;
                 try {
@@ -103,13 +107,22 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     while (instanceCursor.moveToNext()) {
                         String instanceFilename = instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                        candidateInstances.remove(instanceFilename);
+                        System.out.println("INSTANCE : " + instanceFilename);
+                        if (candidateInstances.contains(instanceFilename)) {
+                            candidateInstances.remove(instanceFilename);
+                        } else {
+                            filesToRemove.add(instanceFilename);
+                        }
                     }
+
                 } finally {
                     if (instanceCursor != null) {
                         instanceCursor.close();
                     }
                 }
+
+                InstancesDao instancesDao = new InstancesDao();
+                instancesDao.deleteInstancesFromIDs(filesToRemove.toArray(new String[filesToRemove.size()]));
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
