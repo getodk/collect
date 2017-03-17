@@ -20,7 +20,7 @@ def getMasterCommitCount = { ->
     try {
         def stdout = new ByteArrayOutputStream()
         exec {
-            switch(ant.properties.os){
+            switch (ant.properties.os) {
                 case 'windows':
                     commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
                     break
@@ -162,10 +162,10 @@ dependencies {
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
 
     // firebase core library
-    compile 'com.google.firebase:firebase-core:9.0.0'
+    compile group: 'com.google.firebase', name: 'firebase-core', version: '9.2.0'
 
     // firebase crash library
-    compile 'com.google.firebase:firebase-crash:9.0.0'
+    compile group: 'com.google.firebase', name: 'firebase-crash', version: '9.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
