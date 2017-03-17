@@ -63,7 +63,7 @@ android {
     defaultConfig {
         applicationId("org.odk.collect.android")
         minSdkVersion(16)
-        targetSdkVersion(25)
+        targetSdkVersion(22)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
