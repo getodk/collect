@@ -154,7 +154,7 @@ public final class WebUtils {
         }
     }
 
-    private static final void addCredentials(Credentials c, String host) {
+    private static void addCredentials(Credentials c, String host) {
         CredentialsProvider credsProvider = Collect.getInstance()
                 .getCredentialsProvider();
         List<AuthScope> asList = buildAuthScopes(host);
@@ -180,7 +180,7 @@ public final class WebUtils {
         }
     }
 
-    private static final void setOpenRosaHeaders(HttpRequest req) {
+    private static void setOpenRosaHeaders(HttpRequest req) {
         req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
         GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         g.setTime(new Date());
