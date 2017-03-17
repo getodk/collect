@@ -79,7 +79,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
                         ToastUtils.showShortToast(R.string.admin_password_changed);
-                        editor.commit();
+                        editor.apply();
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "CHANGED");
@@ -87,7 +87,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
-                        editor.commit();
+                        editor.apply();
                         ToastUtils.showShortToast(R.string.admin_password_disabled);
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
