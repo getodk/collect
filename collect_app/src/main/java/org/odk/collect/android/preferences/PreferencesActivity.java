@@ -102,6 +102,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public static final String KEY_NAVIGATION = "navigation";
     public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 
+    public static final String KEY_TIMER_LOG_ENABLED = "timer_log";
+
     // MAP SPECIFIC
 
     public static final String KEY_MAP_SDK = "map_sdk_behavior";
@@ -124,6 +126,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private CheckBoxPreference mAutosendNetworkPreference;
     private ListPreference mProtocolPreference;
     private PreferenceScreen mProtocolSettings;
+    private CheckBoxPreference mTimerLogPreference;
     protected EditTextPreference mUsernamePreference;
     protected EditTextPreference mPasswordPreference;
 
@@ -156,6 +159,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 getString(R.string.server_preferences));
 
         mProtocolPreference = (ListPreference) findPreference(KEY_PROTOCOL);
+
+        mTimerLogPreference = (CheckBoxPreference) findPreference(KEY_TIMER_LOG_ENABLED);
 
         mSelectedGoogleAccountPreference = (ListPreference) findPreference(
                 KEY_SELECTED_GOOGLE_ACCOUNT);
@@ -255,6 +260,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 AdminPreferencesActivity.KEY_CHANGE_PROTOCOL_SETTINGS, true);
         if (!(changeProtocolSettings || adminMode)) {
             serverCategory.removePreference(mProtocolSettings);
+        }
+
+        boolean timerLogAvailable = adminPreferences.getBoolean(
+                AdminPreferencesActivity.KEY_TIMER_LOG_ENABLED, true);
+        if (!(timerLogAvailable || adminMode)) {
+            clientCategory.removePreference(mTimerLogPreference);
         }
 
         // get list of google accounts

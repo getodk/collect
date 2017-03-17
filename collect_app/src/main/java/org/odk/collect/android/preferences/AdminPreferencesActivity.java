@@ -88,6 +88,8 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     public static String KEY_AUTOSEND_WIFI = "autosend_wifi";
     public static String KEY_AUTOSEND_NETWORK = "autosend_network";
 
+    public static final String KEY_TIMER_LOG_ENABLED = "timer_log";
+
     public static String KEY_NAVIGATION = "navigation";
     public static String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
 

@@ -73,11 +73,6 @@ public class FormController {
     private static final String INSTANCE_NAME = "instanceName";
 
     /**
-     * Non OpenRosa metadata tag names.
-     */
-    private static final String TIMING = "timing";
-
-    /**
      * OpenRosa metadata of a form instance.
      *
      * Contains the values for the required metadata
@@ -161,14 +156,14 @@ public class FormController {
     private File mInstancePath;
     private FormEntryController mFormEntryController;
     private FormIndex mIndexWaitingForData = null;
-    private TimerLogger mTimerLogger;
+    //private TimerLogger mTimerLogger;
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
         mMediaFolder = mediaFolder;
         mFormEntryController = fec;
         mInstancePath = instancePath;
 
-        mTimerLogger = new TimerLogger(instancePath, this);
+        //mTimerLogger = new TimerLogger(instancePath, this);
     }
 
     public FormDef getFormDef() {
@@ -195,9 +190,9 @@ public class FormController {
         return mIndexWaitingForData;
     }
 
-    public TimerLogger getTimerLogger() {
-        return mTimerLogger;
-    }
+    //public TimerLogger getTimerLogger() {
+    //    return mTimerLogger;
+    //}
 
     /**
      * For logging purposes...
@@ -1192,14 +1187,6 @@ public class FormController {
                 }
             }
 
-            // timing element...
-            v = e.getChildrenWithName(TIMING);
-            if (v.size() == 1) {
-                StringData sa = (StringData) v.get(0).getValue();
-                if (sa != null) {
-                    timing = (String) sa.getValue();
-                }
-            }
         }
 
         return new InstanceMetadata(instanceId, instanceName, timing);

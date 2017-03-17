@@ -187,6 +187,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private boolean mAutoSaved;
 
+    private TimerLogger mTimerLogger;
+
     // Random ID
     private static final int DELETE_REPEAT = 654321;
 
@@ -911,8 +913,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                formController.getTimerLogger().exitView();
-                formController.getTimerLogger().logTimerEvent(TimerLogger.Event.HIERARCHY, 0, null);
+                mTimerLogger.exitView();
+                mTimerLogger.logTimerEvent(TimerLogger.Event.HIERARCHY, 0, null);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
@@ -923,7 +925,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
 
-                formController.getTimerLogger().logTimerEvent(TimerLogger.Event.PREFERENCES, 0, null);
+                mTimerLogger.logTimerEvent(TimerLogger.Event.PREFERENCES, 0, null);
 
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
@@ -1070,7 +1072,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 + formController.getFormTitle());
 
 
-        formController.getTimerLogger().logTimerEvent(TimerLogger.Event.FEC,
+        mTimerLogger.logTimerEvent(TimerLogger.Event.FEC,
                 event, formController.getFormIndex().getReference());
 
         switch (event) {
@@ -1308,7 +1310,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
+            mTimerLogger.exitView();    // Close timer events waiting for an end time
 
             // get constraint behavior preference value with appropriate default
             String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
@@ -1386,7 +1388,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            formController.getTimerLogger().exitView();    // Close timer events
+            mTimerLogger.exitView();    // Close timer events
 
             // The answer is saved on a back swipe, but question constraints are
             // ignored.
@@ -1703,7 +1705,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         };
 
-        formController.getTimerLogger().logTimerEvent(TimerLogger.Event.FEC,
+        mTimerLogger.logTimerEvent(TimerLogger.Event.FEC,
                 FormEntryController.EVENT_PROMPT_NEW_REPEAT, null);
 
         if (formController.getLastRepeatCount() > 0) {
@@ -1851,9 +1853,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // Log the timer event
         FormController formController = Collect.getInstance().getFormController();
         if(complete) {
-            formController.getTimerLogger().logTimerEvent(TimerLogger.Event.FINALIZE, 0, null);
+            mTimerLogger.logTimerEvent(TimerLogger.Event.FINALIZE, 0, null);
         } else {
-            formController.getTimerLogger().logTimerEvent(TimerLogger.Event.STOP, 0, null);
+            mTimerLogger.logTimerEvent(TimerLogger.Event.STOP, 0, null);
         }
 
         synchronized (saveDialogLock) {
@@ -2555,6 +2557,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             });
         }
 
+
         // Set saved answer path
         if (formController.getInstancePath() == null) {
 
@@ -2566,11 +2569,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             String path = Collect.INSTANCES_PATH + File.separator + file + "_"
                     + time;
             if (FileUtils.createFolder(path)) {
-                formController.setInstancePath(new File(path + File.separator
-                        + file + "_" + time + ".xml"));
+                File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
+                formController.setInstancePath(instanceFile);
 
-                formController.getTimerLogger().setPath(path);
-                formController.getTimerLogger().logTimerEvent(TimerLogger.Event.START, 0, null);
+                mTimerLogger = new TimerLogger(instanceFile,
+                        PreferenceManager.getDefaultSharedPreferences(this));
+                mTimerLogger.logTimerEvent(TimerLogger.Event.START, 0, null);
                 Log.i("debug", "$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Create Path");
 
             }
@@ -2578,7 +2582,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            formController.getTimerLogger().logTimerEvent(TimerLogger.Event.RESUME, 0, null);
+            mTimerLogger = new TimerLogger(formController.getInstancePath(),
+                    PreferenceManager.getDefaultSharedPreferences(this));
+            mTimerLogger.logTimerEvent(TimerLogger.Event.RESUME, 0, null);
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy

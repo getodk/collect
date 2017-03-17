@@ -15,14 +15,17 @@
  */
 package org.odk.collect.android.utilities;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
@@ -126,26 +129,23 @@ public class TimerLogger {
     private File timerlogFile = null;
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
-    private boolean timerEnabled = false;               // Set true of the timer logger is enabled
+    private boolean mTimerEnabled = false;               // Set true of the timer logger is enabled
     private boolean locationRecordingEnabled = false;   // Set true to also record gps coordinates
 
 
-    public TimerLogger(File instancePath, FormController formController) {
+    public TimerLogger(File instanceFile, SharedPreferences sharedPreferences) {
 
         /*
          * The timer logger is enabled if:
-         *   - A file name ending in .csv or .zip  has been specified in the meta section of the form
-         *           <orx:timing>timing.csv</orx:timing>
          *   - The timer log has been enabled in the administration properties of collect
          */
-        filename = formController.getSubmissionMetadata().timing;
+        mTimerEnabled = sharedPreferences.getBoolean(
+                PreferencesActivity.KEY_TIMER_LOG_ENABLED, false);
 
-        // TODO Check preferences
-        timerEnabled = (filename != null && (filename.endsWith(".csv") || filename.endsWith(".zip")));
-
-        if (timerEnabled) {
-            if (instancePath != null) {
-                File instanceFolder = instancePath.getParentFile();
+        if (mTimerEnabled) {
+            filename = "timing.csv";
+            if (instanceFile != null) {
+                File instanceFolder = instanceFile.getParentFile();
                 timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
             }
             mEvents = new ArrayList<Event>();
@@ -154,14 +154,14 @@ public class TimerLogger {
 
 
     public void setPath(String instancePath) {
-        if (timerEnabled) {
+        if (mTimerEnabled) {
             timerlogFile = new File(instancePath + File.separator + filename);
         }
     }
 
     public void logTimerEvent(int eventType, int fecType, TreeReference ref) {
 
-        if (timerEnabled) {
+        if (mTimerEnabled) {
             // Calculate the time and add the event to the events array
             long start = getEventTime();
             String node = ref == null ? "" : ref.toString();
@@ -185,7 +185,7 @@ public class TimerLogger {
 
     public void exitView() {
 
-        if (timerEnabled) {
+        if (mTimerEnabled) {
             Log.e(t, "######### Exit view");
 
             // Calculate the time and add the event to the events array

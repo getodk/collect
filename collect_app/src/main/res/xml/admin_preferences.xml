@@ -89,6 +89,12 @@
             android:summary="@string/found_in_settings"
             android:title="@string/autosend_network" />
         <CheckBoxPreference
+            android:id="@+id/timer_log"
+            android:defaultValue="true"
+            android:key="timer_log"
+            android:summary="@string/found_in_settings"
+            android:title="@string/timer_log" />
+        <CheckBoxPreference
             android:id="@+id/navigation"
             android:defaultValue="true"
             android:key="navigation"

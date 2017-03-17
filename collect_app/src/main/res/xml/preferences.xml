@@ -59,6 +59,16 @@
             android:title="@string/autosend_network" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="@string/logging"
+        android:title="@string/logging" >
+        <CheckBoxPreference
+            android:id="@+id/timer_log"
+            android:defaultValue="false"
+            android:key="timer_log"
+            android:summary="@string/timer_log_summary"
+            android:title="@string/timer_log" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client" >
        <ListPreference android:id="@+id/constraint_behavior"
