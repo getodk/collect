@@ -206,11 +206,13 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (mTitleFontColor != -1) {
 
                 int tabTitleTextColor;
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    tabTitleTextColor=getResources().getColor(mTitleFontColor,null);
-                }else{
-                    tabTitleTextColor=getResources().getColor(mTitleFontColor);
+                    tabTitleTextColor = getResources().getColor(mTitleFontColor, getContext().getTheme());
+                } else {
+                    tabTitleTextColor = getResources().getColor(mTitleFontColor);
                 }
+
                 tabTitleView.setTextColor(tabTitleTextColor);
             }
 
