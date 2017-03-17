@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -76,7 +77,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_SORT + 1;
+    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
@@ -84,6 +85,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
+    private static final String SELECTED_FORMS = "selectedForms";
 
     private static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
@@ -107,6 +109,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private HashMap<String, FormDetails> mFormNamesAndURLs = new HashMap<String, FormDetails>();
     private SimpleAdapter mFormListAdapter;
     private ArrayList<HashMap<String, String>> mFormList;
+    private ArrayList<HashMap<String, String>> mFilteredFormList = new ArrayList<>();
+    private LinkedHashSet<String> mSelectedForms = new LinkedHashSet<>();
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -183,6 +187,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (savedInstanceState.containsKey(SHOULD_EXIT)) {
                 mShouldExit = savedInstanceState.getBoolean(SHOULD_EXIT);
             }
+            if (savedInstanceState.containsKey(SELECTED_FORMS)) {
+                mSelectedForms = (LinkedHashSet<String>) savedInstanceState.getSerializable(SELECTED_FORMS);
+            }
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FORMLIST)) {
@@ -192,6 +199,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         } else {
             mFormList = new ArrayList<HashMap<String, String>>();
         }
+
+        mFilteredFormList.addAll(mFormList);
 
         if (getLastNonConfigurationInstance() instanceof DownloadFormListTask) {
             mDownloadFormListTask = (DownloadFormListTask) getLastNonConfigurationInstance();
@@ -226,7 +235,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         };
 
         mFormListAdapter =
-                new SimpleAdapter(this, mFormList, R.layout.two_item_multiple_choice, data, view);
+                new SimpleAdapter(this, mFilteredFormList, R.layout.two_item_multiple_choice, data, view);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         setListAdapter(mFormListAdapter);
@@ -272,6 +281,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         } else {
             Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                     "<missing form detail>");
+        }
+
+        if (getListView().isItemChecked(position)) {
+            mSelectedForms.add(((HashMap<String, String>) getListAdapter().getItem(position)).get(FORMDETAIL_KEY));
+        } else {
+            mSelectedForms.remove(((HashMap<String, String>) getListAdapter().getItem(position)).get(FORMDETAIL_KEY));
         }
     }
 
@@ -327,6 +342,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         outState.putBoolean(DIALOG_SHOWING, mAlertShowing);
         outState.putBoolean(SHOULD_EXIT, mShouldExit);
         outState.putSerializable(FORMLIST, mFormList);
+        outState.putSerializable(SELECTED_FORMS, mSelectedForms);
     }
 
     @Override
@@ -405,7 +421,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @Override
     protected void setupAdapter(final String sortOrder) {
         getListView().clearChoices();
-        Collections.sort(mFormList, new Comparator<HashMap<String, String>>() {
+        Collections.sort(mFilteredFormList, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
                 if (sortOrder.equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
@@ -417,7 +433,31 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         });
 
         mFormListAdapter.notifyDataSetChanged();
-        selectSupersededForms();
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        mFilteredFormList.clear();
+        for (HashMap<String, String> form : mFormList) {
+            if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                mFilteredFormList.add(form);
+            }
+        }
+        mFormListAdapter.notifyDataSetChanged();
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected void checkPreviouslyCheckedItems() {
+        getListView().clearChoices();
+        for (int i = 0; i < getListView().getCount(); i++) {
+            HashMap<String, String> item =
+                    (HashMap<String, String>) getListAdapter().getItem(i);
+            if (mSelectedForms.contains(item.get(FORMDETAIL_KEY))) {
+                getListView().setItemChecked(i, true);
+            }
+        }
     }
 
     /**
@@ -563,6 +603,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             HashMap<String, String> item = mFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
                 ls.setItemChecked(idx, true);
+                mSelectedForms.add(item.get(FORMDETAIL_KEY));
             }
         }
     }
