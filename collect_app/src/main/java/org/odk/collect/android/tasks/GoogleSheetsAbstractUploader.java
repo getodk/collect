@@ -319,7 +319,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         Spreadsheet response = null;
         try {
-            response = mService.spreadsheets()
+            response = mSheetsService.spreadsheets()
                     .get(spreadsheetId)
                     .setIncludeGridData(false)
                     .execute();
@@ -390,7 +390,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             // Send the new row to the API for insertion.
             // write the headers
             try {
-                mService.spreadsheets().values()
+                mSheetsService.spreadsheets().values()
                         .append(spreadsheetId, spreadsheetName, row)
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
@@ -444,7 +444,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             row.setValues(content);
 
             try {
-                mService.spreadsheets().values()
+                mSheetsService.spreadsheets().values()
                         .update(spreadsheetId, spreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
@@ -553,7 +553,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         // Send the new row to the API for insertion.
         try {
-            mService.spreadsheets().values()
+            mSheetsService.spreadsheets().values()
                     .append(spreadsheetId, spreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
@@ -924,7 +924,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
      */
     private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
             throws IOException {
-        ValueRange response = mService.spreadsheets()
+        ValueRange response = mSheetsService.spreadsheets()
                 .values()
                 .get(spreadsheetId, spreadsheetName)
                 .execute();

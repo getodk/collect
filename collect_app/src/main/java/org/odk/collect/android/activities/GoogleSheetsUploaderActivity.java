@@ -530,7 +530,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         GoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.sheets.v4.Sheets.Builder(
+            mSheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
                     transport, jsonFactory, credential)
                     .setApplicationName("ODK-Collect")
                     .build();

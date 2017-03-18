@@ -39,7 +39,7 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
     public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
     private final static String tag = "GoogleSheetsTask";
     protected String mGoogleUserName = null;
-    protected com.google.api.services.sheets.v4.Sheets mService = null;
+    protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
     protected Exception mLastError = null;
     InstanceUploaderListener mStateListener;
 
