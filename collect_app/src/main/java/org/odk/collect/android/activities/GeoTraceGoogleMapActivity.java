@@ -76,7 +76,7 @@ import java.util.concurrent.TimeUnit;
 public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture schedulerHandler;
+    private ScheduledFuture<?> schedulerHandler;
     private Button play_button;
     private Button save_button;
     public Button polygon_button;

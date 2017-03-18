@@ -125,7 +125,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                     // e.g., whitespace (text)
                     continue;
                 }
-                Element xformElement = (Element) xformsElement.getElement(i);
+                Element xformElement = xformsElement.getElement(i);
                 if (!isXformsListNamespacedElement(xformElement)) {
                     // someone else's extension?
                     continue;
