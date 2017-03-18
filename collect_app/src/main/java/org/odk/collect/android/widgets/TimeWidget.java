@@ -64,7 +64,7 @@ public class TimeWidget extends QuestionWidget {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 mTimePicker.setHour(ldt.getHourOfDay());
                 mTimePicker.setMinute(ldt.getMinuteOfHour());
-            }else{
+            } else {
                 mTimePicker.setCurrentHour(ldt.getHourOfDay());
                 mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
             }
@@ -98,10 +98,9 @@ public class TimeWidget extends QuestionWidget {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mTimePicker.setHour(ldt.getHourOfDay());
             mTimePicker.setMinute(ldt.getMinuteOfHour());
-        }else{
+        } else {
             mTimePicker.setCurrentHour(ldt.getHourOfDay());
             mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
-
         }
     }
 
@@ -115,7 +114,7 @@ public class TimeWidget extends QuestionWidget {
             ldt = (new DateTime()).withTime(mTimePicker.getHour(),
                             mTimePicker.getMinute(),
                             0, 0);
-        }else{
+        } else {
              ldt = (new DateTime()).withTime(mTimePicker.getCurrentHour(),
                             mTimePicker.getCurrentMinute(),
                             0, 0);
