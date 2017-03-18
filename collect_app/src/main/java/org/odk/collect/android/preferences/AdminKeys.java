@@ -32,7 +32,6 @@ public final class AdminKeys {
     private static String KEY_CHANGE_PROTOCOL_SETTINGS  = "change_protocol_settings";
 
     // client
-            static String KEY_FORM_PROCESSING_LOGIC     = "form_processing_logic";
 
     private static String KEY_CHANGE_FONT_SIZE          = "change_font_size";
     private static String KEY_DEFAULT_TO_FINALIZED      = "default_to_finalized";
