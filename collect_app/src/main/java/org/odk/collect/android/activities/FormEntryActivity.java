@@ -710,7 +710,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 if (filePath != null) {
                     new File(filePath).delete();
                 }
+                        try{
                 getContentResolver().delete(mediaUri, null, null);
+                        }catch (Exception e){
+                            Log.d(t,e.getMessage());
+                        }
                 break;
             case AUDIO_CHOOSER:
             case VIDEO_CHOOSER:
