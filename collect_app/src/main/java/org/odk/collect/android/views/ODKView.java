@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -48,6 +47,7 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -90,7 +90,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         mView.setPadding(0, 7, 0, 0);
 
         mLayout =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 
@@ -164,15 +164,11 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         } catch (ExternalParamsException e) {
                             Log.e("ExternalParamsException", e.getMessage(), e);
 
-                            Toast.makeText(getContext(),
-                                    e.getMessage(), Toast.LENGTH_SHORT)
-                                    .show();
+                            ToastUtils.showShortToast(e.getMessage());
                         } catch (ActivityNotFoundException e) {
                             Log.e("ActivityNotFoundExcept", e.getMessage(), e);
 
-                            Toast.makeText(getContext(),
-                                    errorString, Toast.LENGTH_SHORT)
-                                    .show();
+                            ToastUtils.showShortToast(errorString);
                         }
                     }
                 });
@@ -320,9 +316,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         ((IBinaryWidget) q).setBinaryData(answer);
                     } catch (Exception e) {
                         Log.e(t, e.getMessage(), e);
-                        Toast.makeText(getContext(),
-                                getContext().getString(R.string.error_attaching_binary_file,
-                                        e.getMessage()), Toast.LENGTH_LONG).show();
+                        ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
+                                        e.getMessage()));
                     }
                     set = true;
                     break;

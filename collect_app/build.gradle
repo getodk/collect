@@ -20,7 +20,7 @@ def getMasterCommitCount = { ->
     try {
         def stdout = new ByteArrayOutputStream()
         exec {
-            switch(ant.properties.os){
+            switch (ant.properties.os) {
                 case 'windows':
                     commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
                     break
@@ -57,7 +57,7 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion(22)
+    compileSdkVersion(25)
     buildToolsVersion("25.0.2")
 
     defaultConfig {
@@ -150,13 +150,27 @@ dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '4.2'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
+    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.0'
+    compile group: 'com.google.firebase', name: 'firebase-core', version: '9.2.0'
+    compile group: 'com.google.firebase', name: 'firebase-crash', version: '9.2.0'
+    compile 'pub.devrel:easypermissions:0.2.1'
+    compile('com.google.apis:google-api-services-sheets:v4-rev463-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
+    compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
+    compile group: 'com.google.http-client', name: 'google-http-client-android', version: '1.22.0'
+    compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
     testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
     testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
-    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '24.0.0'
+    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.1.0'
     androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
 }

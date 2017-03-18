@@ -34,7 +34,6 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.DateWidgetUtils;
 
-import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 
