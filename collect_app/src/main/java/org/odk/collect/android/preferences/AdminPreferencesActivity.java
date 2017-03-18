@@ -44,7 +44,7 @@ import java.io.ObjectOutputStream;
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
-<<<<<<< HEAD
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-<<<<<<< HEAD
-=======
 
->>>>>>> d118f43170d3d8fa17e074727a20898b2444fc25
         Preference mChangeAdminPwPreference = pref(KEY_CHANGE_ADMIN_PASSWORD);
         mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -173,9 +170,9 @@ public class AdminPreferencesActivity extends PreferenceActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-=======
+
     public static String ADMIN_PREFERENCES = "admin_prefs";
->>>>>>> upstream/master
+
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
@@ -206,10 +203,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
         }
         return res;
     }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
+
 
 
 
@@ -260,6 +254,4 @@ public class AdminPreferencesActivity extends PreferenceActivity {
         }
         return super.onOptionsItemSelected(item);
     }
->>>>>>> upstream/master
->>>>>>> d118f43170d3d8fa17e074727a20898b2444fc25
 }
