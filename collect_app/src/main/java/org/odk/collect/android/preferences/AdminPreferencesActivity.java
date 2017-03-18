@@ -66,21 +66,6 @@ public class AdminPreferencesActivity extends AppPreferenceActivity {
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        ListPreference mFormProcessingLogicPreference = listPref(KEY_FORM_PROCESSING_LOGIC);
-        mFormProcessingLogicPreference.setSummary(mFormProcessingLogicPreference.getEntry());
-        mFormProcessingLogicPreference.setOnPreferenceChangeListener(
-                new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        int index = ((ListPreference) preference).findIndexOfValue(
-                                newValue.toString());
-                        String entry = (String) ((ListPreference) preference).getEntries()[index];
-                        preference.setSummary(entry);
-                        return true;
-                    }
-                });
-
         Preference mChangeAdminPwPreference = pref(KEY_CHANGE_ADMIN_PASSWORD);
         mChangeAdminPwPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -224,49 +209,5 @@ public class AdminPreferencesActivity extends AppPreferenceActivity {
             }
         }
         return res;
-    }
-
-    public static FormDef.EvalBehavior getConfiguredFormProcessingLogic(Context context) {
-        FormDef.EvalBehavior mode;
-
-        SharedPreferences adminPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
-        String formProcessingLoginIndex = adminPreferences.getString(KEY_FORM_PROCESSING_LOGIC,
-                context.getString(R.string.default_form_processing_logic));
-        try {
-            if ("-1".equals(formProcessingLoginIndex)) {
-                mode = FormDef.recommendedMode;
-            } else {
-                int preferredModeIndex = Integer.parseInt(formProcessingLoginIndex);
-                switch (preferredModeIndex) {
-                    case 0: {
-                        mode = FormDef.EvalBehavior.Fast_2014;
-                        break;
-                    }
-                    case 1: {
-                        mode = FormDef.EvalBehavior.Safe_2014;
-                        break;
-                    }
-                    case 2: {
-                        mode = FormDef.EvalBehavior.April_2014;
-                        break;
-                    }
-                    case 3: {
-                        mode = FormDef.EvalBehavior.Legacy;
-                        break;
-                    }
-                    default: {
-                        mode = FormDef.recommendedMode;
-                        break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.w("AdminPrefActivity",
-                    "Unable to get EvalBehavior -- defaulting to recommended mode");
-            mode = FormDef.recommendedMode;
-        }
-
-        return mode;
     }
 }
