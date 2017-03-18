@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!--Text Sizes-->
+    <dimen name="text_14">14sp</dimen>
+    <dimen name="text_21">21sp</dimen>
+
+
+
+    <!--Layout Dimensions-->
+    <dimen name="size_8">8dp</dimen>
+    <dimen name="size_4">4dp</dimen>
+    <dimen name="size_20">20dp</dimen>
+    <dimen name="size_250">250dp</dimen>
+
+
+
+
+
+
+
+</resources>

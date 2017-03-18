@@ -19,4 +19,6 @@ the License.
     <drawable name="white">#ffffffff</drawable>
     <drawable name="black">#ff000000</drawable>
 
+    <color name="gainsboro">#DDDDDD</color>
+
 </resources>
