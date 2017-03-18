@@ -16,6 +16,7 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     private Context c;
     private int id;
     private List<DriveListItem> items;
+    private boolean enabled;
 
     public FileArrayAdapter(Context context, int textViewResourceId,
             List<DriveListItem> objects) {
@@ -44,6 +46,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         c = context;
         id = textViewResourceId;
         items = objects;
+        enabled = true;
     }
 
     public DriveListItem getItem(int i) {
@@ -79,16 +82,16 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
 
             if (o.getType() == 1) {
-                Drawable d = c.getResources().getDrawable(R.drawable.ic_download);
+                Drawable d = ContextCompat.getDrawable(c, R.drawable.ic_download);
                 iv.setImageDrawable(d);
                 cb.setVisibility(View.VISIBLE);
             }
             if (o.getType() == 3) {
-                Drawable d = c.getResources().getDrawable(R.drawable.ic_back);
+                Drawable d = ContextCompat.getDrawable(c, R.drawable.ic_back);
                 iv.setImageDrawable(d);
             }
             if (o.getType() == 2 || o.getType() == 4 || o.getType() == 5) {
-                Drawable d = c.getResources().getDrawable(R.drawable.ic_folder);
+                Drawable d = ContextCompat.getDrawable(c, R.drawable.ic_folder);
                 iv.setImageDrawable(d);
             }
 
@@ -101,5 +104,13 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
         }
         return v;
+    }
+    @Override
+    public boolean isEnabled(int position) {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

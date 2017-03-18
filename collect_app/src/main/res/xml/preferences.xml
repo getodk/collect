@@ -75,6 +75,12 @@
             android:key="font_size"
             android:title="@string/font_size" />
         <CheckBoxPreference
+            android:id="@+id/instance_sync"
+            android:defaultValue="true"
+            android:key="instance_sync"
+            android:summary="@string/instance_sync_summary"
+            android:title="@string/instance_sync" />
+        <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
             android:key="default_completed"

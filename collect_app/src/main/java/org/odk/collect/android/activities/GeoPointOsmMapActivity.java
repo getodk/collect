@@ -28,17 +28,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
@@ -129,20 +130,19 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             setContentView(R.layout.geopoint_osm_layout);
         } catch (NoClassDefFoundError e) {
             e.printStackTrace();
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
 
-        if (PlayServicesUtil.checkPlayServices(GeoPointOsmMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointOsmMapActivity.this)) {
 
             mMap = (MapView) findViewById(R.id.omap);
             mHelper = new MapHelper(this, mMap, GeoPointOsmMapActivity.this);
             mMap.setMultiTouchControls(true);
             mMap.setBuiltInZoomControls(true);
             mMarker = new Marker(mMap);
-            mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+            mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
 
             handler.postDelayed(new Runnable() {
@@ -541,7 +541,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mShowLocationButton.setEnabled(true);
         mMap.invalidate();
         mMarker.setPosition(geoPoint);
-        mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+        mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         mMarker.setDraggable(true);
         mLatLng = geoPoint;
         mIsDragged = true;

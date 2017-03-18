@@ -16,7 +16,25 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 * ODK developer Slack archive: [http://opendatakit.slackarchive.io](http://opendatakit.slackarchive.io) 
 * ODK developer wiki: [https://github.com/opendatakit/opendatakit/wiki](https://github.com/opendatakit/opendatakit/wiki)
 
+## Release cycle
+New versions of ODK Collect are released on the last Sunday of each month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes).
+
+## Testing a form locally
+
+1. [Make](https://xlsform.org) or get ([example forms](https://github.com/XLSForm/example-forms), [test forms](https://github.com/XLSForm/test-forms)) an XLSForm.
+
+1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://opendatakit.org/xiframe/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
+
+1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
+	```
+	adb push my_form.xml /sdcard/odk/forms/
+	```
+
+1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
+
 ## Setting up your development environment
+
+1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
 
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
 
@@ -56,5 +74,10 @@ Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opend
 Current and previous production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk).
 
 ## Troubleshooting
+#### Error when running Robolectric tests from Android Studio on macOS: `build/intermediates/bundles/debug/AndroidManifest.xml (No such file or directory)`
+> Configure the default JUnit test runner configuration in order to work around a bug where IntelliJ / Android Studio does not set the working directory to the module being tested. This can be accomplished by editing the run configurations, Defaults -> JUnit and changing the working directory value to $MODULE_DIR$.
+
+> Source: [Robolectric Wiki](https://github.com/robolectric/robolectric/wiki/Running-tests-in-Android-Studio#notes-for-mac).
+
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
 When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.

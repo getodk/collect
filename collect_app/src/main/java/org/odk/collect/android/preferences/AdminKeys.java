@@ -38,6 +38,7 @@ public final class AdminKeys {
     private static String KEY_HIGH_RESOLUTION           = "high_resolution";
     private static String KEY_SHOW_SPLASH_SCREEN        = "show_splash_screen";
     private static String KEY_DELETE_AFTER_SEND         = "delete_after_send";
+    private static String KEY_INSTANCE_FORM_SYNC        = "instance_form_sync";
 
     private static String KEY_AUTOSEND_WIFI             = "autosend_wifi";
     private static String KEY_AUTOSEND_NETWORK          = "autosend_network";
@@ -73,6 +74,7 @@ public final class AdminKeys {
         ag(KEY_NAVIGATION,                 PreferenceKeys.KEY_NAVIGATION),
         ag(KEY_CHANGE_PASSWORD,            PreferenceKeys.KEY_PASSWORD),
         ag(KEY_CHANGE_USERNAME,            PreferenceKeys.KEY_USERNAME),
-        ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)
+        ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT),
+        ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC)
     };
 }

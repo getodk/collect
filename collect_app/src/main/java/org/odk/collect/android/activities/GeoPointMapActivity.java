@@ -31,7 +31,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
@@ -124,13 +124,12 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
             e.printStackTrace();
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
 
-        if (PlayServicesUtil.checkPlayServices(GeoPointMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointMapActivity.this)) {
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
@@ -196,8 +195,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private void setupMap(GoogleMap googleMap) {
         mMap = googleMap;
         if (mMap == null) {
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }

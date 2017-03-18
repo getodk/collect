@@ -24,9 +24,8 @@ import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -218,10 +217,9 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             }
             mImageView = new ImageView(getContext());
             mImageView.setId(QuestionWidget.newUniqueId());
-            Display display = ((WindowManager) getContext().getSystemService(
-                    Context.WINDOW_SERVICE)).getDefaultDisplay();
-            int screenWidth = display.getWidth();
-            int screenHeight = display.getHeight();
+            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+            int screenWidth = metrics.widthPixels;
+            int screenHeight = metrics.heightPixels;
 
             File f = new File(mInstanceFolder + File.separator + mBinaryName);
 
@@ -309,7 +307,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         if (mBinaryName != null) {
-            return new StringData(mBinaryName.toString());
+            return new StringData(mBinaryName);
         } else {
             return null;
         }
