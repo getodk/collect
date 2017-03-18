@@ -38,6 +38,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     private Context c;
     private int id;
     private List<DriveListItem> items;
+    private boolean enabled;
 
     public FileArrayAdapter(Context context, int textViewResourceId,
             List<DriveListItem> objects) {
@@ -45,6 +46,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         c = context;
         id = textViewResourceId;
         items = objects;
+        enabled = true;
     }
 
     public DriveListItem getItem(int i) {
@@ -102,5 +104,13 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
         }
         return v;
+    }
+    @Override
+    public boolean isEnabled(int position) {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
