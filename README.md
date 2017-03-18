@@ -82,15 +82,3 @@ Current and previous production builds can be found on the [ODK website](https:/
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
 When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.
 
-##Working with Forms
-**Sample Form:**
-[XLS](https://opendatakit.org/wp-content/uploads/2013/06/sample_xlsform.xls) ,
-[XML](https://drive.google.com/uc?export=download&id=0B_b-74whjnxtVGotUmpEOXpCLVE)  
-
-**Convert from XLS to XML:** [xiframe](http://opendatakit.org/xiframe/)
-
-**Adding form to Device:**  
-Simply copy the required xml and media files to the device's local app folder usually located in /data/odk/forms/  
-
-One can also upload the xml file from a Google Drive Account. Access the General Settings and change platform to 'Google Drive, Google Sheets' and configure your Account. Next, 'Get Blank Form' will give you an option to search or go through your drive to add the required forms.  
-Note: Using Google Drive will require you to generate an [API Key](https://github.com/opendatakit/collect/#using-apis-for-local-development) for your application.
