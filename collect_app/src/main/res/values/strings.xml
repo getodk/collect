@@ -314,6 +314,7 @@
 <string name="aggregate_preferences">ODK Aggregate settings</string>
 <string name="other_preferences">Other platform settings</string>
 <string name="google_preferences">Google Sheets settings</string>
+<string name="google_sheets_url_hint"><font size="13">http://docs.google.com/spreadsheets/d/sheet_id</font></string>
 <string name="drive_get_file">Getting %1$s and media files.</string>
 <string name="no_google_account">No Google Account Selected!</string>
 <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>

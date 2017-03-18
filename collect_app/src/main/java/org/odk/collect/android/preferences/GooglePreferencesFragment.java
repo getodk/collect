@@ -60,6 +60,7 @@ public class GooglePreferencesFragment extends PreferenceFragment {
 
         mGoogleSheetsUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
+        mGoogleSheetsUrlPreference.getEditText().setHint(R.string.google_sheets_url_hint);
         mGoogleSheetsUrlPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -69,7 +70,6 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                 while (url.endsWith("/")) {
                     url = url.substring(0, url.length() - 1);
                 }
-
                 if (UrlUtils.isValidUrl(url) || url.length() == 0) {
                     preference.setSummary(newValue.toString());
                     return true;
