@@ -1,10 +1,11 @@
+apply plugin: 'com.android.application'
+
 import com.android.ddmlib.DdmPreferences
 
 /**************************************************************************************************
  GRADLE CONFIG
  *************************************************************************************************/
 
-apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
 
 DdmPreferences.setTimeOut(60000)
@@ -160,10 +161,11 @@ dependencies {
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
+    compile('com.google.apis:google-api-services-drive:v3-rev64-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
     compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
-    compile group: 'com.google.http-client', name: 'google-http-client-android', version: '1.22.0'
-    compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
