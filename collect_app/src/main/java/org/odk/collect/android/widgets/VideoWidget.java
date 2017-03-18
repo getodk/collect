@@ -289,7 +289,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Bitmap frame = mRetriever.getFrameAtTime();
                 int width = frame.getWidth();
                 int height = frame.getHeight();
-                Log.d("Rajt "+Integer.toString(width),Integer.toString(height));
                 answerLayout.removeAllViews();
                 answerLayout.addView(mVideoView);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams
