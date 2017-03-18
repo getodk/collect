@@ -20,6 +20,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -29,6 +31,7 @@ import android.provider.MediaStore.Video;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -68,12 +71,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private Button mCaptureButton;
     private Button mPlayButton;
     private Button mChooseButton;
+    private Button mFullScreenButton;
     private VideoView mVideoView;
     private MediaController mMediaController;
     private String mBinaryName;
-
+    private DisplayMetrics metrics;
     private String mInstanceFolder;
-
+    private LinearLayout answerLayout;
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
     private static final String NEXUS7 = "Nexus 7";
@@ -202,17 +206,17 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
         //setup video view and media controller
         mVideoView = new VideoView(getContext());
+
         mVideoView.setId(QuestionWidget.newUniqueId());
         mVideoView.setPadding(20, 20, 20, 20);
         mVideoView.setVisibility(View.INVISIBLE);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        metrics = context.getResources().getDisplayMetrics();
         int videoViewHeight = (metrics.heightPixels * 4) / 10;
         mVideoView.setLayoutParams(new FrameLayout.LayoutParams
                 (ViewGroup.LayoutParams.MATCH_PARENT, videoViewHeight));
         mMediaController = new MediaController(getContext());
         mMediaController.setAnchorView(mVideoView);
         mVideoView.setMediaController(mMediaController);
-
         // on play, launch the appropriate viewer
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,6 +227,17 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                                 "click", mPrompt.getIndex());
                 File f = new File(mInstanceFolder + File.separator
                         + mBinaryName);
+
+                MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                mRetriever.setDataSource(mInstanceFolder + File.separator + mBinaryName);
+                Bitmap frame = mRetriever.getFrameAtTime();
+                int width = frame.getWidth();
+                int height = frame.getHeight();
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams
+                        ((width * (metrics.heightPixels*4)/10)/height, (metrics.heightPixels*4)/10 );
+                layoutParams.gravity = Gravity.CENTER;
+                layoutParams.topMargin = 20;
+                mVideoView.setLayoutParams(layoutParams);
                 mVideoView.setVisibility(View.VISIBLE);
                 mVideoView.setVideoURI(Uri.fromFile(f));
                 mVideoView.requestFocus();
@@ -232,10 +247,62 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mVideoView.seekTo(0);
+                answerLayout.removeAllViews();
+                answerLayout.addView(mCaptureButton);
+                answerLayout.addView(mChooseButton);
+                answerLayout.addView(mPlayButton);
+                answerLayout.addView(mFullScreenButton);
+                answerLayout.addView(mVideoView);
+                MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                mRetriever.setDataSource(mInstanceFolder + File.separator + mBinaryName);
+                Bitmap frame = mRetriever.getFrameAtTime();
+                int width = frame.getWidth();
+                int height = frame.getHeight();
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams
+                        ((width * (metrics.heightPixels*4)/10)/height, (metrics.heightPixels*4)/10 );
+                layoutParams.gravity = Gravity.CENTER;
+                layoutParams.topMargin = 20;
+                mVideoView.setLayoutParams(layoutParams);
+                mVideoView.seekTo(1);
             }
         });
+        mFullScreenButton = new Button(getContext());
+        mFullScreenButton.setId(QuestionWidget.newUniqueId());
+        mFullScreenButton.setText(getContext().getString(R.string.play_full_screen));
+        mFullScreenButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mFullScreenButton.setPadding(20, 20, 20, 20);
+        mFullScreenButton.setEnabled(!prompt.isReadOnly());
+        mFullScreenButton.setLayoutParams(params);
+        mFullScreenButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(VideoWidget.this, "playButton",
+                                "click", mPrompt.getIndex());
+                File f = new File(mInstanceFolder + File.separator
+                        + mBinaryName);
 
+                MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                mRetriever.setDataSource(mInstanceFolder + File.separator + mBinaryName);
+                Bitmap frame = mRetriever.getFrameAtTime();
+                int width = frame.getWidth();
+                int height = frame.getHeight();
+                Log.d("Rajt "+Integer.toString(width),Integer.toString(height));
+                answerLayout.removeAllViews();
+                answerLayout.addView(mVideoView);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams
+                        ((width * ((metrics.heightPixels-100)*6)/10)/height, (metrics.heightPixels*6)/10 -100);
+                layoutParams.gravity = Gravity.CENTER;
+                layoutParams.topMargin = 20;
+                mVideoView.setLayoutParams(layoutParams);
+                mVideoView.setVisibility(View.VISIBLE);
+                mVideoView.setVideoURI(Uri.fromFile(f));
+                mVideoView.requestFocus();
+                mVideoView.start();
+            }
+        });
         //if videoview is unable to play
         mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
@@ -259,16 +326,19 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mBinaryName = prompt.getAnswerText();
         if (mBinaryName != null) {
             mPlayButton.setEnabled(true);
+            mFullScreenButton.setEnabled(true);
         } else {
             mPlayButton.setEnabled(false);
+            mFullScreenButton.setEnabled(false);
         }
 
         // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(mCaptureButton);
         answerLayout.addView(mChooseButton);
         answerLayout.addView(mPlayButton);
+        answerLayout.addView(mFullScreenButton);
         answerLayout.addView(mVideoView);
         addAnswerView(answerLayout);
 
@@ -301,6 +371,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mVideoView.setVisibility(View.INVISIBLE);
         // reset buttons
         mPlayButton.setEnabled(false);
+        mFullScreenButton.setEnabled(false);
     }
 
     @Override

@@ -494,4 +494,5 @@
 <string name="sorting_menu_open">Open sorting menu</string>
 <string name="sorting_menu_close">Close sorting menu</string>
 <string name="sort_the_list">Sort the list</string>
+    <string name="play_full_screen">Play In Full Screen</string>
 </resources>
