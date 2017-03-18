@@ -187,7 +187,7 @@ public class EncryptionUtils {
             // start building elementSignatureSource...
             appendElementSignatureSource(formId);
             if (formVersion != null) {
-                appendElementSignatureSource(formVersion.toString());
+                appendElementSignatureSource(formVersion);
             }
             appendElementSignatureSource(base64RsaEncryptedSymmetricKey);
 

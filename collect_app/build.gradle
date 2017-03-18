@@ -151,6 +151,17 @@ dependencies {
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '4.2'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
     compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.0'
+    compile 'pub.devrel:easypermissions:0.2.1'
+    compile('com.google.apis:google-api-services-sheets:v4-rev463-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
+    compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
+    compile group: 'com.google.http-client', name: 'google-http-client-android', version: '1.22.0'
+    compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'

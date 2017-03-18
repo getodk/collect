@@ -197,7 +197,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         if (mBinaryName != null) {
-            return new StringData(mBinaryName.toString());
+            return new StringData(mBinaryName);
         } else {
             return null;
         }
