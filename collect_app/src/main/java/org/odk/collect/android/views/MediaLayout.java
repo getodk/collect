@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.views;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +24,8 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageButton;
-import android.util.Log;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -143,7 +142,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             Intent i = new Intent("android.intent.action.VIEW");
             i.setDataAndType(Uri.fromFile(videoFile), "video/*");
             if (i.resolveActivity(getContext().getPackageManager()) != null) {
-                ((Activity) getContext()).startActivity(i);
+                getContext().startActivity(i);
             } else {
                 ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, "view video"));
             }
