@@ -78,21 +78,21 @@ public class MapHelper {
 
 
     public MapHelper(Context pContext, GoogleMap pGoogleMap) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
-        this.mGoogleMap = pGoogleMap;
+        mGoogleMap = pGoogleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
-        this.mOsmMap = pOsmMap;
+        mOsmMap = pOsmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
