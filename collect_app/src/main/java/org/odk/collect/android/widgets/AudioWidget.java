@@ -233,10 +233,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object binaryuri) {
-        // when replacing an answer. remove the current media.
-        if (mBinaryName != null) {
-            deleteMedia();
-        }
+
 
         // get the file path and create a copy in the instance folder
         String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
@@ -260,6 +257,10 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             Uri AudioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
             Log.i(t, "Inserting AUDIO returned uri = " + AudioURI.toString());
+            // when replacing an answer. remove the current media.
+            if (mBinaryName != null && !mBinaryName.equals(newAudio.getName())) {
+                deleteMedia();
+            }
             mBinaryName = newAudio.getName();
             Log.i(t, "Setting current answer to " + newAudio.getName());
         } else {
