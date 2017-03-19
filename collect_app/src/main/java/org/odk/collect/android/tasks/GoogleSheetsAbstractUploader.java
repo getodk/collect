@@ -19,15 +19,13 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Images;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Xml;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.InputStreamContent;
+import com.google.api.client.http.FileContent;
+import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
@@ -36,12 +34,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.FormException;
-import org.odk.collect.android.picasa.AlbumEntry;
-import org.odk.collect.android.picasa.AlbumFeed;
-import org.odk.collect.android.picasa.PhotoEntry;
-import org.odk.collect.android.picasa.PicasaClient;
-import org.odk.collect.android.picasa.PicasaUrl;
-import org.odk.collect.android.picasa.UserFeed;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -53,8 +45,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -62,13 +54,15 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//import com.google.api.services.drive.model.ParentReference;
+
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
 public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
-    protected static final String picasa_fail = "Picasa Error: ";
+    protected static final String drive_fail = "Media Error: ";
     protected static final String oauth_fail = "OAUTH Error: ";
     protected static final String form_fail = "Form Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
@@ -146,13 +140,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         HashMap<String, String> answersToUpload = new HashMap<>();
         HashMap<String, String> photosToUpload = new HashMap<>();
-        HashMap<String, PhotoEntry> uploadedPhotos = new HashMap<>();
-
-        HttpTransport h = AndroidHttp.newCompatibleTransport();
-        GoogleCredential gc = new GoogleCredential();
-        gc.setAccessToken(token);
-
-        PicasaClient client = new PicasaClient(h.createRequestFactory(gc));
+        HashMap<String, String> uploadedPhotos = new HashMap<>();
 
         // get instance file
         File instanceFile = new File(instanceFilePath);
@@ -231,31 +219,94 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             }
         }
 
-        // if we have any photos to upload,
-        // get the picasa album or create a new one
-        // then upload the photos
-        if (photosToUpload.size() > 0) {
-            // First set up a picasa album to upload to:
-            // maybe we should move this, because if we don't have any
-            // photos we don't care...
-            AlbumEntry albumToUse;
-            try {
-                albumToUse = getOrCreatePicasaAlbum(client, jrFormId);
-            } catch (IOException e) {
-                GoogleAuthUtil.invalidateToken(Collect.getInstance(), token);
-                mResults.put(id, picasa_fail + e.getMessage());
-                return false;
-            }
 
-            try {
-                uploadPhotosToPicasa(photosToUpload, uploadedPhotos, client, albumToUse,
-                        instanceFile);
-            } catch (IOException e1) {
-                mResults.put(id, picasa_fail + e1.getMessage());
-                return false;
+        /*  # NOTE #
+         *  Media files are uploaded to Google Drive of user
+         *  All media files are currently saved under folder "ODK Media Files"
+         */
+
+        // if we have any media files to upload,
+        // get the folder or create a new one
+        // then upload the media files
+        if (photosToUpload.size() > 0) {
+
+            for (String key : photosToUpload.keySet()) {
+                String filename = instanceFile.getParentFile() + "/" + photosToUpload.get(key);
+                File toUpload = new File(filename);
+
+                // first check the local content provider
+                // to see if this photo still exists at the location or not
+                String selection = MediaStore.Images.Media.DATA + "=?";
+                String[] selectionArgs = {
+                        filename
+                };
+                Cursor c = Collect.getInstance().getContentResolver()
+                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection
+                                , selectionArgs, null);
+                if (c.getCount() != 1) {
+                    c.close();
+                    try {
+                        throw new FileNotFoundException(drive_fail + Collect.getInstance()
+                                .getString(R.string.media_upload_error, filename));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                c.close();
+
+                // try to get
+                ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
+                try {
+                    getFilesFromDrive(files);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mResults.put(id, form_fail + e.getMessage());
+                    return false;
+                }
+
+                com.google.api.services.drive.model.File folder = null;
+
+                for (com.google.api.services.drive.model.File file : files) {
+                    if (folder == null) {
+                        folder = file;
+                    } else {
+                        mResults.put(id, form_fail + files.size() + " folders found");
+                        return false;
+                    }
+                }
+
+                // if folder is not found then create a new one
+                if (folder == null) {
+                    try {
+                        folder = createFolderInDrive();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        mResults.put(id, form_fail + e.getMessage());
+                        return false;
+                    }
+                }
+                String uploadedFileId;
+
+                // file is ready to be uploaded
+                try {
+                    uploadedFileId = uploadFileToDrive(photosToUpload, key, folder, toUpload);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mResults.put(id, form_fail + e.getMessage());
+                    return false;
+                }
+
+                //checking if file was successfully uploaded
+                if (uploadedFileId == null) {
+                    mResults.put(id, form_fail + "Unable to upload the media files. Try again");
+                    return false;
+                }
+
+                // uploadedPhotos keeps track of the uploaded URL
+                // relative to the path
+                uploadedPhotos.put(key, "https://drive.google.com/open?id=" + uploadedFileId);
             }
         }
-
         // All photos have been sent to picasa (if there were any)
         // now upload data to Google Sheet
 
@@ -372,8 +423,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             ValueRange row = new ValueRange();
             row.setValues(content);
 
-
-            /**
+            /*
              *  Appends the data at the last row
              *
              *  append(spreadsheetId, range, ValueRange)
@@ -509,7 +559,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         // add photos to answer set
         for (String key : uploadedPhotos.keySet()) {
-            String url = uploadedPhotos.get(key).getImageLink();
+            String url = uploadedPhotos.get(key);
             answersToUpload.put(key, url);
         }
 
@@ -519,8 +569,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             String answer = "";
             if (path.equals(" ") || !columnNames.contains(path)) {
                 //ignores the blank fields and extra fields
-            }
-            else if (columnNames.contains(path)) { // if column present in sheet
+            } else if (columnNames.contains(path)) { // if column present in sheet
                 if (answersToUpload.containsKey(path)) {
                     answer = answersToUpload.get(path);
                     // Check to see if answer is a location, if so, get rid of accuracy
@@ -565,116 +614,65 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         return true;
     }
 
-    private void uploadPhotosToPicasa(HashMap<String, String> photos,
-                                      HashMap<String, PhotoEntry> uploaded, PicasaClient client, AlbumEntry albumToUse,
-                                      File instanceFile) throws IOException {
-        for (String key : photos.keySet()) {
-            String filename = instanceFile.getParentFile() + "/" + photos.get(key);
-            File toUpload = new File(filename);
+    private String uploadFileToDrive(HashMap<String, String> photosToUpload, String key, com.google.api.services.drive.model.File folder, File toUpload) throws IOException {
 
-            // first check the local content provider
-            // to see if this photo already has a picasa_id
-            String selection = Images.Media.DATA + "=?";
-            String[] selectionArgs = {
-                    filename
-            };
-            Cursor c = Collect.getInstance().getContentResolver()
-                    .query(Images.Media.EXTERNAL_CONTENT_URI, null, selection, selectionArgs, null);
-            if (c.getCount() != 1) {
-                c.close();
-                throw new FileNotFoundException(picasa_fail
-                        + Collect.getInstance().getString(R.string.picasa_upload_error, filename));
-            }
+        //adding meta-data to the file
+        com.google.api.services.drive.model.File fileMetadata =
+                new com.google.api.services.drive.model.File()
+                        .setName(photosToUpload.get(key))
+                        .setViewersCanCopyContent(true)
+                        .setParents(Collections.singletonList(folder.getId()));
 
-            // assume it's not already in picasa
-            boolean inPicasa = false;
-
-            // this will contain the link to the photo
-            PhotoEntry picasaPhoto = null;
-
-            c.moveToFirst();
-            String picasa_id = c.getString(c.getColumnIndex(Images.Media.PICASA_ID));
-            if (picasa_id == null || picasa_id.equalsIgnoreCase("")) {
-                // not in picasa, so continue
-            } else {
-                // got a picasa ID, make sure it exists in this
-                // particular album online
-                // if it does, go on
-                // if it doesn't, upload it and update the picasa_id
-                if (albumToUse.numPhotos != 0) {
-                    PicasaUrl photosUrl = new PicasaUrl(albumToUse.getFeedLink());
-                    AlbumFeed albumFeed = client.executeGetAlbumFeed(photosUrl);
-
-                    for (PhotoEntry photo : albumFeed.photos) {
-                        if (picasa_id.equals(photo.id)) {
-                            // already in picasa, no need to upload
-                            inPicasa = true;
-                            picasaPhoto = photo;
-                        }
-                    }
-                }
-            }
-
-            // wasn't already there, so upload a new copy and update the
-            // content provder with its picasa_id
-            if (!inPicasa) {
-                String fileName = toUpload.getAbsolutePath();
-                File file = new File(fileName);
-                String mimetype = URLConnection.guessContentTypeFromName(file.getName());
-                InputStreamContent content = new InputStreamContent(mimetype, new FileInputStream(
-                        file));
-
-                picasaPhoto = client.executeInsertPhotoEntry(
-                        new PicasaUrl(albumToUse.getFeedLink()), content, toUpload.getName());
-
-                ContentValues cv = new ContentValues();
-                cv.put(Images.Media.PICASA_ID, picasaPhoto.id);
-
-                // update the content provider picasa_id once we upload
-                String where = Images.Media.DATA + "=?";
-                String[] whereArgs = {
-                        toUpload.getAbsolutePath()
-                };
-                Collect.getInstance().getContentResolver()
-                        .update(Images.Media.EXTERNAL_CONTENT_URI, cv, where, whereArgs);
-            }
-
-            // uploadedPhotos keeps track of the uploaded URL
-            // relative to the path
-            uploaded.put(key, picasaPhoto);
-        }
+        FileContent mediaContent = new FileContent("image/jpeg", toUpload);
+        com.google.api.services.drive.model.File file;
+        file = mDriveService.files().create(fileMetadata, mediaContent)
+                .setFields("id, parents")
+                .setIgnoreDefaultVisibility(true)
+                .execute();
+        return file.getId();
     }
 
-    private AlbumEntry getOrCreatePicasaAlbum(PicasaClient client, String jrFormId)
+    private com.google.api.services.drive.model.File createFolderInDrive() throws IOException {
+
+        //creating a new folder
+        com.google.api.services.drive.model.File fileMetadata = new
+                com.google.api.services.drive.model.File();
+        fileMetadata.setName("ODK Media Files");
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+        com.google.api.services.drive.model.File folder;
+        folder = mDriveService.files().create(fileMetadata)
+                .setFields("id")
+                .execute();
+
+        //adding the permissions to folder
+        Permission sharePermission = new Permission()
+                .setType("anyone")
+                .setRole("reader");
+
+        mDriveService.permissions().create(folder.getId(), sharePermission)
+                .setFields("id")
+                .execute();
+        return folder;
+    }
+
+    private FileList getFilesFromDrive(ArrayList<com.google.api.services.drive.model.File> files)
             throws IOException {
-        AlbumEntry albumToUse = null;
-        PicasaUrl url = PicasaUrl.relativeToRoot("feed/api/user/default");
-        UserFeed feed;
-
-        feed = client.executeGetUserFeed(url);
-
-        // Find an album with a title matching the form_id
-        // Technically there could be multiple albums that match
-        // We just use the first one that matches
-        if (feed.albums != null) {
-            for (AlbumEntry album : feed.albums) {
-                if (jrFormId.equals(album.title)) {
-                    albumToUse = album;
-                    break;
-                }
+        FileList fileList;
+        String pageToken;
+        do {
+            fileList = mDriveService.files().list()
+                    .setQ("name = 'ODK Media Files' and " +
+                            "mimeType = 'application/vnd.google-apps.folder'")
+                    .execute();
+            for (com.google.api.services.drive.model.File file : fileList.getFiles()) {
+                files.add(file);
             }
-        }
-
-        // no album exited, so create one
-        if (albumToUse == null) {
-            AlbumEntry newAlbum = new AlbumEntry();
-            newAlbum.access = "private";
-            newAlbum.title = jrFormId;
-            newAlbum.summary = "Images for form: " + jrFormId;
-            albumToUse = client.executeInsert(feed, newAlbum);
-        }
-        return albumToUse;
+            pageToken = fileList.getNextPageToken();
+        } while (pageToken != null);
+        return fileList;
     }
+
 
     private void getColumns(String filePath, ArrayList<String> columns)
             throws XmlPullParserException, IOException, FormException {

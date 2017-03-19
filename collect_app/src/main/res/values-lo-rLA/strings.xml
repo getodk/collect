@@ -293,7 +293,7 @@
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
-  <string name="picasa_upload_error">ບໍ່ສາມາດອັບໂຫຼດຮູບທີ່ບໍ່ມີ: %1$s</string>
+  <string name="media_upload_error">ບໍ່ສາມາດອັບໂຫຼດຮູບທີ່ບໍ່ມີ: %1$s</string>
   <string name="odk_auth_auth_fail">ການກວດສອບ ODK Autosend ຜິດພາດ, ກະລຸນາກວດສອບການຕັ້ງຄ່າວ່າຖືກຕ້ອງບໍ່</string>
   <string name="odk_auto_note">ສົ່ງການແຈ້ງເຕືອນແບບໂອໂຕຂອງ ODK</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>

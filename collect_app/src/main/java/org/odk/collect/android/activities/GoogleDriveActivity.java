@@ -61,7 +61,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.FileList;
-import com.google.api.services.drive.model.ParentList;
+//import com.google.api.services.drive.model.ParentList;
 
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
@@ -576,6 +576,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             String requestString = "'" + currentDir + "' in parents and trashed=false";
             Files.List request = null;
 
+            //// TODO: 19/3/17 update library
+/*
             try {
                 ParentList parents = service.parents().list(currentDir).execute();
                 if (parents.getItems().size() > 0) {
@@ -595,6 +597,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 request = service.files().list().setQ(requestString);
             } catch (IOException e1) {
             }
+*/
 
             // If there's a query parameter, we're searching for all the files.
             if (query != null) {
@@ -608,6 +611,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             results.put(PARENT_ID_KEY, parentId);
             results.put(CURRENT_ID_KEY, currentDir);
             do {
+                //// TODO: 19/3/17 update
+/*
                 try {
                     FileList fa = request.execute();
                     List<com.google.api.services.drive.model.File> driveFileListPage =
@@ -622,6 +627,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     publishProgress(nextPage);
                 } catch (IOException e) {
                 }
+*/
             } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
             return results;
@@ -644,6 +650,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         protected void onProgressUpdate(HashMap<String, Object>... values) {
             super.onProgressUpdate(values);
 
+            //// TODO: 19/3/17 update these methods
+/*
             List<com.google.api.services.drive.model.File> fileList =
                     (List<com.google.api.services.drive.model.File>) values[0]
                             .get(FILE_LIST_KEY);
@@ -697,6 +705,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             });
             adapter.notifyDataSetChanged();
 
+*/
         }
 
     }
@@ -756,7 +765,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 do {
                     try {
                         FileList fa = request.execute();
-                        driveFileList.addAll(fa.getItems());
+                        //// TODO: 19/3/17 update
+//                        driveFileList.addAll(fa.getItems());
                         request.setPageToken(fa.getNextPageToken());
                     } catch (Exception e2) {
                         results.put(fileItem.getName(), e2.getMessage());
@@ -778,7 +788,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                         do {
                             try {
                                 FileList fa = request.execute();
-                                mediaFileList.addAll(fa.getItems());
+                                //// TODO: 19/3/17 update
+//                                mediaFileList.addAll(fa.getItems());
                                 request.setPageToken(fa.getNextPageToken());
                             } catch (Exception e2) {
                                 results.put(fileItem.getName(), e2.getMessage());
@@ -795,7 +806,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     if (!mediaDir.exists()) {
                         mediaDir.mkdir();
                     }
-
+//// TODO: 19/3/17 update
+/*
                     for (com.google.api.services.drive.model.File file : mediaFileList) {
                         InputStream is = downloadFile(service, file);
 
@@ -813,6 +825,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
                         results.put(file.getTitle(), Collect.getInstance().getString(R.string.success));
                     }
+*/
 
                 } else {
                     // zero.. just downloda the .xml file
@@ -848,7 +861,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
         private InputStream downloadFile(com.google.api.services.drive.Drive service,
                 com.google.api.services.drive.model.File file) {
-            if (file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0) {
+            //// TODO: 19/3/17 update
+            /*if (file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0) {
                 try {
                     HttpResponse resp = service.getRequestFactory()
                             .buildGetRequest(new GenericUrl(file.getDownloadUrl())).execute();
@@ -860,7 +874,8 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             } else {
                 // The file doesn't have any content stored on Drive.
                 return null;
-            }
+            }*/
+            return null;
         }
 
         @Override

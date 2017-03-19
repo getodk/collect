@@ -293,7 +293,7 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="invalid_oauth">Neplatný kód OAuth 2</string>
-  <string name="picasa_upload_error">Chyba při nahrávání fotografie - Fotografie není k dispozici : %1$s</string>
+  <string name="media_upload_error">Chyba při nahrávání fotografie - Fotografie není k dispozici : %1$s</string>
   <string name="odk_auth_auth_fail">Chyba autorizace ODK pro automatické odesílání dat, ujistěte se, že Vaše nastavení je správné</string>
   <string name="odk_auto_note">ODK - výsledek automatického odeslání</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>

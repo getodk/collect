@@ -308,7 +308,7 @@
   <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
   <string name="google_audio_error">File audio non sono ancora supportati da Google Sheets.</string>
   <string name="google_video_error">File video non sono ancora supportati da Google Sheets.</string>
-  <string name="picasa_upload_error">Impossibile caricare foto inesistente: %1$s</string>
+  <string name="media_upload_error">Impossibile caricare foto inesistente: %1$s</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
   <string name="odk_auto_note">Notifica ODK Autosend</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
