@@ -271,10 +271,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object binaryuri) {
-        // you are replacing an answer. remove the media.
-        if (mBinaryName != null) {
-            deleteMedia();
-        }
 
         // get the file path and create a copy in the instance folder
         String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
@@ -300,6 +296,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             Log.i(t, "Inserting VIDEO returned uri = " + VideoURI.toString());
         } else {
             Log.e(t, "Inserting Video file FAILED");
+        }
+        // you are replacing an answer. remove the media.
+        if (mBinaryName != null && !mBinaryName.equals(newVideo.getName())) {
+            deleteMedia();
         }
 
         mBinaryName = newVideo.getName();
