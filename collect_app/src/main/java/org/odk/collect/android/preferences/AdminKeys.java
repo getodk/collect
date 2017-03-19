@@ -4,53 +4,53 @@ import static org.odk.collect.android.preferences.AdminAndGeneralKeys.ag;
 
 public final class AdminKeys {
     // key for this preference screen
-    public static String KEY_ADMIN_PW = "admin_pw";
+    final public static String KEY_ADMIN_PW = "admin_pw";
 
     // keys for each preference
 
     // main menu
-    public  static String KEY_EDIT_SAVED                = "edit_saved";
-    public  static String KEY_SEND_FINALIZED            = "send_finalized";
-    public  static String KEY_VIEW_SENT                 = "view_sent";
-    public  static String KEY_GET_BLANK                 = "get_blank";
-    public  static String KEY_DELETE_SAVED              = "delete_saved";
+    final public  static String KEY_EDIT_SAVED                = "edit_saved";
+    final public  static String KEY_SEND_FINALIZED            = "send_finalized";
+    final public  static String KEY_VIEW_SENT                 = "view_sent";
+    final public  static String KEY_GET_BLANK                 = "get_blank";
+    final public  static String KEY_DELETE_SAVED              = "delete_saved";
 
     // form entry
-    public  static String KEY_SAVE_MID                  = "save_mid";
-    public  static String KEY_JUMP_TO                   = "jump_to";
-    public  static String KEY_CHANGE_LANGUAGE           = "change_language";
-    public  static String KEY_ACCESS_SETTINGS           = "access_settings";
-    public  static String KEY_SAVE_AS                   = "save_as";
-    public  static String KEY_MARK_AS_FINALIZED         = "mark_as_finalized";
+    final public  static String KEY_SAVE_MID                  = "save_mid";
+    final public  static String KEY_JUMP_TO                   = "jump_to";
+    final public  static String KEY_CHANGE_LANGUAGE           = "change_language";
+    final public  static String KEY_ACCESS_SETTINGS           = "access_settings";
+    final public  static String KEY_SAVE_AS                   = "save_as";
+    final public  static String KEY_MARK_AS_FINALIZED         = "mark_as_finalized";
 
     // server
-            static String KEY_CHANGE_ADMIN_PASSWORD     = "admin_password";
-            static String KEY_CHANGE_GOOGLE_ACCOUNT     = "change_google_account";
-    private static String KEY_CHANGE_SERVER             = "change_server";
-    private static String KEY_CHANGE_USERNAME           = "change_username";
-    private static String KEY_CHANGE_PASSWORD           = "change_password";
-    private static String KEY_CHANGE_PROTOCOL_SETTINGS  = "change_protocol_settings";
+    final static String KEY_CHANGE_ADMIN_PASSWORD     = "admin_password";
+    final static String KEY_CHANGE_GOOGLE_ACCOUNT     = "change_google_account";
+    final private static String KEY_CHANGE_SERVER             = "change_server";
+    final private static String KEY_CHANGE_USERNAME           = "change_username";
+    final private static String KEY_CHANGE_PASSWORD           = "change_password";
+    final private static String KEY_CHANGE_PROTOCOL_SETTINGS  = "change_protocol_settings";
 
     // client
-            static String KEY_FORM_PROCESSING_LOGIC     = "form_processing_logic";
+    final static String KEY_FORM_PROCESSING_LOGIC     = "form_processing_logic";
 
-    private static String KEY_CHANGE_FONT_SIZE          = "change_font_size";
-    private static String KEY_DEFAULT_TO_FINALIZED      = "default_to_finalized";
-    private static String KEY_HIGH_RESOLUTION           = "high_resolution";
-    private static String KEY_SHOW_SPLASH_SCREEN        = "show_splash_screen";
-    private static String KEY_DELETE_AFTER_SEND         = "delete_after_send";
-    private static String KEY_INSTANCE_FORM_SYNC        = "instance_form_sync";
+    final private static String KEY_CHANGE_FONT_SIZE          = "change_font_size";
+    final private static String KEY_DEFAULT_TO_FINALIZED      = "default_to_finalized";
+    final private static String KEY_HIGH_RESOLUTION           = "high_resolution";
+    final private static String KEY_SHOW_SPLASH_SCREEN        = "show_splash_screen";
+    final private static String KEY_DELETE_AFTER_SEND         = "delete_after_send";
+    final private static String KEY_INSTANCE_FORM_SYNC        = "instance_form_sync";
 
-    private static String KEY_AUTOSEND_WIFI             = "autosend_wifi";
-    private static String KEY_AUTOSEND_NETWORK          = "autosend_network";
+    final private static String KEY_AUTOSEND_WIFI             = "autosend_wifi";
+    final private static String KEY_AUTOSEND_NETWORK          = "autosend_network";
 
-    private static String KEY_NAVIGATION                = "navigation";
-    private static String KEY_CONSTRAINT_BEHAVIOR       = "constraint_behavior";
+    final private static String KEY_NAVIGATION                = "navigation";
+    final private static String KEY_CONSTRAINT_BEHAVIOR       = "constraint_behavior";
 
-    private static String KEY_SHOW_MAP_SDK              = "show_map_sdk";
-    private static String KEY_SHOW_MAP_BASEMAP          = "show_map_basemap";
+    final private static String KEY_SHOW_MAP_SDK              = "show_map_sdk";
+    final private static String KEY_SHOW_MAP_BASEMAP          = "show_map_basemap";
 
-    private static String KEY_ANALYTICS                 = "analytics";
+    final private static String KEY_ANALYTICS                 = "analytics";
 
     /**
      * The admin preferences allow removing general preferences. This array contains
