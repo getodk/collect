@@ -234,7 +234,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object binaryuri) {
 
-
         // get the file path and create a copy in the instance folder
         String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
                 Audio.Media.DATA);
