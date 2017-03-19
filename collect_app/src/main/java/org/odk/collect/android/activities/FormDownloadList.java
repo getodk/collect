@@ -91,11 +91,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final String FORM_ID_KEY = "formid";
     private static final String FORM_VERSION_KEY = "formversion";
-
+    private static final String VERSION_NOT_SPECIFIED = "noversionspecified";
     private String mAlertMsg;
     private boolean mAlertShowing = false;
     private String mAlertTitle;
-
+    private FormsDao mFormsDao;
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private Button mDownloadButton;
@@ -131,6 +131,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // this is callled in downloadSelectedFiles():
                 //    Collect.getInstance().getActivityLogger().logAction(this,
                 // "downloadSelectedFiles", ...);
+
                 downloadSelectedFiles();
             }
         });
@@ -224,6 +225,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         int[] view = new int[]{
                 R.id.text1, R.id.text2
         };
+
 
         mFormListAdapter =
                 new SimpleAdapter(this, mFormList, R.layout.two_item_multiple_choice, data, view);
@@ -567,6 +569,44 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
     }
 
+    private void removeOldForms() {
+        mFormsDao = new FormsDao();
+        Cursor formsCursor = mFormsDao.getFormsCursor();
+        if (formsCursor == null) {
+            return;
+        }
+        HashMap<String,String> downloadForm = new HashMap<>();
+        formsCursor.moveToPosition(-1);
+        while(formsCursor.moveToNext()){
+            String version = formsCursor.getString(formsCursor.getColumnIndex(FormsColumns.JR_VERSION));
+            if(version == null) {
+                version = VERSION_NOT_SPECIFIED;
+            }
+            String id = formsCursor.getString(formsCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
+            downloadForm.put(id, version);
+        }
+        int formListSize = mFormList.size();
+        for (int idx = 0; idx < formListSize; idx++) {
+            HashMap<String,String> hashMap = mFormList.get(idx);
+            String id = hashMap.get(FORM_ID_KEY);
+            String version = hashMap.get(FORM_VERSION_KEY);
+            if(version == null) {
+                version = VERSION_NOT_SPECIFIED;
+            }
+            if (downloadForm.get(id) != null) {
+                if(downloadForm.get(id).equals(VERSION_NOT_SPECIFIED) && version.equals(VERSION_NOT_SPECIFIED)) {
+                    mFormList.remove(idx);
+                    formListSize--;
+                    idx--;
+                } else if (downloadForm.get(id).equals(version)) {
+                    mFormList.remove(idx);
+                    formListSize--;
+                    idx--;
+                }
+            }
+        }
+    }
+
     /**
      * Called when the form list has finished downloading. results will either contain a set of
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
@@ -630,6 +670,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
             }
             selectSupersededForms();
+            removeOldForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
             toggleButtonLabel(mToggleButton, getListView());
