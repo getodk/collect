@@ -66,6 +66,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
     protected static final String oauth_fail = "OAUTH Error: ";
     protected static final String form_fail = "Form Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
+    private final static String GOOGLE_DRIVE_UPLOADS_FOLDER = "odk-uploads";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
     protected HashMap<String, String> mResults;
@@ -222,7 +223,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         /*  # NOTE #
          *  Media files are uploaded to Google Drive of user
-         *  All media files are currently saved under folder "ODK Media Files"
+         *  All media files are currently saved under folder "odk-uploads"
          */
 
         // if we have any media files to upload,
@@ -637,7 +638,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         //creating a new folder
         com.google.api.services.drive.model.File fileMetadata = new
                 com.google.api.services.drive.model.File();
-        fileMetadata.setName("ODK Media Files");
+        fileMetadata.setName(GOOGLE_DRIVE_UPLOADS_FOLDER);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
 
         com.google.api.services.drive.model.File folder;
@@ -662,7 +663,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         String pageToken;
         do {
             fileList = mDriveService.files().list()
-                    .setQ("name = 'ODK Media Files' and " +
+                    .setQ("name = '" + GOOGLE_DRIVE_UPLOADS_FOLDER + "' and " +
                             "mimeType = 'application/vnd.google-apps.folder'")
                     .execute();
             for (com.google.api.services.drive.model.File file : fileList.getFiles()) {
