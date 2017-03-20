@@ -20,6 +20,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Patterns;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -34,6 +35,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -121,6 +124,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         String sqlFilename =
                                 mCursor.getString(
                                         mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                        Log.d(TAG, "FORM_FILE_PATH= "+sqlFilename);
                         String md5 = mCursor.getString(
                                 mCursor.getColumnIndex(FormsColumns.MD5_HASH));
                         File sqlFile = new File(sqlFilename);
@@ -301,7 +305,11 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             updateValues.put(FormsColumns.JR_VERSION, version);
         }
         if (submission != null) {
-            updateValues.put(FormsColumns.SUBMISSION_URI, submission);
+            if(checkValidSubmissionURI(submission)) {
+                updateValues.put(FormsColumns.SUBMISSION_URI, submission);
+            } else {
+                throw new IllegalArgumentException(formDefFile.getName() + " :: bad url");
+            }
         }
         if (base64RsaPublicKey != null) {
             updateValues.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, base64RsaPublicKey);
@@ -326,4 +334,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
     }
 
+    public boolean checkValidSubmissionURI(String submissionURI) {
+        return Patterns.WEB_URL.matcher(submissionURI).matches();
+    }
 }
