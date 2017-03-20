@@ -137,6 +137,7 @@ allprojects {
     }
 }
 
+
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
@@ -164,6 +165,7 @@ dependencies {
     compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
     compile group: 'com.google.http-client', name: 'google-http-client-android', version: '1.22.0'
     compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
+    compile group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'

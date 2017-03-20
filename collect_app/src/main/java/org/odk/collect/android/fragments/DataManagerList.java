@@ -20,7 +20,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,9 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
+
 /**
  * Responsible for displaying and deleting all the saved form instances
  * directory.
@@ -50,7 +52,6 @@ import java.util.List;
  */
 public class DataManagerList extends InstanceListFragment
         implements DeleteInstancesListener, DiskSyncListener, View.OnClickListener {
-    private static final String TAG = "DataManagerList";
     DeleteInstancesTask mDeleteInstancesTask = null;
     private AlertDialog mAlertDialog;
     private InstanceSyncTask instanceSyncTask;
@@ -201,7 +202,7 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void deleteComplete(int deletedInstances) {
-        Log.i(TAG, "Delete instances complete");
+        Timber.i("Delete instances complete");
         logger.logAction(this, "deleteComplete",
                 Integer.toString(deletedInstances));
         final int toDeleteCount = mDeleteInstancesTask.getToDeleteCount();
@@ -211,7 +212,7 @@ public class DataManagerList extends InstanceListFragment
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
-            Log.e(TAG, "Failed to delete "
+            Timber.e("Failed to delete "
                     + (toDeleteCount - deletedInstances) + " instances");
             ToastUtils.showLongToast(getString(R.string.file_deleted_error,
                     String.valueOf(toDeleteCount - deletedInstances),

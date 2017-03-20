@@ -17,11 +17,12 @@ package org.odk.collect.android.tasks;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+
+import timber.log.Timber;
 
 /**
  * Task responsible for deleting selected instances.
@@ -30,8 +31,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
  * @author mitchellsundt@gmail.com
  */
 public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
-
-    private static final String TAG = "DeleteInstancesTask";
 
     private ContentResolver contentResolver;
     private DeleteInstancesListener deleteInstancesListener;
@@ -63,10 +62,12 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
                 deleted += wasDeleted;
 
                 if (wasDeleted > 0) {
-                    Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
+                    Collect.getInstance()
+                            .getActivityLogger().logAction(this, "delete", deleteForm.toString());
                 }
             } catch (Exception ex) {
-                Log.e(TAG, "Exception during delete of: " + param.toString() + " exception: " + ex.toString());
+                Timber.e(ex, "Exception during delete of: "
+                        + param.toString() + " exception: " + ex.toString());
             }
         }
         successCount = deleted;
