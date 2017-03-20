@@ -337,7 +337,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             first = false;
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
-            messageParser = null;
 
             MimeTypeMap m = MimeTypeMap.getSingleton();
 
@@ -497,7 +496,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
                         // If response from server is valid use that else use default messaging
-                        if (messageParser != null && messageParser.isValid()){
+                        if (messageParser.isValid()){
                             outcome.mResults.put(id, fail + messageParser.getMessageResponse());
                         }else{
                             outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
@@ -526,7 +525,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // If response from server is valid use that else use default messaging
-        if (messageParser != null && messageParser.isValid()){
+        if (messageParser.isValid()){
             outcome.mResults.put(id, messageParser.getMessageResponse());
         }else{
             // Default messaging
