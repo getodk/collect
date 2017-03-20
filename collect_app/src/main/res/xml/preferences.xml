@@ -16,7 +16,8 @@
         	android:title="@string/protocol_settings"/>
         <PreferenceScreen
         	android:key="form_metadata"
-        	android:title="@string/form_metadata"/>
+        	android:title="@string/form_metadata"
+            android:summary="@string/form_metadata_summary"/>
         <ListPreference
             android:id="@+id/selected_google_account"
             android:defaultValue=""
