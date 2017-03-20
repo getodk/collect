@@ -497,10 +497,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
-                        // Custom messaging response if fail.
-                        // If Custom Server Response enabled then confirm response is valid
-                        // and set as display message, otherwise fall back to default string messaging
-                        if (messageParser != null && messageParser.isValid){
+                        // If response from server is valid use that else use default messaging
+                        if (messageParser != null && messageParser.isValid()){
                             outcome.mResults.put(id, fail + messageParser.getMessageResponse());
                         }else{
                             outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
@@ -528,10 +526,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
-        // Custom messaging handle for success
-        // If Custom Server Response enabled then confirm response is valid
-        // and set as display message, otherwise fall back to default string messagining.
-        if (messageParser != null && messageParser.isValid){
+        // If response from server is valid use that else use default messaging
+        if (messageParser != null && messageParser.isValid()){
             outcome.mResults.put(id, messageParser.getMessageResponse());
         }else{
             // Default messaging

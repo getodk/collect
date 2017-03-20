@@ -19,11 +19,10 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 
 public class ResponseMessageParser {
-    private static HttpEntity httpEntity;
-    private static final String MESSAGE_XML_TAG = "message";
-    public static Boolean isValid = false;
-
-    public static String messageResponse;
+    private HttpEntity httpEntity;
+    private final String MESSAGE_XML_TAG = "message";
+    public Boolean isValid = false;
+    public String messageResponse;
 
     public ResponseMessageParser(HttpEntity httpEntity) {
         this.httpEntity = httpEntity;
@@ -38,11 +37,11 @@ public class ResponseMessageParser {
     }
 
     public Boolean isValid() {
-        return this.isValid;
+        return isValid;
     }
 
     public String getMessageResponse() {
-        return this.messageResponse;
+        return messageResponse;
     }
 
 
@@ -66,11 +65,9 @@ public class ResponseMessageParser {
                 return message;
 
             } catch (SAXException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 isValid = false;
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 isValid = false;
             }
