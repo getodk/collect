@@ -171,9 +171,7 @@ public class Collect extends Application {
     }
 
     public String getVersionedAppName() {
-        String versionName = "";
-        versionName = BuildConfig.VERSION_NAME;
-        versionName = " " + versionName.replaceFirst("-", "\n");
+        String versionName = BuildConfig.VERSION_NAME.replaceFirst("-", "\n");
         return getString(R.string.app_name) + versionName;
     }
 
