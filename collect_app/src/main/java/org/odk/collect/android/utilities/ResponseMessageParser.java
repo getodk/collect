@@ -37,11 +37,11 @@ public class ResponseMessageParser {
     }
 
     public Boolean isValid() {
-        return isValid;
+        return this.isValid;
     }
 
     public String getMessageResponse() {
-        return messageResponse;
+        return this.messageResponse;
     }
 
 
