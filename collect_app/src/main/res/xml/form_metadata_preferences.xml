@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:key="Form Metadata Settings"
-        android:title="@string/settings">
+        android:title="@string/form_metadata">
         <EditTextPreference
             android:id="@+id/metadata_username"
-            android:dialogTitle="@string/username"
             android:inputType="textNoSuggestions"
-            android:key="@string/username"
+            android:key="username"
             android:title="@string/username" />
         <EditTextPreference
             android:id="@+id/metadata_phone_number"
-            android:dialogTitle="@string/phone_number"
-            android:inputType="textNoSuggestions"
-            android:key="@string/phone_number"
+            android:inputType="phone"
+            android:key="phone_number"
             android:title="@string/phone_number" />
         <EditTextPreference
             android:id="@+id/metadata_email"
-            android:dialogTitle="@string/email"
-            android:inputType="textNoSuggestions"
-            android:key="@string/email"
+            android:inputType="textEmailAddress"
+            android:key="email"
             android:title="@string/email" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="Identifiers"
-        android:title="Identifiers">
-
         <EditTextPreference
             android:id="@+id/device_id"
             android:editable="false"

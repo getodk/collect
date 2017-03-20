@@ -49,14 +49,14 @@ public class PropertyManager implements IPropertyManager {
     public final static String SUBSCRIBER_ID_PROPERTY       = "subscriberid";   // imsi
     public final static String SIM_SERIAL_PROPERTY          = "simserial";
     public final static String PHONE_NUMBER_PROPERTY        = "phonenumber";
-    public final static String USERNAME                     = "username";
-    public final static String EMAIL                        = "email";
+    public final static String USERNAME_PROPERTY            = "username";
+    public final static String EMAIL_PROPERTY               = "email";
     public final static String OR_DEVICE_ID_PROPERTY        = withUri(DEVICE_ID_PROPERTY);
     public final static String OR_SUBSCRIBER_ID_PROPERTY    = withUri(SUBSCRIBER_ID_PROPERTY);
     public final static String OR_SIM_SERIAL_PROPERTY       = withUri(SIM_SERIAL_PROPERTY);
     public final static String OR_PHONE_NUMBER_PROPERTY     = withUri(PHONE_NUMBER_PROPERTY);
-    public final static String OR_USERNAME                  = withUri(USERNAME);
-    public final static String OR_EMAIL                     = withUri(EMAIL);
+    public final static String OR_USERNAME_PROPERTY         = withUri(USERNAME_PROPERTY);
+    public final static String OR_EMAIL_PROPERTY            = withUri(EMAIL_PROPERTY);
 
 
     public String getName() {
@@ -130,13 +130,13 @@ public class PropertyManager implements IPropertyManager {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         value = settings.getString(PreferenceKeys.KEY_USERNAME, null);
         if (value != null) {
-            mProperties.put(USERNAME, value);
-            mProperties.put(OR_USERNAME, "username:" + value);
+            mProperties.put(USERNAME_PROPERTY, value);
+            mProperties.put(OR_USERNAME_PROPERTY, "username:" + value);
         }
         value = settings.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
         if (value != null) {
-            mProperties.put(EMAIL, value);
-            mProperties.put(OR_EMAIL, "mailto:" + value);
+            mProperties.put(EMAIL_PROPERTY, value);
+            mProperties.put(OR_EMAIL_PROPERTY, "mailto:" + value);
         }
     }
 
