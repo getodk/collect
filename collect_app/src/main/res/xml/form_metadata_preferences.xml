@@ -32,19 +32,16 @@
             android:id="@+id/device_id"
             android:editable="false"
             android:key="device_id"
-            android:defaultValue="b22004d93c4e2de4"
             android:title="@string/device_id" />
         <EditTextPreference
             android:id="@+id/subscriber_id"
             android:editable="false"
             android:key="subscriber_id"
-            android:defaultValue="310260000000000"
             android:title="@string/subscriber_id" />
         <EditTextPreference
             android:id="@+id/sim_serial_id"
             android:editable="false"
             android:key="sim_serial_id"
-            android:defaultValue="89014103211118510720"
             android:title="@string/sim_serial_id" />
     </PreferenceCategory>
 </PreferenceScreen>
