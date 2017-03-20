@@ -133,7 +133,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
             // register this activity with the new uploader task
             mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
-
             mInstanceUploaderTask.execute(mInstancesToSend);
         }
     }
