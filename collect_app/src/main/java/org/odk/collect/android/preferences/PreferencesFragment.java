@@ -41,6 +41,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         // ToDo: order these logically
         initProtocolPrefs(adminMode);
+        initFormMetadata();
         initGoogleAccountPref();
         initUserAndPasswordPrefs();
         initNavigationPrefs();
@@ -325,6 +326,12 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 return true;
             }
         });
+    }
+
+    private void initFormMetadata() {
+        final Preference formMetadataPref = findPreference(KEY_FORM_METADATA);
+        final Intent intent = new Intent(getActivity(), FormMetadataActivity.class);
+        formMetadataPref.setIntent(intent);
     }
 
     private Intent setProtocolIntent(boolean adminMode, CharSequence value,

@@ -14,6 +14,9 @@ public final class PreferenceKeys {
     public static final String KEY_PROTOCOL                 = "protocol";
            static final String KEY_PROTOCOL_SETTINGS        = "protocol_settings";
 
+           static final String KEY_FORM_METADATA            = "form_metadata";
+           static final String KEY_FORM_METADATA_SETTINGS   = "form_metadata_settings";
+
     // leaving these in the main screen because username can be used as a
     // pre-fill value in a form
     public static final String KEY_SELECTED_GOOGLE_ACCOUNT  = "selected_google_account";
