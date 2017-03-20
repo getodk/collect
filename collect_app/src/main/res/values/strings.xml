@@ -495,11 +495,13 @@
 <string name="sorting_menu_close">Close sorting menu</string>
 <string name="sort_the_list">Sort the list</string>
 
+<string name="form_metadata_title">Form Metadata</string>
 <string name="form_metadata">Form metadata</string>
 <string name="form_metadata_summary">These values will be added to forms that have username, email and/or telephone preloaded fields to identify the person submitting data.</string>
 <string name="phone_number">Phone number</string>
 <string name="email">Email address</string>
-<string name="settings">Settings</string>
+<string name="user_defined">User-defined</string>
+<string name="device_defined">Device-defined</string>
 <string name="device_id">Device ID</string>
 <string name="subscriber_id">Subscriber ID</string>
 <string name="sim_serial_id">Subscriber identity module serial number</string>
