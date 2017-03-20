@@ -179,7 +179,6 @@ public class Collect extends Application {
             versionName = " " + versionName.replaceFirst("-", "\n");
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         return getString(R.string.app_name) + versionName;
     }

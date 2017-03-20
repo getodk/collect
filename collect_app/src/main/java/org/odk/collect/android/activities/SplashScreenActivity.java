@@ -79,7 +79,6 @@ public class SplashScreenActivity extends Activity {
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
         }
 
         boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
@@ -132,7 +131,6 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
             }
 
             int scale = 1;
@@ -154,7 +152,6 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         } catch (FileNotFoundException e) {
         }
@@ -189,7 +186,6 @@ public class SplashScreenActivity extends Activity {
                         count += 100;
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                 } finally {
                     endSplashScreen();
                 }

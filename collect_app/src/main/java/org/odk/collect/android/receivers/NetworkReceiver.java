@@ -296,7 +296,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } catch (GooglePlayServicesAvailabilityException playEx) {
                 return null;
             } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
                 return null;
             } catch (GoogleAuthException e) {
                 // Failure. The call is not expected to ever succeed so it

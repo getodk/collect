@@ -364,10 +364,8 @@ public class DownloadFormsTask extends
             URL url = new URL(downloadUrl);
             uri = url.toURI();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             throw e;
         } catch (URISyntaxException e) {
-            e.printStackTrace();
             throw e;
         }
 
