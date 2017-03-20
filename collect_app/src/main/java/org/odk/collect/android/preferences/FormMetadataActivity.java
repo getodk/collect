@@ -7,7 +7,6 @@ import android.preference.PreferenceActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.PropertyManager;
-
 import static org.odk.collect.android.logic.PropertyManager.*;
 
 public class FormMetadataActivity extends PreferenceActivity {
@@ -22,6 +21,8 @@ public class FormMetadataActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_metadata_preferences);
+        setTitle(getString(R.string.form_metadata_title));
+
         PropertyInitializer pi = new PropertyInitializer(new PropertyManager(this));
         pi.init(KEY_USERNAME,       USERNAME_PROPERTY);
         pi.init(KEY_PHONE_NUMBER,   PHONE_NUMBER_PROPERTY);
@@ -32,14 +33,14 @@ public class FormMetadataActivity extends PreferenceActivity {
     }
 
     private class PropertyInitializer {
-        private final PropertyManager mgr;
+        private final PropertyManager propertyManager;
 
-        PropertyInitializer(PropertyManager mgr) {
-            this.mgr = mgr;
+        PropertyInitializer(PropertyManager propertyManager) {
+            this.propertyManager = propertyManager;
         }
 
         void init(String prefKey, final String propKey) {
-            String propVal = mgr.getSingularProperty(propKey);
+            String propVal = propertyManager.getSingularProperty(propKey);
             if (propVal != null) {
                 final EditTextPreference pref = (EditTextPreference) findPreference(prefKey);
                 pref.setSummary(propVal);
@@ -47,11 +48,10 @@ public class FormMetadataActivity extends PreferenceActivity {
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        System.out.println(propKey + " changed");
                         String newValueString = newValue.toString();
                         pref.setSummary(newValueString);
                         pref.setText(newValueString);
-                        mgr.setProperty(propKey, newValueString);
+                        propertyManager.setProperty(propKey, newValueString);
                         return true;
                     }
                 });
