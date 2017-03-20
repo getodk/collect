@@ -48,7 +48,7 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                                 .toString());
                         String value =
                                 (String) ((ListPreference) preference).getEntryValues()[index];
-                        ((ListPreference) preference).setSummary(value);
+                        preference.setSummary(value);
                         return true;
                     }
                 });

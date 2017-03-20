@@ -448,7 +448,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void disableMyLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mMyLocationOverlay.setEnabled(false);
             mMyLocationOverlay.disableFollowLocation();
             mMyLocationOverlay.disableMyLocation();
@@ -459,7 +459,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void upMyLocationOverlayLayers() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             overlayMyLocationLayers();
         } else {
             showGPSDisabledAlertToUser();
