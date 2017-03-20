@@ -157,7 +157,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
     }
 
-
     private void initMapPrefs() {
         final ListPreference mapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         final ListPreference mapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);

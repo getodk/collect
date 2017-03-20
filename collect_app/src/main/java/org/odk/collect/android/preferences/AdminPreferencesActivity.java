@@ -43,7 +43,6 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_FORM_PROCESSING_
  *         option)
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
-
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
     public static String ADMIN_PREFERENCES = "admin_prefs";
 

@@ -108,7 +108,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         ResponseMessageParser messageParser = null;
-
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
             // we already issued a head request and got a response,
