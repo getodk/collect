@@ -66,7 +66,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
     protected static final String oauth_fail = "OAUTH Error: ";
     protected static final String form_fail = "Form Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
-    private final static String GOOGLE_DRIVE_UPLOADS_FOLDER = "odk-uploads";
+    private final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
+    private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
     protected HashMap<String, String> mResults;
@@ -255,10 +257,10 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 }
                 c.close();
 
-                // try to get
+                // try to get root folder "Open Data Kit"
                 ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
                 try {
-                    getFilesFromDrive(files);
+                    getFilesFromDrive(GOOGLE_DRIVE_ROOT_FOLDER, files, null);
                 } catch (IOException e) {
                     e.printStackTrace();
                     mResults.put(id, form_fail + e.getMessage());
@@ -276,16 +278,85 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     }
                 }
 
-                // if folder is not found then create a new one
+                // if root folder is not found then create a new one
                 if (folder == null) {
                     try {
-                        folder = createFolderInDrive();
+                        folder = createFolderInDrive(GOOGLE_DRIVE_ROOT_FOLDER, null);
                     } catch (IOException e) {
                         e.printStackTrace();
                         mResults.put(id, form_fail + e.getMessage());
                         return false;
                     }
                 }
+
+                String rootFolderId = folder.getId();
+
+                // check if Submissions folder exists
+                files = new ArrayList<>();
+                try {
+                    getFilesFromDrive(GOOGLE_DRIVE_SUBFOLDER, files, rootFolderId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mResults.put(id, form_fail + e.getMessage());
+                    return false;
+                }
+
+                folder = null;
+
+                for (com.google.api.services.drive.model.File file : files) {
+                    if (folder == null) {
+                        folder = file;
+                    } else {
+                        mResults.put(id, form_fail + files.size() + " folders found");
+                        return false;
+                    }
+                }
+
+                // if sub folder is not found then create a new one
+                if (folder == null) {
+                    try {
+                        folder = createFolderInDrive(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        mResults.put(id, form_fail + e.getMessage());
+                        return false;
+                    }
+                }
+
+                String subFolderId = folder.getId();
+
+                // check if jrformId folder exists
+                files = new ArrayList<>();
+                try {
+                    getFilesFromDrive(jrFormId, files, subFolderId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mResults.put(id, form_fail + e.getMessage());
+                    return false;
+                }
+
+                folder = null;
+
+                for (com.google.api.services.drive.model.File file : files) {
+                    if (folder == null) {
+                        folder = file;
+                    } else {
+                        mResults.put(id, form_fail + files.size() + " folders found");
+                        return false;
+                    }
+                }
+
+                // if sub folder is not found then create a new one
+                if (folder == null) {
+                    try {
+                        folder = createFolderInDrive(jrFormId, subFolderId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        mResults.put(id, form_fail + e.getMessage());
+                        return false;
+                    }
+                }
+
                 String uploadedFileId;
 
                 // file is ready to be uploaded
@@ -633,13 +704,18 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         return file.getId();
     }
 
-    private com.google.api.services.drive.model.File createFolderInDrive() throws IOException {
+    private com.google.api.services.drive.model.File createFolderInDrive(String folderName,
+                                                                         String parentId)
+            throws IOException {
 
         //creating a new folder
         com.google.api.services.drive.model.File fileMetadata = new
                 com.google.api.services.drive.model.File();
-        fileMetadata.setName(GOOGLE_DRIVE_UPLOADS_FOLDER);
+        fileMetadata.setName(folderName);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
+        if (parentId != null) {
+            fileMetadata.setParents(Collections.singletonList(parentId));
+        }
 
         com.google.api.services.drive.model.File folder;
         folder = mDriveService.files().create(fileMetadata)
@@ -654,18 +730,28 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         mDriveService.permissions().create(folder.getId(), sharePermission)
                 .setFields("id")
                 .execute();
+
         return folder;
     }
 
-    private FileList getFilesFromDrive(ArrayList<com.google.api.services.drive.model.File> files)
-            throws IOException {
+    private FileList getFilesFromDrive(String folderName,
+                                       ArrayList<com.google.api.services.drive.model.File> files,
+                                       String parentId) throws IOException {
         FileList fileList;
         String pageToken;
         do {
-            fileList = mDriveService.files().list()
-                    .setQ("name = '" + GOOGLE_DRIVE_UPLOADS_FOLDER + "' and " +
-                            "mimeType = 'application/vnd.google-apps.folder'")
-                    .execute();
+            if (parentId == null) {
+                fileList = mDriveService.files().list()
+                        .setQ("name = '" + folderName + "' and " +
+                                "mimeType = 'application/vnd.google-apps.folder'")
+                        .execute();
+            } else {
+                fileList = mDriveService.files().list()
+                        .setQ("name = '" + folderName + "' and " +
+                                "mimeType = 'application/vnd.google-apps.folder'" +
+                                " and '" + parentId + "' in parents")
+                        .execute();
+            }
             for (com.google.api.services.drive.model.File file : fileList.getFiles()) {
                 files.add(file);
             }
