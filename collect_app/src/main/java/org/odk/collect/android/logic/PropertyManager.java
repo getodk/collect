@@ -31,11 +31,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Used to return device properties to JavaRosa
+ * Returns device properties to JavaRosa
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-
 public class PropertyManager implements IPropertyManager {
 
     private static final String TAG = "PropertyManager";
@@ -51,29 +50,50 @@ public class PropertyManager implements IPropertyManager {
     public final static String USERNAME_PROPERTY            = "username";
     public final static String EMAIL_PROPERTY               = "email";
 
-
     public String getName() {
         return "Property Manager";
     }
 
+    private class IdAndPrefix {
+        String id;
+        String prefix;
+
+        IdAndPrefix(String id, String prefix) {
+            this.id = id;
+            this.prefix = prefix;
+        }
+    }
 
     public PropertyManager(Context context) {
         Log.i(TAG, "calling constructor");
 
         mProperties = new HashMap<>();
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
+        // User-defined properties
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        initUserDefinedProperty(preferences, PHONE_NUMBER_PROPERTY,    "tel");
+        initUserDefinedProperty(preferences, USERNAME_PROPERTY,        "username");
+        initUserDefinedProperty(preferences, EMAIL_PROPERTY,           "mailto");
+
+        // Device-defined properties
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        IdAndPrefix idp = findDeviceId(context, telephonyManager);
+        putProperty(DEVICE_ID_PROPERTY,     idp.prefix,    idp.id);
+        putProperty(SUBSCRIBER_ID_PROPERTY, "imsi",        telephonyManager.getSubscriberId());
+        putProperty(SIM_SERIAL_PROPERTY,    "simserial",   telephonyManager.getSimSerialNumber());
+    }
+
+    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {
+        final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = telephonyManager.getDeviceId();
-        String orDeviceId = null;
+        String prefix = null;
+
         if (deviceId != null) {
             if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
-                deviceId =
-                        Settings.Secure
-                                .getString(context.getContentResolver(),
-                                        Settings.Secure.ANDROID_ID);
-                orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
+                deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
+                prefix = androidIdName;
             } else {
-                orDeviceId = "imei:" + deviceId;
+                prefix = "imei";
             }
         }
 
@@ -86,39 +106,17 @@ public class PropertyManager implements IPropertyManager {
             WifiInfo info = wifi.getConnectionInfo();
             if (info != null && !ANDROID6_FAKE_MAC.equals(info.getMacAddress())) {
                 deviceId = info.getMacAddress();
-                orDeviceId = "mac:" + deviceId;
+                prefix = "mac";
             }
         }
 
         // if it is still null, use ANDROID_ID
         if (deviceId == null) {
-            deviceId =
-                    Settings.Secure
-                            .getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-            orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
+            deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
+            prefix = androidIdName;
         }
 
-        mProperties.put(DEVICE_ID_PROPERTY, deviceId);
-        mProperties.put(withUri(DEVICE_ID_PROPERTY), orDeviceId);
-
-        String value;
-
-        value = telephonyManager.getSubscriberId();
-        if (value != null) {
-            mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
-            mProperties.put(withUri(SUBSCRIBER_ID_PROPERTY), "imsi:" + value);
-        }
-        value = telephonyManager.getSimSerialNumber();
-        if (value != null) {
-            mProperties.put(SIM_SERIAL_PROPERTY, value);
-            mProperties.put(withUri(SIM_SERIAL_PROPERTY), "simserial:" + value);
-        }
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        initFromPref(preferences, PHONE_NUMBER_PROPERTY,    "tel:");
-        initFromPref(preferences, USERNAME_PROPERTY,        "username:");
-        initFromPref(preferences, EMAIL_PROPERTY,           "mailto:");
+        return new IdAndPrefix(deviceId, prefix);
     }
 
     /**
@@ -127,11 +125,15 @@ public class PropertyManager implements IPropertyManager {
      * @param propName the name of the property to set
      * @param prefix the string prepended to the value for the associated “with URI” property
      */
-    private void initFromPref(SharedPreferences settings, String propName, String prefix) {
+    private void initUserDefinedProperty(SharedPreferences settings, String propName, String prefix) {
         String value = settings.getString(propName, null);
+        putProperty(propName, prefix, value);
+    }
+
+    private void putProperty(String propName, String prefix, String value) {
         if (value != null) {
             mProperties.put(propName, value);
-            mProperties.put(withUri(propName), prefix + value);
+            mProperties.put(withUri(propName), prefix + ":" + value);
         }
     }
 
@@ -140,34 +142,28 @@ public class PropertyManager implements IPropertyManager {
         return null;
     }
 
-
     @Override
     public String getSingularProperty(String propertyName) {
         // for now, all property names are in english...
         return mProperties.get(propertyName.toLowerCase(Locale.ENGLISH));
     }
 
-
     @Override
     public void setProperty(String propertyName, String propertyValue) {
     }
-
 
     @Override
     public void setProperty(String propertyName, List<String> propertyValue) {
     }
 
-
     @Override
     public void addRules(IPropertyRules rules) {
     }
-
 
     @Override
     public List<IPropertyRules> getRules() {
         return null;
     }
-
 
     public static String withUri(String name) {
         return "uri:" + name;
