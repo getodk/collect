@@ -16,7 +16,6 @@ public class FormMetadataActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_metadata_preferences);
-        setTitle(getString(R.string.form_metadata_title));
 
         PropertyInitializer pi = new PropertyInitializer(new PropertyManager(this));
         pi.init(
