@@ -115,7 +115,6 @@
   <string name="server_requires_auth">ဆာဗာမွ မွန္ကန္ေၾကာင္း ေထာက္ခံရန္လိုအပ္ပါသည္</string>
   <string name="server_url">ရင္းျမစ္ေနရာ</string>
   <string name="server_preferences">ဆာဗာ</string>
-  <string name="toggle_selected">အားလံုးခ်ိတ္ဆက္ရန္</string>
   <string name="trigger">ဆက္လက္လုပ္ေဆာင္ရန္</string>
   <string name="uploading_data">ပံုစံေပးပို႔ျခင္း</string>
   <string name="url_error">ရင္းျမစ္ေနရာမွားယြင္းေနပါသည္</string>
@@ -233,4 +232,8 @@
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

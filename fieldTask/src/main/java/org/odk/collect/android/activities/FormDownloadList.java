@@ -126,7 +126,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_forms));
+        setTitle(getString(R.string.get_forms));
         mAlertMsg = getString(R.string.please_wait);
 
         // need white background before load
@@ -149,6 +149,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             @Override
             public void onClick(View v) {
                 mDownloadButton.setEnabled(ListViewUtils.toggleChecked(getListView()));
+                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
             }
         });
 
@@ -263,6 +264,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
 
         Object o = getListAdapter().getItem(position);
@@ -278,7 +280,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                     "<missing form detail>");
         }
     }
-
 
     /**
      * Starts the download task and shows the progress dialog.
@@ -311,6 +312,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             mDownloadFormListTask = new DownloadFormListTask();
             mDownloadFormListTask.setDownloaderListener(this);
             mDownloadFormListTask.execute();
+
         }
     }
 
@@ -620,9 +622,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(ListViewUtils.selectedItemCount(getListView()) > 0);
 
-
             Intent intent = new Intent("refresh");  // smap refresh task list
             LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
+            ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         }
     }
 

@@ -124,7 +124,6 @@
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
-  <string name="toggle_selected">تحديد الكل</string>
   <string name="trigger">حسنًا. الرجاء المواصلة.</string>
   <string name="uploading_data">جاري ارسال الاستمارة</string>
   <string name="url_error">غدراً، الرابط خاطئ!</string>
@@ -330,4 +329,8 @@
   <string name="google_play_services_error_occured">غير قادرعلى الوصول الى خرائط الجوجل. هل خدمات تشغيل الجوجل مثبتة؟</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

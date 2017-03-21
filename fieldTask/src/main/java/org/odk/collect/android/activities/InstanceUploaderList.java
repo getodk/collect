@@ -155,6 +155,7 @@ public class InstanceUploaderList extends ListActivity implements
             public void onClick(View v) {
                 ListView lv = getListView();
                 boolean allChecked = ListViewUtils.toggleChecked(lv);
+                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
 
                 // sync up internal state
                 mSelected.clear();
@@ -185,8 +186,7 @@ public class InstanceUploaderList extends ListActivity implements
         mUploadButton.setEnabled(mSelected.size() > 0);
 
         // set title
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.send_data));
+        setTitle(getString(R.string.send_data));
 
         // if current activity is being reinitialized due to changing
         // orientation restore all check
@@ -288,7 +288,7 @@ public class InstanceUploaderList extends ListActivity implements
         }
 
         mUploadButton.setEnabled(mSelected.size() > 0);
-
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
     }
 
     @Override

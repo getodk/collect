@@ -1,0 +1,141 @@
+import com.android.ddmlib.DdmPreferences
+
+/**************************************************************************************************
+ GRADLE CONFIG
+ *************************************************************************************************/
+
+apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+
+DdmPreferences.setTimeOut(60000)
+
+ant.condition(property: "os", value: "windows") { os(family: "windows") }
+ant.condition(property: "os", value: "unix") { os(family: "unix") }
+
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            switch (ant.properties.os) {
+                case 'windows':
+                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty'
+                    break
+                case 'unix':
+                    commandLine 'git', 'describe', '--tags', '--dirty'
+                    break
+            }
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null;
+    }
+}
+
+android {
+    compileSdkVersion(22)
+    buildToolsVersion("25.0.0")
+
+    defaultConfig {
+        applicationId("org.odk.collect.android")
+        minSdkVersion(9)
+        targetSdkVersion(9)
+        versionCode(1067)
+        versionName getVersionName()
+        testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            // Proguard rules will need to be carefully revised before turning on minification --
+            // the current configuration breaks Google Drive API.
+            // minifyEnabled(true)
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        debug {
+            debuggable(true)
+            // Allows AndroidTest JaCoCo reports to be generated
+            testCoverageEnabled(true)
+        }
+    }
+
+    packagingOptions {
+        // Pick first occurrence of any files that cause conflicts, as defined
+        // in common.gradle
+        pickFirst 'META-INF/DEPENDENCIES'
+        pickFirst 'META-INF/LICENSE'
+        pickFirst 'META-INF/LICENSE.txt'
+        pickFirst 'META-INF/NOTICE'
+        pickFirst 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
+        pickFirst 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec'
+        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
+        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    dexOptions {
+        javaMaxHeapSize "2048M"
+    }
+
+    lintOptions {
+        abortOnError true
+    }
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    classpath = files()
+}
+
+
+
+configurations.all {
+    resolutionStrategy {
+        cacheDynamicVersionsFor(0, 'seconds')
+        cacheChangingModulesFor(0, 'seconds')
+    }
+    transitive = true
+}
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:all"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
+    compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
+    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
+    compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
+    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
+    compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
+    compile group: 'org.osmdroid', name: 'osmdroid-android', version: '4.2'
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
+
+    // Testing-only dependencies
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
+    testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
+    testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
+    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '24.0.0'
+    androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
+    androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
+}
+
+apply plugin: 'com.google.gms.google-services'

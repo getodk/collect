@@ -155,7 +155,8 @@ public class SelectOneWidget extends QuestionWidget implements
         for (RadioButton button : this.buttons) {
             if (button.isChecked()) {
                 button.setChecked(false);
-                return;
+                clearNextLevelsOfCascadingSelect();
+                break;
             }
         }
     }
@@ -199,6 +200,7 @@ public class SelectOneWidget extends QuestionWidget implements
         for (RadioButton button : buttons) {
             if (button.isChecked() && !(buttonView == button)) {
                 button.setChecked(false);
+                clearNextLevelsOfCascadingSelect();
             }
         }
 

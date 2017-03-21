@@ -103,7 +103,6 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                 public void onClick(View v) {
                     ListView lv = getListView();
                     boolean allChecked = ListViewUtils.toggleChecked(lv);
-
                     // sync up internal state
                     mSelected.clear();
                     if (allChecked) {
@@ -112,6 +111,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                             mSelected.add(getListAdapter().getItemId(pos));
                         }
                     }
+                    ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
                     mDeleteButton.setEnabled(allChecked);
                 }
         });
@@ -130,6 +130,10 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
+
+        if (getListView().getCount() == 0) {
+            mToggleButton.setEnabled(false);
+        }
 
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(syncMsgKey)) {
@@ -236,6 +240,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "createDeleteFormsDialog", "delete");
                                 deleteSelectedForms();
+                                if (getListView().getCount() == mSelected.size()) {
+                                    mToggleButton.setEnabled(false);
+                                }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE: // do nothing
                                 Collect.getInstance().getActivityLogger().logAction(this,
@@ -245,9 +252,9 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
                     }
                 };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.delete_yes),
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delete_yes),
                 dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.delete_no),
+        mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delete_no),
                 dialogYesNoListener);
         mAlertDialog.show();
     }
@@ -289,6 +296,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 Long.toString(k));
 
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(!(mSelected.size() == 0));
 
     }

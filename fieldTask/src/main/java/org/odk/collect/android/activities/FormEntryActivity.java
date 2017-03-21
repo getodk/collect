@@ -91,6 +91,7 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -237,6 +238,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
+    private boolean mShowNavigationButtons=false;
 
     /** Called when the activity is first created. */
     @Override
@@ -253,8 +255,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         setContentView(R.layout.form_entry);
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.loading_form));
+        setTitle(getString(R.string.loading_form));
 
         mErrorMessage = null;
 
@@ -951,6 +952,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 Intent i = new Intent(this, FormHierarchyActivity.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
             case MENU_PREFERENCES:
@@ -1111,8 +1113,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private View createView(int event, boolean advancingPage) {
         FormController formController = Collect.getInstance()
                 .getFormController();
-        setTitle(getString(R.string.app_name) + " > "
-                + formController.getFormTitle());
+        setTitle(formController.getFormTitle());
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1233,10 +1234,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             }
                         });
 
-                if (mBackButton.isShown()) {
+                if (mShowNavigationButtons) {
                     mBackButton.setEnabled(true);
-                }
-                if (mNextButton.isShown()) {
                     mNextButton.setEnabled(false);
                 }
 
@@ -1290,8 +1289,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 }
 
-                if (mBackButton.isShown() && mNextButton.isShown()) {
-                    mBackButton.setEnabled(true);
+                if (mShowNavigationButtons) {
+                    adjustBackNavigationButtonVisibility();
                     mNextButton.setEnabled(true);
                 }
                 return odkv;
@@ -1311,6 +1310,26 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     createErrorDialog(e.getCause().getMessage(), EXIT);
                 }
                 return createView(event, advancingPage);
+        }
+    }
+
+    /**
+     * Disables the back button if it is first question....
+     */
+    private void adjustBackNavigationButtonVisibility(){
+        FormController formController = Collect.getInstance()
+                .getFormController();
+        try {
+            boolean firstQuestion = formController.stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM;
+            mBackButton.setEnabled(!firstQuestion);
+            formController.stepToNextScreenEvent();
+            if (formController.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                mBackButton.setEnabled(true);
+                formController.stepToNextScreenEvent();
+            }
+        } catch (JavaRosaException e) {
+            mBackButton.setEnabled(true);
+            e.printStackTrace();
         }
     }
 
@@ -2372,12 +2391,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         String navigation = sharedPreferences.getString(
                 PreferencesActivity.KEY_NAVIGATION,
                 PreferencesActivity.KEY_NAVIGATION);
-        Boolean showButtons = false;
         if (navigation.contains(PreferencesActivity.NAVIGATION_BUTTONS)) {
-            showButtons = true;
+            mShowNavigationButtons = true;
         }
 
-        if (showButtons) {
+        if (mShowNavigationButtons) {
             mBackButton.setVisibility(View.VISIBLE);
             mNextButton.setVisibility(View.VISIBLE);
         } else {
@@ -2610,9 +2628,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // we've just loaded a saved form, so start in the hierarchy
                 // view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                startActivity(i);
-                return; // so we don't show the intro screen before jumping to
-                // the hierarchy
+                if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                    startActivity(i);
+                    return; // so we don't show the intro screen before jumping to
+                    // the hierarchy
+                } else {
+                    if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.VIEW_SENT)) {
+                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                        startActivity(i);
+                    }
+                    finish();
+                }
             }
         }
 

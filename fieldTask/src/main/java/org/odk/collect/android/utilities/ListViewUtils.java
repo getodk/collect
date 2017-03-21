@@ -1,12 +1,15 @@
 package org.odk.collect.android.utilities;
 
 import android.util.SparseBooleanArray;
+import android.widget.Button;
 import android.widget.ListView;
 
+import org.odk.collect.android.R;
+
 /**
- *  Utilities for checking/unchecking list views.
+ * Utilities for checking/unchecking list views.
  *
- *  @author Jeff Wishnie (jeff@wishnie.org)
+ * @author Jeff Wishnie (jeff@wishnie.org)
  */
 
 public final class ListViewUtils {
@@ -55,6 +58,15 @@ public final class ListViewUtils {
 
         for (int x = 0; x < lv.getCount(); x++) {
             lv.setItemChecked(x, check);
+        }
+    }
+
+    // Function to toggle button label
+    public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
+        if (ListViewUtils.selectedItemCount(lv) != lv.getCount()) {
+            mToggleButton.setText(R.string.select_all);
+        } else {
+            mToggleButton.setText(R.string.clear_all);
         }
     }
 }

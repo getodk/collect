@@ -119,6 +119,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="@string/analytics_preferences"
+        android:title="@string/analytics_preferences" >
+
+        <CheckBoxPreference
+            android:id="@+id/analytics"
+            android:defaultValue="true"
+            android:key="analytics"
+            android:summary="@string/analytics_summary"
+            android:title="@string/analytics" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/general_settings_about" >
 
         <PreferenceScreen

@@ -122,7 +122,6 @@
   <string name="server_requires_auth">Server Requires Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">ตั้งค่าเซิร์ฟเวอร์</string>
-  <string name="toggle_selected">เลือกทั้งหมด</string>
   <string name="trigger">ตกลง โปรดดำเนินการต่อ</string>
   <string name="uploading_data">กำลังส่งแบบสำรวจ</string>
   <string name="url_error">ขออภัย URL ไม่ถูกต้อง</string>
@@ -322,4 +321,8 @@
 </string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

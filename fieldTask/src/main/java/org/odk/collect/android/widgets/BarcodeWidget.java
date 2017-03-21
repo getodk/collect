@@ -137,12 +137,10 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-        //smap
         String sResponse = (String) answer;
         if (sResponse != null) {      // It looks like the answer is not set to null even if no barcode captured, however it seems prudent to check
-            sResponse = sResponse.replaceAll("\\p{C}", ".");
+            sResponse = sResponse.replaceAll("\\p{C}", "");
         }
-        // End smap
         mStringAnswer.setText(sResponse);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }

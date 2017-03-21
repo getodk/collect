@@ -44,8 +44,7 @@ public class FileManagerTabs extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.app_name) + " > "
-                + getString(R.string.manage_files));
+        setTitle(getString(R.string.manage_files));
 
         final TabHost tabHost = getTabHost();
         tabHost.setBackgroundColor(Color.WHITE);

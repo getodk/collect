@@ -21,6 +21,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IDataReference;
 import org.javarosa.core.model.IFormElement;
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -902,6 +903,10 @@ public class FormController {
 
     public String getQuestionPromptConstraintText(FormIndex index) {
         return mFormEntryController.getModel().getQuestionPrompt(index).getConstraintText();
+    }
+
+    public boolean currentCaptionPromptIsQuestion() {
+        return getCaptionPrompt().getFormElement() instanceof QuestionDef;
     }
 
     public String getQuestionPromptRequiredText(FormIndex index) {

@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Для доступу до сервера необхідно авторизуватись</string>
   <string name="server_url">Адреса URL</string>
   <string name="server_preferences">Налаштування сервера</string>
-  <string name="toggle_selected">Обрати все</string>
   <string name="trigger">Добре. Будь ласка, продовжуйте.</string>
   <string name="uploading_data">Надсилаю анкету</string>
   <string name="url_error">Вибачте, посилання недійсне!</string>
@@ -340,4 +339,8 @@
   <string name="map_basemap_behavior">Обрати базову мапу</string>
   <string name="show_map_basemap">Показати параметри базової мапи</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

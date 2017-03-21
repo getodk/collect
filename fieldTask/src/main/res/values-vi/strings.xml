@@ -121,7 +121,6 @@
   <string name="server_requires_auth">Máy chủ yêu cầu xác thực</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Máy chủ</string>
-  <string name="toggle_selected">Đánh dấu tất</string>
   <string name="trigger">OK. Hãy tiếp tục.</string>
   <string name="uploading_data">Gửi biểu mẫu</string>
   <string name="url_error">Xin lỗi URL không đúng!</string>
@@ -243,4 +242,8 @@
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

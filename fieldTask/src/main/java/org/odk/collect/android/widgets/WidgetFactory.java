@@ -93,7 +93,13 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            questionWidget = new ItemsetWidget(context, fep, readOnlyOverride);
+                            if (appearance.startsWith("quick")) {
+                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
+                                        true);
+                            } else {
+                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
+                                        false);
+                            }
                         } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
@@ -159,19 +165,7 @@ public class WidgetFactory {
                     }
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
-                }
-                // else if (appearance != null && appearance.contains("autocomplete")) {
-                // String filterType = null;
-                // try {
-                // filterType = appearance.substring(appearance.indexOf('-') + 1);
-                // } catch (Exception e) {
-                // // Do nothing, leave filerType null
-                // Log.e("WidgetFactory", "Exception parsing filterType");
-                // }
-                // questionWidget = new AutoCompleteWidget(context, fep, filterType);
-                //
-                // }
-                else if (appearance.startsWith("quick")) {
+                } else if (appearance.startsWith("quick")) {
                     questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
@@ -179,7 +173,7 @@ public class WidgetFactory {
                     questionWidget = new ListWidget(context, fep, true);
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains("search")) {
+                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep);
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap - add readOnlyOverride

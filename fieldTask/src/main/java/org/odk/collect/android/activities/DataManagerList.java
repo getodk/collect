@@ -33,6 +33,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.ListViewUtils;
@@ -87,6 +88,7 @@ public class DataManagerList extends ListActivity implements
             public void onClick(View v) {
                 ListView lv = getListView();
                 boolean allChecked = ListViewUtils.toggleChecked(lv);
+                ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
 
                 // sync up internal state
                 mSelected.clear();
@@ -100,7 +102,8 @@ public class DataManagerList extends ListActivity implements
             }
         });
 
-        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
+        Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection, null,
                 InstanceColumns.DISPLAY_NAME + " ASC");
 
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME,
@@ -115,6 +118,10 @@ public class DataManagerList extends ListActivity implements
         mDeleteButton.setEnabled(false);
 
         mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
+
+        if (getListView().getCount() == 0) {
+            mToggleButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -200,6 +207,9 @@ public class DataManagerList extends ListActivity implements
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "createDeleteInstancesDialog", "delete");
                                 deleteSelectedInstances();
+                                if (getListView().getCount() == mSelected.size()) {
+                                    mToggleButton.setEnabled(false);
+                                }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE: // do nothing
                                 Collect.getInstance().getActivityLogger().logAction(this,
@@ -209,9 +219,9 @@ public class DataManagerList extends ListActivity implements
                     }
                 };
         mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.delete_yes),
+        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delete_yes),
                 dialogYesNoListener);
-        mAlertDialog.setButton2(getString(R.string.delete_no),
+        mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delete_no),
                 dialogYesNoListener);
         mAlertDialog.show();
     }
@@ -251,6 +261,7 @@ public class DataManagerList extends ListActivity implements
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 Long.toString(k));
 
+        ListViewUtils.toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(mSelected.size() > 0);
     }
 

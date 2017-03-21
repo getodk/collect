@@ -67,7 +67,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
             }
         }
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_location));
+        setTitle(getString(R.string.get_location));
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
