@@ -255,7 +255,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                                 results.getString(
                                         results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + "-" + result.get(id) + "\n\n");
+                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
                     }
                 }
             } catch (SQLException e) {

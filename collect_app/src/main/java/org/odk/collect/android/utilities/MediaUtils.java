@@ -570,7 +570,6 @@ public class MediaUtils {
             }
             return new File(filePath);
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(outputStream);
