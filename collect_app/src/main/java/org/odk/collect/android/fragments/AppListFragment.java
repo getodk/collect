@@ -137,9 +137,9 @@ abstract class AppListFragment extends ListFragment {
 
             case MENU_FILTER:
                 if (mSearchBoxLayout.getVisibility() == View.GONE) {
-                    mSearchBoxLayout.setVisibility(View.VISIBLE);
+                    showSearchBox();
                 } else {
-                    closeSearchBox();
+                    hideSearchBox();
                 }
                 return true;
         }
@@ -175,7 +175,7 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void performSelectedSearch(int position) {
-        closeSearchBox();
+        hideSearchBox();
         switch (position) {
             case 0:
                 sortByNameAsc();
@@ -252,10 +252,15 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
-    private void closeSearchBox() {
+    private void hideSearchBox() {
         mInputSearch.setText("");
         mSearchBoxLayout.setVisibility(View.GONE);
         Collect.getInstance().hideKeyboard(mInputSearch);
+    }
+
+    private void showSearchBox() {
+        mSearchBoxLayout.setVisibility(View.VISIBLE);
+        Collect.getInstance().showKeyboard(mInputSearch);
     }
 
     protected abstract void filter(CharSequence charSequence);

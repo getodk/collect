@@ -232,6 +232,12 @@ public class Collect extends Application {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public void showKeyboard(View view) {
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    }
+
     @Override
     public void onCreate() {
         singleton = this;

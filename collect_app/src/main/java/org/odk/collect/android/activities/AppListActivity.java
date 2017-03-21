@@ -118,9 +118,9 @@ abstract class AppListActivity extends ListActivity {
 
             case MENU_FILTER:
                 if (mSearchBoxLayout.getVisibility() == View.GONE) {
-                    mSearchBoxLayout.setVisibility(View.VISIBLE);
+                    showSearchBox();
                 } else {
-                    closeSearchBox();
+                    hideSearchBox();
                 }
                 return true;
         }
@@ -162,10 +162,15 @@ abstract class AppListActivity extends ListActivity {
         });
     }
 
-    private void closeSearchBox() {
+    private void hideSearchBox() {
         mInputSearch.setText("");
         mSearchBoxLayout.setVisibility(View.GONE);
         Collect.getInstance().hideKeyboard(mInputSearch);
+    }
+
+    private void showSearchBox() {
+        mSearchBoxLayout.setVisibility(View.VISIBLE);
+        Collect.getInstance().showKeyboard(mInputSearch);
     }
 
     private void setupDrawerItems() {
@@ -189,7 +194,7 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void performSelectedSearch(int position) {
-        closeSearchBox();
+        hideSearchBox();
         switch(position) {
             case 0:
                 sortByNameAsc();
