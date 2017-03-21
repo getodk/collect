@@ -190,8 +190,15 @@ public class MainListActivity extends FragmentActivity  {
                     tabsActivity.completeTask(entry);
                 }
 	    	} else {
-	    		Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, entry.id);
-	    		startActivity(new Intent(Intent.ACTION_EDIT, formUri));
+
+                Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, entry.id);
+
+                // Use an explicit intent
+                Intent i = new Intent(tabsActivity, org.odk.collect.android.activities.FormEntryActivity.class);
+                i.setData(formUri);
+                startActivity(i);
+
+	    		//startActivity(new Intent(Intent.ACTION_EDIT, formUri));
 	    	}
 
 	    }

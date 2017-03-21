@@ -91,7 +91,7 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
 			r.setLayoutParams(trLayout);
 			r.setBackgroundColor(0xff0000); 
 	        TextView text1 = new TextView(this);
-	        text1.setText("Status");
+	        text1.setText(R.string.smap_status);
 	        text1.setBackgroundColor(0xff0000);
 	        TextView text2 = new TextView(this);
 	        text2.setText(taskEntry.taskStatus);
@@ -130,14 +130,14 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
     		if(Utilities.canReject(taskEntry.taskStatus)) {
 
     	        Button b = new Button(this);
-    	        b.setText("Reject Task");
+    	        b.setText(getString(R.string.smap_reject_task));
     	        b.setId(R.id.reject_button);
     	        b.setOnClickListener(this);
     	        buttons.addView(b);
     		}
     		if(Utilities.canComplete(taskEntry.taskStatus)) {
     	        Button b = new Button(this);
-    	        b.setText("Complete Task");
+    	        b.setText(R.string.smap_complete_task);
     	        b.setId(R.id.complete_button);
     	        b.setOnClickListener(this);
     	        buttons.addView(b);
@@ -218,7 +218,7 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
 		Cursor cInstanceProvider = managedQuery(InstanceColumns.CONTENT_URI, 
 				null, where, whereArgs, null);
 		if(cInstanceProvider.getCount() != 1) {
-			Log.e("MainListActivity:completeTask", "Unique instance not found: count is:" + 
+			Log.e("TaskAddressActivity", "Unique instance not found: count is:" +
 					cInstanceProvider.getCount());
 		} else {
 			cInstanceProvider.moveToFirst();

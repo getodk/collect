@@ -867,15 +867,20 @@ public class MainTabsActivity extends TabActivity implements
                 surveyNotes = cInstanceProvider.getString(
                         cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
                 // Start activity to complete form
-                Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
 
-                i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
+                // Use an explicit intent
+                Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+                i.setData(instanceUri);
+
+                //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+
+                //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
                 i.putExtra(FormEntryActivity.KEY_TASK, taskId);
                 i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
                 i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
-                if (instancePath != null) {    // TODO Don't think this is needed
-                    i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-                }
+                //if (instancePath != null) {    // TODO Don't think this is needed
+                //    i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+                //}
                 startActivity(i);
             }
             cInstanceProvider.close();

@@ -67,4 +67,5 @@
     <string name="smap_downloading">Downloading %1$d forms</string>
     <string name="smap_submitting">"Submitting %1$d finalised surveys"</string>
     <string name="smap_update_task_status">"Update status of tasks on the server"</string>
+    <string name="smap_status">"Status"</string>
 </resources>
