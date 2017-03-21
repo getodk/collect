@@ -25,7 +25,6 @@ import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
-import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +50,6 @@ public class PropertyManager implements IPropertyManager {
     public final static String PHONE_NUMBER_PROPERTY        = "phonenumber";
     public final static String USERNAME_PROPERTY            = "username";
     public final static String EMAIL_PROPERTY               = "email";
-    public final static String OR_DEVICE_ID_PROPERTY        = withUri(DEVICE_ID_PROPERTY);
-    public final static String OR_SUBSCRIBER_ID_PROPERTY    = withUri(SUBSCRIBER_ID_PROPERTY);
-    public final static String OR_SIM_SERIAL_PROPERTY       = withUri(SIM_SERIAL_PROPERTY);
-    public final static String OR_PHONE_NUMBER_PROPERTY     = withUri(PHONE_NUMBER_PROPERTY);
-    public final static String OR_USERNAME_PROPERTY         = withUri(USERNAME_PROPERTY);
-    public final static String OR_EMAIL_PROPERTY            = withUri(EMAIL_PROPERTY);
 
 
     public String getName() {
@@ -106,37 +99,39 @@ public class PropertyManager implements IPropertyManager {
         }
 
         mProperties.put(DEVICE_ID_PROPERTY, deviceId);
-        mProperties.put(OR_DEVICE_ID_PROPERTY, orDeviceId);
+        mProperties.put(withUri(DEVICE_ID_PROPERTY), orDeviceId);
 
         String value;
 
         value = telephonyManager.getSubscriberId();
         if (value != null) {
             mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
-            mProperties.put(OR_SUBSCRIBER_ID_PROPERTY, "imsi:" + value);
+            mProperties.put(withUri(SUBSCRIBER_ID_PROPERTY), "imsi:" + value);
         }
         value = telephonyManager.getSimSerialNumber();
         if (value != null) {
             mProperties.put(SIM_SERIAL_PROPERTY, value);
-            mProperties.put(OR_SIM_SERIAL_PROPERTY, "simserial:" + value);
-        }
-        value = telephonyManager.getLine1Number();
-        if (value != null) {
-            mProperties.put(PHONE_NUMBER_PROPERTY, value);
-            mProperties.put(OR_PHONE_NUMBER_PROPERTY, "tel:" + value);
+            mProperties.put(withUri(SIM_SERIAL_PROPERTY), "simserial:" + value);
         }
 
-        // Get the username from the settings
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        value = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        initFromPref(preferences, PHONE_NUMBER_PROPERTY,    "tel:");
+        initFromPref(preferences, USERNAME_PROPERTY,        "username:");
+        initFromPref(preferences, EMAIL_PROPERTY,           "mailto:");
+    }
+
+    /**
+     * Initializes a property and its associated “with URI” property, from shared preferences.
+     * @param settings the shared preferences object to be used
+     * @param propName the name of the property to set
+     * @param prefix the string prepended to the value for the associated “with URI” property
+     */
+    private void initFromPref(SharedPreferences settings, String propName, String prefix) {
+        String value = settings.getString(propName, null);
         if (value != null) {
-            mProperties.put(USERNAME_PROPERTY, value);
-            mProperties.put(OR_USERNAME_PROPERTY, "username:" + value);
-        }
-        value = settings.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-        if (value != null) {
-            mProperties.put(EMAIL_PROPERTY, value);
-            mProperties.put(OR_EMAIL_PROPERTY, "mailto:" + value);
+            mProperties.put(propName, value);
+            mProperties.put(withUri(propName), prefix + value);
         }
     }
 
@@ -174,7 +169,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
 
-    private static String withUri(String name) {
+    public static String withUri(String name) {
         return "uri:" + name;
     }
 }

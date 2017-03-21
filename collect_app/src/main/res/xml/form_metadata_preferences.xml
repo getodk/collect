@@ -9,7 +9,7 @@
         <EditTextPreference
             android:id="@+id/metadata_phone_number"
             android:inputType="phone"
-            android:key="phone_number"
+            android:key="phonenumber"
             android:title="@string/phone_number" />
         <EditTextPreference
             android:id="@+id/metadata_email"
@@ -22,17 +22,17 @@
         <EditTextPreference
             android:id="@+id/device_id"
             android:editable="false"
-            android:key="device_id"
+            android:key="deviceid"
             android:title="@string/device_id" />
         <EditTextPreference
             android:id="@+id/subscriber_id"
             android:editable="false"
-            android:key="subscriber_id"
+            android:key="subscriberid"
             android:title="@string/subscriber_id" />
         <EditTextPreference
             android:id="@+id/sim_serial_id"
             android:editable="false"
-            android:key="sim_serial_id"
+            android:key="simserial"
             android:title="@string/sim_serial_id" />
     </PreferenceCategory>
 </PreferenceScreen>
