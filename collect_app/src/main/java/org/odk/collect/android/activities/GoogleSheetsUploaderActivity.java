@@ -558,10 +558,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
-                e.printStackTrace();
             }
             return mResults;
         }

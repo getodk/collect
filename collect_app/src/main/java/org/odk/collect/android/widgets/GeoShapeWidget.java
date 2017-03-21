@@ -190,7 +190,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 return new StringData(s);
             } catch (NumberFormatException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
                 return null;
             }
         }

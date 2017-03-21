@@ -148,7 +148,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayColor = Color.parseColor(playColorString);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
             }
         }
         questionMediaLayout.setPlayTextColor(mPlayColor);
@@ -159,7 +158,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayBackgroundColor = Color.parseColor(playBackgroundColorString);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
             }
         }
         questionMediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
@@ -408,7 +406,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                e.printStackTrace();
             }
         }
     }
