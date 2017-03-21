@@ -27,8 +27,6 @@ public final class AdminKeys {
             static final String KEY_CHANGE_ADMIN_PASSWORD     = "admin_password";
             static final String KEY_CHANGE_GOOGLE_ACCOUNT     = "change_google_account";
     private static final String KEY_CHANGE_SERVER             = "change_server";
-    private static final String KEY_CHANGE_USERNAME           = "change_username";
-    private static final String KEY_CHANGE_PASSWORD           = "change_password";
     private static final String KEY_CHANGE_PROTOCOL_SETTINGS  = "change_protocol_settings";
 
     // client
@@ -73,9 +71,6 @@ public final class AdminKeys {
         ag(KEY_SHOW_MAP_SDK,               PreferenceKeys.KEY_MAP_SDK),
         ag(KEY_SHOW_MAP_BASEMAP,           PreferenceKeys.KEY_MAP_BASEMAP),
         ag(KEY_NAVIGATION,                 PreferenceKeys.KEY_NAVIGATION),
-        ag(KEY_CHANGE_PASSWORD,            PreferenceKeys.KEY_PASSWORD),
-        ag(KEY_CHANGE_USERNAME,            PreferenceKeys.KEY_USERNAME),
-        ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT),
         ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC)
     };
 }

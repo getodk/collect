@@ -38,7 +38,7 @@
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">ODK Password</string>
-<string name="change_protocol_settings_default">Platform Settings</string>
+<string name="change_protocol_settings_default">Platform settings</string>
 <string name="change_username">ODK Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 <string name="clear_answer">Remove response</string>
