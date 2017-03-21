@@ -57,12 +57,12 @@ import java.util.regex.Pattern;
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
-public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> extends
+public abstract class GoogleSheetsAbstractUploader extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
-    protected static final String drive_fail = "Media Error: ";
-    protected static final String oauth_fail = "OAUTH Error: ";
-    protected static final String form_fail = "Form Error: ";
+    private static final String drive_fail = "Media Error: ";
+    private static final String oauth_fail = "OAUTH Error: ";
+    private static final String form_fail = "Form Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
     private final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
@@ -741,13 +741,15 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             if (parentId == null) {
                 fileList = mDriveService.files().list()
                         .setQ("name = '" + folderName + "' and " +
-                                "mimeType = 'application/vnd.google-apps.folder'")
+                                "mimeType = 'application/vnd.google-apps.folder'" +
+                                " and trashed=false")
                         .execute();
             } else {
                 fileList = mDriveService.files().list()
                         .setQ("name = '" + folderName + "' and " +
                                 "mimeType = 'application/vnd.google-apps.folder'" +
-                                " and '" + parentId + "' in parents")
+                                " and '" + parentId + "' in parents" +
+                                " and trashed=false")
                         .execute();
             }
             for (com.google.api.services.drive.model.File file : fileList.getFiles()) {

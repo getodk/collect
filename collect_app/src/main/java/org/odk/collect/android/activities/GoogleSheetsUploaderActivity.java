@@ -55,8 +55,8 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.GoogleSheetsTask;
+import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -167,7 +167,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         }
     }
 
-    /**
+    /*
      * Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
      * account was selected and the device currently has online access. If any
@@ -186,7 +186,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         }
     }
 
-    /**
+    /*
      * Attempts to set the account used with the API credentials. If an account
      * name was previously saved it will use that one; otherwise an account
      * picker dialog will be shown to the user. Note that the setting the
@@ -525,7 +525,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     }
 
     private class GoogleSheetsInstanceUploaderTask extends
-            GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
+            GoogleSheetsAbstractUploader {
 
         GoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();

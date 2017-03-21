@@ -260,7 +260,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     private class GoogleSheetsAutoUploadTask extends
-            GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
+            GoogleSheetsAbstractUploader {
 
         private Context mContext;
 

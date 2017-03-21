@@ -42,7 +42,6 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
     protected String mGoogleUserName = null;
     protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
     protected com.google.api.services.drive.Drive mDriveService = null;
-    protected Exception mLastError = null;
     InstanceUploaderListener mStateListener;
 
     public void setUserName(String username) {
@@ -60,7 +59,7 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
         // use google auth utils to get oauth2 token
         String scope =
                 "https://picasaweb.google.com/data/";
-        String token = null;
+        String token;
 
         if (mGoogleUserName == null) {
             Log.e(tag, "Google user not set");
