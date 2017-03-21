@@ -61,7 +61,6 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.FileList;
-//import com.google.api.services.drive.model.ParentList;
 
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
