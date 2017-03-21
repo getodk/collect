@@ -179,7 +179,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
                 }
                 return new StringData(s);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
                 return null;
             }
         }

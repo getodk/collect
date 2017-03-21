@@ -65,17 +65,14 @@ public class ResponseMessageParser {
                 return message;
 
             } catch (SAXException e) {
-                e.printStackTrace();
                 isValid = false;
             } catch (IOException e) {
-                e.printStackTrace();
                 isValid = false;
             }
 
             return message;
 
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
             isValid = false;
         }
 
