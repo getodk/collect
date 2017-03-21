@@ -123,7 +123,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         try {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
-            e.printStackTrace();
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;

@@ -126,7 +126,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                         ReferenceManager._().DeriveReference(mVideoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Log.e(t, "Invalid reference exception");
-                e.printStackTrace();
             }
 
             File videoFile = new File(videoFilename);
@@ -275,7 +274,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 }
             } catch (InvalidReferenceException e) {
                 Log.e(t, "image invalid reference exception");
-                e.printStackTrace();
             }
         } else {
             // There's no imageURI listed, so just ignore it.
