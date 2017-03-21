@@ -13,6 +13,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en"
            tools:ignore="MissingTranslation">
 <string name="accept_location">Record Location</string>
+<string name="show_password">Show password</string>
 <string name="accuracy">Accuracy</string>
 <string name="activity_not_found">No activity found to handle: %s</string>
 <string name="add_another">Add Group</string>
@@ -29,7 +30,7 @@
 <string name="cancel">Cancel</string>
 <string name="cancel_loading_form">Cancel</string>
 <string name="cancel_location">Cancel</string>
-<string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as complete. It may be encrypted.</string>
+<string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as finalized. It may be encrypted.</string>
 <string name="capture_audio">Record Sound</string>
 <string name="capture_image">Take Picture</string>
 <string name="capture_osm">Launch OpenMapKit</string>
@@ -106,6 +107,7 @@
 <string name="no_connection">No network connection available</string>
 <string name="no_items_display">Nothing available to display.</string>
 <string name="no_items_display_forms">Nothing available to display.\n\nTry getting and filling out a blank form.</string>
+<string name="no_items_display_sent_forms">Nothing available to display.\n\nTry sending finalized forms before viewing.</string>
 <string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing saved forms before sending.</string>
 <string name="ok">OK</string>
 <string name="parse_error">Sorry, unable to parse form.</string>
@@ -132,11 +134,12 @@
 <string name="send_data">Send Finalized Form</string>
 <string name="send_data_button">Send Finalized Form (%s)</string>
 <string name="send_selected_data">Send Selected</string>
-<string name="server_auth_credentials">Please enter username and password for server:\n%s</string>
+<string name="view_sent_forms">View Sent Form</string>
+<string name="view_sent_forms_button">View Sent Form (%s)</string>
+<string name="server_auth_credentials">Invalid username or password for server: %s</string>
 <string name="server_requires_auth">Server Requires Authentication</string>
 <string name="server_url">URL</string>
 <string name="server_preferences">Server Settings</string>
-<string name="toggle_selected">Toggle All</string>
 <string name="trigger">OK. Please continue.</string>
 <string name="uploading_data">Sending Form</string>
 <string name="url_error">Sorry, invalid URL!</string>
@@ -201,6 +204,7 @@
 <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
 <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
+<string name="deleted_on_date_at_time">\'Deleted on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
 <string name="version">Version:</string>
 <string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
 <string name="launch_app">Launch</string>
@@ -330,7 +334,7 @@
 <string name="default_google_sheets_url"></string>
 <string name="send_in_progress">Background send running, please try again shortly</string>
 <string name="sheets_google_account_needed">You have selected Google Sheets as your server, please select a corresponding Google Account in the General Settings before continuing</string>
-<string name="sheets_max_columns">Max number of columns is 255, your form has %1%s. Unable to upload to spreadsheet.</string>
+<string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
 <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
 <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
 <string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
@@ -338,9 +342,15 @@
 <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
 <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
 <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
+<string name="about_preferences">About</string>
+<string name="tell_your_friends">Tell your friends</string>
+<string name="tell_your_friends_title">Share ODK Collect with your friends</string>
+<string name="tell_your_friends_msg">Download the ODK Collect app!</string>
+<string name="leave_a_review">Leave a review</string>
+<string name="leave_a_review_summary">Leave a review on Google Play</string>
 
 <!-- Geo string added in feature-geofeatures branch-->
-<string name="map_preferences">Mapping Options</string>
+<string name="map_preferences">Mapping</string>
 <string name="map_sdk_selector_title">Mapping SDK</string>
 <string name="map_sdk_behavior">Mapping SDK</string>
 <string name="google_maps_sdk">Google Maps SDK</string>
@@ -402,4 +412,86 @@
 <string name="geotrace_view_change_location">View or Change GeoTrace</string>
 <string name="bearing">Bearing: %.3f</string>
 <string name="direction">Direction: %s</string>
+<string name="select_odk_shortcut">Select ODK Shortcut</string>
+<string name="bad_uri">Bad URI: %s</string>
+<string name="unrecognized_uri">Unrecognized URI: %s</string>
+<!-- &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
+<string name="no_form_loaded">&lt;no form loaded&gt;</string>
+<string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
+<string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
+<string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>
+<string name="selected_invalid_image">Selected file is not a valid image</string>
+<string name="edited_osm_file">Edited OSM XML File:</string>
+<string name="invalid_osm_data">Something went wrong. We did not get valid OSM data.</string>
+<string name="alert">Alert</string>
+<string name="install_openmapkit">Please install OpenMapKit!</string>
+<string name="go_back">Go back</string>
+<string name="download_selected">Download Selected</string>
+<string name="detection_frequency">detection frequency</string>
+<string name="record_geopoint">Record GeoPoint</string>
+<string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
+<string name="parser_exception">XPathParser Exception: \"%s\"</string>
+<string name="selected_answer">Selected: %s</string>
+<string name="version_number">Version: %s</string>
+<string name="general_settings_about">About</string>
+<string name="odk_website">Open Data Kit website</string>
+<string name="all_open_source_licenses">Open source licenses</string>
+<!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
+<string name="west">W %1$s%2$s%3$s</string>
+<!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8" -->
+<string name="east">E %1$s%2$s%3$s</string>
+<!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8" -->
+<string name="south">S %1$s%2$s%3$s</string>
+<!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8" -->
+<string name="north">N %1$s%2$s%3$s</string>
+<string name="gdrive_connection_exception">This image is stored on Google Drive and cannot be accessed while you are offline.</string>
+<string name="not_exactly_one_record_for_this_instance">Not exactly one record for this instance!</string>
+<string name="not_exactly_one_blank_form_for_this_form_id">Not exactly one blank form matches this jr_form_id.</string>
+<string name="no_form_id_specified">No FormId specified???</string>
+<string name="phone_does_not_support_encryption">Phone does not support encryption.</string>
+<string name="phone_does_not_have_base64_class">Phone does not have Base64 class but API level is %s.</string>
+<string name="phone_does_not_support_rsa">Phone does not support RSA encryption.</string>
+<string name="invalid_rsa_public_key">Invalid RSA public key.</string>
+<string name="encryption_error_message">%s Form has not been saved as finalized.</string>
+<string name="analytics_preferences">Usage data</string>
+<string name="analytics">Collect anonymous usage data</string>
+<string name="analytics_summary">Anonymous usage data helps the ODK team prioritize fixes and features</string>
+<string name="select_all">Select All</string>
+<string name="clear_all">Clear All</string>
+<string name="reset_settings">All settings (internal settings, saved settings)</string>
+<string name="reset_saved_forms">Saved forms (instances folder, instances database)</string>
+<string name="reset_blank_forms">Blank forms (forms folder, forms database, itemsets database)</string>
+<string name="reset_layers">Map layers (layers folder)</string>
+<string name="reset_cache">Form load cache (.cache folder)</string>
+<string name="reset_osm_tiles">OSM tile cache (osmdroid folder)</string>
+<string name="reset_settings_dialog_title">Select what to reset</string>
+<string name="reset_settings_dialog">Reset application…</string>
+<string name="reset_settings_button_reset">Reset</string>
+<string name="reset_dialog_nothing">You have not selected anything to reset.</string>
+<string name="reset_in_progress">Resetting…</string>
+<string name="resetting_finished">Resetting finished</string>
+<string name="reset_app_state_result">Reset results</string>
+<string name="reset_app_state_warning">All selected data will be deleted permanently. There is no undo.</string>
+<string name="reset_settings_result">All settings :: %s</string>
+<string name="reset_saved_forms_result">Saved forms :: %s</string>
+<string name="reset_blank_forms_result">Blank forms :: %s</string>
+<string name="reset_layers_result">Map layers :: %s</string>
+<string name="reset_cache_result">Form load cache :: %s</string>
+<string name="reset_osm_tiles_result">OSM tile cache :: %s</string>
+<string name="encrypted_form">Encrypted form</string>
+<string name="deleted_form">Deleted form</string>
+<string name="exit">Exit</string>
+<string name="instance_scan_completed">Finished scanning.</string>
+<string name="instance_scan_count">%1$d forms added.</string>
+<string name="instance_sync">Import saved forms as finalized</string>
+<string name="instance_sync_summary">Imports saved forms from instances folder</string>
+<string name="sort_by_name_asc">By name, A-Z</string>
+<string name="sort_by_name_desc">By name, Z-A</string>
+<string name="sort_by_date_asc">By date, newest first</string>
+<string name="sort_by_date_desc">By date, oldest first</string>
+<string name="sort_by_status_asc">By status, finalized first</string>
+<string name="sort_by_status_desc">By status, unfinalized first</string>
+<string name="sorting_menu_open">Open sorting menu</string>
+<string name="sorting_menu_close">Close sorting menu</string>
+<string name="sort_the_list">Sort the list</string>
 </resources>

@@ -25,6 +25,7 @@ import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
@@ -60,6 +61,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int VALIDATE_ERROR = 502;
     public static final int VALIDATED = 503;
     public static final int SAVED_AND_EXIT = 504;
+    public static final int ENCRYPTION_ERROR = 505;
 
 
     public SaveToDiskTask(Uri uri, Boolean saveAndExit, Boolean markCompleted, String updatedName) {
@@ -133,6 +135,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             }
 
             saveResult.setSaveResult(mSave ? SAVED_AND_EXIT : SAVED);
+        } catch (EncryptionException e) {
+            saveResult.setSaveErrorMessage(e.getMessage());
+            saveResult.setSaveResult(ENCRYPTION_ERROR);
         } catch (Exception e) {
             Log.e(t, e.getMessage(), e);
 
@@ -184,9 +189,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             String[] whereArgs = {
                     instancePath
             };
-            int updated =
-                    Collect.getInstance().getContentResolver()
-                            .update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
+            int updated = new InstancesDao().updateInstance(values, where, whereArgs);
             if (updated > 1) {
                 Log.w(t, "Updated more than one entry, that's not good: " + instancePath);
             } else if (updated == 1) {
@@ -224,8 +227,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                         c.close();
                     }
                 }
-                mUri = Collect.getInstance().getContentResolver()
-                        .insert(InstanceColumns.CONTENT_URI, values);
+                mUri = new InstancesDao().saveInstance(values);
             }
         }
     }

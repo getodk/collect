@@ -15,19 +15,26 @@
 package org.odk.collect.android.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -45,10 +52,6 @@ import java.io.File;
  */
 public class Collect extends Application {
 
-    static {
-        PRNGFixes.apply();
-    }
-
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
             + File.separator + "odk";
@@ -60,9 +63,14 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String TMPXML_PATH = CACHE_PATH + File.separator + "tmp.xml";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
-
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
+    public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+    private static Collect singleton = null;
+
+    static {
+        PRNGFixes.apply();
+    }
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
@@ -71,55 +79,18 @@ public class Collect extends Application {
     private ActivityLogger mActivityLogger;
     private FormController mFormController = null;
     private ExternalDataManager externalDataManager;
-
-    private static Collect singleton = null;
+    private Tracker mTracker;
 
     public static Collect getInstance() {
         return singleton;
     }
 
-    public ActivityLogger getActivityLogger() {
-        return mActivityLogger;
-    }
-
-    public FormController getFormController() {
-        return mFormController;
-    }
-
-    public void setFormController(FormController controller) {
-        mFormController = controller;
-    }
-
-    public ExternalDataManager getExternalDataManager() {
-        return externalDataManager;
-    }
-
-    public void setExternalDataManager(ExternalDataManager externalDataManager) {
-        this.externalDataManager = externalDataManager;
-    }
-
     public static int getQuestionFontsize() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        String question_font = settings.getString(PreferencesActivity.KEY_FONT_SIZE,
+        String question_font = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        int questionFontsize = Integer.valueOf(question_font);
-        return questionFontsize;
-    }
-
-    public String getVersionedAppName() {
-        String versionDetail = "";
-        try {
-            PackageInfo pinfo;
-            pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            int versionNumber = pinfo.versionCode;
-            String versionName = pinfo.versionName;
-            versionDetail = " " + versionName + " (" + versionNumber + ")";
-        } catch (NameNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return getString(R.string.app_name) + versionDetail;
+        return Integer.valueOf(question_font);
     }
 
     /**
@@ -179,6 +150,49 @@ public class Collect extends Application {
         return false;
     }
 
+    public ActivityLogger getActivityLogger() {
+        return mActivityLogger;
+    }
+
+    public FormController getFormController() {
+        return mFormController;
+    }
+
+    public void setFormController(FormController controller) {
+        mFormController = controller;
+    }
+
+    public ExternalDataManager getExternalDataManager() {
+        return externalDataManager;
+    }
+
+    public void setExternalDataManager(ExternalDataManager externalDataManager) {
+        this.externalDataManager = externalDataManager;
+    }
+
+    public String getVersionedAppName() {
+        String versionName = BuildConfig.VERSION_NAME;
+        versionName = " " + versionName.replaceFirst("-", "\n");
+        return getString(R.string.app_name) + versionName;
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getInstance()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
+    }
+
+    /*
+        Adds support for multidex support library. For more info check out the link below,
+        https://developer.android.com/studio/build/multidex.html
+    */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     /**
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
@@ -229,6 +243,21 @@ public class Collect extends Application {
 
         mActivityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
+
+        AuthDialogUtility.setWebCredentialsFromPreferences(this);
+    }
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     *
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 
 }

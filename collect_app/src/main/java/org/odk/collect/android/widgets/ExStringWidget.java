@@ -107,7 +107,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setLayoutParams(params);
         mTextBackground = mAnswer.getBackground();
-        mAnswer.setBackgroundDrawable(null);
+        mAnswer.setBackground(null);
 
         // capitalize nothing
         mAnswer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
@@ -122,7 +122,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         if (mPrompt.isReadOnly()) {
-            mAnswer.setBackgroundDrawable(null);
+            mAnswer.setBackground(null);
         }
 
         if (mPrompt.isReadOnly() || mHasExApp) {
@@ -172,7 +172,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             private void onException(String toastText) {
                 mHasExApp = false;
                 if (!mPrompt.isReadOnly()) {
-                    mAnswer.setBackgroundDrawable(mTextBackground);
+                    mAnswer.setBackground(mTextBackground);
                     mAnswer.setFocusable(true);
                     mAnswer.setFocusableInTouchMode(true);
                     mAnswer.setClickable(true);

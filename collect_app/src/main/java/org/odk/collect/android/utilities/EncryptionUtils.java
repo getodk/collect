@@ -24,7 +24,9 @@ import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.logic.FormController.InstanceMetadata;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -185,7 +187,7 @@ public class EncryptionUtils {
             // start building elementSignatureSource...
             appendElementSignatureSource(formId);
             if (formVersion != null) {
-                appendElementSignatureSource(formVersion.toString());
+                appendElementSignatureSource(formVersion);
             }
             appendElementSignatureSource(base64RsaEncryptedSymmetricKey);
 
@@ -295,7 +297,7 @@ public class EncryptionUtils {
      * @param mUri either an instance URI (if previously saved) or a form URI
      */
     public static EncryptedFormInformation getEncryptedFormInformation(Uri mUri,
-            InstanceMetadata instanceMetadata) {
+            InstanceMetadata instanceMetadata) throws EncryptionException {
 
         ContentResolver cr = Collect.getInstance().getContentResolver();
 
@@ -315,8 +317,9 @@ public class EncryptionUtils {
                 try {
                     instanceCursor = cr.query(mUri, null, null, null, null);
                     if (instanceCursor.getCount() != 1) {
-                        Log.e(t, "Not exactly one record for this instance!");
-                        return null; // save unencrypted.
+                        String msg = Collect.getInstance().getString(R.string.not_exactly_one_record_for_this_instance);
+                        Log.e(t, msg);
+                        throw new EncryptionException(msg, null);
                     }
                     instanceCursor.moveToFirst();
                     String jrFormId = instanceCursor.getString(
@@ -338,27 +341,29 @@ public class EncryptionUtils {
                     }
                 }
 
-                formCursor = cr.query(FormsColumns.CONTENT_URI, null, selection, selectionArgs,
-                        null);
+                formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
 
                 if (formCursor.getCount() != 1) {
-                    Log.e(t, "Not exactly one blank form matches this jr_form_id");
-                    return null; // save unencrypted
+                    String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
+                    Log.e(t, msg);
+                    throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
             } else if (cr.getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
                 formCursor = cr.query(mUri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
-                    Log.e(t, "Not exactly one blank form!");
-                    return null; // save unencrypted.
+                    String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
+                    Log.e(t, msg);
+                    throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
             }
 
             formId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
             if (formId == null || formId.length() == 0) {
-                Log.e(t, "No FormId specified???");
-                return null;
+                String msg = Collect.getInstance().getString(R.string.no_form_id_specified);
+                Log.e(t, msg);
+                throw new EncryptionException(msg, null);
             }
             int idxVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
             int idxBase64RsaPublicKey = formCursor.getColumnIndex(
@@ -372,20 +377,17 @@ public class EncryptionUtils {
             }
 
             int version = android.os.Build.VERSION.SDK_INT;
-            if (version < 8) {
-                Log.e(t, "Phone does not support encryption.");
-                return null; // save unencrypted
-            }
 
             // this constructor will throw an exception if we are not
             // running on version 8 or above (if Base64 is not found).
             try {
                 wrapper = new Base64Wrapper();
             } catch (ClassNotFoundException e) {
-                Log.e(t, "Phone does not have Base64 class but API level is "
-                        + version);
+                String msg = String.format(Collect.getInstance()
+                        .getString(R.string.phone_does_not_have_base64_class), String.valueOf(version));
+                Log.e(t, msg);
                 e.printStackTrace();
-                return null; // save unencrypted
+                throw new EncryptionException(msg, e);
             }
 
             // OK -- Base64 decode (requires API Version 8 or higher)
@@ -395,16 +397,18 @@ public class EncryptionUtils {
             try {
                 kf = KeyFactory.getInstance(RSA_ALGORITHM);
             } catch (NoSuchAlgorithmException e) {
-                Log.e(t, "Phone does not support RSA encryption.");
+                String msg = Collect.getInstance().getString(R.string.phone_does_not_support_rsa);
+                Log.e(t, msg);
                 e.printStackTrace();
-                return null;
+                throw new EncryptionException(msg, e);
             }
             try {
                 pk = kf.generatePublic(publicKeySpec);
             } catch (InvalidKeySpecException e) {
                 e.printStackTrace();
-                Log.e(t, "Invalid RSA public key.");
-                return null;
+                String msg = Collect.getInstance().getString(R.string.invalid_rsa_public_key);
+                Log.e(t, msg);
+                throw new EncryptionException(msg, e);
             }
         } finally {
             if (formCursor != null) {

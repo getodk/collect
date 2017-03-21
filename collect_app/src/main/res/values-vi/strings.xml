@@ -109,20 +109,18 @@
   <string name="replace_location">Thay vị trí</string>
   <string name="required_answer_error">Xin lỗi, câu trả lời được yêu cầu điền!</string>
   <string name="review_data">Sửa biểu mẫu lưu</string>
-  <string name="review_data_button">Sửa biểu mẫu lưu</string>
+  <string name="review_data_button">Sửa biểu mẫu lưu (%s)</string>
   <string name="saved_data">Chưa hoàn thành (%s)</string>
   <string name="save_all_answers">Lưu biểu mẫu</string>
   <string name="save_enter_data_description">Bạn đang ở phần kết thúc của \"%s\".</string>
   <string name="saving_form">Đang lưu biểu mẫu</string>
   <string name="sending_items">Gửi %1$s trong %2$s biểu mẫu</string>
   <string name="send_data">Gửi biểu mẫu đã hoàn thành</string>
-  <string name="send_data_button">Gửi biểu mẫu</string>
   <string name="send_selected_data">Gửi lựa chọn</string>
-  <string name="server_auth_credentials">Vui lòng nhập tên và mật mã đăng nhập vào server:\n%s</string>
+  <string name="server_auth_credentials">Vui lòng nhập tên và mật mã đăng nhập vào server: %s</string>
   <string name="server_requires_auth">Máy chủ yêu cầu xác thực</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Máy chủ</string>
-  <string name="toggle_selected">Đánh dấu tất</string>
   <string name="trigger">OK. Hãy tiếp tục.</string>
   <string name="uploading_data">Gửi biểu mẫu</string>
   <string name="url_error">Xin lỗi URL không đúng!</string>
@@ -244,4 +242,9 @@
   <string name="change_server_url">Địa chỉ máy chủ</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

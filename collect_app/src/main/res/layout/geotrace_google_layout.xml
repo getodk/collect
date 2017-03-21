@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#BF000000"
     android:padding="0dip">
@@ -23,14 +23,14 @@
     <fragment
         android:id="@+id/gmap"
         android:layout_marginTop="28dip"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
     <Button
-        android:text="Record GeoPoint"
+        android:text="@string/record_geopoint"
         android:id="@+id/manual_button"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:visibility="gone"
@@ -52,7 +52,7 @@
         android:layout_below="@+id/geotrace_instruction">
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="0dip"
         android:paddingBottom="60dip">
@@ -85,7 +85,7 @@
             android:padding="15dp"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             />
 
         <Button

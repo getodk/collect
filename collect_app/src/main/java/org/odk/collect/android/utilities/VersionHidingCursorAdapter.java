@@ -54,7 +54,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     String version = cursor.getString(columnIndex);
                     TextView v = (TextView) view;
                     if (version != null) {
-                        v.setText(ctxt.getString(R.string.version) + " " + version);
+                        v.setText(String.format(ctxt.getString(R.string.version_number), version));
                         v.setVisibility(View.VISIBLE);
                     } else {
                         v.setText(null);

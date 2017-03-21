@@ -14,23 +14,9 @@
 
 package org.odk.collect.android.preferences;
 
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.widget.Toast;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.utilities.WebUtils;
 
 /**
  * Handles aggregate specific preferences.
@@ -39,149 +25,11 @@ import org.odk.collect.android.utilities.WebUtils;
  */
 public class AggregatePreferencesActivity extends PreferenceActivity {
 
-    protected EditTextPreference mServerUrlPreference;
-    protected EditTextPreference mUsernamePreference;
-    protected EditTextPreference mPasswordPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.aggregate_preferences);
-
-        mServerUrlPreference = (EditTextPreference) findPreference(
-                PreferencesActivity.KEY_SERVER_URL);
-        mUsernamePreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_USERNAME);
-        mPasswordPreference = (EditTextPreference) findPreference(PreferencesActivity.KEY_PASSWORD);
-
-        PreferenceCategory aggregatePreferences = (PreferenceCategory) findPreference(
-                getString(R.string.aggregate_preferences));
-
-        mServerUrlPreference
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference,
-                            Object newValue) {
-                        String url = newValue.toString();
-
-                        // remove all trailing "/"s
-                        while (url.endsWith("/")) {
-                            url = url.substring(0, url.length() - 1);
-                        }
-
-                        if (UrlUtils.isValidUrl(url)) {
-                            preference.setSummary(newValue.toString());
-                            return true;
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.url_error, Toast.LENGTH_SHORT)
-                                    .show();
-                            return false;
-                        }
-                    }
-                });
-        mServerUrlPreference.setSummary(mServerUrlPreference.getText());
-        mServerUrlPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
-
-        mUsernamePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String username = newValue.toString();
-
-                // do not allow leading and trailing whitespace
-                if (!username.equals(username.trim())) {
-                    Toast.makeText(getApplicationContext(),
-                            R.string.username_error_whitespace, Toast.LENGTH_SHORT)
-                            .show();
-                    return false;
-                }
-
-                preference.setSummary(username);
-
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                        getBaseContext());
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                        getString(R.string.default_server_url));
-                Uri u = Uri.parse(server);
-                WebUtils.clearHostCredentials(u.getHost());
-                Collect.getInstance().getCookieStore().clear();
-
-                return true;
-            }
-        });
-        mUsernamePreference.setSummary(mUsernamePreference.getText());
-        mUsernamePreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
-
-        mPasswordPreference
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference,
-                            Object newValue) {
-                        String pw = newValue.toString();
-
-                        // do not allow leading and trailing whitespace
-                        if (!pw.equals(pw.trim())) {
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.password_error_whitespace, Toast.LENGTH_SHORT)
-                                    .show();
-                            return false;
-                        }
-
-                        if (pw.length() > 0) {
-                            mPasswordPreference.setSummary("********");
-                        } else {
-                            mPasswordPreference.setSummary("");
-                        }
-
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                                getBaseContext());
-                        String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
-                                getString(R.string.default_server_url));
-                        Uri u = Uri.parse(server);
-                        WebUtils.clearHostCredentials(u.getHost());
-                        Collect.getInstance().getCookieStore().clear();
-
-                        return true;
-                    }
-                });
-        if (mPasswordPreference.getText() != null
-                && mPasswordPreference.getText().length() > 0) {
-            mPasswordPreference.setSummary("********");
-        }
-        mPasswordPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
-    }
-
-}
-
-/**
- * Rejects edits that contain whitespace.
- */
-class WhitespaceFilter implements InputFilter {
-    public CharSequence filter(CharSequence source, int start, int end,
-            Spanned dest, int dstart, int dend) {
-        for (int i = start; i < end; i++) {
-            if (Character.isWhitespace(source.charAt(i))) {
-                return "";
-            }
-        }
-        return null;
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new AggregatePreferencesFragment()).commit();
     }
 }
 
-/**
- * Rejects edits that contain control characters, including linefeed and carriage return.
- */
-class ControlCharacterFilter implements InputFilter {
-    public CharSequence filter(CharSequence source, int start, int end,
-            Spanned dest, int dstart, int dend) {
-        for (int i = start; i < end; i++) {
-            if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-                return "";
-            }
-        }
-        return null;
-    }
-}

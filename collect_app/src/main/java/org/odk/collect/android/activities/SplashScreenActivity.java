@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -34,7 +35,7 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,8 +63,8 @@ public class SplashScreenActivity extends Activity {
             return;
         }
 
-        mImageMaxWidth = getWindowManager().getDefaultDisplay().getWidth();
-
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        mImageMaxWidth = displayMetrics.widthPixels;
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
@@ -82,25 +83,25 @@ public class SplashScreenActivity extends Activity {
             e.printStackTrace();
         }
 
-        boolean firstRun = mSharedPreferences.getBoolean(PreferencesActivity.KEY_FIRST_RUN, true);
+        boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
-                mSharedPreferences.getBoolean(PreferencesActivity.KEY_SHOW_SPLASH, false);
+                mSharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
         String splashPath =
-                mSharedPreferences.getString(PreferencesActivity.KEY_SPLASH_PATH,
+                mSharedPreferences.getString(PreferenceKeys.KEY_SPLASH_PATH,
                         getString(R.string.default_splash_path));
 
         // if you've increased version code, then update the version number and set firstRun to true
-        if (mSharedPreferences.getLong(PreferencesActivity.KEY_LAST_VERSION, 0)
+        if (mSharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
                 < packageInfo.versionCode) {
-            editor.putLong(PreferencesActivity.KEY_LAST_VERSION, packageInfo.versionCode);
-            editor.commit();
+            editor.putLong(PreferenceKeys.KEY_LAST_VERSION, packageInfo.versionCode);
+            editor.apply();
 
             firstRun = true;
         }
 
         // do all the first run things
         if (firstRun || showSplash) {
-            editor.putBoolean(PreferencesActivity.KEY_FIRST_RUN, false);
+            editor.putBoolean(PreferenceKeys.KEY_FIRST_RUN, false);
             editor.commit();
             startSplashScreen(splashPath);
         } else {

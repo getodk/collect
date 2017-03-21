@@ -15,14 +15,14 @@ the License.
 -->
 <RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
   android:id="@+id/rl" >
 
     <LinearLayout
      android:id="@+id/questionholder"
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/buttonholder">
@@ -30,10 +30,9 @@ the License.
 
     <LinearLayout
         android:id="@+id/buttonholder"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
         android:orientation="horizontal"
         android:paddingBottom="0dip"
         android:paddingStart="4dip"

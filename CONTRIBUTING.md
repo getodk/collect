@@ -13,19 +13,38 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git checkout -b NAME_OF_YOUR_BRANCH
 
-1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. 
+1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. If there is no issue yet, create one to provide background on the problem you are solving.
 
-1. Once you've made an incremental progress towards you goal and are ready to commit, reformat all Java code using Android Studio and official [codestyle](https://github.com/android/platform_development/blob/master/ide/intellij/codestyles/AndroidStyle.xml).
-
-1. Commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
+1. Once you've made incremental progress towards you goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
         git commit -m "Do a thing. Fix #1."
 
-1. Push changes to your fork to make them publicly available:
+1. Push changes to your fork at any time to make them publicly available:
 
         git push
+        
+1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md#style-guidelines). Additionally, [lint](https://developer.android.com/studio/write/lint.html) is run for each new build so please run `gradle lint` and fix any errors before issuing a pull request.
 
 1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
+
+1. Pull requests will be reviewed when committers have time. If you haven't received a review in 10 days, you may notify committers by putting `@opendatakit/collect` in a comment.
+
+## Making sure your pull request is accepted
+1. Confirm that your code compiles.
+
+1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected.
+
+1. Make sure that there is an issue that corresponds to the pull request and that it has been discussed by the community as necessary.
+
+1. Keep your pull request focused on one narrow goal. This could mean addressing an issue with multiple, smaller pull requests. Small pull requests are easier to review and less likely to introduce bugs. If you would like to make stylistic changes to the code, create a separate pull request.
+
+1. Run `gradle lint` and fix any lint errors.
+
+1. Write clear code. Use descriptive names and create meaningful abstractions (methods, classes).
+
+1. Document your reasoning. Your commit messages should make it clear why each change has been made.
+
+1. Follow the guidelines below.
 
 ## Style guidelines
 For now, match the style of the code in the file you are editing. When creating new files, follow the [Android style rules](http://source.android.com/source/code-style.html).

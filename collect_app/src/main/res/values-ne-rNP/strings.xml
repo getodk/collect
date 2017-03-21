@@ -118,11 +118,10 @@
   <string name="send_data">भरिसकेको फारम पठाउन</string>
   <string name="send_data_button">भरिसकेको फारम पठाउन (%s)</string>
   <string name="send_selected_data">छानिएका पठाउनुहोस् </string>
-  <string name="server_auth_credentials">कृपया सर्भर:\n%sको लागि प्रयोगकर्ता नाम र पासवर्ड हाल्नुहोला | </string>
+  <string name="server_auth_credentials">कृपया सर्भर:%sको लागि प्रयोगकर्ता नाम र पासवर्ड हाल्नुहोला | </string>
   <string name="server_requires_auth">सर्भरलाई प्रमाणीकरण चाहिन्छ </string>
   <string name="server_url">URL</string>
   <string name="server_preferences">सर्भर सेटिङ्स</string>
-  <string name="toggle_selected">सबैलाई/nचिनो/n(न)लगाउने</string>
   <string name="trigger">हुन्छ | कृपया जारी राख्नुहोस् |</string>
   <string name="uploading_data">फारम पठाईदैछ |</string>
   <string name="url_error">गलत URL</string>
@@ -307,4 +306,9 @@
   <string name="satellite">उपग्रह</string>
   <string name="start">सुरु</string>
   <string name="clear">मेटाउनुहोस्</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

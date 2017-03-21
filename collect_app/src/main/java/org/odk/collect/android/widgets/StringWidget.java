@@ -100,7 +100,7 @@ public class StringWidget extends QuestionWidget {
         }
 
         if (mReadOnly) {
-            mAnswer.setBackgroundDrawable(null);
+            mAnswer.setBackground(null);
             mAnswer.setFocusable(false);
             mAnswer.setClickable(false);
         }

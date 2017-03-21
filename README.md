@@ -27,7 +27,6 @@ Task Management
 
 A user of fieldTask can be assigned tasks to complete as per this [video](http://www.smap.com.au/taskManagement.shtml). 
 
-
 ##### Get existing survey data as an XForm instance XML file
 https://hostname/instanceXML/{survey id}/0?datakey={key name}&datakeyvalue={value of key}
 

@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
@@ -29,9 +30,15 @@ import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 
+import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.GDriveConnectionException;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -526,6 +533,51 @@ public class MediaUtils {
         return null;
     }
 
+    public static File getFileFromUri(final Context context, final Uri uri, String pathKey) throws GDriveConnectionException {
+        File file = null;
+        String filePath = getPathFromUri(context, uri, pathKey);
+        if (filePath != null) {
+            file = new File(filePath);
+        } else if (isGoogleDriveDocument(uri)) {
+            file = getGoogleDriveFile(context, uri);
+        }
+
+        return file;
+    }
+
+    private static File getGoogleDriveFile(Context context, Uri uri) throws GDriveConnectionException {
+        if (!Collect.getInstance().isNetworkAvailable()) {
+            throw new GDriveConnectionException();
+        }
+        if (uri == null) {
+            return null;
+        }
+        FileInputStream inputStream = null;
+        FileOutputStream outputStream = null;
+        String filePath = new File(context.getCacheDir(), "tmp").getAbsolutePath();
+        try {
+            ParcelFileDescriptor parcelFileDescriptor = context.getContentResolver().openFileDescriptor(uri, "r");
+            if (parcelFileDescriptor == null) {
+                return null;
+            }
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            inputStream = new FileInputStream(fileDescriptor);
+            outputStream = new FileOutputStream(filePath);
+            int read;
+            byte[] bytes = new byte[4096];
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+            return new File(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(outputStream);
+        }
+        return null;
+    }
+
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
@@ -563,6 +615,15 @@ public class MediaUtils {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri
                 .getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check
+     * @return Whether the Uri authority is Google Drive.
+     */
+    public static boolean isGoogleDriveDocument(Uri uri) {
+        return "com.google.android.apps.docs.storage".equals(uri.getAuthority()) ||
+                uri.getAuthority().startsWith("com.google.android.apps.photos.content");
     }
 
     /**

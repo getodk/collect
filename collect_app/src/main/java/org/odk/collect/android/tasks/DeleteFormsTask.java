@@ -36,6 +36,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
     private DeleteFormsListener dl;
 
     private int successCount = 0;
+    private int toDeleteCount = 0;
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -44,15 +45,16 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
         if (params == null || cr == null || dl == null) {
             return deleted;
         }
+        toDeleteCount = params.length;
 
         // delete files from database and then from file system
-        for (int i = 0; i < params.length; i++) {
+        for (Long param : params) {
             if (isCancelled()) {
                 break;
             }
             try {
                 Uri deleteForm =
-                        Uri.withAppendedPath(FormsColumns.CONTENT_URI, params[i].toString());
+                        Uri.withAppendedPath(FormsColumns.CONTENT_URI, param.toString());
 
                 int wasDeleted = cr.delete(deleteForm, null, null);
                 deleted += wasDeleted;
@@ -62,7 +64,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
                             deleteForm.toString());
                 }
             } catch (Exception ex) {
-                Log.e(t, "Exception during delete of: " + params[i].toString() + " exception: "
+                Log.e(t, "Exception during delete of: " + param.toString() + " exception: "
                         + ex.toString());
             }
         }
@@ -97,5 +99,9 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
 
     public int getDeleteCount() {
         return successCount;
+    }
+
+    public int getToDeleteCount() {
+        return toDeleteCount;
     }
 }

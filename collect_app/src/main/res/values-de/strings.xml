@@ -111,20 +111,19 @@
   <string name="replace_location">Standort ersetzen</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
   <string name="review_data">Gespeichertes Formular ändern</string>
-  <string name="review_data_button">Gespeichertes Formular ändern</string>
+  <string name="review_data_button">Gespeichertes Formular ändern (%s)</string>
   <string name="saved_data">Unvollständig (%s)</string>
   <string name="save_all_answers">Formular speichern</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
   <string name="saving_form">Formular wird gespeichert</string>
   <string name="sending_items">%1$s von %2$s Formular(en) werden hochgeladen</string>
   <string name="send_data">Vollständiges Formular hochladen</string>
-  <string name="send_data_button">Vollständiges Formular hochladen</string>
+  <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <string name="send_selected_data">Auswahl hochladen</string>
-  <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben:\n%s</string>
+  <string name="server_auth_credentials">Benutzername und Passwort für Server eingeben: %s</string>
   <string name="server_requires_auth">Server verlangt Authentifizierung</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servereinstellungen</string>
-  <string name="toggle_selected">Alle auswählen</string>
   <string name="trigger">OK. Bitte fortfahren.</string>
   <string name="uploading_data">Formular wird gesendet</string>
   <string name="url_error">Ungültige URL!</string>
@@ -321,7 +320,7 @@
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="sheets_google_account_needed">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
-  <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %1%s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
+  <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_update_error">Fehler beim Aktualisieren der Tabelle.Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Schreibzugriffsberechtigung erteilt hat.</string>
@@ -334,7 +333,6 @@
   <string name="map_sdk_selector_title">Karten-SDK</string>
   <string name="map_sdk_behavior">Karten-SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
   <string name="streets">Straßen</string>
   <string name="terrain">Gelände</string>
@@ -384,4 +382,9 @@
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
   <string name="bearing">Kompass-Peilung: %.3f</string>
   <string name="direction">Himmelsrichtung: %s</string>
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

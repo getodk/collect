@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.views;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,19 +23,17 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.support.v7.widget.AppCompatImageButton;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -45,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
@@ -62,7 +60,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private FormIndex mIndex;
     private TextView mView_Text;
     private AudioButton mAudioButton;
-    private ImageButton mVideoButton;
+    private AppCompatImageButton mVideoButton;
     private ImageView mImageView;
     private TextView mMissingImage;
 
@@ -71,12 +69,15 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private AudioPlayListener mAudioPlayListener;
     private int mPlayTextColor;
     private int mPlayBackgroundTextColor;
+    
+    private Context mContext;
 
     private CharSequence mOriginalText;
 
 
     public MediaLayout(Context c, MediaPlayer player) {
         super(c);
+        mContext = c;
         mView_Text = null;
         mAudioButton = null;
         mImageView = null;
@@ -86,7 +87,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         mPlayer = player;
         mAudioPlayListener = null;
         mPlayTextColor = Color.BLUE;
-        mPlayBackgroundTextColor = Color.WHITE;
     }
 
     public void playAudio() {
@@ -95,7 +95,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             mView_Text.setText(mView_Text.getText().toString());
             mView_Text.setTextColor(mPlayTextColor);
-            mView_Text.setBackgroundColor(mPlayBackgroundTextColor);
             mAudioButton.playAudio();
         }
     }
@@ -115,7 +114,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     public void resetTextFormatting() {
         // first set it to defaults
         mView_Text.setTextColor(Color.BLACK);
-        mView_Text.setBackgroundColor(Color.WHITE);
         // then set the text to our original (brings back any html formatting)
         mView_Text.setText(mOriginalText);
     }
@@ -137,18 +135,16 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String errorMsg =
                         getContext().getString(R.string.file_missing, videoFilename);
                 Log.e(t, errorMsg);
-                Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                ToastUtils.showLongToast(errorMsg);
                 return;
             }
 
             Intent i = new Intent("android.intent.action.VIEW");
             i.setDataAndType(Uri.fromFile(videoFile), "video/*");
-            try {
-                ((Activity) getContext()).startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found, "view video"),
-                        Toast.LENGTH_SHORT).show();
+            if (i.resolveActivity(getContext().getPackageManager()) != null) {
+                getContext().startActivity(i);
+            } else {
+                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, "view video"));
             }
         }
     }
@@ -182,6 +178,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // An audio file is specified
             mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI,
                     mPlayer);
+            mAudioButton.setPadding(22, 12, 22, 12);
+            mAudioButton.setBackgroundColor(Color.LTGRAY);
             mAudioButton.setOnClickListener(this);
             mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
             // relative layout.
@@ -192,11 +190,13 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // Then set up the video button
         if (videoURI != null) {
             // An video file is specified
-            mVideoButton = new ImageButton(getContext());
+            mVideoButton = new AppCompatImageButton(getContext());
             Bitmap b =
                     BitmapFactory.decodeResource(getContext().getResources(),
                             android.R.drawable.ic_media_play);
             mVideoButton.setImageBitmap(b);
+            mVideoButton.setPadding(22, 12, 22, 12);
+            mVideoButton.setBackgroundColor(Color.LTGRAY);
             mVideoButton.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -220,17 +220,14 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
-                    Display display =
-                            ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                                    .getDefaultDisplay();
-                    int screenWidth = display.getWidth();
-                    int screenHeight = display.getHeight();
+                    DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+                    int screenWidth = metrics.widthPixels;
+                    int screenHeight = metrics.heightPixels;
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
                             screenWidth);
                     if (b != null) {
                         mImageView = new ImageView(getContext());
                         mImageView.setPadding(2, 2, 2, 2);
-                        mImageView.setBackgroundColor(Color.WHITE);
                         mImageView.setImageBitmap(b);
                         mImageView.setId(imageId);
 
@@ -253,10 +250,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                     try {
                                         getContext().startActivity(i);
                                     } catch (ActivityNotFoundException e) {
-                                        Toast.makeText(
-                                                getContext(),
-                                                getContext().getString(R.string.activity_not_found,
-                                                        "view image"), Toast.LENGTH_SHORT).show();
+                                        ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
+                                                        "view image"));
                                     }
                                 }
                             });
@@ -319,17 +314,21 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
             } else if (mAudioButton == null && mVideoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+                videoParams.setMargins(0, 20, 11, 0);
                 imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else {
                 // the image will implicitly scale down to fit within parent...
@@ -352,14 +351,18 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             if (mAudioButton != null && mVideoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
             } else if (mAudioButton == null && mVideoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
             } else if (mAudioButton != null && mVideoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                audioParams.setMargins(0, 0, 11, 0);
                 textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                videoParams.setMargins(0, 20, 11, 0);
                 videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -399,7 +402,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void addDivider(ImageView v) {
         RelativeLayout.LayoutParams dividerParams =
-                new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT);
         if (mImageView != null) {
             dividerParams.addRule(RelativeLayout.BELOW, mImageView.getId());

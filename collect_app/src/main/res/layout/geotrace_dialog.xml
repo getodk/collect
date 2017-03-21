@@ -4,12 +4,12 @@
     android:layout_height="wrap_content">
 
     <RadioGroup android:id="@+id/radio_group"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RadioButton android:id="@+id/trace_manual"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
@@ -19,7 +19,7 @@
             android:text="@string/manual_mode"/>
 
         <RadioButton android:id="@+id/trace_automatic"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_marginBottom="10dp"
@@ -29,19 +29,9 @@
 
     </RadioGroup>
 
-    <EditText
-        android:id="@+id/trace_number"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="detection frequency"
-        android:visibility="gone"
-        android:text="200"
-        android:inputType="number"
-        android:imeActionLabel="Label" />
-
     <Spinner
         android:id="@+id/trace_delay"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entryValues="@array/delay_scale"
         android:entries="@array/delay_scale"
@@ -53,7 +43,7 @@
         android:id="@+id/trace_scale"
         android:entries="@array/time_scale"
         android:entryValues="@array/time_scale"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="wrap_content" />
 

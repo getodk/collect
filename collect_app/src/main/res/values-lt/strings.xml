@@ -101,19 +101,19 @@
   <string name="replace_location">Pakeisti vietovę</string>
   <string name="required_answer_error">Atsakymas į šį klausimą yra privalomas!</string>
   <string name="review_data">Taisyti užpildytą formą</string>
-  <string name="review_data_button">Taisyti užpildytą formą</string>
+  <string name="review_data_button">Taisyti užpildytą formą (%s)</string>
   <string name="saved_data">Nebaigta (%s)</string>
   <string name="save_all_answers">Išsaugoti formą</string>
   <string name="save_enter_data_description">Jūs esate \"%s\" pabaigoje.</string>
   <string name="saving_form">Forma išsaugoma</string>
   <string name="sending_items">Siunčiama %1$s iš %2$s formų</string>
   <string name="send_data">Išsiųsti užbaigtą formą</string>
-  <string name="send_data_button">Išsiųsti užbaigtą formą</string>
+  <string name="send_data_button">Išsiųsti užbaigtą formą (%s)</string>
   <string name="send_selected_data">Išsiųsti pažymėtas</string>
+  <string name="server_auth_credentials">Prašome įvesti naudotojo vardą ir slaptažodį serveryje: %s</string>
   <string name="server_requires_auth">Serveris reikalauja autentifikavimo</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Serveris</string>
-  <string name="toggle_selected">Perjungti visas</string>
   <string name="trigger">Gerai. Prašome tęsti.</string>
   <string name="uploading_data">Siunčiama forma</string>
   <string name="url_error">Netinkamas URL!</string>
@@ -235,4 +235,9 @@
   <string name="change_server_url">Serverio URL</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

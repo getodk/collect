@@ -115,7 +115,6 @@
   <string name="server_requires_auth">Server inahitaji uthibitishaji</string>
   <string name="server_url">anwani ya wavuti</string>
   <string name="server_preferences">Mazingira ya Server</string>
-  <string name="toggle_selected">Kugeuza yote</string>
   <string name="trigger">Sawa. Tafadhali Endelea.</string>
   <string name="uploading_data">Kutuma Fomu</string>
   <string name="url_error">Samahani, URL si halali!</string>
@@ -146,8 +145,8 @@
   <string name="form_scan_starting">Inatafuta fomu.....</string>
   <string name="access_error">Hitilafu wakati wa kupata %s:</string>
   <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
-  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa% s</string>
-  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi:% s</string>
+  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>
+  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi: %s</string>
   <string name="manifest_tag_error">Wasilisho la Manifest %s linakosa vitambulisho moja au zaidi: jina la faili, hash, au downloadUrl</string>
   <string name="form_download_progress">%1$s. Kupata faili za vyombo vya habari: %2$s kati ya %3$s</string>
   <string name="file_fetch_failed">Hitilafu: %2$s (%3$s) katika %1$s</string>
@@ -259,4 +258,9 @@
   <string name="high_resolution">Ezesha video za mwonekano wa hali ya juu...</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

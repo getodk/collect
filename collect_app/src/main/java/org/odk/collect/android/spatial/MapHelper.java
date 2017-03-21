@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -45,13 +45,12 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class MapHelper {
-    public static Context context;
     private static SharedPreferences sharedPreferences;
     public static String[] offilineOverlays;
     private static final String no_folder_key = "None";
 
-    public static GoogleMap mGoogleMap;
-    public static MapView mOsmMap;
+    public GoogleMap mGoogleMap;
+    public MapView mOsmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -79,32 +78,30 @@ public class MapHelper {
 
 
     public MapHelper(Context pContext, GoogleMap pGoogleMap) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
-        context = pContext;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mGoogleMap = null;
+        mOsmMap = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
-        this.mGoogleMap = pGoogleMap;
+        mGoogleMap = pGoogleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
-        context = pContext;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mGoogleMap = null;
+        mOsmMap = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
-        this.mOsmMap = pOsmMap;
+        mOsmMap = pOsmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     private static String _getGoogleBasemap() {
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
     private static String _getOsmBasemap() {
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
@@ -174,9 +171,9 @@ public class MapHelper {
         return results.toArray(new String[0]);
     }
 
-    public void showLayersDialog() {
-        AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
-        layerDialod.setTitle(context.getString(R.string.select_offline_layer));
+    public void showLayersDialog(final Context pContext) {
+        AlertDialog.Builder layerDialod = new AlertDialog.Builder(pContext);
+        layerDialod.setTitle(pContext.getString(R.string.select_offline_layer));
         AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
                 selected_layer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -224,7 +221,7 @@ public class MapHelper {
                                         mOsmMap.invalidate();
                                         OsmMBTileProvider mbprovider = new OsmMBTileProvider(
                                                 iRegisterReceiver, spfile);
-                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
+                                        osmTileOverlay = new TilesOverlay(mbprovider, pContext);
                                         osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
                                         mOsmMap.getOverlays().add(0, osmTileOverlay);
                                         mOsmMap.invalidate();

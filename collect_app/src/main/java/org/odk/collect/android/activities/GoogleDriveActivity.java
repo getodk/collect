@@ -49,11 +49,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -64,13 +63,15 @@ import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentList;
 
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -87,7 +88,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class GoogleDriveActivity extends ListActivity implements OnConnectionFailedListener,
+public class GoogleDriveActivity extends ListActivity implements GoogleApiClient.OnConnectionFailedListener,
         TaskListener, GoogleDriveFormDownloadListener {
 
     private final static int PROGRESS_DIALOG = 1;
@@ -158,7 +159,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.google_drive));
+        setTitle(getString(R.string.google_drive));
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setProgressBarVisibility(true);
@@ -170,7 +171,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
 
         // ensure we have a google account selected
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mGoogleUsername = prefs.getString(PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
         if (mGoogleUsername == null || mGoogleUsername.equals("")) {
             showDialog(GOOGLE_USER_DIALOG);
             return;
@@ -193,6 +194,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
             adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image, dl);
             setListAdapter(adapter);
+            adapter.setEnabled(true);
         } else {
             // new
             TextView emptyView = new TextView(this);
@@ -339,7 +341,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
             mCurrentPath.clear();
             listFiles(ROOT_KEY, mSearchText.getText().toString());
         } else {
-            Toast.makeText(this, R.string.no_blank_search, Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.no_blank_search);
         }
     }
 
@@ -366,7 +368,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
         TextView empty = (TextView) findViewById(android.R.id.empty);
         empty.setVisibility(View.VISIBLE);
         getListView().setEmptyView(empty);
-
+        adapter.setEnabled(false);
         DriveListItem o = adapter.getItem(position);
         if (o != null && o.getType() == DriveListItem.DIR) {
             if (testNetwork()) {
@@ -375,9 +377,11 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                 listFiles(o.getDriveId());
                 mCurrentPath.push(o.getName());
             } else {
+                adapter.setEnabled(true);
                 createAlertDialog(getString(R.string.no_connection));
             }
         } else {
+            adapter.setEnabled(true);
             // file clicked, download the file, mark checkbox.
             CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
@@ -740,11 +744,11 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
             for (int k = 0; k < fileItems.size(); k++) {
                 DriveListItem fileItem = fileItems.get(k);
 
-                String mediaDir = fileItem.getName().substring(0, fileItem.getName().length() - 4)
+                String mediaDirName = fileItem.getName().substring(0, fileItem.getName().length() - 4)
                         + "-media";
 
                 String requestString = "'" + fileItem.getParentId()
-                        + "' in parents and trashed=false and title='" + mediaDir + "'";
+                        + "' in parents and trashed=false and title='" + mediaDirName + "'";
                 Files.List request = null;
                 List<com.google.api.services.drive.model.File> driveFileList =
                         new ArrayList<com.google.api.services.drive.model.File>();
@@ -769,8 +773,7 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                 } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
                 if (driveFileList.size() > 1) {
-                    results.put(fileItem.getName(),
-                            "More than one media folder detected, please remove one and try again");
+                    results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
                     return results;
                 } else if (driveFileList.size() == 1) {
                     requestString = "'" + driveFileList.get(0).getId()
@@ -797,6 +800,31 @@ public class GoogleDriveActivity extends ListActivity implements OnConnectionFai
                         results.put(fileItem.getName(), e.getMessage());
                         return results;
                     }
+
+                    File mediaDir = new File(Collect.FORMS_PATH + File.separator + mediaDirName);
+                    if (!mediaDir.exists()) {
+                        mediaDir.mkdir();
+                    }
+
+                    for (com.google.api.services.drive.model.File file : mediaFileList) {
+                        InputStream is = downloadFile(service, file);
+
+                        File targetFile = new File(Collect.FORMS_PATH +
+                                File.separator + mediaDirName + File.separator + file.getTitle());
+
+                        try {
+                            if (is != null) {
+                                FileUtils.copyInputStreamToFile(is, targetFile);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            results.put(file.getTitle(), e.getMessage());
+                            return results;
+                        }
+
+                        results.put(file.getTitle(), Collect.getInstance().getString(R.string.success));
+                    }
+
                 } else {
                     // zero.. just downloda the .xml file
                 }

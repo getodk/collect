@@ -15,9 +15,11 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ConfigurationInfo;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,8 +39,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.text.DecimalFormat;
 
@@ -86,7 +87,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // Determine whether or not to use the plain, maps, or mapsV2 activity
         mAppearance = prompt.getAppearanceHint();
         // use mapsV2 if it is available and was requested;
-        mUseMapsV2 = CompatibilityUtils.useMapsV2(context);
+        mUseMapsV2 = useMapsV2(context);
         if (mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2) {
             draggable = true;
             mUseMaps = true;
@@ -98,7 +99,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
 
         mReadOnly = prompt.isReadOnly();
@@ -280,15 +281,19 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         String secs = location.substring(0, location.indexOf(".")) + '"';
         if (type.equalsIgnoreCase("lon")) {
             if (degree.startsWith("-")) {
-                degree = "W " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.west), degree.replace("-", ""), mins, secs);
             } else {
-                degree = "E " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.east), degree.replace("-", ""), mins, secs);
             }
         } else {
             if (degree.startsWith("-")) {
-                degree = "S " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.south), degree.replace("-", ""), mins, secs);
             } else {
-                degree = "N " + degree.replace("-", "") + mins + secs;
+                degree = String.format(getContext()
+                        .getString(R.string.north), degree.replace("-", ""), mins, secs);
             }
         }
         return degree;
@@ -308,14 +313,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         if (!s.equals("") || s == null) {
             mStringAnswer.setText(s);
             String[] sa = s.split(" ");
-            mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
-                    + formatGps(Double.parseDouble(sa[0]), "lat") + "\n"
-                    + getContext().getString(R.string.longitude) + ": "
-                    + formatGps(Double.parseDouble(sa[1]), "lon") + "\n"
-                    + getContext().getString(R.string.altitude) + ": "
-                    + truncateDouble(sa[2]) + "m\n"
-                    + getContext().getString(R.string.accuracy) + ": "
-                    + truncateDouble(sa[3]) + "m");
+            mAnswerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
+                    formatGps(Double.parseDouble(sa[0]), "lat"),
+                    formatGps(Double.parseDouble(sa[1]), "lon"), truncateDouble(sa[2]),
+                    truncateDouble(sa[3])));
         } else {
             mStringAnswer.setText(s);
             mAnswerDisplay.setText("");
@@ -354,4 +355,11 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mAnswerDisplay.cancelLongPress();
     }
 
+    private boolean useMapsV2(final Context context) {
+        final ActivityManager activityManager = (ActivityManager) context.getSystemService(
+                Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo =
+                activityManager.getDeviceConfigurationInfo();
+        return configurationInfo.reqGlEsVersion >= 0x20000;
+    }
 }

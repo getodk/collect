@@ -119,11 +119,10 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="send_data">Odeslat dokončený dotazník</string>
   <string name="send_data_button">Odeslat dokončený dotazník (%s)</string>
   <string name="send_selected_data">Odeslat vybrané</string>
-  <string name="server_auth_credentials">Zadejte prosím uživatelské jméno a heslo pro server:\n%s</string>
+  <string name="server_auth_credentials">Zadejte prosím uživatelské jméno a heslo pro server: %s</string>
   <string name="server_requires_auth">Server vyžaduje přihlášení</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Nastavení serveru</string>
-  <string name="toggle_selected">O(d)značit všechny</string>
   <string name="trigger">OK. Pokračujte prosím.</string>
   <string name="uploading_data">Odesílám dotazník</string>
   <string name="url_error">Neplatné URL!</string>
@@ -304,4 +303,9 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>
