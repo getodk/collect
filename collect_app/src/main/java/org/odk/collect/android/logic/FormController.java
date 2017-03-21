@@ -83,12 +83,10 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
-        public final String timing;
 
-        InstanceMetadata(String instanceId, String instanceName, String timing) {
+        InstanceMetadata(String instanceId, String instanceName) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
-            this.timing = timing;
         }
     }
 
@@ -1189,7 +1187,7 @@ public class FormController {
 
         }
 
-        return new InstanceMetadata(instanceId, instanceName, timing);
+        return new InstanceMetadata(instanceId, instanceName);
     }
 
 }
