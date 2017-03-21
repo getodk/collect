@@ -40,6 +40,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -100,6 +101,8 @@ public class MainMenuActivity extends Activity {
     private Cursor mViewSentCursor;
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
+
+    boolean doubleBackToExitPressedOnce = false;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -705,5 +708,23 @@ public class MainMenuActivity extends Activity {
             mHandler.sendEmptyMessage(0);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;                       
+            }
+        }, 2000);
+    } 
 
 }
