@@ -28,7 +28,6 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.UrlUtils;
 
 import java.io.File;
 import java.util.ArrayList;
