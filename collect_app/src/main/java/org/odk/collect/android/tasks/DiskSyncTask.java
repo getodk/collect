@@ -28,6 +28,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.UrlUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static org.odk.collect.android.R.string.url_error;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -305,10 +307,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             updateValues.put(FormsColumns.JR_VERSION, version);
         }
         if (submission != null) {
-            if(checkValidSubmissionURI(submission)) {
+            if(UrlUtils.isValidUrl(submission)) {
                 updateValues.put(FormsColumns.SUBMISSION_URI, submission);
             } else {
-                throw new IllegalArgumentException(formDefFile.getName() + " :: bad url");
+                throw new IllegalArgumentException(formDefFile.getName() + " :: " + url_error);
             }
         }
         if (base64RsaPublicKey != null) {
@@ -332,9 +334,5 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         if (mListener != null) {
             mListener.syncComplete(result);
         }
-    }
-
-    public boolean checkValidSubmissionURI(String submissionURI) {
-        return Patterns.WEB_URL.matcher(submissionURI).matches();
     }
 }
