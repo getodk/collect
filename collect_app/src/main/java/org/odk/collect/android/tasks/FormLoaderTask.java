@@ -139,10 +139,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
-<<<<<<< HEAD
 
-=======
->>>>>>> d118f43170d3d8fa17e074727a20898b2444fc25
 //    FormDef.setDefaultEventNotifier(new EventNotifier() {
 //
 //      @Override
