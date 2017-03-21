@@ -307,10 +307,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             updateValues.put(FormsColumns.JR_VERSION, version);
         }
         if (submission != null) {
-            if(UrlUtils.isValidUrl(submission)) {
+            if(Patterns.WEB_URL.matcher(submission).matches()) {
                 updateValues.put(FormsColumns.SUBMISSION_URI, submission);
             } else {
-                throw new IllegalArgumentException(formDefFile.getName() + " :: " + url_error);
+                throw new IllegalArgumentException(formDefFile.getName() + " :: " + Collect.getInstance().getString(R.string.url_error));
             }
         }
         if (base64RsaPublicKey != null) {
