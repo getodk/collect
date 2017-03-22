@@ -314,7 +314,7 @@
 <string name="aggregate_preferences">ODK Aggregate settings</string>
 <string name="other_preferences">Other platform settings</string>
 <string name="google_preferences">Google Sheets settings</string>
-<string name="google_sheets_url_hint">Optional. Only use for blank forms that don't specify a Google Sheets URL.</string>
+<string name="google_sheets_url_hint">Optional. Only use for blank forms that don\'t specify a Google Sheets URL.</string>
 <string name="drive_get_file">Getting %1$s and media files.</string>
 <string name="no_google_account">No Google Account Selected!</string>
 <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
