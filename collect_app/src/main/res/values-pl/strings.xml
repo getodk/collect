@@ -325,7 +325,6 @@
   <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
   <string name="google_sheets_access_denied">Brak dostępu. Upewnij się, że właściciel arkusza kalkulacyjnego udzielił Ci praw dostępu.</string>
-  <string name="google_sheets_update_error">Błąd aktualizacji arkusza kalkulacyjnego. Upewnij się, że właściciel arkusza kalkulacyjnego udzielił Ci praw zapisu.</string>
   <string name="google_sheets_missing_columns">W arkuszu kalkulacyjnym brak następujących kolumn: %1$s</string>
   <string name="password_error_whitespace">Spacje na początku lub na końcu hasła są niedozwolone</string>
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
