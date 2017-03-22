@@ -22,6 +22,8 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -215,6 +217,17 @@ public class Collect extends Application {
 
     public CookieStore getCookieStore() {
         return cookieStore;
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void showKeyboard(View view) {
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
     @Override
