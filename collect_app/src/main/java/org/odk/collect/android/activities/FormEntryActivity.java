@@ -355,7 +355,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             if (intent != null) {
                 Uri uri = intent.getData();
 
-                if (null != uri && getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uri != null && getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
@@ -447,7 +447,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             }
                         }
                     }
-                } else if (null != uri && getContentResolver().getType(uri).equals(
+                } else if (uri != null && getContentResolver().getType(uri).equals(
                         FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
                     try {

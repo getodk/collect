@@ -68,7 +68,8 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         setContentView(R.layout.chooser_list_layout);
 
         String order;
-        if ((ApplicationConstants.FormModes.EDIT_SAVED).equalsIgnoreCase(getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE))) {
+        final String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+        if (formMode != null && formMode.equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
             setTitle(getString(R.string.review_data));
             mEditMode = true;
             mSortingOptions = new String[]{
