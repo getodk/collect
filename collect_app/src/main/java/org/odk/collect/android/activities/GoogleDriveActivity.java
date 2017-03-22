@@ -177,7 +177,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
             MyDrive = false;
 
-            if (testNetwork()) {
+            if (isDeviceOnline()) {
             } else {
                 createAlertDialog(getString(R.string.no_connection));
             }
@@ -273,7 +273,7 @@ public class GoogleDriveActivity extends ListActivity implements
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
-            if (testNetwork()) {
+            if (isDeviceOnline()) {
                 toDownload.clear();
                 mRootButton.setEnabled(false);
                 mSearchButton.setEnabled(false);
@@ -426,7 +426,7 @@ public class GoogleDriveActivity extends ListActivity implements
         adapter.setEnabled(false);
         DriveListItem o = adapter.getItem(position);
         if (o != null && o.getType() == DriveListItem.DIR) {
-            if (testNetwork()) {
+            if (isDeviceOnline()) {
                 toDownload.clear();
                 mSearchText.setText(null);
                 listFiles(o.getDriveId());
@@ -590,7 +590,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
             case COMPLETE_AUTHORIZATION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    if (testNetwork()) {
+                    if (isDeviceOnline()) {
                         listFiles(ROOT_KEY);
                     } else {
                         createAlertDialog(getString(R.string.no_connection));
@@ -718,16 +718,6 @@ public class GoogleDriveActivity extends ListActivity implements
         super.onStop();
     }
 
-    private boolean testNetwork() {
-        ConnectivityManager manager = (ConnectivityManager) this
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        if (currentNetworkInfo == null) {
-            return false;
-        }
-        return (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
-    }
-
     public void listFiles(String dir, String query) {
         setProgressBarIndeterminateVisibility(true);
         adapter = null;
@@ -761,7 +751,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 TextView empty = (TextView) findViewById(android.R.id.empty);
                 empty.setVisibility(View.VISIBLE);
                 getListView().setEmptyView(empty);
-                if (testNetwork()) {
+                if (isDeviceOnline()) {
                     if (mParentId == null) {
                         mParentId = ROOT_KEY;
                     }
