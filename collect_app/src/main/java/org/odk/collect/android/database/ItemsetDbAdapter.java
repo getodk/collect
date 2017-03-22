@@ -213,7 +213,6 @@ public class ItemsetDbAdapter {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             Log.e("MD5", e.getMessage());
         }
         md.update(toEncode.getBytes());

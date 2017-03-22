@@ -45,19 +45,14 @@ public class Base64Wrapper {
             String s = new String(outArray, "UTF-8");
             return s;
         } catch (SecurityException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         }
     }
@@ -70,16 +65,12 @@ public class Base64Wrapper {
             Object[] argList = new Object[]{base64String, FLAGS};
             o = m.invoke(null, argList);
         } catch (SecurityException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         }
         return (byte[]) o;

@@ -148,7 +148,6 @@ public class LabelWidget extends QuestionWidget {
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
-                        e.printStackTrace();
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

@@ -224,7 +224,6 @@ public class GridWidget extends QuestionWidget {
                     }
                 } catch (InvalidReferenceException e) {
                     Log.e("GridWidget", "image invalid reference exception");
-                    e.printStackTrace();
                 }
             } else {
                 errorMsg = "";

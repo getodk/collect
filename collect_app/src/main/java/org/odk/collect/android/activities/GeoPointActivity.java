@@ -24,6 +24,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Window;
 
 import org.odk.collect.android.R;
@@ -68,10 +69,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
         }
 
         setTitle(getString(R.string.get_location));
-
         if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointActivity.this)) {
             mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
             // make sure we have a good location provider before continuing
             List<String> providers = mLocationManager.getProviders(true);
             for (String provider : providers) {
@@ -84,6 +83,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
             }
             if (!mGPSOn && !mNetworkOn) {
                 ToastUtils.showShortToast(R.string.provider_disabled_error);
+                Intent onGPS_intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(onGPS_intent);
                 finish();
             }
 
