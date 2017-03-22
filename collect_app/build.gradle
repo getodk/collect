@@ -166,6 +166,7 @@ dependencies {
     }
     compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
     compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
+    compile group: 'com.android.support', name: 'customtabs', version: '25.1.0'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
