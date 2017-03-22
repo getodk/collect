@@ -34,8 +34,6 @@ test:
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
         - ./gradlew lintDebug -Pandroid.useDexArchive=false
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false 
-        #- ./gradlew assembleDebug -Pandroid.useDexArchive=false:
-        #    timeout: 900
         # start the emulator
         - mksdcard -l e 128M sdcard.img
         - emulator -avd circleci-android22 -sdcard sdcard.img -no-window:
@@ -43,12 +41,12 @@ test:
             parallel: true
         # wait for it to have booted
         - circle-android wait-for-boot
-        # run tests  against the emulator.
+        # run tests against the emulator.
         - ./gradlew connectedCheck -Pandroid.useDexArchive=false
 
     post:
         # APKs
-        # - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
+        - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
 
         # Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
