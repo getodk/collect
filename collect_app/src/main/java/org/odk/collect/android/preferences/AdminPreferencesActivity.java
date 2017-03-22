@@ -22,7 +22,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.*;
 
 import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
