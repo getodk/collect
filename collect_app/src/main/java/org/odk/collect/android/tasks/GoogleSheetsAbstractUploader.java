@@ -15,7 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -23,9 +22,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Xml;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
@@ -38,6 +39,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -69,6 +71,9 @@ public abstract class GoogleSheetsAbstractUploader extends
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
     protected HashMap<String, String> mResults;
+    String mSpreadsheetName;
+    private String mSpreadsheetId;
+    private boolean hasWritePermissonToSheet = false;
 
     /**
      * @param selection
@@ -138,6 +143,45 @@ public abstract class GoogleSheetsAbstractUploader extends
             return false;
         }
 
+        // get spreadsheet id
+        if (mSpreadsheetId == null) {
+            try {
+                mSpreadsheetId = UrlUtils.getSpreadsheetID(id);
+            } catch (UrlUtils.BadUrlException e) {
+                mResults.put(id, e.getMessage());
+                return false;
+            }
+        }
+
+        // checking for write permissions to the spreadsheet
+        if (!hasWritePermissonToSheet) {
+            try {
+                mSheetsService.spreadsheets()
+                        .batchUpdate(mSpreadsheetId, new BatchUpdateSpreadsheetRequest())
+                        .execute();
+            } catch (GoogleJsonResponseException e) {
+                Log.e(TAG, e.getMessage(), e);
+                String message = e.getMessage();
+                if (e.getDetails().getCode() == 403)
+                    message = Collect.getInstance().getString(R.string.access_permission_error);
+                mResults.put(id, message);
+                return false;
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+                mResults.put(id, e.getMessage());
+                return false;
+            }
+
+            hasWritePermissonToSheet = true;
+            try {
+                mSpreadsheetName = getSpreadSheetName();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+                mResults.put(id, e.getMessage());
+                return false;
+            }
+        }
+
         HashMap<String, String> answersToUpload = new HashMap<>();
         HashMap<String, String> photosToUpload = new HashMap<>();
         HashMap<String, String> uploadedPhotos = new HashMap<>();
@@ -164,15 +208,13 @@ public abstract class GoogleSheetsAbstractUploader extends
         }
 
         if (columnNames.size() == 0) {
-            mResults.put(id,
-                    "No columns found in the form to upload");
+            mResults.put(id, "No columns found in the form to upload");
             return false;
         }
 
         if (columnNames.size() > 255) {
-            mResults.put(id,
-                    Collect.getInstance()
-                            .getString(R.string.sheets_max_columns, String.valueOf(columnNames.size())));
+            mResults.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
+                    String.valueOf(columnNames.size())));
             return false;
         }
 
@@ -213,12 +255,11 @@ public abstract class GoogleSheetsAbstractUploader extends
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, Collect.getInstance().getString(
-                        R.string.google_sheets_invalid_column_instance, n));
+                mResults.put(id, Collect.getInstance()
+                        .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
         }
-
 
         /*  # NOTE #
          *  Media files are uploaded to Google Drive of user
@@ -285,79 +326,14 @@ public abstract class GoogleSheetsAbstractUploader extends
                 uploadedPhotos.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
             }
         }
-        // All photos have been sent to picasa (if there were any)
+        // All photos have been sent to Google Drive (if there were any)
         // now upload data to Google Sheet
-
-        Cursor cursor = null;
-        String urlString = null;
-        try {
-            // see if the submission element was defined in the form
-            cursor = new InstancesDao().getInstancesCursorForId(id);
-
-            if (cursor.getCount() > 0) {
-                cursor.moveToPosition(-1);
-                while (cursor.moveToNext()) {
-                    int subIdx = cursor.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
-
-                    // if we didn't find one in the content provider,
-                    // try to get from settings
-                    if (urlString == null) {
-                        SharedPreferences settings = PreferenceManager
-                                .getDefaultSharedPreferences(Collect.getInstance());
-                        urlString = settings
-                                .getString(PreferenceKeys.KEY_GOOGLE_SHEETS_URL, Collect
-                                        .getInstance()
-                                        .getString(R.string.default_google_sheets_url));
-                    }
-                }
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        // now parse the url string if we have one
-        final String googleHeader = "docs.google.com/spreadsheets/d/";
-        String spreadsheetId;
-        if (urlString == null || urlString.length() < googleHeader.length()) {
-            mResults.put(id, Collect.getInstance().getString(R.string.invalid_sheet_id,
-                    urlString));
-            return false;
-        } else {
-            int start = urlString.indexOf(googleHeader) + googleHeader.length();
-            int end = urlString.indexOf("/", start);
-            if (end == -1) {
-                // if there wasn't a "/", just try to get the end
-                end = urlString.length();
-            }
-            if (start == -1 || end == -1) {
-                mResults.put(id, Collect.getInstance().getString(R.string.invalid_sheet_id,
-                        urlString));
-                return false;
-            }
-            spreadsheetId = urlString.substring(start, end);
-        }
-
-        Spreadsheet response = null;
-        try {
-            response = mSheetsService.spreadsheets()
-                    .get(spreadsheetId)
-                    .setIncludeGridData(false)
-                    .execute();
-        } catch (IOException e) {
-            mResults.put(id, e.getMessage());
-            return false;
-        }
-
-        String spreadsheetName = response.getSheets().get(0).getProperties().getTitle();
 
         List<List<Object>> values;
         List headerFeed = null;
 
         try {
-            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            values = getHeaderFeed(mSpreadsheetId, mSpreadsheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, "No data found");
             } else {
@@ -398,9 +374,9 @@ public abstract class GoogleSheetsAbstractUploader extends
             /*
              *  Appends the data at the last row
              *
-             *  append(spreadsheetId, range, ValueRange)
+             *  append(mSpreadsheetId, range, ValueRange)
              *
-             *  spreadsheetId   :   Unique sheet id
+             *  mSpreadsheetId   :   Unique sheet id
              *  range           :   A1 notation range. It specifies the range within which the
              *                      spreadsheet should be searched.
              *              hint   "Giving only sheetName in range searches in the complete sheet"
@@ -413,7 +389,7 @@ public abstract class GoogleSheetsAbstractUploader extends
             // write the headers
             try {
                 mSheetsService.spreadsheets().values()
-                        .append(spreadsheetId, spreadsheetName, row)
+                        .append(mSpreadsheetId, mSpreadsheetName, row)
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
@@ -426,7 +402,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // update the feed
 
         try {
-            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            values = getHeaderFeed(mSpreadsheetId, mSpreadsheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, "No data found");
                 return false;
@@ -467,7 +443,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
             try {
                 mSheetsService.spreadsheets().values()
-                        .update(spreadsheetId, spreadsheetName + "!A1:1", row)
+                        .update(mSpreadsheetId, mSpreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
                 mResults.put(id, e.getMessage());
@@ -479,7 +455,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // update the feed
 
         try {
-            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            values = getHeaderFeed(mSpreadsheetId, mSpreadsheetName);
             if (values == null || values.size() == 0) {
                 mResults.put(id, "No data found");
                 return false;
@@ -572,7 +548,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // Send the new row to the API for insertion.
         try {
             mSheetsService.spreadsheets().values()
-                    .append(spreadsheetId, spreadsheetName, row)
+                    .append(mSpreadsheetId, mSpreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
             mResults.put(id, e.getMessage());
@@ -581,6 +557,15 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         mResults.put(id, Collect.getInstance().getString(R.string.success));
         return true;
+    }
+
+    private String getSpreadSheetName() throws IOException {
+        Spreadsheet response;
+        response = mSheetsService.spreadsheets()
+                .get(mSpreadsheetId)
+                .setIncludeGridData(false)
+                .execute();
+        return response.getSheets().get(0).getProperties().getTitle();
     }
 
     private String createOrGetIDOfFolderWithName(String jrFormId)
@@ -933,7 +918,7 @@ public abstract class GoogleSheetsAbstractUploader extends
     }
 
     /**
-     * Fetches the spreadsheet with the provided spreadsheetId
+     * Fetches the spreadsheet with the provided mSpreadsheetId
      * <p>
      * get(sheetId, range) method requires two parameters
      * <p>
@@ -945,23 +930,24 @@ public abstract class GoogleSheetsAbstractUploader extends
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      *
      * @param spreadsheetId
-     * @param spreadsheetName
+     * @param mSpreadsheetName
      * @return
      * @throws IOException
      */
-    private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
+    private List<List<Object>> getHeaderFeed(String spreadsheetId, String mSpreadsheetName)
             throws IOException {
         ValueRange response = mSheetsService.spreadsheets()
                 .values()
-                .get(spreadsheetId, spreadsheetName)
+                .get(spreadsheetId, mSpreadsheetName)
                 .execute();
         return response.getValues();
     }
+
 
     public class MultipleFoldersFoundException extends Exception {
         public MultipleFoldersFoundException(String message) {
             super(message);
         }
-
     }
+
 }

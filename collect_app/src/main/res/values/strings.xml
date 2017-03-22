@@ -495,4 +495,5 @@
 <string name="sorting_menu_close">Close sorting menu</string>
 <string name="sort_the_list">Sort the list</string>
     <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
+    <string name="access_permission_error">You don\'t have access to the submission sheet. Please make sure your survey administrator has given you edit privileges.</string>
 </resources>

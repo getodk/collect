@@ -55,8 +55,8 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsTask;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
+import org.odk.collect.android.tasks.GoogleSheetsTask;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -532,11 +532,11 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mSheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
                     transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect-Sheets")
+                    .setApplicationName("ODK-Collect")
                     .build();
             mDriveService = new com.google.api.services.drive.Drive.Builder(
                     transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect-Drive")
+                    .setApplicationName("ODK-Collect")
                     .build();
         }
 
@@ -567,5 +567,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             }
             return mResults;
         }
+
     }
 }
