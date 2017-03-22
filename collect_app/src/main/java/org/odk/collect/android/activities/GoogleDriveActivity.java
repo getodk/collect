@@ -18,6 +18,7 @@
 
 package org.odk.collect.android.activities;
 
+
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.ActionBar.LayoutParams;
@@ -84,6 +85,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -131,6 +134,8 @@ public class GoogleDriveActivity extends ListActivity implements
     private ArrayList<DriveListItem> toDownload;
     private Drive mDriveService;
 
+    protected GoogleAccountCredential mCredential;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +148,23 @@ public class GoogleDriveActivity extends ListActivity implements
 
         mParentId = null;
         mAlertShowing = false;
-        toDownload = new ArrayList<>();
+        toDownload = new ArrayList<DriveListItem>();
+
+        // ensure we have a google account selected
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        if (mGoogleUsername == null || mGoogleUsername.equals("")) {
+            mCredential = GoogleAccountCredential.usingOAuth2(
+                    getApplicationContext(), Arrays.asList(GoogleSheetsTask.SCOPES))
+                    .setBackOff(new ExponentialBackOff());
+            startActivityForResult(
+                    mCredential.newChooseAccountIntent(),
+                    GoogleSheetsTask.REQUEST_ACCOUNT_PICKER);
+            if (mGoogleUsername == null || mGoogleUsername.equals("")) {
+                showDialog(GOOGLE_USER_DIALOG);
+            return;}
+        }
+
 
         if (savedInstanceState != null && savedInstanceState.containsKey(MY_DRIVE_KEY)) {
             // recover state on rotate
@@ -600,6 +621,21 @@ public class GoogleDriveActivity extends ListActivity implements
                     // User denied access, show him the account chooser again
                 }
                 break;
+            case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null &&
+                        data.getExtras() != null) {
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+                        editor.apply();
+                        mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                        mCredential.setSelectedAccountName(mGoogleUsername);
+                    }
+                }
+                break;
+
         }
         if (resultCode == RESULT_CANCELED) {
             finish();
