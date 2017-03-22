@@ -22,6 +22,7 @@ import android.net.Uri;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,6 +233,41 @@ public class InstancesDao {
 
     public void deleteInstancesDatabase() {
         Collect.getInstance().getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
+    }
+
+    public void deleteInstancesFromIDs(List<String> ids){
+        int count = ids.size();
+        int counter = 0;
+        while (count > 0) {
+            String[] selectionArgs = null;
+            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER ) {
+                selectionArgs = new String[
+                        ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
+            } else {
+                selectionArgs = new String[count];
+            }
+
+            StringBuilder selection = new StringBuilder();
+            selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " IN (");
+            int j = 0 ;
+            while (j < selectionArgs.length) {
+                selectionArgs[j] = ids.get(
+                        counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
+                selection.append("?");
+
+                if (j != selectionArgs.length - 1) {
+                    selection.append(",");
+                }
+                j++;
+            }
+            counter++;
+            count -= selectionArgs.length;
+            selection.append(")");
+            Collect.getInstance().getContentResolver()
+                    .delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI
+                            , selection.toString(), selectionArgs);
+
+        }
     }
 
     public List<Instance> getInstancesFromCursor(Cursor cursor) {
