@@ -299,7 +299,7 @@
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
-  <string name="picasa_upload_error">Gagal mengunggah foto yang tidak ada: %1$s</string>
+  <string name="media_upload_error">Gagal mengunggah foto yang tidak ada: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikasi pengiriman otomatis ODK gagal, pastikan pengaturan anda sudah benar</string>
   <string name="odk_auto_note">Notifikasi Pengiriman otomatis ODK</string>
   <string name="notification_error">Gagal menampilkan teks notifikasi</string>

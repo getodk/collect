@@ -183,9 +183,16 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         int[] view = new int[]{
                 R.id.text1, R.id.text2, R.id.text3
         };
-        SimpleCursorAdapter instances =
+
+        mListAdapter =
                 new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(sortOrder), data, view);
-        setListAdapter(instances);
+
+        setListAdapter(mListAdapter);
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
     }
 
     /**

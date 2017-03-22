@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -133,11 +132,16 @@ public class DataManagerList extends InstanceListFragment
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        Cursor cursor = new InstancesDao().getSavedInstancesCursor(sortOrder);
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, cursor, data, view);
-        setListAdapter(cursorAdapter);
-        checkPreviouslyCheckedItems(checkedInstances, cursor);
+        mListAdapter = new SimpleCursorAdapter(getActivity(),
+                R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(sortOrder), data, view);
+        setListAdapter(mListAdapter);
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        mListAdapter.changeCursor(new InstancesDao().getFilteredSavedInstancesCursor(charSequence));
+        super.filter(charSequence);
     }
 
     /**

@@ -307,7 +307,7 @@
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
   <string name="google_audio_error">Arxius d\'audio no s\'admeten a Google Sheets de moment</string>
   <string name="google_video_error">Arxius de vídeo no s\'admeten a Google Sheets de moment</string>
-  <string name="picasa_upload_error">No pot pujar una foto que no existeix: %1$s</string>
+  <string name="media_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>

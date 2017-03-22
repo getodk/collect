@@ -355,7 +355,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             if (intent != null) {
                 Uri uri = intent.getData();
 
-                if (getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uri != null && getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
@@ -447,7 +447,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             }
                         }
                     }
-                } else if (getContentResolver().getType(uri).equals(
+                } else if (uri != null && getContentResolver().getType(uri).equals(
                         FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
                     try {
@@ -2550,16 +2550,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             if (!showFirst) {
-                // we've just loaded a saved form, so start in the hierarchy
-                // view
+                // we've just loaded a saved form, so start in the hierarchy view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                     startActivity(i);
-                    return; // so we don't show the intro screen before jumping to
-                    // the hierarchy
+                    return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
-                    if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.VIEW_SENT)) {
+                    if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
                         i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
                         startActivity(i);
                     }
@@ -2646,23 +2645,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         this.stepMessage = stepMessage;
         if (mProgressDialog != null) {
             mProgressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-        }
-    }
-
-    /**
-     * Attempts to save an answer to the specified index.
-     *
-     * @return status as determined in FormEntryController
-     */
-    public int saveAnswer(IAnswerData answer, FormIndex index,
-                          boolean evaluateConstraints) throws JavaRosaException {
-        FormController formController = Collect.getInstance()
-                .getFormController();
-        if (evaluateConstraints) {
-            return formController.answerQuestion(index, answer);
-        } else {
-            formController.saveAnswer(index, answer);
-            return FormEntryController.ANSWER_OK;
         }
     }
 

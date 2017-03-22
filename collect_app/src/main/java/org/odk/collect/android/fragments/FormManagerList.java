@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -126,16 +124,20 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         for (long a : getListView().getCheckedItemIds()) {
             checkedForms.add(a);
         }
-        Cursor c = new FormsDao().getFormsCursor(sortOrder);
         String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
 
-        // render total instance view
-        SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(
+        mListAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(cursorAdapter);
-        checkPreviouslyCheckedItems(checkedForms, c);
+                R.layout.two_item_multiple_choice, new FormsDao().getFormsCursor(sortOrder), data, view);
+        setListAdapter(mListAdapter);
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
+        super.filter(charSequence);
     }
 
     /**
