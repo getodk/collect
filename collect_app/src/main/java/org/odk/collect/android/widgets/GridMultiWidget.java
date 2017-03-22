@@ -220,7 +220,6 @@ public class GridMultiWidget extends QuestionWidget {
                     }
                 } catch (InvalidReferenceException e) {
                     Log.e("GridMultiWidget", "image invalid reference exception");
-                    e.printStackTrace();
                 }
             } else {
                 errorMsg = "";

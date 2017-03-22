@@ -190,7 +190,6 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
             res = true;
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             try {
                 if (output != null) {
@@ -198,14 +197,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                     output.close();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
             }
         }
         return res;
     }
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -142,7 +142,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         // TODO Auto-generated method stub
-        String s = (String) answer.toString();
+        String s =  answer.toString();
         mStringAnswer.setText(s);
         mAnswerDisplay.setText(s);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
@@ -190,7 +190,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 return new StringData(s);
             } catch (NumberFormatException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
                 return null;
             }
         }
