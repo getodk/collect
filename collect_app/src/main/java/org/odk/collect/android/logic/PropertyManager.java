@@ -29,6 +29,7 @@ import org.javarosa.core.services.properties.IPropertyRules;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Returns device properties to JavaRosa
@@ -41,7 +42,7 @@ public class PropertyManager implements IPropertyManager {
 
     private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
 
-    private HashMap<String, String> mProperties;
+    private final Map<String, String> mProperties = new HashMap<>();
 
     public final static String DEVICE_ID_PROPERTY           = "deviceid";       // imei
     public final static String SUBSCRIBER_ID_PROPERTY       = "subscriberid";   // imsi
@@ -66,8 +67,6 @@ public class PropertyManager implements IPropertyManager {
 
     public PropertyManager(Context context) {
         Log.i(TAG, "calling constructor");
-
-        mProperties = new HashMap<>();
 
         // User-defined properties
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
