@@ -64,7 +64,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
     private static final String oauth_fail = "OAUTH Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
-    private final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
+    protected final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
     private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
@@ -81,7 +81,6 @@ public abstract class GoogleSheetsAbstractUploader extends
      * @param token
      */
     protected void uploadInstances(String selection, String[] selectionArgs, String token) {
-
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -582,7 +581,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
     }
 
-    private String getIDOfFolderWithName(String name, String inFolder)
+    protected String getIDOfFolderWithName(String name, String inFolder)
             throws IOException, MultipleFoldersFoundException {
 
         com.google.api.services.drive.model.File folder = null;
