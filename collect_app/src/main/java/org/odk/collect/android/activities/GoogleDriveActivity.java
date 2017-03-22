@@ -249,7 +249,7 @@ public class GoogleDriveActivity extends ListActivity implements
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         mDriveService = new com.google.api.services.drive.Drive.Builder(
                 transport, jsonFactory, mCredential)
-                .setApplicationName("ODK-Collect-Drive")
+                .setApplicationName("ODK-Collect")
                 .build();
 
         getResultsFromApi();
