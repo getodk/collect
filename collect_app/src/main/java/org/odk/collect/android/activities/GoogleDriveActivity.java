@@ -112,6 +112,7 @@ public class GoogleDriveActivity extends ListActivity implements
     private static final String FILE_LIST_KEY = "fileList";
     private static final String PARENT_ID_KEY = "parentId";
     private static final String CURRENT_ID_KEY = "currentDir";
+    private static final String TAG = "GoogleDriveActivity";
     protected GoogleAccountCredential mCredential;
     private Button mRootButton;
     private Button mBackButton;
@@ -804,7 +805,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
                 return null;
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
             if (rootId == null) {
                 Log.e("drive", "Error occurred : Unable to fetch drive contents");
@@ -964,7 +965,7 @@ public class GoogleDriveActivity extends ListActivity implements
                             (new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
                     downloadFile(df).writeTo(fStream);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage(), e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
                 } finally {
@@ -973,7 +974,7 @@ public class GoogleDriveActivity extends ListActivity implements
                             fStream.close();
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getMessage(), e);
                     }
                 }
 
