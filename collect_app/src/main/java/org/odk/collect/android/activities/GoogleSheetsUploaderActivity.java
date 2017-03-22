@@ -236,16 +236,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case GoogleSheetsTask.REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != RESULT_OK) {
-                    // the user got sent to the playstore
-                    // it returns to this activity, but we'd rather they manually retry
-                    // so we finish
-                    finish();
-                } else {
-                    getResultsFromApi();
-                }
-                break;
             case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
                         data.getExtras() != null) {
