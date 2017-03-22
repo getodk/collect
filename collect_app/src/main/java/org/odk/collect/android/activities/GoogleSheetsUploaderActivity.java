@@ -48,6 +48,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -61,7 +62,7 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -135,7 +136,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(GoogleSheetsTask.SCOPES))
+                getApplicationContext(), Collections.singleton(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff());
 
         getResultsFromApi();
@@ -155,10 +156,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 return;
             }
 
-            // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
 
-            mUlTask.setUserName(googleUsername);
             mUlTask.setUploaderListener(this);
             mUlTask.execute(mInstancesToSend);
         } else {
@@ -167,7 +166,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         }
     }
 
-    /**
+    /*
      * Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
      * account was selected and the device currently has online access. If any
@@ -186,7 +185,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         }
     }
 
-    /**
+    /*
      * Attempts to set the account used with the API credentials. If an account
      * name was previously saved it will use that one; otherwise an account
      * picker dialog will be shown to the user. Note that the setting the
@@ -217,7 +216,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    getString(R.string.request_permissions_google_account),
                     GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
@@ -267,8 +266,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 }
                 break;
             case GoogleSheetsTask.REQUEST_AUTHORIZATION:
+                dismissDialog(PROGRESS_DIALOG);
                 if (resultCode == RESULT_OK) {
                     getResultsFromApi();
+                } else {
+                    Log.d(TAG, "AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
+                    finish();
                 }
                 break;
         }
@@ -525,12 +528,16 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     }
 
     private class GoogleSheetsInstanceUploaderTask extends
-            GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
+            GoogleSheetsAbstractUploader {
 
         GoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.sheets.v4.Sheets.Builder(
+            mSheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("ODK-Collect")
+                    .build();
+            mDriveService = new com.google.api.services.drive.Drive.Builder(
                     transport, jsonFactory, credential)
                     .setApplicationName("ODK-Collect")
                     .build();
@@ -550,18 +557,23 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                     selectionArgs[i] = values[i].toString();
                 }
             }
+            String token;
             try {
-                String token = mCredential.getToken();
-
-                //Immediately invalidate so we get a differnet one if we have to try again
+                token = mCredential.getToken();
+                //Immediately invalidate so we get a different one if we have to try again
                 GoogleAuthUtil.invalidateToken(GoogleSheetsUploaderActivity.this, token);
 
+                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
+                mResults = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
+            } catch (MultipleFoldersFoundException e) {
+                Log.e(TAG, e.getMessage(), e);
             }
             return mResults;
         }
+
     }
 }
