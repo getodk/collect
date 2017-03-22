@@ -325,8 +325,7 @@
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että työkirjan omistaja on myöntänyt pääsyn.</string>
-  <string name="google_sheets_update_error">Virhe päivittäessä työkirjaa. Varmista että työkirjan omistaja on myöntänyt muokkausoikeuden.</string>
-  <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
+    <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>

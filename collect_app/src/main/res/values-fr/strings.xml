@@ -326,8 +326,7 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="google_sheets_access_denied">Accès refusé. Merci d’assurer que le propriétaire de la feuille de calcul vous a accordé l\'autorisation d\'accès.</string>
-  <string name="google_sheets_update_error">Erreur de mis à jour de la feuille de calcul. Demandez le propriétaire d\'assurer votre accès en autorisation d\'écriture.</string>
-  <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
+    <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom de l\'utilisateur</string>
   <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>

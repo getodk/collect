@@ -177,7 +177,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 Log.e(TAG, e.getMessage(), e);
                 String message = e.getMessage();
                 if (e.getDetails().getCode() == 403)
-                    message = Collect.getInstance().getString(R.string.access_permission_error);
+                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 mResults.put(id, message);
                 return false;
             } catch (IOException e) {
